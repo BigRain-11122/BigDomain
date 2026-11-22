@@ -1,7 +1,7 @@
 {
  "face": "start-here",
  "generated_from": {
-  "state/start-here-faces.json": "0ee38f1117f869c3"
+  "state/start-here-faces.json": "42c9d343d38c9d3c"
  },
  "faces_total": 44,
  "operable": [
@@ -12,6 +12,20 @@
   "money-path-demo.html",
   "ship-checklist.html"
  ],
+ "kinds": {
+  "buyer-trial.html": "screen",
+  "filing-checklist.html": "persists",
+  "lobby-protocol-map.html": "persists",
+  "merchant-onboard.html": "persists",
+  "money-path-demo.html": "persists",
+  "ship-checklist.html": "persists"
+ },
+ "kind_counts": {
+  "persists": 5,
+  "screen": 1,
+  "wires": 0,
+  "inert": 0
+ },
  "missing_ceo_items": [
   "mchid",
   "settlement",
@@ -21,6 +35,6 @@
   "pubkey"
  ],
  "sizes": {
-  "html_bytes": 8033
+  "html_bytes": 10197
  }
 }

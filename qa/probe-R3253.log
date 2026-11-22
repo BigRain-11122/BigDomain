@@ -1,0 +1,8 @@
+OPERABLE FACES: 6
+buyer-trial.html             ops=3   in=0   btn=3   sel=0   txt=0   script=2 storage=0 handler=4   domwrite=20  bytes=18154  kind=screen
+filing-checklist.html        ops=21  in=21  btn=0   sel=0   txt=0   script=1 storage=2 handler=1   domwrite=0   bytes=10334  kind=persists
+lobby-protocol-map.html      ops=1   in=1   btn=0   sel=0   txt=0   script=1 storage=2 handler=1   domwrite=1   bytes=20842  kind=persists
+merchant-onboard.html        ops=9   in=8   btn=1   sel=0   txt=0   script=2 storage=4 handler=2   domwrite=4   bytes=16844  kind=persists
+money-path-demo.html         ops=3   in=3   btn=0   sel=0   txt=0   script=1 storage=2 handler=2   domwrite=4   bytes=9921   kind=persists
+ship-checklist.html          ops=12  in=11  btn=1   sel=0   txt=0   script=1 storage=4 handler=2   domwrite=1   bytes=7578   kind=persists
+CLASSIFY COST: 0.0309s over 45 faces (markers=67)

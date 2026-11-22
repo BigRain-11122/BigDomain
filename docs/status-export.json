@@ -3,17 +3,17 @@
     "board_pages_skipped": [
       "preview/ceo-blockers.html (8454B)"
     ],
-    "current": "2026-11-22 R3252 PRODUCT: 上一轮出厂的 merchant-onboard 在 preview/ 里零入口链接，而这个缺口自带的实验已经红着（tools/deliverable_index.py --check 当场 11/17，AC-DIX17 unlisted 列出 merchant-onboard 与新页）。本轮落下 preview/start-here.html（8033B）+ .json（437B）+ tools/start_here.py（ASCII）+ state/start-here-faces.json：顶部两个实测数（44 张面 / 6 张能动手），每张能动手的面写清“这一步能做什么”与“它不能证明什么”，下方用 project_items() 当轮重算的 6 项 CEO 物理件说清今天还不能真收钱；入口页只加一条链。",
+    "current": "2026-11-22 R3253 PRODUCT+ENGINEERING: the front door stopped calling every control the same kind of useful - preview/start-here.html now splits its six operable faces by WHAT A CLICK ACTUALLY CHANGES, read off each face's own bytes instead of authored into a list: FIVE faces touch browser storage so their ticks and filters survive a reload (persists), and ONE (buyer-trial) rewrites the screen with no storage at all, so its order and ledger die on refresh (screen). The header prints both counts, each card carries a data-kind badge, and the legend explains in words what that kind does and does not prove; wires and inert are printed as named absences because no live face sits in them.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
-    "last_artifact": "preview/start-here.html (8033B) + preview/start-here.json (437B) [2026-11-22 mtime]",
-    "latest_artifact": "preview/start-here.html (8033B) + preview/start-here.json (437B) [2026-11-22 mtime]",
+    "last_artifact": "preview/start-here.html (10197B) + preview/start-here.json (760B) [2026-11-22 mtime]",
+    "latest_artifact": "preview/start-here.html (10197B) + preview/start-here.json (760B) [2026-11-22 mtime]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\start-here.html",
     "latest_artifact_note": "",
     "latest_evidence": "qa/suite-ugc-gate-R3246.log (5047B, 2026-11-22)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3252] next window (<=48h): (0) MAIN — **本页的可操作面集是“计数定义的”，不是“真的能用的”**：口径＝面里有 `<input|button|select|textarea>` 就算可操作，于是 `lobby-protocol-map`（1 个过滤框）与 `money-path-demo`（3 个勾选）与 `buyer-trial`（3 钮）同列，而这三张能做的事差归很大。问：值不值得把“能动手”再分一层（可控→产生变化 / 可勾→仅本机自述 / 只读派生视图）？做法＝先只读量三问：①六张面各自的控件对页面状态的影响（点了会改变什么：仅本机存储 / 仅屏上数字 / 无）；②能否从面本身派生这一分层（而不是又一份手写清单）；③代价（一次派生多少字节、开页是否变慢）。收口三选一＝①接受现状（计数就是计数，零风险）②数据件里手写一层 `kind`（最快，但判据只管漂移）③从面自身派生分层（最诚实，代价＝要定义“改变状态”的机器判据）。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
-    "next_milestone_due": "2026-11-24T11:37:38+08:00",
-    "updated_at": "2026-11-22T11:37:38+08:00",
+    "next_milestone": "[R3253] next window (<=48h): (0) MAIN — **这一档是「提到」，不是「做到」**：`persists` 的判据只是面文本里出现 `localStorage|sessionStorage|indexedDB`，所以一个从不 `setItem` 的页面也会被判 persists；反过来把状态写进 `window.name`、cookie 或 URL 的页面会被判 `screen`（今天活树恰好没有这两种）。问：值不值得把「写进去的键」与「读回来的键」做成可判的配对？做法＝先只读量三问：①五张 persists 面各自 `setItem`/`getItem` 的键名与出现次数，是否成对、键名是否带版本后缀（如 `bd-merchant-onboard-v1`）；②能否从面文本派生「写入键集合 ⊇ 读取键集合」这一机械判据（而不是再加一个手写词表）；③代价（每面多几次正则、开页是否变慢、以及**读回来还要不要在页上真的跑一次**——静态读文本永远证不了读回）。收口三选一＝①接受现状（提到就算，零风险，页上明说）②只判「写入键 ⊇ 读取键」的静态配对（更严，但仍是文本证据、非运行证据）③把分层升级为运行证据（要在无头环境真的开页面点一次，代价＝引入 node 依赖与页面执行，触及「不执行 JS」的既有边界）。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
+    "next_milestone_due": "2026-11-24T11:43:23+08:00",
+    "updated_at": "2026-11-22T11:43:23+08:00",
     "heartbeat": {
       "tick": 3246,
       "state_tick": 3246,
@@ -37,8 +37,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-22 R3252 PRODUCT: 上一轮出厂的 merchant-onboard 在 preview/ 里零入口链接，而这个缺口自带的实验已经红着（tools/deliverable_index.py --check 当场 11/17，AC-DIX17 unlisted 列出 merchant-onboard 与新页）。本轮落下 preview/start-here.html（8033B）+ .json（437B）+ tools/start_here.py（ASCII）+ state/start-here-faces.json：顶部两个实测数（44 张面 / 6 张能动手），每张能动手的面写清“这一步能做什么”与“它不能证明什么”，下方用 project_items() 当轮重算的 6 项 CEO 物理件说清今天还不能真收钱；入口页只加一条链。",
-  "claims": {"claimed": 323, "captured": 95, "contradicted": 10, "uncaptured": 218, "historic": 7, "rows": 10, "present": true, "census_ts": "2026-11-22T11:37:38+08:00"},
+  "current": "2026-11-22 R3253 PRODUCT+ENGINEERING: the front door stopped calling every control the same kind of useful - preview/start-here.html now splits its six operable faces by WHAT A CLICK ACTUALLY CHANGES, read off each face's own bytes instead of authored into a list: FIVE faces touch browser storage so their ticks and filters survive a reload (persists), and ONE (buyer-trial) rewrites the screen with no storage at all, so its order and ledger die on refresh (screen). The header prints both counts, each card carries a data-kind badge, and the legend explains in words what that kind does and does not prove; wires and inert are printed as named absences because no live face sits in them.",
+  "claims": {"claimed": 323, "captured": 95, "contradicted": 10, "uncaptured": 218, "historic": 7, "rows": 10, "present": true, "census_ts": "2026-11-22T11:43:23+08:00"},
   "chain": {"present": true, "rows": 10, "broken": 0, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -67,11 +67,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-22 R3252 PRODUCT: 上一轮出厂的 merchant-onboard 在 preview/ 里零入口链接，而这个缺口自带的实验已经红着（tools/deliverable_index.py --check 当场 11/17，AC-DIX17 unlisted 列出 merchant-onboard 与新页）。本轮落下 preview/start-here.html（8033B）+ .json（437B）+ tools/start_here.py（ASCII）+ state/start-here-faces.json：顶部两个实测数（44 张面 / 6 张能动手），每张能动手的面写清“这一步能做什么”与“它不能证明什么”，下方用 project_items() 当轮重算的 6 项 CEO 物理件说清今天还不能真收钱；入口页只加一条链。",
-  "export_ts": "2026-11-22T11:37:38+08:00",
-  "latest_artifact": "preview/start-here.html (8033B) + preview/start-here.json (437B) [2026-11-22 mtime]",
+  "do": "2026-11-22 R3253 PRODUCT+ENGINEERING: the front door stopped calling every control the same kind of useful - preview/start-here.html now splits its six operable faces by WHAT A CLICK ACTUALLY CHANGES, read off each face's own bytes instead of authored into a list: FIVE faces touch browser storage so their ticks and filters survive a reload (persists), and ONE (buyer-trial) rewrites the screen with no storage at all, so its order and ledger die on refresh (screen). The header prints both counts, each card carries a data-kind badge, and the legend explains in words what that kind does and does not prove; wires and inert are printed as named absences because no live face sits in them.",
+  "export_ts": "2026-11-22T11:43:23+08:00",
+  "latest_artifact": "preview/start-here.html (10197B) + preview/start-here.json (760B) [2026-11-22 mtime]",
   "latest_evidence": "qa/suite-ugc-gate-R3246.log (5047B, 2026-11-22)",
-  "next_milestone": "[R3252] next window (<=48h): (0) MAIN — **本页的可操作面集是“计数定义的”，不是“真的能用的”**：口径＝面里有 `<input|button|select|textarea>` 就算可操作，于是 `lobby-protocol-map`（1 个过滤框）与 `money-path-demo`（3 个勾选）与 `buyer-trial`（3 钮）同列，而这三张能做的事差归很大。问：值不值得把“能动手”再分一层（可控→产生变化 / 可勾→仅本机自述 / 只读派生视图）？做法＝先只读量三问：①六张面各自的控件对页面状态的影响（点了会改变什么：仅本机存储 / 仅屏上数字 / 无）；②能否从面本身派生这一分层（而不是又一份手写清单）；③代价（一次派生多少字节、开页是否变慢）。收口三选一＝①接受现状（计数就是计数，零风险）②数据件里手写一层 `kind`（最快，但判据只管漂移）③从面自身派生分层（最诚实，代价＝要定义“改变状态”的机器判据）。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
+  "next_milestone": "[R3253] next window (<=48h): (0) MAIN — **这一档是「提到」，不是「做到」**：`persists` 的判据只是面文本里出现 `localStorage|sessionStorage|indexedDB`，所以一个从不 `setItem` 的页面也会被判 persists；反过来把状态写进 `window.name`、cookie 或 URL 的页面会被判 `screen`（今天活树恰好没有这两种）。问：值不值得把「写进去的键」与「读回来的键」做成可判的配对？做法＝先只读量三问：①五张 persists 面各自 `setItem`/`getItem` 的键名与出现次数，是否成对、键名是否带版本后缀（如 `bd-merchant-onboard-v1`）；②能否从面文本派生「写入键集合 ⊇ 读取键集合」这一机械判据（而不是再加一个手写词表）；③代价（每面多几次正则、开页是否变慢、以及**读回来还要不要在页上真的跑一次**——静态读文本永远证不了读回）。收口三选一＝①接受现状（提到就算，零风险，页上明说）②只判「写入键 ⊇ 读取键」的静态配对（更严，但仍是文本证据、非运行证据）③把分层升级为运行证据（要在无头环境真的开页面点一次，代价＝引入 node 依赖与页面执行，触及「不执行 JS」的既有边界）。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
   "outs": [
     "preview/ugc-gate-report.html (22688B) + preview/ugc-gate-report.json (16020B) [2026-11-22 mtime]",
     "probe-R3243.log (2178B) + suite-ugc-gate-R3243.log (3094B)",
@@ -164,8 +164,8 @@
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 69858,
-  "next_milestone_due": "2026-11-24T11:37:38+08:00",
+  "state_bytes": 75509,
+  "next_milestone_due": "2026-11-24T11:43:23+08:00",
   "heartbeat": {
     "tick": 3246,
     "state_tick": 3246,

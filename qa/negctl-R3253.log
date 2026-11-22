@@ -1,0 +1,10 @@
+WROTE ..\..\..\..\AppData\Local\Temp\bd-negctl-R3253-oose7g_h\c4\preview\start-here.html html=7554B operable=3 faces=4 missing=6
+WROTE ..\..\..\..\AppData\Local\Temp\bd-negctl-R3253-oose7g_h\c6\preview\start-here.html html=7110B operable=2 faces=3 missing=6
+live_baseline            PASS  VERDICT PASS criteria=8 faces=44 operable=6 missing_ceo=6 external_refs=0 kinds=persists:5,screen:1,wires:0,inert:0
+hand_written_kind        PASS  FAIL SH7 hand_written_kind:buyer-trial.html
+flipped_badge            PASS  FAIL SH7 kind:buyer-trial.html page=persists fresh=screen
+edited_count             PASS  FAIL SH8 count:persists page=4 fresh=5
+three_kinds              PASS  VERDICT PASS criteria=8 faces=4 operable=3 missing_ceo=6 external_refs=0 kinds=persists:1,screen:1,wires:0,inert:1
+inert_becomes_persists   PASS  FAIL SH7 kind:pv-inert.html page=inert fresh=persists
+missing_kind_tag         PASS  FAIL SH8 kind_tag_missing:wires
+NEGCTL PASS cases=7 passed=7

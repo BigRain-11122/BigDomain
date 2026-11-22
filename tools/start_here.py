@@ -25,6 +25,17 @@ OPS = ("input", "button", "select", "textarea")
 EXT = re.compile(r'(?:src|href)\s*=\s*["\']https?://', re.I)
 HREF = re.compile(r'<a\s[^>]*href="([^"]+)"')
 
+# What a control actually changes is read off the face itself, never authored:
+# a page whose script touches browser storage keeps its state across a reload
+# (persists); a page whose script rewrites the DOM keeps it only while open
+# (screen); a script with listeners but no derived output is wires; a control
+# with no script behind it is inert (only the browser's own check state moves).
+SCRIPT = re.compile(r"<script\b", re.I)
+STORAGE = re.compile(r"\b(localStorage|sessionStorage|indexedDB)\b")
+HANDLER = re.compile(r"\b(addEventListener|onclick|oninput|onchange|onkeyup)\b", re.I)
+DOMWRITE = re.compile(r"\.(textContent|innerHTML|value)\s*=")
+KINDS = ("persists", "screen", "wires", "inert")
+
 
 def sha16(path):
     with open(path, "rb") as fh:
@@ -36,8 +47,27 @@ def load_json(path):
         return json.load(fh)
 
 
+def classify(text):
+    """Which kind of change a click can make, derived from the face's own bytes."""
+    storage = len(STORAGE.findall(text))
+    script = len(SCRIPT.findall(text))
+    handler = len(HANDLER.findall(text))
+    domwrite = len(DOMWRITE.findall(text))
+    if storage:
+        kind = "persists"
+    elif script and handler and domwrite:
+        kind = "screen"
+    elif script and handler:
+        kind = "wires"
+    else:
+        kind = "inert"
+    return {"storage": storage, "script": script, "handler": handler,
+            "domwrite": domwrite, "kind": kind}
+
+
 def scan_faces():
-    """Per preview face: how many controls it carries and whether it leaves the machine."""
+    """Per preview face: how many controls it carries, what a click can change, and
+    whether it leaves the machine."""
     rows = {}
     for name in sorted(os.listdir(PREVIEW)):
         if not name.endswith(".html"):
@@ -46,12 +76,14 @@ def scan_faces():
             raw = fh.read()
         text = raw.decode("utf-8", "replace")
         counts = {key: len(re.findall(r"<%s\b" % key, text, re.I)) for key in OPS}
-        rows[name] = {
+        row = {
             "bytes": len(raw),
             "counts": counts,
             "ops": sum(counts.values()),
             "external": len(EXT.findall(text)),
         }
+        row.update(classify(text))
+        rows[name] = row
     return rows
 
 
@@ -71,17 +103,28 @@ def projection():
     doc = load_json(DATA)
     operable = operable_set(rows)
     gaps = []
+    hand_written = []
     for name in operable:
         entry = (doc.get("faces") or {}).get(name) or {}
         for key in ("label", "can", "cannot"):
             if not (entry.get(key) or "").strip():
                 gaps.append("%s missing %s" % (name, key))
+        # A hand-authored kind would turn the stratification back into a list that
+        # only tracks drift; the kind must come from the bytes.
+        if "kind" in entry:
+            hand_written.append(name)
+    kinds = {kind: [] for kind in KINDS}
+    for name in operable:
+        kinds[rows[name]["kind"]].append(name)
     return {
         "rows": rows,
         "doc": doc,
         "operable": operable,
         "faces_total": len([name for name in rows if name != "start-here.html"]),
         "gaps": gaps,
+        "hand_written": hand_written,
+        "kinds": kinds,
+        "kind_counts": {kind: len(kinds[kind]) for kind in KINDS},
         "missing": missing_ceo_items(),
         "data16": sha16(DATA),
     }
@@ -90,6 +133,14 @@ def projection():
 def esc(text):
     return (text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
             .replace('"', "&quot;"))
+
+
+def kind_tag(doc, kind):
+    return ((doc.get("kind_tags") or {}).get(kind) or kind)
+
+
+def kind_note(doc, kind):
+    return ((doc.get("kind_notes") or {}).get(kind) or "")
 
 
 def render(proj):
@@ -106,19 +157,37 @@ def render(proj):
         label = entry.get("label") or ""
         can = entry.get("can") or ""
         cannot = entry.get("cannot") or ""
+        kind = proj["rows"][name]["kind"]
         cards.append(
             '  <article class="face" data-face="%s">\n'
             '    <h3><a href="%s">%s</a> <code>%s</code></h3>\n'
+            '    <p class="kindline"><span class="kbadge" data-kind="%s">%s</span></p>\n'
             '    <p><b>%s</b>%s</p>\n'
             '    <p class="limit"><b>%s</b>%s</p>\n'
             '    <p><a class="go" href="%s">%s &rarr;</a></p>\n'
             '  </article>\n' % (
                 esc(name), esc(name), esc(label), esc(name),
+                esc(kind), esc(kind_tag(doc, kind)),
                 esc(doc["can_tag"]), esc(can),
                 esc(doc["cannot_tag"]), esc(cannot),
                 esc(name), esc(doc["open_link"]),
             )
         )
+    kind_counts = "\n".join(
+        '  <span class="kc" data-kind-count="%s"><b>%d</b>%s</span>'
+        % (kind, proj["kind_counts"][kind], esc(kind_tag(doc, kind)))
+        for kind in KINDS
+    )
+    legend = []
+    for kind in KINDS:
+        if proj["kind_counts"][kind]:
+            legend.append('  <p data-kind-note="%s"><b>%s</b>：%s</p>'
+                          % (kind, esc(kind_tag(doc, kind)), esc(kind_note(doc, kind))))
+        else:
+            absent = doc.get("kind_absent") or "{tag}"
+            legend.append('  <p data-kind-absent="%s">%s</p>'
+                          % (kind, esc(absent.format(tag=kind_tag(doc, kind)))))
+    legend_block = "\n".join(legend)
     if proj["missing"]:
         items = "\n".join(
             '    <li data-ceo-item="%s"><b>%s</b> &mdash; %s</li>'
@@ -150,6 +219,16 @@ def render(proj):
         ".count{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.5);"
         "border-radius:8px;padding:8px 14px;font-size:13px}\n"
         ".count b{font-size:20px;margin-right:6px}\n"
+        ".kindshead{margin-top:14px;font-size:13px;opacity:.94}\n"
+        ".kc{display:inline-block;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.4);"
+        "border-radius:6px;padding:4px 10px;font-size:12px;margin:4px 6px 0 0}\n"
+        ".kc b{font-size:15px;margin-right:5px}\n"
+        ".legend{background:#eef2ff;border:1px solid #c7d2fe;border-radius:8px;padding:10px 14px;"
+        "font-size:13px;margin-bottom:12px}\n"
+        ".legend p{margin:3px 0}\n"
+        ".kbadge{display:inline-block;background:#e7f5ff;border:1px solid #a5d8ff;color:#1864ab;"
+        "border-radius:999px;padding:1px 10px;font-size:11px}\n"
+        ".kindline{margin:2px 0 6px}\n"
         "h2{font-size:18px;margin:32px 0 12px;padding-left:10px;border-left:4px solid var(--accent)}\n"
         ".face{background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px 16px;"
         "margin-bottom:12px}\n"
@@ -179,8 +258,10 @@ def render(proj):
         "<span class=\"count\"><b data-count=\"faces\">%d</b>%s</span>"
         "<span class=\"count\"><b data-count=\"operable\">%d</b>%s</span>"
         "</div>\n"
+        "  <p class=\"kindshead\">%s</p>\n"
+        "  <div class=\"counts kinds\">\n%s\n  </div>\n"
         "</div></header>\n<div class=\"wrap\">\n"
-        "<h2>%s</h2>\n%s\n"
+        "<h2>%s</h2>\n<div class=\"legend\">\n%s\n</div>\n%s\n"
         "<h2>%s</h2>\n<div class=\"missing\">\n%s\n</div>\n"
         "<h2>%s</h2>\n<div class=\"notices\">\n%s\n</div>\n"
         "<footer>%s</footer>\n"
@@ -190,7 +271,8 @@ def render(proj):
         esc(doc["h1"]), esc(sub),
         proj["faces_total"], esc(doc.get("count_faces", "")),
         len(proj["operable"]), esc(doc.get("count_operable", "")),
-        esc(doc["h2_can"].format(operable=len(proj["operable"]))), "\n".join(cards),
+        esc(doc.get("kind_counts_head", "")), kind_counts,
+        esc(doc["h2_can"].format(operable=len(proj["operable"]))), legend_block, "\n".join(cards),
         esc(doc["h2_cannot"]), missing_block,
         esc(doc["h2_rule"]), notices,
         "sources: state/start-here-faces.json %s / state/merchant-onboard-items.json via "
@@ -210,6 +292,8 @@ def write():
         },
         "faces_total": proj["faces_total"],
         "operable": proj["operable"],
+        "kinds": {name: proj["rows"][name]["kind"] for name in proj["operable"]},
+        "kind_counts": proj["kind_counts"],
         "missing_ceo_items": [row["id"] for row in proj["missing"]],
         "sizes": {"html_bytes": len(html.encode("utf-8"))},
     }
@@ -267,13 +351,54 @@ def check():
     if text != render(proj):
         failures.append("SH6 page_out_of_date")
 
+    # AC-SH7: every face's badge equals the kind derived from that face's own bytes this
+    # run, and the data file may not carry a hand-authored kind (a written kind would
+    # only be graded for drift, never for being true).
+    for name in proj["operable"]:
+        want = proj["rows"][name]["kind"]
+        block = re.search(r'data-face="%s".*?</article>' % re.escape(name), text, re.S)
+        got = re.search(r'data-kind="([^"]+)"', block.group(0)) if block else None
+        if not got or got.group(1) != want:
+            failures.append("SH7 kind:%s page=%s fresh=%s"
+                            % (name, got.group(1) if got else "absent", want))
+        elif esc(kind_tag(proj["doc"], want)) not in block.group(0):
+            failures.append("SH7 badge_text:%s kind=%s" % (name, want))
+    for name in proj["hand_written"]:
+        failures.append("SH7 hand_written_kind:%s" % name)
+
+    # AC-SH8: the per-kind counters equal a fresh reading, they sum to the operable
+    # count, and a kind with none in it says so in words instead of printing nothing.
+    printed = {}
+    for kind in KINDS:
+        got = re.search(r'data-kind-count="%s"><b>(\d+)</b>' % kind, text)
+        printed[kind] = int(got.group(1)) if got else None
+        if printed[kind] != proj["kind_counts"][kind]:
+            failures.append("SH8 count:%s page=%s fresh=%d"
+                            % (kind, printed[kind], proj["kind_counts"][kind]))
+    if sum(v for v in printed.values() if v is not None) != len(proj["operable"]):
+        failures.append("SH8 sum=%s operable=%d"
+                        % (sum(v for v in printed.values() if v is not None),
+                           len(proj["operable"])))
+    for kind in KINDS:
+        if proj["kind_counts"][kind] == 0 and not re.search(
+                r'data-kind-absent="%s"' % kind, text):
+            failures.append("SH8 absent_line_missing:%s" % kind)
+    # A tag or note a kind cannot read is named, never a crash and never silence.
+    for kind in KINDS:
+        if not (proj["doc"].get("kind_tags") or {}).get(kind):
+            failures.append("SH8 kind_tag_missing:%s" % kind)
+        if proj["kind_counts"][kind] and not (proj["doc"].get("kind_notes") or {}).get(kind):
+            failures.append("SH8 kind_note_missing:%s" % kind)
+
     if failures:
         for line in failures:
             print("  FAIL " + line)
-        print("VERDICT FAIL criteria=6 failures=%d" % len(failures))
+        print("VERDICT FAIL criteria=8 failures=%d" % len(failures))
         return 2
-    print("VERDICT PASS criteria=6 faces=%d operable=%d missing_ceo=%d external_refs=0"
-          % (proj["faces_total"], len(proj["operable"]), len(proj["missing"])))
+    print("VERDICT PASS criteria=8 faces=%d operable=%d missing_ceo=%d external_refs=0 "
+          "kinds=%s"
+          % (proj["faces_total"], len(proj["operable"]), len(proj["missing"]),
+             ",".join("%s:%d" % (kind, proj["kind_counts"][kind]) for kind in KINDS)))
     return 0
 
 
