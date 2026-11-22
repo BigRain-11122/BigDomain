@@ -1885,6 +1885,29 @@ def decl_word(doc, form):
     return ((doc.get("decl_tags") or {}).get(form) or form)
 
 
+# R3282: the reader's own limits, as one closed set. Each id names a fact the reading
+# deliberately does NOT follow; printing them beside the reading is the difference
+# between a silence and a stated absence. The criterion grades the set, so a limit can
+# be neither dropped from the page nor invented on it.
+BOUNDARIES = (
+    ("named-one-hop", "key_bound_named_one_hop"),
+    ("receiver-text", "key_bound_receiver_text"),
+    ("this-text", "key_bound_this_text"),
+    ("indirect-call", "key_bound_indirect_call"),
+)
+
+
+def boundary_block(proj):
+    doc = proj["doc"]
+    rows = []
+    for bound_id, key in BOUNDARIES:
+        rows.append('\n  <p data-key-bound-id="%s">%s</p>'
+                    % (bound_id, esc(doc.get(key) or "")))
+    return ('  <p class="keybound" data-key-bound="%d">%s</p>%s'
+            % (len(BOUNDARIES), esc(doc.get("key_bound_head_fmt") or ""),
+               "".join(rows)))
+
+
 def render(proj):
     doc = proj["doc"]
     faces = doc.get("faces") or {}
@@ -2527,7 +2550,8 @@ def render(proj):
     else:
         func_html += ('\n  <p data-key-func-absent>%s</p>'
                       % esc(doc.get("key_func_absent") or ""))
-    steps_block = (keynames_html + "\n" + repeats_html + "\n" + when_html + "\n"
+    steps_block = (boundary_block(proj) + "\n"
+                   + keynames_html + "\n" + repeats_html + "\n" + when_html + "\n"
                    + multi_html + "\n" + func_html + "\n" + unread_html
                    + "\n" + split_html + "\n"
                    + steps_head
@@ -4041,6 +4065,29 @@ def check():
     elif len(multi_absent) != 1:
         failures.append("SH26 multi_absent_line expected=1 got=%d"
                         % len(multi_absent))
+    # R3282: the page states its own reading limits in one closed set, right where the
+    # reading is printed. A limit that stops being followed but stays off the page lets
+    # a silence read as an answer, so the set is graded in both directions: every
+    # declared limit printed exactly once, in declared order, with text, and no id on
+    # the page that the declaration does not carry.
+    if not (proj["doc"].get("key_bound_head_fmt") or "").strip():
+        failures.append("SH26 word_missing:key_bound_head_fmt")
+    for bound_id, key in BOUNDARIES:
+        if not (proj["doc"].get(key) or "").strip():
+            failures.append("SH26 word_missing:%s" % key)
+    bound_head = re.findall(r'data-key-bound="(\d+)"', text)
+    if bound_head != [str(len(BOUNDARIES))]:
+        failures.append("SH26 bound_head page=%s declared=%s"
+                        % (bound_head, str(len(BOUNDARIES))))
+    bound_ids = re.findall(r'<p data-key-bound-id="([^"]+)">([^<]*)<', text)
+    want_bound = [bound_id for bound_id, _key in BOUNDARIES]
+    if [bound_id for bound_id, _said in bound_ids] != want_bound:
+        failures.append("SH26 bound_ids page=%s declared=%s"
+                        % ([bound_id for bound_id, _said in bound_ids], want_bound))
+    else:
+        for bound_id, said in bound_ids:
+            if not said.strip():
+                failures.append("SH26 bound_line_empty:%s" % bound_id)
     # R3278: the rename is total. A page still carrying the R3277 table beside the new
     # one would print the same site twice, so the residue itself is a failure.
     if 'class="keymixed"' in text or "data-key-mixed-" in text:
