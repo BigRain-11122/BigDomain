@@ -1,0 +1,6 @@
+C0   PASS anchors match crlf=0/10 lf=10/10 (only the CR differs)
+C1   PASS LF copy rc=2 names_eol=False
+C2   PASS CRLF copy rc=2 names_eol=True (E_SXF_EOL: the face carries 208 CR; AC-SXF34 requires LF only because this wri)
+C2b  PASS crlf bytes - lf bytes = 208 = line count 208
+C3   PASS gitattributes pin present=True
+NEGCTL PASS cases=5 red=0

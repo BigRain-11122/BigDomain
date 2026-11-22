@@ -12,7 +12,12 @@ Criteria (pinned in src/os/backlog.md at R2820 BEFORE this file existed):
            verbatim, and latest_artifact from the newest preview/ file on disk.
   AC-SXF3  next_milestone comes from the newest "[R####] next window" backlog row
            and its due hour claim (12h when the row says <=12h, else 48h).
-  AC-SXF4  --apply is idempotent: a second run leaves the file byte-identical.
+  AC-SXF4  --apply is idempotent with the clock held: a second run over the same
+           inputs leaves the file byte-identical (measured R3303: a fixed-clock
+           pair produced sha16 c056a4c555cd4945 twice). Across seconds the only
+           bytes that move are export_ts/updated_at/census_ts - the apply's own
+           moment - so this criterion is a statement about the writer being a
+           function of its inputs, not about two wall-clock runs.
   AC-SXF5  fail-closed on no narrative round (rc=5, zero bytes written); output
            stays UTF-8 without BOM and LF only.
 
@@ -205,6 +210,20 @@ def iso(moment):
 def read_text(path):
     with io.open(path, "r", encoding="utf-8", newline="") as handle:
         return handle.read()
+
+
+def lf_text(path):
+    """R3303: one dialect on the way in, because every anchor here is a line.
+
+    The reader (json.loads) tolerates CRLF, so the face was classified as a
+    tolerant carrier at R3209 - but _set_line/_set_number/_ensure_top match
+    ^<indent>"key": ...(,?)$ and `$` does not match before a CR. On a worktree
+    materialised by core.autocrlf=true the writer therefore answered
+    E_SXF_NO_KEY for all fourteen keys while --check graded what it could
+    still parse. Normalising here repairs an existing CRLF checkout; the pin
+    in .gitattributes stops a new one from appearing.
+    """
+    return read_text(path).replace("\r\n", "\n").replace("\r", "\n")
 
 
 def load_state(path):
@@ -421,9 +440,17 @@ def check(export_path, state_path):
     if round_int is None or not narrative:
         print("E_SXF_NO_ROUND: state.json log carries no narrative round line")
         return 5
-    doc = json.loads(read_text(export_path))
+    raw = read_text(export_path)
+    doc = json.loads(raw)
     tag = "R%d" % round_int
     problems = []
+    # AC-SXF34 (R3303): this document is the CEO's download and the only shipped
+    # writer splices it through line anchors, so one dialect is a property of the
+    # face, not a preference - a CR here is what made every anchor miss.
+    if "\r" in raw:
+        problems.append(("E_SXF_EOL",
+                         "the face carries %d CR; AC-SXF34 requires LF only because "
+                         "this writer's anchors are line based" % raw.count("\r")))
     # The LEADING round tag is what "current" means. A mere mention is not enough:
     # the first negative control measured PASS because the narrative names its own
     # round twice, so rewinding the leading tag left a second mention behind.
@@ -822,7 +849,7 @@ def apply(export_path, state_path, backlog_path, preview_dir, dry_run=False):
     moment = now_local()
     due = moment + dt.timedelta(hours=milestone["hours"] if milestone else 48)
 
-    text = read_text(export_path)
+    text = lf_text(export_path)
     milestone_line = milestone["text"] if milestone else ""
     edits = [
         ("", "export_ts", iso(moment), "  "),
@@ -896,7 +923,7 @@ def apply(export_path, state_path, backlog_path, preview_dir, dry_run=False):
             print("E_SXF_WRITE: %s copies are not both the derived value (top=%r ceo_face=%r)"
                   % (key, (pair[0] or "")[:40], (pair[1] or "")[:40]))
             return 7
-    before = read_text(export_path)
+    before = lf_text(export_path)
     changed = text != before
     if dry_run:
         print("DRY %s changed=%s round=R%d bytes_before=%d bytes_after=%d"
@@ -920,6 +947,12 @@ def apply(export_path, state_path, backlog_path, preview_dir, dry_run=False):
         return 8
     os.replace(stage, export_path)
     after = read_text(export_path)
+    # AC-SXF35 (R3303): the applied line used to PRINT lf_only and land anyway.
+    # A face that still carries a CR is one this writer cannot repar, so it is
+    # refused here rather than left for the next window to discover.
+    if "\r" in after:
+        print("E_SXF_EOL: applied face still carries %d CR (AC-SXF35)" % after.count("\r"))
+        return 9
     # The re-read is a live-name reading, not a second refusal surface: after
     # os.replace the landed bytes ARE the judged bytes, so a code here would mean
     # the judge or the disk moved between the two calls.

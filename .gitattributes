@@ -58,15 +58,31 @@ preview/apimarket-report.json text eol=lf
 # qa/*.log (evidence_dialect classifies, pre-commit refuses), and
 # tools/hooks/pre-commit (read by sh). Tolerant carriers, each measured with a
 # real add/checkout cycle and then read back through its own reader at R3209:
-# docs/status-export.json, heartbeat.txt, qa/writer-census-baseline.json and
+# heartbeat.txt, qa/writer-census-baseline.json and
 # logs/state-log-archive-*.md ALL flip to CRLF under a checkout on an
 # autocrlf=true host, yet heartbeat.read_tick normalises CRLF before parsing
 # and the other two are read through json.loads or re-rendered LF and compared
-# downstream. CORRECTION (R3210): an earlier version of this comment said the
+# downstream. CORRECTION (R3209 + R3303): docs/status-export.json was listed as
+# tolerant above, and that measurement covered only its READER (json.loads eats
+# CRLF). Its sole shipped WRITER, tools/status_export_fresh.py, splices raw text
+# through line-anchored regexes (^<indent>"key": ...(,?)$), and `$` does not
+# match before a CR: on a worktree materialised by core.autocrlf=true the writer
+# refused all fourteen keys with E_SXF_NO_KEY while --check graded the values it
+# could still parse. Measured at R3303 (git ls-files --eol: i/lf w/crlf attr/).
+# So the pin below is owed by the WRITER, and AC-SXF34/35/36 grade it. The old
+# law's scope sentence is corrected, not dropped. CORRECTION (R3210): an earlier version of this comment said the
 # archives have "no dialect reader at all", which is false -
 # src/os/ledger_lines.load_archive reads them (measured: the mixed 2026-09
 # archive, crlf=478 with bare_lf=15500, yields the SAME 15611 lines live,
 # forced-LF and forced-CRLF, zero accepted line carrying an embedded CR), so
 # they are TOLERATED by measurement rather than unread. Pinning those four
 # would change nothing a machine can judge - decoration - so AC-CDPIN5 holds
-# the scope: every hard-reader carrier is pinned, no tolerant carrier is.
+# the scope: every hard-READER carrier is pinned, no tolerant reader is.
+
+# R3303: the CEO three-line face has a tolerant reader but a dialect-hard
+# WRITER (see the correction above), so it is pinned for the writer's sake.
+# Without this line any checkout on an autocrlf=true host lands CRLF, the
+# writer's line anchors all miss, and the face rots while --check parses it.
+# Same law as preview/apimarket-report.{html,json} (R3292): the carrier dialect
+# is a property of the FILE, never of the machine's git settings.
+docs/status-export.json text eol=lf

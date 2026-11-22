@@ -1,0 +1,6 @@
+face bytes=36910 cr=208 crlf_pairs=208 lines=208
+anchor hits on the worktree text: string=0/10 top=0/3 number=0/1
+anchor hits after CRLF->LF: string=10/10 top=3/3 number=1/1
+fields: state_bytes=225799 export_ts=2026-11-23T00:24:43+08:00
+current leads with R3302 - 
+ok - read-only probe, zero writes
