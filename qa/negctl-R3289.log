@@ -1,0 +1,10 @@
+ARM clean-private-world          OK   expect=PASS    got=none                                     fails=0
+ARM html-byte-flip               OK   expect=E_AMF2  got=E_AMF2 E_AMF2                            fails=2
+ARM frozen-html-deleted          OK   expect=E_AMF4  got=E_AMF4                                   fails=1
+ARM unlisted-page                OK   expect=E_AMF1  got=E_AMF1                                   fails=1
+ARM json-schema-bumped           OK   expect=E_AMF3  got=E_AMF3                                   fails=1
+ARM sibling-json-deleted         OK   expect=E_AMF2  got=E_AMF2 E_AMF3                            fails=2
+ARM exclusion-no-producer        OK   expect=E_AMF5  got=E_AMF5                                   fails=1
+ARM empty-manifest               OK   expect=E_AMF6  got=E_AMF6 E_AMF6 E_AMF1 E_AMF1 E_AMF1 E_AMF1 E_AMF1 E_AMF1 E_AMF1 E_AMF1 E_AMF1 E_AMF1 E_AMF1 E_AMF1 E_AMF1 fails=15
+NEGCTL R3289 arms=8 passed=8
+VERDICT PASS

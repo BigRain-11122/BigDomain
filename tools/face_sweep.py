@@ -97,6 +97,13 @@ FACES = [
      "tools/ledger_business_report.py",
      "preview/ledger-business-report.html", "preview/ledger-business-report.json",
      "\u4ee3\u5e01\u4e24\u5f0f\u8d26\u672c\u5bf9\u4e0d\u4e0a\uff0c\u6536\u5165\u4e0d\u53ef\u5ba1\u8ba1\u3002"),
+    # R3289: thirteen apimarket report faces are historical snapshots with no
+    # generator on disk; the manifest is the only record of their bytes, so a
+    # silent drift would leave an unreproducible page nobody could audit.
+    ("apimarket-freeze", "API \u5e02\u573a\u62a5\u8868\u9762\u51bb\u7ed3 / 13 \u9762\u65e0\u4ea7\u51fa\u5668",
+     "tools/apimarket_face_freeze.py",
+     "preview/apimarket-report-claims-demo.html", "state/apimarket-face-freeze.json",
+     "\u62a5\u8868\u9762\u6f02\u79fb\u540e\u65e0\u4eba\u80fd\u91cd\u9020\uff0c\u5ba1\u8ba1\u5c31\u65ad\u5728\u8fd9\u5f20\u9875\u4e0a\u3002"),
     ("entry-index", "\u5165\u53e3\u9875\u5b9e\u7269\u53f0\u8d26 / index",
      "tools/deliverable_index.py",
      "preview/index.html", "preview/deliverable-index.json",
@@ -106,6 +113,10 @@ FACES = [
 # Deliberately excluded, and named instead of silently dropped: the API-market face
 # (preview/apimarket-report.html) is rendered by src/sandbox/ledger/apimarket_report.py,
 # which has NO read-only --check, so a sweep row for it could only quote a declaration.
+# R3289: thirteen of the seventeen apimarket-report-* faces have no generator at all,
+# so they are frozen by sha256 in state/apimarket-face-freeze.json and gated by
+# tools/apimarket_face_freeze.py --check (the row below). The four generator-backed
+# faces keep their own preview_*.py drivers and stay off this board.
 EXCLUDED_NOTE = ("API \u5e02\u573a\u9762\u4e0d\u5728\u672c\u677f\u5b9e\u6d4b\u9762\u5185\uff1a"
                  "src/sandbox/ledger/apimarket_report.py \u65e0\u53ea\u8bfb --check\uff0c"
                  "\u5f3a\u884c\u5165\u677f\u53ea\u80fd\u5f15\u7528\u58f0\u660e\u3002")

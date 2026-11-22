@@ -397,7 +397,11 @@
   "R3288 tokens: local=~38k api=0 api_reason=no cloud call: one five-still scan, one board/state read set, one read-only probe, one PIN row before any shipped edit, one new channel tool with six criteria, 32 page writes plus 11 in-place size patches, three fixed-point passes, one sweep and one index re-render, nine negative-control arms in private worlds, one export pass and the closeout gate; zero cloud calls and zero external API touches",
   "R3288 group scan: ledger carried 0 @BigDomain lines; the only new decisions token is T-20261117-0556, which is a MiniGame receipt file named inside a group ruling - not a BigDomain dispatch, so it is logged as knowledge-only; group orders tail still ends at the 2026-11-20 22:5x content-handover row matching last_order; benchmarks_refreshed 2026-11-18 is inside the seven-day gate.",
   "R3288 tick: 3287 -> 3288.",
-  "R3288 closeout: tick advanced to 3288; every one of the 32 silent endpoints now shows the reader a clickable way back, and the endpoint table derives empty because no face is silent any more."
+  "R3288 closeout: tick advanced to 3288; every one of the 32 silent endpoints now shows the reader a clickable way back, and the endpoint table derives empty because no face is silent any more.",
+  "R3289 group scan: ledger carried 0 @BigDomain lines; the decisions token set is unchanged against last_dec_tokens (no new D-/C- row this window); group orders tail still ends at the 2026-11-20 22:5x content-handover row matching last_order; benchmarks_refreshed 2026-11-18 is inside the seven-day gate.",
+  "R3289 tick: 3288 -> 3289.",
+  "2026-11-22 R3289 EXEC: the thirteen apimarket report faces that no script on disk can re-create are now frozen by bytes+sha256+schema in state/apimarket-face-freeze.json (tools/apimarket_face_freeze.py, criteria AC-AMF1..6, negative controls 8/8), and that check runs for real inside face_sweep --gates (rc=0, mutated=0, 0.12s). Zero page bytes changed: the round ships a drift alarm, not a better page. Honest limit: a freeze does not make these faces reproducible, and no buyer can pay yet - the five physical pieces are still missing.",
+  "R3289 tokens: local=~28k api=0 api_reason=no cloud call: one five-still scan, one board/state read set, one read-only probe landed through the writer, one new freeze tool with six criteria, one manifest of thirteen entries plus four exclusion proofs, eight negative-control arms across private preview copies, one face-sweep board re-render and check, one deliverable-index check, one export apply and the closeout gate; zero cloud calls and zero external API touches."
  ],
- "tick": 3288
+ "tick": 3289
 }

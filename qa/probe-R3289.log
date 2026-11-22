@@ -1,0 +1,67 @@
+PROBE R3289 apimarket faces reproducibility (read-only)
+
+generator REPORT_SCHEMA today = 17
+
+Q1 per-face source (html bytes, sha16, json sibling, schema)
+slug         html_bytes sha16            json  schema sizes_block
+activity          15157 0fd69a8a06ba1e75 21777 3      no
+attention         13128 d6829dab31b2200a absent none   none
+buyers            24878 c0e7e8291c96b8e4 38330 5      no
+claims            36410 8d65a7c409d2b10c 59148 17     no
+claims-demo       46430 43962aba85a198ff 76032 17     no
+csv               31910 d02d79b993a8f156 52261 14     no
+demand            29028 9166c3daf293da21 47526 9      no
+dossiers          20554 1cb2f6b309e57fdd 32688 4      no
+duty              33470 734ee31dac61d99f 54733 15     no
+json              13123 1dcd0035f361c15e absent none   none
+quality           38854 0fd70567b5da1f91 67667 10     no
+slowanswer        11983 7fbe3c72f3d9aa7a 18381 14     no
+workbench         14629 0e6d68c5e5b5dcfb 18474 2      no
+
+schema values present = 2,3,4,5,9,10,14,15,17
+faces whose schema != today (17) = 9 activity,buyers,csv,demand,dossiers,duty,quality,slowanswer,workbench
+faces with no json sibling = 2 attention,json
+distinct html sha16 = 13 of 13
+
+Q1b test worlds on disk (each builds its own temp db?)
+test modules = 13
+  test_apimarket_report.py                     mkdtemp=1 preview_write=0
+  test_apimarket_report_activity.py            mkdtemp=1 preview_write=0
+  test_apimarket_report_attention.py           mkdtemp=1 preview_write=0
+  test_apimarket_report_buyerhistory.py        mkdtemp=1 preview_write=0
+  test_apimarket_report_claims.py              mkdtemp=1 preview_write=0
+  test_apimarket_report_claims_nesting.py      mkdtemp=0 preview_write=0
+  test_apimarket_report_demand.py              mkdtemp=1 preview_write=0
+  test_apimarket_report_dossier.py             mkdtemp=1 preview_write=0
+  test_apimarket_report_duty.py                mkdtemp=1 preview_write=0
+  test_apimarket_report_json.py                mkdtemp=1 preview_write=0
+  test_apimarket_report_refundregister.py      mkdtemp=1 preview_write=0
+  test_apimarket_report_slowanswer.py          mkdtemp=1 preview_write=0
+  test_apimarket_report_workbench.py           mkdtemp=1 preview_write=0
+  activity     token=api_market_feed        worlds=test_apimarket_report_activity.py,test_apimarket_report_buyerhistory.py,test_apimarket_report_claims.py
+  attention    token=collect_attention      worlds=test_apimarket_report_activity.py,test_apimarket_report_attention.py,test_apimarket_report_buyerhistory.py
+  buyers       token=api_library            worlds=test_apimarket_report_buyerhistory.py,test_apimarket_report_refundregister.py
+  claims       token=api_claims             worlds=test_apimarket_report_claims.py
+  claims-demo  token=api_claims             worlds=test_apimarket_report_claims.py
+  csv          token=--csv-out              worlds=NONE
+  demand       token=api_listing_demand     worlds=test_apimarket_report_demand.py
+  dossiers     token=api_view               worlds=test_apimarket_report_buyerhistory.py,test_apimarket_report_dossier.py,test_apimarket_report_refundregister.py
+  duty         token=api_public_listings    worlds=test_apimarket_report_duty.py
+  json         token=--json-out             worlds=test_apimarket_report_activity.py,test_apimarket_report_buyerhistory.py,test_apimarket_report_dossier.py
+  quality      token=api_seller_quality     worlds=NONE
+  slowanswer   token=slow_answer            worlds=test_apimarket_report_slowanswer.py
+  workbench    token=api_buyer_todo         worlds=test_apimarket_report_workbench.py
+slugs with exactly one named temp-db world = 6/13
+
+Q2 can --check re-render and compare?
+re-render today would emit schema 17; 9 faces carry older schemas, so a fresh render can never equal the pinned bytes
+=> a check can only compare PINNED bytes+sha16 (a freeze), not a derived render
+=> any option that edits these pages destroys the only record of the schema they were rendered at
+
+Q3 cost of each option
+(1) slug driver = import 13 worlds, re-render 13 pages at schema 17: 13 html + N json bytes change, then backhop injection + face sweep + index + scan + export re-run
+    honest cost: the 13 historical snapshots are replaced by 13 near-identical current pages; the schema record is lost
+(2) freeze = 1 new tool + 1 manifest (13 entries) + 1 face sweep row; 0 page bytes change
+(3) status quo = 0 files, drift stays invisible
+
+PROBE DONE slugs=13 stale=9 no_json=2

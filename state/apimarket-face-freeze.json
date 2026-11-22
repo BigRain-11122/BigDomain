@@ -1,0 +1,155 @@
+{
+ "excluded_generator_backed": [
+  {
+   "producer": "src/os/preview_R2119.py",
+   "slug": "buyerquestions"
+  },
+  {
+   "producer": "src/os/preview_R2118.py",
+   "slug": "questions"
+  },
+  {
+   "producer": "src/os/preview_R2111.py",
+   "slug": "refunds"
+  },
+  {
+   "producer": "src/os/preview_R2120.py",
+   "slug": "selleranswers"
+  }
+ ],
+ "faces": [
+  {
+   "html": "preview/apimarket-report-activity.html",
+   "html_bytes": 15157,
+   "html_sha256": "0fd69a8a06ba1e7574e7b32e9840370a4f916926bab31eff1fde881c8ab2ffb1",
+   "json": "preview/apimarket-report-activity.json",
+   "json_bytes": 21777,
+   "json_sha256": "d07fa49769dfdb0162a04d64f1f6e1118e507f6dc8e57ccc417c6fb1a27d486f",
+   "schema_version": 3,
+   "slug": "activity"
+  },
+  {
+   "html": "preview/apimarket-report-attention.html",
+   "html_bytes": 13128,
+   "html_sha256": "d6829dab31b2200a49d77abd3f4a657c79d893802773eb8afe168752e3ec4aed",
+   "json": null,
+   "json_bytes": null,
+   "json_sha256": null,
+   "schema_version": null,
+   "slug": "attention"
+  },
+  {
+   "html": "preview/apimarket-report-buyers.html",
+   "html_bytes": 24878,
+   "html_sha256": "c0e7e8291c96b8e4ed487def9b09581676e0f47b5a940ea7fa8de770268a15b2",
+   "json": "preview/apimarket-report-buyers.json",
+   "json_bytes": 38330,
+   "json_sha256": "66f262ceceaea457546916073eee7dd3ded260a89255d92d40ab1bdb41d530b4",
+   "schema_version": 5,
+   "slug": "buyers"
+  },
+  {
+   "html": "preview/apimarket-report-claims.html",
+   "html_bytes": 36410,
+   "html_sha256": "8d65a7c409d2b10c70e0785609a9b715a3d7ae99cdcb53156db6372708071888",
+   "json": "preview/apimarket-report-claims.json",
+   "json_bytes": 59148,
+   "json_sha256": "02e526eeac93242e9a9b75bd177d0521696e51fd91096fc08cee1fadd42f7514",
+   "schema_version": 17,
+   "slug": "claims"
+  },
+  {
+   "html": "preview/apimarket-report-claims-demo.html",
+   "html_bytes": 46430,
+   "html_sha256": "43962aba85a198ffd8ed6363806c2a1f5e2cdba9fcf76aa7136f42389ad1d58e",
+   "json": "preview/apimarket-report-claims-demo.json",
+   "json_bytes": 76032,
+   "json_sha256": "a23f7cef67e4455d2a714a73c34d261b2ca4c147f268cb89fdb52ab756b0bf0a",
+   "schema_version": 17,
+   "slug": "claims-demo"
+  },
+  {
+   "html": "preview/apimarket-report-csv.html",
+   "html_bytes": 31910,
+   "html_sha256": "d02d79b993a8f1564bfb41f2c7b93b536bc6e5e515277e57984dca081afcfcba",
+   "json": "preview/apimarket-report-csv.json",
+   "json_bytes": 52261,
+   "json_sha256": "4100aa55f1b7a968b4b21aaf7c3121fd68912adb5ca860fdd1e92b6bf4e083e7",
+   "schema_version": 14,
+   "slug": "csv"
+  },
+  {
+   "html": "preview/apimarket-report-demand.html",
+   "html_bytes": 29028,
+   "html_sha256": "9166c3daf293da21199cce261caf1c91e12561fea4a27d1bd5c2aecb5f38a06f",
+   "json": "preview/apimarket-report-demand.json",
+   "json_bytes": 47526,
+   "json_sha256": "d4b4d49cf5dae260e8ed7a4daf66c275c1eb7d50b863b737860c5eda2148a235",
+   "schema_version": 9,
+   "slug": "demand"
+  },
+  {
+   "html": "preview/apimarket-report-dossiers.html",
+   "html_bytes": 20554,
+   "html_sha256": "1cb2f6b309e57fdddd609afcc8625f0700751e1d7be781578dab21a7bd5e98b8",
+   "json": "preview/apimarket-report-dossiers.json",
+   "json_bytes": 32688,
+   "json_sha256": "eb3810b39ea42cdd8276026e4b2d6db6e64036ce689056487e0da1352c45e4f8",
+   "schema_version": 4,
+   "slug": "dossiers"
+  },
+  {
+   "html": "preview/apimarket-report-duty.html",
+   "html_bytes": 33470,
+   "html_sha256": "734ee31dac61d99f22eb6c3ff515aacb5e40ffc769d28f1cccef89ac88c54f5e",
+   "json": "preview/apimarket-report-duty.json",
+   "json_bytes": 54733,
+   "json_sha256": "a29b350c491cf53ad6ba231222cf2a0450ab59fd34760150643f6e4a52fbd6fd",
+   "schema_version": 15,
+   "slug": "duty"
+  },
+  {
+   "html": "preview/apimarket-report-json.html",
+   "html_bytes": 13123,
+   "html_sha256": "1dcd0035f361c15e39d4c24aedb76790781788a48750ac461be7d9a3f2685e96",
+   "json": null,
+   "json_bytes": null,
+   "json_sha256": null,
+   "schema_version": null,
+   "slug": "json"
+  },
+  {
+   "html": "preview/apimarket-report-quality.html",
+   "html_bytes": 38854,
+   "html_sha256": "0fd70567b5da1f9145f0e35a3d68cab375af1174cc510a3f1217dd7247e9e2b7",
+   "json": "preview/apimarket-report-quality.json",
+   "json_bytes": 67667,
+   "json_sha256": "016542f070b058e96f1b065e6fdb2afb427a05882c72bac5d06c21b1f0470dab",
+   "schema_version": 10,
+   "slug": "quality"
+  },
+  {
+   "html": "preview/apimarket-report-slowanswer.html",
+   "html_bytes": 11983,
+   "html_sha256": "7fbe3c72f3d9aa7a5c469ac39c78adce03bc688679daa3fc68ed4299335ce135",
+   "json": "preview/apimarket-report-slowanswer.json",
+   "json_bytes": 18381,
+   "json_sha256": "c57a2fc76794309af1f565b7df03bec9067ffd56ddf0323dbe3003b871cbbc00",
+   "schema_version": 14,
+   "slug": "slowanswer"
+  },
+  {
+   "html": "preview/apimarket-report-workbench.html",
+   "html_bytes": 14629,
+   "html_sha256": "0e6d68c5e5b5dcfb2e060ca89b023ec29f39b2ed8a2b2d76cb2cd53f962e8fdf",
+   "json": "preview/apimarket-report-workbench.json",
+   "json_bytes": 18474,
+   "json_sha256": "eb073a0e88598699af67d13b9d5670d48cd4c7c8c2c052bdf35516093b30cb02",
+   "schema_version": 2,
+   "slug": "workbench"
+  }
+ ],
+ "manifest_schema": 1,
+ "tool": "tools/apimarket_face_freeze.py",
+ "why": "13 faces were rendered ad hoc from per-feature temp databases; the generator is at REPORT_SCHEMA 17 and 9 of them carry older schemas, so a fresh render can never equal these bytes. Pinned, not reproducible: this makes drift visible, nothing more."
+}
