@@ -114,3 +114,9 @@
   instead of writing; 3 fails = do the missing faces first and continue next window.
 
 - 试点实测 c（2026-11-17 R2869·第八份 apimarket 面，收口）：判据①过——单字节红控如实判 `FAIL sizes html 36146 != 36147 on disk` rc=2，还原回 PASS；判据②**过**（本面首次全过）——同种子世界两次渲染 html/json 逐字节同一（sha256 9d6dd297c01bb656 / 67b45cae9c117faa），因为 apimarket 面不带 `generated_utc`，这正是 R2765 payment 面判负的原因，差异在面不在尺寸技法；判据③**过**——带 `sizes` 的面页由实测 7/8 变 8/8，八个面的 `--check` 在该树全绿（qa/battery-apimarket-sizes-R2869.log，10 个套件 rc=0）。附带实物：`preview/apimarket-report.html` 36146B + `.json` 59515B 由 schema 1 旧样本重渲至 schema 17，样本与代码重新对齐。诚实边界：sizes 只证「文件知道自己多大」，不证报表内容正确；八个兄弟套件的信封断言由三成员改四成员是契约改动，已在提案面与套件 docstring 双向披露。**BD-PROP-010 转正。**
+
+### BD-PROP-011 让「已到位」可以由一次本机登记产生（2026-11-22·窗 11-22~11-28·状态 open·试点窗 11-22~12-06）
+
+- 现象：R3264 上首屏已经会说「{total} 项里有 {pending} 项 CEO 物理件未到位」，但那个数字只能靠改 `state/merchant-onboard-items.json` 的 `evidence_source` 才会动，而 `evidence()` 今天只认 `callback`/`books` 两条固定键。于是 CEO 真拿到商户号那天，页面照样写「收不了钱」，除非有人改代码——而改代码正是这一轮刚刚拒绝的「手写冒充派生」。
+- 建议：给接入自查单加一条**只记「是否已具备」、绝不记录值**的本机登记命令（形如 `python tools/merchant_onboard.py --mark <id> --file <path>`：把该文件的 sha256 与名字写进 `state/` 下的证据索引，密钥值一律不落盘、不入 git、不打印），让 `evidence_source` 能由一次登记产生，首屏收钱行与 AC-SH22 自动翻档，无需人手改页面。
+- 判据（先立·≤3 问，试点窗内逐条验）：①登记后 `project_items()` 该行 `proven` 翻真、首屏 `data-money-*` 随之翻档，且 `--check` 仍 PASS（其余判据一条不松）？②命令行参数或路径里出现疑似密钥形态（连续 ≥20 位字母数字）时，命令必须拒绝并把日志写成「只留长度与种类、不留值」？③登记面零写入 `.env`、零写入 git 跟踪文件（只写 `state/` 下的索引，存 sha256 而非内容）？
