@@ -50,6 +50,14 @@ END = "<!-- BD-DELIVERABLE-INDEX:END -->"
 TITLE_RE = re.compile(r"<title>(.*?)</title>", re.S)
 LINK_RE = re.compile(r'href="([^"]+)"')
 CLAIMS_DIV_RE = re.compile(r'<div class="note" id="claims-census">(.*?)</div>', re.S)
+
+# R3301: the three named-absence phrases are ONE author. They used to be typed
+# in the renderer and again in the criterion, so naming the source document in
+# the page (AC-COO8 requires it) left AC-CVL2 grading a sentence that no longer
+# existed. Both readers take the words from here.
+CENSUS_ABSENT = "no claims block in docs/status-export.json"
+CENSUS_EMPTY = "nothing to census in docs/status-export.json (present=false)"
+CENSUS_MALFORMED = "block in docs/status-export.json is malformed ("
 # R3300 (AC-COO8): a copy of the export's time of day is what made this page's
 # byte count swing on every --apply.
 CLOCK_COPY_RE = re.compile(r"\d{2}:\d{2}:\d{2}")
@@ -276,7 +284,7 @@ def export_law(new):
 
 
 LAW_NOTE_RE = re.compile(
-    r'<div class="note" data-law="(diff|same|none)">(.*?)</div>', re.S)
+    r'<div class="note" data-law="(diff|same|none|static)">(.*?)</div>', re.S)
 
 
 CLOCK_WORD_WIDTH = 6
@@ -333,42 +341,24 @@ def render_newest(new):
         out.append('<div class="note">\u65e0\u81ea\u9a8c\u547d\u4ee4\uff1a%s'
                    '\uff08\u5982\u5b9e\u547d\u540d\uff0c\u4e0d\u7f16\u9020\uff09</div>'
                    % html.escape(why_not))
-    view, law_why = export_law(new)
-    if view is None:
-        out.append('<div class="note" data-law="none">\u65e0\u5bfc\u51fa\u9762'
-                   '\u5bf9\u7167\uff1a%s\uff08\u5982\u5b9e\u5177\u540d\uff0c\u4e0d'
-                   '\u7f16\u9020\uff09\u3002</div>' % html.escape(law_why or ""))
-    elif view["same"]:
-        # R3300: the note names the two laws and points at the export for the
-        # pair itself. Copying the pair name or its byte counts here would put
-        # a volatile export value into this file's bytes - the same edge that
-        # AC-COO8 refuses on the census note.
-        out.append(
-            '<div class="note" data-law="same">\u672c\u5e26\u4e0e\u5bfc\u51fa'
-            '\u9762\u540c\u6307\u4e00\u5bf9\u4ef6\uff1a\u672c\u5e26\u6309\u6587'
-            '\u4ef6 mtime \u6392\u540d\uff0c\u5bfc\u51fa\u9762\u6309\u63d0\u4ea4'
-            '\u5185\u5bb9\u65f6\u949f\u6392\u540d\uff0c\u8fd9\u4e00\u5bf9\u4e24'
-            '\u6cd5\u90fd\u6307\u5411\u540c\u4e00\u5bf9\u3002\u8be5\u5bf9'
-            '\u540d\u4e0e\u5b57\u8282\u6570\u5199\u5728 '
-            '<code>docs/status-export.json</code> \u91cc\uff0c\u672c\u9875'
-            '\u4e0d\u590d\u5236\uff08\u590d\u5236\u4f1a\u8ba9\u672c\u9875'
-            '\u5b57\u8282\u968f\u5bfc\u51fa\u9762\u91cd\u5199\u800c\u53d8\uff09'
-            '\u3002</div>')
-    else:
-        out.append(
-            '<div class="note" data-law="diff">\u4e24\u6761\u5f8b\u5404\u7ed9'
-            '\u4e00\u4e2a\u7b54\u6848\uff1a\u672c\u5e26\u6309\u6587\u4ef6 mtime '
-            '\u6392\u540d\uff08\u4e0a\u4e00\u6761\u6570\u5b57\u884c\uff09\uff1b'
-            '<code>docs/status-export.json</code> \u6309\u63d0\u4ea4\u5185\u5bb9'
-            '\u65f6\u949f\u6392\u540d\u3002\u5b83\u9009\u7684\u90a3\u4e00\u5bf9'
-            '\u4e0e\u4e24\u4e2a\u5b57\u8282\u6570\u5199\u5728\u90a3\u4efd'
-            '\u6587\u6863\u91cc\uff0c\u672c\u9875\u4e0d\u590d\u5236\uff5e'
-            '\u590d\u5236\u4f1a\u8ba9\u672c\u9875\u5b57\u8282\u968f\u4efb'
-            '\u4f55\u4e00\u5f20\u9762\u91cd\u6e32\u800c\u53d8\uff0c\u6b63'
-            '\u662f\u6536\u53e3\u73af\u7684\u90a3\u6761\u8fb9\uff08AC-COO8 '
-            '\u540c\u6cd5\uff09\u3002\u540c\u4e00\u65f6\u523b\u4e24\u4e2a'
-            '\u7b54\u6848\u4e0d\u5408\u5e76\u6210\u4e00\u4e2a\u6570\u5b57\u3002'
-            '</div>')
+    # AC-DIX22 (R3301, exit 2): the note is now FULLY STATIC. R3297/R3300 shipped
+    # three answer-shaped branches (diff/same/none) and R3300 measured the
+    # consequence: the export face's own answer to "which pair is newest" flips
+    # with the last write, so any page that copies that answer - even as one
+    # boolean - cannot be a fixed point, and closeout_order --write stayed rc=2.
+    # The disagreement is still measured, but it is READ (closeout_order --plan
+    # prints one LAW row) instead of copied here.
+    out.append(
+        '<div class="note" data-law="static">\u672c\u5e26\u6309\u6587\u4ef6 '
+        'mtime \u6392\u540d\uff1b<code>docs/status-export.json</code> '
+        '\u6309\u63d0\u4ea4\u5185\u5bb9\u65f6\u949f\u6392\u540d\u3002\u5bfc'
+        '\u51fa\u9762\u9009\u51fa\u7684\u90a3\u4e00\u5bf9\u4e0e\u4e24\u4e2a'
+        '\u5b57\u8282\u6570\u5199\u5728\u90a3\u4efd\u6587\u6863\u91cc\uff0c'
+        '\u672c\u9875\u4e0d\u590d\u5236\uff08\u590d\u5236\u4f1a\u8ba9\u672c'
+        '\u9875\u5b57\u8282\u968f\u5bfc\u51fa\u9762\u91cd\u5199\u800c\u53d8'
+        '\uff09\u3002\u4e24\u6cd5\u6b64\u523b\u662f\u5426\u610f\u89c1\u4e0d'
+        '\u540c\uff0c\u7531 <code>python tools/closeout_order.py --plan</code> '
+        '\u7684 LAW \u884c\u53ea\u8bfb\u5370\u51fa\u3002</div>')
     out.append('<div class="note">%s</div>' % html.escape(NEWEST_SNAPSHOT))
     return "\n".join(out)
 
@@ -537,21 +527,22 @@ def claims_band(block):
     """
     view = claims_view.claims_view(block)
     if view["state"] == claims_view.ABSENT:
-        return ('<div class="note" id="claims-census">claims census: no claims '
-                'block in docs/status-export.json; no moment invented.</div>')
+        return ('<div class="note" id="claims-census">claims census: '
+                + CENSUS_ABSENT + '; no moment invented.</div>')
     if view["state"] == claims_view.EMPTY:
-        return ('<div class="note" id="claims-census">claims census: nothing to '
-                'census (present=false); no moment invented.</div>')
+        return ('<div class="note" id="claims-census">claims census: '
+                + CENSUS_EMPTY + '; no moment invented.</div>')
     if view["state"] == claims_view.MALFORMED:
-        return ('<div class="note" id="claims-census">claims census: block '
-                'malformed (%s); no moment invented.</div>'
+        return ('<div class="note" id="claims-census">claims census: '
+                + CENSUS_MALFORMED + '%s); no moment invented.</div>'
                 % ",".join(view["bad"]))
     readings = claims_readings(view)
     ts = view["stamp"]
     if not ts:
         return ('<div class="note" id="claims-census">claims census: %s \u00b7 '
-                'the block carries no census_ts; the numbers are the export\'s '
-                'and the moment is not - no moment invented.</div>' % readings)
+                'docs/status-export.json carries no census_ts; the numbers are '
+                'the export\'s and the moment is not - no moment invented.</div>'
+                % readings)
     # R3300 (AC-COO8): the exact moment is deliberately NOT copied here. A page
     # that printed the export's full census_ts changed bytes on every --apply,
     # and first-yuan-chain embeds this page's byte count, so the two drag each
@@ -894,9 +885,9 @@ def main(argv):
         record("AC-CVL1", printed_readings,
                "live-readings=%r printed=%s" % (want_readings, printed_readings))
     else:
-        absence = {claims_view.ABSENT: "no claims block in docs/status-export.json",
-                   claims_view.EMPTY: "nothing to census (present=false)",
-                   claims_view.MALFORMED: "block malformed ("}[live_view["state"]]
+        absence = {claims_view.ABSENT: CENSUS_ABSENT,
+                   claims_view.EMPTY: CENSUS_EMPTY,
+                   claims_view.MALFORMED: CENSUS_MALFORMED}[live_view["state"]]
         named = (absence in div_text) and ("claimed=" not in div_text)
         record("AC-CVL2", named,
                "live-state=%s named-absence=%s invented-numbers=%s"
@@ -1030,8 +1021,15 @@ def main(argv):
                                                 "empty": False})
     if command and mode == "dry":
         promise = ("<b>%dB</b>" % fresh.get("html_bytes", 0)) in band
-    else:
+    elif command:
         promise = html.escape(CHECK_CAVEAT) in band
+    else:
+        # R3301: with no recorded producer the row is a NAMED ABSENCE, and this
+        # arm used to demand the check-run caveat there - a sentence an absence
+        # cannot carry, so the arm was red for every pair outside the table.
+        # The intent ("neither may stand in for the other") is kept by refusing
+        # the opposite: an absence that still prints a promise or caveat.
+        promise = (absence in band) and (html.escape(CHECK_CAVEAT) not in band)
     arms = {
         "one-command-or-absence": (band.count(html.escape(command)) == 1
                                    if command else absence in band),
@@ -1048,44 +1046,35 @@ def main(argv):
               " ".join("%s=%s" % (k, v) for k, v in sorted(arms.items())
                        if not v) or "all-arms-green"))
 
-    # AC-DIX22 (pinned 2026-11-22 R3297 in src/os/backlog.md BEFORE this code):
-    # two CEO pages ranked "newest" by two different clocks and published two
-    # different pairs. Measured (qa/probe-R3297.log): 31 of 40 pairs sat at a
-    # different position with every pair committed and clean, so this is not the
-    # dirty-tree corner the board guessed. The band now prints its own law and
-    # names the export face's answer; each state is graded against a FRESH
-    # derivation taken through that face's own code, never a second copy.
-    law_view, law_why = export_law(fresh)
+    # AC-DIX22 (pinned 2026-11-22 R3297, rewritten R3301 exit 2): two CEO pages
+    # ranked "newest" by two different clocks. Measured (qa/probe-R3297.log): 31
+    # of 40 pairs sat at a different position with every pair committed and
+    # clean, so the split is structural. R3300 then measured the answer itself
+    # flipping with the last write, which makes any copy of it - pair name, byte
+    # counts, or one boolean - a non-fixed-point page. This arm now grades a
+    # STATIC note: both laws named, the other answer's single source named, the
+    # read-only witness named, and no copied value. The fresh derivation is
+    # still computed here and printed as gate evidence; it is never rendered.
+    law_view, _law_why = export_law(fresh)
     notes = LAW_NOTE_RE.findall(band)
     marks = [mark for mark, _body in notes]
     law_body = notes[0][1] if notes else ""
     arms = {"one-law-note": len(notes) == 1}
-    if law_view is None:
-        arms["mark-none"] = marks == ["none"]
-        arms["reason-quoted"] = bool(law_why) and html.escape(law_why) in law_body
-        arms["no-pair-invented"] = "preview/" not in law_body
-    elif law_view["same"]:
-        arms["mark-same"] = marks == ["same"]
-        arms["one-pair-only"] = law_body.count("preview/") == 0
-        arms["two-laws-named"] = ("mtime" in law_body
-                                  and "\u63d0\u4ea4\u5185\u5bb9" in law_body)
-    else:
-        arms["mark-diff"] = marks == ["diff"]
-        # R3300: mark-diff used to require the export's pair name and both byte
-        # counts verbatim. Those are volatile, and copying them made this page's
-        # own length swing with every face re-render - the ring's remaining edge.
-        arms["no-copy"] = (BYTES_COPY_RE.search(law_body) is None
-                           and "preview/" not in law_body)
-        arms["source-named"] = "docs/status-export.json" in law_body
-        arms["own-law-stated"] = ("mtime" in law_body
-                                  and "\u63d0\u4ea4\u5185\u5bb9" in law_body)
+    arms["mark-static"] = marks == ["static"]
+    arms["own-law-stated"] = ("mtime" in law_body
+                              and "\u63d0\u4ea4\u5185\u5bb9" in law_body)
+    arms["source-named"] = "docs/status-export.json" in law_body
+    arms["witness-named"] = ("closeout_order" in law_body
+                             and "--plan" in law_body)
+    arms["no-bytes-copied"] = (BYTES_COPY_RE.search(law_body) is None
+                               and "preview/" not in law_body)
+    arms["no-clock-copied"] = CLOCK_COPY_RE.search(law_body) is None
     record("AC-DIX22", all(arms.values()),
-           "law=%s export=%s %s"
+           "law=%s (still derived here, never rendered) %s"
            % ("none" if law_view is None
               else ("same" if law_view["same"] else "diff"),
-              (law_view or {}).get("json", "-"),
               " ".join("%s=%s" % (k, v) for k, v in sorted(arms.items())
-                                              if not v) or "all-arms-green"))
+                       if not v) or "all-arms-green"))
 
     if check:
         for code, ok, detail in checks:

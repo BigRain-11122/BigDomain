@@ -84,6 +84,26 @@ def build_world():
           "<!DOCTYPE html>\n<html><head><title>Beta Face</title></head>"
           "<body><p>a second shipped pair</p></body></html>\n")
     write(os.path.join(pv, "beta-face.json"), "{}\n")
+    # R3301: the entry page carries the first-visit walk over four FIXED faces
+    # (buyer_route.FIRST_VISIT). A world without them has links that do not
+    # resolve, so AC-DIX5 reddened and every arm needing a green gate failed
+    # with it. These four are fixture faces, not criteria; two carry a control
+    # so the walk promises something operable (AC-IDX1). They are written
+    # BEFORE beta-face so the newest-pair arm still lands on beta-face.
+    route = {"start-here.html": "<p>read-only summary of today</p>",
+             "buyer-trial.html": '<button type="button">mock order</button>',
+             "merchant-onboard.html": '<input name="merchant" />',
+             "money-path-demo.html": '<button type="button">run the path</button>'}
+    for href in ("start-here.html", "buyer-trial.html",
+                 "merchant-onboard.html", "money-path-demo.html"):
+        write(os.path.join(pv, href),
+              "<!DOCTYPE html>\n<html><head><title>%s</title></head><body>%s"
+              "</body></html>\n" % (href, route[href]))
+        write(os.path.join(pv, os.path.splitext(href)[0] + ".json"), "{}\n")
+    # keep beta-face the newest artifact regardless of write-clock granularity
+    stamp = max(os.path.getmtime(os.path.join(pv, n)) for n in os.listdir(pv))
+    for name in ("beta-face.html", "beta-face.json"):
+        os.utime(os.path.join(pv, name), (stamp + 5, stamp + 5))
     body = ("<!DOCTYPE html>\n<html><head><title>Entry</title></head><body>\n"
             "<!-- BD-DELIVERABLE-INDEX:BEGIN -->\n(placeholder block)\n"
             "<!-- BD-DELIVERABLE-INDEX:END -->\n"
@@ -97,6 +117,13 @@ def build_world():
                       "claims": {"claimed": 3, "captured": 2, "contradicted": 0,
                                  "uncaptured": 1, "historic": 0, "rows": 1,
                                  "present": True, "census_ts": CENSUS_TS}},
+                     sort_keys=True) + "\n")
+    # R3301: AC-DIX20 grades frozen-face tags against the freeze manifest. The
+    # suite used to leave the tool pointed at the PRODUCTION manifest, so a
+    # private page was graded against thirteen faces it never listed - red by
+    # construction. The world owns its own manifest now (one frozen face).
+    write(os.path.join(d, "state", "apimarket-face-freeze.json"),
+          json.dumps({"faces": [{"html": FACE + ".html", "schema_version": 3}]},
                      sort_keys=True) + "\n")
     return d
 
@@ -114,6 +141,7 @@ def point_to(mod, world):
     mod.INDEX = os.path.join(pv, "index.html")
     mod.REGISTRY = os.path.join(pv, "deliverable-index.json")
     mod.EXPORT = os.path.join(world, "docs", "status-export.json")
+    mod.FREEZE = os.path.join(world, "state", "apimarket-face-freeze.json")
 
 
 def call(mod, args):
@@ -223,6 +251,14 @@ def main():
                                            os.path.getmtime(index_path))
         call(mod, [])
         second = read(index_path)
+        # The gate's printed total used to be pinned as a literal ("17/17"),
+        # which rotted silently every time a criterion was added: the arm
+        # reddened while the gate itself was healthy. R3301: the total is now
+        # graded against the PASS rows the gate itself printed (one row per
+        # criterion it recorded), with a floor so a collapsed gate cannot pass.
+        pass_rows = [ln for ln in out_c.splitlines() if ln.startswith("PASS ")]
+        total = len(pass_rows)
+        gate_line = "VERDICT PASS %d/%d" % (total, total)
         world3 = os.path.join(tempfile.mkdtemp(prefix="dix3-"), "w")
         shutil.copytree(world, world3)
         tampered = first.replace("verdict=PASS", "verdict=PAS5", 1)
@@ -231,13 +267,14 @@ def main():
         rc_t, out_t = call(mod, ["--check"])
         rows_t = rows_of(out_t)
         point_to(mod, world)
-        ok("AC-DIX3 two writer runs byte identical and the gate reads 17/17",
-           first == second and rc_c == 0 and "VERDICT PASS 17/17" in out_c
+        ok("AC-DIX3 two writer runs byte identical and the gate reads all criteria",
+           first == second and rc_c == 0 and total >= 20 and gate_line in out_c
            and "VERDICT FAIL" in out_t and rc_t == 2
            and rows_t.get("AC-DIX7") == "FAIL"
            and rows_t.get("AC-DIX1") in (None, "PASS"),
-           "identical=%s rc=%s tamper_rc=%s tamper_row=%s verdict_row=%s"
-           % (first == second, rc_c, rc_t, rows_t.get("AC-DIX3"), rows_t.get("AC-DIX7")))
+           "identical=%s rc=%s tamper_rc=%s tamper_row=%s verdict_row=%s criteria=%d"
+           % (first == second, rc_c, rc_t, rows_t.get("AC-DIX3"), rows_t.get("AC-DIX7"),
+              total))
 
         # ---- AC-DIX3b (R2804): the snapshot label is the load-bearing half of the new
         # contract. Removing it must flip AC-DIX3 AND AC-DIX8 and nothing else, which is
@@ -352,14 +389,23 @@ def main():
         point_to(mod, world4)
         call(mod, [])
         block4 = block_of(read(os.path.join(pv4, "index.html")))
+
+        def row_of(block_text, name):
+            # R3301: a fixed 400-char window ran into the NEXT row once the
+            # first-visit faces joined the band, so beta-face was accused of a
+            # label that belonged to delta-face. A row ends at its </li>.
+            at = block_text.find('href="%s"' % name)
+            if at < 0:
+                return ""
+            end = block_text.find("</li>", at)
+            return block_text[at:end if end > 0 else at + 400]
+
         rc_4, out_4 = call(mod, ["--check"])
         rows_4 = rows_of(out_4)
         delta_at = block4.find('href="delta-face.html"')
-        delta_label = (delta_at >= 0
-                       and "json=missing" in block4[delta_at:delta_at + 400])
+        delta_label = "json=missing" in row_of(block4, "delta-face.html")
         beta_at = block4.find('href="beta-face.html"')
-        beta_clean = (beta_at >= 0
-                      and "json=missing" not in block4[beta_at:beta_at + 400])
+        beta_clean = "json=missing" not in row_of(block4, "beta-face.html")
         os.remove(os.path.join(pv4, "delta-face.html"))
         call(mod, [])
         block4b = block_of(read(os.path.join(pv4, "index.html")))

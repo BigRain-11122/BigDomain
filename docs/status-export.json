@@ -1,21 +1,23 @@
 {
   "ceo_face": {
-    "board_pages_skipped": [],
-    "current": "R3300 - EXECUTED (board head R3299 next-window (0) MAIN: the content ring closed only by breaking an edge) - took option 2 and broke the clock copy: the entry page now prints the export census DAY (ten characters, one width whatever the time of day) and names docs/status-export.json as the one authority for...",
+    "board_pages_skipped": [
+      "preview/face-sweep.html (8878B)"
+    ],
+    "current": "R3301 - PRODUCT+ENGINEERING: the entry page stopped copying the export face's answer. R3300 measured that docs/status-export.json's own answer to which pair is newest flips with the last write, so the answer-shaped branches shipped at R3297/R3300 (diff/same/none) could never be a fixed point. The note is no...",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
-    "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-23 mtime] (halves differ: html [2026-11-23 mtime] + json [2026-11-16 commit]; later=html)",
-    "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-23 mtime] (halves differ: html [2026-11-23 mtime] + json [2026-11-16 commit]; later=html)",
+    "last_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20492B) [2026-11-23 mtime] (halves differ: html [2026-11-23 mtime] + json [2026-11-22 commit]; later=html)",
+    "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20492B) [2026-11-23 mtime] (halves differ: html [2026-11-23 mtime] + json [2026-11-22 commit]; later=html)",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ugc-gate-report.html",
     "latest_artifact_note": "",
     "latest_evidence": "qa/probe-R3300.log (498B, 2026-11-23)",
-    "newest_pair_on_disk_is_board": false,
+    "newest_pair_on_disk_is_board": true,
     "next_milestone": "MAIN — 失败旁路件**有写者、没有读者**：`qa/crawl-failures.jsonl` 现在会记下每次取回失败（url/时间/错误），但**没有任何东西读它**——扫描器不读（有意）、套件只在临时世界读、`docs/status-export.json` 不派生它。下一轮**先量**（只读）：①若无读者，这文件就是死重量（写证据没人看=产线空转第四形态）——量清「谁会读」再决定；②把它作为**只展示不判定**的字段（如扫描器行尾 `crawl_fail_7d=N`，绝不进 PASS/FLAG 判定）是否违反 R2990 的「记录面≠证明面」定律；③轮体块本身仍无判据臂（本轮只做了...",
-    "next_milestone_due": "2026-11-25T00:02:16+08:00",
-    "updated_at": "2026-11-23T00:02:15+08:00",
+    "next_milestone_due": "2026-11-25T00:13:54+08:00",
+    "updated_at": "2026-11-23T00:13:53+08:00",
     "heartbeat": {
       "tick": 3299,
-      "state_tick": 3300,
-      "lag": 1,
+      "state_tick": 3301,
+      "lag": 2,
       "verdict": "FLAG",
       "reason": "heartbeat_row_debt"
     },
@@ -27,7 +29,7 @@
       "over7": 0,
       "dup_rows": 0,
       "distinct": 8,
-      "collapsed": 1,
+      "collapsed": 0,
       "labels_refreshed": 0,
       "notes_stale": 0,
       "note_claims": 0,
@@ -79,14 +81,14 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "R3300 - EXECUTED (board head R3299 next-window (0) MAIN: the content ring closed only by breaking an edge) - took option 2 and broke the clock copy: the entry page now prints the export census DAY (ten characters, one width whatever the time of day) and names docs/status-export.json as the one authority for...",
-  "export_ts": "2026-11-23T00:02:15+08:00",
+  "do": "R3301 - PRODUCT+ENGINEERING: the entry page stopped copying the export face's answer. R3300 measured that docs/status-export.json's own answer to which pair is newest flips with the last write, so the answer-shaped branches shipped at R3297/R3300 (diff/same/none) could never be a fixed point. The note is no...",
+  "export_ts": "2026-11-23T00:13:53+08:00",
   "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20492B) [2026-11-22 mtime] (halves differ: html [2026-11-22 mtime] + json [2026-11-22 commit]; later=html)",
   "latest_evidence": "qa/probe-R3300.log (498B, 2026-11-23)",
   "next_milestone": "[R3298] next window (<=48h): (0) MAIN — **四件互为输入的排序环已被量出、但没被解**：chain 嵌 index 的字节数、index 嵌 chain 的 html 字节数与 `docs/status-export.json` 的 `census_ts`、sweep 要求 index 先写、export 在 sweep 为最新件时要跳过审计——四条边围成环，任何一次「只改一件」都会让另一件 `E_STALE`（R3297 的 FINDING 就是它的症状）。问：要不要把这条环**变成一条可执行的重渲次序并写成断言**（例如 `tools/closeout_order.py`：按依赖图拓扑序重渲，再跑四件 `--check`，环内若有相等性只允许一个方向）？做法＝先只读量三问：①四条边里哪几条是**真相等性**（字节数被逐字比对）哪几条只是**mtime 顺序**（mtime 边可以用「最后写」满足，不必进环）；②若把 index 那句 `census_ts` 改成从导出面**现读的引用**（而非落地副本），环是否断一条边；③价（一个拓扑序工具约 80 行 + 一条判据 + closeout 多跑四件 `--check` 的 4s）。收口三选一＝①写 `closeout_order.py` 并把「静止态四件全绿」变成判据 ②只把环写进诚实段（接受「改一件就要重渲三件」的人工纪律）③把 chain 的 back-hop 从入口页字节数改成**入口页指纹**（同样会变，但可一次性重算，不参与长度耦合）。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：state 载体 fold_needed、tasks.md P-47 站行（零支付能力）、BigDomain-OSLoop LogonType=Interactive。",
   "outs": [
+    "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20492B) [2026-11-23 mtime] (halves differ: html [2026-11-23 mtime] + json [2026-11-22 commit]; later=html)",
     "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-23 mtime] (halves differ: html [2026-11-23 mtime] + json [2026-11-16 commit]; later=html)",
-    "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20492B) [2026-11-22 mtime] (halves differ: html [2026-11-22 mtime] + json [2026-11-22 commit]; later=html)",
     "preview/platform-live-report.html (8621B) + preview/platform-live-report.json (6451B) [2026-11-22 commit]",
     "preview/apimarket-report-slowanswer.html (13022B) + preview/apimarket-report-slowanswer.json (18381B) [2026-11-22 mtime] (halves differ: html [2026-11-22 mtime] + json [2026-10-25 commit]; later=html)",
     "preview/start-here.html (41366B) + preview/start-here.json (3298B) [2026-11-22 mtime]",
@@ -155,7 +157,7 @@
       "2026-11-04 R2431 verification window on the item the debt gate named first=yes (reconcile-battery-R2431, carried from R2430): zero product code changed, the R2168 mixed-tree rule honoured. Leg 1 read 542/543 suites with the criteria total 4234 exactly as pre-registered and the only red was reconcile-daily-census at cd7 exit=2 DRIFT-FLAG; the census named the file (qa/battery-R2431-stdout.log, class=cmd-raw) because this window launched the battery with a Start-Process redirect pointed INTO the evidence directory. Repaired at the birth site, never by widening the baseline: the two launcher captures moved to the gitignored logs/ face, after which the census read flags=0 DRIFT-CLEAN with the 529-entry baseline untouched. Retry leg on the repaired tree: RUNNER PASS 543/543 suites plus controls 7/7 in 956.2s at criteria 4234, TMP RECLAIM 932/932. Four follow-up sections: matrix FAILED first on the stale doc without rewriting it, was regenerated stamp-aligned to 52317B, and the re-run read VERDICT R2431 PASS failing=none (fingerprint CLEAN 5 domains, profile byte-identical, census DRIFT-CLEAN). Debt: reconcile-battery-R2431 closed and product-face-R2432 opened first=yes through the shipped CLIs. Zero product points claimed."
     ],
     [
-      "3300",
+      "3301",
       "OSLoop 执行 tick",
       "a failed fold state write takes the appended archive block back and removes the backup"
     ]
@@ -169,10 +171,10 @@
   "self_drive": {
     "window": "2026-11-17..2026-11-23",
     "window_days": 7,
-    "log_lines_in_window": 329,
+    "log_lines_in_window": 340,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 57,
+    "substantive_non_idle_mention_lines": 59,
     "proposals_total": 11,
     "proposals_open": 9,
     "queue_main_open": 6,
@@ -183,8 +185,8 @@
   "next_milestone_due": "2026-11-24T23:42:01+08:00",
   "heartbeat": {
     "tick": 3299,
-    "state_tick": 3300,
-    "lag": 1,
+    "state_tick": 3301,
+    "lag": 2,
     "verdict": "FLAG",
     "reason": "heartbeat_row_debt"
   },
@@ -196,7 +198,7 @@
     "over7": 0,
     "dup_rows": 0,
     "distinct": 8,
-    "collapsed": 1,
+    "collapsed": 0,
     "labels_refreshed": 0,
     "notes_stale": 0,
     "note_claims": 0,

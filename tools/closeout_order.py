@@ -44,6 +44,10 @@ this file existed):
   AC-COO6 --write twice leaves the four faces green the second time (a real
           fixed point, not a single-window accident)
   AC-COO7 zero network: no socket, requests or urllib import
+  AC-COO9 (R3301) the two "newest" laws are compared in THIS read-only row and
+          nowhere else: both names freshly derived, the flag computed from them,
+          and no preview page may carry the row (the copy is what broke the
+          fixed point)
 
 Nothing here renders a page itself, runs JS, opens a socket or reads the clock
 for a product number.
@@ -175,6 +179,72 @@ def feeding_edges(red):
     return [e for e in EDGES if e[0] == red and e[2] == "bytes"]
 
 
+def law_view():
+    """AC-COO9 (R3301, exit 2): the one place the two "newest" laws are compared.
+
+    R3300 measured that docs/status-export.json's own answer to "which pair is
+    newest" flips with the last write. The entry page used to copy that answer
+    (R3297 three-way branch, R3300 one boolean) and could therefore never be a
+    fixed point. The answer left the page; the comparison lives HERE, read-only,
+    so the disagreement is still observable without feeding a page's bytes.
+
+    Both names come from fresh derivations - an mtime scan here and
+    export_round's own call - and the flag is computed from them, never typed.
+    """
+    best = None
+    for name in sorted(os.listdir(PREVIEW)):
+        if not name.endswith(".json"):
+            continue
+        stem = name[:-5]
+        if not os.path.isfile(os.path.join(PREVIEW, stem + ".html")):
+            continue
+        stamp = os.stat(os.path.join(PREVIEW, stem + ".html")).st_mtime_ns
+        if best is None or stamp >= best[0]:
+            best = (stamp, name)
+    mtime_json = best[1] if best else None
+    export_json = None
+    try:
+        if os.path.join(ROOT, "src", "os") not in sys.path:
+            sys.path.insert(0, os.path.join(ROOT, "src", "os"))
+        import importlib
+        er = importlib.import_module("export_round")
+        pair, _skipped, _board = er.newest_artifact(ROOT)
+        if pair is not None:
+            export_json = os.path.basename(pair[2])
+    except Exception as exc:          # named, never fabricated
+        return mtime_json, None, "export-derivation-failed: %s" % exc
+    if export_json is None:
+        return mtime_json, None, "export-derives-no-pair"
+    return mtime_json, export_json, (mtime_json == export_json)
+
+
+def law_row():
+    """Print the witness row and grade the four AC-COO9 arms. Returns True/False."""
+    mtime_json, export_json, same = law_view()
+    if isinstance(same, str):         # derivation failure: named absence, not a pair
+        print("LAW mtime=%s export=- same=unknown why=%s"
+              % (mtime_json or "-", same))
+        return True
+    print("LAW mtime=%s export=%s same=%s" % (mtime_json, export_json, same))
+    arms = {
+        "both-named": bool(mtime_json) and bool(export_json),
+        "flag-derived": same == (mtime_json == export_json),
+    }
+    leaked = []
+    for name in sorted(os.listdir(PREVIEW)):
+        if not name.endswith(".html"):
+            continue
+        with io.open(os.path.join(PREVIEW, name), "r", encoding="utf-8",
+                     errors="replace") as fh:
+            if "LAW mtime=" in fh.read():
+                leaked.append(name)
+    arms["no-page-carries-it"] = not leaked
+    print("AC-COO9 %s %s" % ("PASS" if all(arms.values()) else "FAIL",
+                             " ".join("%s=%s" % (k, v) for k, v in sorted(arms.items()))
+                             or "all-arms-green"))
+    return all(arms.values())
+
+
 def cmd_plan():
     print("STEPS %d %s" % (len(STEPS), ",".join(n for n, _, _ in STEPS)))
     for row in edge_report():
@@ -183,10 +253,14 @@ def cmd_plan():
                  row["reader_file"], row["token"], row["token_found"]))
     cycles = byte_cycle()
     print("BYTE-CYCLES %d %s" % (len(cycles), ",".join("->".join(c) for c in cycles) or "none"))
+    law_ok = law_row()
     bad = [r for r in edge_report() if not (r["file_present"] and r["token_found"])]
     if bad:
         print("VERDICT FAIL %d orphan-edge(s): %s"
               % (len(bad), ",".join("%s<-%s" % (r["reader"], r["writer"]) for r in bad)))
+        return 2
+    if not law_ok:
+        print("VERDICT FAIL AC-COO9 witness row")
         return 2
     print("VERDICT PASS edges=%d cycles=%d" % (len(EDGES), len(cycles)))
     return 0
