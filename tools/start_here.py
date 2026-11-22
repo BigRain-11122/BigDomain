@@ -513,6 +513,12 @@ def key_reading(text):
 # a named function the face calls elsewhere), `never` (neither - the write exists in
 # the bytes and this face never reaches it).
 WHEN_STATES = ("load", "handler", "call", "never")
+# R3279: where an owner NAME comes from. `element` is an element expression bound to
+# the handler (`b`, `T[n]`), `function` is a declared function (`apply`, `save`), `top`
+# is no enclosing body at all, and `chain` is a receiver whose leading members were cut
+# (`document.getElementById('b')` reads as `getElementById('b')`). One closed set so
+# the page can say which one it is instead of calling every name a handler.
+OWNER_KINDS = ("element", "function", "top", "chain")
 WHEN_RESERVED = {"if", "for", "while", "switch", "catch", "return", "typeof",
                  "function", "new", "delete", "void", "do", "else", "var",
                  "let", "const", "await", "yield"}
@@ -567,11 +573,11 @@ def when_reading(text):
                 if not body or body[1] <= body[0]:
                     body = None
             if body:
-                spans.append((body[0], body[1], "decl", name))
-    for start, end, target, _kind, _fn in _handler_spans(blanked, text):
-        spans.append((start, end, "live", target))
-    for start, end, target in _arrow_spans(blanked, text):
-        spans.append((start, end, "live", target))
+                spans.append((body[0], body[1], "decl", name, False))
+    for start, end, target, _kind, _fn, chained in _handler_spans(blanked, text):
+        spans.append((start, end, "live", target, chained))
+    for start, end, target, _kind, _fn, chained in _arrow_spans(blanked, text):
+        spans.append((start, end, "live", target, chained))
     bound, called = _reach_names(blanked)
     counts = {state: 0 for state in WHEN_STATES}
     never = []
@@ -590,20 +596,40 @@ def when_reading(text):
         holders = [span for span in spans if span[0] <= match.start() <= span[1]]
         if not holders:
             counts["load"] += 1
-            sites.append([expr, "load", ""])
+            sites.append([expr, "load", "", "top"])
             continue
         inner = min(holders, key=lambda span: span[1] - span[0])
+        kind = ("function" if inner[2] == "decl"
+                else ("chain" if inner[4] else "element"))
         if inner[2] == "live" or inner[3] in bound:
             counts["handler"] += 1
-            sites.append([expr, "handler", inner[3]])
+            sites.append([expr, "handler", inner[3], kind])
         elif inner[3] in called:
             counts["call"] += 1
-            sites.append([expr, "call", inner[3]])
+            sites.append([expr, "call", inner[3], kind])
         else:
             counts["never"] += 1
             never.append([expr, inner[3]])
-            sites.append([expr, "never", inner[3]])
+            sites.append([expr, "never", inner[3], kind])
     return {"counts": counts, "never": never, "sites": sites}
+
+
+def owner_phrase(doc, kind, owner):
+    """R3279: the ONE place a site's owner is turned into words, shared by the page and
+    the criterion so two encodings of one reading cannot drift. Each kind has its own
+    word: an element expression, a declared function, no enclosing body, or a receiver
+    cut out of a member chain (that last one says the chain was cut)."""
+    if kind == "top":
+        return doc.get("key_multi_owner_none") or ""
+    if kind == "function":
+        fmt = (doc.get("key_multi_func_fmt") or doc.get("key_multi_owner_fmt")
+               or "{name}")
+    elif kind == "chain":
+        fmt = (doc.get("key_multi_chain_fmt") or doc.get("key_multi_owner_fmt")
+               or "{name}")
+    else:
+        fmt = doc.get("key_multi_owner_fmt") or "{name}"
+    return fmt.format(name=owner)
 
 
 def when_attr(naming):
@@ -953,29 +979,41 @@ def _raw_slice(raw, blanked, start, end):
     return text[start:end].replace(" ", "")
 
 
+def _chained_at(blanked, pos):
+    """True when the receiver at pos is the tail of a member chain: the bytes right
+    before it end with a dot. `document.getElementById('b').addEventListener` is read
+    by the receiver regex as `getElementById('b')`, so the page must be able to say
+    the chain was cut instead of letting a tail pass for a whole expression."""
+    return blanked[max(0, pos - 3):pos].rstrip().endswith(".")
+
+
 def _handler_spans(blanked, raw=None):
     """Every handler literal in the page: body start/end, the target it is assigned
-    to, the form, and whether its body is a `function` or an arrow. Only literal
-    forms with a brace body are recognised; anything else stays silence."""
+    to, the form, whether its body is a `function` or an arrow, and whether that
+    target was cut out of a member chain. Only literal forms with a brace body are
+    recognised; anything else stays silence."""
     spans = []
     for match in H_ASSIGN.finditer(blanked):
         got = _body_span(blanked, match.end())
         if got:
             spans.append((got[0], got[1],
                           _raw_slice(raw, blanked, match.start(1), match.end(1)),
-                          match.group(2), FUNC_KIND))
+                          match.group(2), FUNC_KIND,
+                          _chained_at(blanked, match.start(1))))
     for match in H_ADDL.finditer(blanked):
         got = _body_span(blanked, match.end())
         if got:
             spans.append((got[0], got[1],
                           _raw_slice(raw, blanked, match.start(1), match.end(1)),
-                          "addEventListener", FUNC_KIND))
+                          "addEventListener", FUNC_KIND,
+                          _chained_at(blanked, match.start(1))))
     for match in H_ADDL_CALL.finditer(blanked):
         got = _body_span(blanked, match.end())
         if got:
             spans.append((got[0], got[1],
                           _raw_slice(raw, blanked, match.start(1), match.end(1)),
-                          "addEventListener", FUNC_KIND))
+                          "addEventListener", FUNC_KIND,
+                          _chained_at(blanked, match.start(1))))
     spans.extend(_arrow_spans(blanked, raw))
     named, _ = _named_spans(blanked, raw)
     spans.extend(named)
@@ -988,9 +1026,13 @@ def _named_report(blanked, raw=None):
     An arrow declaration is named `lexical` rather than resolved: its `this` is not the
     element even though the declaration itself is unambiguous."""
     bindings = {}
+    chains = {}
     for match in H_ADDL_NAME.finditer(blanked):
-        bindings.setdefault(match.group(2), []).append(
+        name = match.group(2)
+        bindings.setdefault(name, []).append(
             _raw_slice(raw, blanked, match.start(1), match.end(1)))
+        chains[name] = chains.get(name, False) or _chained_at(blanked,
+                                                              match.start(1))
     decls = _decl_index(blanked)
     direct = set()
     for match in CALL_NAME.finditer(blanked):
@@ -1016,7 +1058,8 @@ def _named_report(blanked, raw=None):
             status = "lexical"
         else:
             status = "resolved"
-        out[name] = {"status": status, "targets": inner, "form": form}
+        out[name] = {"status": status, "targets": inner, "form": form,
+                     "chained": bool(chains.get(name))}
     return out
 
 
@@ -1034,7 +1077,8 @@ def _named_spans(blanked, raw=None):
         if not body:
             got["status"] = "nobody"
             continue
-        spans.append((body[0], body[1], got["targets"][0], "named", FUNC_KIND))
+        spans.append((body[0], body[1], got["targets"][0], "named", FUNC_KIND,
+                      got.get("chained", False)))
     return spans, report
 
 
@@ -1130,7 +1174,14 @@ def _arrow_spans(blanked, raw=None):
         # round prints that text as a site's owner instead of hiding it in a count.
         head = (raw if raw is not None else blanked)[
             max(0, match.start() - 160):match.start()]
-        out.append((got[0], got[1], _arrow_target(head), "arrow", ARROW_KIND))
+        target = _arrow_target(head)
+        chained = False
+        if target:
+            # The same cut the literal forms carry: a target whose character before
+            # it in the head is a dot is the tail of a member chain, not a whole one.
+            at = head.rfind(target)
+            chained = at > 0 and head[:at].rstrip().endswith(".")
+        out.append((got[0], got[1], target, "arrow", ARROW_KIND, chained))
     return out
 
 
@@ -2316,17 +2367,16 @@ def render(proj):
                faces=len(proj["when_multi"]), sites=multi_sites,
                mixed=proj["multi_mixed"]))))
     multi_words = doc.get("key_multi_state_words") or {}
-    owner_fmt = doc.get("key_multi_owner_fmt") or "{name}"
-    owner_none = doc.get("key_multi_owner_none") or ""
     if proj["when_multi"]:
         for name, sites in proj["when_multi"]:
-            counts = ",".join("%s>%s>%s" % (expr, state, owner or "-")
-                              for expr, state, owner in sites)
+            counts = ",".join("%s>%s>%s>%s" % (expr, state, owner or "-", kind)
+                              for expr, state, owner, kind in sites)
             phrases = "、".join((doc.get("key_multi_site_fmt") or "").format(
                 expr=expr,
-                owner=owner_fmt.format(name=owner) if owner else owner_none,
+                kind=owner_phrase(doc, kind, owner),
+                owner=owner_phrase(doc, kind, owner),
                 word=multi_words.get(state) or state)
-                for expr, state, owner in sites)
+                for expr, state, owner, kind in sites)
             multi_html += (
                 '\n  <p data-key-multi-face="%s" data-key-multi-counts="%s">%s</p>'
                 % (esc(name), esc(counts),
@@ -2497,8 +2547,8 @@ def write():
         "write_when_multi": [{"face": name,
                               "mixed": len({site[1] for site in sites}) > 1,
                               "sites": [{"expr": expr, "state": state,
-                                         "owner": owner}
-                                        for expr, state, owner in sites]}
+                                         "owner": owner, "kind": kind}
+                                        for expr, state, owner, kind in sites]}
                              for name, sites in proj["when_multi"]],
         "steps_excluded": [{"face": name, "reason": reason}
                            for name, reason in proj["steps_excluded"]],
@@ -3485,7 +3535,7 @@ def check():
     for slot in ("{faces}", "{sites}", "{mixed}"):
         if slot not in (proj["doc"].get("key_multi_head_fmt") or ""):
             failures.append("SH26 slot_missing:key_multi_head_fmt:%s" % slot)
-    for slot in ("{expr}", "{owner}", "{word}"):
+    for slot in ("{expr}", "{kind}", "{word}"):
         if slot not in (proj["doc"].get("key_multi_site_fmt") or ""):
             failures.append("SH26 slot_missing:key_multi_site_fmt:%s" % slot)
     for slot in ("{name}", "{phrases}"):
@@ -3493,6 +3543,17 @@ def check():
             failures.append("SH26 slot_missing:key_multi_face_fmt:%s" % slot)
     if "{name}" not in (proj["doc"].get("key_multi_owner_fmt") or ""):
         failures.append("SH26 slot_missing:key_multi_owner_fmt:{name}")
+    # R3279: each site's owner comes from a closed set of kinds, each kind has its own
+    # word, and the word the page prints must be the one that kind names.
+    for key in ("key_multi_func_fmt", "key_multi_chain_fmt"):
+        if "{name}" not in (proj["doc"].get(key) or ""):
+            failures.append("SH26 slot_missing:%s:{name}" % key)
+    for kind, key in (("element", "key_multi_owner_fmt"),
+                      ("function", "key_multi_func_fmt"),
+                      ("chain", "key_multi_chain_fmt"),
+                      ("top", "key_multi_owner_none")):
+        if not (proj["doc"].get(key) or "").strip():
+            failures.append("SH26 owner_kind_word_missing:%s" % kind)
     multi_words = proj["doc"].get("key_multi_state_words") or {}
     for state in WHEN_STATES:
         if not (multi_words.get(state) or "").strip():
@@ -3542,6 +3603,7 @@ def check():
                         % len(key_absent_lines))
     fresh = {}
     fresh_keys = {}
+    fresh_decl = {}
     for name in proj["operable"]:
         try:
             with open(os.path.join(PREVIEW, name), encoding="utf-8",
@@ -3552,6 +3614,7 @@ def check():
             continue
         fresh_keys[name] = key_reading(raw_text)
         fresh[name] = key_naming({"keys": fresh_keys[name]})
+        fresh_decl[name] = set(_decl_index(_blank_strings(raw_text)))
     # R3275: the repeat bucket. A face writing one expression from two call sites
     # said nothing about it; the head counter, the named rows and both row
     # attributes are graded against a fresh resolution of each face's own bytes,
@@ -3712,22 +3775,34 @@ def check():
         owner_none = proj["doc"].get("key_multi_owner_none") or ""
         for index, (name, counts_raw, said) in enumerate(multi_rows):
             sites = fresh_multi[index][1]
-            want_counts = ",".join("%s>%s>%s" % (expr, state, owner or "-")
-                                   for expr, state, owner in sites)
+            want_counts = ",".join("%s>%s>%s>%s" % (expr, state, owner or "-", kind)
+                                   for expr, state, owner, kind in sites)
             if counts_raw != esc(want_counts):
                 failures.append("SH26 multi_counts_attr:%s page=%s fresh=%s"
                                 % (name, counts_raw, want_counts))
+            for _expr, _state, owner, kind in sites:
+                if kind not in OWNER_KINDS:
+                    failures.append("SH26 owner_kind_open:%s kind=%s"
+                                    % (name, kind))
+                # Four kinds, four refusal arms, all read from the face's own bytes.
+                declared = fresh_decl.get(name) or set()
+                if kind == "function" and owner not in declared:
+                    failures.append("SH26 owner_kind_func_undeclared:%s owner=%s"
+                                    % (name, owner))
+                if kind == "top" and owner:
+                    failures.append("SH26 owner_kind_top_named:%s owner=%s"
+                                    % (name, owner))
             phrases = "、".join((proj["doc"].get("key_multi_site_fmt") or "").format(
-                expr=expr,
-                owner=owner_fmt.format(name=owner) if owner else owner_none,
+                expr=expr, kind=owner_phrase(proj["doc"], kind, owner),
+                owner=owner_phrase(proj["doc"], kind, owner),
                 word=multi_words.get(state) or state)
-                for expr, state, owner in sites)
+                for expr, state, owner, kind in sites)
             want_text = (proj["doc"].get("key_multi_face_fmt") or "").format(
                 name=name, phrases=phrases)
             if said != esc(want_text):
                 failures.append("SH26 multi_face_sentence:%s" % name)
             tally = {state: 0 for state in WHEN_STATES}
-            for _expr, state, _owner in sites:
+            for _expr, state, _owner, _kind in sites:
                 tally[state] += 1
             want_attr = when_attr({"when": tally})
             # The two encodings are compared THROUGH THE PAGE when the face has a

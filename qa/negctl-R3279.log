@@ -1,0 +1,27 @@
+PASS W0 live-copy expected_hit token=VERDICT PASS criteria=29
+PASS W0 live-row expected_hit token=data-key-multi-face="ship-checklist.html"
+PASS W0 live-kind-element expected_hit token=NS&gt;handler&gt;b&gt;element
+PASS W0 live-kind-function-absent expected_absent token=&gt;function
+PASS W0 live-chain-absent expected_hit token=counts=
+PASS W1 chain-page expected_hit token=VERDICT PASS criteria=29
+PASS W1 chain-kind expected_hit token=&gt;chain
+PASS W1 chain-word expected_hit token=从成员链尾部截下来的接收者所绑的处理函数里
+PASS W1 chain-receiver expected_hit token=「getElementById('b')」
+PASS W1 chain-no-element-word expected_absent token=&gt;element
+PASS W2 mixed-kinds-page expected_hit token=VERDICT PASS criteria=29
+PASS W2 elem expected_hit token=&gt;b&gt;element
+PASS W2 func expected_hit token=&gt;save&gt;function
+PASS W2 func-word expected_hit token=「save」这个具名函数里
+PASS W2 elem-word expected_hit token=「b」的处理函数里
+PASS W3 top-page expected_hit token=VERDICT PASS criteria=29
+PASS W3 top-kind expected_hit token=&gt;-&gt;top
+PASS W3 top-word expected_hit token=脚本顶层
+PASS E1 flip-kind expected_hit token=multi_counts_attr
+PASS E2 flip-owner-kind expected_hit token=multi_counts_attr
+PASS E3 func-word-edit expected_hit token=multi_face_sentence
+PASS E4 attr-edit expected_hit token=multi_counts_attr
+PASS E5 func-word-missing expected_hit token=key_multi_func_fmt
+PASS E6 kind-slot-missing expected_hit token={kind}
+PASS E7 chain-word-missing expected_hit token=owner_kind_word_missing:chain
+PASS W4 restored expected_hit token=VERDICT PASS criteria=29
+NEGCTL PASS cases=26

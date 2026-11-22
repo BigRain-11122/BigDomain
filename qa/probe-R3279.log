@@ -1,0 +1,13 @@
+R3279 probe - provenance of every write owner (read-only)
+faces=44 operable=6 write_sites=6
+SITE filing-checklist.html  expr=NS state=handler owner=b kind=handler-element
+SITE lobby-protocol-map.html expr=NS state=handler owner=apply kind=function-name
+SITE merchant-onboard.html  expr=KEY state=call owner=save kind=function-name
+SITE money-path-demo.html   expr=NS+':'+this.getAttribute('data-ck') state=handler owner=T[n] kind=onchange
+SITE ship-checklist.html    expr=NS state=handler owner=b kind=handler-element
+SITE ship-checklist.html    expr=NS state=handler owner=reset kind=handler-element
+KINDS function-name=2 handler-element=3 onchange=1
+NAMED_BINDINGS=2
+CHAINED_RECEIVERS=0
+ELAPSED=0.3691s per_face=0.06151s
+NOTE zero socket, zero network, zero live write, JS never run

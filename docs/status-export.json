@@ -3,17 +3,17 @@
     "board_pages_skipped": [
       "preview/face-sweep.html (7449B)"
     ],
-    "current": "2026-11-22 R3278 PRODUCT+ENGINEERING: the table R3277 shipped listed a face only when its write states DISAGREED, so ship-checklist (two write sites, both handler) still read as \"NS written twice\" with no way to tell that one site sits in b and the other in reset. The table is now a MULTI-SITE table: every operable face with two or more write sites gets one row, each site names its owner, and \"the states disagree\" is a column (data-key-multi-mixed) instead of the reason a face appears. The R3277 mixed table is gone, not kept beside it.",
+    "current": "2026-11-22 R3279 PRODUCT+ENGINEERING: the multi-site table now says WHAT KIND OF NAME owns each write - before this round all six live write sites printed the same phrase `写在「X」的处理函数里`, so `apply` and `save`, which are DECLARED FUNCTIONS, were called handler functions and a reader went looking for a handler that does not exist. Each site now carries a kind from the closed set (element / function / top / chain), each kind has its own word, and a receiver cut out of a member chain is its own class that says the chain was cut. preview/start-here.html is 38823B (38702B last round) and preview/start-here.json (2765B) carries kind on every multi-site site.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
-    "last_artifact": "preview/start-here.html (38702B) + preview/start-here.json (2717B) [2026-11-22 mtime]",
-    "latest_artifact": "preview/start-here.html (38702B) + preview/start-here.json (2717B) [2026-11-22 mtime]",
+    "last_artifact": "preview/start-here.html (38823B) + preview/start-here.json (2765B) [2026-11-22 mtime]",
+    "latest_artifact": "preview/start-here.html (38823B) + preview/start-here.json (2765B) [2026-11-22 mtime]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\start-here.html",
     "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/negctl-R3273.log (1280B, 2026-11-22)",
     "latest_evidence": "qa/negctl-R3273.log (1280B, 2026-11-22)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3279] next window (<=48h): (0) MAIN — **多址面现在逐处说「这一处写在哪个函数里」，但这个名字有两种来路，页上不说是哪一种**：一份监听器写成 `b.addEventListener('click', function(){…})` 时报的是接收者 `b`（元素表达式），写成 `document.getElementById('b').addEventListener('click', function(){…})` 时报的是被截到最后一节的调用 `getElementById('b')`（`document.` 被读取器的捕获组切掉），而写成具名回调 `…addEventListener('click', save)` 时 R3278 报的是函数名 `save`——三种都被同一句「「名字」的处理函数里」包住。问：值不值得把 owner 的**来路**也读出来并按来路换词（元素表达式 / 具名函数 / 脚本顶层），并把链式接收者的截断如实标成一类？做法＝先只读量三问：①活树 6 张可操作面的 6 处写逐一列出 owner 与来路分类（逐处列，不猜；预计 `b`/`reset` 两处是元素标识符、`save` 类具名 0 处、链式 0 处）；②若按来路换词，页上句子与 `data-key-multi-counts` 第三段要不要跟着带 kind（带＝属性变四段，AC-SH26 的逐项比臂与 46 条负控里几条要改；不带＝句子与属性两种编码不一致的风险怎么避）；③代价（活树会多印几类词、页增多少字节；是否顺便把链式接收者的完整链读出来，还是只标「只读到最后一次调用」）。收口三选一＝①不建，只在页上与诚实段写明「owner 只有名字、不区分来路」②按来路换词（元素表达式 / 具名函数 / 脚本顶层）③按来路换词并把链式截断标成第四类。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：state 载体 fold_needed=true（bytes=123311·gate=78500·fold 连续多窗因 live-dirty 被拒）、删除侧时机词未建（活树 removeItem=0）、同一键值的不同表达式不入重复桶（活树 0 张）、tasks.md P-47 站行（零支付能力）、BigDomain-OSLoop LogonType=Interactive。",
-    "next_milestone_due": "2026-11-24T17:18:33+08:00",
-    "updated_at": "2026-11-22T17:18:33+08:00",
+    "next_milestone": "[R3280] next window (<=48h): (0) MAIN — **多址面现在逐处说 owner 是哪一种来路，但「具名函数」这一类只印函数名，不印它被绑到哪个元素上**：`merchant-onboard` 的 `save` 页上只写「「save」这个具名函数里」，读者仍要回去找 `save` 绑在哪个控件上；而 `chain` 这一类只标「截下来的接收者」，不印链的前面几节。问：值不值得给具名函数类补一句「绑在哪个元素上」，并把链式接收者的**完整链**读出来（`document.getElementById('b')`）而不是只标截断？做法＝先只读量三问：①活树 2 处具名函数 owner 各自的绑定目标是什么（逐处列；`apply` 被绑到 `q`、`save` 绑到某个 `boxes[i]` 类表达式，逐处核）；②若补绑定目标，同一个 owner 被绑到两处不同元素时（`twotarget`）怎么印；属性要不要加第五段；③完整链要怎么切（从上一处分号/括号起，还是从 `document` 起，逐项列两种口径各自会多读什么、活树 0 处是否只值一条私有世界证据）。收口三选一＝①不建，页与诚实段写明「具名函数类只说函数名，不说绑在哪」②补绑定目标（同 owner 多目标时印全部）③补绑定目标并把链式接收者读成完整链。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：state 载体 fold_needed=true（bytes=123311·gate=78500·fold 连续多窗因 live-dirty 被拒）、删除侧时机词未建（活树 removeItem=0）、同一键值的不同表达式不入重复桶（活树 0 张）、tasks.md P-47 站行（零支付能力）、BigDomain-OSLoop LogonType=Interactive。",
+    "next_milestone_due": "2026-11-24T17:30:49+08:00",
+    "updated_at": "2026-11-22T17:30:49+08:00",
     "heartbeat": {
       "tick": 3262,
       "state_tick": 3273,
@@ -37,8 +37,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-22 R3278 PRODUCT+ENGINEERING: the table R3277 shipped listed a face only when its write states DISAGREED, so ship-checklist (two write sites, both handler) still read as \"NS written twice\" with no way to tell that one site sits in b and the other in reset. The table is now a MULTI-SITE table: every operable face with two or more write sites gets one row, each site names its owner, and \"the states disagree\" is a column (data-key-multi-mixed) instead of the reason a face appears. The R3277 mixed table is gone, not kept beside it.",
-  "claims": {"claimed": 318, "captured": 94, "contradicted": 10, "uncaptured": 214, "historic": 7, "rows": 15, "present": true, "census_ts": "2026-11-22T17:18:33+08:00"},
+  "current": "2026-11-22 R3279 PRODUCT+ENGINEERING: the multi-site table now says WHAT KIND OF NAME owns each write - before this round all six live write sites printed the same phrase `写在「X」的处理函数里`, so `apply` and `save`, which are DECLARED FUNCTIONS, were called handler functions and a reader went looking for a handler that does not exist. Each site now carries a kind from the closed set (element / function / top / chain), each kind has its own word, and a receiver cut out of a member chain is its own class that says the chain was cut. preview/start-here.html is 38823B (38702B last round) and preview/start-here.json (2765B) carries kind on every multi-site site.",
+  "claims": {"claimed": 320, "captured": 94, "contradicted": 10, "uncaptured": 216, "historic": 7, "rows": 15, "present": true, "census_ts": "2026-11-22T17:30:49+08:00"},
   "chain": {"present": true, "rows": 15, "broken": 0, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -67,11 +67,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-22 R3278 PRODUCT+ENGINEERING: the table R3277 shipped listed a face only when its write states DISAGREED, so ship-checklist (two write sites, both handler) still read as \"NS written twice\" with no way to tell that one site sits in b and the other in reset. The table is now a MULTI-SITE table: every operable face with two or more write sites gets one row, each site names its owner, and \"the states disagree\" is a column (data-key-multi-mixed) instead of the reason a face appears. The R3277 mixed table is gone, not kept beside it.",
-  "export_ts": "2026-11-22T17:18:33+08:00",
-  "latest_artifact": "preview/start-here.html (38702B) + preview/start-here.json (2717B) [2026-11-22 mtime]",
+  "do": "2026-11-22 R3279 PRODUCT+ENGINEERING: the multi-site table now says WHAT KIND OF NAME owns each write - before this round all six live write sites printed the same phrase `写在「X」的处理函数里`, so `apply` and `save`, which are DECLARED FUNCTIONS, were called handler functions and a reader went looking for a handler that does not exist. Each site now carries a kind from the closed set (element / function / top / chain), each kind has its own word, and a receiver cut out of a member chain is its own class that says the chain was cut. preview/start-here.html is 38823B (38702B last round) and preview/start-here.json (2765B) carries kind on every multi-site site.",
+  "export_ts": "2026-11-22T17:30:49+08:00",
+  "latest_artifact": "preview/start-here.html (38823B) + preview/start-here.json (2765B) [2026-11-22 mtime]",
   "latest_evidence": "qa/negctl-R3273.log (1280B, 2026-11-22)",
-  "next_milestone": "[R3279] next window (<=48h): (0) MAIN — **多址面现在逐处说「这一处写在哪个函数里」，但这个名字有两种来路，页上不说是哪一种**：一份监听器写成 `b.addEventListener('click', function(){…})` 时报的是接收者 `b`（元素表达式），写成 `document.getElementById('b').addEventListener('click', function(){…})` 时报的是被截到最后一节的调用 `getElementById('b')`（`document.` 被读取器的捕获组切掉），而写成具名回调 `…addEventListener('click', save)` 时 R3278 报的是函数名 `save`——三种都被同一句「「名字」的处理函数里」包住。问：值不值得把 owner 的**来路**也读出来并按来路换词（元素表达式 / 具名函数 / 脚本顶层），并把链式接收者的截断如实标成一类？做法＝先只读量三问：①活树 6 张可操作面的 6 处写逐一列出 owner 与来路分类（逐处列，不猜；预计 `b`/`reset` 两处是元素标识符、`save` 类具名 0 处、链式 0 处）；②若按来路换词，页上句子与 `data-key-multi-counts` 第三段要不要跟着带 kind（带＝属性变四段，AC-SH26 的逐项比臂与 46 条负控里几条要改；不带＝句子与属性两种编码不一致的风险怎么避）；③代价（活树会多印几类词、页增多少字节；是否顺便把链式接收者的完整链读出来，还是只标「只读到最后一次调用」）。收口三选一＝①不建，只在页上与诚实段写明「owner 只有名字、不区分来路」②按来路换词（元素表达式 / 具名函数 / 脚本顶层）③按来路换词并把链式截断标成第四类。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：state 载体 fold_needed=true（bytes=123311·gate=78500·fold 连续多窗因 live-dirty 被拒）、删除侧时机词未建（活树 removeItem=0）、同一键值的不同表达式不入重复桶（活树 0 张）、tasks.md P-47 站行（零支付能力）、BigDomain-OSLoop LogonType=Interactive。",
+  "next_milestone": "[R3280] next window (<=48h): (0) MAIN — **多址面现在逐处说 owner 是哪一种来路，但「具名函数」这一类只印函数名，不印它被绑到哪个元素上**：`merchant-onboard` 的 `save` 页上只写「「save」这个具名函数里」，读者仍要回去找 `save` 绑在哪个控件上；而 `chain` 这一类只标「截下来的接收者」，不印链的前面几节。问：值不值得给具名函数类补一句「绑在哪个元素上」，并把链式接收者的**完整链**读出来（`document.getElementById('b')`）而不是只标截断？做法＝先只读量三问：①活树 2 处具名函数 owner 各自的绑定目标是什么（逐处列；`apply` 被绑到 `q`、`save` 绑到某个 `boxes[i]` 类表达式，逐处核）；②若补绑定目标，同一个 owner 被绑到两处不同元素时（`twotarget`）怎么印；属性要不要加第五段；③完整链要怎么切（从上一处分号/括号起，还是从 `document` 起，逐项列两种口径各自会多读什么、活树 0 处是否只值一条私有世界证据）。收口三选一＝①不建，页与诚实段写明「具名函数类只说函数名，不说绑在哪」②补绑定目标（同 owner 多目标时印全部）③补绑定目标并把链式接收者读成完整链。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：state 载体 fold_needed=true（bytes=123311·gate=78500·fold 连续多窗因 live-dirty 被拒）、删除侧时机词未建（活树 removeItem=0）、同一键值的不同表达式不入重复桶（活树 0 张）、tasks.md P-47 站行（零支付能力）、BigDomain-OSLoop LogonType=Interactive。",
   "outs": [
     "preview/start-here.html (35942B) + preview/start-here.json (2180B) [2026-11-22 mtime]",
     "preview/ugc-gate-report.html (28112B) + preview/ugc-gate-report.json (20170B) [2026-11-22 mtime]",
@@ -165,8 +165,8 @@
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 123311,
-  "next_milestone_due": "2026-11-24T17:18:33+08:00",
+  "state_bytes": 130346,
+  "next_milestone_due": "2026-11-24T17:30:49+08:00",
   "heartbeat": {
     "tick": 3262,
     "state_tick": 3273,

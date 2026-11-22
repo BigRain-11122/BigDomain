@@ -1,7 +1,7 @@
 {
  "face": "start-here",
  "generated_from": {
-  "state/start-here-faces.json": "2117173dd555cc1b"
+  "state/start-here-faces.json": "083ec5c4f742bcfc"
  },
  "faces_total": 44,
  "operable": [
@@ -151,12 +151,14 @@
     {
      "expr": "NS",
      "state": "handler",
-     "owner": "b"
+     "owner": "b",
+     "kind": "element"
     },
     {
      "expr": "NS",
      "state": "handler",
-     "owner": "reset"
+     "owner": "reset",
+     "kind": "element"
     }
    ]
   }
@@ -172,6 +174,6 @@
   }
  ],
  "sizes": {
-  "html_bytes": 38702
+  "html_bytes": 38823
  }
 }
