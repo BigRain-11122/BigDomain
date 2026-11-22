@@ -1000,6 +1000,86 @@ def run(root):
               add_doc["next_milestone_due"], len(add_doc["claims"]),
               counters_still, add_tokens))
 
+    # AC-SXFB35 (AC-SXF35, R3236): the six readings are graded against
+    # THEMSELVES. Probed (qa/probe-R3236.log, Q2): a landed block that EQUALED a
+    # census reading of claimed=100 / captured=1 / contradicted=0 /
+    # uncaptured=0 answered rc=0 VERDICT PASS, because every criterion compared
+    # the block to the census and none graded the census against itself.
+    def patched_face(over):
+        base = {"claimed": 10, "captured": 4, "contradicted": 2,
+                "uncaptured": 4, "historic": 1, "rows": 3, "present": True}
+        base.update(over)
+        return lambda root: dict(base)
+
+    def verdict_of():
+        buffer = io.StringIO()
+        with contextlib.redirect_stdout(buffer):
+            rc = sx.check(export, sx.STATE)
+        return rc, buffer.getvalue()
+
+    real_face_arith = sx.claims_face
+    arith_arms = []
+    for label, over in (
+            ("sum", {"claimed": 100, "captured": 1, "contradicted": 0,
+                     "uncaptured": 0}),
+            ("historic", {"historic": 5}),
+            ("negative", {"captured": -1}),
+            ("type", {"claimed": "10"})):
+        sx.claims_face = patched_face(over)
+        try:
+            rc_arm, text_arm = verdict_of()
+        finally:
+            sx.claims_face = real_face_arith
+        arith_arms.append((label, rc_arm, "E_SXF_CLAIMS_ARITH" in text_arm))
+    record("AC-SXFB35", all(rc_arm == 2 and hit
+                            for _label, rc_arm, hit in arith_arms),
+           "arms=%s" % ",".join("%s rc=%d hit=%s" % arm for arm in arith_arms))
+
+    # AC-SXFB36 (AC-SXF36, R3236): the arithmetic code is NOT redundant with
+    # STALE. The decisive arm makes the landed block EQUAL the non-conserving
+    # census, so STALE is clean by construction and only the new code can redden.
+    bad_reading = {"claimed": 100, "captured": 1, "contradicted": 0,
+                   "uncaptured": 0, "historic": 0, "rows": 3, "present": True}
+    sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
+    landed_mut = json.loads(io.open(export, encoding="utf-8").read())
+    landed_mut["claims"].update(bad_reading)
+    write_json(export, landed_mut)
+    sx.claims_face = lambda root: dict(bad_reading)
+    try:
+        rc_indep, text_indep = verdict_of()
+    finally:
+        sx.claims_face = real_face_arith
+    indep = (rc_indep == 2 and "E_SXF_CLAIMS_ARITH" in text_indep
+             and "E_SXF_CLAIMS_STALE" not in text_indep)
+    record("AC-SXFB36", indep,
+           "rc=%d arith=%s stale=%s" % (rc_indep,
+                                        "E_SXF_CLAIMS_ARITH" in text_indep,
+                                        "E_SXF_CLAIMS_STALE" in text_indep))
+
+    # AC-SXFB37 (AC-SXF37, R3236): PURE ADDITION - the block keeps its eight
+    # keys, a second apply on a pinned clock is byte-identical, and the real
+    # world's own reading conserves, so the new code manufactures no false red.
+    real_clock_arith = sx.now_local
+    pinned_arith = dt.datetime(2026, 11, 22, 9, 0, 0,
+                               tzinfo=dt.timezone(dt.timedelta(hours=8)))
+    try:
+        sx.now_local = lambda: pinned_arith
+        rc_arith_once = sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
+        arith_once = io.open(export, "rb").read()
+        rc_arith_twice = sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
+        arith_twice = io.open(export, "rb").read()
+    finally:
+        sx.now_local = real_clock_arith
+    rc_arith_after = sx.check(export, sx.STATE)
+    live_clean = sx.claims_arith(sx.claims_face(REPO)) == []
+    arith_doc = json.loads(arith_twice.decode("utf-8"))
+    record("AC-SXFB37", rc_arith_once == 0 and rc_arith_twice == 0
+           and arith_once == arith_twice and rc_arith_after == 0
+           and len(arith_doc["claims"]) == 8 and live_clean,
+           "rc=%d/%d/%d idempotent=%s keys=%d live_clean=%s"
+           % (rc_arith_once, rc_arith_twice, rc_arith_after,
+              arith_once == arith_twice, len(arith_doc["claims"]), live_clean))
+
     # AC-SXFB10 (AC-SXF10): the registry row exists AND declares this many
     # criteria, so adding a criterion without moving the count is red instead of
     # silently uncounted.
@@ -1014,7 +1094,7 @@ def run(root):
             if "test_status_export_fresh.py" in line:
                 row = line
                 break
-    record("AC-SXFB10", row is not None and declared == 34,
+    record("AC-SXFB10", row is not None and declared == 37,
            "matrix_row=%s declared=%d" % (bool(row), declared))
 
 

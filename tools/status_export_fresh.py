@@ -534,6 +534,13 @@ def check(export_path, state_path):
     # AC-SXF27 (R3228): the same law for the census reading. Published as a
     # reading, never a verdict - a contradicted count of 1 still reads PASS.
     derived_claims = claims_face(ROOT)
+    # AC-SXF35 (R3236): the reading is graded against itself, not only against
+    # the landed block. A block that equals a non-conserving census is STALE-
+    # clean by construction, so the arithmetic needs its own verdict or the
+    # defect is silent (measured, qa/probe-R3236.log: rc=0 PASS with 99 claims
+    # unaccounted for).
+    for violation in claims_arith(derived_claims):
+        problems.append(("E_SXF_CLAIMS_ARITH", violation))
     landed_claims = doc.get(CLAIMS_KEY)
     if not isinstance(landed_claims, dict):
         problems.append(("E_SXF_CLAIMS_MISSING",
@@ -727,6 +734,45 @@ def claims_block(root, moment):
     block = claims_face(root)
     block[CLAIMS_TS_KEY] = iso(moment)
     return block
+
+
+CLAIMS_ARITH_KEYS = ("claimed", "captured", "contradicted", "uncaptured",
+                     "historic", "rows")
+
+
+def claims_arith(reading):
+    """AC-SXF35 (R3236): named violations of the reading's own arithmetic.
+
+    The six readings are only readable if they add up. Probed
+    (qa/probe-R3236.log): a world whose landed block EQUALED a census reading of
+    claimed=100 / captured=1 / contradicted=0 / uncaptured=0 answered
+    `--check` rc=0 VERDICT PASS - every criterion compared the block to the
+    census, so 99 claims with nothing behind them were invisible. The HTTP card
+    printed a `class=fail` sentence about it, which is a rendering a reader may
+    miss, not a gate.
+
+    Violations are returned one per line so a red print names the law that
+    broke instead of collapsing three defects into one refusal. An unusable
+    reading (non-integer or negative counter) is reported first and short
+    circuits, because a sum over it would be a second guess.
+    """
+    bad = []
+    for key in CLAIMS_ARITH_KEYS:
+        value = reading.get(key)
+        if isinstance(value, bool) or not isinstance(value, int) or value < 0:
+            bad.append("%s=%r is not a non-negative integer" % (key, value))
+    if bad:
+        return bad
+    total = (reading["captured"] + reading["contradicted"]
+             + reading["uncaptured"])
+    if total != reading["claimed"]:
+        bad.append("captured + contradicted + uncaptured = %d but claimed = %d"
+                   % (total, reading["claimed"]))
+    if reading["historic"] > reading["contradicted"]:
+        bad.append("historic = %d exceeds contradicted = %d (historic is a "
+                   "sub-count, never a reclassification)"
+                   % (reading["historic"], reading["contradicted"]))
+    return bad
 
 
 def _ensure_block(text, key, mapping, indent="  "):

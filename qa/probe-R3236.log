@@ -1,0 +1,40 @@
+=== R3236 PROBE (read-only) ===
+Q1 code census over shipped .py:
+  HIT src\os\test_status_export_fresh.py:829 tampered_seven["claims"]["uncaptured"]) + 1
+  HIT src\os\test_status_export_fresh.py:875 conserves = (landed_block["captured"] + landed_block["contradicted"]
+  HIT src\os\test_status_export_fresh.py:876 + landed_block["uncaptured"]) == landed_block["claimed"]
+  HIT src\sandbox\frontdoor.py:6060 (captured + contradicted + uncaptured == claimed), never a re-census: this
+  HIT src\sandbox\frontdoor.py:6108 total = (counts["captured"] + counts["contradicted"]
+  HIT src\sandbox\frontdoor.py:6109 + counts["uncaptured"])
+  HIT src\sandbox\test_claim_census.py:151 if result["claimed"] != (result["captured"] + result["contradicted"]
+  HIT src\sandbox\test_claim_census.py:152 + result["uncaptured"]):
+  HIT tmp\probe_R3229.py:133 say("Q2 conservation captured+contradicted+uncaptured==claimed is %s"
+  HIT tmp\probe_R3229.py:134 % ((seven["captured"] + seven["contradicted"] + seven["uncaptured"])
+  HIT tmp\probe_R3230.py:82 total = claims["captured"] + claims["contradicted"] + claims["uncaptured"]
+  HIT tmp\probe_R3230.py:83 print("Q3 conservation captured+contradicted+uncaptured=%d claimed=%d "
+  HIT tmp\probe_R3234.py:28 NUM_RE = re.compile(r"claimed=(\d+) captured=(\d+) contradicted=(\d+) "
+  HIT tmp\probe_R3234.py:29 r"uncaptured=(\d+) historic=(\d+) records=(\d+)")
+  HIT tmp\probe_R3236.py:4 conservation captured+contradicted+uncaptured == claimed, or the sub-count
+  HIT tmp\probe_R3236.py:76 total = (reading["captured"] or 0) + (reading["contradicted"] or 0) + \
+  HIT tools\status_export_fresh.py:92 a world with two claims counted 1 captured + 1 contradicted, and publishing the
+  HIT tools\status_export_fresh.py:127 contradicted + uncaptured == claimed), and the landed block carries
+  HIT tools\status_export_fresh.py:706 (captured + contradicted + uncaptured == claimed) is what makes the number
+  HIT tools\status_export_fresh.py:766 total = (reading["captured"] + reading["contradicted"]
+  HIT tools\status_export_fresh.py:767 + reading["uncaptured"])
+  HIT tools\status_export_fresh.py:769 bad.append("captured + contradicted + uncaptured = %d but claimed = %d"
+  code_sites=22
+  prose_only_lines tools/status_export_fresh.py=7
+  prose_only_lines tools/claim_census.py=1
+  absent src/os/closeout_gate.py
+  prose_only_lines tools/claim_census.py=1
+  E_SXF_CLAIMS_ARITH anywhere=7
+Q3 live reading {"captured": 106, "claimed": 322, "contradicted": 11, "historic": 7, "rows": 8, "uncaptured": 205}
+  sum=322 claimed=322 conservation=True historic<=contradicted=True
+APPLIED R3235 changed=True bytes=37990 lf_only=True bom=False
+do->2026-11-22 R3235 PRODUCT+ENGINEERING: the red CEO face was red for the wrong reason - AC-UGR8 pinned the first SecGate call site as an exact file:line, so every
+latest_artifact->preview/ugc-gate-report.html (9952B) + preview/ugc-gate-report.json (7000B) [2026-11-22 commit]
+next_milestone->R3235 [R3235] next window (<=48h): (0) MAIN — **仍然欠着 R3234 的问题，而且本轮又添了一条新的**：①**接续题**＝... due=2026-11-24T08:06:29+08:00
+Q2 arms: apply_rc=0 fresh_check_rc=0
+  block==non-conserving census: rc=2 STALE=False ARITH=True
+  | VERDICT R3235 FAIL
+  | E_SXF_CLAIMS_ARITH: captured + contradicted + uncaptured = 1 but claimed = 100
