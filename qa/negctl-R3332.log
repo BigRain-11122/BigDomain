@@ -1,0 +1,4 @@
+NEGCTL face answers 503 with a json body on port 50763
+NEGCTL connect_only=True page_aware=False differ=True
+NEGCTL same 503 face behind a page that would read live under connect-only
+NEGCTL live_map_would_read=True shipped_map_reads=False

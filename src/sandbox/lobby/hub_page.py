@@ -23,7 +23,9 @@ import os
 import socket
 import sys
 import threading
+import urllib.error
 import urllib.parse
+import urllib.request
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -77,6 +79,23 @@ def face_live(host, port, timeout=0.35):
         return False
 
 
+def face_serves(url, timeout=1.5):
+    """True when the face's own published root answers 200 text/html.
+
+    R3332: a listening port is not a serving face. The checkout face once
+    listened with its page absent and answered 503 with a JSON error, and a
+    probe that read the connect alone called it live - the same lie as a page
+    naming a dead port, only harder to see. This asks for the root the hub
+    itself publishes, so a face that cannot serve its page reads dead.
+    """
+    try:
+        with urllib.request.urlopen(url, timeout=timeout) as resp:
+            ctype = (resp.headers.get("Content-Type") or "").lower()
+            return resp.status == 200 and "text/html" in ctype
+    except (OSError, ValueError, urllib.error.URLError):
+        return False
+
+
 class HubPageHandler(BaseHTTPRequestHandler):
     """Read-only HTTP face for the sandbox entry page."""
 
@@ -93,10 +112,18 @@ class HubPageHandler(BaseHTTPRequestHandler):
         payload = dict(self.faces)
         if probe:
             ports = payload.get("face_ports") or {}
-            payload["live"] = dict(
-                (face_id, face_live(self.probe_host, port))
-                for face_id, port in sorted(ports.items())
-            )
+            # R3332: the map answers "does this face serve its page", not just
+            # "is a socket listening". A face whose root is published is asked
+            # for that root; a face without a published URL falls back to the
+            # connect test and is named by its port.
+            live = {}
+            for face_id, port in sorted(ports.items()):
+                url = payload.get(face_id)
+                if isinstance(url, str) and url.startswith("http://"):
+                    live[face_id] = face_serves(url)
+                else:
+                    live[face_id] = face_live(self.probe_host, port)
+            payload["live"] = live
         return payload
 
     def _send_page(self):

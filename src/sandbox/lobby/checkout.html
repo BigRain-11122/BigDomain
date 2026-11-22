@@ -111,6 +111,13 @@
   </section>
 
   <section class="card">
+    <div class="step">付费通道</div>
+    <h2>真实金额为什么还走不到</h2>
+    <div id="realpay" class="out">读取契约中……</div>
+    <p class="hint">这里读的是结账面自己公布的契约（同源接口），不是页面写死的说明：金额、通道属性与阻塞项都以服务端返回为准。</p>
+  </section>
+
+  <section class="card">
     <div class="step">状态面</div>
     <h2>当前读到的权益</h2>
     <div id="stateout" class="out">点上方「查询当前权益」。</div>
@@ -132,6 +139,43 @@
     var head = title + (cls ? "" : "");
     el.textContent = head + "\n" + JSON.stringify(obj, null, 2);
     el.className = "out" + (cls ? " " + cls : "");
+  }
+
+  var realpay = document.getElementById("realpay");
+  var PHYSICAL = [
+    "微信支付商户号",
+    "服务器",
+    "域名",
+    "备案 + ICP",
+    "小程序 appid + secret"
+  ];
+
+  function loadContract() {
+    fetch("/checkout/api/state?actor=" + encodeURIComponent(actor()))
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        var c = data.contract || {};
+        var price = (typeof c.amount_cents === "number")
+          ? (c.amount_cents / 100).toFixed(2) + " " + (c.currency || "")
+          : "未读到";
+        var lines = [
+          "演示金额: " + price + (typeof c.amount_cents === "number" ? "（" + c.amount_cents + " 分，价格正典）" : ""),
+          "演示通道: " + (c.always && c.always.mock ? "mock" : "未知") +
+            " —— 回执 paid=true，但 chargeable=false、mock=true，不动真钱",
+          "真实扣费阻塞项: " + (c.blocked_on || "契约未公布"),
+          "接通真钱还需补齐（CEO 物理件 " + PHYSICAL.length + " 件）:"
+        ];
+        for (var i = 0; i < PHYSICAL.length; i++) {
+          lines.push("  " + (i + 1) + ") " + PHYSICAL[i]);
+        }
+        lines.push("结论: 本页可以把 19.9 全流程点完；真钱要等上面 " + PHYSICAL.length + " 件到位。");
+        realpay.textContent = lines.join("\n");
+        realpay.className = "out warn";
+      })
+      .catch(function (e) {
+        realpay.textContent = "读取契约失败: " + String(e);
+        realpay.className = "out bad";
+      });
   }
 
   function actor() {
@@ -199,6 +243,8 @@
         show(stateout, "权益读取", data, data.entrance_active ? "ok" : "warn");
       });
   });
+
+  loadContract();
 })();
 </script>
 </body>

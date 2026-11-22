@@ -478,8 +478,11 @@ SUITES = [
     # process really bound, so the page never guesses one; the checkout demo is
     # a separate process and the payload says so instead of claiming liveness.
     # (AC-HUB1..AC-HUB6 were pre-registered in src/os/backlog.md at R2462
-    # BEFORE this suite, its module and the page existed.)
-    ("os-sandbox-hub", os.path.join("lobby", "test_hub_page.py"), 6),
+    # BEFORE this suite, its module and the page existed. AC-HUB7 (R3332) asks
+    # the shipped probe whether a listening port whose page answers 503 still
+    # reads live - measured: it no longer does, and the old connect-only
+    # reading is printed beside it.)
+    ("os-sandbox-hub", os.path.join("lobby", "test_hub_page.py"), 7),
     # lobby room picker and event ledger (R2464): GET /lobby/api/rooms answers
     # the server OWN configured rooms (never a literal in the module or page),
     # the page gains a selector that subscribes the new room and releases the

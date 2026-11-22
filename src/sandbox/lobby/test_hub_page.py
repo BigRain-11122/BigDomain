@@ -1,8 +1,9 @@
 """Suite for the sandbox entry face (hub_page.py + hub.html).
 
-Six criteria, each read off a REAL server process and the ports it actually
+Seven criteria, each read off a REAL server process and the ports it actually
 bound (AC-HUB1..AC-HUB6 were pre-registered in src/os/backlog.md at R2462
-BEFORE this module, the page and this suite existed):
+BEFORE this module, the page and this suite existed; AC-HUB7 was pre-registered
+in the R3332 backlog row before the probe upgrade landed):
 
   AC-HUB1  GET /hub/ answers 200 text/html with bytes identical to the page on
            disk, bigger than 2000 bytes, and the page makes no external
@@ -23,6 +24,11 @@ BEFORE this module, the page and this suite existed):
   AC-HUB6  server.py wires the face: --hub-port prints
            hub=http://127.0.0.1:<real bound port>/hub/ in the banner and the
            registry carries the os-sandbox-hub suite row.
+  AC-HUB7  a listening port that cannot serve its page is NOT live: three
+           in-process servers (200 html, 503 html, closed port) are asked by
+           face_serves and face_live, and the old connect-only reading is
+           printed beside the new one so the difference is a reading, not a
+           claim.
 """
 
 import hashlib
@@ -33,11 +39,17 @@ import socket
 import subprocess
 import sys
 import tempfile
+import threading
 import time
 import urllib.error
 import urllib.request
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+if HERE not in sys.path:
+    sys.path.append(HERE)
+
+import hub_page  # noqa: E402  (AC-HUB7 asks the shipped probe itself)
 BASE = os.path.dirname(HERE)
 SERVER = os.path.join(HERE, "server.py")
 PAGE = os.path.join(HERE, "hub.html")
@@ -64,6 +76,32 @@ def http_get(url, timeout=6.0):
             return resp.status, resp.headers.get("Content-Type", ""), resp.read()
     except urllib.error.HTTPError as exc:
         return exc.code, exc.headers.get("Content-Type", ""), exc.read()
+
+
+class _Face(BaseHTTPRequestHandler):
+    """The smallest possible face: one status, one html body, no state."""
+
+    code = 200
+    body = b"<!doctype html><title>face</title><p>face</p>"
+
+    def do_GET(self):
+        self.send_response(self.code)
+        self.send_header("Content-Type", "text/html; charset=utf-8")
+        self.send_header("Content-Length", str(len(self.body)))
+        self.end_headers()
+        self.wfile.write(self.body)
+
+    def log_message(self, *args):
+        pass
+
+
+def serve_face(code):
+    """A loopback face answering `code`; returns (server, url, port)."""
+    handler = type("Face%d" % code, (_Face,), {"code": code})
+    httpd = ThreadingHTTPServer(("127.0.0.1", 0), handler)
+    threading.Thread(target=httpd.serve_forever, daemon=True).start()
+    port = httpd.server_address[1]
+    return httpd, "http://127.0.0.1:%d/" % port, port
 
 
 def http_post(url, payload=b"{}", timeout=6.0):
@@ -139,7 +177,7 @@ def main():
     for path, what in ((PAGE, "page"), (MODULE, "module")):
         if not os.path.exists(path):
             print("FAIL AC-HUB1 %s missing on disk: %s" % (what, path))
-            print("SUITE FAIL 0/6")
+            print("SUITE FAIL 0/7")
             return 1
 
     with open(PAGE, "rb") as fh:
@@ -248,11 +286,43 @@ def main():
             failed += 1
             print("FAIL AC-HUB6 :: %s" % exc)
 
+        # ---------------- AC-HUB7 ----------------
+        ok200 = bad503 = None
+        try:
+            ok200, url200, port200 = serve_face(200)
+            bad503, url503, port503 = serve_face(503)
+            closed_port = free_port()
+            closed_url = "http://127.0.0.1:%d/" % closed_port
+
+            serves200 = hub_page.face_serves(url200)
+            serves503 = hub_page.face_serves(url503)
+            serves_closed = hub_page.face_serves(closed_url)
+            live503 = hub_page.face_live("127.0.0.1", port503)
+            live_closed = hub_page.face_live("127.0.0.1", closed_port)
+
+            assert serves200 is True, "a 200 html face read not serving"
+            assert serves503 is False, "a 503 face read serving"
+            assert serves_closed is False, "a closed port read serving"
+            assert live503 is True, "connect-only reading cannot see the 503"
+            assert live_closed is False, "connect-only reading called a dead port live"
+            print("PASS AC-HUB7 serves=200:%s 503:%s closed:%s | "
+                  "connect_only=503:%s closed:%s live_diff=%s"
+                  % (serves200, serves503, serves_closed, live503, live_closed,
+                     (serves503 != live503)))
+        except AssertionError as exc:
+            failed += 1
+            print("FAIL AC-HUB7 :: %s" % exc)
+        finally:
+            for srv in (ok200, bad503):
+                if srv is not None:
+                    srv.shutdown()
+                    srv.server_close()
+
     finally:
         if leg is not None:
             leg.close()
 
-    total = 6
+    total = 7
     if failed:
         print("SUITE FAIL %d/%d" % (total - failed, total))
         return 1

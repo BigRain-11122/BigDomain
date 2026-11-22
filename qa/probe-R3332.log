@@ -1,0 +1,16 @@
+REPORT ok=True hub_url=http://127.0.0.1:50701/hub/
+FACE checkout  status=200  type=text/html; charset=utf-8     head=b'<!DOCTYPE html>\n<html lang="zh-CN">\n<hea'
+FACE city      status=200  type=text/html; charset=utf-8     head=b'<!DOCTYPE html>\n<html lang="zh-CN">\n<hea'
+FACE gate      status=200  type=text/html; charset=utf-8     head=b'<!DOCTYPE html>\n<html lang="zh-CN">\n<hea'
+FACE ledger    status=200  type=text/html; charset=utf-8     head=b'<!doctype html>\n<html lang="zh-CN">\n<hea'
+FACE lobby     status=200  type=text/html; charset=utf-8     head=b'<!DOCTYPE html>\n<html lang="zh-CN">\n<hea'
+FACE member    status=200  type=text/html; charset=utf-8     head=b'<!DOCTYPE html>\n<html lang="zh-CN">\n<hea'
+FACE panel     status=200  type=text/html; charset=utf-8     head=b'<!DOCTYPE html>\n<html lang="zh-CN">\n<hea'
+FACE ugc       status=200  type=text/html; charset=utf-8     head=b'<!DOCTYPE html>\n<html lang="zh-CN">\n<hea'
+FACE hub       status=200  type=text/html; charset=utf-8    
+CLICK page status=200 html=True bytes=8569 markers=True
+CLICK realpay_card=True contract_on_load=True
+CLICK order=201 amount=1990 chargeable=False
+CLICK pay=200 paid=True card=True
+CLICK send=200 suggest=pass gate_first=403/E_ENTRANCE_REQUIRED
+CHILD rc=0
