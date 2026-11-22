@@ -1,0 +1,23 @@
+=== R3257 PROBE (read-only) ===
+[Q1] handler binding forms per storage face
+  filing-checklist.html    handlers=0 direct=0 addl=0 iife=1 this_in_handler=0 spans=-
+  lobby-protocol-map.html  handlers=0 direct=0 addl=0 iife=2 this_in_handler=0 spans=-
+  lobby-session-trace.html handlers=0 direct=0 addl=0 iife=1 this_in_handler=0 spans=-
+  membership-face.html     handlers=0 direct=0 addl=0 iife=3 this_in_handler=0 spans=-
+  merchant-onboard.html    handlers=0 direct=0 addl=0 iife=1 this_in_handler=0 spans=-
+  money-path-demo.html     handlers=1 direct=1 addl=0 iife=2 this_in_handler=1 spans=T[n].onchange
+  ship-checklist.html      handlers=0 direct=0 addl=0 iife=1 this_in_handler=0 spans=-
+[Q2] host expressions per side
+  filing-checklist.html    write=- read=- verdict=no-host unknown=0
+  lobby-protocol-map.html  write=- read=- verdict=no-host unknown=0
+  lobby-session-trace.html write=- read=- verdict=no-host unknown=0
+  membership-face.html     write=- read=- verdict=no-host unknown=0
+  merchant-onboard.html    write=- read=- verdict=no-host unknown=0
+  money-path-demo.html     write=['T[n]'] read=['T[n]'] verdict=same-host unknown=0
+  ship-checklist.html      write=- read=- verdict=no-host unknown=0
+[Q2b] private worlds
+  same-host          write=['T[n]'] read=['T[n]'] verdict=same-host unknown=0
+  different-host     write=['U[n]'] read=['T[n]'] verdict=different-host unknown=0
+  no-handler-this    write=- read=- verdict=unknown unknown=1
+  no-attr            write=- read=- verdict=no-host unknown=0
+[Q3] cost: 0.0241s over 7 storage faces

@@ -304,6 +304,138 @@ def attr_reading(text, keys=None):
             "unknown": w_bad + r_bad, "verdict": verdict}
 
 
+# A shared attribute name is not a shared element: money-path-demo writes
+# this.getAttribute('data-ck') and reads T[n].getAttribute('data-ck'), which the name
+# column can only call same-name. The element a read sits on IS derivable from the
+# bytes in three ways - a direct X.getAttribute(...) names X, a `this` inside
+# TARGET.onX = function(){...} is TARGET, and a name bound to an attribute read takes
+# that right-hand side's host. Comparing host EXPRESSIONS is still text, not identity.
+H_ASSIGN = re.compile(r"([A-Za-z_$][\w$]*\s*(?:\[[^\]]*\])?)\s*\.\s*(on[a-z]+)"
+                      r"\s*=\s*function\s*\(")
+H_ADDL = re.compile(r"([A-Za-z_$][\w$]*\s*(?:\[[^\]]*\])?)\s*\.\s*addEventListener"
+                    r"\s*\(\s*['\"][\w-]+['\"]\s*,\s*function\s*\(")
+A_HOST = re.compile(r"([A-Za-z_$][\w$]*\s*(?:\[[^\]]*\])?)\s*\.\s*getAttribute\s*\(")
+THIS_GET = re.compile(r"\bthis\s*\.\s*getAttribute\s*\(")
+HOST_NONE = "none"
+HOST_VERDICTS = ("same-host", "different-host", "one-side", "no-host", "unknown")
+
+
+def _body_span(text, frm):
+    """The braces of the function literal starting at or after frm."""
+    i = text.find("{", frm)
+    if i < 0:
+        return None
+    depth = 0
+    for j in range(i, len(text)):
+        if text[j] == "{":
+            depth += 1
+        elif text[j] == "}":
+            depth -= 1
+            if depth == 0:
+                return (i, j)
+    return None
+
+
+def _handler_spans(blanked):
+    """Every element handler literal in the page: body start/end plus the target it is
+    assigned to. Only the two literal forms are recognised; anything else is silence."""
+    spans = []
+    for match in H_ASSIGN.finditer(blanked):
+        got = _body_span(blanked, match.end())
+        if got:
+            spans.append((got[0], got[1], match.group(1).replace(" ", ""),
+                          match.group(2)))
+    for match in H_ADDL.finditer(blanked):
+        got = _body_span(blanked, match.end())
+        if got:
+            spans.append((got[0], got[1], match.group(1).replace(" ", ""),
+                          "addEventListener"))
+    return spans
+
+
+def _sides_pos(raw, blanked):
+    """The storage call arguments with their offsets, so a `this` can be tied to the
+    handler literal that encloses it."""
+    sides = {"setItem": [], "getItem": []}
+    for match in CALL.finditer(blanked):
+        kind = match.group(1)
+        if kind not in sides:
+            continue
+        open_paren = match.end() - 1
+        arg = _first_arg(raw, open_paren)
+        if arg.strip():
+            sides[kind].append((arg, open_paren + 1))
+    return sides
+
+
+def _side_hosts(raw, blanked, expr, pos, spans):
+    """Host expressions the attribute reads of one key side sit on, one hop deep."""
+    hosts, unknown = set(), 0
+    for match in A_HOST.finditer(expr):
+        # 'this' is not a host name - it is resolved through its enclosing handler.
+        # Counting it as a host would make two unresolved sides look equal.
+        got = match.group(1).replace(" ", "")
+        if got != "this":
+            hosts.add(got)
+    for match in THIS_GET.finditer(expr):
+        at = pos + match.start()
+        owner = [s for s in spans if s[0] <= at <= s[1]]
+        if owner:
+            hosts.add(owner[0][2])
+        else:
+            unknown += 1
+    for name in _key_symbols(expr):
+        for decl in RAW_ASSIGN.finditer(blanked):
+            if decl.group(1) != name:
+                continue
+            rhs = raw[decl.start(2):decl.start(2) + len(decl.group(2))]
+            for match in A_HOST.finditer(rhs):
+                got = match.group(1).replace(" ", "")
+                if got != "this":
+                    hosts.add(got)
+            for match in THIS_GET.finditer(rhs):
+                at = decl.start(2) + match.start()
+                owner = [s for s in spans if s[0] <= at <= s[1]]
+                if owner:
+                    hosts.add(owner[0][2])
+                else:
+                    unknown += 1
+            break
+    return hosts, unknown
+
+
+def host_reading(text, keys=None):
+    """Which element expression each side of a storage key reads an attribute from.
+    Text only: two sides naming one expression is not proof of one node at runtime."""
+    keys = keys or key_reading(text)
+    blanked = _blank_strings(text)
+    spans = _handler_spans(blanked)
+    sides = _sides_pos(text, blanked)
+    write, w_bad = set(), 0
+    read, r_bad = set(), 0
+    for expr, pos in sides["setItem"]:
+        got, bad = _side_hosts(text, blanked, expr, pos, spans)
+        write |= got
+        w_bad += bad
+    for expr, pos in sides["getItem"]:
+        got, bad = _side_hosts(text, blanked, expr, pos, spans)
+        read |= got
+        r_bad += bad
+    shared = sorted(write & read)
+    if w_bad or r_bad:
+        verdict = "unknown"
+    elif write and read:
+        verdict = "same-host" if shared else "different-host"
+    elif write or read:
+        verdict = "one-side"
+    else:
+        verdict = "no-host"
+    return {"write": sorted(write), "read": sorted(read), "shared": shared,
+            "unknown": w_bad + r_bad, "verdict": verdict,
+            "handlers": len(spans),
+            "bound": len([s for s in spans if s[3] != "addEventListener"])}
+
+
 def scan_faces():
     """Per preview face: how many controls it carries, what a click can change, and
     whether it leaves the machine."""
@@ -326,6 +458,7 @@ def scan_faces():
             row["keys"] = key_reading(text)
             row["tiers"] = tier_reading(text, row["keys"])
             row["attrs"] = attr_reading(text, row["keys"])
+            row["hosts"] = host_reading(text, row["keys"])
         rows[name] = row
     return rows
 
@@ -384,6 +517,13 @@ def projection():
     attr_different = [n for n in key_faces
                       if rows[n]["attrs"]["verdict"] == "different"]
     attr_unknown = [n for n in key_faces if rows[n]["attrs"]["verdict"] == "unknown"]
+    host_counts = {verdict: 0 for verdict in HOST_VERDICTS}
+    for name in key_faces:
+        host_counts[rows[name]["hosts"]["verdict"]] += 1
+    host_different = [n for n in key_faces
+                      if rows[n]["hosts"]["verdict"] == "different-host"]
+    host_unknown = [n for n in key_faces
+                    if rows[n]["hosts"]["verdict"] == "unknown"]
     return {
         "rows": rows,
         "doc": doc,
@@ -404,6 +544,9 @@ def projection():
         "attr_counts": attr_counts,
         "attr_different": attr_different,
         "attr_unknown": attr_unknown,
+        "host_counts": host_counts,
+        "host_different": host_different,
+        "host_unknown": host_unknown,
         "missing": missing_ceo_items(),
         "data16": sha16(DATA),
     }
@@ -461,6 +604,21 @@ def attr_phrase(doc, attrs):
         verdict=attr_word(doc, attrs["verdict"]))
 
 
+def host_word(doc, verdict):
+    return ((doc.get("host_words") or {}).get(verdict) or verdict)
+
+
+def host_phrase(doc, hosts):
+    """One face's host expressions in words, with the unresolved `this` count printed
+    instead of hidden when a handler could not be located."""
+    none = doc.get("host_none") or HOST_NONE
+    return (doc.get("host_fmt") or "").format(
+        write=" , ".join(hosts["write"]) or none,
+        read=" , ".join(hosts["read"]) or none,
+        verdict=host_word(doc, hosts["verdict"]),
+        unknown=hosts["unknown"])
+
+
 def render(proj):
     doc = proj["doc"]
     faces = doc.get("faces") or {}
@@ -503,17 +661,27 @@ def render(proj):
                            esc(attr_phrase(doc, attrs))))
         else:
             attrline = ""
+        if "hosts" in proj["rows"][name]:
+            hosts = proj["rows"][name]["hosts"]
+            hostline = ('    <p class="hostline" data-hosts="%s" data-hosts-write="%s" '
+                        'data-hosts-read="%s" data-hosts-verdict="%s">%s</p>\n'
+                        % (esc(name), esc(",".join(hosts["write"])),
+                           esc(",".join(hosts["read"])), esc(hosts["verdict"]),
+                           esc(host_phrase(doc, hosts))))
+        else:
+            hostline = ""
         cards.append(
             '  <article class="face" data-face="%s">\n'
             '    <h3><a href="%s">%s</a> <code>%s</code></h3>\n'
             '    <p class="kindline"><span class="kbadge" data-kind="%s">%s</span></p>\n'
-            '%s%s%s'
+            '%s%s%s%s'
             '    <p><b>%s</b>%s</p>\n'
             '    <p class="limit"><b>%s</b>%s</p>\n'
             '    <p><a class="go" href="%s">%s &rarr;</a></p>\n'
             '  </article>\n' % (
                 esc(name), esc(name), esc(label), esc(name),
                 esc(kind), esc(kind_tag(doc, kind)), keyline, tierline, attrline,
+                hostline,
                 esc(doc["can_tag"]), esc(can),
                 esc(doc["cannot_tag"]), esc(cannot),
                 esc(name), esc(doc["open_link"]),
@@ -642,10 +810,45 @@ def render(proj):
                    '  </div>\n  <div class="legend attrs">\n%s\n  </div>'
                    % (esc(doc.get("attrs_head", "")), attr_counts_html,
                       "\n".join(attr_notes)))
+    host_tags = doc.get("host_count_tags") or {}
+    host_counts_html = "\n".join(
+        '  <span class="kc" data-host-count="%s"><b>%d</b>%s</span>'
+        % (verdict, proj["host_counts"][verdict],
+           esc(host_tags.get(verdict) or host_word(doc, verdict)))
+        for verdict in HOST_VERDICTS
+    )
+    host_notes = []
+    for name in proj["host_different"] or [None]:
+        if not name:
+            host_notes.append('  <p data-hosts-different-absent>%s</p>'
+                              % esc(doc.get("host_different_absent") or ""))
+            continue
+        hosts = proj["rows"][name]["hosts"]
+        host_notes.append(
+            '  <p data-hosts-different="%s" data-hosts-write="%s" data-hosts-read="%s">'
+            '%s</p>'
+            % (esc(name), esc(",".join(hosts["write"])), esc(",".join(hosts["read"])),
+               esc((doc.get("host_different_fmt") or "").format(
+                   write=" , ".join(hosts["write"]) or doc.get("host_none", ""),
+                   read=" , ".join(hosts["read"]) or doc.get("host_none", "")))))
+    for name in proj["host_unknown"] or [None]:
+        if not name:
+            host_notes.append('  <p data-hosts-unknown-absent>%s</p>'
+                              % esc(doc.get("host_unknown_absent") or ""))
+            continue
+        hosts = proj["rows"][name]["hosts"]
+        host_notes.append(
+            '  <p data-hosts-unknown="%s" data-hosts-calls="%d">%s</p>'
+            % (esc(name), hosts["unknown"],
+               esc((doc.get("host_unknown_fmt") or "").format(calls=hosts["unknown"]))))
+    hosts_block = ('  <p class="kindshead">%s</p>\n  <div class="counts kinds">\n%s\n'
+                   '  </div>\n  <div class="legend hosts">\n%s\n  </div>\n  <p class="note">%s</p>'
+                   % (esc(doc.get("hosts_head", "")), host_counts_html,
+                      "\n".join(host_notes), esc(doc.get("host_note", ""))))
     keys_block = ('  <p class="kindshead">%s</p>\n  <div class="counts kinds">\n%s\n'
-                  '  </div>\n  <div class="legend keys">\n%s\n  </div>\n%s\n%s'
+                  '  </div>\n  <div class="legend keys">\n%s\n  </div>\n%s\n%s\n%s'
                   % (esc(doc.get("keys_head", "")), key_counts_html,
-                     "\n".join(keys_notes), tiers_block, attrs_block))
+                     "\n".join(keys_notes), tiers_block, attrs_block, hosts_block))
 
     if proj["missing"]:
         items = "\n".join(
@@ -1033,13 +1236,63 @@ def check():
             failures.append("SH13 different:%s page=%s fresh=%s"
                             % (name, got.groups() if got else "absent", want))
 
+    # AC-SH14: the name column says both sides read one attribute; it does not say they
+    # sit on one element. Every storage face prints the host expression it writes from
+    # and reads from, every verdict counter equals a fresh reading, and the five
+    # counters sum to the number of storage faces.
+    for name in proj["key_faces"]:
+        hosts = proj["rows"][name]["hosts"]
+        got = re.search(r'data-hosts="%s" data-hosts-write="([^"]*)" '
+                        r'data-hosts-read="([^"]*)" data-hosts-verdict="([^"]*)"'
+                        % re.escape(name), text)
+        want = (esc(",".join(hosts["write"])), esc(",".join(hosts["read"])),
+                hosts["verdict"])
+        if not got:
+            failures.append("SH14 hosts_line_missing:%s" % name)
+        elif got.groups() != want:
+            failures.append("SH14 hosts:%s page=%s fresh=%s" % (name, got.groups(), want))
+    for verdict in HOST_VERDICTS:
+        got = re.search(r'data-host-count="%s"><b>(\d+)</b>' % verdict, text)
+        value = int(got.group(1)) if got else None
+        if value != proj["host_counts"][verdict]:
+            failures.append("SH14 count:%s page=%s fresh=%d"
+                            % (verdict, value, proj["host_counts"][verdict]))
+        if not (proj["doc"].get("host_words") or {}).get(verdict):
+            failures.append("SH14 word_missing:%s" % verdict)
+    if sum(proj["host_counts"].values()) != len(proj["key_faces"]):
+        failures.append("SH14 sum=%d faces=%d"
+                        % (sum(proj["host_counts"].values()), len(proj["key_faces"])))
+
+    # AC-SH15: two sides reading one attribute on DIFFERENT host expressions must be
+    # NAMED with both expressions, an unresolved `this` must be named with its count,
+    # none today prints in words, and a same-host face listed as different reddens.
+    for verdict, wanted, tag, absent in (
+            ("different", proj["host_different"], "data-hosts-different",
+             "data-hosts-different-absent"),
+            ("unknown", proj["host_unknown"], "data-hosts-unknown",
+             "data-hosts-unknown-absent")):
+        listed = set(re.findall(r'%s="([^"]+)"' % tag, text))
+        if listed != set(wanted):
+            failures.append("SH15 %s_list page=%s fresh=%s"
+                            % (verdict, sorted(listed), sorted(wanted)))
+        if not wanted and absent not in text:
+            failures.append("SH15 %s_absent_line_missing" % verdict)
+    for name in proj["host_different"]:
+        hosts = proj["rows"][name]["hosts"]
+        got = re.search(r'data-hosts-different="%s" data-hosts-write="([^"]*)" '
+                        r'data-hosts-read="([^"]*)"' % re.escape(name), text)
+        want = (esc(",".join(hosts["write"])), esc(",".join(hosts["read"])))
+        if not got or got.groups() != want:
+            failures.append("SH15 different:%s page=%s fresh=%s"
+                            % (name, got.groups() if got else "absent", want))
+
     if failures:
         for line in failures:
             print("  FAIL " + line)
-        print("VERDICT FAIL criteria=13 failures=%d" % len(failures))
+        print("VERDICT FAIL criteria=15 failures=%d" % len(failures))
         return 2
-    print("VERDICT PASS criteria=13 faces=%d operable=%d missing_ceo=%d external_refs=0 "
-          "kinds=%s keys=%s tiers=%s attrs=%s"
+    print("VERDICT PASS criteria=15 faces=%d operable=%d missing_ceo=%d external_refs=0 "
+          "kinds=%s keys=%s tiers=%s attrs=%s hosts=%s"
           % (proj["faces_total"], len(proj["operable"]), len(proj["missing"]),
              ",".join("%s:%d" % (kind, proj["kind_counts"][kind]) for kind in KINDS),
              ",".join("%s:%d" % (key, proj["key_counts"][key])
@@ -1048,7 +1301,9 @@ def check():
              ",".join("%s:%d" % (tier, proj["tier_counts"][tier]) for tier in TIERS)
              + ",cross:%d,noread:%d" % (len(proj["tier_cross"]), len(proj["tier_noread"])),
              ",".join("%s:%d" % (verdict, proj["attr_counts"][verdict])
-                      for verdict in ATTR_VERDICTS)))
+                      for verdict in ATTR_VERDICTS),
+             ",".join("%s:%d" % (verdict, proj["host_counts"][verdict])
+                      for verdict in HOST_VERDICTS)))
 
     return 0
 

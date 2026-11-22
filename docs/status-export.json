@@ -1,23 +1,25 @@
 {
   "ceo_face": {
-    "board_pages_skipped": [],
-    "current": "2026-11-22 R3256 PRODUCT+ENGINEERING: the front door now says whether the two sides of a storage key name the SAME DOM attribute - money-path-demo writes this.getAttribute(data-ck) and reads kk=T[n].getAttribute(data-ck), so same-name, where the tier column could only say dom/dom; six live faces have no attribute to compare and are counted as such instead of silently looking equal. AC-SH13, criteria 13.",
+    "board_pages_skipped": [
+      "preview/face-sweep.html (7449B)"
+    ],
+    "current": "2026-11-22 R3257 PRODUCT+ENGINEERING: the front door's host column now names the ELEMENT EXPRESSION each side of a storage key reads an attribute from, instead of only the attribute name - a direct X.getAttribute() names X, a `this` inside TARGET.onX = function(){...} is TARGET, and a name bound one hop to an attribute read takes that right-hand side's host. Live: 5 operable storage faces read same-host:1 (money-path-demo, both sides on T[n]), no-host:4, different-host:0, one-side:0, unknown:0, with the 2 storage faces that carry no controls counted as outside. Criteria 13 -> 15: AC-SH14 grades every host badge and the five counters, AC-SH15 requires a different-host face and an unresolved `this` to be named with both expressions or their call count, requires a named absence when either is zero, and refuses a same-host face listed as different.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
-    "last_artifact": "preview/start-here.html (17401B) + preview/start-here.json (1021B) [2026-11-22 mtime]",
-    "latest_artifact": "preview/start-here.html (17401B) + preview/start-here.json (1021B) [2026-11-22 mtime]",
+    "last_artifact": "preview/start-here.html (20062B) + preview/start-here.json (1021B) [2026-11-22 mtime]",
+    "latest_artifact": "preview/start-here.html (20062B) + preview/start-here.json (1021B) [2026-11-22 mtime]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\start-here.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/negctl-R3256.log (609B, 2026-11-22)",
-    "latest_evidence": "qa/negctl-R3256.log (609B, 2026-11-22)",
-    "newest_pair_on_disk_is_board": false,
+    "latest_artifact_note": "",
+    "latest_evidence": "qa/negctl-R3257.log (659B, 2026-11-22)",
+    "newest_pair_on_disk_is_board": true,
     "next_milestone": "[R3256] next window (<=48h): (0) MAIN — **属性名判到「两侧同名 `data-ck`」，但同名不等于同一个元素**：写侧取 `this`（被改的那个 checkbox）的属性、读侧取 `T[n]`（循环里那个 checkbox）的属性，静态读数至今说不出这两个是不是同一个实体；而 `T[n].onchange = function(){ ... this ... }` 这一句本身在文本上就带着一层依据（赋给某元素 handler 的函数里 `this` 即该元素）。问：值不值得把**元素身份**再判一层？做法＝先只读量三问：①七张存储面的 handler 绑定写法各有几种（`X.onchange=` 直接赋值 / `addEventListener` 匿名函数 / 顶层 IIFE 自执行），能否从文本认出「`this` 出现在被赋给哪个元素的函数体里」；②能否给出机械律「handler 赋值目标 == 键的宿主元素」且不误判没有 handler 的面（例如 `lobby-session-trace` 的 IIFE）；③代价（要保存绑定位置还是复用已读原文、页增多少字节）。收口三选一＝①接受现状（属性名同名已是文本边界，页上已写明不判实体）②加一层「`this` 的绑定目标」判据（仍读文本，不执行 JS）③升级为运行证据（无头开页点一次，跨「不执行 JS」边界）。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
-    "next_milestone_due": "2026-11-24T12:20:50+08:00",
-    "updated_at": "2026-11-22T12:20:50+08:00",
+    "next_milestone_due": "2026-11-24T12:34:52+08:00",
+    "updated_at": "2026-11-22T12:34:52+08:00",
     "heartbeat": {
       "tick": 3256,
-      "state_tick": 3256,
-      "lag": 0,
-      "verdict": "PASS",
-      "reason": "fresh"
+      "state_tick": 3257,
+      "lag": 1,
+      "verdict": "FLAG",
+      "reason": "heartbeat_row_debt"
     },
     "outs_age": {
       "rows": 6,
@@ -33,16 +35,10 @@
       "note_claims": 0,
       "criteria_stale": 0,
       "criteria_claims": 0
-    },
-    "corpus": {
-      "files": 4669,
-      "bytes": 511396087,
-      "mb": 511.4,
-      "readable": 4669
     }
   },
-  "current": "2026-11-22 R3256 PRODUCT+ENGINEERING: the front door now says whether the two sides of a storage key name the SAME DOM attribute - money-path-demo writes this.getAttribute(data-ck) and reads kk=T[n].getAttribute(data-ck), so same-name, where the tier column could only say dom/dom; six live faces have no attribute to compare and are counted as such instead of silently looking equal. AC-SH13, criteria 13.",
-  "claims": {"claimed": 315, "captured": 95, "contradicted": 10, "uncaptured": 210, "historic": 7, "rows": 11, "present": true, "census_ts": "2026-11-22T12:20:50+08:00"},
+  "current": "2026-11-22 R3257 PRODUCT+ENGINEERING: the front door's host column now names the ELEMENT EXPRESSION each side of a storage key reads an attribute from, instead of only the attribute name - a direct X.getAttribute() names X, a `this` inside TARGET.onX = function(){...} is TARGET, and a name bound one hop to an attribute read takes that right-hand side's host. Live: 5 operable storage faces read same-host:1 (money-path-demo, both sides on T[n]), no-host:4, different-host:0, one-side:0, unknown:0, with the 2 storage faces that carry no controls counted as outside. Criteria 13 -> 15: AC-SH14 grades every host badge and the five counters, AC-SH15 requires a different-host face and an unresolved `this` to be named with both expressions or their call count, requires a named absence when either is zero, and refuses a same-host face listed as different.",
+  "claims": {"claimed": 313, "captured": 95, "contradicted": 10, "uncaptured": 208, "historic": 7, "rows": 11, "present": true, "census_ts": "2026-11-22T12:34:52+08:00"},
   "chain": {"present": true, "rows": 11, "broken": 0, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -71,13 +67,13 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-22 R3256 PRODUCT+ENGINEERING: the front door now says whether the two sides of a storage key name the SAME DOM attribute - money-path-demo writes this.getAttribute(data-ck) and reads kk=T[n].getAttribute(data-ck), so same-name, where the tier column could only say dom/dom; six live faces have no attribute to compare and are counted as such instead of silently looking equal. AC-SH13, criteria 13.",
-  "export_ts": "2026-11-22T12:20:50+08:00",
-  "latest_artifact": "preview/start-here.html (17401B) + preview/start-here.json (1021B) [2026-11-22 mtime]",
-  "latest_evidence": "qa/negctl-R3256.log (609B, 2026-11-22)",
+  "do": "2026-11-22 R3257 PRODUCT+ENGINEERING: the front door's host column now names the ELEMENT EXPRESSION each side of a storage key reads an attribute from, instead of only the attribute name - a direct X.getAttribute() names X, a `this` inside TARGET.onX = function(){...} is TARGET, and a name bound one hop to an attribute read takes that right-hand side's host. Live: 5 operable storage faces read same-host:1 (money-path-demo, both sides on T[n]), no-host:4, different-host:0, one-side:0, unknown:0, with the 2 storage faces that carry no controls counted as outside. Criteria 13 -> 15: AC-SH14 grades every host badge and the five counters, AC-SH15 requires a different-host face and an unresolved `this` to be named with both expressions or their call count, requires a named absence when either is zero, and refuses a same-host face listed as different.",
+  "export_ts": "2026-11-22T12:34:52+08:00",
+  "latest_artifact": "preview/start-here.html (20062B) + preview/start-here.json (1021B) [2026-11-22 mtime]",
+  "latest_evidence": "qa/negctl-R3257.log (659B, 2026-11-22)",
   "next_milestone": "[R3256] next window (<=48h): (0) MAIN — **属性名判到「两侧同名 `data-ck`」，但同名不等于同一个元素**：写侧取 `this`（被改的那个 checkbox）的属性、读侧取 `T[n]`（循环里那个 checkbox）的属性，静态读数至今说不出这两个是不是同一个实体；而 `T[n].onchange = function(){ ... this ... }` 这一句本身在文本上就带着一层依据（赋给某元素 handler 的函数里 `this` 即该元素）。问：值不值得把**元素身份**再判一层？做法＝先只读量三问：①七张存储面的 handler 绑定写法各有几种（`X.onchange=` 直接赋值 / `addEventListener` 匿名函数 / 顶层 IIFE 自执行），能否从文本认出「`this` 出现在被赋给哪个元素的函数体里」；②能否给出机械律「handler 赋值目标 == 键的宿主元素」且不误判没有 handler 的面（例如 `lobby-session-trace` 的 IIFE）；③代价（要保存绑定位置还是复用已读原文、页增多少字节）。收口三选一＝①接受现状（属性名同名已是文本边界，页上已写明不判实体）②加一层「`this` 的绑定目标」判据（仍读文本，不执行 JS）③升级为运行证据（无头开页点一次，跨「不执行 JS」边界）。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
   "outs": [
-    "preview/start-here.html (17401B) + preview/start-here.json (1021B) [2026-11-22 mtime]",
+    "preview/start-here.html (20062B) + preview/start-here.json (1021B) [2026-11-22 mtime]",
     "preview/ugc-gate-report.html (28112B) + preview/ugc-gate-report.json (20170B) [2026-11-22 mtime]",
     "probe-R3243.log (2178B) + suite-ugc-gate-R3243.log (3094B)",
     "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
@@ -145,7 +141,7 @@
       "2026-11-04 R2431 verification window on the item the debt gate named first=yes (reconcile-battery-R2431, carried from R2430): zero product code changed, the R2168 mixed-tree rule honoured. Leg 1 read 542/543 suites with the criteria total 4234 exactly as pre-registered and the only red was reconcile-daily-census at cd7 exit=2 DRIFT-FLAG; the census named the file (qa/battery-R2431-stdout.log, class=cmd-raw) because this window launched the battery with a Start-Process redirect pointed INTO the evidence directory. Repaired at the birth site, never by widening the baseline: the two launcher captures moved to the gitignored logs/ face, after which the census read flags=0 DRIFT-CLEAN with the 529-entry baseline untouched. Retry leg on the repaired tree: RUNNER PASS 543/543 suites plus controls 7/7 in 956.2s at criteria 4234, TMP RECLAIM 932/932. Four follow-up sections: matrix FAILED first on the stale doc without rewriting it, was regenerated stamp-aligned to 52317B, and the re-run read VERDICT R2431 PASS failing=none (fingerprint CLEAN 5 domains, profile byte-identical, census DRIFT-CLEAN). Debt: reconcile-battery-R2431 closed and product-face-R2432 opened first=yes through the shipped CLIs. Zero product points claimed."
     ],
     [
-      "3256",
+      "3257",
       "OSLoop 执行 tick",
       "a failed fold state write takes the appended archive block back and removes the backup"
     ]
@@ -169,14 +165,14 @@
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 71266,
-  "next_milestone_due": "2026-11-24T12:20:50+08:00",
+  "state_bytes": 73194,
+  "next_milestone_due": "2026-11-24T12:34:52+08:00",
   "heartbeat": {
     "tick": 3256,
-    "state_tick": 3256,
-    "lag": 0,
-    "verdict": "PASS",
-    "reason": "fresh"
+    "state_tick": 3257,
+    "lag": 1,
+    "verdict": "FLAG",
+    "reason": "heartbeat_row_debt"
   },
   "outs_age": {
     "rows": 6,
@@ -192,11 +188,5 @@
     "note_claims": 0,
     "criteria_stale": 0,
     "criteria_claims": 0
-  },
-  "corpus": {
-    "files": 4669,
-    "bytes": 511396087,
-    "mb": 511.4,
-    "readable": 4669
   }
 }

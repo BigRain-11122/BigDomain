@@ -1,7 +1,7 @@
 {
  "face": "start-here",
  "generated_from": {
-  "state/start-here-faces.json": "3a694ddb3bf8934a"
+  "state/start-here-faces.json": "a44192a630d1eb69"
  },
  "faces_total": 44,
  "operable": [
@@ -52,6 +52,6 @@
   "pubkey"
  ],
  "sizes": {
-  "html_bytes": 17401
+  "html_bytes": 20062
  }
 }

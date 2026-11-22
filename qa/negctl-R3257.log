@@ -1,0 +1,13 @@
+PASS C1 same-host world passes
+PASS C2 different-host world names the face with both hosts
+PASS C3 a swapped host reddens SH14 by face name
+PASS C4 a missing named-absence line reddens
+PASS C5 a this with no handler is unknown, named, not counted as same-host
+PASS C6 an unnamed unknown face reddens
+PASS C7 a badge claiming different on a same-host face reddens
+PASS C8 an edited counter reddens
+PASS C9 a clean face listed as different-host is refused
+PASS C10 four-face world sums to the storage faces
+PASS C11 a missing host word is named instead of crashing
+PASS C12 live page carries the host reading and a mutation reddens
+NEGCTL PASS cases=12 fails=0
