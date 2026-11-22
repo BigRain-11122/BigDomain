@@ -1,0 +1,11 @@
+PASS c1_live_copy_passes live copy rc=0
+PASS c2_edited_header_count_reddens count edit rc=2 two_reds=True
+PASS c3_edited_visible_number_reddens sentence edit rc=2
+PASS c4_flipped_state_word_reddens state edit rc=2
+PASS c5_dropped_line_is_named line dropped rc=2
+PASS c6_missing_word_reddens word rc=2
+PASS c7_edited_bottom_id_reddens_the_header_link id edit rc=2
+PASS c8_dropped_bottom_item_breaks_the_same_number row dropped rc=2
+PASS c9_private_clear_world_flips_the_line rc=0 clear=True absent=True
+PASS c10_absent_line_on_blocked_world_reddens absent on blocked rc=2
+NEGCTL PASS cases=10 failed=0

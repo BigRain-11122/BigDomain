@@ -818,6 +818,32 @@ def missing_ceo_items():
     return [row for row in mo.project_items() if row.get("owner") == "ceo" and not row.get("proven")]
 
 
+def money_status():
+    """The one fact the first screen never stated: this platform cannot take money.
+
+    Derived from the same project_items()/counts() the bottom blocker list is built
+    from, so the header line and that list cannot drift apart. The hard/soft split
+    ("which item is required to take money, which is only nice to have") is NOT
+    invented here: the items file carries no such field, and a hand-written
+    classification would only be graded for drift, never for being true. The number
+    is therefore named for what it is - CEO-side items still without evidence.
+    """
+    sys.path.insert(0, os.path.join(ROOT, "tools"))
+    import merchant_onboard as mo
+
+    rows = mo.project_items()
+    c = mo.counts(rows)
+    pending = [r["id"] for r in rows
+               if r.get("owner") == "ceo" and not r.get("proven")]
+    return {
+        "state": "blocked" if pending else "clear",
+        "pending": c["pending_ceo"],
+        "total": c["total"],
+        "proven": c["proven"],
+        "pending_ids": pending,
+    }
+
+
 def projection():
     rows = scan_faces()
     doc = load_json(DATA)
@@ -934,6 +960,7 @@ def projection():
         "named_total": named_total,
         "form_sites": sum(form_counts.values()),
         "missing": missing_ceo_items(),
+        "money": money_status(),
         "data16": sha16(DATA),
     }
 
@@ -1370,6 +1397,19 @@ def render(proj):
                      "\n".join(keys_notes), tiers_block, attrs_block, hosts_block,
                      forms_block))
 
+    money = proj["money"]
+    money_word = doc.get("money_blocked_fmt" if money["state"] == "blocked"
+                         else "money_clear_fmt") or ""
+    money_said = (doc.get("money_head") or "") + money_word.format(
+        pending=money["pending"], total=money["total"], proven=money["proven"])
+    money_html = ('  <p class="money" data-money="%s" data-money-pending="%d" '
+                  'data-money-total="%d" data-money-proven="%d">%s</p>'
+                  % (money["state"], money["pending"], money["total"],
+                     money["proven"], esc(money_said)))
+    if not money["pending_ids"]:
+        money_html += ('\n  <p data-money-absent>%s</p>'
+                       % esc(doc.get("money_absent") or ""))
+
     if proj["missing"]:
         items = "\n".join(
             '    <li data-ceo-item="%s"><b>%s</b> &mdash; %s</li>'
@@ -1446,6 +1486,7 @@ def render(proj):
         "<span class=\"count\"><b data-count=\"faces\">%d</b>%s</span>"
         "<span class=\"count\"><b data-count=\"operable\">%d</b>%s</span>"
         "</div>\n"
+        "%s\n"
         "  <p class=\"kindshead\">%s</p>\n"
         "  <div class=\"counts kinds\">\n%s\n  </div>\n"
         "%s\n"
@@ -1461,6 +1502,7 @@ def render(proj):
         esc(doc["h1"]), esc(sub),
         proj["faces_total"], esc(doc.get("count_faces", "")),
         len(proj["operable"]), esc(doc.get("count_operable", "")),
+        money_html,
         esc(doc.get("kind_counts_head", "")), kind_counts, keys_block, freeze_html,
         esc(doc["h2_can"].format(operable=len(proj["operable"]))), legend_block, "\n".join(cards),
         esc(doc["h2_cannot"]), missing_block,
@@ -2108,12 +2150,74 @@ def check():
         if proj["freeze_state"] == "frozen-zero" and fresh != (0, 0, 0):
             failures.append("SH21 zero_state_with_counts")
 
+    # AC-SH22 (R3264): the first screen stated three zero readings and said nothing
+    # about the platform being unable to take money, while the blocker list sat ~3.2KB
+    # below. The header now carries one money line derived from the same
+    # project_items()/counts() the bottom list is built from; its state word, three
+    # numbers and its sentence are graded against this round's derivation, and the
+    # page's bottom list must still be that same list - edit one face, two red.
+    for key in ("money_head", "money_blocked_fmt", "money_clear_fmt", "money_absent"):
+        if not (proj["doc"].get(key) or "").strip():
+            failures.append("SH22 word_missing:%s" % key)
+    for key in ("money_blocked_fmt", "money_clear_fmt"):
+        word = proj["doc"].get(key) or ""
+        for slot in ("{pending}", "{total}", "{proven}"):
+            if slot not in word:
+                failures.append("SH22 slot_missing:%s:%s" % (key, slot))
+    money = proj["money"]
+    derived = "blocked" if money["pending"] > 0 else "clear"
+    if money["state"] != derived:
+        failures.append("SH22 state_not_derived fresh=%s pending=%d"
+                        % (money["state"], money["pending"]))
+    if len(money["pending_ids"]) != money["pending"]:
+        failures.append("SH22 pending_count_differs list=%d counted=%d"
+                        % (len(money["pending_ids"]), money["pending"]))
+    got = re.search(r'data-money="([^"]+)" data-money-pending="(\d+)" '
+                    r'data-money-total="(\d+)" data-money-proven="(\d+)">([^<]*)<',
+                    text)
+    if not got:
+        failures.append("SH22 line_missing")
+    else:
+        state_word, p_raw, t_raw, v_raw, said = got.groups()
+        fresh = (money["pending"], money["total"], money["proven"])
+        if (int(p_raw), int(t_raw), int(v_raw)) != fresh:
+            failures.append("SH22 counts page=%s fresh=%s"
+                            % ((p_raw, t_raw, v_raw), fresh))
+        if state_word != money["state"]:
+            failures.append("SH22 state page=%s fresh=%s"
+                            % (state_word, money["state"]))
+        want_key = ("money_blocked_fmt" if money["state"] == "blocked"
+                    else "money_clear_fmt")
+        want = ((proj["doc"].get("money_head") or "")
+                + (proj["doc"].get(want_key) or "").format(
+                    pending=money["pending"], total=money["total"],
+                    proven=money["proven"]))
+        if said != esc(want):
+            failures.append("SH22 sentence differs from the fresh derivation")
+        for number in fresh:
+            if str(number) not in said:
+                failures.append("SH22 number_missing:%d" % number)
+        # The header number and the bottom list are the same list or this reddens -
+        # two faces that agree today are not the same thing as one source.
+        page_ids = set(re.findall(r'data-ceo-item="([^"]+)"', text))
+        if page_ids != set(money["pending_ids"]):
+            failures.append("SH22 pending_ids_differ money=%s page=%s"
+                            % (sorted(money["pending_ids"]), sorted(page_ids)))
+        if len(page_ids) != int(p_raw):
+            failures.append("SH22 list_size_differs page=%d header=%s"
+                            % (len(page_ids), p_raw))
+    absent_line = re.findall(r'<p data-money-absent>', text)
+    if money["pending"] == 0 and len(absent_line) != 1:
+        failures.append("SH22 absent_line expected=1 got=%d" % len(absent_line))
+    if money["pending"] > 0 and absent_line:
+        failures.append("SH22 absent_line_on_blocked")
+
     if failures:
         for line in failures:
             print("  FAIL " + line)
-        print("VERDICT FAIL criteria=21 failures=%d" % len(failures))
+        print("VERDICT FAIL criteria=22 failures=%d" % len(failures))
         return 2
-    print("VERDICT PASS criteria=21 faces=%d operable=%d missing_ceo=%d external_refs=0 "
+    print("VERDICT PASS criteria=22 faces=%d operable=%d missing_ceo=%d external_refs=0 "
           "kinds=%s keys=%s tiers=%s attrs=%s hosts=%s lexical=faces:%d,calls:%d "
           "expr_bodies=%d forms=%s"
           % (proj["faces_total"], len(proj["operable"]), len(proj["missing"]),
@@ -2133,8 +2237,10 @@ def check():
                       for form in HANDLER_FORMS)
              + " decl=%s" % ",".join("%s:%d" % (form, proj["named_decl_counts"][form])
                                      for form in DECL_FORMS)
-             + " cond_unbal=%d freeze=%s" % (proj["cond_total"],
-                                             proj["freeze_state"])))
+             + " cond_unbal=%d freeze=%s money=%s:%d/%d/%d"
+             % (proj["cond_total"], proj["freeze_state"],
+                proj["money"]["state"], proj["money"]["pending"],
+                proj["money"]["total"], proj["money"]["proven"])))
 
     return 0
 

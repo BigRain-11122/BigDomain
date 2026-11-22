@@ -1,0 +1,12 @@
+R3264 probe correction (own error recorded): the first probe split the page on '<div class="wrap">' and reported "wrap_mentions_6=False", which was a check artifact - a direct search finds the gap sentence at offset 18862 with data-ceo-item count 6, so the bottom block does carry all six names.
+Corrected first-screen measurement (split on '</header>', the real boundary):
+header_bytes=15542
+还缺 in_header=False in_page=True
+收不了钱 in_header=False in_page=False
+不能收钱 in_header=False in_page=False
+物理件 in_header=False in_page=True
+商户号 in_header=False in_page=True
+blocked in_header=False in_page=False
+data-money in_header=False in_page=False
+missing_block_offset=18798
+Reading: the first screen states 44 faces / 6 operable and a three-bucket zero banner, and says nothing about the platform being unable to take money; the blocker names sit ~3.2KB below.

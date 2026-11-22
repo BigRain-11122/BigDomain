@@ -1,0 +1,17 @@
+Q1 items=8 ceo=6 proven=2 pending_ceo=6
+Q1 row_keys=evidence_source,evidence_text,how,id,label,owner,proven
+Q1 carries_hard_soft_flag=False
+Q1 pending_ids=mchid,settlement,domain,filing,miniapp,pubkey
+Q1 pending_with_evidence=0
+Q1 page_ceo_ids=6 same_as_pending=True
+Q1 first_screen_bytes=3101
+Q1 first_screen_mentions_6=False
+Q1 first_screen_mentions_money=False
+Q1 wrap_mentions_6=False
+Q2 criteria_declared=22
+Q2 freeze_banner_slot=1
+Q2 data_freeze_attrs=2
+Q2 page_has_money_attr=False
+Q3 page_bytes=28959
+Q3 module_bytes=105640
+Q3 data_bytes=15716 data_has_money_word=False

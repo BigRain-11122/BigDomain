@@ -1,24 +1,34 @@
 {
  "face": "start-here",
  "generated_from": {
-  "state/start-here-faces.json": "26bc4c290ebb588c"
+  "state/start-here-faces.json": "35bb59c9ca106442"
  },
- "faces_total": 1,
+ "faces_total": 44,
  "operable": [
-  "private.html"
+  "buyer-trial.html",
+  "filing-checklist.html",
+  "lobby-protocol-map.html",
+  "merchant-onboard.html",
+  "money-path-demo.html",
+  "ship-checklist.html"
  ],
  "kinds": {
-  "private.html": "persists"
+  "buyer-trial.html": "screen",
+  "filing-checklist.html": "persists",
+  "lobby-protocol-map.html": "persists",
+  "merchant-onboard.html": "persists",
+  "money-path-demo.html": "persists",
+  "ship-checklist.html": "persists"
  },
  "kind_counts": {
-  "persists": 1,
-  "screen": 0,
+  "persists": 5,
+  "screen": 1,
   "wires": 0,
   "inert": 0
  },
  "tier_counts": {
   "literal": 0,
-  "const": 0,
+  "const": 4,
   "loop": 0,
   "runtime": 0,
   "dom": 1
@@ -28,7 +38,7 @@
   "same-name": 1,
   "different": 0,
   "one-side": 0,
-  "no-attr": 0,
+  "no-attr": 4,
   "unknown": 0
  },
  "attr_different": [],
@@ -37,38 +47,56 @@
   "same-host": 1,
   "different-host": 0,
   "one-side": 0,
-  "no-host": 0,
+  "no-host": 4,
   "unknown": 0,
   "lexical": 0
  },
  "host_lexical": [],
  "host_lexical_calls": 0,
  "form_counts": {
-  "simple": 0,
-  "call": 0,
-  "named": 0,
+  "simple": 4,
+  "call": 1,
+  "named": 2,
   "attr": 0
  },
- "form_sites": 0,
+ "form_sites": 7,
  "named_decl_counts": {
-  "func": 0,
+  "func": 2,
   "varfunc": 0,
   "arrow": 0,
   "mixed": 0,
   "none": 0
  },
- "named_total": 0,
- "form_calls": {},
- "form_named": {},
- "missing_ceo_items": [
-  "mchid",
-  "settlement",
-  "domain",
-  "filing",
-  "miniapp",
-  "pubkey"
- ],
+ "named_total": 2,
+ "form_calls": {
+  "merchant-onboard.html": [
+   "$('reset')"
+  ]
+ },
+ "form_named": {
+  "lobby-protocol-map.html": [
+   [
+    "apply",
+    "called",
+    [
+     "q"
+    ],
+    "func"
+   ]
+  ],
+  "merchant-onboard.html": [
+   [
+    "onToggle",
+    "resolved",
+    [
+     "boxes[i]"
+    ],
+    "func"
+   ]
+  ]
+ },
+ "missing_ceo_items": [],
  "sizes": {
-  "html_bytes": 18693
+  "html_bytes": 28075
  }
 }
