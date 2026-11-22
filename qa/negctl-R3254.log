@@ -1,0 +1,14 @@
+WROTE ..\..\..\..\AppData\Local\Temp\r3254-live-rojqh3vk\start-here.html html=12848B operable=6 faces=44 missing=6
+WROTE ..\..\..\..\AppData\Local\Temp\r3254-aav6u3v4\start-here.html html=10301B operable=4 faces=5 missing=6
+WORLD: VERDICT PASS criteria=10 faces=5 operable=4 missing_ceo=6 external_refs=0 kinds=persists:4,screen:0,wires:0,inert:0 keys=persists:4,expr_paired:2,base_paired:2,orphan:2,unresolved:1,outside:0
+C1 key count tampered        PASS  SH6 page_out_of_date SH9 keys:money-path-demo.html page=(2, 1, 'orphan') fresh=(1, 1, 'orphan')
+C2 base verdict flipped      PASS  SH6 page_out_of_date SH9 keys:money-path-demo.html page=(1, 1, 'paired') fresh=(1, 1, 'orphan')
+C3 header count tampered     PASS  SH6 page_out_of_date SH9 count:orphan page=0 fresh=1
+C4 orphan name removed       PASS  SH6 page_out_of_date SH10 orphan_unnamed:money-path-demo.html SH10 orphan_list page=[] fresh=['money-path-demo.html'] SH10 orphan_keys:money-path-demo.html page=absent fresh=NS+""+kk
+C5 clean face accused        PASS  SH6 page_out_of_date SH10 orphan_list page=['filing-checklist.html', 'money-path-demo.html'] fresh=['money-path-demo.html']
+C5b orphan quotes wrong key  PASS  SH6 page_out_of_date SH10 orphan_keys:money-path-demo.html page=WRONGNS+&quot;&quot;+kk fresh=NS+""+kk
+C6 restored passes           PASS  VERDICT PASS criteria=10 faces=44 operable=6 missing_ceo=6 external_refs=0 kinds=persists:5,screen:1,wires:0,inert:0 keys=persists:5,expr_paired:4,base_paired:4,orphan:1,unresolved:0,outside:2
+C7 world pairs named         PASS  rc=0 fails=[]
+C8 unresolved unnamed        PASS  SH6 page_out_of_date SH10 unresolved_unnamed:gamma.html SH10 unresolved_list page=[] fresh=['gamma.html'] SH10 unresolved_symbols:gamma.html page=absent fresh=MYSTERY
+C9 literal pair counted clean PASS  literal key face read as paired
+NEGCTL PASS cases=10

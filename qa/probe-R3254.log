@@ -1,0 +1,31 @@
+FACES_WITH_STORAGE=7 elapsed=0.0198s
+filing-checklist.html      calls=2 decl=4 W=1 R=1 REM=0
+    W=NS
+    R=NS
+    unpaired_read=- unread_write=-
+lobby-protocol-map.html    calls=2 decl=3 W=1 R=1 REM=0
+    W=NS
+    R=NS
+    unpaired_read=- unread_write=-
+lobby-session-trace.html   calls=2 decl=2 W=1 R=1 REM=0
+    W=k
+    R=k
+    unpaired_read=- unread_write=-
+membership-face.html       calls=2 decl=4 W=1 R=1 REM=0
+    W=K
+    R=K
+    unpaired_read=- unread_write=-
+merchant-onboard.html      calls=2 decl=16 W=1 R=1 REM=0
+    W=KEY
+    R=KEY
+    unpaired_read=- unread_write=-
+money-path-demo.html       calls=2 decl=14 W=1 R=1 REM=0
+    W=NS+':'+this.getAttribute('data-ck')
+    R=NS+':'+kk
+    unpaired_read=NS+':'+kk unread_write=NS+':'+this.getAttribute('data-ck')
+    UNRESOLVED={"NS+':'+this.getAttribute('data-ck')": ['getAttribute', 'data', 'ck']}
+ship-checklist.html        calls=3 decl=7 W=1 R=1 REM=0
+    W=NS
+    R=NS
+    unpaired_read=- unread_write=-
+TOTAL unpaired_read=1 unresolved_exprs=1 faces_unpaired=1

@@ -8,3 +8,4 @@
 {"event": "REPLACED", "name": "suite-frontdoor-claims-card-R3230.log", "new_bytes": 71, "new_sha16": "4b83ca5eccdf084b", "old_bytes": 57, "old_sha16": "2fd74e26bb422bca", "ts": "2026-11-21T22:47:47Z"}
 {"event": "REPLACED", "name": "probe-R3246.log", "new_bytes": 1315, "new_sha16": "9b1556952cb27723", "old_bytes": 1577, "old_sha16": "0bc663c740bc8b39", "ts": "2026-11-22T02:11:31Z"}
 {"event": "REPLACED", "name": "suite-ugc-gate-R3246.log", "new_bytes": 5047, "new_sha16": "a786873901849f7d", "old_bytes": 10178, "old_sha16": "8e2c7551223fe8f0", "ts": "2026-11-22T02:15:39Z"}
+{"event": "REPLACED", "name": "negctl-R3254.log", "new_bytes": 1856, "new_sha16": "413fb2fc38839515", "old_bytes": 1590, "old_sha16": "11ac1c9ef4b57d66", "ts": "2026-11-22T03:55:11Z"}

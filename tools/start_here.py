@@ -36,6 +36,19 @@ HANDLER = re.compile(r"\b(addEventListener|onclick|oninput|onchange|onkeyup)\b",
 DOMWRITE = re.compile(r"\.(textContent|innerHTML|value)\s*=")
 KINDS = ("persists", "screen", "wires", "inert")
 
+# A persists face keeps state in browser storage, but WHICH key is only half of it:
+# a page that reads a key it never writes is reading nothing. The live faces key by
+# SYMBOL (NS, KEY, k), not by literal, so pairing is read on two levels - the key
+# expression, and the declared symbols that expression rests on.
+CALL = re.compile(r"\.(setItem|getItem|removeItem)\s*\(")
+DECL = re.compile(r"\b(?:var|let|const)\s+([A-Za-z_$][\w$]*)")
+IDENT = re.compile(r"[A-Za-z_$][\w$]*")
+STR = re.compile(r"'[^']*'|\"[^\"]*\"")
+MEMBER = re.compile(r"\.\s*[A-Za-z_$][\w$]*")
+KEYWORDS = {"this", "window", "document", "true", "false", "null", "undefined",
+            "function", "return", "typeof", "new", "JSON", "String", "Number",
+            "localStorage", "sessionStorage", "indexedDB"}
+
 
 def sha16(path):
     with open(path, "rb") as fh:
@@ -65,6 +78,54 @@ def classify(text):
             "domwrite": domwrite, "kind": kind}
 
 
+def _first_arg(text, open_paren):
+    depth = 0
+    for i in range(open_paren, min(len(text), open_paren + 600)):
+        ch = text[i]
+        if ch in "([{":
+            depth += 1
+        elif ch in ")]}":
+            depth -= 1
+            if depth == 0:
+                return text[open_paren + 1:i]
+        elif ch == "," and depth == 1:
+            return text[open_paren + 1:i]
+    return ""
+
+
+def _key_symbols(expr):
+    """The declared-looking identifiers a key expression rests on. String literals and
+    member tails are stripped first, so 'data-ck' and this.getAttribute are not
+    mistaken for symbols (the first probe run made exactly that mistake)."""
+    bare = MEMBER.sub("", STR.sub('""', expr))
+    return sorted({tok for tok in IDENT.findall(bare) if tok not in KEYWORDS})
+
+
+def key_reading(text):
+    """How a face keys its storage: which expressions it writes and reads, and the
+    symbols those expressions rest on. Text only - no JS is ever executed."""
+    bare = STR.sub('""', text)
+    declared = set(DECL.findall(bare))
+    buckets = {"setItem": set(), "getItem": set(), "removeItem": set()}
+    for match in CALL.finditer(bare):
+        expr = re.sub(r"\s+", "", _first_arg(bare, match.end() - 1))
+        if expr:
+            buckets[match.group(1)].add(expr)
+    writes, reads, removes = buckets["setItem"], buckets["getItem"], buckets["removeItem"]
+    symbols = {expr: _key_symbols(expr) for expr in writes | reads | removes}
+    base_write = sorted({tok for expr in writes for tok in symbols[expr]})
+    base_read = sorted({tok for expr in reads for tok in symbols[expr]})
+    unresolved = sorted({tok for expr in symbols for tok in symbols[expr]
+                         if tok not in declared})
+    return {
+        "write": sorted(writes), "read": sorted(reads), "remove": sorted(removes),
+        "base_write": base_write, "base_read": base_read,
+        "expr_paired": bool(reads) and reads <= writes,
+        "base_paired": set(base_read) <= set(base_write),
+        "unresolved": unresolved,
+    }
+
+
 def scan_faces():
     """Per preview face: how many controls it carries, what a click can change, and
     whether it leaves the machine."""
@@ -83,6 +144,8 @@ def scan_faces():
             "external": len(EXT.findall(text)),
         }
         row.update(classify(text))
+        if row["storage"]:
+            row["keys"] = key_reading(text)
         rows[name] = row
     return rows
 
@@ -116,6 +179,18 @@ def projection():
     kinds = {kind: [] for kind in KINDS}
     for name in operable:
         kinds[rows[name]["kind"]].append(name)
+    key_faces = [name for name in operable if "keys" in rows[name]]
+    key_outside = [name for name in rows
+                   if "keys" in rows[name] and name not in operable
+                   and name != "start-here.html"]
+    key_counts = {
+        "persists": len(key_faces),
+        "expr_paired": len([n for n in key_faces if rows[n]["keys"]["expr_paired"]]),
+        "base_paired": len([n for n in key_faces if rows[n]["keys"]["base_paired"]]),
+        "orphan": len([n for n in key_faces if not rows[n]["keys"]["base_paired"]]),
+        "unresolved": len([n for n in key_faces if rows[n]["keys"]["unresolved"]]),
+        "outside": len(key_outside),
+    }
     return {
         "rows": rows,
         "doc": doc,
@@ -125,6 +200,11 @@ def projection():
         "hand_written": hand_written,
         "kinds": kinds,
         "kind_counts": {kind: len(kinds[kind]) for kind in KINDS},
+        "key_faces": key_faces,
+        "key_outside": key_outside,
+        "key_counts": key_counts,
+        "key_orphans": [n for n in key_faces if not rows[n]["keys"]["base_paired"]],
+        "key_unresolved": [n for n in key_faces if rows[n]["keys"]["unresolved"]],
         "missing": missing_ceo_items(),
         "data16": sha16(DATA),
     }
@@ -143,6 +223,15 @@ def kind_note(doc, kind):
     return ((doc.get("kind_notes") or {}).get(kind) or "")
 
 
+def key_phrase(doc, keys):
+    """One face's key pairing in words, read off that face's own bytes."""
+    paired = (doc.get("keys_paired_word") if keys["base_paired"]
+              else doc.get("keys_orphan_word")) or ""
+    return (doc.get("keys_fmt") or "").format(
+        write=len(keys["write"]), read=len(keys["read"]), paired=paired,
+        unresolved=len(keys["unresolved"]))
+
+
 def render(proj):
     doc = proj["doc"]
     faces = doc.get("faces") or {}
@@ -158,16 +247,26 @@ def render(proj):
         can = entry.get("can") or ""
         cannot = entry.get("cannot") or ""
         kind = proj["rows"][name]["kind"]
+        if "keys" in proj["rows"][name]:
+            keys = proj["rows"][name]["keys"]
+            keyline = ('    <p class="keyline" data-keys="%s" data-keys-write="%d" '
+                       'data-keys-read="%d" data-keys-base="%s">%s</p>\n'
+                       % (esc(name), len(keys["write"]), len(keys["read"]),
+                          "paired" if keys["base_paired"] else "orphan",
+                          esc(key_phrase(doc, keys))))
+        else:
+            keyline = ""
         cards.append(
             '  <article class="face" data-face="%s">\n'
             '    <h3><a href="%s">%s</a> <code>%s</code></h3>\n'
             '    <p class="kindline"><span class="kbadge" data-kind="%s">%s</span></p>\n'
+            '%s'
             '    <p><b>%s</b>%s</p>\n'
             '    <p class="limit"><b>%s</b>%s</p>\n'
             '    <p><a class="go" href="%s">%s &rarr;</a></p>\n'
             '  </article>\n' % (
                 esc(name), esc(name), esc(label), esc(name),
-                esc(kind), esc(kind_tag(doc, kind)),
+                esc(kind), esc(kind_tag(doc, kind)), keyline,
                 esc(doc["can_tag"]), esc(can),
                 esc(doc["cannot_tag"]), esc(cannot),
                 esc(name), esc(doc["open_link"]),
@@ -188,6 +287,48 @@ def render(proj):
             legend.append('  <p data-kind-absent="%s">%s</p>'
                           % (kind, esc(absent.format(tag=kind_tag(doc, kind)))))
     legend_block = "\n".join(legend)
+    key_tags = doc.get("keys_count_tags") or {}
+    key_counts_html = "\n".join(
+        '  <span class="kc" data-keys-count="%s"><b>%d</b>%s</span>'
+        % (key, proj["key_counts"][key], esc(key_tags.get(key) or key))
+        for key in ("persists", "expr_paired", "base_paired", "orphan",
+                    "unresolved", "outside")
+    )
+    keys_notes = []
+    for name in proj["key_orphans"] or [None]:
+        if not name:
+            keys_notes.append('  <p data-keys-orphan-absent>%s</p>'
+                              % esc(doc.get("keys_absent") or ""))
+            continue
+        keys = proj["rows"][name]["keys"]
+        keys_notes.append(
+            '  <p data-keys-orphan="%s" data-keys-read="%s">%s</p>'
+            % (esc(name), esc(",".join(keys["read"])),
+               esc((doc.get("keys_orphan_fmt") or "").format(
+                   read=" , ".join(keys["read"]) or doc.get("keys_none", ""),
+                   write=" , ".join(keys["write"]) or doc.get("keys_none", "")))))
+    for name in proj["key_unresolved"] or [None]:
+        if not name:
+            keys_notes.append('  <p data-keys-unresolved-absent>%s</p>'
+                              % esc(doc.get("keys_unresolved_absent") or ""))
+            continue
+        keys = proj["rows"][name]["keys"]
+        keys_notes.append(
+            '  <p data-keys-unresolved="%s" data-keys-symbols="%s">%s</p>'
+            % (esc(name), esc(",".join(keys["unresolved"])),
+               esc((doc.get("keys_unresolved_fmt") or "").format(
+                   symbols=" , ".join(keys["unresolved"])))))
+    if proj["key_outside"]:
+        keys_notes.append(
+            '  <p data-keys-outside="%d">%s</p>'
+            % (len(proj["key_outside"]),
+               esc((doc.get("keys_outside_fmt") or "").format(
+                   n=len(proj["key_outside"]),
+                   names=", ".join(proj["key_outside"])))))
+    keys_block = ('  <p class="kindshead">%s</p>\n  <div class="counts kinds">\n%s\n'
+                  '  </div>\n  <div class="legend keys">\n%s\n  </div>'
+                  % (esc(doc.get("keys_head", "")), key_counts_html,
+                     "\n".join(keys_notes)))
     if proj["missing"]:
         items = "\n".join(
             '    <li data-ceo-item="%s"><b>%s</b> &mdash; %s</li>'
@@ -229,6 +370,8 @@ def render(proj):
         ".kbadge{display:inline-block;background:#e7f5ff;border:1px solid #a5d8ff;color:#1864ab;"
         "border-radius:999px;padding:1px 10px;font-size:11px}\n"
         ".kindline{margin:2px 0 6px}\n"
+        ".keyline{font-size:12px;color:#1864ab;margin:0 0 6px}\n"
+        ".legend.keys{background:#f1f8ff;border-color:#a5d8ff}\n"
         "h2{font-size:18px;margin:32px 0 12px;padding-left:10px;border-left:4px solid var(--accent)}\n"
         ".face{background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px 16px;"
         "margin-bottom:12px}\n"
@@ -260,6 +403,7 @@ def render(proj):
         "</div>\n"
         "  <p class=\"kindshead\">%s</p>\n"
         "  <div class=\"counts kinds\">\n%s\n  </div>\n"
+        "%s\n"
         "</div></header>\n<div class=\"wrap\">\n"
         "<h2>%s</h2>\n<div class=\"legend\">\n%s\n</div>\n%s\n"
         "<h2>%s</h2>\n<div class=\"missing\">\n%s\n</div>\n"
@@ -271,7 +415,7 @@ def render(proj):
         esc(doc["h1"]), esc(sub),
         proj["faces_total"], esc(doc.get("count_faces", "")),
         len(proj["operable"]), esc(doc.get("count_operable", "")),
-        esc(doc.get("kind_counts_head", "")), kind_counts,
+        esc(doc.get("kind_counts_head", "")), kind_counts, keys_block,
         esc(doc["h2_can"].format(operable=len(proj["operable"]))), legend_block, "\n".join(cards),
         esc(doc["h2_cannot"]), missing_block,
         esc(doc["h2_rule"]), notices,
@@ -390,15 +534,92 @@ def check():
         if proj["kind_counts"][kind] and not (proj["doc"].get("kind_notes") or {}).get(kind):
             failures.append("SH8 kind_note_missing:%s" % kind)
 
+    # AC-SH9: every operable storage face prints its own key pairing, and every printed
+    # number equals a fresh reading of THAT face's bytes this run.
+    for name in proj["key_faces"]:
+        keys = proj["rows"][name]["keys"]
+        block = re.search(r'data-keys="%s"[^>]*>' % re.escape(name), text)
+        if not block:
+            failures.append("SH9 keys_line_missing:%s" % name)
+            continue
+        line = block.group(0)
+        want = (len(keys["write"]), len(keys["read"]),
+                "paired" if keys["base_paired"] else "orphan")
+        got = (re.search(r'data-keys-write="(\d+)"', line),
+               re.search(r'data-keys-read="(\d+)"', line),
+               re.search(r'data-keys-base="([^"]+)"', line))
+        printed = tuple(int(m.group(1)) if m and i < 2 else (m.group(1) if m else None)
+                        for i, m in enumerate(got))
+        if printed != want:
+            failures.append("SH9 keys:%s page=%s fresh=%s" % (name, printed, want))
+    for key in ("persists", "expr_paired", "base_paired", "orphan", "unresolved",
+                "outside"):
+        got = re.search(r'data-keys-count="%s"><b>(\d+)</b>' % key, text)
+        value = int(got.group(1)) if got else None
+        if value != proj["key_counts"][key]:
+            failures.append("SH9 count:%s page=%s fresh=%d"
+                            % (key, value, proj["key_counts"][key]))
+    if not (proj["doc"].get("keys_head") or "").strip():
+        failures.append("SH9 keys_head_missing")
+
+    # AC-SH10: a face that reads a key it never writes, and a face keying on a symbol it
+    # never declares, must be NAMED on the page - and a face that is neither may not be
+    # listed (no crying wolf while the honest answer is "none today").
+    for name in proj["key_orphans"]:
+        if not re.search(r'data-keys-orphan="%s"' % re.escape(name), text):
+            failures.append("SH10 orphan_unnamed:%s" % name)
+    for name in proj["key_unresolved"]:
+        if not re.search(r'data-keys-unresolved="%s"' % re.escape(name), text):
+            failures.append("SH10 unresolved_unnamed:%s" % name)
+    if not proj["key_orphans"] and "data-keys-orphan-absent" not in text:
+        failures.append("SH10 orphan_absent_line_missing")
+    if not proj["key_unresolved"] and "data-keys-unresolved-absent" not in text:
+        failures.append("SH10 unresolved_absent_line_missing")
+    listed_orphans = set(re.findall(r'data-keys-orphan="([^"]+)"', text))
+    if listed_orphans != set(proj["key_orphans"]):
+        failures.append("SH10 orphan_list page=%s fresh=%s"
+                        % (sorted(listed_orphans), sorted(proj["key_orphans"])))
+    listed_unresolved = set(re.findall(r'data-keys-unresolved="([^"]+)"', text))
+    if listed_unresolved != set(proj["key_unresolved"]):
+        failures.append("SH10 unresolved_list page=%s fresh=%s"
+                        % (sorted(listed_unresolved), sorted(proj["key_unresolved"])))
+    # The named line must carry the SAME expressions the fresh reading found, so a line
+    # that names the right face while quoting the wrong key still reddens.
+    for name in proj["key_orphans"]:
+        keys = proj["rows"][name]["keys"]
+        got = re.search(r'data-keys-orphan="%s" data-keys-read="([^"]*)"'
+                        % re.escape(name), text)
+        if not got or got.group(1) != esc(",".join(keys["read"])):
+            failures.append("SH10 orphan_keys:%s page=%s fresh=%s"
+                            % (name, got.group(1) if got else "absent",
+                               ",".join(keys["read"])))
+    for name in proj["key_unresolved"]:
+        keys = proj["rows"][name]["keys"]
+        got = re.search(r'data-keys-unresolved="%s" data-keys-symbols="([^"]*)"'
+                        % re.escape(name), text)
+        if not got or got.group(1) != esc(",".join(keys["unresolved"])):
+            failures.append("SH10 unresolved_symbols:%s page=%s fresh=%s"
+                            % (name, got.group(1) if got else "absent",
+                               ",".join(keys["unresolved"])))
+    if proj["key_outside"]:
+        got = re.search(r'data-keys-outside="(\d+)"', text)
+        if not got or int(got.group(1)) != len(proj["key_outside"]):
+            failures.append("SH10 outside page=%s fresh=%d"
+                            % (got.group(1) if got else "absent",
+                               len(proj["key_outside"])))
+
     if failures:
         for line in failures:
             print("  FAIL " + line)
-        print("VERDICT FAIL criteria=8 failures=%d" % len(failures))
+        print("VERDICT FAIL criteria=10 failures=%d" % len(failures))
         return 2
-    print("VERDICT PASS criteria=8 faces=%d operable=%d missing_ceo=%d external_refs=0 "
-          "kinds=%s"
+    print("VERDICT PASS criteria=10 faces=%d operable=%d missing_ceo=%d external_refs=0 "
+          "kinds=%s keys=%s"
           % (proj["faces_total"], len(proj["operable"]), len(proj["missing"]),
-             ",".join("%s:%d" % (kind, proj["kind_counts"][kind]) for kind in KINDS)))
+             ",".join("%s:%d" % (kind, proj["kind_counts"][kind]) for kind in KINDS),
+             ",".join("%s:%d" % (key, proj["key_counts"][key])
+                      for key in ("persists", "expr_paired", "base_paired",
+                                  "orphan", "unresolved", "outside"))))
     return 0
 
 
