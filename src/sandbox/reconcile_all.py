@@ -7782,8 +7782,13 @@ SUITES = [
     # R3239: AC-UGRB20 degrades the reader to bare names and requires the new
     # AC-UGR12 to redden while AC-UGR8 stays green, proving the criterion the
     # face gained catches what the file-set criterion cannot - twenty-one.
+    # R3240 adds three arms for the walk's REFUSING side: B21 a refused door the
+    # face does not name reddens AC-UGR13 while AC-UGR8 stays green, B22 the same
+    # door at a visible path reddens AC-UGR8 while AC-UGR13 stays green (the two
+    # halves do not impersonate each other), B23 a data/ door is now READ and a
+    # test_ door is named by the refused census - twenty-four.
     ("os-ugc-gate-report",
-     os.path.join("..", "os", "test_ugc_gate_report.py"), 21),
+     os.path.join("..", "os", "test_ugc_gate_report.py"), 24),
     # R2875. docs/status-export.json's latest_artifact follows the NEWEST preview
     # pair by mtime, so a fixture that re-renders a tracked pair moves the world
     # another suite measures - measured in the real tree at R2875 as

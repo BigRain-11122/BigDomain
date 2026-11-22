@@ -123,7 +123,7 @@ def main():
         mod.OUT_HTML, mod.OUT_JSON = copy_html, copy_json
 
         rc, base, text, verdict = run_check(mod, data)
-        ok('AC-UGRB0', rc == 0 and len(base) == 10 and all(base.values()),
+        ok('AC-UGRB0', rc == 0 and len(base) == 11 and all(base.values()),
            'baseline rc=%d criteria=%d green=%d %s'
            % (rc, len(base), sum(1 for v in base.values() if v), verdict))
 
@@ -354,6 +354,85 @@ def main():
            'degraded reader: AC-UGR12=%s (must be FAIL) AC-UGR8=%s (stays PASS) rc=%d'
            % (res20.get('AC-UGR12'), res20.get('AC-UGR8'), rc20))
 
+        # ---- B21/B22: the walk's two sides are graded by two criteria and do
+        # not impersonate each other (R3240). Measured in qa/probe-R3240.log: a
+        # real door written at src/sandbox/test_gate_factory.py, and the same
+        # bytes under data/, each left the whole check VERDICT PASS, while the
+        # same door at a visible path reddened AC-UGR8. B21 buys the new side,
+        # B22 proves it does not swallow the old one's job.
+        def b21(d):
+            slot = d['refused'].setdefault(
+                'test_prefix', {'files': 0, 'doors': [], 'unparsed': []})
+            slot['doors'] = list(slot.get('doors') or []) + [
+                'src/sandbox/test_named_door.py']
+
+        mutated21 = copy.deepcopy(data)
+        b21(mutated21)
+        r21, res21, _t21, _v21 = run_check(mod, mutated21)
+        ok('AC-UGRB21', res21.get('AC-UGR13') is False and res21.get('AC-UGR8') is True,
+           'a refused door not named on the face: AC-UGR13=%s (must be FAIL) '
+           'AC-UGR8=%s (stays PASS) rc=%d'
+           % (res21.get('AC-UGR13'), res21.get('AC-UGR8'), r21))
+
+        def b22(d):
+            d['call_sites'] = list(d['call_sites']) + ['src/sandbox/visible_door.py:7']
+
+        mutated22 = copy.deepcopy(data)
+        b22(mutated22)
+        r22, res22, _t22, _v22 = run_check(mod, mutated22)
+        ok('AC-UGRB22', res22.get('AC-UGR8') is False and res22.get('AC-UGR13') is True,
+           "a visible door is AC-UGR8's job and leaves AC-UGR13 green: "
+           'AC-UGR8=%s (must be FAIL) AC-UGR13=%s rc=%d'
+           % (res22.get('AC-UGR8'), res22.get('AC-UGR13'), r22))
+
+        # ---- B23: the two structural closes, in private worlds. (a) `data` is
+        # no longer a skipped name, so a door there is READ - measured before
+        # the change as the ARM-B blindness. (b) a test_-prefixed door stays out
+        # of the site set but is NAMED by the refused census, which is what makes
+        # B21's event visible at all.
+        def world_tree(files):
+            world = tempfile.mkdtemp(prefix='ugc-gate-walk-')
+            for rel, body in files.items():
+                path = os.path.join(world, *rel.split('/'))
+                os.makedirs(os.path.dirname(path), exist_ok=True)
+                with io.open(path, 'w', encoding='utf-8', newline='\n') as fh:
+                    fh.write(body)
+            return world
+
+        data_world = world_tree({
+            'src/sandbox/data/hidden_gate.py':
+                'from lobby.sec_gate import SecGate\nG = SecGate([], [])\n',
+            'src/sandbox/plain.py': 'x = 1\n',
+        })
+        test_world = world_tree({
+            'src/sandbox/test_hidden.py':
+                'from lobby.sec_gate import SecGate\nG = SecGate([], [])\n',
+            'src/sandbox/.venv/lib/vendor.py':
+                'from lobby.sec_gate import SecGate\nG = SecGate([], [])\n',
+        })
+        real_root = mod.ROOT
+        try:
+            mod.ROOT = data_world
+            data_hits, _ = mod.direct_call_sites()
+            mod.ROOT = test_world
+            test_hits, _ = mod.direct_call_sites()
+            census = mod.refused_census()
+        finally:
+            mod.ROOT = real_root
+            shutil.rmtree(data_world, ignore_errors=True)
+            shutil.rmtree(test_world, ignore_errors=True)
+        ok('AC-UGRB23',
+           data_hits == ['src/sandbox/data/hidden_gate.py:2']
+           and test_hits == []
+           and (census.get('test_prefix') or {}).get('doors')
+           == ['src/sandbox/test_hidden.py']
+           and (census.get('vendor_dir') or {}).get('files') == 1
+           and (census.get('vendor_dir') or {}).get('doors') == [],
+           'data door read=%s test door hits=%s refused doors=%s vendor files=%s'
+           % (data_hits, test_hits,
+              (census.get('test_prefix') or {}).get('doors'),
+              (census.get('vendor_dir') or {}).get('files')))
+
         # ---- B17: the live tree must read the same site set as before the
         # reader changed (pure addition): three files, four constructions.
         live_hits, live_skipped = mod.direct_call_sites()
@@ -372,7 +451,7 @@ def main():
     after = real_snapshot()
     rc_real, res_real, _, verdict_real = run_check(mod, mod.collect())
     ok('AC-UGRB10',
-       before == after and rc_real == 0 and len(res_real) == 10 and all(res_real.values()),
+       before == after and rc_real == 0 and len(res_real) == 11 and all(res_real.values()),
        'real pair unchanged=%s real rc=%d green=%d' %
        (before == after, rc_real, sum(1 for v in res_real.values() if v)))
 
@@ -388,7 +467,7 @@ def main():
             declared = int(tail.strip())
         except ValueError:
             declared = None
-    ok('AC-UGRB11', bool(row) and declared == 21,
+    ok('AC-UGRB11', bool(row) and declared == 24,
        'registry_rows=%d declared=%s' % (len(row), declared))
 
     law_verdict = "PASS" if not FAILS else "FAIL"

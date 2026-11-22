@@ -91,6 +91,10 @@
       "text": "the site reader's own spelling laws are re-proved INSIDE --check on a fixed in-memory sample that never comes from disk (R3239): the sample must answer exactly six pinned coordinates - bare, attribute, attribute-assignment alias, import-as alias, literal-getattr alias and a construction sharing a def line - and zero hits for a prose-only source and for a non-literal getattr alias, so a reader degraded to name-only reddens this face instead of only the suite"
     },
     {
+      "id": "AC-UGR13",
+      "text": "the walk's OTHER side is measured, printed and graded (R3240): the report must print, for each refusing rule, how many sources it refused and - for the test_ rule, which cannot be narrowed without drowning nine legal fixture doors - the NAME of every refused source that really constructs the gate; --check refuses when either printed count or any refused door file disagrees with a fresh reading, so a production door misnamed test_*.py reddens here instead of vanishing. The vendor rule is counted and never parsed (a class inside a vendor tree is not this module's class), and `data` left the skip set because it is not a non-source name - measured: zero .py under either data directory, so the live reading did not move"
+    },
+    {
       "id": "AC-SGV1",
       "text": "PRE-REGISTERED REPAIR (not applied: src/ bytes are frozen under the live battery leg): SecGate.__init__ must refuse empty wordlists exactly as MsgSecStub does, so the constitutional no-content-safety-no-door rule holds on the direct construction path too"
     },
@@ -152,6 +156,30 @@
       "raised": null
     }
   ],
+  "refused": {
+    "test_prefix": {
+      "doors": [
+        "src/sandbox/liveroom/test_liveroom.py",
+        "src/sandbox/liveroom/test_liveroom_minorguard_persist.py",
+        "src/sandbox/liveroom/test_liveroom_persist.py",
+        "src/sandbox/minors/test_wiring.py",
+        "src/sandbox/ugc/test_sec_batch.py",
+        "src/sandbox/ugc/test_sec_batch_bannerpersist.py",
+        "src/sandbox/ugc/test_sec_batch_roll.py",
+        "src/sandbox/ugc/test_sec_batch_rowpersist.py",
+        "src/sandbox/ugc/test_sec_batch_rowsroll.py"
+      ],
+      "files": 458,
+      "parsed": true,
+      "unparsed": []
+    },
+    "vendor_dir": {
+      "doors": [],
+      "files": 455,
+      "parsed": false,
+      "unparsed": []
+    }
+  },
   "rows": [
     {
       "billable": false,
@@ -217,8 +245,8 @@
     }
   ],
   "sizes": {
-    "html": 12109,
-    "json": 7911
+    "html": 14203,
+    "json": 9416
   },
   "unparsed": [],
   "wordlist": {

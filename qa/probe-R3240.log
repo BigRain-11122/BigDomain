@@ -1,0 +1,68 @@
+=== R3240 PROBE ===
+Q1 test_prefix_files=458
+Q1 skip_dir_entries=546
+Q1 test_prefix_with_doors=9 of 458
+Q1   test-door src/sandbox/liveroom/test_liveroom.py -> 64
+Q1   test-door src/sandbox/liveroom/test_liveroom_minorguard_persist.py -> 118,251
+Q1   test-door src/sandbox/liveroom/test_liveroom_persist.py -> 69
+Q1   test-door src/sandbox/minors/test_wiring.py -> 108
+Q1   test-door src/sandbox/ugc/test_sec_batch.py -> 72
+Q1   test-door src/sandbox/ugc/test_sec_batch_bannerpersist.py -> 124
+Q1   test-door src/sandbox/ugc/test_sec_batch_roll.py -> 77
+Q1   test-door src/sandbox/ugc/test_sec_batch_rowpersist.py -> 131
+Q1   test-door src/sandbox/ugc/test_sec_batch_rowsroll.py -> 90
+Q1 skip_dir_py_with_doors=0
+Q1 live_sites=4 live_unparsed=0
+Q2 BASELINE private world = the three carrying files sites=4 unparsed=0 landed_sizes={'html': 12109, 'json': 7911}
+PASS AC-UGR1 html=12109B json=7911B rows=4 each-row-once-missing=0
+PASS AC-UGR2 must_refuse=3 blocked=3 hole_recorded=True
+PASS AC-UGR3 decisions=4 recomputed-agree=4 mismatched=0
+PASS AC-UGR4 provider=msgSecCheck-v2 blocked_on_carried=True
+PASS AC-UGR5 found=True line=154
+PASS AC-UGR6 ascii=True third_party_imports=0
+PASS AC-UGR7 rc=0 carried=True line=MSGSEC PARITY cases=14 stub_mismatch=0 gate_agree=14 verdict=PARITY-OK
+PASS AC-UGR8 status=LIVE sites=4 files_carried=4/4 unparsed=0
+PASS AC-UGR12 sample_hits=6 expected=6 extra=0 missing=0 unparsed=0
+PASS AC-UGR9 json_sizes={'html': 12109, 'json': 7911} disk=12109/7911
+VERDICT PASS checks=10/10 failed=(none)
+Q2 BASELINE rc=0
+Q2 ARM-A door at src/sandbox/test_gate_factory.py sites=4 unparsed=0 landed_sizes={'html': 12109, 'json': 7911}
+PASS AC-UGR1 html=12109B json=7911B rows=4 each-row-once-missing=0
+PASS AC-UGR2 must_refuse=3 blocked=3 hole_recorded=True
+PASS AC-UGR3 decisions=4 recomputed-agree=4 mismatched=0
+PASS AC-UGR4 provider=msgSecCheck-v2 blocked_on_carried=True
+PASS AC-UGR5 found=True line=154
+PASS AC-UGR6 ascii=True third_party_imports=0
+PASS AC-UGR7 rc=0 carried=True line=MSGSEC PARITY cases=14 stub_mismatch=0 gate_agree=14 verdict=PARITY-OK
+PASS AC-UGR8 status=LIVE sites=4 files_carried=4/4 unparsed=0
+PASS AC-UGR12 sample_hits=6 expected=6 extra=0 missing=0 unparsed=0
+PASS AC-UGR9 json_sizes={'html': 12109, 'json': 7911} disk=12109/7911
+VERDICT PASS checks=10/10 failed=(none)
+Q2 ARM-A rc=0 (0 = the face stayed green)
+Q2 ARM-B door at src/sandbox/data/hidden_gate.py sites=4 unparsed=0 landed_sizes={'html': 12109, 'json': 7911}
+PASS AC-UGR1 html=12109B json=7911B rows=4 each-row-once-missing=0
+PASS AC-UGR2 must_refuse=3 blocked=3 hole_recorded=True
+PASS AC-UGR3 decisions=4 recomputed-agree=4 mismatched=0
+PASS AC-UGR4 provider=msgSecCheck-v2 blocked_on_carried=True
+PASS AC-UGR5 found=True line=154
+PASS AC-UGR6 ascii=True third_party_imports=0
+PASS AC-UGR7 rc=0 carried=True line=MSGSEC PARITY cases=14 stub_mismatch=0 gate_agree=14 verdict=PARITY-OK
+PASS AC-UGR8 status=LIVE sites=4 files_carried=4/4 unparsed=0
+PASS AC-UGR12 sample_hits=6 expected=6 extra=0 missing=0 unparsed=0
+PASS AC-UGR9 json_sizes={'html': 12109, 'json': 7911} disk=12109/7911
+VERDICT PASS checks=10/10 failed=(none)
+Q2 ARM-B rc=0 (0 = the face stayed green)
+Q2 ARM-C control door at src/sandbox/visible_gate.py sites=5 unparsed=0 landed_sizes={'html': 12109, 'json': 7911}
+PASS AC-UGR1 html=12109B json=7911B rows=4 each-row-once-missing=0
+PASS AC-UGR2 must_refuse=3 blocked=3 hole_recorded=True
+PASS AC-UGR3 decisions=4 recomputed-agree=4 mismatched=0
+PASS AC-UGR4 provider=msgSecCheck-v2 blocked_on_carried=True
+PASS AC-UGR5 found=True line=154
+PASS AC-UGR6 ascii=True third_party_imports=0
+PASS AC-UGR7 rc=0 carried=True line=MSGSEC PARITY cases=14 stub_mismatch=0 gate_agree=14 verdict=PARITY-OK
+FAIL AC-UGR8 status=LIVE sites=5 files_carried=4/5 unparsed=0
+PASS AC-UGR12 sample_hits=6 expected=6 extra=0 missing=0 unparsed=0
+PASS AC-UGR9 json_sizes={'html': 12109, 'json': 7911} disk=12109/7911
+VERDICT CHECK-MISMATCH checks=9/10 failed=AC-UGR8
+Q2 ARM-C rc=2 (2 = the face reddens on a visible file)
+PROBE OK

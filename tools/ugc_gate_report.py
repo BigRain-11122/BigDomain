@@ -49,6 +49,7 @@ CRITERIA = (
     ("AC-UGR10", "a --check run must not author the document it verifies: both artifacts keep their bytes and mtimes across a --check, so a stale document stays visibly stale instead of being silently refreshed into a pass (verified by an mtime control; measured red before R2768 when --check alone re-rendered)"),
     ("AC-UGR11", "re-rendering is an explicit act: --write re-renders before checking, and a bare run with no flags still renders, so no caller loses its previous behaviour"),
     ("AC-UGR12", "the site reader's own spelling laws are re-proved INSIDE --check on a fixed in-memory sample that never comes from disk (R3239): the sample must answer exactly six pinned coordinates - bare, attribute, attribute-assignment alias, import-as alias, literal-getattr alias and a construction sharing a def line - and zero hits for a prose-only source and for a non-literal getattr alias, so a reader degraded to name-only reddens this face instead of only the suite"),
+    ("AC-UGR13", "the walk's OTHER side is measured, printed and graded (R3240): the report must print, for each refusing rule, how many sources it refused and - for the test_ rule, which cannot be narrowed without drowning nine legal fixture doors - the NAME of every refused source that really constructs the gate; --check refuses when either printed count or any refused door file disagrees with a fresh reading, so a production door misnamed test_*.py reddens here instead of vanishing. The vendor rule is counted and never parsed (a class inside a vendor tree is not this module's class), and `data` left the skip set because it is not a non-source name - measured: zero .py under either data directory, so the live reading did not move"),
     ("AC-SGV1", "PRE-REGISTERED REPAIR (not applied: src/ bytes are frozen under the live battery leg): SecGate.__init__ must refuse empty wordlists exactly as MsgSecStub does, so the constitutional no-content-safety-no-door rule holds on the direct construction path too"),
     ("AC-SGV2", "PRE-REGISTERED: after the repair, SecGate([], []) raises GateOfflineError, the four expected-blocked constructions read 4/4 blocked, and every existing direct call site in src/sandbox stays green because each already passes non-empty config lists"),
     ("AC-SGV3", "PRE-REGISTERED: tools/ugc_gate_report.py --check reads VERDICT PASS with AC-UGR2 counting 4 must-refuse constructions and zero measured holes"),
@@ -183,28 +184,100 @@ def _constructor_aliases(tree):
     return aliases
 
 
-def _sandbox_sources():
-    """Every non-test sandbox source as (root-relative path, text).
+TEST_PREFIX = "test_"
+VENDOR_DIRS = ("__pycache__", ".venv", "ygo-poc", "node_modules")
 
-    Split out of direct_call_sites at R3239 so a criterion can hand the reader
-    a fixed in-memory world: the spelling laws become gradable without the disk
-    and without the live tree (which carries no alias site today, so the live
-    tree cannot witness a broken alias branch).
+
+def _sandbox_walk():
+    """Every sandbox source, split into what is READ and what is REFUSED.
+
+    Two rules refuse a source, and they are different in kind (R3240, measured
+    in qa/probe-R3240.log):
+
+      * a file whose name starts with `test_` - test fixtures construct gates
+        legally (nine do today), so counting them as production sites would
+        drown the signal. The price is that a production file misnamed this way
+        is invisible: measured, a real door written at
+        src/sandbox/test_gate_factory.py left the whole check VERDICT PASS. So
+        the refused side is now measured and NAMED rather than ignored.
+      * a directory that is not source at all (`__pycache__`, `.venv`,
+        `ygo-poc`, `node_modules`) - counted, never parsed: a class inside a
+        vendor tree is not this module's class.
+
+    `data` sat in this skip set until R3240 and was removed: it is not a
+    non-source NAME, it merely happened to hold no Python. Measured before the
+    change: zero .py files under either data directory, so the live reading did
+    not move; a door written under data/ is read now instead of vanishing.
+
+    Returns (read_pairs, refused_triples) where a refused triple carries the
+    rule that refused it: (rel, "test_prefix"|"vendor_dir", text).
     """
-    skip = {"__pycache__", ".venv", "ygo-poc", "node_modules", "data"}
-    out = []
-    for base, dirs, files in os.walk(os.path.join(ROOT, "src", "sandbox")):
-        dirs[:] = [d for d in dirs if d not in skip]
+    read = []
+    refused = []
+    walk_root = os.path.join(ROOT, "src", "sandbox")
+    for base, dirs, files in os.walk(walk_root):
+        for name in list(dirs):
+            if name in VENDOR_DIRS:
+                vdir = os.path.join(base, name)
+                for vbase, _vdirs, vfiles in os.walk(vdir):
+                    for vname in sorted(vfiles):
+                        if not vname.endswith(".py"):
+                            continue
+                        rel = os.path.relpath(os.path.join(vbase, vname), ROOT)
+                        refused.append((rel.replace("\\", "/"), "vendor_dir", ""))
+        dirs[:] = [d for d in dirs if d not in VENDOR_DIRS]
         for name in sorted(files):
-            if not name.endswith(".py") or name.startswith("test_"):
+            if not name.endswith(".py"):
                 continue
             path = os.path.join(base, name)
             rel = os.path.relpath(path, ROOT).replace("\\", "/")
+            if name.startswith(TEST_PREFIX):
+                try:
+                    with open(path, "r", encoding="utf-8", errors="replace") as fh:
+                        refused.append((rel, "test_prefix", fh.read()))
+                except OSError:
+                    continue
+                continue
             try:
                 with open(path, "r", encoding="utf-8", errors="replace") as fh:
-                    out.append((rel, fh.read()))
+                    read.append((rel, fh.read()))
             except OSError:
                 continue
+    return read, refused
+
+
+def _sandbox_sources():
+    """The sources the site reader actually reads, as (path, text) pairs."""
+    read, _refused = _sandbox_walk()
+    return read
+
+
+def refused_census(refused=None):
+    """What the walk refused, by rule, with its doors named where they are ours.
+
+    The vendor rule is counted and NOT parsed: its files are not this module's
+    source, so a construction there would not be this door (named on the page).
+    The test_ rule IS parsed, because those files are ours and nine of them
+    really construct the gate - the number is printed, and every door file is
+    named, which is what lets a misnamed production door redden AC-UGR13.
+    """
+    if refused is None:
+        _read, refused = _sandbox_walk()
+    out = {}
+    for rel, rule, text in refused:
+        slot = out.setdefault(rule, {"files": 0, "parsed": rule != "vendor_dir",
+                                     "doors": [], "unparsed": []})
+        slot["files"] += 1
+        if not slot["parsed"]:
+            continue
+        hits, skipped = direct_call_sites(sources=[(rel, text)])
+        if skipped:
+            slot["unparsed"].append(rel)
+        if hits:
+            slot["doors"].append(rel)
+    for slot in out.values():
+        slot["doors"].sort()
+        slot["unparsed"].sort()
     return out
 
 
@@ -324,6 +397,7 @@ def collect():
         "hole": hole,
         "call_sites": sites,
         "unparsed": skipped,
+        "refused": refused_census(),
         "hole_status": "LIVE" if sites else "LATENT",
         "parity": parity_line(),
         "aigc": aigc_face(),
@@ -367,6 +441,32 @@ def render_html(data):
                      "<br>Not parsed, so NOT counted either way (named, not hidden): "
                      "<span class='mono'>%s</span>"
                      % _esc(", ".join(unparsed)))
+    # R3240: the walk's refusing side, printed rather than left implicit. Two
+    # rules, two meanings - the vendor tree is not ours, the test_ prefix is a
+    # deliberate narrowing that keeps nine legal fixture doors out of the site
+    # count, and those nine are named here so a tenth (or a misnamed production
+    # door) cannot join them quietly.
+    refused = data.get("refused") or {}
+    refused_bits = []
+    for rule in ("test_prefix", "vendor_dir"):
+        slot = refused.get(rule) or {"files": 0, "doors": [], "unparsed": []}
+        files = slot.get("files") or 0
+        doors = slot.get("doors") or []
+        if rule == "test_prefix":
+            tail = "parsed; <b>%d</b> construct the gate%s" % (
+                len(doors),
+                (": " + ", ".join("<span class='mono'>%s</span>" % _esc(d) for d in doors))
+                if doors else "")
+        else:
+            tail = "counted and NOT parsed - a class inside a vendor tree is not this module's class"
+        refused_bits.append("<li>refused %s: %d sources - %s</li>" % (_esc(rule), files, tail))
+    refused_html = ("<br>The walk refuses two kinds of source, and both are counted on this face "
+                    "rather than left implicit (AC-UGR13, R3240):<ul>%s</ul>"
+                    "A production file misnamed with the test_ prefix, or a door written under "
+                    "<span class='mono'>data/</span> (which stopped being a skipped name at R3240 - it "
+                    "held no Python, measured), is therefore either read or NAMED here. Parsing the "
+                    "refused side costs about 1.5 s over 913 files, paid on every collect and --check."
+                    % "".join(refused_bits))
     hole_html = (
         "<div class='card hole'><b>MEASURED HOLE - %s (%s)</b><br>"
         "<span class='mono'>SecGate([], [])</span> constructs a gate with no wordlists and does "
@@ -391,16 +491,17 @@ def render_html(data):
         "reader's spelling laws on a fixed in-memory sample (AC-UGR12, R3239), six pinned coordinates "
         "for bare, attribute, two alias spellings, a literal getattr and a def-line construction, plus "
         "a prose source and a non-literal getattr that must stay uncounted. A reader degraded to "
-        "name-only reddens here instead of only in the suite. Outside that criterion stay the file-walk "
-        "rules and a class returned by a factory; and a reader written to special-case this exact "
-        "sample would still pass it.%s<br><br>"
+        "name-only reddens here instead of only in the suite. The walk's two refusing rules are graded "
+        "separately (AC-UGR13, below); what stays outside every criterion here is a class returned by "
+        "a factory, and a reader written to special-case this exact sample would still pass it.%s%s"
+        "<br><br>"
         "Status: <b>%s</b> - every site above passes lists read from config today, so the door is shut "
         "only because the config is not empty, not because the type forbids an empty gate.<br><br>"
         "Repair pre-registered, NOT applied in this window: src/ bytes are frozen under the live battery "
         "leg, so the fix is written down as AC-SGV1..AC-SGV3 rather than landed."
         "</div>" % (_esc(hole.get("attempt")), _esc(data["hole_status"]),
                     sites_html or "<li>(none measured)</li>", unparsed_html,
-                    _esc(data["hole_status"])))
+                    refused_html, _esc(data["hole_status"])))
     crit_html = "".join("<li><b>%s</b> %s</li>" % (_esc(c["id"]), _esc(c["text"]))
                         for c in data["criteria"])
     order_html = "".join("<li>%s</li>" % _esc(g) for g in data["gate_order"])
@@ -638,6 +739,29 @@ def check(data):
                     "sample_hits=%d expected=%d extra=%d missing=%d unparsed=%d"
                     % (len(probe_hits), len(expected), len(extra), len(missing),
                        len(probe_skipped))))
+
+    # AC-UGR13: the walk's refusing side is graded, not implied (R3240). AC-UGR8
+    # asks whether every READ file is named on the face, so a door the walk never
+    # reads is invisible to it - measured in qa/probe-R3240.log: a real door at
+    # src/sandbox/test_gate_factory.py, and another under data/, each left the
+    # whole check VERDICT PASS while the same bytes at a visible path reddened
+    # AC-UGR8. The counts and the refused door files are graded against a FRESH
+    # reading (collect runs before check), so a new refused door reddens by name
+    # until the document is re-rendered.
+    refused = data.get("refused") or {}
+    ok13 = True
+    thirteen = []
+    for rule in ("test_prefix", "vendor_dir"):
+        slot = refused.get(rule) or {"files": 0, "doors": [], "unparsed": []}
+        files = slot.get("files") or 0
+        doors = sorted(slot.get("doors") or [])
+        counted = ("refused %s: %d sources" % (rule, files)) in html_text
+        unnamed = [d for d in doors if d not in html_text]
+        if not counted or unnamed:
+            ok13 = False
+        thirteen.append("%s files=%d doors=%d counted=%s unnamed=%d"
+                        % (rule, files, len(doors), counted, len(unnamed)))
+    results.append(("AC-UGR13", ok13, " ".join(thirteen)))
 
     # AC-UGR9: the sizes block is read back FROM THE LANDED DOCUMENT, never from
     # the in-memory dict, so a --no-write run still gates on what is on disk.
