@@ -19,6 +19,7 @@ import html
 import json
 import os
 import re
+import subprocess
 import sys
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -139,20 +140,89 @@ def newest_artifact():
         return {"json": "", "bytes": 0, "stamp": "", "empty": True}
     import datetime
     stamp = datetime.datetime.fromtimestamp(best[1]).strftime("%Y-%m-%dT%H:%M:%S")
-    return {"json": best[0], "bytes": best[2], "stamp": stamp, "empty": False}
+    # R3296 (AC-DIX21): the row names the json, but the page a reader opens is
+    # the sibling html - and a self-verify command prints the HTML byte count.
+    # Both numbers live here so the band can quote the one the command reports.
+    html_name = os.path.splitext(best[0])[0] + ".html"
+    try:
+        html_bytes = os.path.getsize(os.path.join(PREVIEW, html_name))
+    except OSError:
+        html_bytes = 0
+    return {"json": best[0], "bytes": best[2], "stamp": stamp,
+            "html": html_name, "html_bytes": html_bytes, "empty": False}
+
+
+PRODUCER_REL = "src/os/preview_apimarket_current.py"
+PRODUCER = os.path.join(REPO, *PRODUCER_REL.split("/"))
+SELF_VERIFY_FLAGS = ("--dry-run", "--stamp")
+
+
+def newest_rendered_on(new):
+    """The date the newest json says its page was rendered on, or None."""
+    if not new.get("json"):
+        return None
+    try:
+        doc = json.loads(read(os.path.join(PREVIEW, new["json"])))
+    except (OSError, ValueError):
+        return None
+    value = doc.get("rendered_on") if isinstance(doc, dict) else None
+    return value if isinstance(value, str) and value else None
+
+
+def self_verify(new):
+    """(command, why_not) for the one command that reproduces the newest pair.
+
+    R3296 (AC-DIX21): the index lists this pair as the newest deliverable and
+    the reader still has to guess what to run. Every part of the command is
+    taken from a source, never typed: the module path from PRODUCER_REL, the
+    two flags from the producer source (both must still be declared there, or
+    the command would be a paragraph of fiction), and the stamp from the json
+    the page itself quotes. Measured first (qa/probe-R3296.log): the dry run
+    reports 37201 bytes, equal to the html on disk, and writes nothing - which
+    is why the row must also quote the html byte count it prints.
+    """
+    if new.get("empty"):
+        return None, "no artifact pair on disk"
+    try:
+        source = read(PRODUCER)
+    except OSError:
+        return None, "producer %s is not on disk" % PRODUCER_REL
+    missing = [f for f in SELF_VERIFY_FLAGS if ('"%s"' % f) not in source]
+    if missing:
+        return None, ("producer no longer declares %s" % ",".join(missing))
+    stamp = newest_rendered_on(new)
+    if not stamp:
+        return None, "the newest json records no rendered_on date"
+    return ("python %s --dry-run --stamp %s" % (PRODUCER_REL, stamp)), None
 
 
 def newest_line(new):
     """The one derived line AC-DIX8 compares against a fresh read."""
     if new["empty"]:
         return "preview/ carries no json artifact yet - stated, not blank."
-    return "%s \u00b7 %dB \u00b7 %s" % (new["json"], new["bytes"], new["stamp"])
+    # R3296: both sizes, because the self-verify command prints the html byte
+    # count while this band used to quote only the json's.
+    return "%s \u00b7 json=%dB \u00b7 html=%dB \u00b7 %s" % (
+        new["json"], new["bytes"], new.get("html_bytes", 0), new["stamp"])
 
 
 def render_newest(new):
     out = []
     out.append("<h2>\u6700\u65b0\u5b9e\u7269\uff08\u76d8\u4e0a mtime \u6d3e\u751f\uff0c\u7981\u5199\u6b7b\uff09</h2>")
     out.append('<div class="note">%s</div>' % html.escape(newest_line(new)))
+    command, why_not = self_verify(new)
+    if command:
+        out.append(
+            '<div class="note">\u81ea\u5df1\u9a8c\u4e00\u904d\uff08\u547d\u4ee4'
+            '\u53c2\u6570\u73b0\u8bfb\u81ea\u4ea7\u51fa\u5668\u4e0e\u8be5\u5bf9'
+            '\u6587\u4ef6\uff0c\u975e\u624b\u5199\uff09\uff1a'
+            '<code>%s</code>\uff0d\u5b83\u4f1a\u62a5\u51fa\u540c\u4e00\u4e2a '
+            '<b>%dB</b> \u5e76\u4e14\u4e0d\u5199\u4efb\u4f55\u5b57\u8282\u3002</div>'
+            % (html.escape(command), new.get("html_bytes", 0)))
+    else:
+        out.append('<div class="note">\u65e0\u81ea\u9a8c\u547d\u4ee4\uff1a%s'
+                   '\uff08\u5982\u5b9e\u547d\u540d\uff0c\u4e0d\u7f16\u9020\uff09</div>'
+                   % html.escape(why_not))
     out.append('<div class="note">%s</div>' % html.escape(NEWEST_SNAPSHOT))
     return "\n".join(out)
 
@@ -685,6 +755,66 @@ def main(argv):
            and printed_tags == len(hist) and not leaked,
            "frozen=%d tagged=%d printed=%d leaked=%s"
            % (len(hist), len(hist_tagged), printed_tags, leaked))
+
+    # AC-DIX21 (pinned 2026-11-22 R3296 in src/os/backlog.md BEFORE this code):
+    # this page lists the newest pair and used to leave the reader with no way
+    # to check it themselves. The band now prints one command whose module path,
+    # flags and stamp are all read from sources; this criterion runs that command
+    # ONCE and grades what it reports. Measured before the change
+    # (qa/probe-R3296.log): the dry run reports 37201 bytes - the HTML count,
+    # not the 59815 the band used to quote alone - and leaves both files byte
+    # identical, so the row must quote both numbers for the command to be true.
+    # Cost: one extra deterministic render, measured 0.292s (the sweep the
+    # closeout already runs; no standing second pass is added to production).
+    command, why_not = self_verify(fresh)
+    band = landed_block if check else block
+    if command is None:
+        absence = "\u65e0\u81ea\u9a8c\u547d\u4ee4\uff1a%s" % html.escape(why_not)
+        record("AC-DIX21", absence in band,
+               "no-command-reason=%r printed-as-named-absence=%s"
+               % (why_not, absence in band))
+    else:
+        stamp = newest_rendered_on(fresh)
+        html_path = os.path.join(PREVIEW, fresh["html"])
+        json_path = os.path.join(PREVIEW, fresh["json"])
+
+        def stat_pair(path):
+            try:
+                return (os.path.getsize(path), os.path.getmtime(path))
+            except OSError:
+                return None
+
+        before = (stat_pair(html_path), stat_pair(json_path))
+        proc = subprocess.run(
+            [sys.executable, PRODUCER, "--dry-run", "--stamp", stamp],
+            cwd=REPO, capture_output=True, text=True)
+        after = (stat_pair(html_path), stat_pair(json_path))
+        dry_lines = [ln for ln in (proc.stdout or "").splitlines()
+                     if ln.startswith("DRY ")]
+        dry = dry_lines[-1] if dry_lines else ""
+        m_bytes = re.search(r"bytes=(\d+)", dry)
+        m_stamp = re.search(r"stamp=(\d{4}-\d{2}-\d{2})", dry)
+        reported = int(m_bytes.group(1)) if m_bytes else -1
+        reported_stamp = m_stamp.group(1) if m_stamp else ""
+        printed_once = band.count(html.escape(command)) == 1
+        printed_html = ("html=%dB" % fresh.get("html_bytes", 0)) in band
+        arms = {
+            "printed-once": printed_once,
+            "module-on-disk": os.path.exists(PRODUCER),
+            "rc0": proc.returncode == 0,
+            "dry-line": bool(dry),
+            "bytes-eq-html-eq-row": (reported == fresh.get("html_bytes", 0)
+                                     == (os.path.getsize(html_path)
+                                        if os.path.exists(html_path) else -2)),
+            "row-quotes-html": printed_html,
+            "stamp-eq-page": reported_stamp == stamp,
+            "nothing-written": before == after,
+        }
+        record("AC-DIX21", all(arms.values()),
+               "cmd=%r dry=%r html=%dB json=%dB %s"
+               % (command, dry, fresh.get("html_bytes", 0), fresh["bytes"],
+                  " ".join("%s=%s" % (k, v) for k, v in sorted(arms.items())
+                           if not v) or "all-arms-green"))
 
     if check:
         for code, ok, detail in checks:

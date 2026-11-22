@@ -210,7 +210,7 @@
    "title": "BigDomain API Market - Settlement Ledger"
   },
   {
-   "bytes": 37049,
+   "bytes": 37201,
    "controls": 0,
    "face": "apimarket-report.html",
    "links": [
@@ -328,7 +328,7 @@
    "title": "BigDomain 第一笔收入路径"
   },
   {
-   "bytes": 42141,
+   "bytes": 42417,
    "controls": 2,
    "face": "index.html",
    "links": [

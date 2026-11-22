@@ -1,0 +1,14 @@
+Q1       producer=src\os\preview_apimarket_current.py
+Q1       flags=--db,--dry-run,--json-out,--out,--rendered-on,--stamp
+Q1       FACE='apimarket-report.html' STAMP_FLOOR='2026-11-22' local_day='2026-11-22'
+Q1       command=python src\os\preview_apimarket_current.py --dry-run --stamp 2026-11-22
+Q2       page_on_disk=37201B json_on_disk=59815B rendered_on='2026-11-22' sizes={'html': 37201, 'json': 59815}
+Q2       dry_rc=0 out='report written: C:\\Users\\sjs20\\AppData\\Local\\Temp\\apimarket-current-face-probe-bvy677am\\apimarket-report.html (36497 bytes, sha256 9d920141e18b8dc6)\nattention findings: 5 (severity {"warn": 5})\nreport json written: C:\\Users\\sjs20\\AppData\\Local\\Temp\\apimarket-current-face-probe-bvy677am\\apimarket-report.json (59515 bytes, schema 17)\nDRY apimarket-report.html inserted bytes=37201 stamp=2026-11-22 (nothing written)'
+Q2       dry_bytes=37201 page=37201 equal=True
+Q2       index_rows_mentioning_json=2
+Q2       row_quoted_B=['59815'] dry_matches_any=False
+Q2       row_quoted_B=['37201'] dry_matches_any=True
+Q2       stamped_dry_rc=0 out='report written: C:\\Users\\sjs20\\AppData\\Local\\Temp\\apimarket-current-face-probe-q2mp3lti\\apimarket-report.html (36497 bytes, sha256 9d920141e18b8dc6)\nattention findings: 5 (severity {"warn": 5})\nreport json written: C:\\Users\\sjs20\\AppData\\Local\\Temp\\apimarket-current-face-probe-q2mp3lti\\apimarket-report.json (59515 bytes, schema 17)\nDRY apimarket-report.html inserted bytes=37201 stamp=2026-11-22 (nothing written)'
+Q3       checker_rc=0 secs=0.340 out='-p4r666x3\\apimarket-report.json (59515 bytes, schema 17)\nAPI MARKET CURRENT FACE CHECK schema=17 printed=17 stamp=2026-11-22 html=37201B json=59815B injection=inserted fails=0\nVERDICT PASS criteria=12'
+Q3       dry_secs=0.292  added_render_on_check_path=0.292
+DONE probe R3296

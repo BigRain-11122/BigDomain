@@ -1,0 +1,11 @@
+OK   c1-clean-copy              verdict=PASS 20/20 failed=[] want=PASS
+OK   c2-command-stamp-edit      verdict=FAIL 19/20 failed=['AC-DIX21'] want=AC-DIX21
+OK   c3-command-removed         verdict=FAIL 19/20 failed=['AC-DIX21'] want=AC-DIX21
+OK   c4-row-html-number         verdict=FAIL 19/20 failed=['AC-DIX21'] want=AC-DIX21
+OK   c5-json-date-moved         verdict=FAIL 19/20 failed=['AC-DIX21'] want=AC-DIX21
+OK   c6-flag-not-declared       verdict=FAIL 19/20 failed=['AC-DIX21'] want=AC-DIX21
+OK   c7-dry-bytes-off-by-one    verdict=FAIL 19/20 failed=['AC-DIX21'] want=AC-DIX21
+OK   c8-dry-run-writes          verdict=FAIL 19/20 failed=['AC-DIX21'] want=AC-DIX21
+OK   c9-no-date-named-absence   absence-printed=True write_rc=0 verdict=PASS
+OK   c10-producer-not-on-disk   verdict=FAIL 19/20 failed=['AC-DIX21'] want=AC-DIX21
+NEGCTL PASS green=10/10
