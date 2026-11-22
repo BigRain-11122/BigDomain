@@ -55,6 +55,7 @@ CRITERIA = (
     ("AC-UGR16", "the fallback evidence is named and its counts are graded (R3244): AC-UGR15 grades one summary word, and one word cannot tell a world where a package manager's RECORD decided from a world where a bare directory name did - both print the same. Measured in qa/probe-R3244.log: in a world with no .git, a gate of OURS written into the same vendor root as an installed package was refused by name and answered zero sites (hits=[], refused_files=2), while that root's two .dist-info/RECORD files list every one of its 453 .py files. When git cannot answer, ownership now falls back to RECORD membership: a listed file is refused, an unlisted file is READ as ours, a root carrying no RECORD keeps the name rule. The report must print the decision count for each rule (evidence, marker, name) and name every file read as ours; --check refuses when any printed count, the summary rule, or an owned path disagrees with a fresh reading. The marker evidence is the package manager's own account of itself - a hand-edited RECORD is believed, which is the same kind of fallibility as a tracked vendored copy being read, and it is printed rather than implied"),
     ("AC-UGR17", "how far the believed RECORD reaches is a graded reading (R3245): AC-UGR16 grades WHICH evidence decided, and one membership list cannot tell a RECORD that covers its root from one that lists half of it - measured in qa/probe-R3245.log, where a package whose RECORD listed one of two files left the unlisted sibling READ as ours and a gate inside it entered the site set, while the live .venv lists 995 paths (995 exist, 0 stale) covering all 453 of its .py files. Every vendor root decided by marker must be NAMED on the face with its four counts printed (listed, exists, stale, unlisted), and a reading in which no root was decided by marker must print a named absence instead of four zeros. --check refuses when any printed count, an arithmetic inconsistency (exists + stale == listed), a missing root name or the absence sentence disagrees with a fresh reading. This makes a truncated or stale RECORD visible; it does not close the hole - an unlisted file is still read as ours - and it does not verify the RECORD's hash column, so exists asks only whether the path is still on disk"),
     ("AC-UGR18", "the unlisted side is split by WHERE the file sits and both halves are graded (R3246): AC-UGR17 prints how many files a believed RECORD forgot, and a truncated RECORD and a file of OURS in the same root read identically there - measured in qa/probe-R3246.log, where a package whose RECORD listed one of two files in a directory left the forgotten sibling READ as ours and a gate inside it entered the site set (hits=[.../pkg/core/unlisted.py:2]). Every marker-decided root must now print inside=<n> beside=<m>, the two must sum to the printed unlisted count, and every file REFUSED by the directory rule must be NAMED on the face; no such path may also appear among the files printed as ours. The rule is: an unlisted file whose directory holds a file the RECORD DID list is refused (that directory is a package directory), while an unlisted file beside any package is still READ as ours (measured: our own gate beside the package stays readable). --check refuses when a count, the sum, a name or a leak disagrees with a fresh reading. This closes one direction only: a root whose RECORD lists no .py at all still reads its whole tree as ours (the stricter red was refused because it would redden every freshly unpacked root), and the cost is printed - one of ours placed INSIDE a package directory is refused too, as a named inside path"),
+("AC-UGR19", "how far a believed RECORD reaches over .py files is a graded count (R3247): AC-UGR18 splits the unlisted side by where it sits, but the directory rule needs at least one listed file to fire, so a root whose RECORD lists NO .py at all leaves its whole .py tree reachable - measured in qa/probe-R3247.log, where a RECORD listing only pkg/core/data.json still read pkg/top.py as ours and a gate inside it entered the site set (listed_py=0, disk_py=2, inside=1, beside=1). Every marker-decided root must now print listed_py=<n> disk_py=<m>, the two must satisfy listed_py + unlisted == disk_py, a root with listed_py == 0 and disk_py > 0 must carry a NAMED warning on its own line, and the face must print how many roots are in that state or say in words that none is. --check refuses when any count, the sum, the warning or the page-level count disagrees with a fresh reading. This does not close the hole - the unreachable root still reads its whole .py tree as ours - it makes that root visible with a count; the stricter red was refused because it would redden every freshly unpacked root"),
     ("AC-SGV1", "PRE-REGISTERED REPAIR (not applied: src/ bytes are frozen under the live battery leg): SecGate.__init__ must refuse empty wordlists exactly as MsgSecStub does, so the constitutional no-content-safety-no-door rule holds on the direct construction path too"),
 
     ("AC-SGV2", "PRE-REGISTERED: after the repair, SecGate([], []) raises GateOfflineError, the four expected-blocked constructions read 4/4 blocked, and every existing direct call site in src/sandbox stays green because each already passes non-empty config lists"),
@@ -341,6 +342,11 @@ def _walk_all(tracked=_TRACKED_AUTO):
     `decisions` is one (rel, "evidence"|"marker"|"name") per vendor-named file,
     so the face can print which rule decided each count instead of one word for
     a mixed world.
+    Since R3247 each marker row also carries `listed_py` and `disk_py`: how many
+    of the .py files under that root the RECORD lists, and how many sit there at
+    all. A root with listed_py == 0 cannot fire the directory rule at all, so its
+    whole .py tree is read as ours; that state is counted and warned rather than
+    left implicit (measured in qa/probe-R3247.log).
     """
     if tracked is _TRACKED_AUTO:
         tracked = _tracked_sources()
@@ -371,6 +377,7 @@ def _walk_all(tracked=_TRACKED_AUTO):
                 if has_markers:
                     cov = {"root": rel_root, "listed": len(evidence), "exists": 0,
                            "stale": 0, "unlisted": 0, "inside": 0, "beside": 0,
+                           "listed_py": 0, "disk_py": 0,
                            "inside_paths": []}
                     for rel in evidence:
                         if os.path.exists(os.path.join(ROOT, rel)):
@@ -396,6 +403,11 @@ def _walk_all(tracked=_TRACKED_AUTO):
                                 text = fh.read()
                         except OSError:
                             text = ""
+                        # R3247: the .py reach of a believed RECORD is a count on
+                        # the face, and it rides this walk rather than a second
+                        # pass (measured: 453 files counted in 0.0101s).
+                        if cov is not None:
+                            cov["disk_py"] += 1
                         if tracked is not None:
                             decisions.append((rel, "evidence"))
                             if rel in tracked:
@@ -406,6 +418,7 @@ def _walk_all(tracked=_TRACKED_AUTO):
                         elif has_markers:
                             decisions.append((rel, "marker"))
                             if rel in evidence:
+                                cov["listed_py"] += 1
                                 refused.append((rel, "vendor_dir", text))
                             elif os.path.dirname(rel) in listed_dirs:
                                 # R3246: the RECORD forgot a file inside a
@@ -759,20 +772,33 @@ def render_html(data):
                          % "".join(
                              "<li><span class='mono'>%s</span> listed=<b>%d</b> exists=<b>%d</b> "
                              "stale=<b>%d</b> unlisted=<b>%d</b> inside=<b>%d</b> "
-                             "beside=<b>%d</b>%s</li>"
+                             "beside=<b>%d</b> listed_py=<b>%d</b> disk_py=<b>%d</b>%s%s</li>"
                              % (_esc(r["root"]), r["listed"], r["exists"], r["stale"],
                                 r["unlisted"], r["inside"], r["beside"],
+                                r["listed_py"], r["disk_py"],
                                 (": inside-refused " + ", ".join(
                                     "<span class='mono'>%s</span>" % _esc(p)
                                     for p in r.get("inside_paths") or []))
                                 if r.get("inside_paths") else
-                                " (no unlisted file inside a package directory)")
+                                " (no unlisted file inside a package directory)",
+                                (" - WARNING: this RECORD lists no .py, so every .py "
+                                 "under this root is read as ours")
+                                if (r["listed_py"] == 0 and r["disk_py"] > 0) else "")
                              for r in cov_rows))
+                zero_py = [r for r in cov_rows
+                           if r["listed_py"] == 0 and r["disk_py"] > 0]
+                tail += (" Roots whose RECORD lists no .py at all (graded by "
+                         "AC-UGR19, R3247): "
+                         + (("%d - every .py under them is read as ours, because the "
+                             "directory rule needs one listed file to fire"
+                             % len(zero_py)) if zero_py else
+                            "no root whose RECORD lists zero .py files in this reading"))
             else:
                 tail += ("; no vendor root decided by marker in this reading (AC-UGR17, R3245): "
                          "git answered, or no root carried a RECORD, so there are no coverage "
                          "counts to print; no unlisted file was decided by marker, so the "
-                         "inside/beside split of AC-UGR18 has nothing to divide")
+                         "inside/beside split of AC-UGR18 has nothing to divide, and the .py "
+                         "reach of AC-UGR19 has nothing to measure")
         refused_bits.append("<li>refused %s: %d sources - %s</li>" % (_esc(rule), files, tail))
     refused_html = ("<br>The walk refuses two kinds of source, and both are counted on this face "
                     "rather than left implicit (AC-UGR13, R3240):<ul>%s</ul>"
@@ -1240,6 +1266,47 @@ def check(data):
         cov_ok18 = absent18
         bits18.append("no marker-decided root; named_absence=%s" % absent18)
     results.append(("AC-UGR18", cov_ok18, " ".join(bits18) or "(no rows)"))
+
+    # AC-UGR19: a RECORD that lists no .py cannot fire the directory rule, so
+    # its whole .py tree is read as ours (R3247). Measured in
+    # qa/probe-R3247.log: a RECORD listing only pkg/core/data.json still read
+    # pkg/top.py as ours and a gate inside it entered the site set. The root
+    # must print listed_py/disk_py, the pair must sum with unlisted, a zero-py
+    # root must carry its own warning, and the page must count such roots.
+    cov19 = data.get("marker_coverage") or []
+    cov_ok19 = True
+    bits19 = []
+    if cov19:
+        for row in cov19:
+            counts19 = ("listed_py=<b>%d</b> disk_py=<b>%d</b>"
+                        % (row["listed_py"], row["disk_py"])) in html_text
+            sum19 = row["listed_py"] + row["unlisted"] == row["disk_py"]
+            warn19 = True
+            if row["listed_py"] == 0 and row["disk_py"] > 0:
+                warn19 = ("WARNING: this RECORD lists no .py, so every .py "
+                          "under this root is read as ours" in html_text)
+            if not (counts19 and sum19 and warn19):
+                cov_ok19 = False
+            bits19.append("%s listed_py=%d disk_py=%d unlisted=%d printed=%s "
+                          "sum=%s warned=%s"
+                          % (row["root"], row["listed_py"], row["disk_py"],
+                             row["unlisted"], counts19, sum19, warn19))
+        zero19 = [r for r in cov19
+                  if r["listed_py"] == 0 and r["disk_py"] > 0]
+        page19 = (("%d - every .py under them is read as ours" % len(zero19))
+                  if zero19 else
+                  "no root whose RECORD lists zero .py files in this reading")
+        page_hit19 = ("Roots whose RECORD lists no .py at all (graded by AC-UGR19, "
+                      "R3247): " + page19) in html_text
+        if not page_hit19:
+            cov_ok19 = False
+        bits19.append("page_count=%d printed=%s" % (len(zero19), page_hit19))
+    else:
+        absent19 = ("the .py reach of AC-UGR19 has nothing to measure"
+                    in html_text)
+        cov_ok19 = absent19
+        bits19.append("no marker-decided root; named_absence=%s" % absent19)
+    results.append(("AC-UGR19", cov_ok19, " ".join(bits19) or "(no rows)"))
 
     # AC-UGR9: the sizes block is read back FROM THE LANDED DOCUMENT, never from
     # the in-memory dict, so a --no-write run still gates on what is on disk.

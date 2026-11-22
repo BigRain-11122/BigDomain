@@ -1,0 +1,44 @@
+Q1 LIVE: every vendor-named root, its marker and its .py coverage
+  root=src/sandbox/__pycache__ marker=False listed_py=None disk_py=None
+  root=src/sandbox/benchgate/__pycache__ marker=False listed_py=None disk_py=None
+  root=src/sandbox/citymodel/__pycache__ marker=False listed_py=None disk_py=None
+  root=src/sandbox/compliance/__pycache__ marker=False listed_py=None disk_py=None
+  root=src/sandbox/funnel/__pycache__ marker=False listed_py=None disk_py=None
+  root=src/sandbox/ledger/__pycache__ marker=False listed_py=None disk_py=None
+  root=src/sandbox/liveroom/__pycache__ marker=False listed_py=None disk_py=None
+  root=src/sandbox/lobby/.venv marker=True listed_py=453 disk_py=453
+  root=src/sandbox/lobby/__pycache__ marker=False listed_py=None disk_py=None
+  root=src/sandbox/member/__pycache__ marker=False listed_py=None disk_py=None
+  root=src/sandbox/minors/__pycache__ marker=False listed_py=None disk_py=None
+  root=src/sandbox/opsreview/__pycache__ marker=False listed_py=None disk_py=None
+  root=src/sandbox/pay/__pycache__ marker=False listed_py=None disk_py=None
+  root=src/sandbox/pycrdt-poc/vendor/__pycache__ marker=False listed_py=None disk_py=None
+  root=src/sandbox/pycrdt-poc/vendor/anyio/__pycache__ marker=False listed_py=None disk_py=None
+  root=src/sandbox/pycrdt-poc/vendor/anyio/abc/__pycache__ marker=False listed_py=None disk_py=None
+  root=src/sandbox/pycrdt-poc/vendor/anyio/streams/__pycache__ marker=False listed_py=None disk_py=None
+  root=src/sandbox/pycrdt-poc/vendor/anyio/_backends/__pycache__ marker=False listed_py=None disk_py=None
+  root=src/sandbox/pycrdt-poc/vendor/anyio/_core/__pycache__ marker=False listed_py=None disk_py=None
+  root=src/sandbox/pycrdt-poc/vendor/idna/__pycache__ marker=False listed_py=None disk_py=None
+  root=src/sandbox/pycrdt-poc/vendor/pycrdt/__pycache__ marker=False listed_py=None disk_py=None
+  root=src/sandbox/pycrdt-poc/vendor/pycrdt/store/__pycache__ marker=False listed_py=None disk_py=None
+  root=src/sandbox/pycrdt-poc/vendor/pycrdt/websocket/__pycache__ marker=False listed_py=None disk_py=None
+  root=src/sandbox/pycrdt-poc/vendor/sqlite_anyio/__pycache__ marker=False listed_py=None disk_py=None
+  root=src/sandbox/tourstate/__pycache__ marker=False listed_py=None disk_py=None
+  root=src/sandbox/ugc/__pycache__ marker=False listed_py=None disk_py=None
+  root=src/sandbox/watermark/__pycache__ marker=False listed_py=None disk_py=None
+  root=src/sandbox/ygo-poc/data/toolchain marker=False listed_py=None disk_py=None
+  root=src/sandbox/ygo-poc/js/node_modules marker=False listed_py=None disk_py=None
+  extreme_roots(listed_py==0 and disk_py>0)=0
+  Q1 cost=0.240s over 29 vendor roots
+Q2 PRIVATE WORLD: RECORD lists only pkg/core/data.json
+  owned(READ as ours)=['src/sandbox/.venv/pkg/top.py']
+  refused=['src/sandbox/.venv/pkg/core/inner.py']
+  decisions=[('src/sandbox/.venv/pkg/top.py', 'marker'), ('src/sandbox/.venv/pkg/core/inner.py', 'marker')]
+  coverage=[{"root": "src/sandbox/.venv", "listed": 1, "exists": 1, "stale": 0, "unlisted": 2, "inside": 1, "beside": 1, "inside_paths": ["src/sandbox/.venv/pkg/core/inner.py"]}]
+  world_prefix_escaped=0
+  site_hits=1 ['src/sandbox/.venv/pkg/top.py:2']
+  unparsed=[]
+  derived listed_py=0 disk_py=2 inside=1 beside=1 unlisted=2
+  Q2 walk cost=0.0013s
+Q3 COST: counting .py under .venv = 453 files in 0.0101s
+DONE

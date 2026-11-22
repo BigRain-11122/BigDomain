@@ -123,7 +123,7 @@ def main():
         mod.OUT_HTML, mod.OUT_JSON = copy_html, copy_json
 
         rc, base, text, verdict = run_check(mod, data)
-        ok('AC-UGRB0', rc == 0 and len(base) == 16 and all(base.values()),
+        ok('AC-UGRB0', rc == 0 and len(base) == 17 and all(base.values()),
            'baseline rc=%d criteria=%d green=%d %s'
            % (rc, len(base), sum(1 for v in base.values() if v), verdict))
 
@@ -733,7 +733,7 @@ def main():
             shutil.rmtree(stale_world, ignore_errors=True)
         half_expect = [{'root': 'src/sandbox/.venv', 'listed': 1,
                         'exists': 1, 'stale': 0, 'unlisted': 1, 'inside': 1,
-                        'beside': 0,
+                        'beside': 0, 'listed_py': 1, 'disk_py': 2,
                         'inside_paths': ['src/sandbox/.venv/pkg/core/unlisted.py']}]
         ok('AC-UGRB35',
            half_hits == []
@@ -752,6 +752,7 @@ def main():
         ok('AC-UGRB36',
            stale_cov == [{'root': 'src/sandbox/.venv', 'listed': 2, 'exists': 1,
                           'stale': 1, 'unlisted': 0, 'inside': 0, 'beside': 0,
+                          'listed_py': 1, 'disk_py': 1,
                           'inside_paths': []}],
            'stale RECORD: coverage=%s (a listed path that is gone is counted, '
            'not silently believed)' % (stale_cov,))
@@ -847,6 +848,75 @@ def main():
            % (res39a.get('AC-UGR18'), res39a.get('AC-UGR17'),
               res39b.get('AC-UGR18'), res39b.get('AC-UGR17'), rc39a, rc39b))
 
+        # ---- B40/B41/B42: a RECORD that lists NO .py at all (R3247). Measured
+        # in qa/probe-R3247.log: a RECORD listing only pkg/core/data.json still
+        # read pkg/top.py as ours and its gate entered the site set, while the
+        # file inside the listed directory was refused - the directory rule
+        # needs one listed file to fire. B40 grades that the page now prints
+        # listed_py/disk_py, a per-root WARNING and the page-level count; B41
+        # drops the warning, then edits disk_py; B42 breaks the sum. AC-UGR18
+        # stays green in every tamper, so the two criteria do not shadow one
+        # another.
+        zero_world = world_tree({
+            'src/sandbox/.venv/pkg/core/data.json': '{}\n',
+            'src/sandbox/.venv/pkg/core/inner.py':
+                'from lobby.sec_gate import SecGate\nG = SecGate([], [])\n',
+            'src/sandbox/.venv/pkg/top.py':
+                'from lobby.sec_gate import SecGate\nG = SecGate([], [])\n',
+            'src/sandbox/.venv/demo-1.0.dist-info/RECORD':
+                'pkg/core/data.json,,\n',
+        })
+        try:
+            mod.ROOT = zero_world
+            mod._tracked_sources = lambda: None
+            zero_hits, _zs = mod.direct_call_sites()
+            _zr, _zf, zero_owned, _zd, zero_cov = mod._walk_all()
+            mod.OUT_HTML = os.path.join(zero_world, 'out.html')
+            mod.OUT_JSON = os.path.join(zero_world, 'out.json')
+            mod.write_outputs(mod.collect())
+            zero_data = mod.collect()
+            rc40, res40, _t40, _v40 = run_check(mod, zero_data)
+            page40 = read(mod.OUT_HTML)
+            warn40 = (' - WARNING: this RECORD lists no .py, so every .py under '
+                      'this root is read as ours')
+            write(mod.OUT_HTML, page40.replace(warn40, ''))
+            rc41a, res41a, _t41a, _v41a = run_check(mod, zero_data)
+            write(mod.OUT_HTML, page40.replace(
+                'listed_py=<b>0</b> disk_py=<b>2</b>',
+                'listed_py=<b>0</b> disk_py=<b>1</b>'))
+            rc41b, res41b, _t41b, _v41b = run_check(mod, zero_data)
+            write(mod.OUT_HTML, page40)
+            broken42 = copy.deepcopy(zero_data)
+            broken42['marker_coverage'][0]['listed_py'] = 1
+            rc42, res42, _t42, _v42 = run_check(mod, broken42)
+        finally:
+            mod._tracked_sources = real_tracked
+            mod.ROOT = real_root
+            mod.OUT_HTML, mod.OUT_JSON = real_html, real_json
+            shutil.rmtree(zero_world, ignore_errors=True)
+        ok('AC-UGRB40',
+           zero_hits == ['src/sandbox/.venv/pkg/top.py:2']
+           and zero_cov[0]['listed_py'] == 0
+           and zero_cov[0]['disk_py'] == 2
+           and zero_cov[0]['unlisted'] == 2
+           and res40.get('AC-UGR19') is True
+           and res40.get('AC-UGR18') is True,
+           'zero-.py RECORD: read=%s coverage=%s AC-UGR19=%s AC-UGR18=%s rc=%d'
+           % (zero_hits, zero_cov, res40.get('AC-UGR19'),
+              res40.get('AC-UGR18'), rc40))
+        ok('AC-UGRB41',
+           res41a.get('AC-UGR19') is False and res41a.get('AC-UGR18') is True
+           and res41b.get('AC-UGR19') is False and res41b.get('AC-UGR18') is True,
+           'a dropped warning reddens AC-UGR19=%s (18=%s) and an edited disk_py '
+           'reddens it too=%s (18=%s) rc=%d/%d'
+           % (res41a.get('AC-UGR19'), res41a.get('AC-UGR18'),
+              res41b.get('AC-UGR19'), res41b.get('AC-UGR18'), rc41a, rc41b))
+        ok('AC-UGRB42',
+           res42.get('AC-UGR19') is False and res42.get('AC-UGR18') is True,
+           'a broken listed_py+unlisted==disk_py sum reddens AC-UGR19=%s while '
+           'AC-UGR18 stays %s rc=%d'
+           % (res42.get('AC-UGR19'), res42.get('AC-UGR18'), rc42))
+
         # ---- B17: the live tree must read the same site set as before the
         # reader changed (pure addition): three files, four constructions.
         live_hits, live_skipped = mod.direct_call_sites()
@@ -865,7 +935,7 @@ def main():
     after = real_snapshot()
     rc_real, res_real, _, verdict_real = run_check(mod, mod.collect())
     ok('AC-UGRB10',
-       before == after and rc_real == 0 and len(res_real) == 16 and all(res_real.values()),
+       before == after and rc_real == 0 and len(res_real) == 17 and all(res_real.values()),
        'real pair unchanged=%s real rc=%d green=%d' %
        (before == after, rc_real, sum(1 for v in res_real.values() if v)))
 
@@ -881,7 +951,7 @@ def main():
             declared = int(tail.strip())
         except ValueError:
             declared = None
-    ok('AC-UGRB11', bool(row) and declared == 41,
+    ok('AC-UGRB11', bool(row) and declared == 44,
        'registry_rows=%d declared=%s' % (len(row), declared))
 
     law_verdict = "PASS" if not FAILS else "FAIL"

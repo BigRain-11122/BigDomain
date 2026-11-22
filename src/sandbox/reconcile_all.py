@@ -7797,9 +7797,11 @@ SUITES = [
     # git cannot answer, and an unprinted owned path reddens AC-UGR15 rather than
     # AC-UGR13 - forty-one (R3244 added B32/B33/B34, R3245 added B35/B36, R3246
     # added B37/B38/B39: an unlisted file is refused inside a package directory
-    # and still read beside one).
+    # and still read beside one; R3247 adds B40/B41/B42: a RECORD that lists no
+    # .py at all is counted and warned rather than silently reading its whole
+    # .py tree as ours - forty-four).
     ("os-ugc-gate-report",
-     os.path.join("..", "os", "test_ugc_gate_report.py"), 41),
+     os.path.join("..", "os", "test_ugc_gate_report.py"), 44),
     # R2875. docs/status-export.json's latest_artifact follows the NEWEST preview
     # pair by mtime, so a fixture that re-renders a tracked pair moves the world
     # another suite measures - measured in the real tree at R2875 as

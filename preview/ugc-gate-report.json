@@ -115,6 +115,10 @@
       "text": "the unlisted side is split by WHERE the file sits and both halves are graded (R3246): AC-UGR17 prints how many files a believed RECORD forgot, and a truncated RECORD and a file of OURS in the same root read identically there - measured in qa/probe-R3246.log, where a package whose RECORD listed one of two files in a directory left the forgotten sibling READ as ours and a gate inside it entered the site set (hits=[.../pkg/core/unlisted.py:2]). Every marker-decided root must now print inside=<n> beside=<m>, the two must sum to the printed unlisted count, and every file REFUSED by the directory rule must be NAMED on the face; no such path may also appear among the files printed as ours. The rule is: an unlisted file whose directory holds a file the RECORD DID list is refused (that directory is a package directory), while an unlisted file beside any package is still READ as ours (measured: our own gate beside the package stays readable). --check refuses when a count, the sum, a name or a leak disagrees with a fresh reading. This closes one direction only: a root whose RECORD lists no .py at all still reads its whole tree as ours (the stricter red was refused because it would redden every freshly unpacked root), and the cost is printed - one of ours placed INSIDE a package directory is refused too, as a named inside path"
     },
     {
+      "id": "AC-UGR19",
+      "text": "how far a believed RECORD reaches over .py files is a graded count (R3247): AC-UGR18 splits the unlisted side by where it sits, but the directory rule needs at least one listed file to fire, so a root whose RECORD lists NO .py at all leaves its whole .py tree reachable - measured in qa/probe-R3247.log, where a RECORD listing only pkg/core/data.json still read pkg/top.py as ours and a gate inside it entered the site set (listed_py=0, disk_py=2, inside=1, beside=1). Every marker-decided root must now print listed_py=<n> disk_py=<m>, the two must satisfy listed_py + unlisted == disk_py, a root with listed_py == 0 and disk_py > 0 must carry a NAMED warning on its own line, and the face must print how many roots are in that state or say in words that none is. --check refuses when any count, the sum, the warning or the page-level count disagrees with a fresh reading. This does not close the hole - the unreachable root still reads its whole .py tree as ours - it makes that root visible with a count; the stricter red was refused because it would redden every freshly unpacked root"
+    },
+    {
       "id": "AC-SGV1",
       "text": "PRE-REGISTERED REPAIR (not applied: src/ bytes are frozen under the live battery leg): SecGate.__init__ must refuse empty wordlists exactly as MsgSecStub does, so the constitutional no-content-safety-no-door rule holds on the direct construction path too"
     },
@@ -268,8 +272,8 @@
     }
   ],
   "sizes": {
-    "html": 22688,
-    "json": 16020
+    "html": 23870,
+    "json": 17162
   },
   "unparsed": [],
   "vendor_decisions": {

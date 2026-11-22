@@ -3,17 +3,17 @@
     "board_pages_skipped": [
       "preview/ceo-blockers.html (8454B)"
     ],
-    "current": "2026-11-22 R3246 PRODUCT+ENGINEERING: an unlisted file is now split by WHERE it sits - a file the RECORD forgot inside a package directory is REFUSED and named, while a file beside any package is still read as ours, so a truncated RECORD can no longer turn someone else's code into ours without a named cost; AC-UGR18 grades the two counts, their sum against unlisted, every inside name and a leak check (criteria 15 -> 16, registry 38 -> 41).",
+    "current": "2026-11-22 R3247 PRODUCT+ENGINEERING: how far a believed RECORD reaches over .py files is now a count on the face - tools/ugc_gate_report.py's marker branch accumulates listed_py and disk_py while it already walks and reads every .py (measured: 453 files counted in 0.0101s, so the counting rides the walk instead of a second pass). Each marker root prints listed_py=<n> disk_py=<m>, a root with listed_py == 0 and disk_py > 0 carries its own named WARNING on that line, and the page prints how many roots are in that state or says in words that none is. New criterion AC-UGR19 grades the two counts, listed_py + unlisted == disk_py, the warning and the page-level count against a fresh reading; criteria 16 -> 17, registry 41 -> 44.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
-    "last_artifact": "preview/ugc-gate-report.html (22688B) + preview/ugc-gate-report.json (16020B) [2026-11-22 mtime]",
-    "latest_artifact": "preview/ugc-gate-report.html (22688B) + preview/ugc-gate-report.json (16020B) [2026-11-22 mtime]",
+    "last_artifact": "preview/ugc-gate-report.html (23870B) + preview/ugc-gate-report.json (17162B) [2026-11-22 mtime]",
+    "latest_artifact": "preview/ugc-gate-report.html (23870B) + preview/ugc-gate-report.json (17162B) [2026-11-22 mtime]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ugc-gate-report.html",
     "latest_artifact_note": "",
     "latest_evidence": "qa/suite-ugc-gate-R3246.log (5047B, 2026-11-22)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3246] next window (<=48h): (0) MAIN — **「RECORD 一个 `.py` 都没列的包」和「全新未打包的根」在页上仍分不开**：本轮的目录规则要依赖「至少有一个已列文件」才生效，极端态是某包 RECORD 只列了数据文件、一个 `.py` 也没列 ⇒ 该包整棵树被读成我们的。做法＝先只读量三问：①活树里有多少 vendor 根是「有 RECORD 且列出 0 个 `.py`，而盘上 `.py` > 0」（预期 0，本轮普查读数里 `ygo-poc/data/toolchain` 无标记、`.venv` 全覆盖）；②私有世界里造「RECORD 只列 `pkg/core/data.json`」的包，量「该根列出 `.py` 为 0 而盘上有 `.py`」这条升级为**页上警示行（非红）**能否让这种包看得见，同时仍不把 `.venv` 这类真第三方根变红；③代价（每根多一次 `.py` 计数，估 <0.02s）。收口三选一＝①接受并把 `listed_py=0 while disk_py>0` 作为一个具名计数印在根行（零风险）②该情形给整根加一层「未列出 `.py` 一律拒」的标记式规则（更严，代价=该根里我们自己的文件也被拒）③升级为红（会让全新未打包的 root 每次变红，须先想清代价）。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
-    "next_milestone_due": "2026-11-24T10:18:14+08:00",
-    "updated_at": "2026-11-22T10:18:14+08:00",
+    "next_milestone": "[R3247] next window (<=48h): (0) MAIN — **活树上 `AC-UGR16..19` 永远走具名缺席支**：git 一能回答，marker 证据就不被询问，所以四个「RECORD 到底覆盖到哪里」的判据全部只在私有世界里被证明，真页上永远印「no vendor root decided by marker in this reading」。问：值不值得让 marker 证据在活树上也跑一次？R3245 已实测 29 根全覆盖普查 0.448s（几乎全花在 .venv 的 995 次 exists），收益=真页第一次有 `listed/exists/stale/unlisted/inside/beside/listed_py/disk_py` 的全覆盖读数而不是缺席句，代价=每次 `collect`/`--check` 多 ~0.45s。做法＝先只读量三问：①把 marker 普查挂进活树读一次，量真实增量耗时（预期 0.4-0.5s，因为 .venv 995 次 exists）；②这份读数写进 json 后 `--check` 必须**读回**而不是重算（否则自证）；③私有世界里把 marker 强制关闭，量「git 回答了但读数仍在」是否会与 `AC-UGR15` 的 `rule=evidence` 冲突。收口三选一＝①接受现状（缺席句是诚实，零成本）②只在 `--write` 时问 marker、把读数落进 json 让 `--check` 读回（不重算，不自证）③每次 collect 都问（最诚实，最贵）。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
+    "next_milestone_due": "2026-11-24T10:32:11+08:00",
+    "updated_at": "2026-11-22T10:32:11+08:00",
     "heartbeat": {
       "tick": 3246,
       "state_tick": 3246,
@@ -37,8 +37,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-22 R3246 PRODUCT+ENGINEERING: an unlisted file is now split by WHERE it sits - a file the RECORD forgot inside a package directory is REFUSED and named, while a file beside any package is still read as ours, so a truncated RECORD can no longer turn someone else's code into ours without a named cost; AC-UGR18 grades the two counts, their sum against unlisted, every inside name and a leak check (criteria 15 -> 16, registry 38 -> 41).",
-  "claims": {"claimed": 328, "captured": 93, "contradicted": 10, "uncaptured": 225, "historic": 7, "rows": 10, "present": true, "census_ts": "2026-11-22T10:18:14+08:00"},
+  "current": "2026-11-22 R3247 PRODUCT+ENGINEERING: how far a believed RECORD reaches over .py files is now a count on the face - tools/ugc_gate_report.py's marker branch accumulates listed_py and disk_py while it already walks and reads every .py (measured: 453 files counted in 0.0101s, so the counting rides the walk instead of a second pass). Each marker root prints listed_py=<n> disk_py=<m>, a root with listed_py == 0 and disk_py > 0 carries its own named WARNING on that line, and the page prints how many roots are in that state or says in words that none is. New criterion AC-UGR19 grades the two counts, listed_py + unlisted == disk_py, the warning and the page-level count against a fresh reading; criteria 16 -> 17, registry 41 -> 44.",
+  "claims": {"claimed": 330, "captured": 93, "contradicted": 10, "uncaptured": 227, "historic": 7, "rows": 10, "present": true, "census_ts": "2026-11-22T10:32:11+08:00"},
   "chain": {"present": true, "rows": 10, "broken": 0, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -67,11 +67,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-22 R3246 PRODUCT+ENGINEERING: an unlisted file is now split by WHERE it sits - a file the RECORD forgot inside a package directory is REFUSED and named, while a file beside any package is still read as ours, so a truncated RECORD can no longer turn someone else's code into ours without a named cost; AC-UGR18 grades the two counts, their sum against unlisted, every inside name and a leak check (criteria 15 -> 16, registry 38 -> 41).",
-  "export_ts": "2026-11-22T10:18:14+08:00",
-  "latest_artifact": "preview/ugc-gate-report.html (22688B) + preview/ugc-gate-report.json (16020B) [2026-11-22 mtime]",
+  "do": "2026-11-22 R3247 PRODUCT+ENGINEERING: how far a believed RECORD reaches over .py files is now a count on the face - tools/ugc_gate_report.py's marker branch accumulates listed_py and disk_py while it already walks and reads every .py (measured: 453 files counted in 0.0101s, so the counting rides the walk instead of a second pass). Each marker root prints listed_py=<n> disk_py=<m>, a root with listed_py == 0 and disk_py > 0 carries its own named WARNING on that line, and the page prints how many roots are in that state or says in words that none is. New criterion AC-UGR19 grades the two counts, listed_py + unlisted == disk_py, the warning and the page-level count against a fresh reading; criteria 16 -> 17, registry 41 -> 44.",
+  "export_ts": "2026-11-22T10:32:11+08:00",
+  "latest_artifact": "preview/ugc-gate-report.html (23870B) + preview/ugc-gate-report.json (17162B) [2026-11-22 mtime]",
   "latest_evidence": "qa/suite-ugc-gate-R3246.log (5047B, 2026-11-22)",
-  "next_milestone": "[R3246] next window (<=48h): (0) MAIN — **「RECORD 一个 `.py` 都没列的包」和「全新未打包的根」在页上仍分不开**：本轮的目录规则要依赖「至少有一个已列文件」才生效，极端态是某包 RECORD 只列了数据文件、一个 `.py` 也没列 ⇒ 该包整棵树被读成我们的。做法＝先只读量三问：①活树里有多少 vendor 根是「有 RECORD 且列出 0 个 `.py`，而盘上 `.py` > 0」（预期 0，本轮普查读数里 `ygo-poc/data/toolchain` 无标记、`.venv` 全覆盖）；②私有世界里造「RECORD 只列 `pkg/core/data.json`」的包，量「该根列出 `.py` 为 0 而盘上有 `.py`」这条升级为**页上警示行（非红）**能否让这种包看得见，同时仍不把 `.venv` 这类真第三方根变红；③代价（每根多一次 `.py` 计数，估 <0.02s）。收口三选一＝①接受并把 `listed_py=0 while disk_py>0` 作为一个具名计数印在根行（零风险）②该情形给整根加一层「未列出 `.py` 一律拒」的标记式规则（更严，代价=该根里我们自己的文件也被拒）③升级为红（会让全新未打包的 root 每次变红，须先想清代价）。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
+  "next_milestone": "[R3247] next window (<=48h): (0) MAIN — **活树上 `AC-UGR16..19` 永远走具名缺席支**：git 一能回答，marker 证据就不被询问，所以四个「RECORD 到底覆盖到哪里」的判据全部只在私有世界里被证明，真页上永远印「no vendor root decided by marker in this reading」。问：值不值得让 marker 证据在活树上也跑一次？R3245 已实测 29 根全覆盖普查 0.448s（几乎全花在 .venv 的 995 次 exists），收益=真页第一次有 `listed/exists/stale/unlisted/inside/beside/listed_py/disk_py` 的全覆盖读数而不是缺席句，代价=每次 `collect`/`--check` 多 ~0.45s。做法＝先只读量三问：①把 marker 普查挂进活树读一次，量真实增量耗时（预期 0.4-0.5s，因为 .venv 995 次 exists）；②这份读数写进 json 后 `--check` 必须**读回**而不是重算（否则自证）；③私有世界里把 marker 强制关闭，量「git 回答了但读数仍在」是否会与 `AC-UGR15` 的 `rule=evidence` 冲突。收口三选一＝①接受现状（缺席句是诚实，零成本）②只在 `--write` 时问 marker、把读数落进 json 让 `--check` 读回（不重算，不自证）③每次 collect 都问（最诚实，最贵）。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
   "outs": [
     "preview/ugc-gate-report.html (22688B) + preview/ugc-gate-report.json (16020B) [2026-11-22 mtime]",
     "probe-R3243.log (2178B) + suite-ugc-gate-R3243.log (3094B)",
@@ -164,8 +164,8 @@
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 77670,
-  "next_milestone_due": "2026-11-24T10:18:14+08:00",
+  "state_bytes": 83391,
+  "next_milestone_due": "2026-11-24T10:32:11+08:00",
   "heartbeat": {
     "tick": 3246,
     "state_tick": 3246,
