@@ -87,6 +87,10 @@
       "text": "re-rendering is an explicit act: --write re-renders before checking, and a bare run with no flags still renders, so no caller loses its previous behaviour"
     },
     {
+      "id": "AC-UGR12",
+      "text": "the site reader's own spelling laws are re-proved INSIDE --check on a fixed in-memory sample that never comes from disk (R3239): the sample must answer exactly six pinned coordinates - bare, attribute, attribute-assignment alias, import-as alias, literal-getattr alias and a construction sharing a def line - and zero hits for a prose-only source and for a non-literal getattr alias, so a reader degraded to name-only reddens this face instead of only the suite"
+    },
+    {
       "id": "AC-SGV1",
       "text": "PRE-REGISTERED REPAIR (not applied: src/ bytes are frozen under the live battery leg): SecGate.__init__ must refuse empty wordlists exactly as MsgSecStub does, so the constitutional no-content-safety-no-door rule holds on the direct construction path too"
     },
@@ -213,8 +217,8 @@
     }
   ],
   "sizes": {
-    "html": 11033,
-    "json": 7396
+    "html": 12109,
+    "json": 7911
   },
   "unparsed": [],
   "wordlist": {

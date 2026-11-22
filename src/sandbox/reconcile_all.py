@@ -7779,8 +7779,11 @@ SUITES = [
     # R3238: AC-UGRB18 buys the literal-getattr alias as a door and AC-UGRB19
     # keeps the boundary (a non-literal or defaulted getattr stays uncounted,
     # so the file set never accuses a file on an undecidable form) - twenty.
+    # R3239: AC-UGRB20 degrades the reader to bare names and requires the new
+    # AC-UGR12 to redden while AC-UGR8 stays green, proving the criterion the
+    # face gained catches what the file-set criterion cannot - twenty-one.
     ("os-ugc-gate-report",
-     os.path.join("..", "os", "test_ugc_gate_report.py"), 20),
+     os.path.join("..", "os", "test_ugc_gate_report.py"), 21),
     # R2875. docs/status-export.json's latest_artifact follows the NEWEST preview
     # pair by mtime, so a fixture that re-renders a tracked pair moves the world
     # another suite measures - measured in the real tree at R2875 as

@@ -1,0 +1,22 @@
+PASS AC-UGRB0 baseline rc=0 criteria=10 green=10 VERDICT PASS checks=10/10 failed=(none)
+PASS AC-UGRB1 AC-UGR1 red under duplicated trace id, rc=2
+PASS AC-UGRB2 AC-UGR2 red when the hole stops reading NOT BLOCKED, rc=2
+PASS AC-UGRB3 AC-UGR3 red on decision/recompute mismatch, rc=2
+PASS AC-UGRB4 AC-UGR4 red when the provider contract is blanked, rc=2
+PASS AC-UGRB5 AC-UGR5 red when the quoted source line is stripped (line=154), rc=2
+PASS AC-UGRB6 tool ascii=True and the same law rejects a poisoned twin=True
+PASS AC-UGRB7 AC-UGR7 red when the parity line stops being carried, rc=2
+PASS AC-UGRB8 AC-UGR8 red on a status outside LIVE/LATENT, rc=2
+PASS AC-UGRB9 AC-UGR9 red when the landed size disagrees with disk, rc=2
+PASS AC-UGRB12 AC-UGR8 stays green when only line numbers move (rc=0)
+PASS AC-UGRB13 AC-UGR8 red when a constructing file is not named on the face, rc=2
+PASS AC-UGRB14 a name in prose is not a construction: hits=[]
+PASS AC-UGRB15 a construction sharing a def line is counted: hits=['src/sandbox/beta.py:1']
+PASS AC-UGRB16 one-level module aliases are followed: hits=['src/sandbox/delta.py:3', 'src/sandbox/gamma.py:2']
+PASS AC-UGRB18 a literal getattr alias is counted: hits=['src/sandbox/epsilon.py:3']
+PASS AC-UGRB19 a getattr with a non-literal or defaulted class name is not counted: hits=[]
+PASS AC-UGRB20 degraded reader: AC-UGR12=False (must be FAIL) AC-UGR8=True (stays PASS) rc=2
+PASS AC-UGRB17 live reader: files=3 sites=4 unparsed=0
+PASS AC-UGRB10 real pair unchanged=True real rc=0 green=10
+PASS AC-UGRB11 registry_rows=1 declared=21
+SUITE PASS 21/21

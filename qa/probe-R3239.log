@@ -1,0 +1,32 @@
+R3239 probe: who judges the door reader? read-only, landed pair copied into a private temp dir, zero socket, zero live write.
+
+BEFORE (shipped reader, nine graded criteria)
+Q1 LIVE forms: hits=4 unparsed=0
+   attr src/sandbox/frontdoor.py:647
+   attr src/sandbox/journey_demo.py:90
+   name src/sandbox/lobby/msgsec_stub.py:40
+   name src/sandbox/lobby/msgsec_stub.py:123
+Q2 BASELINE shipped reader: rc=0 criteria=9 failed=(none)
+   VERDICT PASS checks=9/9 failed=(none)
+Q3 ARM A attr-blind reader: sites=2 files=1
+   AC-UGR8=True rc=0 failed=(none)
+   VERDICT PASS checks=9/9 failed=(none)
+Q4 ARM B alias-blind reader: sites=4 AC-UGR8=True rc=0
+Q5 SAMPLE: absent (this build has no in-memory sample source)
+Q6 CRITERIA count=14 has-AC-UGR12=False
+
+AFTER (same probe, reader graded by AC-UGR12)
+Q1 LIVE forms: hits=4 unparsed=0
+   attr src/sandbox/frontdoor.py:647
+   attr src/sandbox/journey_demo.py:90
+   name src/sandbox/lobby/msgsec_stub.py:40
+   name src/sandbox/lobby/msgsec_stub.py:123
+Q2 BASELINE shipped reader: rc=0 criteria=10 failed=(none)
+   VERDICT PASS checks=10/10 failed=(none)
+Q3 ARM A attr-blind reader: sites=2 files=1
+   AC-UGR8=True rc=2 failed=AC-UGR12
+   VERDICT CHECK-MISMATCH checks=9/10 failed=AC-UGR12
+Q4 ARM B alias-blind reader: sites=4 AC-UGR8=True rc=2
+Q5 SAMPLE good reader: hits=6 skipped=0 ['src/sandbox/sample_forms.py:5', 'src/sandbox/sample_forms.py:6', 'src/sandbox/sample_forms.py:7', 'src/sandbox/sample_forms.py:8', 'src/sandbox/sample_forms.py:9', 'src/sandbox/sample_forms.py:10']
+Q5 SAMPLE attr-blind reader: hits=5 ['src/sandbox/sample_forms.py:5', 'src/sandbox/sample_forms.py:7', 'src/sandbox/sample_forms.py:8', 'src/sandbox/sample_forms.py:9', 'src/sandbox/sample_forms.py:10']
+Q6 CRITERIA count=15 has-AC-UGR12=True

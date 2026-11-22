@@ -48,9 +48,40 @@ CRITERIA = (
     ("AC-UGR9", "BD-PROP-010: the json states the byte size of both artifacts it belongs to, iterated to a fixed point, and --check refuses when either number disagrees with the bytes on disk"),
     ("AC-UGR10", "a --check run must not author the document it verifies: both artifacts keep their bytes and mtimes across a --check, so a stale document stays visibly stale instead of being silently refreshed into a pass (verified by an mtime control; measured red before R2768 when --check alone re-rendered)"),
     ("AC-UGR11", "re-rendering is an explicit act: --write re-renders before checking, and a bare run with no flags still renders, so no caller loses its previous behaviour"),
+    ("AC-UGR12", "the site reader's own spelling laws are re-proved INSIDE --check on a fixed in-memory sample that never comes from disk (R3239): the sample must answer exactly six pinned coordinates - bare, attribute, attribute-assignment alias, import-as alias, literal-getattr alias and a construction sharing a def line - and zero hits for a prose-only source and for a non-literal getattr alias, so a reader degraded to name-only reddens this face instead of only the suite"),
     ("AC-SGV1", "PRE-REGISTERED REPAIR (not applied: src/ bytes are frozen under the live battery leg): SecGate.__init__ must refuse empty wordlists exactly as MsgSecStub does, so the constitutional no-content-safety-no-door rule holds on the direct construction path too"),
     ("AC-SGV2", "PRE-REGISTERED: after the repair, SecGate([], []) raises GateOfflineError, the four expected-blocked constructions read 4/4 blocked, and every existing direct call site in src/sandbox stays green because each already passes non-empty config lists"),
     ("AC-SGV3", "PRE-REGISTERED: tools/ugc_gate_report.py --check reads VERDICT PASS with AC-UGR2 counting 4 must-refuse constructions and zero measured holes"),
+)
+
+# R3239: the reader's laws are gradable without the disk. This sample is a
+# literal, never read from anywhere, so a reader degraded to name-only cannot
+# hide behind a live tree that happens to carry no alias site today.
+SAMPLE_SOURCES = (
+    ("src/sandbox/sample_prose.py",
+     '"""A name in prose is not a door: SecGate([], [])."""\n'
+     '# historical note: SecGate([], []) used to live here\n'),
+    ("src/sandbox/sample_forms.py",
+     'import sec_gate as sg\n'
+     'from lobby import SecGate as Imported\n'
+     'Ctor = sg.SecGate\n'
+     'Door = getattr(sg, "SecGate")\n'
+     'a = SecGate([], [])\n'
+     'b = sg.SecGate([], [])\n'
+     'c = Ctor([], [])\n'
+     'd = Imported([], [])\n'
+     'e = Door([], [])\n'
+     'def make(w1, w2): return SecGate(w1, w2)\n'
+     'Bad = getattr(sg, name)\n'
+     'f = Bad([], [])\n'),
+)
+SAMPLE_EXPECTED = (
+    "src/sandbox/sample_forms.py:5",
+    "src/sandbox/sample_forms.py:6",
+    "src/sandbox/sample_forms.py:7",
+    "src/sandbox/sample_forms.py:8",
+    "src/sandbox/sample_forms.py:9",
+    "src/sandbox/sample_forms.py:10",
 )
 
 
@@ -152,7 +183,32 @@ def _constructor_aliases(tree):
     return aliases
 
 
-def direct_call_sites():
+def _sandbox_sources():
+    """Every non-test sandbox source as (root-relative path, text).
+
+    Split out of direct_call_sites at R3239 so a criterion can hand the reader
+    a fixed in-memory world: the spelling laws become gradable without the disk
+    and without the live tree (which carries no alias site today, so the live
+    tree cannot witness a broken alias branch).
+    """
+    skip = {"__pycache__", ".venv", "ygo-poc", "node_modules", "data"}
+    out = []
+    for base, dirs, files in os.walk(os.path.join(ROOT, "src", "sandbox")):
+        dirs[:] = [d for d in dirs if d not in skip]
+        for name in sorted(files):
+            if not name.endswith(".py") or name.startswith("test_"):
+                continue
+            path = os.path.join(base, name)
+            rel = os.path.relpath(path, ROOT).replace("\\", "/")
+            try:
+                with open(path, "r", encoding="utf-8", errors="replace") as fh:
+                    out.append((rel, fh.read()))
+            except OSError:
+                continue
+    return out
+
+
+def direct_call_sites(sources=None):
     """Find every non-test construction of SecGate in the sandbox, because the
     emptiness refusal lives in the FACTORY, not in the constructor.
 
@@ -163,37 +219,42 @@ def direct_call_sites():
     module alias of the class (attribute assignment, import-as, or a literal
     getattr - R3238). A file that does not parse is skipped by name rather
     than silently turned into a zero.
+
+    `sources` lets a caller pass (path, text) pairs instead of walking the
+    tree (R3239). The default is the live walk; the criterion AC-UGR12 passes
+    a fixed sample, which is how the reader's own laws got a --check judge.
     """
     hits = []
     skipped = []
-    skip = {"__pycache__", ".venv", "ygo-poc", "node_modules", "data"}
-    for base, dirs, files in os.walk(os.path.join(ROOT, "src", "sandbox")):
-        dirs[:] = [d for d in dirs if d not in skip]
-        for name in files:
-            if not name.endswith(".py") or name.startswith("test_"):
+    for rel, text in (sources if sources is not None else _sandbox_sources()):
+        try:
+            tree = ast.parse(text)
+        except SyntaxError:
+            skipped.append(rel)
+            continue
+        aliases = _constructor_aliases(tree)
+        for node in ast.walk(tree):
+            if not isinstance(node, ast.Call):
                 continue
-            path = os.path.join(base, name)
-            rel = os.path.relpath(path, ROOT).replace("\\", "/")
-            try:
-                with open(path, "r", encoding="utf-8", errors="replace") as fh:
-                    tree = ast.parse(fh.read())
-            except OSError:
-                continue
-            except SyntaxError:
-                skipped.append(rel)
-                continue
-            aliases = _constructor_aliases(tree)
-            for node in ast.walk(tree):
-                if not isinstance(node, ast.Call):
-                    continue
-                func = node.func
-                direct = ((isinstance(func, ast.Attribute) and func.attr == "SecGate")
-                          or (isinstance(func, ast.Name)
-                              and (func.id == "SecGate" or func.id in aliases)))
-                if direct:
-                    hits.append("%s:%d" % (rel, node.lineno))
+            func = node.func
+            direct = ((isinstance(func, ast.Attribute) and func.attr == "SecGate")
+                      or (isinstance(func, ast.Name)
+                          and (func.id == "SecGate" or func.id in aliases)))
+            if direct:
+                hits.append("%s:%d" % (rel, node.lineno))
     hits.sort(key=lambda s: (s.rsplit(":", 1)[0], int(s.rsplit(":", 1)[1])))
     return hits, skipped
+
+
+def reader_probe():
+    """The reader's own spelling laws, measured on the fixed sample.
+
+    This is not the reader grading itself: the expected coordinates are a
+    literal, the sample is a literal, and the code under test is the shipped
+    reader. What it cannot see is a reader that special-cases this exact text
+    (named on the page), the file-walk rules, and a class returned by a factory.
+    """
+    return direct_call_sites(sources=SAMPLE_SOURCES)
 
 
 def failclosed_proof(sec_gate, msgsec_stub):
@@ -325,7 +386,14 @@ def render_html(data):
         "class per branch.<br>"
         "The line numbers above are the coordinates measured when this document was rendered - "
         "orientation for a reader, not a graded fact (R3235). What is graded is the FILE set, so a "
-        "moved line stays quiet while a newly constructing file reddens this face.%s<br><br>"
+        "moved line stays quiet while a newly constructing file reddens this face.<br><br>"
+        "This face grades the WORLD and now also the reader that measures it: --check re-proves the "
+        "reader's spelling laws on a fixed in-memory sample (AC-UGR12, R3239), six pinned coordinates "
+        "for bare, attribute, two alias spellings, a literal getattr and a def-line construction, plus "
+        "a prose source and a non-literal getattr that must stay uncounted. A reader degraded to "
+        "name-only reddens here instead of only in the suite. Outside that criterion stay the file-walk "
+        "rules and a class returned by a factory; and a reader written to special-case this exact "
+        "sample would still pass it.%s<br><br>"
         "Status: <b>%s</b> - every site above passes lists read from config today, so the door is shut "
         "only because the config is not empty, not because the type forbids an empty gate.<br><br>"
         "Repair pre-registered, NOT applied in this window: src/ bytes are frozen under the live battery "
@@ -554,6 +622,22 @@ def check(data):
     results.append(("AC-UGR8", ok8, "status=%s sites=%d files_carried=%d/%d unparsed=%d"
                     % (status, len(sites), len(carried), len(site_files),
                        len(data.get("unparsed") or []))))
+
+    # AC-UGR12: grade the READER, not only the world (R3239). AC-UGR8 asks
+    # whether every measured file is named on the face, so a reader that stops
+    # following a spelling silently shrinks BOTH sides and keeps passing -
+    # measured in qa/probe-R3239.log: an attribute-blind reader answered 2
+    # sites in 1 file against a landed page naming 3 files and AC-UGR8 stayed
+    # green. The sample below is a literal that never comes from disk.
+    probe_hits, probe_skipped = reader_probe()
+    expected = list(SAMPLE_EXPECTED)
+    extra = [h for h in probe_hits if h not in expected]
+    missing = [h for h in expected if h not in probe_hits]
+    ok12 = (probe_hits == expected and probe_skipped == [])
+    results.append(("AC-UGR12", ok12,
+                    "sample_hits=%d expected=%d extra=%d missing=%d unparsed=%d"
+                    % (len(probe_hits), len(expected), len(extra), len(missing),
+                       len(probe_skipped))))
 
     # AC-UGR9: the sizes block is read back FROM THE LANDED DOCUMENT, never from
     # the in-memory dict, so a --no-write run still gates on what is on disk.

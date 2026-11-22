@@ -30,6 +30,7 @@ import importlib.util
 import io
 import json
 import os
+import re
 import shutil
 import tempfile
 
@@ -122,7 +123,7 @@ def main():
         mod.OUT_HTML, mod.OUT_JSON = copy_html, copy_json
 
         rc, base, text, verdict = run_check(mod, data)
-        ok('AC-UGRB0', rc == 0 and len(base) == 9 and all(base.values()),
+        ok('AC-UGRB0', rc == 0 and len(base) == 10 and all(base.values()),
            'baseline rc=%d criteria=%d green=%d %s'
            % (rc, len(base), sum(1 for v in base.values() if v), verdict))
 
@@ -323,6 +324,36 @@ def main():
            'a getattr with a non-literal or defaulted class name is not counted: hits=%s'
            % (dynamic_hits,))
 
+        # ---- B20: the reader now has its own --check judge (R3239). A reader
+        # degraded to bare names only - the exact form measured blind in
+        # qa/probe-R3239.log, where 4 sites collapsed to 2 against a landed page
+        # naming 3 files - must redden AC-UGR12 while AC-UGR8 stays green. One
+        # arm, both halves: the new criterion catches what the old one cannot.
+        attr = re.compile(r'\b[A-Za-z_]\w*\s*\.\s*SecGate\s*\(')
+
+        def attr_blind(sources=None):
+            world = sources if sources is not None else mod._sandbox_sources()
+            texts = dict(world)
+            hits, skipped = orig_hits(sources=world)
+            kept = []
+            for hit in hits:
+                rel, ln = hit.rsplit(':', 1)
+                line = texts[rel].splitlines()[int(ln) - 1]
+                if not attr.search(line):
+                    kept.append(hit)
+            return kept, skipped
+
+        orig_hits = mod.direct_call_sites
+        mod.direct_call_sites = attr_blind
+        try:
+            rc20, res20, _text20, _v20 = run_check(mod, data)
+        finally:
+            mod.direct_call_sites = orig_hits
+        ok('AC-UGRB20',
+           res20.get('AC-UGR12') is False and res20.get('AC-UGR8') is True,
+           'degraded reader: AC-UGR12=%s (must be FAIL) AC-UGR8=%s (stays PASS) rc=%d'
+           % (res20.get('AC-UGR12'), res20.get('AC-UGR8'), rc20))
+
         # ---- B17: the live tree must read the same site set as before the
         # reader changed (pure addition): three files, four constructions.
         live_hits, live_skipped = mod.direct_call_sites()
@@ -341,7 +372,7 @@ def main():
     after = real_snapshot()
     rc_real, res_real, _, verdict_real = run_check(mod, mod.collect())
     ok('AC-UGRB10',
-       before == after and rc_real == 0 and len(res_real) == 9 and all(res_real.values()),
+       before == after and rc_real == 0 and len(res_real) == 10 and all(res_real.values()),
        'real pair unchanged=%s real rc=%d green=%d' %
        (before == after, rc_real, sum(1 for v in res_real.values() if v)))
 
@@ -357,7 +388,7 @@ def main():
             declared = int(tail.strip())
         except ValueError:
             declared = None
-    ok('AC-UGRB11', bool(row) and declared == 20,
+    ok('AC-UGRB11', bool(row) and declared == 21,
        'registry_rows=%d declared=%s' % (len(row), declared))
 
     law_verdict = "PASS" if not FAILS else "FAIL"
