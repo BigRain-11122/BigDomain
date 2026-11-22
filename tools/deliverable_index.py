@@ -50,6 +50,10 @@ END = "<!-- BD-DELIVERABLE-INDEX:END -->"
 TITLE_RE = re.compile(r"<title>(.*?)</title>", re.S)
 LINK_RE = re.compile(r'href="([^"]+)"')
 CLAIMS_DIV_RE = re.compile(r'<div class="note" id="claims-census">(.*?)</div>', re.S)
+# R3300 (AC-COO8): a copy of the export's time of day is what made this page's
+# byte count swing on every --apply.
+CLOCK_COPY_RE = re.compile(r"\d{2}:\d{2}:\d{2}")
+BYTES_COPY_RE = re.compile(r"\d+B\b")
 MARKERS = ["AIGC", "msgSecCheck", "\u6295\u987e", "19.9"]
 COMPLIANCE = [
     "AIGC \u6807\u8bc6",
@@ -335,28 +339,36 @@ def render_newest(new):
                    '\u5bf9\u7167\uff1a%s\uff08\u5982\u5b9e\u5177\u540d\uff0c\u4e0d'
                    '\u7f16\u9020\uff09\u3002</div>' % html.escape(law_why or ""))
     elif view["same"]:
+        # R3300: the note names the two laws and points at the export for the
+        # pair itself. Copying the pair name or its byte counts here would put
+        # a volatile export value into this file's bytes - the same edge that
+        # AC-COO8 refuses on the census note.
         out.append(
             '<div class="note" data-law="same">\u672c\u5e26\u4e0e\u5bfc\u51fa'
-            '\u9762\u540c\u6307\u4e00\u5bf9\u4ef6\uff08<code>%s</code>\uff09\uff1a'
-            '\u672c\u5e26\u6309\u6587\u4ef6 mtime \u6392\u540d\uff0c\u5bfc\u51fa'
-            '\u9762\u6309\u63d0\u4ea4\u5185\u5bb9\u65f6\u949f\u6392\u540d\uff0c'
-            '\u8fd9\u4e00\u5bf9\u8be5\u7528 %s \u949f\u3002</div>'
-            % (html.escape(view["json"]),
-               html.escape(CLOCK_PAD(view["clock"]))))
+            '\u9762\u540c\u6307\u4e00\u5bf9\u4ef6\uff1a\u672c\u5e26\u6309\u6587'
+            '\u4ef6 mtime \u6392\u540d\uff0c\u5bfc\u51fa\u9762\u6309\u63d0\u4ea4'
+            '\u5185\u5bb9\u65f6\u949f\u6392\u540d\uff0c\u8fd9\u4e00\u5bf9\u4e24'
+            '\u6cd5\u90fd\u6307\u5411\u540c\u4e00\u5bf9\u3002\u8be5\u5bf9'
+            '\u540d\u4e0e\u5b57\u8282\u6570\u5199\u5728 '
+            '<code>docs/status-export.json</code> \u91cc\uff0c\u672c\u9875'
+            '\u4e0d\u590d\u5236\uff08\u590d\u5236\u4f1a\u8ba9\u672c\u9875'
+            '\u5b57\u8282\u968f\u5bfc\u51fa\u9762\u91cd\u5199\u800c\u53d8\uff09'
+            '\u3002</div>')
     else:
         out.append(
             '<div class="note" data-law="diff">\u4e24\u6761\u5f8b\u5404\u7ed9'
             '\u4e00\u4e2a\u7b54\u6848\uff1a\u672c\u5e26\u6309\u6587\u4ef6 mtime '
             '\u6392\u540d\uff08\u4e0a\u4e00\u6761\u6570\u5b57\u884c\uff09\uff1b'
             '<code>docs/status-export.json</code> \u6309\u63d0\u4ea4\u5185\u5bb9'
-            '\u65f6\u949f\u6392\u540d\uff0c\u628a <code>%s</code> (%dB) + '
-            '<code>%s</code> (%dB) [%s] \u5217\u4e3a\u6700\u65b0\u4ef6\u3002'
-            '\u540c\u4e00\u65f6\u523b\u4e24\u4e2a\u7b54\u6848\uff0c\u4e24\u9875'
-            '\u5404\u5370\u81ea\u5df1\u7684\u5b9a\u4e49\uff0c\u4e0d\u5408\u5e76'
-            '\u6210\u4e00\u4e2a\u6570\u5b57\u3002</div>'
-            % (html.escape(view["html"]), view["html_bytes"],
-               html.escape(view["json"]), view["json_bytes"],
-               html.escape(CLOCK_PAD(view["clock"]))))
+            '\u65f6\u949f\u6392\u540d\u3002\u5b83\u9009\u7684\u90a3\u4e00\u5bf9'
+            '\u4e0e\u4e24\u4e2a\u5b57\u8282\u6570\u5199\u5728\u90a3\u4efd'
+            '\u6587\u6863\u91cc\uff0c\u672c\u9875\u4e0d\u590d\u5236\uff5e'
+            '\u590d\u5236\u4f1a\u8ba9\u672c\u9875\u5b57\u8282\u968f\u4efb'
+            '\u4f55\u4e00\u5f20\u9762\u91cd\u6e32\u800c\u53d8\uff0c\u6b63'
+            '\u662f\u6536\u53e3\u73af\u7684\u90a3\u6761\u8fb9\uff08AC-COO8 '
+            '\u540c\u6cd5\uff09\u3002\u540c\u4e00\u65f6\u523b\u4e24\u4e2a'
+            '\u7b54\u6848\u4e0d\u5408\u5e76\u6210\u4e00\u4e2a\u6570\u5b57\u3002'
+            '</div>')
     out.append('<div class="note">%s</div>' % html.escape(NEWEST_SNAPSHOT))
     return "\n".join(out)
 
@@ -540,10 +552,18 @@ def claims_band(block):
         return ('<div class="note" id="claims-census">claims census: %s \u00b7 '
                 'the block carries no census_ts; the numbers are the export\'s '
                 'and the moment is not - no moment invented.</div>' % readings)
+    # R3300 (AC-COO8): the exact moment is deliberately NOT copied here. A page
+    # that printed the export's full census_ts changed bytes on every --apply,
+    # and first-yuan-chain embeds this page's byte count, so the two drag each
+    # other round a ring no ordering can close. A day is ten characters wide
+    # whatever the time of day, so the edge stops carrying a clock; the exact
+    # moment keeps one authority - the export document itself.
     return ('<div class="note" id="claims-census">claims census: %s \u00b7 '
-            'census taken at %s (derived from docs/status-export.json at render '
-            'time; a page not re-rendered after an --apply is stale and '
-            'AC-DIX19 refuses it).</div>' % (readings, html.escape(ts)))
+            'census day %s (the day is derived from docs/status-export.json at '
+            'render time; the exact moment lives in that document and is not '
+            'copied here, so re-rendering is not owed to an --apply - AC-COO8 '
+            'refuses a printed moment).</div>'
+            % (readings, html.escape(ts[:10])))
 
 
 def render_body(rows, defects_total, newest, pairs, claims):
@@ -831,10 +851,10 @@ def main(argv):
     if isinstance(live_claims, dict) and isinstance(live_claims.get("census_ts"), str):
         live_ts = live_claims["census_ts"] or None
     if live_ts:
-        printed = ("census taken at %s" % html.escape(live_ts)) in landed_block
+        printed = ("census day %s" % html.escape(live_ts[:10])) in landed_block
         record("AC-DIX19", printed,
-               "export-census_ts=%s printed-in-%s=%s"
-               % (live_ts, "landed" if check else "block", printed))
+               "export-census-day=%s printed-in-%s=%s"
+               % (live_ts[:10], "landed" if check else "block", printed))
     else:
         named = "no moment invented" in landed_block
         record("AC-DIX19", named,
@@ -849,6 +869,25 @@ def main(argv):
     live_view = claims_view.claims_view(live_claims)
     census = CLAIMS_DIV_RE.search(landed_block)
     div_text = census.group(1) if census else ""
+
+    # AC-COO8 (pinned 2026-11-22 R3300 in src/os/backlog.md BEFORE this code):
+    # the entry page must not carry the export's time of day at all, and must
+    # name the document that does. The day is what keeps AC-DIX19 gradeable
+    # without letting a clock ride into this file's bytes. A page with no
+    # claims block still has to keep the no-clock promise.
+    no_clock = CLOCK_COPY_RE.search(div_text) is None
+    source_named = "docs/status-export.json" in div_text
+    if live_ts:
+        day_named = ("census day %s" % html.escape(live_ts[:10])) in div_text
+        record("AC-COO8", no_clock and source_named and day_named,
+               "clock-copy=%s source-named=%s day=%s"
+               % (not no_clock, source_named, day_named))
+    else:
+        fell_back = "no moment invented" in div_text
+        record("AC-COO8", no_clock and source_named and fell_back,
+               "clock-copy=%s source-named=%s named-absence=%s"
+               % (not no_clock, source_named, fell_back))
+
     want_readings = claims_readings(live_view)
     if want_readings is not None:
         printed_readings = want_readings in div_text
@@ -1027,16 +1066,17 @@ def main(argv):
         arms["no-pair-invented"] = "preview/" not in law_body
     elif law_view["same"]:
         arms["mark-same"] = marks == ["same"]
-        arms["one-pair-only"] = law_body.count("preview/") == 1
-        arms["clock-quoted"] = law_view["clock"] in law_body
+        arms["one-pair-only"] = law_body.count("preview/") == 0
+        arms["two-laws-named"] = ("mtime" in law_body
+                                  and "\u63d0\u4ea4\u5185\u5bb9" in law_body)
     else:
         arms["mark-diff"] = marks == ["diff"]
-        arms["export-html-named"] = html.escape(law_view["html"]) in law_body
-        arms["export-bytes"] = (
-            "(%dB) + <code>%s</code> (%dB)"
-            % (law_view["html_bytes"], html.escape(law_view["json"]),
-               law_view["json_bytes"])) in law_body
-        arms["clock-quoted"] = ("[%s]" % html.escape(law_view["clock"])) in law_body
+        # R3300: mark-diff used to require the export's pair name and both byte
+        # counts verbatim. Those are volatile, and copying them made this page's
+        # own length swing with every face re-render - the ring's remaining edge.
+        arms["no-copy"] = (BYTES_COPY_RE.search(law_body) is None
+                           and "preview/" not in law_body)
+        arms["source-named"] = "docs/status-export.json" in law_body
         arms["own-law-stated"] = ("mtime" in law_body
                                   and "\u63d0\u4ea4\u5185\u5bb9" in law_body)
     record("AC-DIX22", all(arms.values()),

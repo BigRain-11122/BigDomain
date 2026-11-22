@@ -1,0 +1,11 @@
+Q1 census_ts consumer sites (producers only, grep):
+  tools/deliverable_index.py             refs=5
+  src/os/export_round.py                 refs=0
+  src/os/test_deliverable_index.py       refs=2
+Q2 note A bytes=367  note B bytes=367  A==B True
+   note carries a time-of-day: False
+   note names the source document: True
+Q3 same-day shift leaves the note identical: True
+   next-day shift changes the note: True
+   next-day note still carries no clock: True
+   day tokens: 2026-11-22 / 2026-11-23

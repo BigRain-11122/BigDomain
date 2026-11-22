@@ -382,10 +382,10 @@ def main():
         # page left behind by an --apply reddens rather than keeping a quiet stamp ----
         point_to(mod, world)
         block5 = block_of(read(os.path.join(pv, "index.html")))
-        printed_now = ("census taken at %s" % CENSUS_TS) in block5
+        printed_now = ("census day %s" % CENSUS_TS[:10]) in block5
         rc_5, out_5 = call(mod, ["--check"])
         rows_5 = rows_of(out_5)
-        moved = "2026-11-22T09:30:00+08:00"
+        moved = "2026-11-23T09:30:00+08:00"
         write(os.path.join(world, "docs", "status-export.json"),
               json.dumps({"export_ts": moved,
                           "claims": {"claimed": 3, "captured": 2, "contradicted": 0,
