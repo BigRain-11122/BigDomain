@@ -1,0 +1,6 @@
+arm a stream-present            = True
+arm b terminal-newline-passes   = True (item 313 ends with LF)
+arm c reordered-window-reddens  = False (expect False)
+arm d content-drift-reddens     = False (expect False)
+arm e dropped-line-reddens      = False (expect False)
+arm e2 empty-window-refused     = False (expect False)

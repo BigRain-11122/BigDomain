@@ -3,23 +3,23 @@
     "board_pages_skipped": [
       "preview/face-sweep.html (8878B)"
     ],
-    "current": "2026-11-23 R3307 GROUP SCAN (content-addressed, read before any work): the ledger carried 0 @BigDomain lines so no dispatch was owed; decisions.md holds 438 rows against the stored baseline 438 with no new D- or C- token (143 live tokens inside the 147 baseline); the company orders head is unchanged; benchmarks_refreshed 2026-11-18 sits inside the seven-day gate; git status carried only the crawl lane's three modified files with no index.lock; the board head WAS pullable, so this is a work round; BigDomain-OSLoop remains registered, so nothing was registered.",
+    "current": "2026-11-23 R3308 PRODUCT+ENGINEERING: the fold's own after-write proof had been red on one line since R3307, and the disease was the unit of proof, not the fold - a line SET can carry neither an item's terminal newline nor its order. Measured in the fold's two own functions plus a planted canonical world: the shipped shape gate accepts 'a note.\\n' and 'first\\nsecond.' as ONE log item, so the defect was born at the write face, surfaced at the fold, and would have reddened every future fold of that window.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
     "last_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20492B) [2026-11-23 commit] (halves differ: html [2026-11-23 commit] + json [2026-11-22 commit]; later=html)",
     "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20492B) [2026-11-23 commit] (halves differ: html [2026-11-23 commit] + json [2026-11-22 commit]; later=html)",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ugc-gate-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/negctl-R3306.log (1488B, 2026-11-23)",
-    "latest_evidence": "qa/negctl-R3306.log (1488B, 2026-11-23)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/negctl-R3308.log (322B, 2026-11-23)",
+    "latest_evidence": "qa/negctl-R3308.log (322B, 2026-11-23)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3307] next window (<=48h): (0) MAIN — **写者纪律与归档证明两件，都是本轮亲手摸到的缝，别再只记账**：①`E_SFOLD_ARCHIVE_COPY` 的红已定位到「单条 log 含内嵌换行 → 按行追加拆两行 → 行集比对看不见」，三问只读量：这个内嵌换行是**历史内容**（不该改写）还是**某写者误插**（`state_append` 是否允许写入带换行的 line，它的 shape gate 为何放行）？`append_archive` 是否应对内嵌换行做转义/分行标注，或 `archive_copy_ok` 应比较**拼接后的文本流**而非行集？收口三选一＝①改 `append_archive` 使之可逐字寻回（转义或显式分行标记），并让 `archive_copy_ok` 判同一事实；②改证明为流级比对（写明为何行集不是正确单位）；③判「归档按行是法、含换行条目是不可折叠对象」→ 让谓词在**折叠前**拒绝并具名，而不是写后才红。②同类第二问：**产出这次漂移的写者是谁**——`git log -p src/os/state.json` 找回把 4 空格+LF 写进来的那次提交（或在 `state/qa_replacements.jsonl` 之外找 appender 痕迹），判定是「一次性脚本」还是「某常驻写入器」，并把结论落成一条**写者面判据**（例如 `state_append` 之外无合法写入路径，或 pre-commit 拒非 canonical 载体）；③第三问：`state_io.layout` 与 `logs_toolkit.item_indent_caliber` 的**判据分歧**（前者任意统一缩进健康／后者只认 {2,16}）该由谁让路——先量两门各自被谁消费，再决定统一到哪一侧，禁同轮偷偷改。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：tasks.md P-47 站行（零支付能力）、Docker 缺失、BigDomain-OSLoop LogonType=Interactive、开轮即红的两套件 `src/os/test_closeout.py` 21/29 与 `src/os/test_face_sweep.py` 54/56。",
-    "next_milestone_due": "2026-11-25T01:32:10+08:00",
-    "updated_at": "2026-11-23T01:32:10+08:00",
+    "next_milestone": "[R3308] next window (<=48h): (0) MAIN — **两条本轮摸到的缝，都已具名**：①写入面仍放行多行条目（实测 `check_round_main_shape` 对 `'...a note.\\n'` 与 `'...first\\nsecond.'` 均 ok=True），收账门只能轮末抓住——三问只读量：`state_append` 的调用面里有没有合法多行用法？若没有，就在 `_collect` 加 `E_RSA_NEWLINE` 在写字节前拒绝（出生站拦截），并让 `closeout_gate` 的列仍然作为第二道；②流级证明证「连续」不证「唯一」——同一窗口若在归档里出现两处，证明仍绿；三问：归档历史里有没有重复窗口？若要加出现次数，成本是多少（`text.count(joined)` 在 6MB 档上是线性扫描）？③承 R3307：`state_io.layout`（任意统一缩进即健康）与 `logs_toolkit.item_indent_caliber`（只认 {2,16}）的判据分歧未动，先量两门各自被谁消费再定统一方向。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：tasks.md P-47 站行（零支付能力）、Docker 缺失、BigDomain-OSLoop LogonType=Interactive、`test_face_sweep` 54/56（AC-FSWB20/20c）。",
+    "next_milestone_due": "2026-11-25T01:42:16+08:00",
+    "updated_at": "2026-11-23T01:42:16+08:00",
     "heartbeat": {
-      "tick": 3299,
-      "state_tick": 3306,
-      "lag": 7,
-      "verdict": "FLAG",
-      "reason": "heartbeat_row_debt"
+      "tick": 3308,
+      "state_tick": 3308,
+      "lag": 0,
+      "verdict": "PASS",
+      "reason": "fresh"
     },
     "outs_age": {
       "rows": 8,
@@ -37,8 +37,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-23 R3307 GROUP SCAN (content-addressed, read before any work): the ledger carried 0 @BigDomain lines so no dispatch was owed; decisions.md holds 438 rows against the stored baseline 438 with no new D- or C- token (143 live tokens inside the 147 baseline); the company orders head is unchanged; benchmarks_refreshed 2026-11-18 sits inside the seven-day gate; git status carried only the crawl lane's three modified files with no index.lock; the board head WAS pullable, so this is a work round; BigDomain-OSLoop remains registered, so nothing was registered.",
-  "claims": {"claimed": 298, "captured": 94, "contradicted": 10, "uncaptured": 194, "historic": 7, "rows": 24, "present": true, "census_ts": "2026-11-23T01:32:10+08:00"},
+  "current": "2026-11-23 R3308 PRODUCT+ENGINEERING: the fold's own after-write proof had been red on one line since R3307, and the disease was the unit of proof, not the fold - a line SET can carry neither an item's terminal newline nor its order. Measured in the fold's two own functions plus a planted canonical world: the shipped shape gate accepts 'a note.\\n' and 'first\\nsecond.' as ONE log item, so the defect was born at the write face, surfaced at the fold, and would have reddened every future fold of that window.",
+  "claims": {"claimed": 298, "captured": 94, "contradicted": 10, "uncaptured": 194, "historic": 7, "rows": 24, "present": true, "census_ts": "2026-11-23T01:42:16+08:00"},
   "chain": {"present": true, "rows": 24, "broken": 0, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -67,11 +67,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-23 R3307 GROUP SCAN (content-addressed, read before any work): the ledger carried 0 @BigDomain lines so no dispatch was owed; decisions.md holds 438 rows against the stored baseline 438 with no new D- or C- token (143 live tokens inside the 147 baseline); the company orders head is unchanged; benchmarks_refreshed 2026-11-18 sits inside the seven-day gate; git status carried only the crawl lane's three modified files with no index.lock; the board head WAS pullable, so this is a work round; BigDomain-OSLoop remains registered, so nothing was registered.",
-  "export_ts": "2026-11-23T01:32:10+08:00",
+  "do": "2026-11-23 R3308 PRODUCT+ENGINEERING: the fold's own after-write proof had been red on one line since R3307, and the disease was the unit of proof, not the fold - a line SET can carry neither an item's terminal newline nor its order. Measured in the fold's two own functions plus a planted canonical world: the shipped shape gate accepts 'a note.\\n' and 'first\\nsecond.' as ONE log item, so the defect was born at the write face, surfaced at the fold, and would have reddened every future fold of that window.",
+  "export_ts": "2026-11-23T01:42:16+08:00",
   "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20492B) [2026-11-23 commit] (halves differ: html [2026-11-23 commit] + json [2026-11-22 commit]; later=html)",
-  "latest_evidence": "qa/negctl-R3306.log (1488B, 2026-11-23)",
-  "next_milestone": "[R3307] next window (<=48h): (0) MAIN — **写者纪律与归档证明两件，都是本轮亲手摸到的缝，别再只记账**：①`E_SFOLD_ARCHIVE_COPY` 的红已定位到「单条 log 含内嵌换行 → 按行追加拆两行 → 行集比对看不见」，三问只读量：这个内嵌换行是**历史内容**（不该改写）还是**某写者误插**（`state_append` 是否允许写入带换行的 line，它的 shape gate 为何放行）？`append_archive` 是否应对内嵌换行做转义/分行标注，或 `archive_copy_ok` 应比较**拼接后的文本流**而非行集？收口三选一＝①改 `append_archive` 使之可逐字寻回（转义或显式分行标记），并让 `archive_copy_ok` 判同一事实；②改证明为流级比对（写明为何行集不是正确单位）；③判「归档按行是法、含换行条目是不可折叠对象」→ 让谓词在**折叠前**拒绝并具名，而不是写后才红。②同类第二问：**产出这次漂移的写者是谁**——`git log -p src/os/state.json` 找回把 4 空格+LF 写进来的那次提交（或在 `state/qa_replacements.jsonl` 之外找 appender 痕迹），判定是「一次性脚本」还是「某常驻写入器」，并把结论落成一条**写者面判据**（例如 `state_append` 之外无合法写入路径，或 pre-commit 拒非 canonical 载体）；③第三问：`state_io.layout` 与 `logs_toolkit.item_indent_caliber` 的**判据分歧**（前者任意统一缩进健康／后者只认 {2,16}）该由谁让路——先量两门各自被谁消费，再决定统一到哪一侧，禁同轮偷偷改。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：tasks.md P-47 站行（零支付能力）、Docker 缺失、BigDomain-OSLoop LogonType=Interactive、开轮即红的两套件 `src/os/test_closeout.py` 21/29 与 `src/os/test_face_sweep.py` 54/56。",
+  "latest_evidence": "qa/negctl-R3308.log (322B, 2026-11-23)",
+  "next_milestone": "[R3308] next window (<=48h): (0) MAIN — **两条本轮摸到的缝，都已具名**：①写入面仍放行多行条目（实测 `check_round_main_shape` 对 `'...a note.\\n'` 与 `'...first\\nsecond.'` 均 ok=True），收账门只能轮末抓住——三问只读量：`state_append` 的调用面里有没有合法多行用法？若没有，就在 `_collect` 加 `E_RSA_NEWLINE` 在写字节前拒绝（出生站拦截），并让 `closeout_gate` 的列仍然作为第二道；②流级证明证「连续」不证「唯一」——同一窗口若在归档里出现两处，证明仍绿；三问：归档历史里有没有重复窗口？若要加出现次数，成本是多少（`text.count(joined)` 在 6MB 档上是线性扫描）？③承 R3307：`state_io.layout`（任意统一缩进即健康）与 `logs_toolkit.item_indent_caliber`（只认 {2,16}）的判据分歧未动，先量两门各自被谁消费再定统一方向。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：tasks.md P-47 站行（零支付能力）、Docker 缺失、BigDomain-OSLoop LogonType=Interactive、`test_face_sweep` 54/56（AC-FSWB20/20c）。",
   "outs": [
     "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20492B) [2026-11-23 commit] (halves differ: html [2026-11-23 commit] + json [2026-11-22 commit]; later=html)",
     "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-23 mtime] (halves differ: html [2026-11-23 mtime] + json [2026-11-16 commit]; later=html)",
@@ -143,7 +143,7 @@
       "2026-11-04 R2431 verification window on the item the debt gate named first=yes (reconcile-battery-R2431, carried from R2430): zero product code changed, the R2168 mixed-tree rule honoured. Leg 1 read 542/543 suites with the criteria total 4234 exactly as pre-registered and the only red was reconcile-daily-census at cd7 exit=2 DRIFT-FLAG; the census named the file (qa/battery-R2431-stdout.log, class=cmd-raw) because this window launched the battery with a Start-Process redirect pointed INTO the evidence directory. Repaired at the birth site, never by widening the baseline: the two launcher captures moved to the gitignored logs/ face, after which the census read flags=0 DRIFT-CLEAN with the 529-entry baseline untouched. Retry leg on the repaired tree: RUNNER PASS 543/543 suites plus controls 7/7 in 956.2s at criteria 4234, TMP RECLAIM 932/932. Four follow-up sections: matrix FAILED first on the stale doc without rewriting it, was regenerated stamp-aligned to 52317B, and the re-run read VERDICT R2431 PASS failing=none (fingerprint CLEAN 5 domains, profile byte-identical, census DRIFT-CLEAN). Debt: reconcile-battery-R2431 closed and product-face-R2432 opened first=yes through the shipped CLIs. Zero product points claimed."
     ],
     [
-      "3306",
+      "3308",
       "OSLoop 执行 tick",
       "a failed fold state write takes the appended archive block back and removes the backup"
     ]
@@ -157,24 +157,24 @@
   "self_drive": {
     "window": "2026-11-17..2026-11-23",
     "window_days": 7,
-    "log_lines_in_window": 389,
+    "log_lines_in_window": 46,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 64,
+    "substantive_non_idle_mention_lines": 9,
     "proposals_total": 11,
     "proposals_open": 9,
     "queue_main_open": 6,
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 26480,
-  "next_milestone_due": "2026-11-25T01:32:10+08:00",
+  "state_bytes": 32081,
+  "next_milestone_due": "2026-11-25T01:42:16+08:00",
   "heartbeat": {
-    "tick": 3299,
-    "state_tick": 3306,
-    "lag": 7,
-    "verdict": "FLAG",
-    "reason": "heartbeat_row_debt"
+    "tick": 3308,
+    "state_tick": 3308,
+    "lag": 0,
+    "verdict": "PASS",
+    "reason": "fresh"
   },
   "outs_age": {
     "rows": 8,

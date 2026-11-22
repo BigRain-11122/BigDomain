@@ -105,14 +105,32 @@ def ledger_coverage(logs_dir, live_lines):
 
 
 def archive_copy_ok(path, window_lines):
-    """Every moved line appears VERBATIM as a line of the archive."""
+    """The moved window appears VERBATIM and IN ORDER inside the archive.
+
+    R3308 (AC-SFOLD10): this compared a SET of archive lines against the
+    moved lines, and the R3307 fold read it red while nothing was lost.
+    Measured on the 390-item window that fold moved: exactly one item
+    (index 313, 962 chars) ends with a newline. `state_fold.append_archive`
+    writes `header + "\\n" + "\\n".join(window_lines) + "\\n"`, so that
+    item lands as its own line plus a BLANK line, and `load_archive` drops
+    blank lines - the item's terminal newline cannot be carried by any
+    single archive line. A set is also weaker in the other direction: it
+    cannot see order, so a reordered window used to pass.
+
+    The stream asks the fact the writer actually creates: the joined window
+    is one contiguous slice of the archive text. An empty window proves
+    nothing and is refused rather than passed vacuously.
+    """
     try:
         with io.open(path, "rb") as handle:
             text = handle.read().decode("utf-8")
     except (IOError, OSError, UnicodeDecodeError):
         return False
-    present = set(text.split("\n"))
-    return all(line in present for line in window_lines)
+    lines = [line if isinstance(line, str) else str(line)
+             for line in window_lines]
+    if not lines:
+        return False
+    return "\n".join(lines) in text
 
 
 def read_archive_text(path):

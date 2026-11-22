@@ -151,6 +151,13 @@ E_CLG_CARRIER = "E_CLG_CARRIER"
 E_CLG_CARRIER_LAYOUT = "E_CLG_CARRIER_LAYOUT"
 E_CLG_CARRIER_FOLD = "E_CLG_CARRIER_FOLD"
 E_CLG_CARRIER_UNREADABLE = "E_CLG_CARRIER_UNREADABLE"
+# R3308 (AC-CLG14): a log item that is not ONE line. Measured: the shipped
+# append path accepted a 962-char item ending in a newline, and the fold's
+# line-based archive proof could not carry it, so the defect surfaced at the
+# fold instead of at the write. The count is published either way; a
+# non-zero count refuses while the layout is canonical, because a writer
+# that emits multi-line items is broken whatever its name.
+E_CLG_CARRIER_NEWLINE = "E_CLG_CARRIER_NEWLINE"
 # R3219: the replacement ledger's two pathologies (a bad row, a latest row
 # whose new_sha16 no longer matches the file on disk). Named so a reader can
 # act; an absent ledger is rows=0 and never a refusal.
@@ -258,14 +265,24 @@ def check_carrier(root):
     margin = LT.GATE - disk
     fold_needed = disk > LT.GATE
     canonical = bool(prof["layout_ok"] and prof["indent_ok"])
+    # R3308 (AC-CLG14): a log item splits into two lines when it carries a
+    # newline, so the fold's line-based record cannot carry it back. Count
+    # them here, at round close, whichever writer produced them.
+    newline_items = sum(1 for item in (payload.get("log") or [])
+                        if "\n" in (item if isinstance(item, str)
+                                    else str(item)))
     row = ("CARRIER bytes=%d gate=%d margin=%d fold_needed=%s layout_ok=%s "
-           "crlf=%d bare_lf=%d indent_anomaly=%d log_items=%d"
+           "crlf=%d bare_lf=%d indent_anomaly=%d log_items=%d "
+           "newline_items=%d"
            % (disk, LT.GATE, margin,
               "true" if fold_needed else "false",
               "true" if canonical else "false",
-              prof["crlf"], prof["bare_lf"], prof["indent_anomaly"], items))
+              prof["crlf"], prof["bare_lf"], prof["indent_anomaly"], items,
+              newline_items))
     if not canonical:
         return False, "CARRIER FAIL %s %s" % (E_CLG_CARRIER_LAYOUT, row)
+    if newline_items:
+        return False, "CARRIER FAIL %s %s" % (E_CLG_CARRIER_NEWLINE, row)
     if fold_needed and items < 2:
         return False, "CARRIER FAIL %s %s" % (E_CLG_CARRIER_FOLD, row)
     return True, row

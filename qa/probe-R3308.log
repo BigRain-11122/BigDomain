@@ -1,0 +1,11 @@
+fixture: window=360 items, newline_items=1 at [313]
+arm a stream-present            = True
+arm b terminal-newline-passes   = True (item 313 ends with LF)
+arm c reordered-window-reddens  = False (expect False)
+arm d content-drift-reddens     = False (expect False)
+arm e dropped-line-reddens      = False (expect False)
+arm e2 empty-window-refused     = False (expect False)
+AC-CLG14 live carrier: ok=True
+  CARRIER bytes=26480 gate=78500 margin=52020 fold_needed=false layout_ok=true crlf=47 bare_lf=0 indent_anomaly=0 log_items=37 newline_items=0
+AC-CLG14 planted newline item: ok=False refuse_named=True
+  CARRIER FAIL E_CLG_CARRIER_NEWLINE CARRIER bytes=26565 gate=78500 margin=51935 fold_needed=false layout_ok=true crlf=48 bare_lf=0 indent_anomaly=0 log_items=38 newline_items=1
