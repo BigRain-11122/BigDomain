@@ -1,0 +1,11 @@
+Q1 substring : {'frontdoor.py': [647], 'journey_demo.py': [90], 'lobby/msgsec_stub.py': [40, 123]}
+Q1 parse     : {'frontdoor.py': [647], 'journey_demo.py': [90], 'lobby/msgsec_stub.py': [40, 123]}
+Q1 parse_no_alias: {'frontdoor.py': [647], 'journey_demo.py': [90], 'lobby/msgsec_stub.py': [40, 123]}
+Q1 agree=True files_text=3 files_parsed=3 sites_text=4 sites_parsed=4
+Q2 prose     ({'alpha.py': [3, 5]}, {})
+Q2 def_line  ({}, {'beta.py': [1]})
+Q2 alias     ({}, {'delta.py': [3], 'gamma.py': [2]}, {})
+Q2 prose_phantom(text_only)=True def_line_invisible_to_text=True alias_invisible_to_both=True
+Q3 parsed=644 files in 1266.0 ms
+SUMMARY text_and_parse_agree_on_live=True prose=True def_line=True alias=True parse_ms=1266.0
+PROBE DONE

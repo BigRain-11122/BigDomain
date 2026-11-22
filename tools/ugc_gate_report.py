@@ -21,6 +21,7 @@ evidence log. Stdlib only, ASCII source, no network.
 """
 
 import argparse
+import ast
 import html
 import json
 import os
@@ -41,9 +42,9 @@ CRITERIA = (
     ("AC-UGR3", "every rendered decision equals the shipped decision_for(stub, resp) recomputed by the caller, never a typed literal"),
     ("AC-UGR4", "the production blocker and provider name come from the shipped contract(), not from this script"),
     ("AC-UGR5", "the AIGC flag face is quoted from the shipped server source, or reported UNVERIFIED when that source does not carry it"),
-    ("AC-UGR6", "stdlib only, ASCII source, read-only on src/, writes only under preview/ and qa/, exit 0 on pass and 2 on any failed criterion"),
+    ("AC-UGR6", "stdlib only (argparse, ast, html, json, os, subprocess, sys), ASCII source, read-only on src/, writes only under preview/ and qa/, exit 0 on pass and 2 on any failed criterion"),
     ("AC-UGR7", "the shipped parity face msgsec_stub.py --parity reads PARITY-OK and its own line is carried verbatim"),
-    ("AC-UGR8", "the constructor hole is measured at its call sites by scanning non-test sandbox sources, and the report states LATENT or LIVE with every measured FILE named on the face - a new constructing file reddens it, a moved line number (orientation for a reader, named as such on the page) does not"),
+    ("AC-UGR8", "the constructor hole is measured at its call sites by PARSING every non-test sandbox source (a name that appears only in prose is not a construction; a module-scope alias of the class is followed one level), and the report states LATENT or LIVE with every measured FILE named on the face - a new constructing file reddens it, a moved line number (orientation for a reader, named as such on the page) does not"),
     ("AC-UGR9", "BD-PROP-010: the json states the byte size of both artifacts it belongs to, iterated to a fixed point, and --check refuses when either number disagrees with the bytes on disk"),
     ("AC-UGR10", "a --check run must not author the document it verifies: both artifacts keep their bytes and mtimes across a --check, so a stale document stays visibly stale instead of being silently refreshed into a pass (verified by an mtime control; measured red before R2768 when --check alone re-rendered)"),
     ("AC-UGR11", "re-rendering is an explicit act: --write re-renders before checking, and a bare run with no flags still renders, so no caller loses its previous behaviour"),
@@ -114,10 +115,40 @@ def build_cases(cfg, msgsec_stub, sec_gate, gate_page):
     return rows
 
 
+def _constructor_aliases(tree):
+    """Module-scope names that ARE the class, so a call through them is a door.
+
+    Two spellings measured in qa/probe-R3237.log: `Ctor = sg.SecGate` and
+    `from sec_gate import SecGate as Ctor`. One level only - a class handed out
+    by a factory at run time is not visible here and the page says so.
+    """
+    aliases = set()
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Assign) and isinstance(node.value, ast.Attribute) \
+                and node.value.attr == "SecGate":
+            for target in node.targets:
+                if isinstance(target, ast.Name):
+                    aliases.add(target.id)
+        if isinstance(node, ast.ImportFrom):
+            for alias in node.names:
+                if alias.name == "SecGate" and alias.asname:
+                    aliases.add(alias.asname)
+    return aliases
+
+
 def direct_call_sites():
     """Find every non-test construction of SecGate in the sandbox, because the
-    emptiness refusal lives in the FACTORY, not in the constructor."""
+    emptiness refusal lives in the FACTORY, not in the constructor.
+
+    Parsed, not grepped (R3237, measured in qa/probe-R3237.log): a substring
+    scan invented two sites out of a docstring and a comment, and missed a
+    construction written on a `def` line because of its own line heuristic.
+    Three call forms count: SecGate(...), mod.SecGate(...), and a one-level
+    module alias of the class. A file that does not parse is skipped by name
+    rather than silently turned into a zero.
+    """
     hits = []
+    skipped = []
     skip = {"__pycache__", ".venv", "ygo-poc", "node_modules", "data"}
     for base, dirs, files in os.walk(os.path.join(ROOT, "src", "sandbox")):
         dirs[:] = [d for d in dirs if d not in skip]
@@ -125,16 +156,27 @@ def direct_call_sites():
             if not name.endswith(".py") or name.startswith("test_"):
                 continue
             path = os.path.join(base, name)
+            rel = os.path.relpath(path, ROOT).replace("\\", "/")
             try:
                 with open(path, "r", encoding="utf-8", errors="replace") as fh:
-                    lines = fh.read().splitlines()
+                    tree = ast.parse(fh.read())
             except OSError:
                 continue
-            for idx, line in enumerate(lines, 1):
-                if "SecGate(" in line and "class SecGate" not in line and "def " not in line:
-                    rel = os.path.relpath(path, ROOT).replace("\\", "/")
-                    hits.append("%s:%d" % (rel, idx))
-    return hits
+            except SyntaxError:
+                skipped.append(rel)
+                continue
+            aliases = _constructor_aliases(tree)
+            for node in ast.walk(tree):
+                if not isinstance(node, ast.Call):
+                    continue
+                func = node.func
+                direct = ((isinstance(func, ast.Attribute) and func.attr == "SecGate")
+                          or (isinstance(func, ast.Name)
+                              and (func.id == "SecGate" or func.id in aliases)))
+                if direct:
+                    hits.append("%s:%d" % (rel, node.lineno))
+    hits.sort(key=lambda s: (s.rsplit(":", 1)[0], int(s.rsplit(":", 1)[1])))
+    return hits, skipped
 
 
 def failclosed_proof(sec_gate, msgsec_stub):
@@ -197,12 +239,13 @@ def collect():
     gate_cfg = cfg["gate"]
     proof = failclosed_proof(sec_gate, msgsec_stub)
     hole = next((p for p in proof if p["kind"] == "measured-hole"), None)
-    sites = direct_call_sites()
+    sites, skipped = direct_call_sites()
     return {
         "rows": build_cases(cfg, msgsec_stub, sec_gate, gate_page),
         "proof": proof,
         "hole": hole,
         "call_sites": sites,
+        "unparsed": skipped,
         "hole_status": "LIVE" if sites else "LATENT",
         "parity": parity_line(),
         "aigc": aigc_face(),
@@ -240,7 +283,12 @@ def render_html(data):
                 "BLOCKED" if p["blocked"] else "NOT BLOCKED"))
     hole = data.get("hole") or {}
     sites = data.get("call_sites") or []
+    unparsed = data.get("unparsed") or []
     sites_html = "".join("<li><span class='mono'>%s</span></li>" % _esc(s) for s in sites)
+    unparsed_html = ("" if not unparsed else
+                     "<br>Not parsed, so NOT counted either way (named, not hidden): "
+                     "<span class='mono'>%s</span>"
+                     % _esc(", ".join(unparsed)))
     hole_html = (
         "<div class='card hole'><b>MEASURED HOLE - %s (%s)</b><br>"
         "<span class='mono'>SecGate([], [])</span> constructs a gate with no wordlists and does "
@@ -248,15 +296,20 @@ def render_html(data):
         "<span class='mono'>from_config</span> only.<br><br>"
         "Non-test call sites that construct the gate directly and would therefore skip that refusal:"
         "<ul>%s</ul><br>"
+        "The set above is PARSED, not grepped (R3237): a name that appears only in a docstring or a "
+        "comment is not a construction and is not counted, and a module-scope alias of the class "
+        "(<span class='mono'>Ctor = sg.SecGate</span>) is followed one level. A class obtained at run "
+        "time from a factory is not visible here.<br>"
         "The line numbers above are the coordinates measured when this document was rendered - "
         "orientation for a reader, not a graded fact (R3235). What is graded is the FILE set, so a "
-        "moved line stays quiet while a newly constructing file reddens this face.<br><br>"
+        "moved line stays quiet while a newly constructing file reddens this face.%s<br><br>"
         "Status: <b>%s</b> - every site above passes lists read from config today, so the door is shut "
         "only because the config is not empty, not because the type forbids an empty gate.<br><br>"
         "Repair pre-registered, NOT applied in this window: src/ bytes are frozen under the live battery "
         "leg, so the fix is written down as AC-SGV1..AC-SGV3 rather than landed."
         "</div>" % (_esc(hole.get("attempt")), _esc(data["hole_status"]),
-                    sites_html or "<li>(none measured)</li>", _esc(data["hole_status"])))
+                    sites_html or "<li>(none measured)</li>", unparsed_html,
+                    _esc(data["hole_status"])))
     crit_html = "".join("<li><b>%s</b> %s</li>" % (_esc(c["id"]), _esc(c["text"]))
                         for c in data["criteria"])
     order_html = "".join("<li>%s</li>" % _esc(g) for g in data["gate_order"])
@@ -450,7 +503,7 @@ def check(data):
     imports = [ln for ln in body.splitlines() if ln.startswith("import ") or ln.startswith("from ")]
     third_party = [ln for ln in imports
                    if ln.split()[1].split(".")[0] not in
-                   ("argparse", "html", "json", "os", "subprocess", "sys")]
+                   ("argparse", "ast", "html", "json", "os", "subprocess", "sys")]
     ok6 = ascii_ok and not third_party
     results.append(("AC-UGR6", ok6, "ascii=%s third_party_imports=%d"
                     % (ascii_ok, len(third_party))))
@@ -475,8 +528,9 @@ def check(data):
     ok8 = (status in ("LIVE", "LATENT")
            and status in html_text
            and (not sites or (status == "LIVE" and len(carried) == len(site_files))))
-    results.append(("AC-UGR8", ok8, "status=%s sites=%d files_carried=%d/%d"
-                    % (status, len(sites), len(carried), len(site_files))))
+    results.append(("AC-UGR8", ok8, "status=%s sites=%d files_carried=%d/%d unparsed=%d"
+                    % (status, len(sites), len(carried), len(site_files),
+                       len(data.get("unparsed") or []))))
 
     # AC-UGR9: the sizes block is read back FROM THE LANDED DOCUMENT, never from
     # the in-memory dict, so a --no-write run still gates on what is on disk.

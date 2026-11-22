@@ -64,7 +64,7 @@
     },
     {
       "id": "AC-UGR6",
-      "text": "stdlib only, ASCII source, read-only on src/, writes only under preview/ and qa/, exit 0 on pass and 2 on any failed criterion"
+      "text": "stdlib only (argparse, ast, html, json, os, subprocess, sys), ASCII source, read-only on src/, writes only under preview/ and qa/, exit 0 on pass and 2 on any failed criterion"
     },
     {
       "id": "AC-UGR7",
@@ -72,7 +72,7 @@
     },
     {
       "id": "AC-UGR8",
-      "text": "the constructor hole is measured at its call sites by scanning non-test sandbox sources, and the report states LATENT or LIVE with every measured FILE named on the face - a new constructing file reddens it, a moved line number (orientation for a reader, named as such on the page) does not"
+      "text": "the constructor hole is measured at its call sites by PARSING every non-test sandbox source (a name that appears only in prose is not a construction; a module-scope alias of the class is followed one level), and the report states LATENT or LIVE with every measured FILE named on the face - a new constructing file reddens it, a moved line number (orientation for a reader, named as such on the page) does not"
     },
     {
       "id": "AC-UGR9",
@@ -213,9 +213,10 @@
     }
   ],
   "sizes": {
-    "html": 9952,
-    "json": 7000
+    "html": 10436,
+    "json": 7187
   },
+  "unparsed": [],
   "wordlist": {
     "advisory": 7,
     "forbidden": 6

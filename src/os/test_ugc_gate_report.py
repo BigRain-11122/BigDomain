@@ -1,4 +1,4 @@
-"""Battery suite for tools/ugc_gate_report.py - criteria AC-UGRB0..AC-UGRB11.
+"""Battery suite for tools/ugc_gate_report.py - criteria AC-UGRB0..AC-UGRB17.
 
 WHY THIS SUITE EXISTS (measured at R2814, not hypothesised):
 tools/ugc_gate_report.py renders preview/ugc-gate-report.html + .json, the face
@@ -250,6 +250,66 @@ def main():
         red, r = tamper_data('AC-UGR8', b13)
         ok('AC-UGRB13', red,
            'AC-UGR8 red when a constructing file is not named on the face, rc=%d' % r)
+        # ---- B14..B16: the READER of the site set (R3237). The substring scan
+        # this criterion used to stand on invented two sites out of a docstring
+        # and a comment, and dropped a construction written on a `def` line.
+        # Proven in private worlds so the live tree is never touched.
+        def world_scan(files):
+            world = tempfile.mkdtemp(prefix='ugc-gate-reader-')
+            sandbox = os.path.join(world, 'src', 'sandbox')
+            os.makedirs(sandbox)
+            for fname, body in files.items():
+                with io.open(os.path.join(sandbox, fname), 'w',
+                             encoding='utf-8', newline='\n') as fh:
+                    fh.write(body)
+            real_root = mod.ROOT
+            mod.ROOT = world
+            try:
+                return mod.direct_call_sites()
+            finally:
+                mod.ROOT = real_root
+                shutil.rmtree(world, ignore_errors=True)
+
+        prose_hits, _ = world_scan({
+            'alpha.py': (
+                '"""Alpha.\n\n'
+                'Example that MUST refuse: SecGate([], []) - prose, not a door.\n'
+                '"""\n'
+                '# historical note: SecGate([], []) used to pass here\n'
+                'def clean(value):\n'
+                '    return value\n'
+            ),
+        })
+        ok('AC-UGRB14', prose_hits == [],
+           'a name in prose is not a construction: hits=%s' % (prose_hits,))
+
+        def_hits, _ = world_scan({
+            'beta.py': 'def make_gate(w1, w2): return build(SecGate(w1, w2))\n',
+        })
+        ok('AC-UGRB15', def_hits == ['src/sandbox/beta.py:1'],
+           'a construction sharing a def line is counted: hits=%s' % (def_hits,))
+
+        alias_hits, _ = world_scan({
+            'gamma.py': ('from sec_gate import SecGate as Ctor\n'
+                         'gate = Ctor([], [])\n'),
+            'delta.py': ('import sec_gate as sg\n'
+                         'Ctor = sg.SecGate\n'
+                         'gate = Ctor([], [])\n'),
+        })
+        ok('AC-UGRB16',
+           alias_hits == ['src/sandbox/delta.py:3', 'src/sandbox/gamma.py:2'],
+           'one-level module aliases are followed: hits=%s' % (alias_hits,))
+
+        # ---- B17: the live tree must read the same site set as before the
+        # reader changed (pure addition): three files, four constructions.
+        live_hits, live_skipped = mod.direct_call_sites()
+        live_files = sorted(set(s.rsplit(':', 1)[0] for s in live_hits))
+        ok('AC-UGRB17',
+           live_files == ['src/sandbox/frontdoor.py', 'src/sandbox/journey_demo.py',
+                          'src/sandbox/lobby/msgsec_stub.py']
+           and len(live_hits) == 4 and live_skipped == [],
+           'live reader: files=%d sites=%d unparsed=%d'
+           % (len(live_files), len(live_hits), len(live_skipped)))
     finally:
         mod.OUT_HTML, mod.OUT_JSON = real_html_path, real_json_path
         shutil.rmtree(tmpdir, ignore_errors=True)
@@ -274,7 +334,7 @@ def main():
             declared = int(tail.strip())
         except ValueError:
             declared = None
-    ok('AC-UGRB11', bool(row) and declared == 14,
+    ok('AC-UGRB11', bool(row) and declared == 18,
        'registry_rows=%d declared=%s' % (len(row), declared))
 
     law_verdict = "PASS" if not FAILS else "FAIL"

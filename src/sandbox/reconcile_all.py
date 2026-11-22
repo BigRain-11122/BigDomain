@@ -7775,9 +7775,9 @@ SUITES = [
     # own AC-UGRB11 asserted the wrong number - both sides now say twelve.
     # R3235: AC-UGRB12 (a moved line number stays green) and AC-UGRB13 (an
     # unnamed constructing file reddens) prove the AC-UGR8 regrade in both
-    # directions, so the suite runs fourteen and the row says fourteen.
+    # directions, so the suite runs eighteen and the row says eighteen.
     ("os-ugc-gate-report",
-     os.path.join("..", "os", "test_ugc_gate_report.py"), 14),
+     os.path.join("..", "os", "test_ugc_gate_report.py"), 18),
     # R2875. docs/status-export.json's latest_artifact follows the NEWEST preview
     # pair by mtime, so a fixture that re-renders a tracked pair moves the world
     # another suite measures - measured in the real tree at R2875 as

@@ -1,17 +1,17 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-22 R3236 PRODUCT+ENGINEERING: the six claims readings now have a graded identity - tools/status_export_fresh.py gained claims_arith(reading) and check() prints E_SXF_CLAIMS_ARITH once per violation, so a census reading whose captured+contradicted+uncaptured does not equal claimed (or whose historic exceeds contradicted, or whose counters are not non-negative integers) can no longer read VERDICT PASS. Before this the identity lived only in prose and in the HTTP card's class=fail sentence.",
+    "current": "2026-11-22 R3237 PRODUCT+ENGINEERING: the content-safety door count is now PARSED, not grepped - tools/ugc_gate_report.py:direct_call_sites() walks each non-test src/sandbox source with ast and counts three call forms (SecGate(...), mod.SecGate(...), and a one-level module alias X = mod.SecGate or from ... import SecGate as X), so a name that appears only in a docstring or a comment no longer invents a door, and a construction sharing a `def` line is no longer dropped by the old line heuristic. Files that do not parse are named on the face instead of silently becoming a zero.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
-    "last_artifact": "preview/ugc-gate-report.html (9952B) + preview/ugc-gate-report.json (7000B) [2026-11-22 commit]",
-    "latest_artifact": "preview/ugc-gate-report.html (9952B) + preview/ugc-gate-report.json (7000B) [2026-11-22 commit]",
+    "last_artifact": "preview/ugc-gate-report.html (10436B) + preview/ugc-gate-report.json (7187B) [2026-11-22 mtime]",
+    "latest_artifact": "preview/ugc-gate-report.html (10436B) + preview/ugc-gate-report.json (7187B) [2026-11-22 mtime]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ugc-gate-report.html",
     "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/suite-frontdoor-chain-card-R3223.log (308B, 2026-11-22)",
     "latest_evidence": "qa/suite-frontdoor-chain-card-R3223.log (308B, 2026-11-22)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R3236] next window (<=48h): (0) MAIN — **R3235 第二问原样未做，仍欠着**：`ugc-gate` 的 AC-UGR8 已从「罚行号」改为「罚文件集」，但文件集判据看不见「同一个文件里把 `SecGate` 换成另一种绕开 `from_config` 拒空律的构造」——那要解析调用形态而不是数文件。做法=先只读量三问：①活树四处构造各是什么调用形态（`SecGate([], [])` 直构 vs `from_config` 工厂 vs 展开实参）；②在私有世界里把其中一处改成等价写法（如 `SecGate(*[])`），量文件集判据是否仍绿（预期绿＝看不见）；③AST 解析的代价与收益（`ast` 计 `SecGate(` 调用次数 vs 纯文本计数在注释/字符串上的误报率）。三选一：①不加（页上具名承认只罚「多一个文件」）②在既有套件加一条按 AST 计构造次数的判据（私 world 负控：等价改写必须红）③把页上坐标整个去掉只印文件名。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
-    "next_milestone_due": "2026-11-24T08:07:35+08:00",
-    "updated_at": "2026-11-22T08:07:35+08:00",
+    "next_milestone": "[R3237] next window (<=48h): (0) MAIN — **读者还剩两条已知盲区，且本轮刻意没给新律配判据**：①**工厂面**＝`getattr(sec_gate, \"SecGate\")`、`factory()` 返回类、包的再导出这三种形态本轮解析看不见（页上已具名），先只读量三问：活树今日是否出现任一形态（预期 0）／把其中一种写进私有 world 量新读者是否仍绿（预期绿＝看不见）／追它需要跨文件符号表还是跨模块运行期解析（代价）。②**判据 vs 套件**＝本轮把「散文不算门、别名要跟」写进了 AC-UGR8/AC-UGR6 散文并由套件负控证明，但**没有任何 `--check` 判据**独立验证这两点；三选一＝①接受（套件臂即证据，判据只罚文件集）②让 `check()` 拿一份「散文样本」自证不算（会引入判据检查自己输入的循环）③把两条限制从页面散文降级为注释并不再声称。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
+    "next_milestone_due": "2026-11-24T08:17:00+08:00",
+    "updated_at": "2026-11-22T08:17:00+08:00",
     "heartbeat": {
       "tick": 3223,
       "state_tick": 3223,
@@ -41,8 +41,8 @@
       "readable": 4586
     }
   },
-  "current": "2026-11-22 R3236 PRODUCT+ENGINEERING: the six claims readings now have a graded identity - tools/status_export_fresh.py gained claims_arith(reading) and check() prints E_SXF_CLAIMS_ARITH once per violation, so a census reading whose captured+contradicted+uncaptured does not equal claimed (or whose historic exceeds contradicted, or whose counters are not non-negative integers) can no longer read VERDICT PASS. Before this the identity lived only in prose and in the HTTP card's class=fail sentence.",
-  "claims": {"claimed": 329, "captured": 106, "contradicted": 11, "uncaptured": 212, "historic": 7, "rows": 8, "present": true, "census_ts": "2026-11-22T08:07:35+08:00"},
+  "current": "2026-11-22 R3237 PRODUCT+ENGINEERING: the content-safety door count is now PARSED, not grepped - tools/ugc_gate_report.py:direct_call_sites() walks each non-test src/sandbox source with ast and counts three call forms (SecGate(...), mod.SecGate(...), and a one-level module alias X = mod.SecGate or from ... import SecGate as X), so a name that appears only in a docstring or a comment no longer invents a door, and a construction sharing a `def` line is no longer dropped by the old line heuristic. Files that do not parse are named on the face instead of silently becoming a zero.",
+  "claims": {"claimed": 325, "captured": 99, "contradicted": 11, "uncaptured": 215, "historic": 7, "rows": 8, "present": true, "census_ts": "2026-11-22T08:17:00+08:00"},
   "chain": {"present": true, "rows": 8, "broken": 0, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -71,11 +71,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-22 R3236 PRODUCT+ENGINEERING: the six claims readings now have a graded identity - tools/status_export_fresh.py gained claims_arith(reading) and check() prints E_SXF_CLAIMS_ARITH once per violation, so a census reading whose captured+contradicted+uncaptured does not equal claimed (or whose historic exceeds contradicted, or whose counters are not non-negative integers) can no longer read VERDICT PASS. Before this the identity lived only in prose and in the HTTP card's class=fail sentence.",
-  "export_ts": "2026-11-22T08:07:35+08:00",
-  "latest_artifact": "preview/ugc-gate-report.html (9952B) + preview/ugc-gate-report.json (7000B) [2026-11-22 commit]",
+  "do": "2026-11-22 R3237 PRODUCT+ENGINEERING: the content-safety door count is now PARSED, not grepped - tools/ugc_gate_report.py:direct_call_sites() walks each non-test src/sandbox source with ast and counts three call forms (SecGate(...), mod.SecGate(...), and a one-level module alias X = mod.SecGate or from ... import SecGate as X), so a name that appears only in a docstring or a comment no longer invents a door, and a construction sharing a `def` line is no longer dropped by the old line heuristic. Files that do not parse are named on the face instead of silently becoming a zero.",
+  "export_ts": "2026-11-22T08:17:00+08:00",
+  "latest_artifact": "preview/ugc-gate-report.html (10436B) + preview/ugc-gate-report.json (7187B) [2026-11-22 mtime]",
   "latest_evidence": "qa/suite-frontdoor-chain-card-R3223.log (308B, 2026-11-22)",
-  "next_milestone": "[R3236] next window (<=48h): (0) MAIN — **R3235 第二问原样未做，仍欠着**：`ugc-gate` 的 AC-UGR8 已从「罚行号」改为「罚文件集」，但文件集判据看不见「同一个文件里把 `SecGate` 换成另一种绕开 `from_config` 拒空律的构造」——那要解析调用形态而不是数文件。做法=先只读量三问：①活树四处构造各是什么调用形态（`SecGate([], [])` 直构 vs `from_config` 工厂 vs 展开实参）；②在私有世界里把其中一处改成等价写法（如 `SecGate(*[])`），量文件集判据是否仍绿（预期绿＝看不见）；③AST 解析的代价与收益（`ast` 计 `SecGate(` 调用次数 vs 纯文本计数在注释/字符串上的误报率）。三选一：①不加（页上具名承认只罚「多一个文件」）②在既有套件加一条按 AST 计构造次数的判据（私 world 负控：等价改写必须红）③把页上坐标整个去掉只印文件名。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
+  "next_milestone": "[R3237] next window (<=48h): (0) MAIN — **读者还剩两条已知盲区，且本轮刻意没给新律配判据**：①**工厂面**＝`getattr(sec_gate, \"SecGate\")`、`factory()` 返回类、包的再导出这三种形态本轮解析看不见（页上已具名），先只读量三问：活树今日是否出现任一形态（预期 0）／把其中一种写进私有 world 量新读者是否仍绿（预期绿＝看不见）／追它需要跨文件符号表还是跨模块运行期解析（代价）。②**判据 vs 套件**＝本轮把「散文不算门、别名要跟」写进了 AC-UGR8/AC-UGR6 散文并由套件负控证明，但**没有任何 `--check` 判据**独立验证这两点；三选一＝①接受（套件臂即证据，判据只罚文件集）②让 `check()` 拿一份「散文样本」自证不算（会引入判据检查自己输入的循环）③把两条限制从页面散文降级为注释并不再声称。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
   "outs": [
     "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
@@ -189,8 +189,8 @@
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 81544,
-  "next_milestone_due": "2026-11-24T08:07:35+08:00",
+  "state_bytes": 77210,
+  "next_milestone_due": "2026-11-24T08:17:00+08:00",
   "heartbeat": {
     "tick": 3223,
     "state_tick": 3223,
