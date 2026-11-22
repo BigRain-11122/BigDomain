@@ -1,0 +1,28 @@
+FREEZE LAW OK scanned=1490 one_offs=904 max_round=2781 freeze=2838
+SUITE 1/2 os-ledger-lines starting (criteria=8)
+  | suite: round ledger line checker (R2152 AC-LGR1..AC-LGR8)
+  | PASS AC-LGR1 canonical parse, units and approx marker resolved
+  | PASS AC-LGR2 nine bad forms named, gate order round/local/api/reason
+  | PASS AC-LGR3 coverage law derives missing and orphan rounds
+  | PASS AC-LGR4 tail window scopes the audit and echoes its arithmetic
+  | PASS AC-LGR5 zero false positives, typo caught by coverage law
+  | PASS AC-LGR6 api is a pure integer and always carries a reason
+  | PASS AC-LGR7 CLI exit 0/2/3, stable JSON, zero file writes
+  | PASS AC-LGR8 live gate clean on the coverage scope, folded gaps proven healed by the archive, exemption list empty, hygiene
+  | SUITE PASS 8/8 criteria
+PASS suite os-ledger-lines exit=0 pass-lines=8 fail-lines=0 criteria=8 0.9s
+SUITE 2/2 os-ledger-round-main-shape starting (criteria=9)
+  | round main line shape suite (expected criteria 9)
+  | PASS AC-RMS1 dated newest round passes, an undated main line is refused by name with its round and a sample
+  | PASS AC-RMS2 highest round wins over position, and an undated sub-line of that round does not redden a healthy tree
+  | PASS AC-RMS3 ledger lines and four fold-summary forms never count as a round main, and an empty window fails closed
+  | PASS AC-RMS4 CLI reads exactly one line on the real tree (rc=0), names E_RMS_NO_DATE in a private world (rc=2), rc=3 when absent
+  | PASS AC-RMS5 AnchorError is typed and carries a code, the newest round is sampled, and check() turns it into one FAIL row
+  | PASS AC-RMS6 the gate writes zero bytes, the library is ASCII with no net, and the registry declares this suite at 9 criteria
+  | PASS AC-RMS7 a lowercase-label newest round is refused by name E_RMS_NO_LABEL while the reader behind it would have published the OLDER round 9001, and the same line with a label passes both
+  | PASS AC-RMS8 ROUND_LABEL_SRC is the only definition - both readers carry it verbatim and all three agree on six label shapes
+  | PASS AC-RMS9 the live tree passes, the shipped vehicle refuses a label-less line at rc=2 with E_RMS_NO_LABEL and accepts the labelled one without writing, registry declares 9
+  | SUITE PASS 9/9
+PASS suite os-ledger-round-main-shape exit=0 pass-lines=9 fail-lines=0 criteria=9 0.3s
+PASS suites 2/2 green, expected criteria total=17, suite cap=600s overrides=1
+RUNNER PARTIAL (selected 2/2 green, criteria=17, full battery NOT proven, 1.3s)

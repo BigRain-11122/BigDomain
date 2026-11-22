@@ -8288,12 +8288,19 @@ def phase_freeze_law():
     return True
 
 
-def phase_suites():
+def phase_suites(selected=None):
+    """R3313 AC-RCA2/AC-RCA4: every selected suite announces itself BEFORE
+    it runs, so a leg that needs minutes is observable while it moves
+    instead of silent until it returns. Returns (green, rows, criteria)."""
+    rows = SUITES if selected is None else [
+        row for row in SUITES if row[0] in selected]
     green = 0
     total = 0
-    for label, rel, crit in SUITES:
+    for idx, (label, rel, crit) in enumerate(rows, 1):
         path = os.path.join(BASE, rel)
         t0 = time.time()
+        print("SUITE %d/%d %s starting (criteria=%d)"
+              % (idx, len(rows), label, crit), flush=True)
         code, out = run_cmd([sys.executable, path],
                             cwd=os.path.dirname(path),
                             timeout=suite_timeout(label))
@@ -8306,12 +8313,56 @@ def phase_suites():
             green += 1
         note(ok, "suite %s exit=%d pass-lines=%d fail-lines=%d criteria=%d %.1fs"
              % (label, code, passes, fails, crit, time.time() - t0))
-    note(green == len(SUITES),
+    note(green == len(rows),
          "suites %d/%d green, expected criteria total=%d, suite cap=%ds"
          " overrides=%d"
-         % (green, len(SUITES), total, SUITE_TIMEOUT_S,
+         % (green, len(rows), total, SUITE_TIMEOUT_S,
             len(SUITE_TIMEOUT_OVERRIDES)))
-    return green == len(SUITES)
+    return green, len(rows), total
+
+
+def _parse_only(args):
+    """R3313 AC-RCA1: --only may stand anywhere and every other argument
+    keeps its positional meaning (the first one is the evidence path).
+    Returns (rest, only) where only is None when the flag was absent and
+    the empty string when it carried no value."""
+    rest = []
+    only = None
+    i = 0
+    while i < len(args):
+        arg = args[i]
+        if arg == "--only":
+            i += 1
+            only = args[i] if i < len(args) else ""
+        elif arg.startswith("--only="):
+            only = arg[len("--only="):]
+        else:
+            rest.append(arg)
+        i += 1
+    return rest, only
+
+
+def _select_suites(spec):
+    """R3313 AC-RCA3: resolve the --only spec against the SUITES labels.
+    Refusal happens BEFORE any suite starts, so a bad selector costs no
+    suite time and can never be mistaken for a partial green run."""
+    import difflib
+    labels = [row[0] for row in SUITES]
+    picked = []
+    for part in spec.split(","):
+        name = part.strip()
+        if not name:
+            print("E_RCA_BAD_ONLY empty selector in --only=%r" % spec,
+                  flush=True)
+            return None
+        if name not in labels:
+            near = difflib.get_close_matches(name, labels, 3)
+            print("E_RCA_BAD_ONLY unknown=%s known=%d near=%s"
+                  % (name, len(labels), ",".join(near) or "-"), flush=True)
+            return None
+        if name not in picked:
+            picked.append(name)
+    return picked
 
 
 TMP_TOOL = os.path.join(BASE, os.pardir, "os", "sweep_suite_tmp.py")
@@ -8584,7 +8635,8 @@ def main(argv):
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     except (AttributeError, ValueError):
         pass
-    if len(argv) < 2:
+    rest, only = _parse_only(argv[1:])
+    if len(rest) < 1:
         # R1836 AC-SL1 (pre-registered in state/queue/tech.md before
         # this code): with no evidence path the output goes to whoever
         # captures us - say so as the very first line so a captured
@@ -8593,10 +8645,20 @@ def main(argv):
         # before phase_suites, so the label is structurally first.
         print(SHELL_CAPTURE_LABEL, flush=True)
     tee = None
-    if len(argv) > 1:
-        tee = Tee(argv[1])
+    if len(rest) > 0:
+        tee = Tee(rest[0])
         sys.stdout = tee
     t0 = time.time()
+    selected = None
+    if only is not None:
+        # R3313 AC-RCA3: a bad selector stops here, before the law phase
+        # and before any suite, so it can never be read as a partial green.
+        selected = _select_suites(only)
+        if selected is None:
+            if tee is not None:
+                sys.stdout = tee.stdout
+                tee.close()
+            return 2
     law_ok = phase_freeze_law()
     # R2842 AC-FLC2/AC-FLC5: a refused tree stops HERE. Asking the law before
     # the suites was not enough - it still burned the whole leg and only said
@@ -8610,22 +8672,36 @@ def main(argv):
             sys.stdout = tee.stdout
             tee.close()
         return 1
-    suites_ok = phase_suites()
-    tmp = tempfile.mkdtemp(prefix="reconcile-all-")
-    try:
-        phase_reconcile(tmp)
-        phase_pay_reconcile(tmp)
-        phase_member_reconcile(tmp)
-    finally:
-        shutil.rmtree(tmp, ignore_errors=True)
-    reclaim = sweep_run_worlds(t0)
-    if reclaim is not None:
-        print("TMP RECLAIM candidates=%d removed=%d busy=%d failed=%d "
-              "reclaimed=%.2f MiB"
-              % (reclaim["candidates"], reclaim["removed"],
-                 reclaim["busy_skipped"], reclaim["failed"],
-                 reclaim["mib"]), flush=True)
-    if FAILS == 0 and suites_ok:
+    green_n, rows_n, total_n = phase_suites(selected)
+    suites_ok = green_n == rows_n
+    if selected is None:
+        tmp = tempfile.mkdtemp(prefix="reconcile-all-")
+        try:
+            phase_reconcile(tmp)
+            phase_pay_reconcile(tmp)
+            phase_member_reconcile(tmp)
+        finally:
+            shutil.rmtree(tmp, ignore_errors=True)
+        reclaim = sweep_run_worlds(t0)
+        if reclaim is not None:
+            print("TMP RECLAIM candidates=%d removed=%d busy=%d failed=%d "
+                  "reclaimed=%.2f MiB"
+                  % (reclaim["candidates"], reclaim["removed"],
+                     reclaim["busy_skipped"], reclaim["failed"],
+                     reclaim["mib"]), flush=True)
+    if selected is not None:
+        # R3313 AC-RCA4: a selected run proves only the selected rows, so it
+        # may never publish the full-battery PASS sentence.
+        if FAILS == 0 and suites_ok:
+            print("RUNNER PARTIAL (selected %d/%d green, criteria=%d, "
+                  "full battery NOT proven, %.1fs)"
+                  % (green_n, rows_n, total_n, time.time() - t0), flush=True)
+            code = 0
+        else:
+            print("RUNNER FAIL (%d failed assertions, selected %d/%d green)"
+                  % (FAILS, green_n, rows_n), flush=True)
+            code = 1
+    elif FAILS == 0 and suites_ok:
         print("RUNNER PASS (%d/%d suites green, reconcile controls 7/7, %.1fs)"
               % (len(SUITES), len(SUITES), time.time() - t0), flush=True)
         code = 0
