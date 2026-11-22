@@ -1,0 +1,42 @@
+PROBE R3277 faces_operable=6 faces_with_storage=5
+Q1 mixed_faces=0 single_state_faces=5
+Q1 single face=filing-checklist.html states=handler sites=NS>handler>b
+Q1 single face=lobby-protocol-map.html states=handler sites=NS>handler>apply
+Q1 single face=merchant-onboard.html states=call sites=KEY>call>save
+Q1 single face=money-path-demo.html states=handler sites=NS+':'+this.getAttribute('data-ck')>handler>T[n]
+Q1 single face=ship-checklist.html states=handler sites=NS>handler>b;NS>handler>reset
+Q1 aggregate=load:0,handler:5,call:1,never:0 write_sites=6
+Q2 consumers=30
+Q2 line=254 token=when_never "when": {state: 0 for state in WHEN_STATES}, "when_never": []}
+Q2 line=259 token=when_never when_never = [list(pair) for pair in (keys.get("when_never") or [])]
+Q2 line=267 token=when_never "when": when, "when_never": when_never}
+Q2 line=271 token=when_never "when": when, "when_never": when_never}
+Q2 line=275 token=when_never "when": when, "when_never": when_never}
+Q2 line=487 token=when_never "when_never": when["never"],
+Q2 line=591 token=when_attr( def when_attr(naming):
+Q2 line=1481 token=when_totals when_totals = {state: 0 for state in WHEN_STATES}
+Q2 line=1485 token=when_totals when_totals[state] += got.get(state, 0)
+Q2 line=1486 token=when_faces when_faces = [(name, key_naming(rows[name])["when_never"])
+Q2 line=1488 token=when_never if key_naming(rows[name])["when_never"]]
+Q2 line=1554 token=when_totals "when_totals": when_totals,
+Q2 line=1555 token=when_faces "when_faces": when_faces,
+Q2 line=2085 token=data-step-write-when 'data-step-write-when="%s">%s</p>'
+Q2 line=2092 token=when_attr( esc(drawn["split"]), esc(when_attr(naming)),
+Q2 line=2128 token=data-branch-write-when 'data-branch-split="%s" data-branch-write-when="%s">%s</p>'
+Q2 line=2139 token=when_attr( esc(when_attr(naming)),
+Q2 line=2249 token=when_totals when = proj["when_totals"]
+Q2 line=2258 token=when_faces if proj["when_faces"]:
+Q2 line=2259 token=when_faces for name, pairs in proj["when_faces"]:
+Q2 line=2425 token=when_totals "write_when": proj["when_totals"],
+Q2 line=2426 token=when_never "write_when_never": [{"face": name,
+Q2 line=2429 token=when_faces for name, pairs in proj["when_faces"]],
+Q2 line=3524 token=when_never fresh_never = [(name, fresh_keys[name].get("when_never") or [])
+Q2 line=3526 token=when_never if name in fresh_keys and fresh_keys[name].get("when_never")]
+Q2 line=3571 token=when_never if not (fresh_keys.get(name) or {}).get("when_never"):
+Q2 line=3582 token=data-step-write-when ("step", r'data-step-face="([^"]+)"[^>]*data-step-write-when="([^"]*)"'),
+Q2 line=3584 token=data-branch-write-when r'data-branch-write-when="([^"]*)"')):
+Q2 line=3588 token=when_attr( want = when_attr(fresh[name])
+Q2 line=3590 token=write_when failures.append("SH26 %s_write_when:%s page=%s fresh=%s"
+Q3 site_walk_total=0.0525s per_face=0.01049s worst=0.0185s faces=5
+Q3 shipped_when_reading_total=0.0505s per_face=0.01011s
+Q3 criteria=29 (AC-SH26 extension keeps the count)

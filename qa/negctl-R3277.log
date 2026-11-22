@@ -1,0 +1,21 @@
+ARM c0 live copy                 bytes_equal=True OK
+ARM c0 live copy check           rc=0 fails=0 OK
+ARM c1 head faces                rc=2 fails=2 OK
+ARM c2 head sites                rc=2 fails=2 OK
+ARM c3 head sentence             rc=2 fails=2 OK
+ARM c4 absent dropped            rc=2 fails=2 OK
+ARM c5 fake clean row            rc=2 fails=3 OK
+ARM c6 word deleted              rc=2 fails=1 OK
+ARM c7 slot deleted              rc=2 fails=1 OK
+ARM c7b state word gone          rc=2 fails=1 OK
+ARM c8 mixed world               row=True absent=False counts='bd-top'&gt;load,'bd-click'&gt;handler loadword=True OK
+ARM c8 mixed world check         rc=0 fails=0 OK
+ARM c9 row counts edited         rc=2 fails=2 OK
+ARM c10 row sentence edited      rc=2 fails=2 OK
+ARM c11 row present              private_face_table=step
+ARM c11 aggregate edited         rc=2 fails=3 OK
+ARM c12 same-state world         row=False absent=True OK
+ARM c12 same-state check         rc=0 fails=0 OK
+ARM c13 never inside mixed       mixed_row=True never_row=True OK
+ARM c13 never-in-mixed check     rc=0 fails=0 OK
+NEGCTL PASS cases=19/19

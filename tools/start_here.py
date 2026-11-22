@@ -251,12 +251,14 @@ def key_naming(row):
     if not keys or not keys["write"]:
         return {"kind": "none", "value": None, "expr": None, "parts": [],
                 "repeats": [], "repeat_sites": 0,
-                "when": {state: 0 for state in WHEN_STATES}, "when_never": []}
+                "when": {state: 0 for state in WHEN_STATES}, "when_never": [],
+                "when_sites": []}
     repeats = [list(pair) for pair in (keys.get("repeat") or [])]
     repeat_sites = sum(count - 1 for _expr, count in repeats)
     when = {state: (keys.get("when") or {}).get(state, 0)
             for state in WHEN_STATES}
     when_never = [list(pair) for pair in (keys.get("when_never") or [])]
+    when_sites = [list(site) for site in (keys.get("when_sites") or [])]
     if keys["literal_all"]:
         values = [keys["literal"][expr] for expr in keys["write"]]
         parts = [("empty", "") if value == "" else ("literal", value)
@@ -264,15 +266,18 @@ def key_naming(row):
         if all(value == "" for value in values):
             return {"kind": "empty", "value": "", "expr": None, "parts": parts,
                     "repeats": repeats, "repeat_sites": repeat_sites,
-                    "when": when, "when_never": when_never}
+                    "when": when, "when_never": when_never,
+                    "when_sites": when_sites}
         return {"kind": "literal", "value": " , ".join(values),
                 "expr": None, "parts": parts,
                 "repeats": repeats, "repeat_sites": repeat_sites,
-                "when": when, "when_never": when_never}
+                "when": when, "when_never": when_never,
+                "when_sites": when_sites}
     return {"kind": "runtime", "value": None,
             "expr": keys["runtime_exprs"][0], "parts": [],
             "repeats": repeats, "repeat_sites": repeat_sites,
-            "when": when, "when_never": when_never}
+            "when": when, "when_never": when_never,
+            "when_sites": when_sites}
 
 
 def key_attr(naming):
@@ -485,6 +490,9 @@ def key_reading(text):
         # the face never binds and never calls.
         "when": when["counts"],
         "when_never": when["never"],
+        # R3277: one row per write site in source order, so a face that writes from
+        # two different states can name which site is which.
+        "when_sites": when["sites"],
         "base_write": base_write, "base_read": base_read,
         # R3274: `reads <= writes` on two lists compares lexicographically and says
         # True for ["a"] <= ["b"] - subset is only asked of sets, now that the
@@ -567,6 +575,12 @@ def when_reading(text):
     bound, called = _reach_names(blanked)
     counts = {state: 0 for state in WHEN_STATES}
     never = []
+    # R3277: the TOTALS said how many sites sit in each state, never WHICH site is
+    # which. One face writing one key at script top level and another from a click
+    # handler read as `load:1,handler:1` with no way to tell the two apart, so the
+    # same scan keeps one row per site, in source order. A face is only worth this
+    # detail when its sites disagree; the page prints it for those faces alone.
+    sites = []
     for match in CALL.finditer(blanked):
         if match.group(1) != "setItem":
             continue
@@ -576,16 +590,20 @@ def when_reading(text):
         holders = [span for span in spans if span[0] <= match.start() <= span[1]]
         if not holders:
             counts["load"] += 1
+            sites.append([expr, "load", ""])
             continue
         inner = min(holders, key=lambda span: span[1] - span[0])
         if inner[2] == "live" or inner[3] in bound:
             counts["handler"] += 1
+            sites.append([expr, "handler", inner[3]])
         elif inner[3] in called:
             counts["call"] += 1
+            sites.append([expr, "call", inner[3]])
         else:
             counts["never"] += 1
             never.append([expr, inner[3]])
-    return {"counts": counts, "never": never}
+            sites.append([expr, "never", inner[3]])
+    return {"counts": counts, "never": never, "sites": sites}
 
 
 def when_attr(naming):
@@ -1486,6 +1504,14 @@ def projection():
     when_faces = [(name, key_naming(rows[name])["when_never"])
                   for name in sorted(operable)
                   if key_naming(rows[name])["when_never"]]
+    # R3277: a per-face total is only ambiguous when the face's sites disagree about
+    # when they run. Such a face is named with one row per site, so a reader can tell
+    # the open-time write from the click-time one; a face whose sites all share one
+    # state keeps the total alone, because there the total IS the answer.
+    when_mixed = [(name, key_naming(rows[name])["when_sites"])
+                  for name in sorted(operable)
+                  if len({site[1] for site in
+                          key_naming(rows[name])["when_sites"]}) > 1]
     step_drawers = {name: drawer_naming(rows[name]) for name in steps}
     branch_drawers = {name: drawer_naming(rows[name])
                       for name, _reason in steps_excluded}
@@ -1553,6 +1579,7 @@ def projection():
         "write_sites_total": write_sites_total,
         "when_totals": when_totals,
         "when_faces": when_faces,
+        "when_mixed": when_mixed,
         "step_drawers": step_drawers,
         "branch_drawers": branch_drawers,
         "drawer_when_counts": drawer_when_counts,
@@ -2268,8 +2295,36 @@ def render(proj):
     else:
         when_html += ('\n  <p data-key-when-absent>%s</p>'
                       % esc(doc.get("key_when_absent") or ""))
+    # R3277: the totals above are per FACE. A face that writes one key on load and
+    # another from a click handler reads as `load:1,handler:1` and says which STATE
+    # each count is in, never which write. Only such a face gets a per-site row; a
+    # face whose sites agree keeps the total alone, and a zero reading prints a named
+    # absence instead of letting the table look covered.
+    mixed_sites = sum(len(sites) for _name, sites in proj["when_mixed"])
+    mixed_html = (
+        '  <p class="keymixed" data-key-mixed-faces="%d" '
+        'data-key-mixed-sites="%d">%s</p>'
+        % (len(proj["when_mixed"]), mixed_sites,
+           esc((doc.get("key_mixed_head_fmt") or "").format(
+               faces=len(proj["when_mixed"]), sites=mixed_sites))))
+    when_words = doc.get("key_mixed_state_words") or {}
+    if proj["when_mixed"]:
+        for name, sites in proj["when_mixed"]:
+            counts = ",".join("%s>%s" % (expr, state)
+                              for expr, state, _owner in sites)
+            phrases = "、".join((doc.get("key_mixed_site_fmt") or "").format(
+                expr=expr, word=when_words.get(state) or state)
+                for expr, state, _owner in sites)
+            mixed_html += (
+                '\n  <p data-key-mixed-face="%s" data-key-mixed-counts="%s">%s</p>'
+                % (esc(name), esc(counts),
+                   esc((doc.get("key_mixed_face_fmt") or "").format(
+                       name=name, phrases=phrases))))
+    else:
+        mixed_html += ('\n  <p data-key-mixed-absent>%s</p>'
+                       % esc(doc.get("key_mixed_absent") or ""))
     steps_block = (keynames_html + "\n" + repeats_html + "\n" + when_html + "\n"
-                   + unread_html
+                   + mixed_html + "\n" + unread_html
                    + "\n" + split_html + "\n"
                    + steps_head
                    + ("\n".join(steps_html) if steps_html else ""))
@@ -2427,6 +2482,11 @@ def write():
                               "sites": [{"expr": expr, "owner": owner}
                                         for expr, owner in pairs]}
                              for name, pairs in proj["when_faces"]],
+        "write_when_mixed": [{"face": name,
+                              "sites": [{"expr": expr, "state": state,
+                                         "owner": owner}
+                                        for expr, state, owner in sites]}
+                             for name, sites in proj["when_mixed"]],
         "steps_excluded": [{"face": name, "reason": reason}
                            for name, reason in proj["steps_excluded"]],
         "sizes": {"html_bytes": len(html.encode("utf-8"))},
@@ -3378,7 +3438,9 @@ def check():
                 "key_repeat_head_fmt", "key_repeat_expr_fmt", "key_repeat_face_fmt",
                 "key_repeat_absent",
                 "key_when_head_fmt", "key_when_expr_fmt", "key_when_face_fmt",
-                "key_when_absent"):
+                "key_when_absent",
+                "key_mixed_head_fmt", "key_mixed_site_fmt", "key_mixed_face_fmt",
+                "key_mixed_absent"):
         if not (proj["doc"].get(key) or "").strip():
             failures.append("SH26 word_missing:%s" % key)
     for slot in ("{total}", "{lit}", "{empty}", "{run}", "{none}"):
@@ -3402,6 +3464,24 @@ def check():
     for slot in ("{name}", "{phrases}"):
         if slot not in (proj["doc"].get("key_when_face_fmt") or ""):
             failures.append("SH26 slot_missing:key_when_face_fmt:%s" % slot)
+    # R3277: the per-site rows and the per-face totals are two encodings of one
+    # reading. Both derive from the same when_reading() call, and this arm makes that
+    # structural fact visible: a mixed face's site states must add up to the very
+    # four numbers its own when_attr() carries. Without it, the two faces of the page
+    # could drift and each would look self-consistent.
+    for slot in ("{faces}", "{sites}"):
+        if slot not in (proj["doc"].get("key_mixed_head_fmt") or ""):
+            failures.append("SH26 slot_missing:key_mixed_head_fmt:%s" % slot)
+    for slot in ("{expr}", "{word}"):
+        if slot not in (proj["doc"].get("key_mixed_site_fmt") or ""):
+            failures.append("SH26 slot_missing:key_mixed_site_fmt:%s" % slot)
+    for slot in ("{name}", "{phrases}"):
+        if slot not in (proj["doc"].get("key_mixed_face_fmt") or ""):
+            failures.append("SH26 slot_missing:key_mixed_face_fmt:%s" % slot)
+    mixed_words = proj["doc"].get("key_mixed_state_words") or {}
+    for state in WHEN_STATES:
+        if not (mixed_words.get(state) or "").strip():
+            failures.append("SH26 mixed_state_word_missing:%s" % state)
     if "{value}" not in (proj["doc"].get("key_literal_fmt") or ""):
         failures.append("SH26 slot_missing:key_literal_fmt:{value}")
     if "{expr}" not in (proj["doc"].get("key_runtime_fmt") or ""):
@@ -3576,6 +3656,87 @@ def check():
             failures.append("SH26 when_absent_line_on_never")
     elif len(when_absent) != 1:
         failures.append("SH26 when_absent_line expected=1 got=%d" % len(when_absent))
+    # R3277: the per-site rows. A face is listed only when its own sites disagree
+    # about when they run; its site states must then add up to the very four numbers
+    # its when_attr() carries, so the per-site table and the per-face total cannot
+    # say different things about one face.
+    fresh_mixed = []
+    for name in sorted(fresh_keys):
+        sites = fresh_keys[name].get("when_sites") or []
+        if len({site[1] for site in sites}) > 1:
+            fresh_mixed.append((name, sites))
+    mixed_head = re.search(
+        r'<p class="keymixed" data-key-mixed-faces="(\d+)" '
+        r'data-key-mixed-sites="(\d+)">([^<]*)<', text)
+    if not mixed_head:
+        failures.append("SH26 mixed_head_missing")
+    else:
+        faces_raw, sites_raw, said = mixed_head.groups()
+        want_sites = sum(len(sites) for _name, sites in fresh_mixed)
+        if int(faces_raw) != len(fresh_mixed):
+            failures.append("SH26 mixed_faces page=%s fresh=%d"
+                            % (faces_raw, len(fresh_mixed)))
+        if int(sites_raw) != want_sites:
+            failures.append("SH26 mixed_sites page=%s fresh=%d"
+                            % (sites_raw, want_sites))
+        want_text = (proj["doc"].get("key_mixed_head_fmt") or "").format(
+            faces=len(fresh_mixed), sites=want_sites)
+        if said != esc(want_text):
+            failures.append("SH26 mixed_sentence differs from the fresh derivation")
+    mixed_rows = re.findall(
+        r'<p data-key-mixed-face="([^"]+)" data-key-mixed-counts="([^"]*)">'
+        r'([^<]*)<', text)
+    want_mixed_names = [name for name, _sites in fresh_mixed]
+    if [name for name, _c, _s in mixed_rows] != want_mixed_names:
+        failures.append("SH26 mixed_rows page=%s fresh=%s"
+                        % ([name for name, _c, _s in mixed_rows],
+                           want_mixed_names))
+    else:
+        for index, (name, counts_raw, said) in enumerate(mixed_rows):
+            sites = fresh_mixed[index][1]
+            want_counts = ",".join("%s>%s" % (expr, state)
+                                   for expr, state, _owner in sites)
+            if counts_raw != esc(want_counts):
+                failures.append("SH26 mixed_counts_attr:%s page=%s fresh=%s"
+                                % (name, counts_raw, want_counts))
+            phrases = "、".join((proj["doc"].get("key_mixed_site_fmt") or "").format(
+                expr=expr, word=mixed_words.get(state) or state)
+                for expr, state, _owner in sites)
+            want_text = (proj["doc"].get("key_mixed_face_fmt") or "").format(
+                name=name, phrases=phrases)
+            if said != esc(want_text):
+                failures.append("SH26 mixed_face_sentence:%s" % name)
+            tally = {state: 0 for state in WHEN_STATES}
+            for _expr, state, _owner in sites:
+                tally[state] += 1
+            want_attr = when_attr({"when": tally})
+            # R3277: the two encodings are compared THROUGH THE PAGE when the face
+            # has a step or branch row, because comparing two fresh derivations would
+            # be near-tautological (the R3274 lesson). Only a face with no row falls
+            # back to the fresh reading, which is then the only source it has.
+            page_attr = dict(
+                re.findall(r'data-step-face="([^"]+)"[^>]*'
+                           r'data-step-write-when="([^"]*)"', text)).get(name)
+            if page_attr is None:
+                page_attr = dict(
+                    re.findall(r'data-branch-face="([^"]+)"[^>]*'
+                               r'data-branch-write-when="([^"]*)"', text)).get(name)
+            if page_attr is None:
+                page_attr = esc(when_attr(fresh[name]))
+            if page_attr != esc(want_attr):
+                failures.append("SH26 mixed_vs_aggregate:%s sites=%s totals=%s"
+                                % (name, want_attr, page_attr))
+    for name, _counts, _said in mixed_rows:
+        sites = (fresh_keys.get(name) or {}).get("when_sites") or []
+        if len({site[1] for site in sites}) <= 1:
+            failures.append("SH26 mixed_clean_face_listed:%s" % name)
+    mixed_absent = re.findall(r'<p data-key-mixed-absent>', text)
+    if fresh_mixed:
+        if mixed_absent:
+            failures.append("SH26 mixed_absent_line_on_mixed")
+    elif len(mixed_absent) != 1:
+        failures.append("SH26 mixed_absent_line expected=1 got=%d"
+                        % len(mixed_absent))
     # The two step/branch rows carry the same four counts, pinned to the fresh
     # reading so a hand edit on either row reddens on its own arm.
     for label, pattern in (

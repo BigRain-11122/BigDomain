@@ -60,8 +60,10 @@ code{background:#eef1f6;border-radius:3px;padding:1px 5px;font-size:12px}
   <p data-key-empty-absent>今天没有一张点得动的面的键名解析成空字符串——空键和「没有键」在这页上是两件事。</p>
   <p class="keyrepeat" data-key-repeat-faces="1" data-key-repeat-extra="1" data-key-write-sites="6">点得动的 6 张面一共写下 6 处键，去重后是 5 个表达式：1 张面把同一个表达式写了不止一遍，多出来的写共 1 次——后一次写会盖掉前一次，页上只说这里写过多遍，不替你说哪一次真的跑到了。</p>
   <p data-key-repeat-face="ship-checklist.html" data-key-repeat-counts="NS:2">ship-checklist.html —— NS 写了 2 遍；同一个键从两个调用点写进去，读的时候只留最后一次写下的值。</p>
-  <p class="keywhen" data-key-when-load="0" data-key-when-handler="5" data-key-when-call="1" data-key-when-never="0">点得动的面上这 6 处写并不是每一处都会在你打开页面时跑：0 处在脚本顶层、打开就写；5 处写在绑到某个控件上的处理函数里，要等你操作过才会跑；1 处写在某个函数里，只有那个函数被调用才跑；0 处写在一个既没被绑定、也没被本面调用的函数里——页上只能说它在代码里存在，不能说它跑得到。没有控件的那几张面不在这块计数里。</p>
+  <p class="keywhen" data-key-when-load="0" data-key-when-handler="5" data-key-when-call="1" data-key-when-never="0">点得动的面上这 6 处写并不是每一处都会在你打开页面时跑：0 处在脚本顶层、打开就写；5 处写在绑到某个控件上的处理函数里，要等你操作过才会跑；1 处写在某个函数里，只有那个函数被调用才跑；0 处写在一个既没被绑定、也没被本面调用的函数里——页上只能说它在代码里存在，不能说它跑得到。没有控件的那几张面不在这块计数里。这块是按面汇总的：一张面只用一种时点写键时，这几个数就是那一处的答案。</p>
   <p data-key-when-absent>今天没有一张点得动的面把写放在既没被绑定、也没被调用的函数里——每一处写要么在脚本顶层跑，要么挂在某个已经绑定的处理函数上。</p>
+  <p class="keymixed" data-key-mixed-faces="0" data-key-mixed-sites="0">0 张点得动的面在同一张面上用两种以上的时点写键，共 0 处写——这四个数放在一起时读者分不出哪一处是打开就写、哪一处要操作过才写；只有这样的面才会在下面逐处印出时点。</p>
+  <p data-key-mixed-absent>今天没有一张点得动的面在同一张面上用两种以上的时点写键——每张面的写要么全在脚本顶层跑，要么全在被绑定的处理函数里，所以按面汇总的几个数已经够读。</p>
   <p class="drawerunread" data-drawer-unread="0" data-drawer-unread-all="6">走线的 6 张面里，有 0 张的写入页面读不出来——这些写法页面给不出抽屉名和键名。</p>
   <p data-drawer-unread-absent>走线里每一张面的写入都是页面读得出来的写法——今天没有一张面带读不出的写入。</p>
   <p class="drawersplit" data-drawer-split-all="6" data-drawer-split-same="5" data-drawer-split-diff="0" data-drawer-split-noread="0" data-drawer-split-erase="0" data-drawer-split-stray="0">走线的 6 张面里，5 张有键：5 张读的抽屉和写的是同一个，0 张读的是另一个抽屉，0 张写完不读回来；0 张写完自己擦掉，0 张擦的是自己没写过的抽屉。</p>
@@ -269,7 +271,7 @@ code{background:#eef1f6;border-radius:3px;padding:1px 5px;font-size:12px}
   <p data-notice="advice">非投顾提示：本页与全部预览面不构成任何投资建议。</p>
   <p data-notice="mock">MOCK：本页列出的支付、账本、权益流程全部是页内模拟，不接真实资金通道。</p>
 </div>
-<footer>sources: state/start-here-faces.json e8f06cdd93b57a38 / state/merchant-onboard-items.json via tools/merchant_onboard.project_items()</footer>
+<footer>sources: state/start-here-faces.json d83bf7d3963c7ab8 / state/merchant-onboard-items.json via tools/merchant_onboard.project_items()</footer>
 </div>
 </body>
 </html>
