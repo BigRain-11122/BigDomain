@@ -1,0 +1,7 @@
+SECTION 1 previous report on disk: ports=10 named=60926:ws,60927:city,60928:gate,60929:web,60930:hub,60931:checkout,60932:ledger,60933:ugc,60934:panel,60935:member
+SECTION 1 preoccupied on that real table=none
+SECTION 2 real default-path run rc=0 (no false refusal on a closed table)
+SECTION 3 decoy world: occupied=[(58538, 'ws')] (only the bound port answers)
+SECTION 3 after close: occupied=none
+SECTION 4 boundary: the reading names a PORT, never an owner; a report deleted by an earlier round or an orphan that moved ports is not seen
+VERDICT PASS

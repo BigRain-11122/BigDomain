@@ -489,8 +489,11 @@ SUITES = [
     # twice - once clean (rc=0, gone=N/N) and once with a child that ignores the
     # stop file (rc=2, survivor named pid:exe) - so the clean reading is proved
     # to bite rather than assumed. (AC-OSB1..AC-OSB3 were pre-registered in
-    # src/os/backlog.md at R3333 BEFORE this suite existed.)
-    ("os-sandbox-open", "test_open_sandbox.py", 5),
+    # src/os/backlog.md at R3333 BEFORE this suite existed.) R3334 added AC-OSB6
+    # for the previous run's port table: the reading is a real loopback connect,
+    # and a recorded port that still answers makes the launcher refuse before it
+    # spawns anything.
+    ("os-sandbox-open", "test_open_sandbox.py", 6),
     # lobby room picker and event ledger (R2464): GET /lobby/api/rooms answers
     # the server OWN configured rooms (never a literal in the module or page),
     # the page gains a selector that subscribes the new room and releases the

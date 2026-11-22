@@ -1,0 +1,6 @@
+table={60786: 'city', 60785: 'ws'} union_once=True
+ARM1 real_connect=[(60785, 'ws')]
+ARM2 table_only_probe_disabled=[] silent_green=True
+ARM3 after_close=[]
+ARM4 last_report_read_before_delete=True (10764 < 11394)
+VERDICT PASS

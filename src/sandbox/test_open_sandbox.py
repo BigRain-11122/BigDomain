@@ -1,9 +1,10 @@
 """Suite for the one-click sandbox launcher (open_sandbox.py).
 
-Five criteria. AC-OSB1..AC-OSB3 were pre-registered in src/os/backlog.md at
+Six criteria. AC-OSB1..AC-OSB3 were pre-registered in src/os/backlog.md at
 R3333 BEFORE this module existed (the board head asked for the disposition to be
 scriptized instead of hand-copied into qa/, and for a teardown reading that can
-say a child really is gone):
+say a child really is gone); AC-OSB6 was pre-registered at R3334 (the board head
+asked for a pre-launch probe of the previous run's port table):
 
   AC-OSB1  the process-table reader the launcher uses is real: a child started
            by this suite appears in descendants(), and after it exits the same
@@ -22,13 +23,21 @@ say a child really is gone):
            open()/write path into qa/.
   AC-OSB5  the battery registry carries this suite exactly once and declares the
            same criterion count this file reports.
+  AC-OSB6  the previous run's port table is read before it is deleted: the
+           union of ports/face_ports names each number once, a REAL listener on
+           a recorded port is seen and cleared when it closes, and the same
+           table on disk makes the launcher refuse (rc=2, port named, boundary
+           stated, no face started). The two real runs above point --prev-report
+           at a private empty table so ambient machine state cannot red them.
 
 Cost measured at R3333: the two sandbox runs are about 3.6s each (the faces come
-up and are torn down for real); the collector arm is under a second. Loopback
-only - no external host is touched.
+up and are torn down for real); the collector arm and the socket arms are under
+a second, and the refusal arm returns before any face is spawned. Loopback only -
+no external host is touched.
 """
 
 import importlib.util
+import json
 import os
 import re
 import socket
@@ -43,7 +52,7 @@ MODULE = os.path.join(HERE, "open_sandbox.py")
 WRITER = os.path.join(ROOT, "tools", "qa_log.py")
 REGISTRY = os.path.join(HERE, "reconcile_all.py")
 NO_WINDOW = getattr(subprocess, "CREATE_NO_WINDOW", 0)
-TOTAL = 5
+TOTAL = 6
 
 
 def load_module():
@@ -99,12 +108,17 @@ def main():
     evidence_dir = None
     try:
         evidence_dir = tempfile.mkdtemp(prefix="osb-evidence-")
+        prev = os.path.join(tempfile.mkdtemp(prefix="osb-prev-"),
+                            "sandbox-start.json")
+        with open(prev, "w", encoding="utf-8") as fh:
+            json.dump({"host": "127.0.0.1", "ports": {}, "face_ports": {}}, fh)
         name = "sandbox-onclick-R3333.log"
-        rc, out = run_launcher(["--check", "--qa-log", name,
-                                "--qa-dir", evidence_dir])
+        rc, out = run_launcher(["--check", "--prev-report", prev,
+                                "--qa-log", name, "--qa-dir", evidence_dir])
         assert rc == 0, "real check run exited %d :: %s" % (
             rc, " | ".join(out.strip().splitlines()[-4:]))
         assert "sandbox up: hub=http://127.0.0.1:" in out, "no measured hub url"
+        assert "preoccupied=none" in out, "a clean previous table was not read as none"
         match = re.search(r"descendants=(\d+) gone=(\d+)/(\d+) leftovers=(\S+)", out)
         assert match, "no descendant reading in the disposition"
         assert match.group(2) == match.group(3), "gone %s/%s" % (match.group(2), match.group(3))
@@ -127,7 +141,12 @@ def main():
     # ---------------- AC-OSB3 ----------------
     try:
         hold_dir = tempfile.mkdtemp(prefix="osb-hold-")
+        prev = os.path.join(tempfile.mkdtemp(prefix="osb-prev-"),
+                            "sandbox-start.json")
+        with open(prev, "w", encoding="utf-8") as fh:
+            json.dump({"host": "127.0.0.1", "ports": {}, "face_ports": {}}, fh)
         rc, out = run_launcher(["--check", "--hold-secs", "25",
+                                "--prev-report", prev,
                                 "--qa-log", "hold.log", "--qa-dir", hold_dir])
         assert rc == 2, "a surviving child still exited %d" % rc
         match = re.search(r"descendants=(\d+) gone=(\d+)/(\d+) leftovers=([^,]+,|none|\d+:\S+)", out)
@@ -181,6 +200,58 @@ def main():
     except AssertionError as exc:
         failed += 1
         print("FAIL AC-OSB5 :: %s" % exc)
+
+    # ---------------- AC-OSB6 ----------------
+    try:
+        # (a) the union of the two maps names each number once, first key wins
+        table = module.previous_port_table({
+            "ports": {"ws": "7000", "city": 7001, "gate": "junk"},
+            "face_ports": {"lobby": 7000, "checkout": 7002}})
+        assert table == {7000: "ws", 7001: "city", 7002: "checkout"}, (
+            "port table read %r" % (table,))
+        assert module.previous_port_table(None) == {}, "a missing report must read empty"
+
+        # (b) a REAL listener on a recorded port is seen; closing it clears the reading
+        sock = socket.socket()
+        sock.bind(("127.0.0.1", 0))
+        sock.listen(5)
+        busy = sock.getsockname()[1]
+        quiet = free_port()
+        report = {"host": "127.0.0.1", "ports": {"ws": busy, "city": quiet}}
+        live = module.occupied_ports(report)
+        assert [pair[0] for pair in live] == [busy], "occupied_ports read %r" % (live,)
+        sock.close()
+        assert module.occupied_ports(report) == [], "a closed port still answered"
+
+        # (c) the same table on disk makes the launcher refuse BEFORE any face starts
+        sock = socket.socket()
+        sock.bind(("127.0.0.1", 0))
+        sock.listen(5)
+        busy = sock.getsockname()[1]
+        try:
+            world = tempfile.mkdtemp(prefix="osb-prev-")
+            prev = os.path.join(world, "sandbox-start.json")
+            with open(prev, "w", encoding="utf-8") as fh:
+                json.dump({"host": "127.0.0.1", "ports": {"ws": busy}}, fh)
+            evidence = tempfile.mkdtemp(prefix="osb-refuse-")
+            rc, out = run_launcher(["--check", "--prev-report", prev,
+                                    "--qa-log", "refuse.log", "--qa-dir", evidence])
+            assert rc == 2, "a live leftover port still exited %d" % rc
+            assert ("preoccupied=%d:ws" % busy) in out, (
+                "the occupied port was not named: %r" % out[:300])
+            assert "REFUSED" in out, "no refusal line"
+            assert "owner not identified" in out, "the boundary was not stated"
+            assert "sandbox up:" not in out, "nine faces were started on top of a leftover"
+            with open(os.path.join(evidence, "refuse.log"), encoding="utf-8") as fh:
+                body = fh.read()
+            assert "VERDICT FAIL" in body, "the disposition did not record the refusal"
+        finally:
+            sock.close()
+        print("PASS AC-OSB6 table=%d busy_named=%d:ws quiet_seen=False refused_rc=2"
+              " spawned=False" % (len(table), busy))
+    except (AssertionError, OSError, subprocess.SubprocessError) as exc:
+        failed += 1
+        print("FAIL AC-OSB6 :: %s" % exc)
 
     if failed:
         print("SUITE FAIL %d/%d" % (TOTAL - failed, TOTAL))

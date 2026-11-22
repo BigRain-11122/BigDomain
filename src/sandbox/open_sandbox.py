@@ -27,7 +27,16 @@ proof, and a teardown nobody measures is a hope.
                   console_hosts= and never gated. The boundary is
                   stated in the output: a process
                   from an EARLIER run is not in this subtree and is not seen -
-                  python_now=N is printed as context, never as a gate.
+                  python_now=N is                   printed as context, never as a gate.
+
+R3334: a teardown reading only sees the subtree THIS run started, so a face
+left behind by an earlier run (the 11-22 orphan holding a port) was invisible.
+The previous run's port table now survives long enough to be read: before this
+run deletes logs/sandbox-start.json it takes that report's ports, connects to
+each one, and prints preoccupied=<port>:<key>,... or none. A port that still
+answers makes the launcher REFUSE and exit 2 without starting nine faces on top
+of a leftover. The reading is a connect answer only - it does not name the
+owner, and the refusal says so rather than claiming our face.
 
 Usage:
   python src/sandbox/open_sandbox.py             # serve and open the browser
@@ -41,6 +50,7 @@ import argparse
 import ctypes
 import json
 import os
+import socket
 import subprocess
 import sys
 import time
@@ -145,6 +155,64 @@ def read_report(path):
         return None
 
 
+def probe_port(host, port, timeout=0.25):
+    """True when that port accepts a connection right now.
+
+    The answer proves that SOMETHING answers, not that it is this sandbox - so
+    a refusal names the port and states the boundary instead of claiming an
+    owner it never measured.
+    """
+    try:
+        with socket.create_connection((host, int(port)), timeout=timeout):
+            return True
+    except (OSError, ValueError):
+        return False
+
+
+def previous_port_table(report):
+    """{port: first key that carried it} from a launcher report.
+
+    ``ports`` is the full ten-key plan and ``face_ports`` the eight published
+    ones, so the two overlap; the union keeps the first key per port, because a
+    refusal only needs one name for each number.
+    """
+    table = {}
+    if not isinstance(report, dict):
+        return table
+    for field in ("ports", "face_ports"):
+        chunk = report.get(field) or {}
+        if not isinstance(chunk, dict):
+            continue
+        for key in sorted(chunk):
+            try:
+                port = int(chunk[key])
+            except (TypeError, ValueError):
+                continue
+            if port not in table:
+                table[port] = str(key)
+    return table
+
+
+def occupied_ports(report, host="127.0.0.1"):
+    """[(port, key)] of the previous run's ports that still answer, ascending."""
+    table = previous_port_table(report)
+    return [(port, table[port]) for port in sorted(table)
+            if probe_port(host, port)]
+
+
+def write_disposition(args, lines):
+    """Land this run's disposition through the one shipped evidence writer."""
+    target = args.qa_dir or QA
+    try:
+        os.makedirs(target, exist_ok=True)
+        load_qa_log().do_write(args.qa_log, ("\n".join(lines) + "\n").encode("utf-8"),
+                               directory=target)
+        return True
+    except (OSError, ValueError, ImportError, AttributeError) as exc:
+        print("QA-LOG REFUSED name=%s reason=%s" % (args.qa_log, exc))
+        return False
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(
         description="start the sandbox and open the measured hub URL")
@@ -168,6 +236,10 @@ def main(argv=None):
     parser.add_argument("--settle", type=float, default=3.0,
                         help="seconds to let the subtree exit before a survivor "
                              "is called a leftover")
+    parser.add_argument("--prev-report", default=None, metavar="PATH",
+                        help="read this file as the previous run's port table "
+                             "(default logs/sandbox-start.json); suites point "
+                             "it at a private world")
     args = parser.parse_args(argv)
 
     lines = []
@@ -180,6 +252,25 @@ def main(argv=None):
     report_path = os.path.join(LOGS, "sandbox-start.json")
     stop_path = os.path.join(LOGS, "sandbox-stop.txt")
     child_log = os.path.join(LOGS, "sandbox-start.log")
+
+    # R3334: the previous run's port table is on disk until this run deletes it,
+    # so read it FIRST and ask every recorded port whether something still
+    # answers. Nine new processes started on top of a leftover would hide it;
+    # refusing names it instead.
+    previous = read_report(args.prev_report or report_path)
+    probe_host = (previous or {}).get("host") or "127.0.0.1"
+    answered = occupied_ports(previous, probe_host)
+    say("preoccupied=%s"
+        % (",".join("%d:%s" % pair for pair in answered) or "none"))
+    if answered:
+        say("REFUSED a port from the previous run still answers (owner not "
+            "identified); that earlier sandbox was not torn down, so nothing "
+            "was started here")
+        say("VERDICT FAIL hub=- faces=0/8 clean=False")
+        if args.qa_log and not write_disposition(args, lines):
+            return 2
+        return 2
+
     for path in (report_path, stop_path):
         try:
             os.remove(path)
@@ -300,13 +391,7 @@ def main(argv=None):
         hold.kill()
 
     if args.qa_log:
-        target = args.qa_dir or QA
-        try:
-            os.makedirs(target, exist_ok=True)
-            load_qa_log().do_write(args.qa_log, ("\n".join(lines) + "\n").encode("utf-8"),
-                                  directory=target)
-        except (OSError, ValueError, ImportError, AttributeError) as exc:
-            say("QA-LOG REFUSED name=%s reason=%s" % (args.qa_log, exc))
+        if not write_disposition(args, lines):
             verdict = False
 
     return 0 if verdict else 2
