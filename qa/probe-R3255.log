@@ -1,0 +1,48 @@
+R3255 PROBE key source tiers (read-only, no socket, no network)
+faces scanned=45 carrying storage=7 cost=0.0204s
+
+FACE filing-checklist.html kind=persists
+  write_tier=const   read_tier=const   same
+  W NS                                 tier=const   from={'NS': 'const'}
+  R NS                                 tier=const   from={'NS': 'const'}
+
+FACE lobby-protocol-map.html kind=persists
+  write_tier=const   read_tier=const   same
+  W NS                                 tier=const   from={'NS': 'const'}
+  R NS                                 tier=const   from={'NS': 'const'}
+
+FACE lobby-session-trace.html kind=persists
+  write_tier=const   read_tier=const   same
+  W k                                  tier=const   from={'k': 'const'}
+  R k                                  tier=const   from={'k': 'const'}
+
+FACE membership-face.html kind=persists
+  write_tier=const   read_tier=const   same
+  W K                                  tier=const   from={'K': 'const'}
+  R K                                  tier=const   from={'K': 'const'}
+
+FACE merchant-onboard.html kind=persists
+  write_tier=const   read_tier=const   same
+  W KEY                                tier=const   from={'KEY': 'const'}
+  R KEY                                tier=const   from={'KEY': 'const'}
+
+FACE money-path-demo.html kind=persists
+  write_tier=dom     read_tier=dom     same
+  W NS+""+this.getAttribute("")        tier=dom     from={'NS': 'const'}
+  R NS+""+kk                           tier=dom     from={'NS': 'const', 'kk': 'dom'}
+
+FACE ship-checklist.html kind=persists
+  write_tier=const   read_tier=const   same
+  W NS                                 tier=const   from={'NS': 'const'}
+  R NS                                 tier=const   from={'NS': 'const'}
+
+write-tier counts: literal=0 const=6 loop=0 runtime=0 dom=1
+cross-tier faces: none
+orphan (R3254 symbol view) faces: ['money-path-demo.html']
+
+PRIVATE WORLD cross-tier check
+  write_tier=const read_tier=dom comparable=False
+  bound={'NS': 'const', 'k': 'dom'}
+  W=[('NS+""+""', 'const')]
+  R=[('NS+""+k', 'dom')]
+  runtime world write_tier=runtime read_tier=runtime comparable=True

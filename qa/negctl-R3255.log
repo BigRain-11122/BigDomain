@@ -1,0 +1,11 @@
+PASS c1 flip one face write tier                    rc=2
+PASS c2 edit const counter                          rc=2
+PASS c3 drop one tiers line                         rc=2
+PASS c4 drop cross absent line                      rc=2
+PASS c5 private cross world named                   rc=0
+PASS c6 drop cross name                             rc=2
+PASS c7 tamper named read tier                      rc=2
+PASS c8 runtime world same tier                     rc=0
+PASS c9 missing tier tag named                      rc=2
+PASS c10 live page still PASS                       rc=0
+NEGCTL PASS cases=10 passed=10

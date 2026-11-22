@@ -36,6 +36,19 @@ HANDLER = re.compile(r"\b(addEventListener|onclick|oninput|onchange|onkeyup)\b",
 DOMWRITE = re.compile(r"\.(textContent|innerHTML|value)\s*=")
 KINDS = ("persists", "screen", "wires", "inert")
 
+# Pairing says WHICH symbols a key rests on; it cannot say WHERE the variable part of
+# the key comes from. A face that reads NS+':'+kk and writes NS+':'+this.getAttribute(..)
+# is an orphan by symbols yet takes both sides from the same DOM attribute. The source
+# tier is read one hop deep from the face's own bytes: a name bound to a literal is
+# const, a loop-bound name is loop, a name bound to anything else is runtime, and a name
+# or expression that reads a DOM/external value is dom. Nothing is executed.
+TIERS = ("literal", "const", "loop", "runtime", "dom")
+TIER_ORDER = {name: i for i, name in enumerate(TIERS)}
+DOMVALUE = re.compile(r"\b(getAttribute|dataset|innerHTML|innerText|textContent|checked|"
+                      r"selectedIndex|getItem|prompt|confirm|Math\.random)\b")
+ASSIGN = re.compile(r"(?:var|let|const)\s+([A-Za-z_$][\w$]*)\s*=\s*([^;]{0,240})")
+LOOPVAR = re.compile(r"for\s*\(\s*(?:var|let|const)?\s*([A-Za-z_$][\w$]*)\s*(?:in|of)\b")
+
 # A persists face keeps state in browser storage, but WHICH key is only half of it:
 # a page that reads a key it never writes is reading nothing. The live faces key by
 # SYMBOL (NS, KEY, k), not by literal, so pairing is read on two levels - the key
@@ -126,6 +139,72 @@ def key_reading(text):
     }
 
 
+def _cut_rhs(rhs):
+    """A declaration can carry several names (`var A='x', B=...`); stopping at the
+    first top-level comma keeps each name bound to its own value. Reading the whole
+    tail made a literal binding look like a runtime one on the first probe run."""
+    depth = 0
+    for i, ch in enumerate(rhs):
+        if ch in "([{":
+            depth += 1
+        elif ch in ")]}":
+            depth -= 1
+        elif ch == "," and depth == 0:
+            return rhs[:i]
+    return rhs
+
+
+def _bindings(text):
+    """One-hop resolution: every declared name and the tier of what it was bound to."""
+    bare = STR.sub('""', text)
+    bound = {}
+    for match in ASSIGN.finditer(bare):
+        name, rhs = match.group(1), _cut_rhs(match.group(2))
+        if DOMVALUE.search(rhs):
+            tier = "dom"
+        else:
+            names = [tok for tok in IDENT.findall(MEMBER.sub("", STR.sub("", rhs)))
+                     if tok not in KEYWORDS]
+            tier = "const" if not names else "runtime"
+        if TIER_ORDER[tier] > TIER_ORDER.get(bound.get(name, "literal"), 0):
+            bound[name] = tier
+    for match in LOOPVAR.finditer(bare):
+        name = match.group(1)
+        if TIER_ORDER.get(bound.get(name, "literal"), 0) < TIER_ORDER["loop"]:
+            bound[name] = "loop"
+    return bound
+
+
+def _expr_tier(expr, bound):
+    tier = "dom" if DOMVALUE.search(expr) else "literal"
+    for tok in _key_symbols(expr):
+        got = bound.get(tok, "runtime")
+        if TIER_ORDER[got] > TIER_ORDER[tier]:
+            tier = got
+    return tier
+
+
+def tier_reading(text, keys=None):
+    """Where the VARIABLE part of each key expression comes from, one hop deep. This is
+    a second reading of the same bytes as key_reading, not a correction of it: symbols
+    answer 'does the read rest on what the write declares', tiers answer 'do the two
+    sides draw their variable part from the same kind of place'."""
+    keys = keys or key_reading(text)
+    bound = _bindings(text)
+    writes = [(expr, _expr_tier(expr, bound)) for expr in keys["write"]]
+    reads = [(expr, _expr_tier(expr, bound)) for expr in keys["read"]]
+    write_tier = max((t for _, t in writes), key=lambda t: TIER_ORDER[t]) if writes else None
+    read_tier = max((t for _, t in reads), key=lambda t: TIER_ORDER[t]) if reads else None
+    if read_tier is None:
+        same = "noread"
+    elif read_tier == write_tier:
+        same = "same"
+    else:
+        same = "cross"
+    return {"writes": writes, "reads": reads, "bound": bound,
+            "write_tier": write_tier, "read_tier": read_tier, "same": same}
+
+
 def scan_faces():
     """Per preview face: how many controls it carries, what a click can change, and
     whether it leaves the machine."""
@@ -146,6 +225,7 @@ def scan_faces():
         row.update(classify(text))
         if row["storage"]:
             row["keys"] = key_reading(text)
+            row["tiers"] = tier_reading(text, row["keys"])
         rows[name] = row
     return rows
 
@@ -191,6 +271,13 @@ def projection():
         "unresolved": len([n for n in key_faces if rows[n]["keys"]["unresolved"]]),
         "outside": len(key_outside),
     }
+    tier_counts = {tier: 0 for tier in TIERS}
+    for name in key_faces:
+        got = rows[name]["tiers"]["write_tier"]
+        if got:
+            tier_counts[got] += 1
+    tier_cross = [n for n in key_faces if rows[n]["tiers"]["same"] == "cross"]
+    tier_noread = [n for n in key_faces if rows[n]["tiers"]["same"] == "noread"]
     return {
         "rows": rows,
         "doc": doc,
@@ -205,6 +292,9 @@ def projection():
         "key_counts": key_counts,
         "key_orphans": [n for n in key_faces if not rows[n]["keys"]["base_paired"]],
         "key_unresolved": [n for n in key_faces if rows[n]["keys"]["unresolved"]],
+        "tier_counts": tier_counts,
+        "tier_cross": tier_cross,
+        "tier_noread": tier_noread,
         "missing": missing_ceo_items(),
         "data16": sha16(DATA),
     }
@@ -232,6 +322,22 @@ def key_phrase(doc, keys):
         unresolved=len(keys["unresolved"]))
 
 
+def tier_tag(doc, tier):
+    return ((doc.get("tier_tags") or {}).get(tier) or (tier or ""))
+
+
+def tier_phrase(doc, tiers):
+    """One face's key source in words. Says what the tier does NOT prove."""
+    same = tiers["same"]
+    word = ((doc.get("tiers_same_word") if same == "same" else
+             doc.get("tiers_cross_word") if same == "cross" else
+             doc.get("tiers_noread_word")) or "")
+    read = tier_tag(doc, tiers["read_tier"]) if tiers["read_tier"] else (
+        doc.get("tiers_noread") or "")
+    return (doc.get("tiers_fmt") or "").format(
+        write=tier_tag(doc, tiers["write_tier"]), read=read, same=word)
+
+
 def render(proj):
     doc = proj["doc"]
     faces = doc.get("faces") or {}
@@ -256,17 +362,26 @@ def render(proj):
                           esc(key_phrase(doc, keys))))
         else:
             keyline = ""
+        if "tiers" in proj["rows"][name]:
+            tiers = proj["rows"][name]["tiers"]
+            tierline = ('    <p class="tierline" data-tiers="%s" data-tiers-write="%s" '
+                        'data-tiers-read="%s" data-tiers-same="%s">%s</p>\n'
+                        % (esc(name), esc(tiers["write_tier"] or ""),
+                           esc(tiers["read_tier"] or ""), esc(tiers["same"]),
+                           esc(tier_phrase(doc, tiers))))
+        else:
+            tierline = ""
         cards.append(
             '  <article class="face" data-face="%s">\n'
             '    <h3><a href="%s">%s</a> <code>%s</code></h3>\n'
             '    <p class="kindline"><span class="kbadge" data-kind="%s">%s</span></p>\n'
-            '%s'
+            '%s%s'
             '    <p><b>%s</b>%s</p>\n'
             '    <p class="limit"><b>%s</b>%s</p>\n'
             '    <p><a class="go" href="%s">%s &rarr;</a></p>\n'
             '  </article>\n' % (
                 esc(name), esc(name), esc(label), esc(name),
-                esc(kind), esc(kind_tag(doc, kind)), keyline,
+                esc(kind), esc(kind_tag(doc, kind)), keyline, tierline,
                 esc(doc["can_tag"]), esc(can),
                 esc(doc["cannot_tag"]), esc(cannot),
                 esc(name), esc(doc["open_link"]),
@@ -325,10 +440,45 @@ def render(proj):
                esc((doc.get("keys_outside_fmt") or "").format(
                    n=len(proj["key_outside"]),
                    names=", ".join(proj["key_outside"])))))
+    tier_tags = doc.get("tier_tags") or {}
+    tier_count_tags = doc.get("tier_count_tags") or {}
+    tier_counts_html = "\n".join(
+        '  <span class="kc" data-tier-count="%s"><b>%d</b>%s</span>'
+        % (tier, proj["tier_counts"][tier], esc(tier_tags.get(tier) or tier))
+        for tier in TIERS
+    )
+    tier_counts_html += (
+        '\n  <span class="kc" data-tier-count="cross"><b>%d</b>%s</span>'
+        '\n  <span class="kc" data-tier-count="noread"><b>%d</b>%s</span>'
+        % (len(proj["tier_cross"]), esc(tier_count_tags.get("cross") or "cross"),
+           len(proj["tier_noread"]), esc(tier_count_tags.get("noread") or "noread")))
+    tier_notes = []
+    for name in proj["tier_cross"] or [None]:
+        if not name:
+            tier_notes.append('  <p data-tier-cross-absent>%s</p>'
+                              % esc(doc.get("tier_cross_absent") or ""))
+            continue
+        tiers = proj["rows"][name]["tiers"]
+        writes = ",".join(expr for expr, _ in tiers["writes"])
+        reads = ",".join(expr for expr, _ in tiers["reads"])
+        tier_notes.append(
+            '  <p data-tier-cross="%s" data-tier-write="%s" data-tier-read="%s" '
+            'data-tier-write-expr="%s" data-tier-read-expr="%s">%s</p>'
+            % (esc(name), esc(tiers["write_tier"]), esc(tiers["read_tier"]),
+               esc(writes), esc(reads),
+               esc((doc.get("tier_cross_fmt") or "").format(
+                   write=" , ".join(expr for expr, _ in tiers["writes"]) or doc.get("keys_none", ""),
+                   read=" , ".join(expr for expr, _ in tiers["reads"]) or doc.get("keys_none", ""),
+                   wt=tier_tag(doc, tiers["write_tier"]),
+                   rt=tier_tag(doc, tiers["read_tier"])))))
+    tiers_block = ('  <p class="kindshead">%s</p>\n  <div class="counts kinds">\n%s\n'
+                   '  </div>\n  <div class="legend tiers">\n%s\n  </div>'
+                   % (esc(doc.get("tiers_head", "")), tier_counts_html,
+                      "\n".join(tier_notes)))
     keys_block = ('  <p class="kindshead">%s</p>\n  <div class="counts kinds">\n%s\n'
-                  '  </div>\n  <div class="legend keys">\n%s\n  </div>'
+                  '  </div>\n  <div class="legend keys">\n%s\n  </div>\n%s'
                   % (esc(doc.get("keys_head", "")), key_counts_html,
-                     "\n".join(keys_notes)))
+                     "\n".join(keys_notes), tiers_block))
     if proj["missing"]:
         items = "\n".join(
             '    <li data-ceo-item="%s"><b>%s</b> &mdash; %s</li>'
@@ -371,7 +521,9 @@ def render(proj):
         "border-radius:999px;padding:1px 10px;font-size:11px}\n"
         ".kindline{margin:2px 0 6px}\n"
         ".keyline{font-size:12px;color:#1864ab;margin:0 0 6px}\n"
+        ".tierline{font-size:12px;color:#5f3dc4;margin:0 0 6px}\n"
         ".legend.keys{background:#f1f8ff;border-color:#a5d8ff}\n"
+        ".legend.tiers{background:#f3f0ff;border-color:#d0bfff}\n"
         "h2{font-size:18px;margin:32px 0 12px;padding-left:10px;border-left:4px solid var(--accent)}\n"
         ".face{background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px 16px;"
         "margin-bottom:12px}\n"
@@ -438,6 +590,8 @@ def write():
         "operable": proj["operable"],
         "kinds": {name: proj["rows"][name]["kind"] for name in proj["operable"]},
         "kind_counts": proj["kind_counts"],
+        "tier_counts": proj["tier_counts"],
+        "tier_cross": proj["tier_cross"],
         "missing_ceo_items": [row["id"] for row in proj["missing"]],
         "sizes": {"html_bytes": len(html.encode("utf-8"))},
     }
@@ -608,18 +762,73 @@ def check():
                             % (got.group(1) if got else "absent",
                                len(proj["key_outside"])))
 
+    # AC-SH11: every operable storage face prints where the variable part of its key
+    # comes from, and every tier counter equals a fresh reading of the same faces.
+    for name in proj["key_faces"]:
+        tiers = proj["rows"][name]["tiers"]
+        got = re.search(r'data-tiers="%s" data-tiers-write="([^"]*)" '
+                        r'data-tiers-read="([^"]*)" data-tiers-same="([^"]*)"'
+                        % re.escape(name), text)
+        want = (tiers["write_tier"] or "", tiers["read_tier"] or "", tiers["same"])
+        if not got:
+            failures.append("SH11 tiers_line_missing:%s" % name)
+        elif got.groups() != want:
+            failures.append("SH11 tiers:%s page=%s fresh=%s" % (name, got.groups(), want))
+    for tier in TIERS:
+        got = re.search(r'data-tier-count="%s"><b>(\d+)</b>' % tier, text)
+        value = int(got.group(1)) if got else None
+        if value != proj["tier_counts"][tier]:
+            failures.append("SH11 count:%s page=%s fresh=%d"
+                            % (tier, value, proj["tier_counts"][tier]))
+        if not (proj["doc"].get("tier_tags") or {}).get(tier):
+            failures.append("SH11 tier_tag_missing:%s" % tier)
+    for key, want in (("cross", len(proj["tier_cross"])),
+                      ("noread", len(proj["tier_noread"]))):
+        got = re.search(r'data-tier-count="%s"><b>(\d+)</b>' % key, text)
+        value = int(got.group(1)) if got else None
+        if value != want:
+            failures.append("SH11 count:%s page=%s fresh=%d" % (key, value, want))
+    nowrite = [n for n in proj["key_faces"] if not proj["rows"][n]["tiers"]["write_tier"]]
+    if sum(proj["tier_counts"].values()) + len(nowrite) != len(proj["key_faces"]):
+        failures.append("SH11 sum=%d nowrite=%d faces=%d"
+                        % (sum(proj["tier_counts"].values()), len(nowrite),
+                           len(proj["key_faces"])))
+
+    # AC-SH12: a face whose write and read take their variable part from different
+    # places must be NAMED with both tiers and both expressions; a same-tier face may
+    # not be listed as cross (no crying wolf), and none today prints so in words.
+    listed_cross = set(re.findall(r'data-tier-cross="([^"]+)"', text))
+    if listed_cross != set(proj["tier_cross"]):
+        failures.append("SH12 cross_list page=%s fresh=%s"
+                        % (sorted(listed_cross), sorted(proj["tier_cross"])))
+    if not proj["tier_cross"] and "data-tier-cross-absent" not in text:
+        failures.append("SH12 absent_line_missing")
+    for name in proj["tier_cross"]:
+        tiers = proj["rows"][name]["tiers"]
+        got = re.search(r'data-tier-cross="%s" data-tier-write="([^"]*)" '
+                        r'data-tier-read="([^"]*)" data-tier-write-expr="([^"]*)" '
+                        r'data-tier-read-expr="([^"]*)"' % re.escape(name), text)
+        want = (tiers["write_tier"], tiers["read_tier"],
+                esc(",".join(expr for expr, _ in tiers["writes"])),
+                esc(",".join(expr for expr, _ in tiers["reads"])))
+        if not got or got.groups() != want:
+            failures.append("SH12 cross:%s page=%s fresh=%s"
+                            % (name, got.groups() if got else "absent", want))
+
     if failures:
         for line in failures:
             print("  FAIL " + line)
-        print("VERDICT FAIL criteria=10 failures=%d" % len(failures))
+        print("VERDICT FAIL criteria=12 failures=%d" % len(failures))
         return 2
-    print("VERDICT PASS criteria=10 faces=%d operable=%d missing_ceo=%d external_refs=0 "
-          "kinds=%s keys=%s"
+    print("VERDICT PASS criteria=12 faces=%d operable=%d missing_ceo=%d external_refs=0 "
+          "kinds=%s keys=%s tiers=%s"
           % (proj["faces_total"], len(proj["operable"]), len(proj["missing"]),
              ",".join("%s:%d" % (kind, proj["kind_counts"][kind]) for kind in KINDS),
              ",".join("%s:%d" % (key, proj["key_counts"][key])
                       for key in ("persists", "expr_paired", "base_paired",
-                                  "orphan", "unresolved", "outside"))))
+                                  "orphan", "unresolved", "outside")),
+             ",".join("%s:%d" % (tier, proj["tier_counts"][tier]) for tier in TIERS)
+             + ",cross:%d,noread:%d" % (len(proj["tier_cross"]), len(proj["tier_noread"]))))
     return 0
 
 

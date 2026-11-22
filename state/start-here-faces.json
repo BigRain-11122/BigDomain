@@ -36,6 +36,25 @@
     "unresolved": "键用未声明符号",
     "outside": "含存储但无控件（未列入）"
   },
+  "tiers_head": "键的来源分档（可变部分从哪来，追一层赋值）：写键与读键各自归入一档，跨档的面会单独具名——",
+  "tier_tags": {
+    "literal": "字面量写死",
+    "const": "常量符号",
+    "loop": "循环变量",
+    "runtime": "运行时值",
+    "dom": "DOM 属性"
+  },
+  "tiers_fmt": "键来源：写={write} / 读={read} · {same}。档位只说明可变部分从哪来，不证明拼出的键名相同。",
+  "tiers_same_word": "同档（来源同类）",
+  "tiers_cross_word": "跨档（两边来源不同类）",
+  "tiers_noread_word": "只写不读（本面无取值）",
+  "tiers_noread": "无读键",
+  "tier_count_tags": {
+    "cross": "张面写读跨档",
+    "noread": "张面只写不读"
+  },
+  "tier_cross_fmt": "写键 {write}（{wt}）/ 读键 {read}（{rt}）——两边可变部分来源不同类，键名是否相等本读数不判断。",
+  "tier_cross_absent": "今天没有一张面的写键与读键跨档。",
   "h2_can": "能动手的 {operable} 张面（逐个点开）",
   "h2_cannot": "今天还不能做的事（缺口列在这里，不藏在别处）",
   "h2_rule": "三条常驻说明",

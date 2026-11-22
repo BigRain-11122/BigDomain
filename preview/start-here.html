@@ -23,7 +23,9 @@ header .sub{margin-top:8px;font-size:14px;opacity:.94}
 .kbadge{display:inline-block;background:#e7f5ff;border:1px solid #a5d8ff;color:#1864ab;border-radius:999px;padding:1px 10px;font-size:11px}
 .kindline{margin:2px 0 6px}
 .keyline{font-size:12px;color:#1864ab;margin:0 0 6px}
+.tierline{font-size:12px;color:#5f3dc4;margin:0 0 6px}
 .legend.keys{background:#f1f8ff;border-color:#a5d8ff}
+.legend.tiers{background:#f3f0ff;border-color:#d0bfff}
 h2{font-size:18px;margin:32px 0 12px;padding-left:10px;border-left:4px solid var(--accent)}
 .face{background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin-bottom:12px}
 .face h3{font-size:16px;margin-bottom:4px}
@@ -69,6 +71,19 @@ code{background:#eef1f6;border-radius:3px;padding:1px 5px;font-size:12px}
   <p data-keys-unresolved-absent>今天没有一张可操作面用未声明的符号当键。</p>
   <p data-keys-outside="2">另有 2 张面含存储调用但没有可操作控件，未列入上面逐张清单：lobby-session-trace.html, membership-face.html。</p>
   </div>
+  <p class="kindshead">键的来源分档（可变部分从哪来，追一层赋值）：写键与读键各自归入一档，跨档的面会单独具名——</p>
+  <div class="counts kinds">
+  <span class="kc" data-tier-count="literal"><b>0</b>字面量写死</span>
+  <span class="kc" data-tier-count="const"><b>4</b>常量符号</span>
+  <span class="kc" data-tier-count="loop"><b>0</b>循环变量</span>
+  <span class="kc" data-tier-count="runtime"><b>0</b>运行时值</span>
+  <span class="kc" data-tier-count="dom"><b>1</b>DOM 属性</span>
+  <span class="kc" data-tier-count="cross"><b>0</b>张面写读跨档</span>
+  <span class="kc" data-tier-count="noread"><b>0</b>张面只写不读</span>
+  </div>
+  <div class="legend tiers">
+  <p data-tier-cross-absent>今天没有一张面的写键与读键跨档。</p>
+  </div>
 </div></header>
 <div class="wrap">
 <h2>能动手的 6 张面（逐个点开）</h2>
@@ -90,6 +105,7 @@ code{background:#eef1f6;border-radius:3px;padding:1px 5px;font-size:12px}
     <h3><a href="filing-checklist.html">小程序备案执行清单</a> <code>filing-checklist.html</code></h3>
     <p class="kindline"><span class="kbadge" data-kind="persists">本机留存</span></p>
     <p class="keyline" data-keys="filing-checklist.html" data-keys-write="1" data-keys-read="1" data-keys-base="paired">写 1 个键 / 读 1 个键；读到的键基座：来自同一组符号；键里用到的未声明符号 0 个。</p>
+    <p class="tierline" data-tiers="filing-checklist.html" data-tiers-write="const" data-tiers-read="const" data-tiers-same="same">键来源：写=常量符号 / 读=常量符号 · 同档（来源同类）。档位只说明可变部分从哪来，不证明拼出的键名相同。</p>
     <p><b>这一步能做什么</b>逐项勾选备案执行步骤，进度存在本机浏览器里，可随时回来接着勾。</p>
     <p class="limit"><b>它不能证明什么</b>勾选是本机自述，不是平台受理回执；本仓没有备案号。</p>
     <p><a class="go" href="filing-checklist.html">打开这张面 &rarr;</a></p>
@@ -99,6 +115,7 @@ code{background:#eef1f6;border-radius:3px;padding:1px 5px;font-size:12px}
     <h3><a href="lobby-protocol-map.html">大厅协议图</a> <code>lobby-protocol-map.html</code></h3>
     <p class="kindline"><span class="kbadge" data-kind="persists">本机留存</span></p>
     <p class="keyline" data-keys="lobby-protocol-map.html" data-keys-write="1" data-keys-read="1" data-keys-base="paired">写 1 个键 / 读 1 个键；读到的键基座：来自同一组符号；键里用到的未声明符号 0 个。</p>
+    <p class="tierline" data-tiers="lobby-protocol-map.html" data-tiers-write="const" data-tiers-read="const" data-tiers-same="same">键来源：写=常量符号 / 读=常量符号 · 同档（来源同类）。档位只说明可变部分从哪来，不证明拼出的键名相同。</p>
     <p><b>这一步能做什么</b>在过滤框里输入消息前缀或判据号，筛出对应的协议节点与判据覆盖。</p>
     <p class="limit"><b>它不能证明什么</b>只读派生视图：不改任何协议，也不连任何服务器。</p>
     <p><a class="go" href="lobby-protocol-map.html">打开这张面 &rarr;</a></p>
@@ -108,6 +125,7 @@ code{background:#eef1f6;border-radius:3px;padding:1px 5px;font-size:12px}
     <h3><a href="merchant-onboard.html">商户号接入自查单</a> <code>merchant-onboard.html</code></h3>
     <p class="kindline"><span class="kbadge" data-kind="persists">本机留存</span></p>
     <p class="keyline" data-keys="merchant-onboard.html" data-keys-write="1" data-keys-read="1" data-keys-base="paired">写 1 个键 / 读 1 个键；读到的键基座：来自同一组符号；键里用到的未声明符号 0 个。</p>
+    <p class="tierline" data-tiers="merchant-onboard.html" data-tiers-write="const" data-tiers-read="const" data-tiers-same="same">键来源：写=常量符号 / 读=常量符号 · 同档（来源同类）。档位只说明可变部分从哪来，不证明拼出的键名相同。</p>
     <p><b>这一步能做什么</b>看 8 项缺口（6 项 CEO 物理件 + 2 项我方证据），逐项勾自述进度，并同时看到『自述 k/6』与『有证据 m/8』两个计数器。</p>
     <p class="limit"><b>它不能证明什么</b>自述不是验证；两项证据只证沙箱回调与页内账簿自洽，不证明真实商户通道可用；本页永远不收密钥值。</p>
     <p><a class="go" href="merchant-onboard.html">打开这张面 &rarr;</a></p>
@@ -117,6 +135,7 @@ code{background:#eef1f6;border-radius:3px;padding:1px 5px;font-size:12px}
     <h3><a href="money-path-demo.html">收款演练（MOCK）</a> <code>money-path-demo.html</code></h3>
     <p class="kindline"><span class="kbadge" data-kind="persists">本机留存</span></p>
     <p class="keyline" data-keys="money-path-demo.html" data-keys-write="1" data-keys-read="1" data-keys-base="orphan">写 1 个键 / 读 1 个键；读到的键基座：有读无写（基座不同）；键里用到的未声明符号 0 个。</p>
+    <p class="tierline" data-tiers="money-path-demo.html" data-tiers-write="dom" data-tiers-read="dom" data-tiers-same="same">键来源：写=DOM 属性 / 读=DOM 属性 · 同档（来源同类）。档位只说明可变部分从哪来，不证明拼出的键名相同。</p>
     <p><b>这一步能做什么</b>按打勾步骤走一遍收款到入权益的钱路，看每一步的页内读数。</p>
     <p class="limit"><b>它不能证明什么</b>全程页内模拟：没有一笔真实资金移动，也没有真实订单落在任何支付平台。</p>
     <p><a class="go" href="money-path-demo.html">打开这张面 &rarr;</a></p>
@@ -126,6 +145,7 @@ code{background:#eef1f6;border-radius:3px;padding:1px 5px;font-size:12px}
     <h3><a href="ship-checklist.html">上线前置清单</a> <code>ship-checklist.html</code></h3>
     <p class="kindline"><span class="kbadge" data-kind="persists">本机留存</span></p>
     <p class="keyline" data-keys="ship-checklist.html" data-keys-write="1" data-keys-read="1" data-keys-base="paired">写 1 个键 / 读 1 个键；读到的键基座：来自同一组符号；键里用到的未声明符号 0 个。</p>
+    <p class="tierline" data-tiers="ship-checklist.html" data-tiers-write="const" data-tiers-read="const" data-tiers-same="same">键来源：写=常量符号 / 读=常量符号 · 同档（来源同类）。档位只说明可变部分从哪来，不证明拼出的键名相同。</p>
     <p><b>这一步能做什么</b>逐项勾选上线前的硬门（AIGC 标识、msgSecCheck 前置闸等），进度本地留存。</p>
     <p class="limit"><b>它不能证明什么</b>勾满不等于可上线：支付通道、备案、服务器等物理件仍缺。</p>
     <p><a class="go" href="ship-checklist.html">打开这张面 &rarr;</a></p>
@@ -150,7 +170,7 @@ code{background:#eef1f6;border-radius:3px;padding:1px 5px;font-size:12px}
   <p data-notice="advice">非投顾提示：本页与全部预览面不构成任何投资建议。</p>
   <p data-notice="mock">MOCK：本页列出的支付、账本、权益流程全部是页内模拟，不接真实资金通道。</p>
 </div>
-<footer>sources: state/start-here-faces.json c783eae9efe51c45 / state/merchant-onboard-items.json via tools/merchant_onboard.project_items()</footer>
+<footer>sources: state/start-here-faces.json aad21c9121914bca / state/merchant-onboard-items.json via tools/merchant_onboard.project_items()</footer>
 </div>
 </body>
 </html>

@@ -1,7 +1,7 @@
 {
  "face": "start-here",
  "generated_from": {
-  "state/start-here-faces.json": "c783eae9efe51c45"
+  "state/start-here-faces.json": "aad21c9121914bca"
  },
  "faces_total": 44,
  "operable": [
@@ -26,6 +26,14 @@
   "wires": 0,
   "inert": 0
  },
+ "tier_counts": {
+  "literal": 0,
+  "const": 4,
+  "loop": 0,
+  "runtime": 0,
+  "dom": 1
+ },
+ "tier_cross": [],
  "missing_ceo_items": [
   "mchid",
   "settlement",
@@ -35,6 +43,6 @@
   "pubkey"
  ],
  "sizes": {
-  "html_bytes": 12848
+  "html_bytes": 15211
  }
 }

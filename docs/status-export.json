@@ -3,17 +3,17 @@
     "board_pages_skipped": [
       "preview/ceo-blockers.html (8454B)"
     ],
-    "current": "2026-11-22 R3254 PRODUCT+ENGINEERING: the persists stratum now reads its own storage KEYS instead of trusting the word localStorage - tools/start_here.py derives, from each face's bytes alone, which key expressions it writes, which it reads and which declared symbols those expressions rest on, so 'keeps state across a reload' is no longer the same claim as 'reads a key it writes'. A face whose read key does not rest on the same symbols as its write key is NAMED on the page with both expressions printed; so is a face keying on a symbol it never declares.",
+    "current": "2026-11-22 R3255 PRODUCT+ENGINEERING: the front door's key pairing now says WHERE the variable part of each key comes from, one hop deep - tools/start_here.py derives a source tier per key expression (literal, const, loop, runtime, dom) from the face's own bytes and prints write tier, read tier and same-or-cross per storage face, plus tier counters and a named cross list. Live: const:4 dom:1 cross:0. money-path-demo is still the symbol orphan, and the new reading says why that is not the same as reading a key it never wrote: its write takes this.getAttribute('data-ck') and its read takes kk, bound one line earlier to T[n].getAttribute('data-ck') - same source kind, different symbol.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
-    "last_artifact": "preview/start-here.html (12848B) + preview/start-here.json (760B) [2026-11-22 mtime]",
-    "latest_artifact": "preview/start-here.html (12848B) + preview/start-here.json (760B) [2026-11-22 mtime]",
+    "last_artifact": "preview/start-here.html (15211B) + preview/start-here.json (871B) [2026-11-22 mtime]",
+    "latest_artifact": "preview/start-here.html (15211B) + preview/start-here.json (871B) [2026-11-22 mtime]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\start-here.html",
     "latest_artifact_note": "",
     "latest_evidence": "qa/suite-ugc-gate-R3246.log (5047B, 2026-11-22)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3254] next window (<=48h): (0) MAIN — **本轮把「基座」判出来了，但「基座相同」不等于「键名相同」**：`money-path-demo` 被点名的原因是写键由 `this.getAttribute('data-ck')` 派生、读键由循环变量 `kk` 派生，机械判据只能看见「符号集合不包含」，看不见「运行时拼出来的字符串是不是同一个」。问：值不值得把键的来源再分一层（①字面量派生 ②常量符号派生 ③DOM 属性/运行时值派生），让读者一眼看出哪些面的留存依赖「DOM 值恰好等于 JS 变量」？做法＝先只读量三问：①七张存储面的写读键各属哪一档（能否从表达式自身机械判：含 `getAttribute|dataset|\\.value|innerHTML` 即运行时派生，纯 `IDENT+const` 即常量派生，纯字面量即字面量）；②分档后能否给出「同档才可比」的配对律（跨档配对必须具名，而不是一律 orphan）；③代价（一次派生多少字节、要不要给 `money-path-demo` 一类面单独开例外——**不开例外**，只把不可比这件事说清）。收口三选一＝①接受现状（orphan 已经点名，零风险）②加一层来源分档（更精确，仍是文本证据）③升级为运行证据（要在无头环境真开页面点一次，跨「不执行 JS」的既有边界）。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
-    "next_milestone_due": "2026-11-24T11:59:28+08:00",
-    "updated_at": "2026-11-22T11:59:28+08:00",
+    "next_milestone": "[R3255] next window (<=48h): (0) MAIN — **档位说明了来源类别，但说明不了「两条表达式指同一个东西」**：`money-path-demo` 两边都是 dom 派生了，可写侧取的是 `this` 的属性、读侧取的是循环元素 `T[n]` 的属性，静态读数至今说不出这两个属性名是否同一个（`data-ck` vs `data-ck`）。问：值不值得把 **属性名本身** 也判出来？做法＝先只读量三问：①七张存储面的 `getAttribute('X')` 参数各是什么（注意现有表达式已把字符串字面量剥成 `\"\"`，要另从原始文本取），双侧是否存在同名参数；②能否给出「同名即同档可比 / 异名即具名不可比」的机械律，且不把没有 `getAttribute` 的面误判；③代价（要再读一次原始文本还是复用已有读取、页增多少字节）。收口三选一＝①接受现状（档位已说清来源类别，等式不可判是诚实的）②加一层「属性名是否同名」判据（更精确，仍是文本证据，代价=一处额外的字面量提取）③升级为运行证据（无头开页点一次，实测键名，跨「不执行 JS」边界）。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
+    "next_milestone_due": "2026-11-24T12:11:13+08:00",
+    "updated_at": "2026-11-22T12:11:13+08:00",
     "heartbeat": {
       "tick": 3246,
       "state_tick": 3246,
@@ -37,8 +37,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-22 R3254 PRODUCT+ENGINEERING: the persists stratum now reads its own storage KEYS instead of trusting the word localStorage - tools/start_here.py derives, from each face's bytes alone, which key expressions it writes, which it reads and which declared symbols those expressions rest on, so 'keeps state across a reload' is no longer the same claim as 'reads a key it writes'. A face whose read key does not rest on the same symbols as its write key is NAMED on the page with both expressions printed; so is a face keying on a symbol it never declares.",
-  "claims": {"claimed": 313, "captured": 95, "contradicted": 10, "uncaptured": 208, "historic": 7, "rows": 11, "present": true, "census_ts": "2026-11-22T11:59:28+08:00"},
+  "current": "2026-11-22 R3255 PRODUCT+ENGINEERING: the front door's key pairing now says WHERE the variable part of each key comes from, one hop deep - tools/start_here.py derives a source tier per key expression (literal, const, loop, runtime, dom) from the face's own bytes and prints write tier, read tier and same-or-cross per storage face, plus tier counters and a named cross list. Live: const:4 dom:1 cross:0. money-path-demo is still the symbol orphan, and the new reading says why that is not the same as reading a key it never wrote: its write takes this.getAttribute('data-ck') and its read takes kk, bound one line earlier to T[n].getAttribute('data-ck') - same source kind, different symbol.",
+  "claims": {"claimed": 315, "captured": 95, "contradicted": 10, "uncaptured": 210, "historic": 7, "rows": 11, "present": true, "census_ts": "2026-11-22T12:11:13+08:00"},
   "chain": {"present": true, "rows": 11, "broken": 0, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -67,11 +67,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-22 R3254 PRODUCT+ENGINEERING: the persists stratum now reads its own storage KEYS instead of trusting the word localStorage - tools/start_here.py derives, from each face's bytes alone, which key expressions it writes, which it reads and which declared symbols those expressions rest on, so 'keeps state across a reload' is no longer the same claim as 'reads a key it writes'. A face whose read key does not rest on the same symbols as its write key is NAMED on the page with both expressions printed; so is a face keying on a symbol it never declares.",
-  "export_ts": "2026-11-22T11:59:28+08:00",
-  "latest_artifact": "preview/start-here.html (12848B) + preview/start-here.json (760B) [2026-11-22 mtime]",
+  "do": "2026-11-22 R3255 PRODUCT+ENGINEERING: the front door's key pairing now says WHERE the variable part of each key comes from, one hop deep - tools/start_here.py derives a source tier per key expression (literal, const, loop, runtime, dom) from the face's own bytes and prints write tier, read tier and same-or-cross per storage face, plus tier counters and a named cross list. Live: const:4 dom:1 cross:0. money-path-demo is still the symbol orphan, and the new reading says why that is not the same as reading a key it never wrote: its write takes this.getAttribute('data-ck') and its read takes kk, bound one line earlier to T[n].getAttribute('data-ck') - same source kind, different symbol.",
+  "export_ts": "2026-11-22T12:11:13+08:00",
+  "latest_artifact": "preview/start-here.html (15211B) + preview/start-here.json (871B) [2026-11-22 mtime]",
   "latest_evidence": "qa/suite-ugc-gate-R3246.log (5047B, 2026-11-22)",
-  "next_milestone": "[R3254] next window (<=48h): (0) MAIN — **本轮把「基座」判出来了，但「基座相同」不等于「键名相同」**：`money-path-demo` 被点名的原因是写键由 `this.getAttribute('data-ck')` 派生、读键由循环变量 `kk` 派生，机械判据只能看见「符号集合不包含」，看不见「运行时拼出来的字符串是不是同一个」。问：值不值得把键的来源再分一层（①字面量派生 ②常量符号派生 ③DOM 属性/运行时值派生），让读者一眼看出哪些面的留存依赖「DOM 值恰好等于 JS 变量」？做法＝先只读量三问：①七张存储面的写读键各属哪一档（能否从表达式自身机械判：含 `getAttribute|dataset|\\.value|innerHTML` 即运行时派生，纯 `IDENT+const` 即常量派生，纯字面量即字面量）；②分档后能否给出「同档才可比」的配对律（跨档配对必须具名，而不是一律 orphan）；③代价（一次派生多少字节、要不要给 `money-path-demo` 一类面单独开例外——**不开例外**，只把不可比这件事说清）。收口三选一＝①接受现状（orphan 已经点名，零风险）②加一层来源分档（更精确，仍是文本证据）③升级为运行证据（要在无头环境真开页面点一次，跨「不执行 JS」的既有边界）。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
+  "next_milestone": "[R3255] next window (<=48h): (0) MAIN — **档位说明了来源类别，但说明不了「两条表达式指同一个东西」**：`money-path-demo` 两边都是 dom 派生了，可写侧取的是 `this` 的属性、读侧取的是循环元素 `T[n]` 的属性，静态读数至今说不出这两个属性名是否同一个（`data-ck` vs `data-ck`）。问：值不值得把 **属性名本身** 也判出来？做法＝先只读量三问：①七张存储面的 `getAttribute('X')` 参数各是什么（注意现有表达式已把字符串字面量剥成 `\"\"`，要另从原始文本取），双侧是否存在同名参数；②能否给出「同名即同档可比 / 异名即具名不可比」的机械律，且不把没有 `getAttribute` 的面误判；③代价（要再读一次原始文本还是复用已有读取、页增多少字节）。收口三选一＝①接受现状（档位已说清来源类别，等式不可判是诚实的）②加一层「属性名是否同名」判据（更精确，仍是文本证据，代价=一处额外的字面量提取）③升级为运行证据（无头开页点一次，实测键名，跨「不执行 JS」边界）。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
   "outs": [
     "preview/ugc-gate-report.html (22688B) + preview/ugc-gate-report.json (16020B) [2026-11-22 mtime]",
     "probe-R3243.log (2178B) + suite-ugc-gate-R3243.log (3094B)",
@@ -164,8 +164,8 @@
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 60143,
-  "next_milestone_due": "2026-11-24T11:59:28+08:00",
+  "state_bytes": 66761,
+  "next_milestone_due": "2026-11-24T12:11:13+08:00",
   "heartbeat": {
     "tick": 3246,
     "state_tick": 3246,
