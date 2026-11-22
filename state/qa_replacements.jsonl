@@ -22,3 +22,4 @@
 {"event": "REPLACED", "name": "probe-R3297.log", "new_bytes": 1, "new_sha16": "01ba4719c80b6fe9", "old_bytes": 3443, "old_sha16": "b1f3030af97b046e", "ts": "2026-11-22T13:29:01Z"}
 {"event": "REPLACED", "name": "probe-R3297.log", "new_bytes": 3443, "new_sha16": "b1f3030af97b046e", "old_bytes": 1, "old_sha16": "01ba4719c80b6fe9", "ts": "2026-11-22T13:29:16Z"}
 {"event": "REPLACED", "name": "closeout-order-R3299.log", "new_bytes": 1693, "new_sha16": "ee3d993fa6754dbd", "old_bytes": 1717, "old_sha16": "894eceac9471e0dd", "ts": "2026-11-22T15:48:34Z"}
+{"event": "REPLACED", "name": "negctl-R3312.log", "new_bytes": 527, "new_sha16": "b63f5f8f309aaaef", "old_bytes": 527, "old_sha16": "88912abf01884dcd", "ts": "2026-11-22T18:48:37Z"}

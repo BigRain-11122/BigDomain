@@ -564,7 +564,7 @@ def main():
         ok('AC-EXPW22 a round carrying only the waiting line still publishes it',
            'MONITORED-WAIT' in cur6, cur6[:60])
         measured = {'GROUP', 'MONITORED-WAIT', 'DECISIONS', 'BOARD', 'BATTERY',
-                    'REGISTRY', 'FOLD'}
+                    'REGISTRY', 'FOLD', 'GORD', 'DEC', 'DEC/GORD'}
         ok('AC-EXPW22 the meta set equals the measured corpus (no guessed word '
            'can enter, and no measured word can silently leave)',
            set(mod.LL.META_LABELS) == measured,
@@ -576,6 +576,69 @@ def main():
                       '2026-11-23 R9011 %s: one thing' % lab)]
         ok('AC-EXPW22 product and evidence labels are never classified as meta',
            leaked == [], repr(leaked))
+
+        # R3312 AC-EXPW23: the set was missing the words this register writes
+        # for its SCAN steps, measured over live+archive (GORD 30 headlines,
+        # DEC 2, DEC/GORD 6). The board's own proposal - tightening the label
+        # law to require ':' or '+' - was refused by measurement instead: it
+        # drops 1574 of 2480 headlines and strips 308 rounds of their only
+        # labelled dated line, so it would refuse shapes the history wrote.
+        # These arms hold the widening and its two limits: a scan receipt never
+        # outranks the product line, a round carrying only the receipt still
+        # publishes it, every word in the set is measured in the corpus, and
+        # the live face does not move (the live window holds 0 such headlines).
+        scans = (
+            ('GORD',
+             '2026-10-08 R9011 GORD receipt of the daily scan (tbl_rows '
+             '192->195): each row was judged'),
+            ('DEC',
+             '2026-10-06 R9011 DEC four new tokens were read and judged'),
+            ('DEC/GORD',
+             '2026-10-06 R9011 DEC/GORD receipt of the scan step only'),
+        )
+        for label, scan in scans:
+            s11['log'] = [scan, prod, range_only]
+            curw = mod.derive(w11, s11, 'T11')['current']
+            ok('AC-EXPW23 a %s scan receipt above the product line never '
+               'becomes current' % label,
+               'PRODUCT+ENGINEERING' in curw and label not in curw,
+               curw[:60])
+        s11['log'] = [scans[0][1]]
+        curw2 = mod.derive(w11, s11, 'T11')['current']
+        ok('AC-EXPW23 a round carrying only the scan receipt still publishes it',
+           'GORD' in curw2, curw2[:60])
+
+        def corpus_labels():
+            texts = []
+            live_state = os.path.join(ROOT, 'src', 'os', 'state.json')
+            texts.extend(json.loads(read(live_state)).get('log') or [])
+            logs_dir = os.path.join(ROOT, 'logs')
+            if os.path.isdir(logs_dir):
+                for name in sorted(os.listdir(logs_dir)):
+                    if name.startswith('state-log-archive-') \
+                            and name.endswith('.md'):
+                        for raw in read(os.path.join(logs_dir, name)).splitlines():
+                            if raw.strip() and not raw.startswith('#'):
+                                texts.append(raw)
+            return texts
+
+        corpus = corpus_labels()
+        missing = [lab for lab in mod.LL.META_LABELS
+                   if not any(
+                       re.match(r'^(?:\d{4}-\d{2}-\d{2}\s+)?R\d{3,5}\s+'
+                                + re.escape(lab) + r'\b', line)
+                       for line in corpus)]
+        ok('AC-EXPW23 every word in the meta set is measured in the corpus',
+           missing == [], repr(missing))
+
+        live_log = json.loads(
+            read(os.path.join(ROOT, 'src', 'os', 'state.json'))).get('log') or []
+        live_pick = mod.last_round_line({'log': live_log})
+        ok('AC-EXPW23 the live face does not move - the published line is not '
+           'one of the newly measured words',
+           live_pick != ''
+           and not mod.LL.ROUND_META_RE.match(live_pick),
+           live_pick[:60])
 
         # ---- AC-EXPW13: R2821 archived the results block, and the writer refuses
         # ---- to notice. An archive that still resolves must not block the write,

@@ -143,8 +143,29 @@ ROUND_LABEL_RE = re.compile(
 # name evidence or product (PRODUCT+ENGINEERING, PRODUCT, SHIPPED, PROOF,
 # VERIFICATION, DEBT, MEASURED) are deliberately ABSENT - a test arm rejects
 # their insertion, so the set cannot be widened into a false gate.
+# R3312 AC-EXPW23: the set grew by two MEASURED observation words, and the
+# alternative remedy was refused by measurement rather than by taste. The board
+# asked whether ROUND_LABEL_SRC is too wide - whether a narrative's first word
+# becomes a label. Measured over live+archive (25305 lines, 2086 rounds):
+#   (a) tightening the label law to require ':' or '+' right after the run
+#       drops 1574 of 2480 headlines and strips 308 rounds of their only
+#       labelled dated main line, i.e. the write gate would refuse shapes the
+#       history wrote and its readers still accept. That is a false gate, so
+#       the law is NOT tightened (qa/probe-R3312.log carries the numbers).
+#   (b) the prose-sentence class the board named does not exist here: every
+#       THE/ONE/TWO/THREE/FOUR opener is an ALL-CAPS heading of three or more
+#       words, and the count of headlines whose run is at most two words
+#       followed by lowercase prose is 0.
+#   (c) the real residue was the set below missing the words this register
+#       actually writes for its scan steps: GORD (30 headlines), DEC (2) and
+#       DEC/GORD (6) name the group-orders and decisions receipts, exactly the
+#       OBSERVATION step DECISIONS already covered in long form. Patching them
+#       in changed 20 historical rounds from a scan receipt to the round's
+#       actual work line, with no round losing its line and none falling back
+#       to an older round. The live window holds 0 such headlines today, so
+#       the published ceo_face.current does not move.
 META_LABELS = ("GROUP", "MONITORED-WAIT", "DECISIONS", "BOARD", "BATTERY",
-               "REGISTRY", "FOLD")
+               "REGISTRY", "FOLD", "GORD", "DEC", "DEC/GORD")
 ROUND_META_RE = re.compile(
     r"^(?:\d{4}-\d{2}-\d{2}\s+)?R\d{3,5}\s+(?:"
     + "|".join(META_LABELS) + r")\b")

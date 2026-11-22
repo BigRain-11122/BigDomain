@@ -1,0 +1,9 @@
+NCTL shipped_set=('GROUP', 'MONITORED-WAIT', 'DECISIONS', 'BOARD', 'BATTERY', 'REGISTRY', 'FOLD', 'GORD', 'DEC', 'DEC/GORD')
+NCTL drop-gord-reddens                      PASS
+NCTL drop-dec-and-dec-gord-reddens          PASS
+NCTL widen-to-swallow-product-reddens       PASS
+NCTL shipped-set-publishes-product          PASS
+NCTL live-face-carries-a-product-line       PASS
+NCTL arms=5 failed=0
+NCTL measured: drop_gord->b'2026-10-08 R9011 GORD receipt of the dai'
+NCTL measured: widen->b'2026-10-06 R9011 a note that carries no '
