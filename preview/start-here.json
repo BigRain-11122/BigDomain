@@ -1,34 +1,24 @@
 {
  "face": "start-here",
  "generated_from": {
-  "state/start-here-faces.json": "c7b3ba8b445f917b"
+  "state/start-here-faces.json": "4f74abd6d7b3bb4e"
  },
- "faces_total": 44,
+ "faces_total": 1,
  "operable": [
-  "buyer-trial.html",
-  "filing-checklist.html",
-  "lobby-protocol-map.html",
-  "merchant-onboard.html",
-  "money-path-demo.html",
-  "ship-checklist.html"
+  "private.html"
  ],
  "kinds": {
-  "buyer-trial.html": "screen",
-  "filing-checklist.html": "persists",
-  "lobby-protocol-map.html": "persists",
-  "merchant-onboard.html": "persists",
-  "money-path-demo.html": "persists",
-  "ship-checklist.html": "persists"
+  "private.html": "persists"
  },
  "kind_counts": {
-  "persists": 5,
-  "screen": 1,
+  "persists": 1,
+  "screen": 0,
   "wires": 0,
   "inert": 0
  },
  "tier_counts": {
   "literal": 0,
-  "const": 4,
+  "const": 0,
   "loop": 0,
   "runtime": 0,
   "dom": 1
@@ -38,7 +28,7 @@
   "same-name": 1,
   "different": 0,
   "one-side": 0,
-  "no-attr": 4,
+  "no-attr": 0,
   "unknown": 0
  },
  "attr_different": [],
@@ -47,54 +37,29 @@
   "same-host": 1,
   "different-host": 0,
   "one-side": 0,
-  "no-host": 4,
+  "no-host": 0,
   "unknown": 0,
   "lexical": 0
  },
  "host_lexical": [],
  "host_lexical_calls": 0,
  "form_counts": {
-  "simple": 4,
-  "call": 1,
-  "named": 2,
+  "simple": 0,
+  "call": 0,
+  "named": 0,
   "attr": 0
  },
- "form_sites": 7,
+ "form_sites": 0,
  "named_decl_counts": {
-  "func": 2,
+  "func": 0,
   "varfunc": 0,
   "arrow": 0,
   "mixed": 0,
   "none": 0
  },
- "named_total": 2,
- "form_calls": {
-  "merchant-onboard.html": [
-   "$('reset')"
-  ]
- },
- "form_named": {
-  "lobby-protocol-map.html": [
-   [
-    "apply",
-    "called",
-    [
-     "q"
-    ],
-    "func"
-   ]
-  ],
-  "merchant-onboard.html": [
-   [
-    "onToggle",
-    "resolved",
-    [
-     "boxes[i]"
-    ],
-    "func"
-   ]
-  ]
- },
+ "named_total": 0,
+ "form_calls": {},
+ "form_named": {},
  "missing_ceo_items": [
   "mchid",
   "settlement",
@@ -104,6 +69,6 @@
   "pubkey"
  ],
  "sizes": {
-  "html_bytes": 26954
+  "html_bytes": 18239
  }
 }

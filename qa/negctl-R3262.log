@@ -1,0 +1,12 @@
+PASS c1_live_copy_passes live copy rc=0
+PASS c2_edited_cond_column_reddens column edit rc=2
+PASS c3_edited_total_reddens total edit rc=2
+PASS c4_missing_total_row_is_named row dropped rc=2
+PASS c5_clean_face_listed_reddens clean face rc=2
+PASS c6_absent_line_missing_reddens absent rc=2
+PASS c7_missing_word_reddens word rc=2
+PASS c8_missing_slot_reddens slot rc=2
+PASS c9_bare_comma_op_is_counted unbal=1 body='c ? x'
+PASS c10_the_six_whole_forms_stay_whole unbal={'paren_comma_op': 0, 'nested_ternary': 0, 'array_element': 0, 'object_value': 0, 'call_commas': 0}
+PASS c11_private_world_lights_the_gauge rc=0 named=True absent=False
+NEGCTL PASS cases=11 failed=0

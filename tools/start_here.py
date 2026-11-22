@@ -444,6 +444,32 @@ def expr_arrow_sites(blanked):
     return out
 
 
+def cond_unbal(blanked):
+    """Expression-bodied arrows whose body ends still owing a depth-0 colon. R3262
+    measured seven conditional forms against the depth-0 stop set: six are kept whole
+    (an array element, an object value followed by a comma, a call's own commas, a
+    parenthesised comma operator, a nested conditional) and exactly one is TRUNCATED -
+    a bare comma operator inside a conditional, `() => c ? x, y : z`, which reads as
+    `c ? x`. This count is the one mechanical trace of that truncation, and it is text
+    only, never executed."""
+    out = 0
+    for start, end, _target in expr_arrow_sites(blanked):
+        depth = 0
+        owed = 0
+        for ch in blanked[start:end + 1]:
+            if ch in "([{":
+                depth += 1
+            elif ch in ")]}":
+                depth -= 1
+            elif depth == 0 and ch == "?":
+                owed += 1
+            elif depth == 0 and ch == ":" and owed:
+                owed -= 1
+        if owed:
+            out += 1
+    return out
+
+
 def _raw_slice(raw, blanked, start, end):
     """The text at [start,end) from the RAW copy when one is given: a receiver such as
     $('reset') must not be printed as $('') just because strings are blanked for
@@ -747,6 +773,7 @@ def host_reading(text, keys=None):
             "unknown": w_bad + r_bad, "lexical": lexical,
             "lexical_targets": sorted(lex_targets), "verdict": verdict,
             "expr_bodies": len(expr_arrow_sites(blanked)),
+            "cond_unbal": cond_unbal(blanked),
             "handlers": len(spans),
             "bound": len([s for s in spans if s[4] == FUNC_KIND
                           and s[3] != "addEventListener"])}
@@ -846,6 +873,8 @@ def projection():
     host_lexical_calls = sum(rows[n]["hosts"]["lexical"] for n in host_lexical)
     expr_faces = [n for n in key_faces if rows[n]["hosts"]["expr_bodies"]]
     expr_total = sum(rows[n]["hosts"]["expr_bodies"] for n in expr_faces)
+    cond_faces = [n for n in key_faces if rows[n]["hosts"]["cond_unbal"]]
+    cond_total = sum(rows[n]["hosts"]["cond_unbal"] for n in cond_faces)
     form_counts = {form: 0 for form in HANDLER_FORMS}
     for name in key_faces:
         for form, count in rows[name]["forms"]["forms"].items():
@@ -886,6 +915,8 @@ def projection():
         "host_lexical_calls": host_lexical_calls,
         "expr_faces": expr_faces,
         "expr_total": expr_total,
+        "cond_faces": cond_faces,
+        "cond_total": cond_total,
         "form_counts": form_counts,
         "form_calls": form_calls,
         "form_named": form_named,
@@ -1030,10 +1061,12 @@ def render(proj):
             hosts = proj["rows"][name]["hosts"]
             hostline = ('    <p class="hostline" data-hosts="%s" data-hosts-write="%s" '
                         'data-hosts-read="%s" data-hosts-verdict="%s" '
-                        'data-hosts-lexical="%d" data-expr-arrows="%d">%s</p>\n'
+                        'data-hosts-lexical="%d" data-expr-arrows="%d" '
+                        'data-cond-unbal="%d">%s</p>\n'
                         % (esc(name), esc(",".join(hosts["write"])),
                            esc(",".join(hosts["read"])), esc(hosts["verdict"]),
                            hosts["lexical"], hosts["expr_bodies"],
+                           hosts["cond_unbal"],
                            esc(host_phrase(doc, hosts))))
         else:
             hostline = ""
@@ -1240,16 +1273,34 @@ def render(proj):
             '  <p data-expr-arrows="%s" data-expr-arrows-count="%d">%s</p>'
             % (esc(name), hosts["expr_bodies"],
                esc((doc.get("expr_fmt") or "").format(calls=hosts["expr_bodies"]))))
+    cond_notes = []
+    for name in proj["cond_faces"] or [None]:
+        if not name:
+            cond_notes.append('  <p data-cond-unbal-absent>%s</p>'
+                              % esc(doc.get("cond_absent") or ""))
+            continue
+        hosts = proj["rows"][name]["hosts"]
+        cond_notes.append(
+            '  <p data-cond-unbal="%s" data-cond-unbal-count="%d">%s</p>'
+            % (esc(name), hosts["cond_unbal"],
+               esc((doc.get("cond_fmt") or "").format(n=hosts["cond_unbal"]))))
     expr_counts_html = ('  <span class="kc" data-expr-total="%d"><b>%d</b>%s</span>'
                         % (proj["expr_total"], proj["expr_total"],
                            esc(doc.get("expr_head", ""))))
+    cond_counts_html = ('  <span class="kc" data-cond-total="%d"><b>%d</b>%s</span>'
+                        % (proj["cond_total"], proj["cond_total"],
+                           esc(doc.get("cond_head", ""))))
     hosts_block = ('  <p class="kindshead">%s</p>\n  <div class="counts kinds">\n%s\n'
                    '  </div>\n  <p class="kindshead">%s</p>\n'
+                   '  <div class="counts kinds">\n%s\n  </div>\n'
+                   '  <p class="kindshead">%s</p>\n'
                    '  <div class="counts kinds">\n%s\n  </div>\n'
                    '  <div class="legend hosts">\n%s\n  </div>\n  <p class="note">%s</p>'
                    % (esc(doc.get("hosts_head", "")), host_counts_html,
                       esc(doc.get("expr_head", "")), expr_counts_html,
-                      "\n".join(host_notes), esc(doc.get("host_note", ""))))
+                      esc(doc.get("cond_head", "")), cond_counts_html,
+                      "\n".join(host_notes + cond_notes),
+                      esc(doc.get("host_note", ""))))
     form_counts_html = "\n".join(
         '  <span class="kc" data-form-count="%s"><b>%d</b>%s</span>'
         % (form, proj["form_counts"][form], esc(form_word(doc, form)))
@@ -1953,12 +2004,57 @@ def check():
         if not (proj["doc"].get(key) or "").strip():
             failures.append("SH19 word_missing:%s" % key)
 
+    # AC-SH20: R3262 measured seven conditional forms against the depth-0 stop set and
+    # found six kept whole, with exactly one TRUNCATED - a bare comma operator inside a
+    # conditional. Rather than rewrite the span, the face carries one count of bodies
+    # that end still owing a colon, graded here against a fresh reading. Zero on the live
+    # tree is printed as a named absence, because a table that can never light must say
+    # so instead of letting a zero read as coverage.
+    for name in proj["key_faces"]:
+        hosts = proj["rows"][name]["hosts"]
+        got = re.search(r'data-hosts="%s"[^>]*data-cond-unbal="(\d+)"'
+                        % re.escape(name), text)
+        if not got:
+            failures.append("SH20 column_missing:%s" % name)
+        elif int(got.group(1)) != hosts["cond_unbal"]:
+            failures.append("SH20 count:%s page=%s fresh=%d"
+                            % (name, got.group(1), hosts["cond_unbal"]))
+    got = re.search(r'data-cond-total="(\d+)"><b>(\d+)</b>', text)
+    if not got:
+        failures.append("SH20 total_missing")
+    elif got.groups() != (str(proj["cond_total"]), str(proj["cond_total"])):
+        failures.append("SH20 total page=%s fresh=%d"
+                        % (got.groups(), proj["cond_total"]))
+    listed_cond = {}
+    for name, calls in re.findall(r'data-cond-unbal="([^"]+)" '
+                                  r'data-cond-unbal-count="(\d+)"', text):
+        listed_cond[name] = int(calls)
+    if set(listed_cond) != set(proj["cond_faces"]):
+        failures.append("SH20 list page=%s fresh=%s"
+                        % (sorted(listed_cond), sorted(proj["cond_faces"])))
+    for name in proj["cond_faces"]:
+        if name in listed_cond and listed_cond[name] != \
+                proj["rows"][name]["hosts"]["cond_unbal"]:
+            failures.append("SH20 named_count:%s" % name)
+        if not proj["rows"][name]["hosts"]["cond_unbal"]:
+            failures.append("SH20 clean_face_listed:%s" % name)
+    if not proj["cond_faces"] and "data-cond-unbal-absent" not in text:
+        failures.append("SH20 absent_line_missing")
+    if proj["cond_total"] != sum(proj["rows"][n]["hosts"]["cond_unbal"]
+                                 for n in proj["cond_faces"]):
+        failures.append("SH20 sum")
+    for key in ("cond_head", "cond_fmt", "cond_absent"):
+        if not (proj["doc"].get(key) or "").strip():
+            failures.append("SH20 word_missing:%s" % key)
+    if "{n}" not in (proj["doc"].get("cond_fmt") or ""):
+        failures.append("SH20 slot_missing:cond_fmt")
+
     if failures:
         for line in failures:
             print("  FAIL " + line)
-        print("VERDICT FAIL criteria=19 failures=%d" % len(failures))
+        print("VERDICT FAIL criteria=20 failures=%d" % len(failures))
         return 2
-    print("VERDICT PASS criteria=19 faces=%d operable=%d missing_ceo=%d external_refs=0 "
+    print("VERDICT PASS criteria=20 faces=%d operable=%d missing_ceo=%d external_refs=0 "
           "kinds=%s keys=%s tiers=%s attrs=%s hosts=%s lexical=faces:%d,calls:%d "
           "expr_bodies=%d forms=%s"
           % (proj["faces_total"], len(proj["operable"]), len(proj["missing"]),
@@ -1977,7 +2073,8 @@ def check():
              ",".join("%s:%d" % (form, proj["form_counts"][form])
                       for form in HANDLER_FORMS)
              + " decl=%s" % ",".join("%s:%d" % (form, proj["named_decl_counts"][form])
-                                     for form in DECL_FORMS)))
+                                     for form in DECL_FORMS)
+             + " cond_unbal=%d" % proj["cond_total"]))
 
     return 0
 

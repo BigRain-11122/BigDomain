@@ -1,0 +1,9 @@
+Q1 live faces=45 arrows=0 conditional=0 cut=0
+Q2 case=plain ternary                arrows=1 cut=0 body='c ? a : b'
+Q2 case=ternary in array             arrows=1 cut=0 body='c ? a : b'
+Q2 case=ternary with call commas     arrows=1 cut=0 body='c ? g(x, y) : h(z)'
+Q2 case=ternary in object value      arrows=1 cut=0 body='c ? a : b'
+Q2 case=parenthesised comma op       arrows=1 cut=0 body='c ? (x, y) : z'
+Q2 case=bare comma op                arrows=1 cut=0 body='c ? x'
+Q2 case=nested ternary               arrows=1 cut=0 body='a ? b : c ? d : e'
+Q3 cost faces=45 arrows=0 seconds=0.0889 per_face=0.00198
