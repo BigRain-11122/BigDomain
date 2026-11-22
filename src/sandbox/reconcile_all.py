@@ -7795,9 +7795,9 @@ SUITES = [
     # (a gate under our own toolchain/ is read once git tracks it, an untracked
     # sibling stays refused), the name rule survives as a NAMED fallback where
     # git cannot answer, and an unprinted owned path reddens AC-UGR15 rather than
-    # AC-UGR13 - thirty-five (R3244 added B32/B33/B34).
+    # AC-UGR13 - thirty-eight (R3244 added B32/B33/B34, R3245 added B35/B36).
     ("os-ugc-gate-report",
-     os.path.join("..", "os", "test_ugc_gate_report.py"), 35),
+     os.path.join("..", "os", "test_ugc_gate_report.py"), 38),
     # R2875. docs/status-export.json's latest_artifact follows the NEWEST preview
     # pair by mtime, so a fixture that re-renders a tracked pair moves the world
     # another suite measures - measured in the real tree at R2875 as

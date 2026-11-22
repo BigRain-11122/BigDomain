@@ -123,7 +123,7 @@ def main():
         mod.OUT_HTML, mod.OUT_JSON = copy_html, copy_json
 
         rc, base, text, verdict = run_check(mod, data)
-        ok('AC-UGRB0', rc == 0 and len(base) == 14 and all(base.values()),
+        ok('AC-UGRB0', rc == 0 and len(base) == 15 and all(base.values()),
            'baseline rc=%d criteria=%d green=%d %s'
            % (rc, len(base), sum(1 for v in base.values() if v), verdict))
 
@@ -684,6 +684,66 @@ def main():
            'AC-UGR15=%s stays PASS rc=%d'
            % (res34.get('AC-UGR16'), res34.get('AC-UGR15'), r34))
 
+        # ---- B35/B36: a believed RECORD is graded for how far it reaches
+        # (R3245). Measured in qa/probe-R3245.log: with a RECORD listing one of
+        # two files of a package, the unlisted sibling was READ as ours and a
+        # gate inside it entered the site set (hits=[.../unlisted.py:2]), and
+        # the live .venv lists 995 paths (995 present, 0 stale) covering all 453
+        # of its .py files. B35 proves the truncation is COUNTED (listed=1,
+        # unlisted=1) and that a page carrying an edited count reddens AC-UGR17
+        # while AC-UGR16 stays green; B36 proves a listed-but-missing path is
+        # counted as stale instead of being believed quietly.
+        half_world = world_tree({
+            'src/sandbox/.venv/pkg/core/listed.py': 'x = 1\n',
+            'src/sandbox/.venv/pkg/core/unlisted.py':
+                'from lobby.sec_gate import SecGate\nG = SecGate([], [])\n',
+            'src/sandbox/.venv/pkg/pkg-1.0.dist-info/RECORD':
+                'core/listed.py,sha256=aa,7\n',
+        })
+        stale_world = world_tree({
+            'src/sandbox/.venv/pkg/core/listed.py': 'x = 1\n',
+            'src/sandbox/.venv/pkg/pkg-1.0.dist-info/RECORD':
+                'core/listed.py,sha256=aa,7\ncore/gone.py,sha256=bb,9\n',
+        })
+        try:
+            mod.ROOT = half_world
+            mod._tracked_sources = lambda: None
+            half_hits, _hskip = mod.direct_call_sites()
+            _hr, _hf, _ho, _hd, half_cov = mod._walk_all()
+            mod.ROOT = stale_world
+            _sr, _sf, _so, _sd, stale_cov = mod._walk_all()
+            mod.ROOT = half_world
+            mod.OUT_HTML = os.path.join(half_world, 'out.html')
+            mod.OUT_JSON = os.path.join(half_world, 'out.json')
+            mod.write_outputs(mod.collect())
+            half_data = mod.collect()
+            rc35, res35, _t35, _v35 = run_check(mod, half_data)
+            drifted35 = copy.deepcopy(half_data)
+            drifted35['marker_coverage'][0]['unlisted'] = 0
+            rc35b, res35b, _t35b, _v35b = run_check(mod, drifted35)
+        finally:
+            mod._tracked_sources = real_tracked
+            mod.ROOT = real_root
+            mod.OUT_HTML, mod.OUT_JSON = real_html, real_json
+            shutil.rmtree(half_world, ignore_errors=True)
+            shutil.rmtree(stale_world, ignore_errors=True)
+        ok('AC-UGRB35',
+           half_hits == ['src/sandbox/.venv/pkg/core/unlisted.py:2']
+           and half_cov == [{'root': 'src/sandbox/.venv', 'listed': 1,
+                             'exists': 1, 'stale': 0, 'unlisted': 1}]
+           and res35.get('AC-UGR17') is True
+           and res35b.get('AC-UGR17') is False
+           and res35b.get('AC-UGR16') is True,
+           'half-listed RECORD: read=%s coverage=%s page AC-UGR17=%s (must PASS) '
+           'edited count AC-UGR17=%s (must FAIL) AC-UGR16=%s rc=%d/%d'
+           % (half_hits, half_cov, res35.get('AC-UGR17'), res35b.get('AC-UGR17'),
+              res35b.get('AC-UGR16'), rc35, rc35b))
+        ok('AC-UGRB36',
+           stale_cov == [{'root': 'src/sandbox/.venv', 'listed': 2, 'exists': 1,
+                          'stale': 1, 'unlisted': 0}],
+           'stale RECORD: coverage=%s (a listed path that is gone is counted, '
+           'not silently believed)' % (stale_cov,))
+
         # ---- B17: the live tree must read the same site set as before the
         # reader changed (pure addition): three files, four constructions.
         live_hits, live_skipped = mod.direct_call_sites()
@@ -698,11 +758,11 @@ def main():
         mod.OUT_HTML, mod.OUT_JSON = real_html_path, real_json_path
         shutil.rmtree(tmpdir, ignore_errors=True)
 
-    # ---- B10: nothing leaked, and the real tree still reads 9/9.
+    # ---- B10: nothing leaked, and the real tree still reads 15/15.
     after = real_snapshot()
     rc_real, res_real, _, verdict_real = run_check(mod, mod.collect())
     ok('AC-UGRB10',
-       before == after and rc_real == 0 and len(res_real) == 14 and all(res_real.values()),
+       before == after and rc_real == 0 and len(res_real) == 15 and all(res_real.values()),
        'real pair unchanged=%s real rc=%d green=%d' %
        (before == after, rc_real, sum(1 for v in res_real.values() if v)))
 
@@ -718,7 +778,7 @@ def main():
             declared = int(tail.strip())
         except ValueError:
             declared = None
-    ok('AC-UGRB11', bool(row) and declared == 35,
+    ok('AC-UGRB11', bool(row) and declared == 38,
        'registry_rows=%d declared=%s' % (len(row), declared))
 
     law_verdict = "PASS" if not FAILS else "FAIL"

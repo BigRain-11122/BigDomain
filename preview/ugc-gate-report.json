@@ -107,6 +107,10 @@
       "text": "the fallback evidence is named and its counts are graded (R3244): AC-UGR15 grades one summary word, and one word cannot tell a world where a package manager's RECORD decided from a world where a bare directory name did - both print the same. Measured in qa/probe-R3244.log: in a world with no .git, a gate of OURS written into the same vendor root as an installed package was refused by name and answered zero sites (hits=[], refused_files=2), while that root's two .dist-info/RECORD files list every one of its 453 .py files. When git cannot answer, ownership now falls back to RECORD membership: a listed file is refused, an unlisted file is READ as ours, a root carrying no RECORD keeps the name rule. The report must print the decision count for each rule (evidence, marker, name) and name every file read as ours; --check refuses when any printed count, the summary rule, or an owned path disagrees with a fresh reading. The marker evidence is the package manager's own account of itself - a hand-edited RECORD is believed, which is the same kind of fallibility as a tracked vendored copy being read, and it is printed rather than implied"
     },
     {
+      "id": "AC-UGR17",
+      "text": "how far the believed RECORD reaches is a graded reading (R3245): AC-UGR16 grades WHICH evidence decided, and one membership list cannot tell a RECORD that covers its root from one that lists half of it - measured in qa/probe-R3245.log, where a package whose RECORD listed one of two files left the unlisted sibling READ as ours and a gate inside it entered the site set, while the live .venv lists 995 paths (995 exist, 0 stale) covering all 453 of its .py files. Every vendor root decided by marker must be NAMED on the face with its four counts printed (listed, exists, stale, unlisted), and a reading in which no root was decided by marker must print a named absence instead of four zeros. --check refuses when any printed count, an arithmetic inconsistency (exists + stale == listed), a missing root name or the absence sentence disagrees with a fresh reading. This makes a truncated or stale RECORD visible; it does not close the hole - an unlisted file is still read as ours - and it does not verify the RECORD's hash column, so exists asks only whether the path is still on disk"
+    },
+    {
       "id": "AC-SGV1",
       "text": "PRE-REGISTERED REPAIR (not applied: src/ bytes are frozen under the live battery leg): SecGate.__init__ must refuse empty wordlists exactly as MsgSecStub does, so the constitutional no-content-safety-no-door rule holds on the direct construction path too"
     },
@@ -133,6 +137,7 @@
     "raised": null
   },
   "hole_status": "LIVE",
+  "marker_coverage": [],
   "parity": {
     "line": "MSGSEC PARITY cases=14 stub_mismatch=0 gate_agree=14 verdict=PARITY-OK",
     "ok": true,
@@ -259,8 +264,8 @@
     }
   ],
   "sizes": {
-    "html": 19945,
-    "json": 13466
+    "html": 21213,
+    "json": 14630
   },
   "unparsed": [],
   "vendor_decisions": {

@@ -1,0 +1,35 @@
+Q1 live marker roots
+  src/sandbox/__pycache__ markers=False listed=0 exists=0 stale=0 disk_py=0 unlisted=0
+  src/sandbox/benchgate/__pycache__ markers=False listed=0 exists=0 stale=0 disk_py=0 unlisted=0
+  src/sandbox/citymodel/__pycache__ markers=False listed=0 exists=0 stale=0 disk_py=0 unlisted=0
+  src/sandbox/compliance/__pycache__ markers=False listed=0 exists=0 stale=0 disk_py=0 unlisted=0
+  src/sandbox/funnel/__pycache__ markers=False listed=0 exists=0 stale=0 disk_py=0 unlisted=0
+  src/sandbox/ledger/__pycache__ markers=False listed=0 exists=0 stale=0 disk_py=0 unlisted=0
+  src/sandbox/liveroom/__pycache__ markers=False listed=0 exists=0 stale=0 disk_py=0 unlisted=0
+  src/sandbox/lobby/.venv markers=True listed=995 exists=995 stale=0 disk_py=453 unlisted=0
+  src/sandbox/lobby/__pycache__ markers=False listed=0 exists=0 stale=0 disk_py=0 unlisted=0
+  src/sandbox/member/__pycache__ markers=False listed=0 exists=0 stale=0 disk_py=0 unlisted=0
+  src/sandbox/minors/__pycache__ markers=False listed=0 exists=0 stale=0 disk_py=0 unlisted=0
+  src/sandbox/opsreview/__pycache__ markers=False listed=0 exists=0 stale=0 disk_py=0 unlisted=0
+  src/sandbox/pay/__pycache__ markers=False listed=0 exists=0 stale=0 disk_py=0 unlisted=0
+  src/sandbox/pycrdt-poc/vendor/__pycache__ markers=False listed=0 exists=0 stale=0 disk_py=0 unlisted=0
+  src/sandbox/pycrdt-poc/vendor/anyio/__pycache__ markers=False listed=0 exists=0 stale=0 disk_py=0 unlisted=0
+  src/sandbox/pycrdt-poc/vendor/anyio/abc/__pycache__ markers=False listed=0 exists=0 stale=0 disk_py=0 unlisted=0
+  src/sandbox/pycrdt-poc/vendor/anyio/streams/__pycache__ markers=False listed=0 exists=0 stale=0 disk_py=0 unlisted=0
+  src/sandbox/pycrdt-poc/vendor/anyio/_backends/__pycache__ markers=False listed=0 exists=0 stale=0 disk_py=0 unlisted=0
+  src/sandbox/pycrdt-poc/vendor/anyio/_core/__pycache__ markers=False listed=0 exists=0 stale=0 disk_py=0 unlisted=0
+  src/sandbox/pycrdt-poc/vendor/idna/__pycache__ markers=False listed=0 exists=0 stale=0 disk_py=0 unlisted=0
+  src/sandbox/pycrdt-poc/vendor/pycrdt/__pycache__ markers=False listed=0 exists=0 stale=0 disk_py=0 unlisted=0
+  src/sandbox/pycrdt-poc/vendor/pycrdt/store/__pycache__ markers=False listed=0 exists=0 stale=0 disk_py=0 unlisted=0
+  src/sandbox/pycrdt-poc/vendor/pycrdt/websocket/__pycache__ markers=False listed=0 exists=0 stale=0 disk_py=0 unlisted=0
+  src/sandbox/pycrdt-poc/vendor/sqlite_anyio/__pycache__ markers=False listed=0 exists=0 stale=0 disk_py=0 unlisted=0
+  src/sandbox/tourstate/__pycache__ markers=False listed=0 exists=0 stale=0 disk_py=0 unlisted=0
+  src/sandbox/ugc/__pycache__ markers=False listed=0 exists=0 stale=0 disk_py=0 unlisted=0
+  src/sandbox/watermark/__pycache__ markers=False listed=0 exists=0 stale=0 disk_py=0 unlisted=0
+  src/sandbox/ygo-poc/data/toolchain markers=False listed=0 exists=0 stale=0 disk_py=2 unlisted=2
+  src/sandbox/ygo-poc/js/node_modules markers=False listed=0 exists=0 stale=0 disk_py=0 unlisted=0
+  cost=0.448s roots=29
+Q2 decisive arm: a RECORD listing only half of an installed package
+  today: hits=['src/sandbox/.venv/pkg/core/unlisted.py:2'] owned=['src/sandbox/.venv/pkg/core/unlisted.py'] refused_files=1 decisions={'src/sandbox/.venv/pkg/core/listed.py': 'marker', 'src/sandbox/.venv/pkg/core/unlisted.py': 'marker'}
+  coverage: listed=2 exists=1 stale=1 disk_py=2 unlisted=['src/sandbox/.venv/pkg/core/unlisted.py']
+Q3 done, no live write
