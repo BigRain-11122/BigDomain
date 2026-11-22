@@ -1,0 +1,52 @@
+Q0 TREE
+  pairs(content-ranked)=42 skipped_boards=1 newest_is_board=True
+  index law winner json=apimarket-report.json html=apimarket-report.html json_bytes=59815 html_bytes=37201
+  export law winner html=preview/first-yuan-chain.html json=preview/first-yuan-chain.json html_bytes=4403 json_bytes=4806 prov=commit
+Q1 AGREEMENT (mtime order vs content order)
+  mtime_first=apimarket-report.json content_first=face-sweep.json same_first=False
+  pairs=40 positions_differ=31
+    DIFF pos_mtime=-1 pos_content=0 face-sweep.json prov=commit
+    DIFF pos_mtime=0 pos_content=2 apimarket-report.json prov=commit
+    DIFF pos_mtime=20 pos_content=7 live-sandbox.json prov=commit
+    DIFF pos_mtime=-1 pos_content=12 ceo-blockers.json prov=commit
+    DIFF pos_mtime=39 pos_content=13 apimarket-report-workbench.json prov=commit
+    DIFF pos_mtime=29 pos_content=14 apimarket-report-slowanswer.json prov=commit
+    DIFF pos_mtime=33 pos_content=15 apimarket-report-quality.json prov=commit
+    DIFF pos_mtime=27 pos_content=16 apimarket-report-duty.json prov=commit
+    DIFF pos_mtime=37 pos_content=17 apimarket-report-dossiers.json prov=commit
+    DIFF pos_mtime=34 pos_content=18 apimarket-report-demand.json prov=commit
+    DIFF pos_mtime=28 pos_content=19 apimarket-report-csv.json prov=commit
+    DIFF pos_mtime=26 pos_content=20 apimarket-report-claims.json prov=commit
+    DIFF pos_mtime=25 pos_content=21 apimarket-report-claims-demo.json prov=commit
+    DIFF pos_mtime=36 pos_content=22 apimarket-report-buyers.json prov=commit
+    DIFF pos_mtime=38 pos_content=23 apimarket-report-activity.json prov=commit
+    DIFF pos_mtime=7 pos_content=24 lobby-ws-report.json prov=commit
+    DIFF pos_mtime=22 pos_content=25 lobby-session-trace.json prov=commit
+    DIFF pos_mtime=30 pos_content=26 apimarket-report-selleranswers.json prov=commit
+    DIFF pos_mtime=35 pos_content=27 apimarket-report-refunds.json prov=commit
+    DIFF pos_mtime=32 pos_content=28 apimarket-report-questions.json prov=commit
+    DIFF pos_mtime=31 pos_content=29 apimarket-report-buyerquestions.json prov=commit
+    DIFF pos_mtime=18 pos_content=30 apimarket-monthly-faces.json prov=commit
+    DIFF pos_mtime=2 pos_content=31 membership-face.json prov=commit
+    DIFF pos_mtime=12 pos_content=32 merchant-onboard.json prov=commit
+    DIFF pos_mtime=13 pos_content=33 lobby-protocol-map.json prov=commit
+    DIFF pos_mtime=14 pos_content=34 buyer-trial.json prov=commit
+    DIFF pos_mtime=15 pos_content=35 money-path-demo.json prov=commit
+    DIFF pos_mtime=16 pos_content=36 journey-19.9.json prov=commit
+    DIFF pos_mtime=17 pos_content=37 start-here.json prov=commit
+    DIFF pos_mtime=19 pos_content=38 battery-shard-report.json prov=commit
+    DIFF pos_mtime=21 pos_content=39 filing-checklist.json prov=commit
+    DIFF pos_mtime=23 pos_content=40 core-loop-walkthrough.json prov=commit
+    DIFF pos_mtime=24 pos_content=41 ship-checklist.json prov=commit
+  every disagreement sits on an mtime(provenance) half=False
+  provenance histogram
+    [('commit', 42)]
+Q2 SHARED ROW FIELDS
+  row_len=7 html_bytes=4403 json_bytes=4806 name_html=preview/first-yuan-chain.html
+  has_html_bytes=True has_json_bytes=True has_provenance=True
+  newest_json_rendered_on=None
+Q3 COST
+  index law newest_artifact rs=0.0012s (no git call)
+  export law newest_artifact rs=0.4370s (one git log over preview)
+  export law _pairs alone rs=0.4220s
+VERDICT measured=42 write=none socket=none

@@ -196,6 +196,57 @@ def self_verify(new):
     return ("python %s --dry-run --stamp %s" % (PRODUCER_REL, stamp)), None
 
 
+# R3297 (AC-DIX22): two CEO pages answered "which pair is newest" with two
+# different pairs - this band ranks by raw mtime, docs/status-export.json ranks
+# by commit content time. A read-only probe measured the split as STRUCTURAL
+# (31 of 40 pairs sat at a different position while every pair was committed
+# and clean), not the dirty-tree corner the board first guessed. Merging on one
+# law was measured too: the shared newest pair carries no rendered_on, so the
+# self-verify command this band ships would degrade to a named absence the day
+# it switched. Both laws stay; this band now states its own law and QUOTES the
+# export face's answer, taken from the export face's own derivation.
+def _export_round():
+    src = os.path.join(REPO, "src", "os")
+    if src not in sys.path:
+        sys.path.insert(0, src)
+    import importlib
+    return importlib.import_module("export_round")
+
+
+def export_law(new):
+    """(view, why_not): the newest pair the EXPORT face would publish.
+
+    view carries both file names, both byte counts and the clock word that
+    derivation reports ('commit' when the winning half is committed and clean,
+    'mtime' when it is dirty or the tree carries no git), plus same=True when
+    both laws name the same json. Never a copy of the rule: the row comes from
+    export_round.newest_artifact(), the single definition that face uses.
+    """
+    try:
+        er = _export_round()
+    except Exception as exc:   # report, never fabricate a pair
+        return None, "shared derivation unavailable (%s)" % exc
+    try:
+        pair, _skipped, _board = er.newest_artifact(REPO)
+    except Exception as exc:
+        return None, "shared derivation raised %s" % exc
+    if pair is None:
+        return None, "the export face derives no pair"
+    view = {
+        "html": pair[1],
+        "json": pair[2],
+        "html_bytes": pair[3],
+        "json_bytes": pair[4],
+        "clock": pair[5],
+        "same": os.path.basename(pair[2]) == (new.get("json") or ""),
+    }
+    return view, None
+
+
+LAW_NOTE_RE = re.compile(
+    r'<div class="note" data-law="(diff|same|none)">(.*?)</div>', re.S)
+
+
 def newest_line(new):
     """The one derived line AC-DIX8 compares against a fresh read."""
     if new["empty"]:
@@ -223,6 +274,33 @@ def render_newest(new):
         out.append('<div class="note">\u65e0\u81ea\u9a8c\u547d\u4ee4\uff1a%s'
                    '\uff08\u5982\u5b9e\u547d\u540d\uff0c\u4e0d\u7f16\u9020\uff09</div>'
                    % html.escape(why_not))
+    view, law_why = export_law(new)
+    if view is None:
+        out.append('<div class="note" data-law="none">\u65e0\u5bfc\u51fa\u9762'
+                   '\u5bf9\u7167\uff1a%s\uff08\u5982\u5b9e\u5177\u540d\uff0c\u4e0d'
+                   '\u7f16\u9020\uff09\u3002</div>' % html.escape(law_why or ""))
+    elif view["same"]:
+        out.append(
+            '<div class="note" data-law="same">\u672c\u5e26\u4e0e\u5bfc\u51fa'
+            '\u9762\u540c\u6307\u4e00\u5bf9\u4ef6\uff08<code>%s</code>\uff09\uff1a'
+            '\u672c\u5e26\u6309\u6587\u4ef6 mtime \u6392\u540d\uff0c\u5bfc\u51fa'
+            '\u9762\u6309\u63d0\u4ea4\u5185\u5bb9\u65f6\u949f\u6392\u540d\uff0c'
+            '\u8fd9\u4e00\u5bf9\u8be5\u7528 %s \u949f\u3002</div>'
+            % (html.escape(view["json"]), html.escape(view["clock"])))
+    else:
+        out.append(
+            '<div class="note" data-law="diff">\u4e24\u6761\u5f8b\u5404\u7ed9'
+            '\u4e00\u4e2a\u7b54\u6848\uff1a\u672c\u5e26\u6309\u6587\u4ef6 mtime '
+            '\u6392\u540d\uff08\u4e0a\u4e00\u6761\u6570\u5b57\u884c\uff09\uff1b'
+            '<code>docs/status-export.json</code> \u6309\u63d0\u4ea4\u5185\u5bb9'
+            '\u65f6\u949f\u6392\u540d\uff0c\u628a <code>%s</code> (%dB) + '
+            '<code>%s</code> (%dB) [%s] \u5217\u4e3a\u6700\u65b0\u4ef6\u3002'
+            '\u540c\u4e00\u65f6\u523b\u4e24\u4e2a\u7b54\u6848\uff0c\u4e24\u9875'
+            '\u5404\u5370\u81ea\u5df1\u7684\u5b9a\u4e49\uff0c\u4e0d\u5408\u5e76'
+            '\u6210\u4e00\u4e2a\u6570\u5b57\u3002</div>'
+            % (html.escape(view["html"]), view["html_bytes"],
+               html.escape(view["json"]), view["json_bytes"],
+               html.escape(view["clock"])))
     out.append('<div class="note">%s</div>' % html.escape(NEWEST_SNAPSHOT))
     return "\n".join(out)
 
@@ -815,6 +893,44 @@ def main(argv):
                % (command, dry, fresh.get("html_bytes", 0), fresh["bytes"],
                   " ".join("%s=%s" % (k, v) for k, v in sorted(arms.items())
                            if not v) or "all-arms-green"))
+
+    # AC-DIX22 (pinned 2026-11-22 R3297 in src/os/backlog.md BEFORE this code):
+    # two CEO pages ranked "newest" by two different clocks and published two
+    # different pairs. Measured (qa/probe-R3297.log): 31 of 40 pairs sat at a
+    # different position with every pair committed and clean, so this is not the
+    # dirty-tree corner the board guessed. The band now prints its own law and
+    # names the export face's answer; each state is graded against a FRESH
+    # derivation taken through that face's own code, never a second copy.
+    law_view, law_why = export_law(fresh)
+    notes = LAW_NOTE_RE.findall(band)
+    marks = [mark for mark, _body in notes]
+    law_body = notes[0][1] if notes else ""
+    arms = {"one-law-note": len(notes) == 1}
+    if law_view is None:
+        arms["mark-none"] = marks == ["none"]
+        arms["reason-quoted"] = bool(law_why) and html.escape(law_why) in law_body
+        arms["no-pair-invented"] = "preview/" not in law_body
+    elif law_view["same"]:
+        arms["mark-same"] = marks == ["same"]
+        arms["one-pair-only"] = law_body.count("preview/") == 1
+        arms["clock-quoted"] = law_view["clock"] in law_body
+    else:
+        arms["mark-diff"] = marks == ["diff"]
+        arms["export-html-named"] = html.escape(law_view["html"]) in law_body
+        arms["export-bytes"] = (
+            "(%dB) + <code>%s</code> (%dB)"
+            % (law_view["html_bytes"], html.escape(law_view["json"]),
+               law_view["json_bytes"])) in law_body
+        arms["clock-quoted"] = ("[%s]" % html.escape(law_view["clock"])) in law_body
+        arms["own-law-stated"] = ("mtime" in law_body
+                                  and "\u63d0\u4ea4\u5185\u5bb9" in law_body)
+    record("AC-DIX22", all(arms.values()),
+           "law=%s export=%s %s"
+           % ("none" if law_view is None
+              else ("same" if law_view["same"] else "diff"),
+              (law_view or {}).get("json", "-"),
+              " ".join("%s=%s" % (k, v) for k, v in sorted(arms.items())
+                                              if not v) or "all-arms-green"))
 
     if check:
         for code, ok, detail in checks:

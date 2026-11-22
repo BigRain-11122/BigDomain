@@ -1,0 +1,13 @@
+OK   c1-no-git-world            ac22=PASS failed=[] law=same export=preview/apimarket-report.json all-arms-green
+OK   c2-diff-render            rc=0 ac22=PASS failed=[] law=diff export=preview/first-yuan-chain.json all-arms-green
+OK   c3-two-law-notes           ac22=FAIL failed=['AC-DIX22'] law=diff export=preview/first-yuan-chain.json mark-diff=False one-law-note=False
+OK   c4-mark-flipped            ac22=FAIL failed=['AC-DIX22'] law=diff export=preview/first-yuan-chain.json mark-diff=False
+OK   c5-html-name-dropped       ac22=FAIL failed=['AC-DIX22'] law=diff export=preview/first-yuan-chain.json export-html-named=False
+OK   c6-bytes-edited            ac22=FAIL failed=['AC-DIX22'] law=diff export=preview/first-yuan-chain.json export-bytes=False
+OK   c7-clock-word-dropped      ac22=FAIL failed=['AC-DIX22'] law=diff export=preview/first-yuan-chain.json clock-quoted=False
+OK   c8-own-law-dropped         ac22=FAIL failed=['AC-DIX22'] law=diff export=preview/first-yuan-chain.json own-law-stated=False
+OK   c9-restored-bytes          identical=True
+OK   c10-none-render           rc=0 ac22=PASS failed=[] law=none export=- all-arms-green
+OK   c11-reason-reworded        ac22=FAIL failed=['AC-DIX22'] law=none export=- reason-quoted=False
+OK   c12-pair-invented          ac22=FAIL failed=['AC-DIX22'] law=none export=- no-pair-invented=False
+NEGCTL PASS green=11/11
