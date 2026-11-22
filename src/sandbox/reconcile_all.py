@@ -5998,7 +5998,7 @@ SUITES = [
     # (AC-RCA6 pinned in src/os/backlog.md as the R3314 PIN row BEFORE this
     # suite and this row existed.)
     ("os-runner-registry-face",
-     os.path.join("..", "os", "test_runner_registry_face.py"), 25),
+     os.path.join("..", "os", "test_runner_registry_face.py"), 27),
     # R2417: the abort face names the suite a body died on but never whether
     # that abort still matters - measured at R2403 over the real pile, the
     # aborted bodies had no way to be told apart from live debt. A body is now
@@ -8900,11 +8900,15 @@ def main(argv):
             sys.stdout = tee.stdout
             tee.close()
         return 2
-    green_n, rows_n, total_n = phase_suites(selected)
+    suites = phase_suites(selected)
+    # R3319 AC-RCA12: read the three fields by NAME off the named exit. The
+    # positional unpack was legal under the R3318 namedtuple yet silent under
+    # a swap, so this line obeys _fields instead of restating its order.
+    green_n, rows_n, total_n = suites.green, suites.rows, suites.criteria
     # R3316 AC-RCA10: a green suite whose own published fraction disagrees
     # with the table cell is drift, so the leg is not green even though every
     # suite exited 0.
-    suites_ok = green_n == rows_n and not RUNTIME_CRIT_DRIFT
+    suites_ok = suites.green == suites.rows and not RUNTIME_CRIT_DRIFT
     if selected is None:
         tmp = tempfile.mkdtemp(prefix="reconcile-all-")
         try:

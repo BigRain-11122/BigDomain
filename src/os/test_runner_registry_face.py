@@ -34,7 +34,7 @@ sys.path.insert(0, BASE)
 
 import reconcile_all as RA  # noqa: E402
 
-EXPECTED_CRITERIA = 25
+EXPECTED_CRITERIA = 27
 RUNNER = os.path.join(SANDBOX, "reconcile_all.py")
 LABEL = "os-runner-registry-face"
 
@@ -179,8 +179,13 @@ def ac_rca6_f():
     """The refusal is wired before the first suite and the CLI agrees."""
     with io.open(RUNNER, "r", encoding="utf-8") as handle:
         source = handle.read()
-    wired = (source.index("if not phase_registry(registry_rows):")
-             < source.index("green_n, rows_n, total_n = phase_suites(selected)"))
+    # R3319: presence first, then order. The old arm read both offsets with a
+    # bare .index(), which raises ValueError when a literal moves; it now names
+    # itself, and it anchors the R3319 named-field binding instead of the
+    # positional unpack that no longer exists.
+    reg_at = source.find("if not phase_registry(registry_rows):")
+    suites_at = source.find("suites = phase_suites(selected)")
+    wired = reg_at != -1 and suites_at != -1 and reg_at < suites_at
     before_suite = ("aborted before the first suite" in source
                     and source.count("return 2") >= 2)
     proc = subprocess.Popen(
@@ -193,8 +198,9 @@ def ac_rca6_f():
     check(wired and before_suite and proc.returncode == 0 and live
           and started and "RUNNER PARTIAL" in text
           and "E_RCA_" not in text,
-          "AC-RCA6(f) wired before the first suite: --only os-ledger-lines "
-          "prints REGISTRY then SUITE 1/1 and ends PARTIAL rc=0")
+          "AC-RCA6(f) wired before the first suite (reg_at=%d suites_at=%d): "
+          "--only os-ledger-lines prints REGISTRY then SUITE 1/1 and ends "
+          "PARTIAL rc=0" % (reg_at, suites_at))
 
 
 def ac_rca7():
@@ -365,8 +371,8 @@ def ac_rca10():
 
     with io.open(RUNNER, "r", encoding="utf-8") as handle:
         source = handle.read()
-    wired = ("suites_ok = green_n == rows_n and not RUNTIME_CRIT_DRIFT"
-             in source)
+    wired = ("suites_ok = suites.green == suites.rows and not "
+             "RUNTIME_CRIT_DRIFT" in source)
     check(wired,
           "AC-RCA10(d) main() counts the drift list in the green flag")
 
@@ -387,6 +393,30 @@ def ac_rca11():
           "values, so existing readers keep working")
 
 
+def ac_rca12():
+    """R3319 AC-RCA12: main() obeys the named order at its own call site.
+    A namedtuple still unpacks positionally, so the order could be restated
+    (and swapped) in the caller; the leg now reads the three fields by name,
+    which is the difference this arm measures on the shipped source."""
+    with io.open(RUNNER, "r", encoding="utf-8") as handle:
+        source = handle.read()
+    main_at = source.find("def main(argv):")
+    main_src = source[main_at:] if main_at != -1 else ""
+    bound_once = main_src.count("= phase_suites(selected)") == 1
+    named = ("suites = phase_suites(selected)" in main_src
+             and "suites.green" in main_src
+             and "suites.rows" in main_src
+             and "suites.criteria" in main_src)
+    check(main_at != -1 and bound_once and named,
+          "AC-RCA12(a) main() binds the exit once and reads .green/.rows/"
+          ".criteria by name (bound=%s named=%s)"
+          % (bound_once, named))
+    old_unpack = "green_n, rows_n, total_n = phase_suites("
+    check(old_unpack not in source,
+          "AC-RCA12(b) the positional three-name unpack of phase_suites("
+          ") is gone from the runner source")
+
+
 def main():
     print("runner_registry_face suite (expected criteria %d)"
           % EXPECTED_CRITERIA, flush=True)
@@ -401,6 +431,7 @@ def main():
     ac_rca9()
     ac_rca10()
     ac_rca11()
+    ac_rca12()
     verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
     print("%s %d/%d" % (verdict, PASSES, PASSES + FAILS), flush=True)
     if (PASSES + FAILS) != EXPECTED_CRITERIA:

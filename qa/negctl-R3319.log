@@ -1,0 +1,14 @@
+R3319 negative controls: each mutation is applied to an in-memory copy of
+the live runner source, so the shipped file is never written by this probe.
+
+A live: main_at=546188 bound_once=True named=True AC-RCA12a=True AC-RCA12b=True
+A live: green flag reads named fields=True
+M1 positional restored: changed=True AC-RCA12a=False AC-RCA12b=False
+M2 one name dropped: changed=True AC-RCA12a=False AC-RCA12b=True
+M3 binding removed: changed=True bound_once=False AC-RCA12a=False
+C anchor repair with the literal moved: old .index ValueError raised (substring not found) | new find(550212, -1) -> wired=False
+D suite: old bare index arm present=False | new presence-first arm present=True
+
+BASELINE: the live source answered AC-RCA12a=True and AC-RCA12b=True before
+and after every mutation, because the copies were local. VERDICT PASS when
+every mutation reddens its own arm while the baseline holds.
