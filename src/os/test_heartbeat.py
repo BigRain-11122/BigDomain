@@ -146,15 +146,35 @@ def main():
         # ---- d: the verdict is derived from two readings.
         fresh = HB.verify(root, 42)
         behind = HB.verify(root, 45)
+        ahead = HB.verify(root, 40)
         gone = HB.verify(missing, 45)
         ok("AC-HB1 arm d - verify derives PASS/FLAG and the lag",
            fresh["status"] == "PASS" and fresh["lag"] == 0
            and behind["status"] == "FLAG" and behind["lag"] == 3
+           and ahead["status"] == "PASS" and ahead["lag"] == -2
+           and ahead["reason"] == "heartbeat_ahead"
            and gone["status"] == "FLAG"
            and gone["reason"] == "heartbeat_missing_or_unparsed",
-           "fresh=%s/%s behind=%s/%s gone=%s/%s"
+           "fresh=%s/%s behind=%s/%s ahead=%s/%s/%s gone=%s/%s"
            % (fresh["status"], fresh["lag"], behind["status"], behind["lag"],
+              ahead["status"], ahead["lag"], ahead["reason"],
               gone["status"], gone["reason"]))
+
+        # ---- d2: the write hand names an ahead stamp; a fresh write stays
+        # byte-identical to the pinned HEARTBEAT-WRITE line (R3322).
+        root_ahead = world()
+        worlds.append(root_ahead)
+        os.makedirs(os.path.join(root_ahead, "src", "os"))
+        with open(os.path.join(root_ahead, "src", "os", "state.json"), "w",
+                  encoding="utf-8") as handle:
+            json.dump({"tick": 40}, handle)
+        rc_a, out_a = run_cli(["--write", "42", "--root", root_ahead])
+        rc_b, out_b = run_cli(["--write", "40", "--root", root_ahead])
+        ok("AC-HB1 arm d2 - an ahead write is named, a fresh write is not",
+           rc_a == 0 and "HEARTBEAT-NOTICE ahead=2 state=40" in out_a
+           and "reason=heartbeat_ahead" in out_a
+           and rc_b == 0 and "HEARTBEAT-NOTICE" not in out_b,
+           "ahead=%r fresh=%r" % (out_a.strip(), out_b.strip()))
 
         # ---- e: the live file and the live state agree right now.
         with open(os.path.join(ROOT, "src", "os", "state.json"),

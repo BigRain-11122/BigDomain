@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 761 | 6359 | 675/675 | R2739 |
+| 761 | 6360 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -600,7 +600,7 @@
 | 561 | os-runner-suite-timeout-headroom | ../os/test_runner_suite_timeout_headroom.py | 6 | green | 2.8 |
 | 562 | os-runner-suite-timeout-headroom-overrides | ../os/test_runner_suite_timeout_headroom_overrides.py | 6 | green | 1.1 |
 | 563 | os-runner-abort-face | ../os/test_runner_abort_face.py | 6 | green | 3.1 |
-| 564 | os-runner-registry-face | ../os/test_runner_registry_face.py | 27 | no-evidence | - |
+| 564 | os-runner-registry-face | ../os/test_runner_registry_face.py | 28 | no-evidence | - |
 | 565 | os-runner-abort-history | ../os/test_runner_abort_history.py | 6 | green | 2.1 |
 | 566 | os-queue-occupancy | ../os/test_queue_occupancy.py | 6 | green | 1.6 |
 | 567 | os-queue-head-delivered | ../os/test_queue_head_delivered.py | 6 | green | 1.0 |
@@ -798,7 +798,7 @@
 | 759 | claim-census | test_claim_census.py | 9 | no-evidence | - |
 | 760 | os-stage-residue | ../os/test_stage_residue.py | 4 | no-evidence | - |
 | 761 | os-corpus-supply-chain | ../os/test_corpus_supply_chain.py | 7 | no-evidence | - |
-|  | 合计 |  | 6359 | green 675 / FAIL 0 / no-evidence 86 |  |
+|  | 合计 |  | 6360 | green 675 / FAIL 0 / no-evidence 86 |  |
 
 ## 证据出处
 

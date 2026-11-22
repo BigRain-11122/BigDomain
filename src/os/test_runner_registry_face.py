@@ -34,7 +34,7 @@ sys.path.insert(0, BASE)
 
 import reconcile_all as RA  # noqa: E402
 
-EXPECTED_CRITERIA = 27
+EXPECTED_CRITERIA = 28
 RUNNER = os.path.join(SANDBOX, "reconcile_all.py")
 LABEL = "os-runner-registry-face"
 
@@ -423,6 +423,38 @@ def ac_rca12():
           ") is gone from the runner source")
 
 
+def ac_rca13():
+    """R3322 AC-RCA13: the registry is a hand-written literal, measured.
+
+    The board asked whether the SUITES block is produced by a generator (and
+    so whether a generator could write a second same-named label). Measured
+    read-only before this arm: the runner carries exactly one module-level
+    SUITES assignment (line 118) whose value is a list literal, and the only
+    shipped writer of a registry-shaped document is suite_matrix_reconcile,
+    whose target is docs/sandbox-suite-matrix.md - a document, not the runner.
+    So the row writer is the hand, and this arm keeps it that way: a future
+    generator that appends a second SUITES table reddens here by name.
+    """
+    import ast
+    with io.open(RUNNER, "r", encoding="utf-8") as handle:
+        source = handle.read()
+    tree = ast.parse(source)
+    assigns = []
+    for node in tree.body:
+        if isinstance(node, ast.Assign):
+            names = [t.id for t in node.targets if isinstance(t, ast.Name)]
+        elif isinstance(node, ast.AnnAssign):
+            names = [node.target.id] if isinstance(node.target, ast.Name) else []
+        else:
+            continue
+        if "SUITES" in names:
+            assigns.append(type(node.value).__name__)
+    check(assigns == ["List"],
+          "AC-RCA13 the registry is one module-level SUITES list literal "
+          "(assignments=%r), so no generator path can append a second label"
+          % (assigns,))
+
+
 def main():
     print("runner_registry_face suite (expected criteria %d)"
           % EXPECTED_CRITERIA, flush=True)
@@ -438,6 +470,7 @@ def main():
     ac_rca10()
     ac_rca11()
     ac_rca12()
+    ac_rca13()
     verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
     print("%s %d/%d" % (verdict, PASSES, PASSES + FAILS), flush=True)
     if (PASSES + FAILS) != EXPECTED_CRITERIA:

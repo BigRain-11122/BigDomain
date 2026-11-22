@@ -89,6 +89,13 @@ def verify(root, state_tick=None):
     if lag > 0:
         return {"status": "FLAG", "tick": hb, "state": int(state_tick),
                 "lag": lag, "reason": "heartbeat_row_debt"}
+    # R3322: a row stamped PAST the state is not "fresh". It is named, not
+    # refused: the measured repair path (a stale row cleared by writing the
+    # next tick, R3147/R3314) needs it, so exit stays PASS and only the reason
+    # changes. Before this, lag=-1 read as fresh and the anomaly was silent.
+    if lag < 0:
+        return {"status": "PASS", "tick": hb, "state": int(state_tick),
+                "lag": lag, "reason": "heartbeat_ahead"}
     return {"status": "PASS", "tick": hb, "state": int(state_tick),
             "lag": lag, "reason": "fresh"}
 
@@ -133,6 +140,14 @@ def main(argv=None):
         print("HEARTBEAT-WRITE tick=%d bytes=%d path=%s"
               % (tick, size,
                  os.path.relpath(path_for(root), root).replace("\\", "/")))
+        # R3322: the hand that can stamp a row PAST the state now says so on
+        # its own line. Measured need, not a guess: R3147 and R3314 each
+        # cleared a stale row by writing the next tick, which is legitimately
+        # ahead. Not a refusal - a named notice.
+        state_now = _state_tick(root)
+        if state_now is not None and tick > state_now:
+            print("HEARTBEAT-NOTICE ahead=%d state=%d reason=heartbeat_ahead"
+                  % (tick - state_now, state_now))
         return 0
     state = _state_tick(root)
     verdict = verify(root, state if state is not None else None)

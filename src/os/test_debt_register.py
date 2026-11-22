@@ -267,6 +267,12 @@ def wiring_ok():
     needle = '"%s"' % LABEL
     if needle not in text:
         return False
+    # R3322: measured unique. Negative control: a decoy world whose earlier row
+    # repeats this label and whose own 400-char window carries both asserted
+    # words while the real row lost ", 8)" - the old form read green off the
+    # decoy row. The uniqueness pin is what stops that slide.
+    if text.count(needle) != 1:
+        return False
     tail = text[text.find(needle):]
     window = tail[:400]
     return ("test_debt_register.py" in window) and (", 8)" in window)

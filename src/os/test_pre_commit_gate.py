@@ -652,14 +652,20 @@ try:
             % os.path.join(_world, "src", "sandbox"))
     rc_d, out_d, _ = run([sys.executable, "-c", code], _world)
     live_report, live_code = OOS.audit(ROOT)
+    # R3322: measured unique in the live runner. Negative control: a decoy
+    # source whose comment names the anchor plus all three asserted tokens,
+    # while the real main() lost its refusal site - the unguarded slice read
+    # green from the comment. One anchor, or no reading.
+    main_anchor = runner_src.count("def main(argv):")
     main_src = runner_src[runner_src.find("def main(argv):"):]
     check("LAW False" in out_d and rc_d == 0
           and live_code == 0 and not live_report["refused"]
+          and main_anchor == 1
           and main_src.count("freeze law refused") == 1
           and "if FAILS == 0 and suites_ok:" in main_src
           and "and law_ok" not in main_src,
           "AC-HK10 law read from the world (refused=False, live=clean), "
-          "one refusal site, verdict independent")
+          "one refusal site, verdict independent (anchors=%d)" % main_anchor)
 finally:
     shutil.rmtree(_world, ignore_errors=True)
 

@@ -1,0 +1,25 @@
+CENSUS slice-sites=10
+  test_debt_register.py:276
+  test_declaration_writer_noop_parity.py:204
+  test_export_freshness.py:107
+  test_pre_commit_gate.py:660
+  test_qa_log.py:770
+  test_qa_log.py:1242
+  test_qa_log.py:1244
+  test_qa_log.py:1300
+  test_queue_floor.py:319
+  test_state_fold.py:311
+A1 baseline old=True guarded=True
+A1 decoy old=True guarded=False
+A1 decoy2 old=True guarded=False
+A2 baseline old=True guarded=True
+A2 decoy old=True guarded=False
+A3 baseline old=True guarded=True
+A3 decoy old=True guarded=False
+A3 gone old=False guarded=False
+A4 baseline old=False guarded=False
+A4 gone old=False guarded=False
+A4 slide old=False guarded=False
+Q2 runner module-level SUITES assignments=[(118, 'List')]
+Q2 matrix writer target: docs/sandbox-suite-matrix.md (measured)
+Q3 write_tick refuses: bool/int/negative only; ahead allowed=True

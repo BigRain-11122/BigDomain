@@ -5998,7 +5998,7 @@ SUITES = [
     # (AC-RCA6 pinned in src/os/backlog.md as the R3314 PIN row BEFORE this
     # suite and this row existed.)
     ("os-runner-registry-face",
-     os.path.join("..", "os", "test_runner_registry_face.py"), 27),
+     os.path.join("..", "os", "test_runner_registry_face.py"), 28),
     # R2417: the abort face names the suite a body died on but never whether
     # that abort still matters - measured at R2403 over the real pile, the
     # aborted bodies had no way to be told apart from live debt. A body is now

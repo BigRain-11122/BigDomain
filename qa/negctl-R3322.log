@@ -1,0 +1,3 @@
+test_debt_register decoy old=True shipped=False live=True
+test_queue_floor decoy old=True shipped=False live=True
+pre_commit_gate decoy old=True guarded=False

@@ -218,8 +218,12 @@ def _hb_bits(verdict):
     status = verdict.get("status") or "FLAG"
     bits = "hb=%s hb_verdict=%s" % ("none" if tick is None else str(tick),
                                     status)
-    if status != "PASS":
-        bits += " hb_reason=%s" % (verdict.get("reason") or "unstated")
+    # R3322: an ahead row keeps status PASS but its reason is no longer
+    # "fresh", so the reason must survive this filter or the anomaly would
+    # vanish exactly where the gate line prints. Fresh bytes are unchanged.
+    reason = verdict.get("reason")
+    if status != "PASS" or reason not in (None, "fresh"):
+        bits += " hb_reason=%s" % (reason or "unstated")
     return bits
 
 
