@@ -1,0 +1,15 @@
+Q1 faces_with_writes=7 write_sites=8 in_function_body=7 top_level=1 unreachable=0
+Q1 face filing-checklist.html sites=1 live:b/bound
+Q1 face lobby-protocol-map.html sites=1 decl:apply/bound
+Q1 face lobby-session-trace.html sites=1 top:-/top-level
+Q1 face membership-face.html sites=1 live:c/bound
+Q1 face merchant-onboard.html sites=1 decl:save/called
+Q1 face money-path-demo.html sites=1 live:T[n]/bound
+Q1 face ship-checklist.html sites=2 live:b/bound, live:reset/bound
+Q2 declarations_with_brace_body=26 not_bound=26 not_called=5
+Q2 bound_reading_misses: onX=name counted, setTimeout(name)/timer=unseen, promise.then(name)=unseen, inline attr onclick=name()=unseen, other-script=cross-face-unseen
+Q2 called_reading_misses: obj.name()=unseen, passed_as_value=unseen, inline attr=name()=unseen, other-script=cross-face-unseen
+Q2 shared index: _decl_index() already carries func/varfunc/arrow with a body hint, so reachability can reuse it without a second declaration reader
+Q3 key_reading_all_faces=0.0236s per_face=0.00055s
+Q3 criteria_today=29 page_bytes=36731
+Q3 field_shape: one enum per write expression (reachable / unreachable / top), not per call site

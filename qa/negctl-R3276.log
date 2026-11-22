@@ -1,0 +1,13 @@
+PASS W0 write | rc=0
+PASS C1 private copy PASSes and is byte-identical to the live page | check_rc=0 identical=True bytes=37859
+PASS C2 flipped head count | rc=2 hits=['when_count']
+PASS C3 edited sentence | rc=2 hits=['when_sentence']
+PASS C4 dropped absence line | rc=2 hits=['when_absent_line']
+PASS C5 removed word | rc=2 hits=['word_missing']
+PASS C6 removed slot | rc=2 hits=['slot_missing:key_when_head_fmt:{sites}']
+PASS C7 unreachable world PASSes with never=1 and a named row | rc=0 never1=True named=True absent=False
+PASS C8 tampered named-row attribute | rc=2 hits=['when_rows']
+PASS C9 bound world reads handler and prints no named row | rc=0 never0=True named=False
+PASS C10 tampered step attribute | rc=2 hits=['step_write_when']
+PASS C11 clean face listed | rc=2 hits=['when_rows']
+NEGCTL PASS cases=12 failed=0

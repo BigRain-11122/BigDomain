@@ -250,22 +250,29 @@ def key_naming(row):
     keys = row.get("keys")
     if not keys or not keys["write"]:
         return {"kind": "none", "value": None, "expr": None, "parts": [],
-                "repeats": [], "repeat_sites": 0}
+                "repeats": [], "repeat_sites": 0,
+                "when": {state: 0 for state in WHEN_STATES}, "when_never": []}
     repeats = [list(pair) for pair in (keys.get("repeat") or [])]
     repeat_sites = sum(count - 1 for _expr, count in repeats)
+    when = {state: (keys.get("when") or {}).get(state, 0)
+            for state in WHEN_STATES}
+    when_never = [list(pair) for pair in (keys.get("when_never") or [])]
     if keys["literal_all"]:
         values = [keys["literal"][expr] for expr in keys["write"]]
         parts = [("empty", "") if value == "" else ("literal", value)
                  for value in values]
         if all(value == "" for value in values):
             return {"kind": "empty", "value": "", "expr": None, "parts": parts,
-                    "repeats": repeats, "repeat_sites": repeat_sites}
+                    "repeats": repeats, "repeat_sites": repeat_sites,
+                    "when": when, "when_never": when_never}
         return {"kind": "literal", "value": " , ".join(values),
                 "expr": None, "parts": parts,
-                "repeats": repeats, "repeat_sites": repeat_sites}
+                "repeats": repeats, "repeat_sites": repeat_sites,
+                "when": when, "when_never": when_never}
     return {"kind": "runtime", "value": None,
             "expr": keys["runtime_exprs"][0], "parts": [],
-            "repeats": repeats, "repeat_sites": repeat_sites}
+            "repeats": repeats, "repeat_sites": repeat_sites,
+            "when": when, "when_never": when_never}
 
 
 def key_attr(naming):
@@ -442,6 +449,9 @@ def key_reading(text):
     # of the page had no way to know the second write ever happens. The count is
     # taken in the same loop, so `write` keeps its first-appearance UNIQUE order -
     # the sequence `parts`, `key_attr()` and `data-step-key` all share.
+    # R3276: the ORDINAL was all a reader got. Two questions stayed open - does the
+    # write ever run, and when - so each site now keeps its offset, and the same
+    # read answers both (no second disk pass).
     sites = {"setItem": {}, "getItem": {}, "removeItem": {}}
     for match in CALL.finditer(structure):
         expr = re.sub(r"\s+", "", _first_arg_at(text, structure,
@@ -449,7 +459,7 @@ def key_reading(text):
         if expr:
             buckets[match.group(1)].setdefault(expr, None)
             counts = sites[match.group(1)]
-            counts[expr] = counts.get(expr, 0) + 1
+            counts.setdefault(expr, []).append(match.start())
     writes = list(buckets["setItem"])
     reads = list(buckets["getItem"])
     removes = list(buckets["removeItem"])
@@ -462,14 +472,19 @@ def key_reading(text):
     literals = {expr: resolve_key_expr(expr, table) for expr in writes}
     runtime_exprs = [expr for expr, value in literals.items()
                      if value is None]
+    when = when_reading(text)
     return {
         "write": writes, "read": reads, "remove": removes,
         # R3275: how many setItem calls this face makes, and which expressions it
         # writes more than once. A repeat is a CALL-SITE count by expression text:
         # it does not say both sites run, nor which one wins at runtime.
-        "write_sites": sum(sites["setItem"].values()),
-        "repeat": [[expr, sites["setItem"][expr]] for expr in writes
-                   if sites["setItem"][expr] > 1],
+        "write_sites": sum(len(got) for got in sites["setItem"].values()),
+        "repeat": [[expr, len(sites["setItem"][expr])] for expr in writes
+                   if len(sites["setItem"][expr]) > 1],
+        # R3276: when each of those writes can run, and which ones sit in a function
+        # the face never binds and never calls.
+        "when": when["counts"],
+        "when_never": when["never"],
         "base_write": base_write, "base_read": base_read,
         # R3274: `reads <= writes` on two lists compares lexicographically and says
         # True for ["a"] <= ["b"] - subset is only asked of sets, now that the
@@ -481,6 +496,104 @@ def key_reading(text):
         "literal_all": bool(writes) and not runtime_exprs,
         "runtime_exprs": runtime_exprs,
     }
+
+
+# R3276: a write call site is not a write that runs. Four closed states, the highest
+# fact first: `load` (no enclosing function body - the script writes on open),
+# `handler` (the innermost body is a handler literal bound to an element, or a named
+# function the face binds by name / to an onX property), `call` (the innermost body is
+# a named function the face calls elsewhere), `never` (neither - the write exists in
+# the bytes and this face never reaches it).
+WHEN_STATES = ("load", "handler", "call", "never")
+WHEN_RESERVED = {"if", "for", "while", "switch", "catch", "return", "typeof",
+                 "function", "new", "delete", "void", "do", "else", "var",
+                 "let", "const", "await", "yield"}
+
+
+def _reach_names(blanked):
+    """Two definitions of "readable", both text-only and one hop: BOUND (a name passed
+    to addEventListener, or assigned to an onX property) and CALLED (a bare call of
+    the name outside its own declaration). Each misses what the other sees, and both
+    miss other scripts, library wrappers, `obj.name()` and a function passed as a
+    value - the page states that instead of letting a count look like a liveness
+    proof."""
+    bound = set()
+    for match in H_ADDL_NAME.finditer(blanked):
+        bound.add(match.group(2))
+    for match in H_ONX_SITE.finditer(blanked):
+        cb = match.group(3).strip()
+        if re.match(r"^[A-Za-z_$][\w$]*$", cb):
+            bound.add(cb)
+    hints = {}
+    for name, got in _decl_index(blanked).items():
+        for _form, hint in got:
+            hints.setdefault(name, set()).add(hint)
+    called = set()
+    for match in CALL_NAME.finditer(blanked):
+        before = blanked[max(0, match.start() - 12):match.start()]
+        if re.search(r"function\s+$", before):
+            continue
+        name = match.group(1)
+        if name in KEYWORDS or name in WHEN_RESERVED:
+            continue
+        if any(abs(match.start() - hint) <= 2
+               for hint in hints.get(name) or ()):
+            continue
+        called.add(name)
+    return bound, called
+
+
+def when_reading(text):
+    """WHEN each storage write can run, per call site. The innermost enclosing body
+    decides: no body = load; a handler literal or a name the face binds = handler; a
+    name the face calls elsewhere = call; a name it neither binds nor calls = never.
+    Text only, one hop, never executed - `never` means this face does not reach the
+    write, not that no code in the world could."""
+    blanked = _blank_strings(text)
+    spans = []
+    for name, got in _decl_index(blanked).items():
+        for _form, hint in got:
+            body = _body_span(blanked, hint)
+            if not body:
+                body = _expr_span(blanked, hint)
+                if not body or body[1] <= body[0]:
+                    body = None
+            if body:
+                spans.append((body[0], body[1], "decl", name))
+    for start, end, target, _kind, _fn in _handler_spans(blanked):
+        spans.append((start, end, "live", target))
+    for start, end, target in _arrow_spans(blanked):
+        spans.append((start, end, "live", target))
+    bound, called = _reach_names(blanked)
+    counts = {state: 0 for state in WHEN_STATES}
+    never = []
+    for match in CALL.finditer(blanked):
+        if match.group(1) != "setItem":
+            continue
+        expr = re.sub(r"\s+", "", _first_arg_at(text, blanked, match.end() - 1))
+        if not expr:
+            continue
+        holders = [span for span in spans if span[0] <= match.start() <= span[1]]
+        if not holders:
+            counts["load"] += 1
+            continue
+        inner = min(holders, key=lambda span: span[1] - span[0])
+        if inner[2] == "live" or inner[3] in bound:
+            counts["handler"] += 1
+        elif inner[3] in called:
+            counts["call"] += 1
+        else:
+            counts["never"] += 1
+            never.append([expr, inner[3]])
+    return {"counts": counts, "never": never}
+
+
+def when_attr(naming):
+    """The exact bytes a row's write-when attribute carries, shared by the page and
+    the criterion so a renamed state cannot drift between them."""
+    got = naming.get("when") or {}
+    return ",".join("%s:%d" % (state, got.get(state) or 0)
+                    for state in WHEN_STATES)
 
 
 def _cut_rhs(rhs):
@@ -1362,6 +1475,17 @@ def projection():
                        for _name, pairs in key_repeat)
     write_sites_total = sum(((rows[name].get("keys") or {}).get("write_sites") or 0)
                             for name in operable)
+    # R3276: of those sites, WHEN each can run. The four states are per call site, so
+    # their sum must equal write_sites_total; a face whose write sits in a function it
+    # never binds and never calls is named rather than folded into the total.
+    when_totals = {state: 0 for state in WHEN_STATES}
+    for name in operable:
+        got = ((rows[name].get("keys") or {}).get("when") or {})
+        for state in WHEN_STATES:
+            when_totals[state] += got.get(state, 0)
+    when_faces = [(name, key_naming(rows[name])["when_never"])
+                  for name in sorted(operable)
+                  if key_naming(rows[name])["when_never"]]
     step_drawers = {name: drawer_naming(rows[name]) for name in steps}
     branch_drawers = {name: drawer_naming(rows[name])
                       for name, _reason in steps_excluded}
@@ -1427,6 +1551,8 @@ def projection():
         "key_repeat": key_repeat,
         "repeat_extra": repeat_extra,
         "write_sites_total": write_sites_total,
+        "when_totals": when_totals,
+        "when_faces": when_faces,
         "step_drawers": step_drawers,
         "branch_drawers": branch_drawers,
         "drawer_when_counts": drawer_when_counts,
@@ -1955,14 +2081,15 @@ def render(proj):
                 'data-step-repeats="%d" '
                 'data-step-drawers="%s" data-step-when="%s" '
                 'data-step-unread="%s" data-step-read-drawers="%s" '
-                'data-step-remove-drawers="%s" data-step-split="%s">%s</p>'
+                'data-step-remove-drawers="%s" data-step-split="%s" '
+                'data-step-write-when="%s">%s</p>'
                 % (index, esc(name), proj["rows"][name]["ops"],
                    esc(" , ".join(keys)), naming["kind"],
                    esc(key_attr(naming)), naming["repeat_sites"],
                    esc(",".join(drawn["drawers"])), esc(drawn["when"]),
                    esc(",".join(drawn["unread"])),
                    esc(",".join(drawn["read"])), esc(",".join(drawn["remove"])),
-                   esc(drawn["split"]),
+                   esc(drawn["split"]), esc(when_attr(naming)),
                    esc((doc.get("step_fmt") or "").format(
                        n=index, face=name,
                        key=key_name_text(naming, doc),
@@ -1998,7 +2125,7 @@ def render(proj):
                 'data-branch-drawers="%s" '
                 'data-branch-when="%s" data-branch-unread="%s" '
                 'data-branch-read-drawers="%s" data-branch-remove-drawers="%s" '
-                'data-branch-split="%s">%s</p>'
+                'data-branch-split="%s" data-branch-write-when="%s">%s</p>'
                 % (index, esc(name), esc(reason),
                    esc(" , ".join((proj["rows"][name].get("keys") or {})
                                   .get("write") or [])),
@@ -2009,6 +2136,7 @@ def render(proj):
                    esc(",".join(drawn.get("read") or [])),
                    esc(",".join(drawn.get("remove") or [])),
                    esc(drawn.get("split") or "none"),
+                   esc(when_attr(naming)),
                    esc((doc.get("branch_fmt") or "").format(
                        n=index, face=name,
                        word=branch_words.get(reason) or "",
@@ -2115,7 +2243,33 @@ def render(proj):
     else:
         repeats_html += ('\n  <p data-key-repeat-absent>%s</p>'
                          % esc(doc.get("key_repeat_absent") or ""))
-    steps_block = (keynames_html + "\n" + repeats_html + "\n" + unread_html
+    # R3276: the write count said HOW MANY, never WHETHER the write can run. Four
+    # closed states per call site, one counter row, and a named row per face whose
+    # write sits in a function it neither binds nor calls.
+    when = proj["when_totals"]
+    when_html = (
+        '  <p class="keywhen" data-key-when-load="%d" data-key-when-handler="%d" '
+        'data-key-when-call="%d" data-key-when-never="%d">%s</p>'
+        % (when["load"], when["handler"], when["call"], when["never"],
+           esc((doc.get("key_when_head_fmt") or "").format(
+               sites=proj["write_sites_total"], load=when["load"],
+               handler=when["handler"], call=when["call"],
+               never=when["never"]))))
+    if proj["when_faces"]:
+        for name, pairs in proj["when_faces"]:
+            counts = ",".join("%s>%s" % (expr, owner) for expr, owner in pairs)
+            phrases = "、".join((doc.get("key_when_expr_fmt") or "").format(
+                expr=expr, owner=owner) for expr, owner in pairs)
+            when_html += (
+                '\n  <p data-key-when-face="%s" data-key-when-counts="%s">%s</p>'
+                % (esc(name), esc(counts),
+                   esc((doc.get("key_when_face_fmt") or "").format(
+                       name=name, phrases=phrases))))
+    else:
+        when_html += ('\n  <p data-key-when-absent>%s</p>'
+                      % esc(doc.get("key_when_absent") or ""))
+    steps_block = (keynames_html + "\n" + repeats_html + "\n" + when_html + "\n"
+                   + unread_html
                    + "\n" + split_html + "\n"
                    + steps_head
                    + ("\n".join(steps_html) if steps_html else ""))
@@ -2268,6 +2422,11 @@ def write():
                        for name, pairs in proj["key_repeat"]],
         "repeat_extra": proj["repeat_extra"],
         "write_sites_total": proj["write_sites_total"],
+        "write_when": proj["when_totals"],
+        "write_when_never": [{"face": name,
+                              "sites": [{"expr": expr, "owner": owner}
+                                        for expr, owner in pairs]}
+                             for name, pairs in proj["when_faces"]],
         "steps_excluded": [{"face": name, "reason": reason}
                            for name, reason in proj["steps_excluded"]],
         "sizes": {"html_bytes": len(html.encode("utf-8"))},
@@ -3217,7 +3376,9 @@ def check():
                 "key_empty_absent", "key_runtime_fmt", "key_absent",
                 "key_literal_empty_part", "key_literal_join",
                 "key_repeat_head_fmt", "key_repeat_expr_fmt", "key_repeat_face_fmt",
-                "key_repeat_absent"):
+                "key_repeat_absent",
+                "key_when_head_fmt", "key_when_expr_fmt", "key_when_face_fmt",
+                "key_when_absent"):
         if not (proj["doc"].get(key) or "").strip():
             failures.append("SH26 word_missing:%s" % key)
     for slot in ("{total}", "{lit}", "{empty}", "{run}", "{none}"):
@@ -3232,6 +3393,15 @@ def check():
     for slot in ("{name}", "{phrases}"):
         if slot not in (proj["doc"].get("key_repeat_face_fmt") or ""):
             failures.append("SH26 slot_missing:key_repeat_face_fmt:%s" % slot)
+    for slot in ("{sites}", "{load}", "{handler}", "{call}", "{never}"):
+        if slot not in (proj["doc"].get("key_when_head_fmt") or ""):
+            failures.append("SH26 slot_missing:key_when_head_fmt:%s" % slot)
+    for slot in ("{expr}", "{owner}"):
+        if slot not in (proj["doc"].get("key_when_expr_fmt") or ""):
+            failures.append("SH26 slot_missing:key_when_expr_fmt:%s" % slot)
+    for slot in ("{name}", "{phrases}"):
+        if slot not in (proj["doc"].get("key_when_face_fmt") or ""):
+            failures.append("SH26 slot_missing:key_when_face_fmt:%s" % slot)
     if "{value}" not in (proj["doc"].get("key_literal_fmt") or ""):
         failures.append("SH26 slot_missing:key_literal_fmt:{value}")
     if "{expr}" not in (proj["doc"].get("key_runtime_fmt") or ""):
@@ -3343,6 +3513,82 @@ def check():
             failures.append("SH26 repeat_absent_line_on_repeats")
     elif len(rep_absent) != 1:
         failures.append("SH26 repeat_absent_line expected=1 got=%d" % len(rep_absent))
+    # R3276: the write-when bucket. Counts are per call site, so their sum must equal
+    # the write-side total; the named rows are graded against a fresh resolution of
+    # each face's own bytes, and a face with no unreachable write may not appear.
+    fresh_when = {state: 0 for state in WHEN_STATES}
+    for name in fresh_keys:
+        got = fresh_keys[name].get("when") or {}
+        for state in WHEN_STATES:
+            fresh_when[state] += got.get(state, 0)
+    fresh_never = [(name, fresh_keys[name].get("when_never") or [])
+                   for name in sorted(proj["operable"])
+                   if name in fresh_keys and fresh_keys[name].get("when_never")]
+    when_head = re.search(
+        r'<p class="keywhen" data-key-when-load="(\d+)" '
+        r'data-key-when-handler="(\d+)" data-key-when-call="(\d+)" '
+        r'data-key-when-never="(\d+)">([^<]*)<', text)
+    if not when_head:
+        failures.append("SH26 when_head_missing")
+    else:
+        load_raw, handler_raw, call_raw, never_raw, said = when_head.groups()
+        got = {"load": int(load_raw), "handler": int(handler_raw),
+               "call": int(call_raw), "never": int(never_raw)}
+        for state in WHEN_STATES:
+            if got[state] != fresh_when[state]:
+                failures.append("SH26 when_count:%s page=%d fresh=%d"
+                                % (state, got[state], fresh_when[state]))
+        if sum(got.values()) != fresh_sites:
+            failures.append("SH26 when_accounting page=%d write_sites=%d"
+                            % (sum(got.values()), fresh_sites))
+        want_text = (proj["doc"].get("key_when_head_fmt") or "").format(
+            sites=fresh_sites, load=fresh_when["load"],
+            handler=fresh_when["handler"], call=fresh_when["call"],
+            never=fresh_when["never"])
+        if said != esc(want_text):
+            failures.append("SH26 when_sentence differs from the fresh derivation")
+    when_rows = re.findall(
+        r'<p data-key-when-face="([^"]+)" data-key-when-counts="([^"]*)">'
+        r'([^<]*)<', text)
+    want_never_names = [name for name, _pairs in fresh_never]
+    if [name for name, _c, _s in when_rows] != want_never_names:
+        failures.append("SH26 when_rows page=%s fresh=%s"
+                        % ([name for name, _c, _s in when_rows], want_never_names))
+    else:
+        for index, (name, counts_raw, said) in enumerate(when_rows):
+            pairs = fresh_never[index][1]
+            want_counts = ",".join("%s>%s" % (expr, owner) for expr, owner in pairs)
+            if counts_raw != esc(want_counts):
+                failures.append("SH26 when_counts_attr:%s page=%s fresh=%s"
+                                % (name, counts_raw, want_counts))
+            phrases = "、".join((proj["doc"].get("key_when_expr_fmt") or "").format(
+                expr=expr, owner=owner) for expr, owner in pairs)
+            want_text = (proj["doc"].get("key_when_face_fmt") or "").format(
+                name=name, phrases=phrases)
+            if said != esc(want_text):
+                failures.append("SH26 when_face_sentence:%s" % name)
+    for name, _counts, _said in when_rows:
+        if not (fresh_keys.get(name) or {}).get("when_never"):
+            failures.append("SH26 when_clean_face_listed:%s" % name)
+    when_absent = re.findall(r'<p data-key-when-absent>', text)
+    if fresh_never:
+        if when_absent:
+            failures.append("SH26 when_absent_line_on_never")
+    elif len(when_absent) != 1:
+        failures.append("SH26 when_absent_line expected=1 got=%d" % len(when_absent))
+    # The two step/branch rows carry the same four counts, pinned to the fresh
+    # reading so a hand edit on either row reddens on its own arm.
+    for label, pattern in (
+            ("step", r'data-step-face="([^"]+)"[^>]*data-step-write-when="([^"]*)"'),
+            ("branch", r'data-branch-face="([^"]+)"[^>]*'
+                       r'data-branch-write-when="([^"]*)"')):
+        for name, raw in re.findall(pattern, text):
+            if name not in fresh:
+                continue
+            want = when_attr(fresh[name])
+            if raw != esc(want):
+                failures.append("SH26 %s_write_when:%s page=%s fresh=%s"
+                                % (label, name, raw, want))
     step_key_rows = re.findall(
         r'<p class="step" data-step="\d+" data-step-face="([^"]+)"[^>]*'
         r'data-step-key="([^"]*)" data-step-key-kind="([^"]*)" '

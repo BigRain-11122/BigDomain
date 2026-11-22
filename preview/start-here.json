@@ -1,7 +1,7 @@
 {
  "face": "start-here",
  "generated_from": {
-  "state/start-here-faces.json": "a52b6287813dda90"
+  "state/start-here-faces.json": "e8f06cdd93b57a38"
  },
  "faces_total": 44,
  "operable": [
@@ -136,6 +136,13 @@
  ],
  "repeat_extra": 1,
  "write_sites_total": 6,
+ "write_when": {
+  "load": 0,
+  "handler": 5,
+  "call": 1,
+  "never": 0
+ },
+ "write_when_never": [],
  "steps_excluded": [
   {
    "face": "buyer-trial.html",
@@ -147,6 +154,6 @@
   }
  ],
  "sizes": {
-  "html_bytes": 36731
+  "html_bytes": 37859
  }
 }
