@@ -36,7 +36,7 @@ import state_append as SA  # noqa: E402
 import logs_toolkit as LT  # noqa: E402
 import state_io  # noqa: E402
 
-EXPECTED_CRITERIA = 10
+EXPECTED_CRITERIA = 11
 MODULE = os.path.join(BASE, "state_append.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-state-append"
@@ -366,6 +366,59 @@ def ac_rsa7():
           % EXPECTED_CRITERIA)
 
 
+def ac_rsa11():
+    """AC-RSA11: one log item is one line (R3309).
+
+    Measured before the gate: `--line "a\\nsecond."` and a `--tokens` payload
+    carrying a break both landed and the stored item carried the break. The
+    archive is appended with "\\n".join(window), so such an item cannot come
+    back as one line - the R3308 stream proof was the surface that noticed.
+    Four refusal arms (embedded, terminal, bare CR, tokens face) each name
+    E_RSA_NEWLINE, cost zero bytes, and leave no break-bearing item; a plain
+    single line still lands, so this is not a gate that refuses everything.
+    """
+    cases = [
+        ("--line embedded", "2026-11-16 R9001 NOTE first\nsecond.", None),
+        ("--line terminal", "2026-11-16 R9001 NOTE ends here.\n", None),
+        ("--line bare CR", "2026-11-16 R9001 NOTE ends here.\r", None),
+        ("--tokens embedded", None, "local=~1k api=0\napi_reason=one line"),
+    ]
+    rows = []
+    folders = []
+    for name, line, tokens in cases:
+        folder, path = world(["2026-11-16 R9001 PRODUCT: an older round"])
+        folders.append(folder)
+        before = fingerprint(path)
+        argv = ["--state", path, "--round", "9001"]
+        if line is not None:
+            argv += ["--line", line]
+        if tokens is not None:
+            argv += ["--tokens", tokens]
+        code, out, _ = run_cli(argv)
+        after = fingerprint(path)
+        log = json.loads(io.open(path, encoding="utf-8").read())["log"]
+        breaks = len([item for item in log if "\n" in item or "\r" in item])
+        rows.append((name, code, "E_RSA_NEWLINE" in out, before == after,
+                     breaks))
+    folder, path = world(["2026-11-16 R9001 PRODUCT: an older round"])
+    folders.append(folder)
+    code, out, _ = run_cli(["--state", path, "--round", "9001", "--line",
+                            "2026-11-16 R9001 PLAIN one single line."])
+    log = json.loads(io.open(path, encoding="utf-8").read())["log"]
+    plain_ok = (code == 0 and "APPEND" in out and len(log) == 2
+                and not any("\n" in item or "\r" in item for item in log))
+    ok = (all(rc == 2 and named and same and breaks == 0
+              for _, rc, named, same, breaks in rows) and plain_ok)
+    if not ok:
+        print("  measured: rows=%r plain=%r code=%r out=%r"
+              % (rows, plain_ok, code, out), flush=True)
+    check(ok, "AC-RSA11 a line break is refused at the write station on both "
+          "faces with E_RSA_NEWLINE and zero bytes written, while an ordinary "
+          "single line still lands")
+    for folder in folders:
+        cleanup(folder)
+
+
 def main():
     print("state append suite (expected criteria %d)" % EXPECTED_CRITERIA,
           flush=True)
@@ -378,6 +431,7 @@ def main():
     ac_rsa8()
     ac_rsa9()
     ac_rsa10()
+    ac_rsa11()
     ac_rsa7()
     verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
     print("%s %d/%d" % (verdict, PASSES, PASSES + FAILS), flush=True)

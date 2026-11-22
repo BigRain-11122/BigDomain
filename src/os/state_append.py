@@ -18,6 +18,13 @@ This module is that single place:
 The shape gate runs BEFORE any byte is written, so a forgotten date prefix
 is refused at the write site instead of being discovered downstream.
 
+R3309 added the neighbouring law at the same station: a log item is ONE
+line, so a `--line` or `--tokens` payload carrying `\n` or `\r` is refused
+as E_RSA_NEWLINE before the bytes land. Measured on the shipped face before
+the gate: `--line "a\nsecond."` and a break inside `--tokens` both wrote an
+item the fold could not carry; the R3308 stream proof then had to be the
+one to notice. The earliest station is cheaper than the proof.
+
 Usage
 -----
     python src/os/state_append.py --round 2833 --line "2026-11-16 R2833 ..."
@@ -80,6 +87,23 @@ def atomic_write(path, text):
             os.remove(temp)
 
 
+def _break_at(text):
+    """Index of the first line break in text, or -1 (R3309).
+
+    One log item is one line: the archive is appended with
+    `"\\n".join(window)`, so an item that carries a break cannot be found
+    again as one line, and a terminal break is silently trimmed by the
+    `.strip()` below - the writer's bytes and the stored bytes stop being
+    the same thing, which is the R3308 disease read from the other side.
+    Measured at R3309 on the shipped face: `--line "a\\nsecond."` and
+    `--tokens` carrying a break both landed with the break stored.
+    """
+    for index, char in enumerate(text):
+        if char in ("\n", "\r"):
+            return index
+    return -1
+
+
 def _collect(data, args):
     """Return (new_lines, added) or a refusal."""
     log = data.get("log")
@@ -88,6 +112,12 @@ def _collect(data, args):
     existing = set(str(item) for item in log)
     added = []
     for raw in args.line:
+        at = _break_at(raw)
+        if at >= 0:
+            return None, _refuse(
+                "E_RSA_NEWLINE", 2,
+                "a log item is one line; this append carries a line break at "
+                "char %d (%r)" % (at, raw[max(0, at - 20):at + 20]))
         text = raw.strip()
         if not text:
             return None, _refuse("E_RSA_EMPTY_LINE", 3, "an empty --line")
@@ -100,6 +130,12 @@ def _collect(data, args):
         if args.round is None:
             return None, _refuse("E_RSA_NO_ROUND", 3,
                                  "--tokens needs --round")
+        at = _break_at(args.tokens)
+        if at >= 0:
+            return None, _refuse(
+                "E_RSA_NEWLINE", 2,
+                "a tokens line is one line; --tokens carries a line break at "
+                "char %d (%r)" % (at, args.tokens[max(0, at - 20):at + 20]))
         text = TOKENS_FMT % (args.round, args.tokens.strip())
         if text in existing:
             return None, {"rc": 0, "ok": False, "code": "E_RSA_DUPLICATE",

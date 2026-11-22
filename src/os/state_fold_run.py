@@ -120,6 +120,13 @@ def archive_copy_ok(path, window_lines):
     The stream asks the fact the writer actually creates: the joined window
     is one contiguous slice of the archive text. An empty window proves
     nothing and is refused rather than passed vacuously.
+
+    R3309 (AC-SFOLD11): a slice is contiguous but not necessarily ONCE - a
+    window written twice still contains itself, so a fold that duplicated a
+    block would have read green. Measured on the archive the R3307 fold
+    wrote: the 360-item window (241888 chars) appears exactly once, and
+    counting it costs 1.4 ms on 6.0 MB, so the stronger question is asked
+    here rather than assumed.
     """
     try:
         with io.open(path, "rb") as handle:
@@ -130,7 +137,8 @@ def archive_copy_ok(path, window_lines):
              for line in window_lines]
     if not lines:
         return False
-    return "\n".join(lines) in text
+    joined = "\n".join(lines)
+    return joined in text and text.count(joined) == 1
 
 
 def read_archive_text(path):

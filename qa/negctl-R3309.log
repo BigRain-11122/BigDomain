@@ -1,0 +1,12 @@
+R3309 negative controls: tree=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain zero socket zero network
+N1 clean: line-break-refused=True plain-landed=True once=True twice=False
+ARM line-gate-present=True
+ARM plain-still-lands=True
+ARM real-window-once=True
+ARM duplicate-window-reddens=True
+ARM mutation-line-gate-removed-reddens=True (code=APPEND)
+ARM mutation-tokens-gate-removed-reddens=True (code=APPEND)
+ARM mutation-count-dropped-reddens=True
+ARM mutation-count-two-reddens=True
+ARM empty-window-refused=True
+ARM reordered-window-reddens=True

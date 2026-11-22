@@ -5062,7 +5062,7 @@ SUITES = [
     # removes the backup, so the refusal reads stage='rolled-back' with
     # after_write=False instead of leaving a half-landed fold behind.
     ("os-state-fold-run",
-     os.path.join("..", "os", "test_state_fold_run.py"), 17),
+     os.path.join("..", "os", "test_state_fold_run.py"), 18),
     # R2407: a tokens line is not automatically a block's LAST line - a round
     # may append disclosures after its ledger, and the R2405 fold then left
     # R2395's ledger in the archive while the rest of the round stayed live.
@@ -5091,7 +5091,7 @@ SUITES = [
     # line that forgot its date prefix is refused at the write site rather
     # than discovered later by a crash or a battery leg (AC-RSA1..AC-RSA10).
     ("os-state-append",
-     os.path.join("..", "os", "test_state_append.py"), 10),
+     os.path.join("..", "os", "test_state_append.py"), 11),
     # R2838: retiring a one-off family does not stop it from growing again -
     # 226 state_append_R*.py and 682 export_R*/closeout_R*.py were deleted and
     # nothing refused the next one (R2837 disclosure (b)). The law is a freeze

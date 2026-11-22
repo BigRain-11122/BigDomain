@@ -29,7 +29,7 @@ sys.path.insert(0, BASE)
 import state_fold_run as FR  # noqa: E402
 import state_fold as SF  # noqa: E402
 
-EXPECTED_CRITERIA = 17
+EXPECTED_CRITERIA = 18
 MODULE = os.path.join(BASE, "state_fold_run.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-state-fold-run"
@@ -1444,6 +1444,32 @@ def main():
     finally:
         shutil.rmtree(base, ignore_errors=True)
 
+
+    # --- AC-SFOLD15: the stream proof also asks ONCE (R3309) ------------
+    # Measured on the archive the R3307 fold wrote: the 360-item window
+    # (241888 chars) appears exactly once, and counting it costs 1.4 ms on
+    # 6.0 MB. A slice is contiguous but not unique, so a fold that wrote the
+    # same window twice used to read green - the second blindness the pinned
+    # R3308 wording left open.
+    dup15 = tempfile.mkdtemp(prefix="sf15_")
+    try:
+        dup_window = fixture_lines(12)
+        joined15 = "\n".join(dup_window)
+        once15 = os.path.join(dup15, "once.md")
+        twice15 = os.path.join(dup15, "twice.md")
+        with io.open(once15, "w", encoding="utf-8", newline="") as handle:
+            handle.write("header\n" + joined15 + "\n")
+        with io.open(twice15, "w", encoding="utf-8", newline="") as handle:
+            handle.write("header\n" + joined15 + "\n" + joined15 + "\n")
+        once_ok = FR.archive_copy_ok(once15, dup_window)
+        twice_ok = FR.archive_copy_ok(twice15, dup_window)
+        empty15 = FR.archive_copy_ok(once15, [])
+        check(once_ok and not twice_ok and not empty15,
+              "AC-SFOLD15 the stream proof asks for exactly one copy "
+              "[once=%s twice=%s empty_refused=%s]"
+              % (once_ok, twice_ok, not empty15))
+    finally:
+        shutil.rmtree(dup15, ignore_errors=True)
 
     print("CRITERIA %d/%d passes=%d fails=%d"
           % (EXPECTED_CRITERIA, EXPECTED_CRITERIA, PASSES, FAILS))

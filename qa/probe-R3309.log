@@ -1,0 +1,32 @@
+R3309 probe phase=open tree=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain zero socket zero network
+EXPECT phase=open: whatever the shipped face does, recorded verbatim
+A1 terminal-newline ok=True code=APPEND stored_break_items=0 wrote=True
+A2a crlf ok=True code=APPEND stored_break_items=0 wrote=True
+A2b lone-cr ok=True code=APPEND stored_break_items=0 wrote=True
+A3 embedded-newline ok=True code=APPEND stored_break_items=1 wrote=True
+A4 tokens-face ok=True code=APPEND stored_break_items=1 wrote=True
+A5 plain-line ok=True code=APPEND stored_break_items=0 wrote=True
+A6 refused=False bytes_unchanged=False mtime_unchanged=False
+A7 live items=47 items_with_breaks=0
+A7 state-log-archive-2026-09.md lines=15979 blank_lines=170 header_lines=198
+A7 state-log-archive-2026-10.md lines=3031 blank_lines=8 header_lines=344
+A7 state-log-archive-2026-11.md lines=7236 blank_lines=3 header_lines=294
+A8 moved_window items=360 chars=241888 occurrences=1 cost_ms=1.4 archive_mb=6.0
+A8 sampled_slices=20 slices_seen_twice=0
+A8 planted_twice_answers=True
+R3309 probe phase=closed tree=C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain zero socket zero network
+EXPECT phase=closed: A1..A4 stored_break_items must be 0 with ok=False, A5 must land, A6 must hold, A8 planted_twice must be False
+A1 terminal-newline ok=False code=E_RSA_NEWLINE stored_break_items=0 wrote=False
+A2a crlf ok=False code=E_RSA_NEWLINE stored_break_items=0 wrote=False
+A2b lone-cr ok=False code=E_RSA_NEWLINE stored_break_items=0 wrote=False
+A3 embedded-newline ok=False code=E_RSA_NEWLINE stored_break_items=0 wrote=False
+A4 tokens-face ok=False code=E_RSA_NEWLINE stored_break_items=0 wrote=False
+A5 plain-line ok=True code=APPEND stored_break_items=0 wrote=True
+A6 refused=True bytes_unchanged=True mtime_unchanged=True
+A7 live items=47 items_with_breaks=0
+A7 state-log-archive-2026-09.md lines=15979 blank_lines=170 header_lines=198
+A7 state-log-archive-2026-10.md lines=3031 blank_lines=8 header_lines=344
+A7 state-log-archive-2026-11.md lines=7236 blank_lines=3 header_lines=294
+A8 moved_window items=360 chars=241888 occurrences=1 cost_ms=1.3 archive_mb=6.0
+A8 sampled_slices=20 slices_seen_twice=0
+A8 planted_twice_answers=False
