@@ -1,0 +1,9 @@
+R3261 PROBE - expression-bodied arrows (text only)
+(a) live tree: faces=45 arrow brace bodies=0 expression bodies=0
+    expression-bodied faces=none
+(b) decisive worlds through the SHIPPED reader (today's buckets)
+  W1_brace_arrow_lexical {'verdict': 'lexical', 'lexical': 1, 'unknown': 0, 'write': [], 'read': [], 'expr_arrows': 0}
+  W2_expr_arrow_lexical {'verdict': 'lexical', 'lexical': 1, 'unknown': 0, 'write': [], 'read': [], 'expr_arrows': 1}
+  W3_expr_arrow_bound {'verdict': 'lexical', 'lexical': 1, 'unknown': 0, 'write': [], 'read': [], 'expr_arrows': 1}
+  W4_expr_arrow_no_this {'verdict': 'no-host', 'lexical': 0, 'unknown': 0, 'write': [], 'read': [], 'expr_arrows': 2}
+(c) cost: live census 0.0129s; delimiting every arrow in 45 faces 0.0121s

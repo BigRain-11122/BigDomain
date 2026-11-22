@@ -332,6 +332,12 @@ TGT_ADDL = re.compile(r"([A-Za-z_$][\w$]*\s*(?:\[[^\]]*\])?)\s*\.\s*addEventList
                       r"\s*\(\s*['\"][^'\"]*['\"]\s*,\s*$")
 FUNC_KIND = "function"
 ARROW_KIND = "arrow"
+# R3261: an arrow's body is not always braced. `const upd = () => expr` carries the
+# same lexical `this` as a braced one, so the extent is delimited mechanically - from
+# the arrow to the first depth-0 ; or , (or newline), or the paren/brace that closes
+# the enclosing call. Ending where the expression ends keeps a following statement
+# out of the span; an empty body is no span at all.
+EXPR_STOP = ";,\n"
 
 # A handler is not always a literal body on a literal element. Two live forms were
 # silent: a call-expression receiver ($('reset').addEventListener('click', function))
@@ -398,6 +404,44 @@ def _body_span(text, frm):
             if depth == 0:
                 return (i, j)
     return None
+
+
+def _expr_span(text, start):
+    """The extent [start, end] of an expression-bodied arrow. A depth-0 ; or , or a
+    newline ends it, as does the paren/brace that closes the enclosing expression, so
+    the next statement is never swallowed."""
+    depth = 0
+    i = start
+    while i < len(text):
+        ch = text[i]
+        if ch in "([{":
+            depth += 1
+        elif ch in ")]}":
+            if depth == 0:
+                return (start, i - 1)
+            depth -= 1
+        elif depth == 0 and ch in EXPR_STOP:
+            return (start, i - 1)
+        i += 1
+    return (start, len(text) - 1)
+
+
+def expr_arrow_sites(blanked):
+    """Every expression-bodied arrow: its extent plus the target the bytes name. The
+    count of these is what tells a reader how many lexical `this` reads a brace-only
+    span table used to miss."""
+    out = []
+    for match in ARROW.finditer(blanked):
+        tail = blanked[match.end():match.end() + 8]
+        i = match.end() + (len(tail) - len(tail.lstrip()))
+        if i < len(blanked) and blanked[i] == "{":
+            continue
+        got = _expr_span(blanked, match.end())
+        if not got or got[1] <= got[0]:
+            continue
+        head = blanked[max(0, match.start() - 160):match.start()]
+        out.append((got[0], got[1], _arrow_target(head)))
+    return out
 
 
 def _raw_slice(raw, blanked, start, end):
@@ -562,17 +606,21 @@ def _arrow_target(head):
 
 
 def _arrow_spans(blanked):
-    """Brace-bodied arrows anywhere in the page. A bare `var go = () => {` is a span
-    too - its target is None, and a lexical `this` inside it still is not an element.
-    An expression body (`e => expr`) is not a span: the brace that follows belongs to
-    something else, so it falls to unknown instead of being guessed."""
+    """Brace-bodied arrows anywhere in the page, plus expression-bodied arrows whose
+    extent is delimited (R3261). A bare `var go = () => {` is a span too - its target
+    is None, and a lexical `this` inside it still is not an element."""
     out = []
     for match in ARROW.finditer(blanked):
         tail = blanked[match.end():match.end() + 8]
         i = match.end() + (len(tail) - len(tail.lstrip()))
-        if i >= len(blanked) or blanked[i] != "{":
+        if i >= len(blanked):
             continue
-        got = _body_span(blanked, i)
+        if blanked[i] == "{":
+            got = _body_span(blanked, i)
+        else:
+            got = _expr_span(blanked, match.end())
+            if got and got[1] <= got[0]:
+                got = None
         if not got:
             continue
         head = blanked[max(0, match.start() - 160):match.start()]
@@ -698,6 +746,7 @@ def host_reading(text, keys=None):
     return {"write": sorted(write), "read": sorted(read), "shared": shared,
             "unknown": w_bad + r_bad, "lexical": lexical,
             "lexical_targets": sorted(lex_targets), "verdict": verdict,
+            "expr_bodies": len(expr_arrow_sites(blanked)),
             "handlers": len(spans),
             "bound": len([s for s in spans if s[4] == FUNC_KIND
                           and s[3] != "addEventListener"])}
@@ -795,6 +844,8 @@ def projection():
     host_lexical = [n for n in key_faces
                     if rows[n]["hosts"]["lexical"]]
     host_lexical_calls = sum(rows[n]["hosts"]["lexical"] for n in host_lexical)
+    expr_faces = [n for n in key_faces if rows[n]["hosts"]["expr_bodies"]]
+    expr_total = sum(rows[n]["hosts"]["expr_bodies"] for n in expr_faces)
     form_counts = {form: 0 for form in HANDLER_FORMS}
     for name in key_faces:
         for form, count in rows[name]["forms"]["forms"].items():
@@ -833,6 +884,8 @@ def projection():
         "host_unknown": host_unknown,
         "host_lexical": host_lexical,
         "host_lexical_calls": host_lexical_calls,
+        "expr_faces": expr_faces,
+        "expr_total": expr_total,
         "form_counts": form_counts,
         "form_calls": form_calls,
         "form_named": form_named,
@@ -977,10 +1030,11 @@ def render(proj):
             hosts = proj["rows"][name]["hosts"]
             hostline = ('    <p class="hostline" data-hosts="%s" data-hosts-write="%s" '
                         'data-hosts-read="%s" data-hosts-verdict="%s" '
-                        'data-hosts-lexical="%d">%s</p>\n'
+                        'data-hosts-lexical="%d" data-expr-arrows="%d">%s</p>\n'
                         % (esc(name), esc(",".join(hosts["write"])),
                            esc(",".join(hosts["read"])), esc(hosts["verdict"]),
-                           hosts["lexical"], esc(host_phrase(doc, hosts))))
+                           hosts["lexical"], hosts["expr_bodies"],
+                           esc(host_phrase(doc, hosts))))
         else:
             hostline = ""
         if "forms" in proj["rows"][name]:
@@ -1176,9 +1230,25 @@ def render(proj):
                esc((doc.get("host_lexical_fmt") or "").format(
                    calls=hosts["lexical"],
                    target=" , ".join(hosts["lexical_targets"]) or doc.get("host_none", "")))))
+    for name in proj["expr_faces"] or [None]:
+        if not name:
+            host_notes.append('  <p data-expr-arrows-absent>%s</p>'
+                              % esc(doc.get("expr_absent") or ""))
+            continue
+        hosts = proj["rows"][name]["hosts"]
+        host_notes.append(
+            '  <p data-expr-arrows="%s" data-expr-arrows-count="%d">%s</p>'
+            % (esc(name), hosts["expr_bodies"],
+               esc((doc.get("expr_fmt") or "").format(calls=hosts["expr_bodies"]))))
+    expr_counts_html = ('  <span class="kc" data-expr-total="%d"><b>%d</b>%s</span>'
+                        % (proj["expr_total"], proj["expr_total"],
+                           esc(doc.get("expr_head", ""))))
     hosts_block = ('  <p class="kindshead">%s</p>\n  <div class="counts kinds">\n%s\n'
-                   '  </div>\n  <div class="legend hosts">\n%s\n  </div>\n  <p class="note">%s</p>'
+                   '  </div>\n  <p class="kindshead">%s</p>\n'
+                   '  <div class="counts kinds">\n%s\n  </div>\n'
+                   '  <div class="legend hosts">\n%s\n  </div>\n  <p class="note">%s</p>'
                    % (esc(doc.get("hosts_head", "")), host_counts_html,
+                      esc(doc.get("expr_head", "")), expr_counts_html,
                       "\n".join(host_notes), esc(doc.get("host_note", ""))))
     form_counts_html = "\n".join(
         '  <span class="kc" data-form-count="%s"><b>%d</b>%s</span>'
@@ -1841,14 +1911,56 @@ def check():
     if "{form}" not in (proj["doc"].get("form_named_fmt") or ""):
         failures.append("SH18 slot_missing:form_named_fmt")
 
+    # AC-SH19: an expression-bodied arrow carries the SAME lexical `this` as a braced
+    # one, so its extent is delimited and counted instead of falling to unknown. Every
+    # storage face prints its expression-body count against a fresh reading, the header
+    # total is their sum, every face carrying one is NAMED with its count, none today
+    # prints in words, and a face reading zero listed in that table reddens.
+    for name in proj["key_faces"]:
+        hosts = proj["rows"][name]["hosts"]
+        got = re.search(r'data-hosts="%s"[^>]*data-expr-arrows="(\d+)"'
+                        % re.escape(name), text)
+        if not got:
+            failures.append("SH19 column_missing:%s" % name)
+        elif int(got.group(1)) != hosts["expr_bodies"]:
+            failures.append("SH19 count:%s page=%s fresh=%d"
+                            % (name, got.group(1), hosts["expr_bodies"]))
+    got = re.search(r'data-expr-total="(\d+)"><b>(\d+)</b>', text)
+    if not got:
+        failures.append("SH19 total_missing")
+    elif got.groups() != (str(proj["expr_total"]), str(proj["expr_total"])):
+        failures.append("SH19 total page=%s fresh=%d"
+                        % (got.groups(), proj["expr_total"]))
+    listed_expr = {}
+    for name, calls in re.findall(r'data-expr-arrows="([^"]+)" '
+                                  r'data-expr-arrows-count="(\d+)"', text):
+        listed_expr[name] = int(calls)
+    if set(listed_expr) != set(proj["expr_faces"]):
+        failures.append("SH19 list page=%s fresh=%s"
+                        % (sorted(listed_expr), sorted(proj["expr_faces"])))
+    for name in proj["expr_faces"]:
+        if name in listed_expr and listed_expr[name] != \
+                proj["rows"][name]["hosts"]["expr_bodies"]:
+            failures.append("SH19 named_count:%s" % name)
+        if not proj["rows"][name]["hosts"]["expr_bodies"]:
+            failures.append("SH19 clean_face_listed:%s" % name)
+    if not proj["expr_faces"] and "data-expr-arrows-absent" not in text:
+        failures.append("SH19 absent_line_missing")
+    if proj["expr_total"] != sum(proj["rows"][n]["hosts"]["expr_bodies"]
+                                 for n in proj["expr_faces"]):
+        failures.append("SH19 sum")
+    for key in ("expr_head", "expr_fmt", "expr_absent"):
+        if not (proj["doc"].get(key) or "").strip():
+            failures.append("SH19 word_missing:%s" % key)
+
     if failures:
         for line in failures:
             print("  FAIL " + line)
-        print("VERDICT FAIL criteria=18 failures=%d" % len(failures))
+        print("VERDICT FAIL criteria=19 failures=%d" % len(failures))
         return 2
-    print("VERDICT PASS criteria=18 faces=%d operable=%d missing_ceo=%d external_refs=0 "
+    print("VERDICT PASS criteria=19 faces=%d operable=%d missing_ceo=%d external_refs=0 "
           "kinds=%s keys=%s tiers=%s attrs=%s hosts=%s lexical=faces:%d,calls:%d "
-          "forms=%s"
+          "expr_bodies=%d forms=%s"
           % (proj["faces_total"], len(proj["operable"]), len(proj["missing"]),
              ",".join("%s:%d" % (kind, proj["kind_counts"][kind]) for kind in KINDS),
              ",".join("%s:%d" % (key, proj["key_counts"][key])
@@ -1861,6 +1973,7 @@ def check():
              ",".join("%s:%d" % (verdict, proj["host_counts"][verdict])
                       for verdict in HOST_VERDICTS),
              len(proj["host_lexical"]), proj["host_lexical_calls"],
+             proj["expr_total"],
              ",".join("%s:%d" % (form, proj["form_counts"][form])
                       for form in HANDLER_FORMS)
              + " decl=%s" % ",".join("%s:%d" % (form, proj["named_decl_counts"][form])

@@ -105,10 +105,15 @@ code{background:#eef1f6;border-radius:3px;padding:1px 5px;font-size:12px}
   <span class="kc" data-host-count="unknown"><b>0</b>不可判</span>
   <span class="kc" data-host-count="lexical"><b>0</b>词法this</span>
   </div>
+  <p class="kindshead">表达式体箭头（R3261）：上两段只认带花括号的箭头体，而 `() =&gt; expr` 这种写法的 this 也是词法的，却一直落在「放不下的 this」里。现在把表达式体的边界按机械律切出（同层的分号、逗号或换行为止），下表逐面数出表达式体箭头几处；活树上一处也没有时印具名缺席句。</p>
+  <div class="counts kinds">
+  <span class="kc" data-expr-total="0"><b>0</b>表达式体箭头（R3261）：上两段只认带花括号的箭头体，而 `() =&gt; expr` 这种写法的 this 也是词法的，却一直落在「放不下的 this」里。现在把表达式体的边界按机械律切出（同层的分号、逗号或换行为止），下表逐面数出表达式体箭头几处；活树上一处也没有时印具名缺席句。</span>
+  </div>
   <div class="legend hosts">
   <p data-hosts-different-absent>本轮没有两侧宿主表达式不同的面（不是没判，是都判过了）。</p>
   <p data-hosts-unknown-absent>本轮没有找不到所属赋值的 this（不是没判，是都判过了）。</p>
   <p data-hosts-lexical-absent>本轮没有落在箭头函数体里的 this（不是没判，是都判过了）。</p>
+  <p data-expr-arrows-absent>本轮没有表达式体箭头（不是没判，是都判过了）。</p>
   </div>
   <p class="note">宿主表达式相同只说明两侧的属性读写在同一个表达式上（例如都写着 T[n]），不说明写的那一次迭代与读的那一次迭代是同一个节点；全程读文本，不执行 JS。</p>
   <p class="kindshead">handler 是怎么绑上去的（R3259）：上一段说「this 落在哪个元素表达式」，但它只认两种写法，页面里还有两种活写法一直是静默——监听挂在一个调用表达式上（如 $('reset').addEventListener(...)），或者回调是一个具名函数（如 boxes[i].addEventListener('change', onToggle)）。下面把每张面的监听站点按绑定形态计数：简单元素表达式 / 调用表达式 / 具名回调 / 内联字符串属性；调用表达式与具名回调各自单独具名，具名回调再给出能否解析到声明体。</p>
@@ -156,7 +161,7 @@ code{background:#eef1f6;border-radius:3px;padding:1px 5px;font-size:12px}
     <p class="keyline" data-keys="filing-checklist.html" data-keys-write="1" data-keys-read="1" data-keys-base="paired">写 1 个键 / 读 1 个键；读到的键基座：来自同一组符号；键里用到的未声明符号 0 个。</p>
     <p class="tierline" data-tiers="filing-checklist.html" data-tiers-write="const" data-tiers-read="const" data-tiers-same="same">键来源：写=常量符号 / 读=常量符号 · 同档（来源同类）。档位只说明可变部分从哪来，不证明拼出的键名相同。</p>
     <p class="attrline" data-attrs="filing-checklist.html" data-attrs-write="" data-attrs-read="" data-attrs-verdict="no-attr">写的属性：（无） ｜ 读的属性：（无） ｜ 两侧都没有属性·不判</p>
-    <p class="hostline" data-hosts="filing-checklist.html" data-hosts-write="" data-hosts-read="" data-hosts-verdict="no-host" data-hosts-lexical="0">写在元素：无 ｜ 读在元素：无 ｜ 无宿主可判（无元素级 handler）（未解析 this：0 ｜ 词法 this：0）</p>
+    <p class="hostline" data-hosts="filing-checklist.html" data-hosts-write="" data-hosts-read="" data-hosts-verdict="no-host" data-hosts-lexical="0" data-expr-arrows="0">写在元素：无 ｜ 读在元素：无 ｜ 无宿主可判（无元素级 handler）（未解析 this：0 ｜ 词法 this：0）</p>
     <p class="formline" data-forms="filing-checklist.html" data-forms-simple="1" data-forms-call="0" data-forms-named="0" data-forms-attr="0">绑定形态：简单 1 ／ 调用 0 ／ 具名 0 ／ 字符串 0。计数只说监听怎么写上去的，不证明运行时绑到了哪个节点。</p>
     <p><b>这一步能做什么</b>逐项勾选备案执行步骤，进度存在本机浏览器里，可随时回来接着勾。</p>
     <p class="limit"><b>它不能证明什么</b>勾选是本机自述，不是平台受理回执；本仓没有备案号。</p>
@@ -169,7 +174,7 @@ code{background:#eef1f6;border-radius:3px;padding:1px 5px;font-size:12px}
     <p class="keyline" data-keys="lobby-protocol-map.html" data-keys-write="1" data-keys-read="1" data-keys-base="paired">写 1 个键 / 读 1 个键；读到的键基座：来自同一组符号；键里用到的未声明符号 0 个。</p>
     <p class="tierline" data-tiers="lobby-protocol-map.html" data-tiers-write="const" data-tiers-read="const" data-tiers-same="same">键来源：写=常量符号 / 读=常量符号 · 同档（来源同类）。档位只说明可变部分从哪来，不证明拼出的键名相同。</p>
     <p class="attrline" data-attrs="lobby-protocol-map.html" data-attrs-write="" data-attrs-read="" data-attrs-verdict="no-attr">写的属性：（无） ｜ 读的属性：（无） ｜ 两侧都没有属性·不判</p>
-    <p class="hostline" data-hosts="lobby-protocol-map.html" data-hosts-write="" data-hosts-read="" data-hosts-verdict="no-host" data-hosts-lexical="0">写在元素：无 ｜ 读在元素：无 ｜ 无宿主可判（无元素级 handler）（未解析 this：0 ｜ 词法 this：0）</p>
+    <p class="hostline" data-hosts="lobby-protocol-map.html" data-hosts-write="" data-hosts-read="" data-hosts-verdict="no-host" data-hosts-lexical="0" data-expr-arrows="0">写在元素：无 ｜ 读在元素：无 ｜ 无宿主可判（无元素级 handler）（未解析 this：0 ｜ 词法 this：0）</p>
     <p class="formline" data-forms="lobby-protocol-map.html" data-forms-simple="0" data-forms-call="0" data-forms-named="1" data-forms-attr="0">绑定形态：简单 0 ／ 调用 0 ／ 具名 1 ／ 字符串 0。计数只说监听怎么写上去的，不证明运行时绑到了哪个节点。</p>
     <p><b>这一步能做什么</b>在过滤框里输入消息前缀或判据号，筛出对应的协议节点与判据覆盖。</p>
     <p class="limit"><b>它不能证明什么</b>只读派生视图：不改任何协议，也不连任何服务器。</p>
@@ -182,7 +187,7 @@ code{background:#eef1f6;border-radius:3px;padding:1px 5px;font-size:12px}
     <p class="keyline" data-keys="merchant-onboard.html" data-keys-write="1" data-keys-read="1" data-keys-base="paired">写 1 个键 / 读 1 个键；读到的键基座：来自同一组符号；键里用到的未声明符号 0 个。</p>
     <p class="tierline" data-tiers="merchant-onboard.html" data-tiers-write="const" data-tiers-read="const" data-tiers-same="same">键来源：写=常量符号 / 读=常量符号 · 同档（来源同类）。档位只说明可变部分从哪来，不证明拼出的键名相同。</p>
     <p class="attrline" data-attrs="merchant-onboard.html" data-attrs-write="" data-attrs-read="" data-attrs-verdict="no-attr">写的属性：（无） ｜ 读的属性：（无） ｜ 两侧都没有属性·不判</p>
-    <p class="hostline" data-hosts="merchant-onboard.html" data-hosts-write="" data-hosts-read="" data-hosts-verdict="no-host" data-hosts-lexical="0">写在元素：无 ｜ 读在元素：无 ｜ 无宿主可判（无元素级 handler）（未解析 this：0 ｜ 词法 this：0）</p>
+    <p class="hostline" data-hosts="merchant-onboard.html" data-hosts-write="" data-hosts-read="" data-hosts-verdict="no-host" data-hosts-lexical="0" data-expr-arrows="0">写在元素：无 ｜ 读在元素：无 ｜ 无宿主可判（无元素级 handler）（未解析 this：0 ｜ 词法 this：0）</p>
     <p class="formline" data-forms="merchant-onboard.html" data-forms-simple="0" data-forms-call="1" data-forms-named="1" data-forms-attr="0">绑定形态：简单 0 ／ 调用 1 ／ 具名 1 ／ 字符串 0。计数只说监听怎么写上去的，不证明运行时绑到了哪个节点。</p>
     <p><b>这一步能做什么</b>看 8 项缺口（6 项 CEO 物理件 + 2 项我方证据），逐项勾自述进度，并同时看到『自述 k/6』与『有证据 m/8』两个计数器。</p>
     <p class="limit"><b>它不能证明什么</b>自述不是验证；两项证据只证沙箱回调与页内账簿自洽，不证明真实商户通道可用；本页永远不收密钥值。</p>
@@ -195,7 +200,7 @@ code{background:#eef1f6;border-radius:3px;padding:1px 5px;font-size:12px}
     <p class="keyline" data-keys="money-path-demo.html" data-keys-write="1" data-keys-read="1" data-keys-base="orphan">写 1 个键 / 读 1 个键；读到的键基座：有读无写（基座不同）；键里用到的未声明符号 0 个。</p>
     <p class="tierline" data-tiers="money-path-demo.html" data-tiers-write="dom" data-tiers-read="dom" data-tiers-same="same">键来源：写=DOM 属性 / 读=DOM 属性 · 同档（来源同类）。档位只说明可变部分从哪来，不证明拼出的键名相同。</p>
     <p class="attrline" data-attrs="money-path-demo.html" data-attrs-write="data-ck" data-attrs-read="data-ck" data-attrs-verdict="same-name">写的属性：data-ck ｜ 读的属性：data-ck ｜ 两侧同名·可比</p>
-    <p class="hostline" data-hosts="money-path-demo.html" data-hosts-write="T[n]" data-hosts-read="T[n]" data-hosts-verdict="same-host" data-hosts-lexical="0">写在元素：T[n] ｜ 读在元素：T[n] ｜ 同一个宿主表达式（未解析 this：0 ｜ 词法 this：0）</p>
+    <p class="hostline" data-hosts="money-path-demo.html" data-hosts-write="T[n]" data-hosts-read="T[n]" data-hosts-verdict="same-host" data-hosts-lexical="0" data-expr-arrows="0">写在元素：T[n] ｜ 读在元素：T[n] ｜ 同一个宿主表达式（未解析 this：0 ｜ 词法 this：0）</p>
     <p class="formline" data-forms="money-path-demo.html" data-forms-simple="1" data-forms-call="0" data-forms-named="0" data-forms-attr="0">绑定形态：简单 1 ／ 调用 0 ／ 具名 0 ／ 字符串 0。计数只说监听怎么写上去的，不证明运行时绑到了哪个节点。</p>
     <p><b>这一步能做什么</b>按打勾步骤走一遍收款到入权益的钱路，看每一步的页内读数。</p>
     <p class="limit"><b>它不能证明什么</b>全程页内模拟：没有一笔真实资金移动，也没有真实订单落在任何支付平台。</p>
@@ -208,7 +213,7 @@ code{background:#eef1f6;border-radius:3px;padding:1px 5px;font-size:12px}
     <p class="keyline" data-keys="ship-checklist.html" data-keys-write="1" data-keys-read="1" data-keys-base="paired">写 1 个键 / 读 1 个键；读到的键基座：来自同一组符号；键里用到的未声明符号 0 个。</p>
     <p class="tierline" data-tiers="ship-checklist.html" data-tiers-write="const" data-tiers-read="const" data-tiers-same="same">键来源：写=常量符号 / 读=常量符号 · 同档（来源同类）。档位只说明可变部分从哪来，不证明拼出的键名相同。</p>
     <p class="attrline" data-attrs="ship-checklist.html" data-attrs-write="" data-attrs-read="" data-attrs-verdict="no-attr">写的属性：（无） ｜ 读的属性：（无） ｜ 两侧都没有属性·不判</p>
-    <p class="hostline" data-hosts="ship-checklist.html" data-hosts-write="" data-hosts-read="" data-hosts-verdict="no-host" data-hosts-lexical="0">写在元素：无 ｜ 读在元素：无 ｜ 无宿主可判（无元素级 handler）（未解析 this：0 ｜ 词法 this：0）</p>
+    <p class="hostline" data-hosts="ship-checklist.html" data-hosts-write="" data-hosts-read="" data-hosts-verdict="no-host" data-hosts-lexical="0" data-expr-arrows="0">写在元素：无 ｜ 读在元素：无 ｜ 无宿主可判（无元素级 handler）（未解析 this：0 ｜ 词法 this：0）</p>
     <p class="formline" data-forms="ship-checklist.html" data-forms-simple="2" data-forms-call="0" data-forms-named="0" data-forms-attr="0">绑定形态：简单 2 ／ 调用 0 ／ 具名 0 ／ 字符串 0。计数只说监听怎么写上去的，不证明运行时绑到了哪个节点。</p>
     <p><b>这一步能做什么</b>逐项勾选上线前的硬门（AIGC 标识、msgSecCheck 前置闸等），进度本地留存。</p>
     <p class="limit"><b>它不能证明什么</b>勾满不等于可上线：支付通道、备案、服务器等物理件仍缺。</p>
@@ -234,7 +239,7 @@ code{background:#eef1f6;border-radius:3px;padding:1px 5px;font-size:12px}
   <p data-notice="advice">非投顾提示：本页与全部预览面不构成任何投资建议。</p>
   <p data-notice="mock">MOCK：本页列出的支付、账本、权益流程全部是页内模拟，不接真实资金通道。</p>
 </div>
-<footer>sources: state/start-here-faces.json 390ecfdafc64fbd7 / state/merchant-onboard-items.json via tools/merchant_onboard.project_items()</footer>
+<footer>sources: state/start-here-faces.json c7b3ba8b445f917b / state/merchant-onboard-items.json via tools/merchant_onboard.project_items()</footer>
 </div>
 </body>
 </html>

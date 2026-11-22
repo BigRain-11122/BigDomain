@@ -3,17 +3,17 @@
     "board_pages_skipped": [
       "preview/face-sweep.html (7449B)"
     ],
-    "current": "2026-11-22 R3260 PRODUCT+ENGINEERING: the front door now says WHICH FORM declared a named callback, and the merge R3259 shipped is gone - `function NAME(` and `var|let|const NAME = function` are ONE weight (both bodies are function literals, so the binding target supplies `this`), an arrow declaration is a DIFFERENT weight (its `this` is lexical per R3258 and can never be read as the element), and all three count toward 'declared exactly once' - so `function upd(` PLUS `var upd = function` is two declarations instead of the one R3259 resolved. preview/start-here.html is 25893B (24326B last round), preview/start-here.json (1717B) carries named_decl_counts/named_total, every named row prints data-forms-form, and the header carries a second counter row (func / varfunc / arrow / mixed / none).",
+    "current": "2026-11-22 R3261 PRODUCT+ENGINEERING: the expression-bodied arrow finally got a span - `() => expr` carries the same lexical `this` as a braced one, yet the brace-only span table left it in unknown, so two readings of one semantic fact disagreed. The extent is now delimited mechanically (depth-0 `;` `,` newline, or the closer of the enclosing expression), every storage face prints its expression-body count, and a face carrying one is named with the count while a zero reading prints a named absence.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
-    "last_artifact": "preview/start-here.html (25893B) + preview/start-here.json (1717B) [2026-11-22 mtime]",
-    "latest_artifact": "preview/start-here.html (25893B) + preview/start-here.json (1717B) [2026-11-22 mtime]",
+    "last_artifact": "preview/start-here.html (26954B) + preview/start-here.json (1717B) [2026-11-22 mtime]",
+    "latest_artifact": "preview/start-here.html (26954B) + preview/start-here.json (1717B) [2026-11-22 mtime]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\start-here.html",
     "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/negctl-R3260.log (705B, 2026-11-22)",
     "latest_evidence": "qa/negctl-R3260.log (705B, 2026-11-22)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3261] next window (<=48h): (0) MAIN — **声明形态判出来了，但「表达式体箭头」这一档今天自相矛盾**：`const upd = () => expr`（无花括号）现在落 `form=arrow / status=lexical`（声明形态确实给了词法 this），可它的 `this` 在宿主读数里仍落 `unknown`——因为 R3258 只把**带花括号**的箭头算作 span，表达式体没有 body 可 delim。同一个名字、同一面，两处读数一个说「词法 this」一个说「放不下的 this」，都对，但读者分不清这是两种边界还是同一个缺口。问：值不值得把表达式体箭头的 body 也 delim？做法＝先只读量三问：①活树 45 张面里表达式体箭头几处、各落在哪张面、今天 named/hosts 各读什么（本轮全树箭头总数已是 0，故只可能由私有世界证出）；②能否立一条机械律「表达式体到同层第一个 `;` 或 `,` 或配对右括号为止」，且不把 `() => obj.x` 之外的东西吞进来、不与 R3258 的「表达式体落 unknown 并具名」正面冲突；③代价（要不要改 `_arrow_spans` 的 span 形状、宿主读数会不会从 unknown 移到 lexical、页增多少字节）。收口三选一＝①接受现状（页上写明两种读数的差别，仍只认花括号体）②把表达式体箭头也做成 span（`this` 从 unknown 移到 lexical，仍不判宿主）③只做「表达式体箭头计数」一档，不 delim。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
-    "next_milestone_due": "2026-11-24T13:18:54+08:00",
-    "updated_at": "2026-11-22T13:18:54+08:00",
+    "next_milestone": "[R3262] next window (<=48h): (0) MAIN — **表达式体的边界是「同层分号/逗号/换行」，这一条在「体里有条件表达式」时会把三元式的后腿切掉**：`() => a ? b : c` 现在切到 `:` 之前还是之后取决于有没有逗号，而 `() => a ? f(b, c) : d` 里的逗号在括号内（不会被误切，已证），但 `() => cond ? x : y` 之后紧跟 `,` 的写法（对象字面量、参数表、数组）会把 `this` 归属切在两段里。问：值不值得给表达式体加一条「三元式整体算一个体」的机械律？做法＝先只读量三问：①活树 45 张面里三元表达式体箭头几处（本轮全树箭头总数为 0，故仍只可能由私有世界证出）；②能否立一条不吞并后续语句的律（例如三元式在 `?` 之后必须等到配对的 `:` 与体结束，再按同层 `;`／`,`／换行收口），且不与 R3261 的 `)`/`}` 收口语义冲突；③代价（要不要把 `_expr_span` 换成带状态的小机、页增多少字节）。收口三选一＝①接受现状（页上写明「三元式体按文本切分」）②实现三元式整体收口 ③只加一档计数不切分。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
+    "next_milestone_due": "2026-11-24T13:32:25+08:00",
+    "updated_at": "2026-11-22T13:32:25+08:00",
     "heartbeat": {
       "tick": 3256,
       "state_tick": 3260,
@@ -37,8 +37,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-22 R3260 PRODUCT+ENGINEERING: the front door now says WHICH FORM declared a named callback, and the merge R3259 shipped is gone - `function NAME(` and `var|let|const NAME = function` are ONE weight (both bodies are function literals, so the binding target supplies `this`), an arrow declaration is a DIFFERENT weight (its `this` is lexical per R3258 and can never be read as the element), and all three count toward 'declared exactly once' - so `function upd(` PLUS `var upd = function` is two declarations instead of the one R3259 resolved. preview/start-here.html is 25893B (24326B last round), preview/start-here.json (1717B) carries named_decl_counts/named_total, every named row prints data-forms-form, and the header carries a second counter row (func / varfunc / arrow / mixed / none).",
-  "claims": {"claimed": 313, "captured": 95, "contradicted": 10, "uncaptured": 208, "historic": 7, "rows": 11, "present": true, "census_ts": "2026-11-22T13:18:54+08:00"},
+  "current": "2026-11-22 R3261 PRODUCT+ENGINEERING: the expression-bodied arrow finally got a span - `() => expr` carries the same lexical `this` as a braced one, yet the brace-only span table left it in unknown, so two readings of one semantic fact disagreed. The extent is now delimited mechanically (depth-0 `;` `,` newline, or the closer of the enclosing expression), every storage face prints its expression-body count, and a face carrying one is named with the count while a zero reading prints a named absence.",
+  "claims": {"claimed": 314, "captured": 95, "contradicted": 10, "uncaptured": 209, "historic": 7, "rows": 11, "present": true, "census_ts": "2026-11-22T13:32:25+08:00"},
   "chain": {"present": true, "rows": 11, "broken": 0, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -67,11 +67,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-22 R3260 PRODUCT+ENGINEERING: the front door now says WHICH FORM declared a named callback, and the merge R3259 shipped is gone - `function NAME(` and `var|let|const NAME = function` are ONE weight (both bodies are function literals, so the binding target supplies `this`), an arrow declaration is a DIFFERENT weight (its `this` is lexical per R3258 and can never be read as the element), and all three count toward 'declared exactly once' - so `function upd(` PLUS `var upd = function` is two declarations instead of the one R3259 resolved. preview/start-here.html is 25893B (24326B last round), preview/start-here.json (1717B) carries named_decl_counts/named_total, every named row prints data-forms-form, and the header carries a second counter row (func / varfunc / arrow / mixed / none).",
-  "export_ts": "2026-11-22T13:18:54+08:00",
-  "latest_artifact": "preview/start-here.html (25893B) + preview/start-here.json (1717B) [2026-11-22 mtime]",
+  "do": "2026-11-22 R3261 PRODUCT+ENGINEERING: the expression-bodied arrow finally got a span - `() => expr` carries the same lexical `this` as a braced one, yet the brace-only span table left it in unknown, so two readings of one semantic fact disagreed. The extent is now delimited mechanically (depth-0 `;` `,` newline, or the closer of the enclosing expression), every storage face prints its expression-body count, and a face carrying one is named with the count while a zero reading prints a named absence.",
+  "export_ts": "2026-11-22T13:32:25+08:00",
+  "latest_artifact": "preview/start-here.html (26954B) + preview/start-here.json (1717B) [2026-11-22 mtime]",
   "latest_evidence": "qa/negctl-R3260.log (705B, 2026-11-22)",
-  "next_milestone": "[R3261] next window (<=48h): (0) MAIN — **声明形态判出来了，但「表达式体箭头」这一档今天自相矛盾**：`const upd = () => expr`（无花括号）现在落 `form=arrow / status=lexical`（声明形态确实给了词法 this），可它的 `this` 在宿主读数里仍落 `unknown`——因为 R3258 只把**带花括号**的箭头算作 span，表达式体没有 body 可 delim。同一个名字、同一面，两处读数一个说「词法 this」一个说「放不下的 this」，都对，但读者分不清这是两种边界还是同一个缺口。问：值不值得把表达式体箭头的 body 也 delim？做法＝先只读量三问：①活树 45 张面里表达式体箭头几处、各落在哪张面、今天 named/hosts 各读什么（本轮全树箭头总数已是 0，故只可能由私有世界证出）；②能否立一条机械律「表达式体到同层第一个 `;` 或 `,` 或配对右括号为止」，且不把 `() => obj.x` 之外的东西吞进来、不与 R3258 的「表达式体落 unknown 并具名」正面冲突；③代价（要不要改 `_arrow_spans` 的 span 形状、宿主读数会不会从 unknown 移到 lexical、页增多少字节）。收口三选一＝①接受现状（页上写明两种读数的差别，仍只认花括号体）②把表达式体箭头也做成 span（`this` 从 unknown 移到 lexical，仍不判宿主）③只做「表达式体箭头计数」一档，不 delim。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
+  "next_milestone": "[R3262] next window (<=48h): (0) MAIN — **表达式体的边界是「同层分号/逗号/换行」，这一条在「体里有条件表达式」时会把三元式的后腿切掉**：`() => a ? b : c` 现在切到 `:` 之前还是之后取决于有没有逗号，而 `() => a ? f(b, c) : d` 里的逗号在括号内（不会被误切，已证），但 `() => cond ? x : y` 之后紧跟 `,` 的写法（对象字面量、参数表、数组）会把 `this` 归属切在两段里。问：值不值得给表达式体加一条「三元式整体算一个体」的机械律？做法＝先只读量三问：①活树 45 张面里三元表达式体箭头几处（本轮全树箭头总数为 0，故仍只可能由私有世界证出）；②能否立一条不吞并后续语句的律（例如三元式在 `?` 之后必须等到配对的 `:` 与体结束，再按同层 `;`／`,`／换行收口），且不与 R3261 的 `)`/`}` 收口语义冲突；③代价（要不要把 `_expr_span` 换成带状态的小机、页增多少字节）。收口三选一＝①接受现状（页上写明「三元式体按文本切分」）②实现三元式整体收口 ③只加一档计数不切分。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
   "outs": [
     "preview/start-here.html (25893B) + preview/start-here.json (1717B) [2026-11-22 mtime]",
     "preview/ugc-gate-report.html (28112B) + preview/ugc-gate-report.json (20170B) [2026-11-22 mtime]",
@@ -165,8 +165,8 @@
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 70391,
-  "next_milestone_due": "2026-11-24T13:18:54+08:00",
+  "state_bytes": 77515,
+  "next_milestone_due": "2026-11-24T13:32:25+08:00",
   "heartbeat": {
     "tick": 3256,
     "state_tick": 3260,

@@ -1,0 +1,12 @@
+PASS c1_live_copy_passes live copy rc=0
+PASS c2_edited_expr_count_reddens count edit rc=2
+PASS c3_edited_total_reddens total edit rc=2
+PASS c4_missing_total_row_is_named row dropped rc=2
+PASS c5_clean_face_listed_reddens clean face rc=2
+PASS c6_absent_line_missing_reddens absent rc=2
+PASS c7_missing_word_reddens word rc=2
+PASS c8_expr_world_is_lexical_and_counted expr verdict=lexical lexical=1 unknown=0 bodies=1
+PASS c9_brace_world_unchanged brace verdict=lexical lexical=1 bodies=0
+PASS c10_extent_stops_before_next_statement sites=1 verdict=unknown lexical=0 unknown=2
+PASS c11_comma_inside_call_is_not_an_end body=' obj.m(a, b)'
+NEGCTL PASS cases=11 failed=0
