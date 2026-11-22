@@ -1,0 +1,293 @@
+{
+ "books": {
+  "cash": "分",
+  "token": "点"
+ },
+ "compliance": {
+  "aigc": "AIGC 标识：平台生成的呈现内容带 ai_service 标识，本页为演示壳，不冒充真人作品。",
+  "disclaimer": "非投资建议：本页展示的是算力包与工具服务价格，不是投资建议，也不承诺任何收益。",
+  "mock": "MOCK 非真实支付：本页不联网、不扣款、不产生商户订单；一切数字为本机模拟。"
+ },
+ "criteria": [
+  {
+   "id": "AC-BT1",
+   "pass_": true,
+   "text": "source sha256 recorded on the face equals the file on disk"
+  },
+  {
+   "id": "AC-BT2",
+   "pass_": true,
+   "text": "every product id / price_cent / entitlement / channel equals the source"
+  },
+  {
+   "id": "AC-BT3",
+   "pass_": true,
+   "text": "the page carries zero external refs (file:// double-click works offline)"
+  },
+  {
+   "id": "AC-BT4",
+   "pass_": true,
+   "text": "double-entry books balance: cash sum == 0 and token sum == 0 after each post"
+  },
+  {
+   "id": "AC-BT5",
+   "pass_": true,
+   "text": "a repeated callback for one order books once (idempotent guard)"
+  },
+  {
+   "id": "AC-BT6",
+   "pass_": true,
+   "text": "MOCK / AIGC / non-advice disclaimers are permanent on the face"
+  }
+ ],
+ "face": "buyer-trial",
+ "generated_utc": "2026-11-22T03:12:21Z",
+ "products": [
+  {
+   "blocked": false,
+   "blocked_reason": "",
+   "cash_entries": [
+    [
+     [
+      "现金",
+      990
+     ],
+     [
+      "预收收入",
+      -990
+     ]
+    ],
+    [
+     [
+      "预收收入",
+      990
+     ],
+     [
+      "营业收入",
+      -990
+     ]
+    ]
+   ],
+   "channel": "virtual",
+   "copy": "永久入场券：付费即入城资格，一次性永久，无周期、无续费、无到期（发放产物=入城凭证·lobby E_ENTRANCE_REQUIRED 判据源=本件 grants 查询面）",
+   "entitlement": "birthright",
+   "id": "birthright_entry",
+   "label": "永久入城券",
+   "needs_ceo": false,
+   "price_cent": 990,
+   "price_label": "¥9.90",
+   "share_cent": 0,
+   "token_entries": [
+    [
+     [
+      "代币待发池",
+      -990
+     ],
+     [
+      "用户点数",
+      990
+     ]
+    ]
+   ]
+  },
+  {
+   "blocked": false,
+   "blocked_reason": "",
+   "cash_entries": [
+    [
+     [
+      "现金",
+      1990
+     ],
+     [
+      "预收收入",
+      -1990
+     ]
+    ],
+    [
+     [
+      "预收收入",
+      1990
+     ],
+     [
+      "营业收入",
+      -1990
+     ]
+    ]
+   ],
+   "channel": "virtual",
+   "copy": "19.9 算力包：AI 生成工具验证服务（次数明细=[needs-CEO]）",
+   "entitlement": "compute_pack",
+   "id": "pack_compute_19_9",
+   "label": "19.9 算力包",
+   "needs_ceo": true,
+   "price_cent": 1990,
+   "price_label": "¥19.90",
+   "share_cent": 0,
+   "token_entries": [
+    [
+     [
+      "代币待发池",
+      -1990
+     ],
+     [
+      "用户点数",
+      1990
+     ]
+    ]
+   ]
+  },
+  {
+   "blocked": true,
+   "blocked_reason": "本通道需要真实微信商户号与结算主体，演示中拒绝放行（物理件未到）",
+   "cash_entries": [
+    [
+     [
+      "现金",
+      199900
+     ],
+     [
+      "预收收入",
+      -199900
+     ]
+    ],
+    [
+     [
+      "预收收入",
+      199900
+     ],
+     [
+      "营业收入",
+      -199900
+     ]
+    ]
+   ],
+   "channel": "standard",
+   "copy": "B 端真实服务：数据报告（标准商户通道·对公结算）",
+   "entitlement": "report:data",
+   "id": "report_data_b",
+   "label": "数据报告（B 端）",
+   "needs_ceo": true,
+   "price_cent": 199900,
+   "price_label": "¥1999.00",
+   "share_cent": 0,
+   "token_entries": [
+    [
+     [
+      "代币待发池",
+      -199900
+     ],
+     [
+      "用户点数",
+      199900
+     ]
+    ]
+   ]
+  },
+  {
+   "blocked": true,
+   "blocked_reason": "本通道需要真实微信商户号与结算主体，演示中拒绝放行（物理件未到）",
+   "cash_entries": [
+    [
+     [
+      "现金",
+      100000
+     ],
+     [
+      "预收收入",
+      -100000
+     ]
+    ],
+    [
+     [
+      "预收收入",
+      100000
+     ],
+     [
+      "营业收入",
+      -100000
+     ]
+    ]
+   ],
+   "channel": "standard",
+   "copy": "观测费分成单：30% 代币分成示意（换算桥演示件）",
+   "entitlement": "obs:credit",
+   "id": "share_observation",
+   "label": "观测费分成单",
+   "needs_ceo": true,
+   "price_cent": 100000,
+   "price_label": "¥1000.00",
+   "share_cent": 30000,
+   "token_entries": [
+    [
+     [
+      "代币待发池",
+      -100000
+     ],
+     [
+      "用户点数",
+      100000
+     ]
+    ]
+   ]
+  },
+  {
+   "blocked": false,
+   "blocked_reason": "",
+   "cash_entries": [
+    [
+     [
+      "现金",
+      2990
+     ],
+     [
+      "预收收入",
+      -2990
+     ]
+    ],
+    [
+     [
+      "预收收入",
+      2990
+     ],
+     [
+      "营业收入",
+      -2990
+     ]
+    ]
+   ],
+   "channel": "virtual",
+   "copy": "月卡（入门订阅卡）：30 天会员周期 + 2 项会员特权（权益明细以会员页目录为准·entitlement=tier:patron）",
+   "entitlement": "tier:patron",
+   "id": "tier_patron_30d",
+   "label": "月卡 · 30 天",
+   "needs_ceo": false,
+   "price_cent": 2990,
+   "price_label": "¥29.90",
+   "share_cent": 0,
+   "token_entries": [
+    [
+     [
+      "代币待发池",
+      -2990
+     ],
+     [
+      "用户点数",
+      2990
+     ]
+    ]
+   ]
+  }
+ ],
+ "products_sha256": "86d5f2df75fbcd7a87c6b8aead5d40b2a4c9b61d05e2b7730c49762b92fe5451",
+ "sizes": {
+  "html_bytes": 20450,
+  "json_bytes": 5722
+ },
+ "source": {
+  "path": "preview/payment-gate-report.json",
+  "sha256": "971f4cabbbff074702208a8d453a0c11cd0d5b7be6df69eca35569a39249217b"
+ },
+ "title": "买家试用镜 · 本地演示",
+ "verdict": "PASS"
+}

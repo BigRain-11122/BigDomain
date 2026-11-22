@@ -1,0 +1,10 @@
+PASS order created :: BT-0001
+PASS virtual product booked :: 宸插叆璐?PASS cash book has 2 entries (4 legs) :: entries=2
+PASS token book has 1 entry (2 legs) :: entries=1
+PASS books balance :: 璐︽湰鑷 路 鐜伴噾璐﹀悎璁?0 鍒?路 浠ｅ竵璐﹀悎璁?0 鐐?路 閰嶅钩
+PASS receipt delivered :: children=2
+PASS repeated callback books nothing :: cash=2 token=1
+PASS idempotent replay logged :: log_lines=7
+PASS standard channel blocked :: pay.disabled=true blocked.hidden=false
+PASS reset clears books :: cash=0 token=0
+HARNESS PASS checks=10

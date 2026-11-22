@@ -3,17 +3,17 @@
     "board_pages_skipped": [
       "preview/ceo-blockers.html (8454B)"
     ],
-    "current": "2026-11-22 R3248 PRODUCT+ENGINEERING: the content-safety face finally reads the RECORD in EVERY world, and the decision stays where it was. Before this round _walk_all asked the installed-package RECORD only when git could not answer, so every RECORD coverage criterion (AC-UGR17..19) was proved only in private worlds and the live page printed a named absence - the RECORD counts had no live reading at all. The walk now asks it always, each coverage row carries decided_by=evidence|marker, and the page says in words that a count does not become an authority: where git answers, the tracked set still decides read/refuse and the RECORD is a second opinion.",
+    "current": "2026-11-22 R3250 PRODUCT (product-first law, higher priority than the rest of the book): at round start preview carried 42 HTML faces and 41 of them were read-only reports - measured button count 0 across all but index.html (qa/buyer-trial-census-R3250.log 2980B/44 lines sha256 0bec2d2779d08bee) - so a visitor could look at engineering numbers and could not act. This round lands the first buyer-operable face: preview/buyer-trial.html + .json project the five SHIPPED products from payment-gate-report.json (id/price_cent/entitlement/channel), let a visitor order one, pay on a mock gateway, watch a double-entry cash+token ledger post, prove a repeated callback books once, and see the entitlement arrive; the two standard-channel products are refused with the missing merchant pieces named rather than faked.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
-    "last_artifact": "preview/ugc-gate-report.html (26563B) + preview/ugc-gate-report.json (18867B) [2026-11-22 mtime]",
-    "latest_artifact": "preview/ugc-gate-report.html (26563B) + preview/ugc-gate-report.json (18867B) [2026-11-22 mtime]",
-    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ugc-gate-report.html",
+    "last_artifact": "preview/buyer-trial.html (20450B) + preview/buyer-trial.json (5725B) [2026-11-22 mtime]",
+    "latest_artifact": "preview/buyer-trial.html (20450B) + preview/buyer-trial.json (5725B) [2026-11-22 mtime]",
+    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\buyer-trial.html",
     "latest_artifact_note": "",
     "latest_evidence": "qa/suite-ugc-gate-R3246.log (5047B, 2026-11-22)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3248] next window (<=48h): (0) MAIN — **活树上有 28 个 vendor 根根本没有 RECORD，RECORD 读数对它们是零行**：本轮让 RECORD 在每个世界被读，但只有带 `*.dist-info/RECORD` 的根会出现在 coverage 里（今天只有 `.venv` 一个），所以「一个根没有 RECORD」与「一个根没有第三方代码」在页上仍是同一件事。做法＝先只读量三问：①活树 29 个 vendor 根里无 RECORD 的那些，盘上 `.py` 有几个（本轮读数：`ygo-poc/data/toolchain` 2 个，其余 0）；②私有世界造一个「无 RECORD 但有 `.py`」的根，量今天页上是否只剩名字规则的计数（`decided_by=name` 不出现，因为 coverage 只在 has_markers 时生成）能否让这种根看得见而不把它变成红；③代价（每根多一行计数，无额外 walk）。收口三选一＝①接受并把「无 RECORD 的根」作为一个具名计数印在页上（零风险）②给无 RECORD 根也生成 `decided_by=name` 的 coverage 行（更完整，代价=页变长、`AC-UGR17/18/19` 需要按规则分支配）③升级为红（会让每个真正无第三方的根每次变红，须先想清代价）。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
-    "next_milestone_due": "2026-11-24T10:49:31+08:00",
-    "updated_at": "2026-11-22T10:49:31+08:00",
+    "next_milestone": "[R3250] next window (<=48h): (0) MAIN — **standard 通道两件在买家试用镜里只能拒绝**（数据报告 1999.00 / 观测分成单 1000.00 都走 `channel=standard`，演示中 `pay.disabled=true` 并列缺失物理件）。问：值不值得做一件「商户号到位后的接入检查单」可执行页——运营输入商户号/密钥**名字**（不输密钥值）→ 逐项自检（域名备案/结算主体/回调可达/签名模式）→ 输出还缺哪几项，判据先落板再动代码；收口三选一＝①只做只读清单（零风险·页上仍是读数）②做成可勾选自检页（本机保存勾选态）③等物理件到位再做。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
+    "next_milestone_due": "2026-11-24T11:14:28+08:00",
+    "updated_at": "2026-11-22T11:14:28+08:00",
     "heartbeat": {
       "tick": 3246,
       "state_tick": 3246,
@@ -37,8 +37,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-22 R3248 PRODUCT+ENGINEERING: the content-safety face finally reads the RECORD in EVERY world, and the decision stays where it was. Before this round _walk_all asked the installed-package RECORD only when git could not answer, so every RECORD coverage criterion (AC-UGR17..19) was proved only in private worlds and the live page printed a named absence - the RECORD counts had no live reading at all. The walk now asks it always, each coverage row carries decided_by=evidence|marker, and the page says in words that a count does not become an authority: where git answers, the tracked set still decides read/refuse and the RECORD is a second opinion.",
-  "claims": {"claimed": 324, "captured": 93, "contradicted": 10, "uncaptured": 221, "historic": 7, "rows": 10, "present": true, "census_ts": "2026-11-22T10:49:31+08:00"},
+  "current": "2026-11-22 R3250 PRODUCT (product-first law, higher priority than the rest of the book): at round start preview carried 42 HTML faces and 41 of them were read-only reports - measured button count 0 across all but index.html (qa/buyer-trial-census-R3250.log 2980B/44 lines sha256 0bec2d2779d08bee) - so a visitor could look at engineering numbers and could not act. This round lands the first buyer-operable face: preview/buyer-trial.html + .json project the five SHIPPED products from payment-gate-report.json (id/price_cent/entitlement/channel), let a visitor order one, pay on a mock gateway, watch a double-entry cash+token ledger post, prove a repeated callback books once, and see the entitlement arrive; the two standard-channel products are refused with the missing merchant pieces named rather than faked.",
+  "claims": {"claimed": 327, "captured": 95, "contradicted": 10, "uncaptured": 222, "historic": 7, "rows": 10, "present": true, "census_ts": "2026-11-22T11:14:28+08:00"},
   "chain": {"present": true, "rows": 10, "broken": 0, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -67,11 +67,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-22 R3248 PRODUCT+ENGINEERING: the content-safety face finally reads the RECORD in EVERY world, and the decision stays where it was. Before this round _walk_all asked the installed-package RECORD only when git could not answer, so every RECORD coverage criterion (AC-UGR17..19) was proved only in private worlds and the live page printed a named absence - the RECORD counts had no live reading at all. The walk now asks it always, each coverage row carries decided_by=evidence|marker, and the page says in words that a count does not become an authority: where git answers, the tracked set still decides read/refuse and the RECORD is a second opinion.",
-  "export_ts": "2026-11-22T10:49:31+08:00",
-  "latest_artifact": "preview/ugc-gate-report.html (26563B) + preview/ugc-gate-report.json (18867B) [2026-11-22 mtime]",
+  "do": "2026-11-22 R3250 PRODUCT (product-first law, higher priority than the rest of the book): at round start preview carried 42 HTML faces and 41 of them were read-only reports - measured button count 0 across all but index.html (qa/buyer-trial-census-R3250.log 2980B/44 lines sha256 0bec2d2779d08bee) - so a visitor could look at engineering numbers and could not act. This round lands the first buyer-operable face: preview/buyer-trial.html + .json project the five SHIPPED products from payment-gate-report.json (id/price_cent/entitlement/channel), let a visitor order one, pay on a mock gateway, watch a double-entry cash+token ledger post, prove a repeated callback books once, and see the entitlement arrive; the two standard-channel products are refused with the missing merchant pieces named rather than faked.",
+  "export_ts": "2026-11-22T11:14:28+08:00",
+  "latest_artifact": "preview/buyer-trial.html (20450B) + preview/buyer-trial.json (5725B) [2026-11-22 mtime]",
   "latest_evidence": "qa/suite-ugc-gate-R3246.log (5047B, 2026-11-22)",
-  "next_milestone": "[R3248] next window (<=48h): (0) MAIN — **活树上有 28 个 vendor 根根本没有 RECORD，RECORD 读数对它们是零行**：本轮让 RECORD 在每个世界被读，但只有带 `*.dist-info/RECORD` 的根会出现在 coverage 里（今天只有 `.venv` 一个），所以「一个根没有 RECORD」与「一个根没有第三方代码」在页上仍是同一件事。做法＝先只读量三问：①活树 29 个 vendor 根里无 RECORD 的那些，盘上 `.py` 有几个（本轮读数：`ygo-poc/data/toolchain` 2 个，其余 0）；②私有世界造一个「无 RECORD 但有 `.py`」的根，量今天页上是否只剩名字规则的计数（`decided_by=name` 不出现，因为 coverage 只在 has_markers 时生成）能否让这种根看得见而不把它变成红；③代价（每根多一行计数，无额外 walk）。收口三选一＝①接受并把「无 RECORD 的根」作为一个具名计数印在页上（零风险）②给无 RECORD 根也生成 `decided_by=name` 的 coverage 行（更完整，代价=页变长、`AC-UGR17/18/19` 需要按规则分支配）③升级为红（会让每个真正无第三方的根每次变红，须先想清代价）。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
+  "next_milestone": "[R3250] next window (<=48h): (0) MAIN — **standard 通道两件在买家试用镜里只能拒绝**（数据报告 1999.00 / 观测分成单 1000.00 都走 `channel=standard`，演示中 `pay.disabled=true` 并列缺失物理件）。问：值不值得做一件「商户号到位后的接入检查单」可执行页——运营输入商户号/密钥**名字**（不输密钥值）→ 逐项自检（域名备案/结算主体/回调可达/签名模式）→ 输出还缺哪几项，判据先落板再动代码；收口三选一＝①只做只读清单（零风险·页上仍是读数）②做成可勾选自检页（本机保存勾选态）③等物理件到位再做。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
   "outs": [
     "preview/ugc-gate-report.html (22688B) + preview/ugc-gate-report.json (16020B) [2026-11-22 mtime]",
     "probe-R3243.log (2178B) + suite-ugc-gate-R3243.log (3094B)",
@@ -164,8 +164,8 @@
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 77109,
-  "next_milestone_due": "2026-11-24T10:49:31+08:00",
+  "state_bytes": 79111,
+  "next_milestone_due": "2026-11-24T11:14:28+08:00",
   "heartbeat": {
     "tick": 3246,
     "state_tick": 3246,

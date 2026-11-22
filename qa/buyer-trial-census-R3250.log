@@ -1,0 +1,44 @@
+faces=42 interactive=1 zero_external=42
+  INTER index.html                                 btn=2 in=0 script=1 ext=0  硅基域 BigDomain · 产品预览 v0.6
+--- non-interactive sample ---
+  REPT  apimarket-monthly-faces.html               btn=0 in=0 ext=0
+  REPT  apimarket-report-activity.html             btn=0 in=0 ext=0
+  REPT  apimarket-report-attention.html            btn=0 in=0 ext=0
+  REPT  apimarket-report-buyerquestions.html       btn=0 in=0 ext=0
+  REPT  apimarket-report-buyers.html               btn=0 in=0 ext=0
+  REPT  apimarket-report-claims-demo.html          btn=0 in=0 ext=0
+  REPT  apimarket-report-claims.html               btn=0 in=0 ext=0
+  REPT  apimarket-report-csv.html                  btn=0 in=0 ext=0
+  REPT  apimarket-report-demand.html               btn=0 in=0 ext=0
+  REPT  apimarket-report-dossiers.html             btn=0 in=0 ext=0
+  REPT  apimarket-report-duty.html                 btn=0 in=0 ext=0
+  REPT  apimarket-report-json.html                 btn=0 in=0 ext=0
+  REPT  apimarket-report-quality.html              btn=0 in=0 ext=0
+  REPT  apimarket-report-questions.html            btn=0 in=0 ext=0
+  REPT  apimarket-report-refunds.html              btn=0 in=0 ext=0
+  REPT  apimarket-report-selleranswers.html        btn=0 in=0 ext=0
+  REPT  apimarket-report-slowanswer.html           btn=0 in=0 ext=0
+  REPT  apimarket-report-workbench.html            btn=0 in=0 ext=0
+  REPT  apimarket-report.html                      btn=0 in=0 ext=0
+  REPT  battery-shard-report.html                  btn=0 in=0 ext=0
+  REPT  ceo-blockers.html                          btn=0 in=0 ext=0
+  REPT  city-face-report.html                      btn=0 in=0 ext=0
+  REPT  core-loop-walkthrough.html                 btn=0 in=0 ext=0
+  REPT  face-sweep.html                            btn=0 in=0 ext=0
+  REPT  filing-checklist.html                      btn=0 in=21 ext=0
+  REPT  first-yuan-chain.html                      btn=0 in=0 ext=0
+  REPT  first-yuan.html                            btn=0 in=0 ext=0
+  REPT  journey-19.9.html                          btn=0 in=0 ext=0
+  REPT  ledger-business-report.html                btn=0 in=0 ext=0
+  REPT  ledger-reconcile-face.html                 btn=0 in=0 ext=0
+  REPT  live-sandbox.html                          btn=0 in=0 ext=0
+  REPT  lobby-protocol-map.html                    btn=0 in=1 ext=0
+  REPT  lobby-session-trace.html                   btn=0 in=0 ext=0
+  REPT  lobby-ws-report.html                       btn=0 in=0 ext=0
+  REPT  membership-benefit-report.html             btn=0 in=0 ext=0
+  REPT  membership-face.html                       btn=0 in=0 ext=0
+  REPT  money-path-demo.html                       btn=0 in=3 ext=0
+  REPT  payment-gate-report.html                   btn=0 in=0 ext=0
+  REPT  platform-live-report.html                  btn=0 in=0 ext=0
+  REPT  ship-checklist.html                        btn=1 in=11 ext=0
+  REPT  ugc-gate-report.html                       btn=0 in=0 ext=0
