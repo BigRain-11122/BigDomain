@@ -113,7 +113,7 @@
    "exists": true,
    "face": "preview/index.html",
    "face_state": {
-    "bytes": 37062,
+    "bytes": 38870,
     "path": "preview/index.html",
     "state": "PRESENT"
    },
@@ -133,7 +133,7 @@
    "exists": true,
    "face": "preview/ugc-gate-report.html",
    "face_state": {
-    "bytes": 9576,
+    "bytes": 19945,
     "path": "preview/ugc-gate-report.html",
     "state": "PRESENT"
    },
@@ -153,7 +153,7 @@
    "exists": true,
    "face": "preview/index.html",
    "face_state": {
-    "bytes": 37062,
+    "bytes": 38870,
     "path": "preview/index.html",
     "state": "PRESENT"
    },
@@ -169,8 +169,8 @@
   }
  ],
  "sizes": {
-  "html": 8453,
-  "json": 6754
+  "html": 8454,
+  "json": 6755
  },
- "tick": "3140"
+ "tick": "3244"
 }

@@ -51,7 +51,8 @@ CRITERIA = (
     ("AC-UGR12", "the site reader's own spelling laws are re-proved INSIDE --check on a fixed in-memory sample that never comes from disk (R3239): the sample must answer exactly six pinned coordinates - bare, attribute, attribute-assignment alias, import-as alias, literal-getattr alias and a construction sharing a def line - and zero hits for a prose-only source and for a non-literal getattr alias, so a reader degraded to name-only reddens this face instead of only the suite"),
     ("AC-UGR13", "the walk's OTHER side is measured, printed and graded (R3240): the report must print, for each refusing rule, how many sources it refused and - for the test_ rule, which cannot be narrowed without drowning nine legal fixture doors - the NAME of every refused source that really constructs the gate; --check refuses when either printed count or any refused door file disagrees with a fresh reading, so a production door misnamed test_*.py reddens here instead of vanishing. The vendor rule is counted and never parsed (a class inside a vendor tree is not this module's class), and `data` left the skip set because it is not a non-source name - measured: zero .py under either data directory, so the live reading did not move. R3242: refusal is by OWNERSHIP - the names are package-manager and bundled-toolchain roots, and `ygo-poc` left the set because a project directory name cannot decide whose code it holds (measured: its only two .py files sit under data/toolchain/goroot and are untracked, so `toolchain` refuses them now and a PoC script of ours beside them is read). The vendor side stays unparsed, but it is READ for manners: the printed mention count and every mentioning file are graded here too, so the face can no longer say 'doors=0' in place of 'never looked'"),
     ("AC-UGR14", "the OTHER side of the reader is graded too (R3241): a source that does not parse is dropped from the site set by direct_call_sites(), so a constructing file whose syntax breaks shrinks BOTH the measured set and the page that echoes it and AC-UGR8 stays green - measured in qa/probe-R3241.log, where a broken src/sandbox/frontdoor.py moved 4 sites in 3 files to 3 sites in 2 files and the whole check still read VERDICT PASS 11/11. The report must NAME every unparsed source (read side and the test_ refused side) on the face, and --check must REFUSE while any unparsed source exists: an unreadable production source is a defect rather than a design choice, so unlike the nine legal fixture doors of AC-UGR13 it cannot be made green by printing it. The vendor rule stays counted and never parsed"),
-    ("AC-UGR15", "the refusal rule is judged, not only its output (R3243): R3242 removed one project directory name from the skip set because a name cannot decide whose code it holds, yet the five names that remained were still the final word - measured in qa/probe-R3243.log, a gate written under a self-owned src/sandbox/mypoc/toolchain/ answered zero sites while the same bytes one level up were seen. Refusal is now decided by OWNERSHIP evidence: a file under a vendor-named directory is refused only when git does not track it, tracked files are READ and parsed as this repo's own source, and the report must print which rule decided (`evidence`, or `name` as the named fallback when git cannot answer in a private world) plus the count and every path of the tracked files that were read. --check refuses when the printed rule, count or any owned path disagrees with a fresh reading. The evidence has one shape only (git tracking) - a tracked vendored copy would be read, which is the honest direction - and the fallback keeps today's name behaviour where git is unavailable rather than pretending coverage"),
+    ("AC-UGR15", "the refusal rule is judged, not only its output (R3243): R3242 removed one project directory name from the skip set because a name cannot decide whose code it holds, yet the five names that remained were still the final word - measured in qa/probe-R3243.log, a gate written under a self-owned src/sandbox/mypoc/toolchain/ answered zero sites while the same bytes one level up were seen. Refusal is now decided by OWNERSHIP evidence: a file under a vendor-named directory is refused only when git does not track it, tracked files are READ and parsed as this repo's own source, and the report must print which rule decided (`evidence`, or `name` as the named fallback when git cannot answer in a private world) plus the count and every path of the tracked files that were read. --check refuses when the printed rule, count or any owned path disagrees with a fresh reading. A tracked vendored copy would be read, which is the honest direction. R3244 added a SECOND evidence used only where git cannot answer (an installed-package RECORD, graded by AC-UGR16), so the summary word may now also read `marker` or `marker+name`; where neither evidence exists the name rule remains the named fallback rather than pretending coverage"),
+    ("AC-UGR16", "the fallback evidence is named and its counts are graded (R3244): AC-UGR15 grades one summary word, and one word cannot tell a world where a package manager's RECORD decided from a world where a bare directory name did - both print the same. Measured in qa/probe-R3244.log: in a world with no .git, a gate of OURS written into the same vendor root as an installed package was refused by name and answered zero sites (hits=[], refused_files=2), while that root's two .dist-info/RECORD files list every one of its 453 .py files. When git cannot answer, ownership now falls back to RECORD membership: a listed file is refused, an unlisted file is READ as ours, a root carrying no RECORD keeps the name rule. The report must print the decision count for each rule (evidence, marker, name) and name every file read as ours; --check refuses when any printed count, the summary rule, or an owned path disagrees with a fresh reading. The marker evidence is the package manager's own account of itself - a hand-edited RECORD is believed, which is the same kind of fallibility as a tracked vendored copy being read, and it is printed rather than implied"),
     ("AC-SGV1", "PRE-REGISTERED REPAIR (not applied: src/ bytes are frozen under the live battery leg): SecGate.__init__ must refuse empty wordlists exactly as MsgSecStub does, so the constitutional no-content-safety-no-door rule holds on the direct construction path too"),
     ("AC-SGV2", "PRE-REGISTERED: after the repair, SecGate([], []) raises GateOfflineError, the four expected-blocked constructions read 4/4 blocked, and every existing direct call site in src/sandbox stays green because each already passes non-empty config lists"),
     ("AC-SGV3", "PRE-REGISTERED: tools/ugc_gate_report.py --check reads VERDICT PASS with AC-UGR2 counting 4 must-refuse constructions and zero measured holes"),
@@ -227,6 +228,73 @@ def _tracked_sources():
     return {p.replace("\\", "/") for p in text.split("\0") if p}
 
 
+_PKG_INFO = ".dist-info"
+
+
+def _record_path(line):
+    """The path field of one installed-package RECORD line, without `csv`.
+
+    AC-UGR6 allows this tool only a fixed stdlib import list, so `csv` is not
+    available here. A RECORD line is `path,hash,size` and only the first field
+    is a path; a quoted path may itself hold a comma, so a leading quote is
+    closed first. This is the whole dialect a package manager writes - a comma
+    inside an UNQUOTED path does not occur, and if it did the file would be read
+    as unlisted, which the page reports rather than hides.
+    """
+    if line.startswith('"'):
+        end = line.find('"', 1)
+        if end > 0:
+            return line[1:end]
+    return line.split(",", 1)[0].strip()
+
+
+def _marker_sources(vroot):
+    """Installed-package evidence under one vendor root, from *.dist-info/RECORD.
+
+    R3244: ownership has a SECOND shape besides git tracking. R3243 moved the
+    refusal from a directory NAME to git evidence, but git cannot answer in a
+    deployed copy - and there the only on-disk record of "this file was
+    installed by a package manager" is the RECORD that manager wrote. Measured
+    in qa/probe-R3244.log: .venv carries two RECORDs listing every one of its
+    453 .py files, while our own gate written into the SAME root was refused by
+    name and never seen (hits=[], refused_files=2, decided by name).
+
+    So where git cannot answer, a root that carries a RECORD decides by
+    membership: a listed file is someone else's (refused, never parsed), an
+    unlisted file belongs to no installed package and is READ as ours. A root
+    carrying no RECORD at all keeps the name rule, and the page says so.
+
+    A .dist-info WITHOUT a RECORD is not treated as evidence: there is no
+    membership list to decide with, so the name fallback stays in charge.
+
+    Returns (evidence_rel_paths, has_markers) where both are relative to ROOT.
+    """
+    evidence = set()
+    has_markers = False
+    for base, _dirs, files in os.walk(vroot):
+        if not os.path.basename(base).endswith(_PKG_INFO):
+            continue
+        if "RECORD" not in files:
+            continue
+        record = os.path.join(base, "RECORD")
+        site = os.path.dirname(base)
+        try:
+            with open(record, "r", encoding="utf-8", errors="replace") as fh:
+                for line in fh:
+                    first = _record_path(line)
+                    if not first:
+                        continue
+                    target = os.path.normpath(os.path.join(site, first))
+                    rel = os.path.relpath(target, ROOT).replace("\\", "/")
+                    if rel.startswith("../"):
+                        continue
+                    evidence.add(rel)
+        except OSError:
+            continue
+        has_markers = True
+    return evidence, has_markers
+
+
 def _sandbox_walk(tracked=_TRACKED_AUTO):
     """Every sandbox source, split into what is READ and what is REFUSED.
 
@@ -259,21 +327,33 @@ def _sandbox_walk(tracked=_TRACKED_AUTO):
     change: zero .py files under either data directory, so the live reading did
     not move; a door written under data/ is read now instead of vanishing.
 
-    Returns (read_pairs, refused_triples, owned_paths) where a refused triple
-    carries the rule that refused it: (rel, "test_prefix"|"vendor_dir", text).
-    `owned_paths` names the files a vendor-named directory held that git TRACKS
-    (R3243): those are this repo's own source and are read, not refused.
+    Returns (read_pairs, refused_triples, owned_paths, decisions) where a
+    refused triple carries the rule that refused it:
+    (rel, "test_prefix"|"vendor_dir", text). `owned_paths` names the files a
+    vendor-named directory held that the available evidence claimed as ours
+    (R3243/R3244): those are this repo's own source and are read, not refused.
+    `decisions` is one (rel, "evidence"|"marker"|"name") per vendor-named file,
+    so the face can print which rule decided each count instead of one word for
+    a mixed world.
     """
     if tracked is _TRACKED_AUTO:
         tracked = _tracked_sources()
     read = []
     refused = []
     owned = []
+    decisions = []
     walk_root = os.path.join(ROOT, "src", "sandbox")
     for base, dirs, files in os.walk(walk_root):
         for name in list(dirs):
             if name in VENDOR_DIRS:
                 vdir = os.path.join(base, name)
+                # R3244: ask the marker evidence only when git cannot answer.
+                # Asking it always would spend 0.4 s to decide what git already
+                # decided, and would let a hand-edited RECORD overrule git.
+                if tracked is None:
+                    evidence, has_markers = _marker_sources(vdir)
+                else:
+                    evidence, has_markers = frozenset(), False
                 for vbase, _vdirs, vfiles in os.walk(vdir):
                     for vname in sorted(vfiles):
                         if not vname.endswith(".py"):
@@ -286,10 +366,22 @@ def _sandbox_walk(tracked=_TRACKED_AUTO):
                                 text = fh.read()
                         except OSError:
                             text = ""
-                        if tracked is not None and rel in tracked:
-                            read.append((rel, text))
-                            owned.append(rel)
+                        if tracked is not None:
+                            decisions.append((rel, "evidence"))
+                            if rel in tracked:
+                                read.append((rel, text))
+                                owned.append(rel)
+                            else:
+                                refused.append((rel, "vendor_dir", text))
+                        elif has_markers:
+                            decisions.append((rel, "marker"))
+                            if rel in evidence:
+                                refused.append((rel, "vendor_dir", text))
+                            else:
+                                read.append((rel, text))
+                                owned.append(rel)
                         else:
+                            decisions.append((rel, "name"))
                             refused.append((rel, "vendor_dir", text))
         dirs[:] = [d for d in dirs if d not in VENDOR_DIRS]
         for name in sorted(files):
@@ -309,12 +401,12 @@ def _sandbox_walk(tracked=_TRACKED_AUTO):
                     read.append((rel, fh.read()))
             except OSError:
                 continue
-    return read, refused, owned
+    return read, refused, owned, decisions
 
 
 def _sandbox_sources():
     """The sources the site reader actually reads, as (path, text) pairs."""
-    read, _refused, _owned = _sandbox_walk()
+    read, _refused, _owned, _dec = _sandbox_walk()
     return read
 
 
@@ -333,7 +425,7 @@ def refused_census(refused=None):
     parsed - measured 0 of 455 files today, 0.31 s to read them all.
     """
     if refused is None:
-        _read, refused, _owned = _sandbox_walk()
+        _read, refused, _owned, _dec = _sandbox_walk()
     out = {}
     for rel, rule, text in refused:
         slot = out.setdefault(rule, {"files": 0, "parsed": rule != "vendor_dir",
@@ -470,8 +562,22 @@ def collect():
     # same split the face prints, so the page cannot describe a different world
     # than the site set came from.
     tracked = _tracked_sources()
-    read_pairs, refused_pairs, owned = _sandbox_walk(tracked=tracked)
+    read_pairs, refused_pairs, owned, decisions = _sandbox_walk(tracked=tracked)
     sites, skipped = direct_call_sites(sources=read_pairs)
+    # R3244: one word cannot describe a mixed world (one vendor root with a
+    # RECORD, another without). The counts are the honest reading; the word is
+    # the summary the page prints, and check() grades both.
+    counts = {"evidence": 0, "marker": 0, "name": 0}
+    for _rel, rule in decisions:
+        counts[rule] = counts.get(rule, 0) + 1
+    if tracked is not None:
+        vendor_rule = "evidence"
+    elif counts["marker"] and counts["name"]:
+        vendor_rule = "marker+name"
+    elif counts["marker"]:
+        vendor_rule = "marker"
+    else:
+        vendor_rule = "name"
     return {
         "rows": build_cases(cfg, msgsec_stub, sec_gate, gate_page),
         "proof": proof,
@@ -480,7 +586,8 @@ def collect():
         "unparsed": skipped,
         "refused": refused_census(refused_pairs),
         "vendor_owned": sorted(owned),
-        "vendor_rule": "evidence" if tracked is not None else "name",
+        "vendor_rule": vendor_rule,
+        "vendor_decisions": counts,
         "hole_status": "LIVE" if sites else "LATENT",
         "parity": parity_line(),
         "aigc": aigc_face(),
@@ -551,17 +658,27 @@ def render_html(data):
             mentions = slot.get("mentions") or []
             owned = data.get("vendor_owned") or []
             decided = data.get("vendor_rule")
-            rule_txt = ("<b>evidence</b> (the git tracked set)"
-                        if decided == "evidence"
-                        else "<b>name</b> (git could not answer here, so the directory "
-                             "name decided)")
-            tail = ("a file here is REFUSED only when git does not track it - decided by %s; "
-                    "<b>%d</b> of them are tracked by git and were READ as ours%s. The "
+            counts = data.get("vendor_decisions") or {}
+            rule_txt = {
+                "evidence": ("<b>evidence</b> (the git tracked set)"),
+                "marker": ("<b>marker</b> (git could not answer here, so the "
+                           "RECORD a package manager wrote decided)"),
+                "marker+name": ("<b>marker+name</b> (git could not answer: roots "
+                                "carrying a RECORD decided by its membership, roots "
+                                "without one by the directory name)"),
+                "name": ("<b>name</b> (neither git nor an installed-package RECORD "
+                         "could answer, so the directory name decided)"),
+            }.get(decided, "<b>%s</b>" % _esc(decided))
+            tail = ("a file here is REFUSED unless the evidence claims it as ours - "
+                    "decided by %s; decisions: evidence=<b>%d</b> marker=<b>%d</b> "
+                    "name=<b>%d</b>; <b>%d</b> of them were READ as ours%s. The "
                     "refused side is NOT parsed - a class inside someone else's tree is not "
                     "this module's class - but read for MANNERS of the name: <b>%d</b> of them "
                     "textually mention the gate%s. A mention is not a construction and never "
-                    "enters the site set (R3242/R3243)"
-                    % (rule_txt, len(owned),
+                    "enters the site set (R3242/R3243/R3244)"
+                    % (rule_txt,
+                       counts.get("evidence", 0), counts.get("marker", 0),
+                       counts.get("name", 0), len(owned),
                        (": " + ", ".join("<span class='mono'>%s</span>" % _esc(o)
                                          for o in owned))
                        if owned else "",
@@ -581,8 +698,13 @@ def render_html(data):
                     "<span class='mono'>toolchain/</span> is read instead of vanishing - measured in "
                     "qa/probe-R3243.log, where that gate was invisible before this change and the same "
                     "bytes one level up were seen. Where git cannot answer (a private world, a copy "
-                    "that is not a repo) the directory name decides and the page says so rather than "
-                    "implying evidence. <span class='mono'>ygo-poc</span> left the name set at R3242 "
+                    "that is not a repo) ownership falls back to a SECOND named evidence (R3244): "
+                    "if the root carries a <span class='mono'>*.dist-info/RECORD</span>, a file it "
+                    "lists is refused and a file it does not list is READ as ours - measured in "
+                    "qa/probe-R3244.log, where our own gate beside an installed package was refused "
+                    "by name before this change. A root carrying no RECORD keeps the directory-name "
+                    "rule (printed as <span class='mono'>name</span>), because a name that cannot be "
+                    "checked is still not evidence. <span class='mono'>ygo-poc</span> left the name set at R3242 "
                     "because a project directory name cannot decide whose code it holds - measured, "
                     "its two .py files sit under <span class='mono'>ygo-poc/data/toolchain/goroot</span> "
                     "and are refused by <span class='mono'>toolchain</span> now. Parsing the refused "
@@ -934,15 +1056,37 @@ def check(data):
     owned15 = sorted(data.get("vendor_owned") or [])
     rule15 = data.get("vendor_rule")
     rule_printed = ("decided by <b>%s</b>" % _esc(rule15)) in html_text
-    owned_counted = ("<b>%d</b> of them are tracked by git and were READ as ours"
-                     % len(owned15)) in html_text
+    owned_counted = ("<b>%d</b> of them were READ as ours" % len(owned15)) in html_text
     owned_unnamed = [o for o in owned15 if o not in html_text]
-    ok15 = (rule15 in ("evidence", "name") and rule_printed
+    ok15 = (rule15 in ("evidence", "marker", "marker+name", "name") and rule_printed
             and owned_counted and not owned_unnamed)
     results.append(("AC-UGR15", ok15,
                     "rule=%s rule_printed=%s owned=%d owned_counted=%s owned_unnamed=%d"
                     % (rule15, rule_printed, len(owned15), owned_counted,
                        len(owned_unnamed))))
+
+    # AC-UGR16: where git cannot answer, the SECOND evidence is named and its
+    # counts are graded (R3244). AC-UGR15 grades one word, and one word cannot
+    # tell a world where a package RECORD decided from a world where a bare name
+    # did - both would print the same face. Measured in qa/probe-R3244.log: in a
+    # world with no .git, our own gate beside an installed package was refused
+    # by name and never seen (hits=[], refused_files=2). So the face must print
+    # the decision count for EACH rule and name every file read as ours, and
+    # --check compares both against this fresh reading rather than trusting the
+    # summary word.
+    counts16 = data.get("vendor_decisions") or {}
+    total16 = sum(counts16.get(k, 0) for k in ("evidence", "marker", "name"))
+    counted16 = all(("%s=<b>%d</b>" % (k, counts16.get(k, 0))) in html_text
+                    for k in ("evidence", "marker", "name"))
+    unnamed16 = [o for o in owned15 if o not in html_text]
+    mixed16 = (rule15 == "marker+name" and counts16.get("marker", 0) > 0
+               and counts16.get("name", 0) > 0)
+    ok16 = (bool(counts16) and total16 == sum(counts16.values()) and counted16
+            and not unnamed16
+            and (total16 == 0 or counts16.get(rule15, 0) > 0 or mixed16))
+    results.append(("AC-UGR16", ok16,
+                    "rule=%s counts=%s printed=%s owned_unnamed=%d total=%d"
+                    % (rule15, counts16, counted16, len(unnamed16), total16)))
 
     # AC-UGR9: the sizes block is read back FROM THE LANDED DOCUMENT, never from
     # the in-memory dict, so a --no-write run still gates on what is on disk.

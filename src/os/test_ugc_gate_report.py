@@ -123,7 +123,7 @@ def main():
         mod.OUT_HTML, mod.OUT_JSON = copy_html, copy_json
 
         rc, base, text, verdict = run_check(mod, data)
-        ok('AC-UGRB0', rc == 0 and len(base) == 13 and all(base.values()),
+        ok('AC-UGRB0', rc == 0 and len(base) == 14 and all(base.values()),
            'baseline rc=%d criteria=%d green=%d %s'
            % (rc, len(base), sum(1 for v in base.values() if v), verdict))
 
@@ -579,11 +579,11 @@ def main():
             mod._tracked_sources = lambda: {'src/sandbox/mypoc/toolchain/door.py'}
             e_hits, _e_skip = mod.direct_call_sites()
             e_census = mod.refused_census()
-            _e_read, _e_ref, e_owned = mod._sandbox_walk()
+            _e_read, _e_ref, e_owned, _e_dec = mod._sandbox_walk()
             mod._tracked_sources = lambda: None
             n_hits, _n_skip = mod.direct_call_sites()
             n_census = mod.refused_census()
-            _n_read, _n_ref, n_owned = mod._sandbox_walk()
+            _n_read, _n_ref, n_owned, _n_dec = mod._sandbox_walk()
         finally:
             mod._tracked_sources = real_tracked
             mod.ROOT = real_root
@@ -617,6 +617,73 @@ def main():
            'AC-UGR13=%s stays PASS rc=%d'
            % (res31.get('AC-UGR15'), res31.get('AC-UGR13'), r31))
 
+        # ---- B32/B33/B34: where git CANNOT answer, ownership falls back to a
+        # SECOND named evidence (R3244). Measured in qa/probe-R3244.log: in a
+        # world with no .git, a gate of OURS beside an installed package was
+        # refused by name and answered zero sites, while the two RECORDs under
+        # .venv list all 453 of its .py files. B32 proves RECORD membership
+        # decides in both directions inside one root (listed refused, unlisted
+        # read); B33 proves a root with no marker still says `name`; B34 proves
+        # the printed per-rule counts are graded and AC-UGR15 does not inherit
+        # the job.
+        marker_world = world_tree({
+            'src/sandbox/.venv/pip/core/vendor.py': 'x = 1\n',
+            'src/sandbox/.venv/pip/pip-1.0.dist-info/METADATA': 'Name: pip\n',
+            'src/sandbox/.venv/pip/pip-1.0.dist-info/RECORD':
+                'core/vendor.py,sha256=aa,12\n',
+            'src/sandbox/.venv/our_gate.py':
+                'from lobby.sec_gate import SecGate\nG = SecGate([], [])\n',
+        })
+        no_marker_world = world_tree({
+            'src/sandbox/mypoc/toolchain/door.py':
+                'from lobby.sec_gate import SecGate\nG = SecGate([], [])\n',
+            'src/sandbox/mypoc/toolchain/plain.py': 'x = 1\n',
+        })
+        try:
+            mod.ROOT = marker_world
+            mod._tracked_sources = lambda: None
+            m_hits, _m_skip = mod.direct_call_sites()
+            m_census = mod.refused_census()
+            _m_read, _m_ref, m_owned, m_dec = mod._sandbox_walk()
+            mod.ROOT = no_marker_world
+            nm_hits, _nm_skip = mod.direct_call_sites()
+            nm_census = mod.refused_census()
+            _nm_read, _nm_ref, nm_owned, nm_dec = mod._sandbox_walk()
+        finally:
+            mod._tracked_sources = real_tracked
+            mod.ROOT = real_root
+            shutil.rmtree(marker_world, ignore_errors=True)
+            shutil.rmtree(no_marker_world, ignore_errors=True)
+        m_vendor = m_census.get('vendor_dir') or {}
+        nm_vendor = nm_census.get('vendor_dir') or {}
+        ok('AC-UGRB32',
+           m_hits == ['src/sandbox/.venv/our_gate.py:2']
+           and m_owned == ['src/sandbox/.venv/our_gate.py']
+           and m_vendor.get('files') == 1
+           and dict(m_dec) == {'src/sandbox/.venv/pip/core/vendor.py': 'marker',
+                               'src/sandbox/.venv/our_gate.py': 'marker'},
+           'RECORD evidence, no git: read=%s owned=%s refused_files=%s decisions=%s '
+           '(the unlisted file beside an installed package is READ)'
+           % (m_hits, m_owned, m_vendor.get('files'), dict(m_dec)))
+        ok('AC-UGRB33',
+           nm_hits == [] and nm_owned == [] and nm_vendor.get('files') == 2
+           and all(rule == 'name' for _p, rule in nm_dec),
+           'no marker, no git: read=%s refused_files=%s decisions=%s '
+           '(the name rule stays, and it is named)'
+           % (nm_hits, nm_vendor.get('files'), dict(nm_dec)))
+
+        def b34(d):
+            d['vendor_decisions'] = {'evidence': 454, 'marker': 1, 'name': 0}
+
+        mutated34 = copy.deepcopy(data)
+        b34(mutated34)
+        r34, res34, _t34, _v34 = run_check(mod, mutated34)
+        ok('AC-UGRB34',
+           res34.get('AC-UGR16') is False and res34.get('AC-UGR15') is True,
+           'an unprinted marker count reddens AC-UGR16=%s (must be FAIL) while '
+           'AC-UGR15=%s stays PASS rc=%d'
+           % (res34.get('AC-UGR16'), res34.get('AC-UGR15'), r34))
+
         # ---- B17: the live tree must read the same site set as before the
         # reader changed (pure addition): three files, four constructions.
         live_hits, live_skipped = mod.direct_call_sites()
@@ -635,7 +702,7 @@ def main():
     after = real_snapshot()
     rc_real, res_real, _, verdict_real = run_check(mod, mod.collect())
     ok('AC-UGRB10',
-       before == after and rc_real == 0 and len(res_real) == 13 and all(res_real.values()),
+       before == after and rc_real == 0 and len(res_real) == 14 and all(res_real.values()),
        'real pair unchanged=%s real rc=%d green=%d' %
        (before == after, rc_real, sum(1 for v in res_real.values() if v)))
 
@@ -651,7 +718,7 @@ def main():
             declared = int(tail.strip())
         except ValueError:
             declared = None
-    ok('AC-UGRB11', bool(row) and declared == 32,
+    ok('AC-UGRB11', bool(row) and declared == 35,
        'registry_rows=%d declared=%s' % (len(row), declared))
 
     law_verdict = "PASS" if not FAILS else "FAIL"
