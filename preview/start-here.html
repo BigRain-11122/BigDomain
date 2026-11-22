@@ -56,7 +56,8 @@ code{background:#eef1f6;border-radius:3px;padding:1px 5px;font-size:12px}
   <p class="money" data-money="blocked" data-money-pending="6" data-money-total="8" data-money-proven="2">第一件要说的事：这台平台现在收不了钱——8 项接入项里有 6 项 CEO 物理件未到位，已证 2 项；这一行与页下那份缺口清单同源，不是手写。</p>
   <p class="net" data-net="offline" data-net-sites="0" data-net-faces="0" data-net-total="44">联网读数：本仓 44 张预览面里共 0 处联网站点，落在 0 张面上——今天一处都没有，全部只在本机打开；这一行读的是页面字节里的站点，不是浏览器能力判定。</p>
   <p data-net-absent>联网面：今天没有——这五类站点一处都没有，但这不等于浏览器不能被唤起：运行期拼出的地址、eval 出来的 URL 与 CSS @import 都不在这五类计数里。</p>
-  <p class="keynames" data-key-literal="4" data-key-runtime="1" data-key-none="1">6 张点得动的面里，4 张的键名能在这份文件的字节里解析成一个可以直接搜的字符串，1 张的键名只在运行期才成型，1 张根本没有键——解析不出来的那几张，页面不会拿变量名冒充你能搜的字符串。</p>
+  <p class="keynames" data-key-literal="4" data-key-empty="0" data-key-runtime="1" data-key-none="1">6 张点得动的面里，4 张的键名能在这份文件的字节里解析成一个可以直接搜的字符串，0 张的键名解析出来是空字符串（没有可搜的字符串），1 张的键名只在运行期才成型，1 张根本没有键——解析不出来的那几张，页面不会拿变量名冒充你能搜的字符串。</p>
+  <p data-key-empty-absent>今天没有一张点得动的面的键名解析成空字符串——空键和「没有键」在这页上是两件事。</p>
   <p class="drawerunread" data-drawer-unread="0" data-drawer-unread-all="6">走线的 6 张面里，有 0 张的写入页面读不出来——这些写法页面给不出抽屉名和键名。</p>
   <p data-drawer-unread-absent>走线里每一张面的写入都是页面读得出来的写法——今天没有一张面带读不出的写入。</p>
   <p class="drawersplit" data-drawer-split-all="6" data-drawer-split-same="5" data-drawer-split-diff="0" data-drawer-split-noread="0" data-drawer-split-erase="0" data-drawer-split-stray="0">走线的 6 张面里，5 张有键：5 张读的抽屉和写的是同一个，0 张读的是另一个抽屉，0 张写完不读回来；0 张写完自己擦掉，0 张擦的是自己没写过的抽屉。</p>
@@ -68,7 +69,7 @@ code{background:#eef1f6;border-radius:3px;padding:1px 5px;font-size:12px}
   <p class="step" data-step="4" data-step-face="lobby-protocol-map.html" data-step-ops="1" data-step-key="NS" data-step-key-kind="literal" data-step-literal="bd-lobby-protocol-map-v1" data-step-drawers="localStorage" data-step-when="on-click" data-step-unread="" data-step-read-drawers="localStorage" data-step-remove-drawers="" data-step-split="same">4. lobby-protocol-map.html —— 点它之后，「bd-lobby-protocol-map-v1」留在「localStorage」里；这个键是点过之后才写进去的，不是一打开页面就有；离开页面再回来还能接着做。这一步能证明「这里确实会留下状态」，不能证明「这份状态对平台有效」——全部在本机。</p>
   <p class="branchhead" data-step-excluded="buyer-trial.html:screen,money-path-demo.html:orphan" data-branch-count="2" data-branch-main="4">走线之外还有 2 张点得动的面（主步 4 条已经在上面）：它们不是走线的一步，理由逐张写在下面。</p>
   <p class="branch" data-branch="1" data-branch-face="buyer-trial.html" data-branch-reason="screen" data-branch-key-kind="none" data-branch-literal="" data-branch-drawers="" data-branch-when="none" data-branch-unread="" data-branch-read-drawers="" data-branch-remove-drawers="" data-branch-split="none">旁支 1：buyer-trial.html —— 点下去会改屏幕，但什么都不留（看得到、留不下）；（写侧没有具名键）；（这张面不写存储，没有抽屉），没有键，也就没有写入时机</p>
-  <p class="branch" data-branch="2" data-branch-face="money-path-demo.html" data-branch-reason="orphan" data-branch-key-kind="runtime" data-branch-literal="" data-branch-drawers="localStorage" data-branch-when="on-click" data-branch-unread="" data-branch-read-drawers="localStorage" data-branch-remove-drawers="" data-branch-split="same">旁支 2：money-path-demo.html —— 它会往存储里写东西，但写进去的键不是它自己读得回来的那个（留下的不是它写的）；键名只在运行期成型（写侧是 NS+&quot;&quot;+this.getAttribute(&quot;&quot;)）——页面给不出你能直接搜的字符串；「localStorage」，这个键是点过之后才写进去的，不是一打开页面就有</p>
+  <p class="branch" data-branch="2" data-branch-face="money-path-demo.html" data-branch-reason="orphan" data-branch-key-kind="runtime" data-branch-literal="" data-branch-drawers="localStorage" data-branch-when="on-click" data-branch-unread="" data-branch-read-drawers="localStorage" data-branch-remove-drawers="" data-branch-split="same">旁支 2：money-path-demo.html —— 它会往存储里写东西，但写进去的键不是它自己读得回来的那个（留下的不是它写的）；键名只在运行期成型（写侧是 NS+':'+this.getAttribute('data-ck')）——页面给不出你能直接搜的字符串；「localStorage」，这个键是点过之后才写进去的，不是一打开页面就有</p>
   <p class="kindshead">同样是「能动手」，点了会改变什么并不一样——分档读自每张面自己的脚本，不是手写：</p>
   <div class="counts kinds">
   <span class="kc" data-kind-count="persists"><b>5</b>本机留存</span>
@@ -86,7 +87,7 @@ code{background:#eef1f6;border-radius:3px;padding:1px 5px;font-size:12px}
   <span class="kc" data-keys-count="outside"><b>2</b>含存储但无控件（未列入）</span>
   </div>
   <div class="legend keys">
-  <p data-keys-orphan="money-path-demo.html" data-keys-read="NS+&quot;&quot;+kk">读的键 NS+&quot;&quot;+kk / 写的键 NS+&quot;&quot;+this.getAttribute(&quot;&quot;)——读到的键基座不来自它自己写的键，刷新后可能读不回来。</p>
+  <p data-keys-orphan="money-path-demo.html" data-keys-read="NS+':'+kk">读的键 NS+':'+kk / 写的键 NS+':'+this.getAttribute('data-ck')——读到的键基座不来自它自己写的键，刷新后可能读不回来。</p>
   <p data-keys-unresolved-absent>今天没有一张可操作面用未声明的符号当键。</p>
   <p data-keys-outside="2">另有 2 张面含存储调用但没有可操作控件，未列入上面逐张清单：lobby-session-trace.html, membership-face.html。</p>
   </div>
@@ -264,7 +265,7 @@ code{background:#eef1f6;border-radius:3px;padding:1px 5px;font-size:12px}
   <p data-notice="advice">非投顾提示：本页与全部预览面不构成任何投资建议。</p>
   <p data-notice="mock">MOCK：本页列出的支付、账本、权益流程全部是页内模拟，不接真实资金通道。</p>
 </div>
-<footer>sources: state/start-here-faces.json 5adc89c4f28bf0c5 / state/merchant-onboard-items.json via tools/merchant_onboard.project_items()</footer>
+<footer>sources: state/start-here-faces.json 0560586029123917 / state/merchant-onboard-items.json via tools/merchant_onboard.project_items()</footer>
 </div>
 </body>
 </html>

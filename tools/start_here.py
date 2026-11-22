@@ -158,6 +158,26 @@ def _first_arg(text, open_paren):
     return ""
 
 
+def _first_arg_at(raw, structure, open_paren):
+    """The first argument, sliced from the RAW bytes while the structure is read off
+    a blanked copy of the same length. key_reading used to take the expression from
+    the blanked copy, where every quoted key had already become `""` - so a face
+    writing `setItem('bd-x', ...)` was read as writing the EMPTY key. Same family as
+    R3259's call receiver, and the same repair: locate on the blanked, slice the raw."""
+    depth = 0
+    for i in range(open_paren, min(len(structure), open_paren + 600)):
+        ch = structure[i]
+        if ch in "([{":
+            depth += 1
+        elif ch in ")]}":
+            depth -= 1
+            if depth == 0:
+                return raw[open_paren + 1:i]
+        elif ch == "," and depth == 1:
+            return raw[open_paren + 1:i]
+    return ""
+
+
 def _key_symbols(expr):
     """The declared-looking identifiers a key expression rests on. String literals and
     member tails are stripped first, so 'data-ck' and this.getAttribute are not
@@ -176,7 +196,7 @@ def _key_symbols(expr):
 LIT_PART = re.compile(r"\s*\+\s*|'[^']*'|\"[^\"]*\"|[A-Za-z_$][\w$]*")
 DECL_STR = re.compile(r"(?:var|let|const)\s+([A-Za-z_$][\w$]*)\s*=\s*"
                       r"(?:'([^']*)'|\"([^\"]*)\")")
-KEY_KINDS = ("literal", "runtime", "none")
+KEY_KINDS = ("literal", "empty", "runtime", "none")
 
 
 def _literal_decls(text):
@@ -221,18 +241,30 @@ def resolve_key_expr(expr, table):
 
 
 def key_naming(row):
-    """How a face names its key, as one of three closed kinds: `literal` carries the
-    string a reader can search for, `runtime` carries the expression that only
-    becomes a string when the page runs, `none` is a face with no named key."""
+    """How a face names its key, as one of four closed kinds: `literal` carries the
+    string a reader can search for, `empty` says the key resolves to the empty
+    string (there is nothing to search for), `runtime` carries the expression that
+    only becomes a string when the page runs, `none` is a face with no named key.
+    R3272: an empty key is NOT folded into runtime - the page can compute that value
+    exactly, so claiming it cannot would be a lie in the opposite direction."""
     keys = row.get("keys")
     if not keys or not keys["write"]:
         return {"kind": "none", "value": None, "expr": None}
     if keys["literal_all"]:
-        return {"kind": "literal",
-                "value": " , ".join(keys["literal"][expr]
-                                    for expr in keys["write"]),
+        values = [keys["literal"][expr] for expr in keys["write"]]
+        if all(value == "" for value in values):
+            return {"kind": "empty", "value": "", "expr": None}
+        return {"kind": "literal", "value": " , ".join(values),
                 "expr": None}
     return {"kind": "runtime", "value": None, "expr": keys["runtime_exprs"][0]}
+
+
+def key_attr(naming):
+    """The exact bytes that go into a row's literal attribute. One function for the
+    page and the criterion, because the two disagreed on the empty string: the page
+    printed "" while the checker compared `(page or None)` against the value, so a
+    face whose key is `''` reddened --check on its own render (R3271 C13 found it)."""
+    return naming["value"] if naming["kind"] == "literal" else ""
 
 
 def _script_bodies(text):
@@ -389,10 +421,12 @@ def key_reading(text):
     """How a face keys its storage: which expressions it writes and reads, and the
     symbols those expressions rest on. Text only - no JS is ever executed."""
     bare = STR.sub('""', text)
+    structure = _blank_strings(text)
     declared = set(DECL.findall(bare))
     buckets = {"setItem": set(), "getItem": set(), "removeItem": set()}
-    for match in CALL.finditer(bare):
-        expr = re.sub(r"\s+", "", _first_arg(bare, match.end() - 1))
+    for match in CALL.finditer(structure):
+        expr = re.sub(r"\s+", "", _first_arg_at(text, structure,
+                                               match.end() - 1))
         if expr:
             buckets[match.group(1)].add(expr)
     writes, reads, removes = buckets["setItem"], buckets["getItem"], buckets["removeItem"]
@@ -1370,6 +1404,8 @@ def key_name_text(naming, doc):
     while the criterion recomputes another."""
     if naming["kind"] == "literal":
         return (doc.get("key_literal_fmt") or "").format(value=naming["value"])
+    if naming["kind"] == "empty":
+        return doc.get("key_empty_fmt") or ""
     if naming["kind"] == "runtime":
         return (doc.get("key_runtime_fmt") or "").format(expr=naming["expr"])
     return doc.get("step_key_none") or ""
@@ -1855,7 +1891,7 @@ def render(proj):
                 'data-step-remove-drawers="%s" data-step-split="%s">%s</p>'
                 % (index, esc(name), proj["rows"][name]["ops"],
                    esc(" , ".join(keys)), naming["kind"],
-                   esc(naming["value"] or ""),
+                   esc(key_attr(naming)),
                    esc(",".join(drawn["drawers"])), esc(drawn["when"]),
                    esc(",".join(drawn["unread"])),
                    esc(",".join(drawn["read"])), esc(",".join(drawn["remove"])),
@@ -1895,7 +1931,7 @@ def render(proj):
                 'data-branch-read-drawers="%s" data-branch-remove-drawers="%s" '
                 'data-branch-split="%s">%s</p>'
                 % (index, esc(name), esc(reason), naming["kind"],
-                   esc(naming["value"] or ""),
+                   esc(key_attr(naming)),
                    esc(",".join(drawn["drawers"])), esc(drawn["when"]),
                    esc(",".join(drawn["unread"])),
                    esc(",".join(drawn.get("read") or [])),
@@ -1915,15 +1951,20 @@ def render(proj):
             % (len(steps), esc(doc.get("branch_absent") or "")))
     key_counts = proj["key_name_counts"]
     keynames_html = (
-        '  <p class="keynames" data-key-literal="%d" data-key-runtime="%d" '
-        'data-key-none="%d">%s</p>'
-        % (key_counts["literal"], key_counts["runtime"], key_counts["none"],
+        '  <p class="keynames" data-key-literal="%d" data-key-empty="%d" '
+        'data-key-runtime="%d" data-key-none="%d">%s</p>'
+        % (key_counts["literal"], key_counts["empty"], key_counts["runtime"],
+           key_counts["none"],
            esc((doc.get("key_head_fmt") or "").format(
                total=len(proj["operable"]), lit=key_counts["literal"],
-               run=key_counts["runtime"], none=key_counts["none"]))))
+               empty=key_counts["empty"], run=key_counts["runtime"],
+               none=key_counts["none"]))))
     if not key_counts["literal"]:
         keynames_html += ('\n  <p data-key-absent>%s</p>'
                           % esc(doc.get("key_absent") or ""))
+    if not key_counts["empty"]:
+        keynames_html += ('\n  <p data-key-empty-absent>%s</p>'
+                          % esc(doc.get("key_empty_absent") or ""))
     unread = proj["drawer_unread"]
     unread_html = (
         '  <p class="drawerunread" data-drawer-unread="%d" '
@@ -3063,13 +3104,17 @@ def check():
     # has nothing to search for. Four of the six operable faces bind their key to
     # a literal in their own bytes, so the page can hand over a string that really
     # is there; one forms its key at runtime and must say exactly that; one has no
-    # key. Three closed kinds, one counter each, and every row is graded against a
-    # FRESH resolution of that face's own bytes, never against the page itself.
-    for key in ("key_head", "key_head_fmt", "key_literal_fmt",
-                "key_runtime_fmt", "key_absent"):
+    # key. R3272: a key that resolves to the EMPTY string is its own closed kind -
+    # the page knows that value exactly, so folding it into runtime would claim it
+    # cannot tell when it can, and printing it as a literal would offer a string
+    # nobody can search for. Four closed kinds, one counter each, and every row is
+    # graded against a FRESH resolution of that face's own bytes, never against the
+    # page itself.
+    for key in ("key_head", "key_head_fmt", "key_literal_fmt", "key_empty_fmt",
+                "key_empty_absent", "key_runtime_fmt", "key_absent"):
         if not (proj["doc"].get(key) or "").strip():
             failures.append("SH26 word_missing:%s" % key)
-    for slot in ("{total}", "{lit}", "{run}", "{none}"):
+    for slot in ("{total}", "{lit}", "{empty}", "{run}", "{none}"):
         if slot not in (proj["doc"].get("key_head_fmt") or ""):
             failures.append("SH26 slot_missing:key_head_fmt:%s" % slot)
     if "{value}" not in (proj["doc"].get("key_literal_fmt") or ""):
@@ -3080,14 +3125,14 @@ def check():
         failures.append("SH26 slot_missing:branch_fmt:{key}")
     counts = proj["key_name_counts"]
     head = re.search(
-        r'<p class="keynames" data-key-literal="(\d+)" data-key-runtime="(\d+)" '
-        r'data-key-none="(\d+)">([^<]*)<', text)
+        r'<p class="keynames" data-key-literal="(\d+)" data-key-empty="(\d+)" '
+        r'data-key-runtime="(\d+)" data-key-none="(\d+)">([^<]*)<', text)
     if not head:
         failures.append("SH26 head_missing")
     else:
-        lit_raw, run_raw, none_raw, said = head.groups()
-        got_counts = {"literal": int(lit_raw), "runtime": int(run_raw),
-                      "none": int(none_raw)}
+        lit_raw, empty_raw, run_raw, none_raw, said = head.groups()
+        got_counts = {"literal": int(lit_raw), "empty": int(empty_raw),
+                      "runtime": int(run_raw), "none": int(none_raw)}
         for kind in KEY_KINDS:
             if got_counts[kind] != counts[kind]:
                 failures.append("SH26 count:%s page=%d fresh=%d"
@@ -3097,10 +3142,18 @@ def check():
                             % (sum(got_counts.values()), len(proj["operable"])))
         want = (proj["doc"].get("key_head_fmt") or "").format(
             total=len(proj["operable"]), lit=counts["literal"],
-            run=counts["runtime"], none=counts["none"])
+            empty=counts["empty"], run=counts["runtime"],
+            none=counts["none"])
         if said != esc(want):
             failures.append("SH26 head_sentence differs from the fresh derivation")
     key_absent_lines = re.findall(r'<p data-key-absent>', text)
+    key_empty_absent = re.findall(r'<p data-key-empty-absent>', text)
+    if counts["empty"]:
+        if key_empty_absent:
+            failures.append("SH26 empty_absent_line_on_empty")
+    elif len(key_empty_absent) != 1:
+        failures.append("SH26 empty_absent_line expected=1 got=%d"
+                        % len(key_empty_absent))
     if counts["literal"]:
         if key_absent_lines:
             failures.append("SH26 absent_line_on_literals")
@@ -3141,14 +3194,21 @@ def check():
             if kind_raw != naming["kind"]:
                 failures.append("SH26 %s_kind:%s page=%s fresh=%s"
                                 % (label, name, kind_raw, naming["kind"]))
-            if (literal_raw or None) != naming["value"]:
+            if literal_raw != key_attr(naming):
                 failures.append("SH26 %s_literal:%s page=%s fresh=%s"
-                                % (label, name, literal_raw, naming["value"]))
+                                % (label, name, literal_raw, key_attr(naming)))
             if naming["kind"] == "literal":
                 raw_exprs = proj["rows"][name]["keys"]["write"]
                 for expr in raw_exprs:
                     if esc(expr) in said:
                         failures.append("SH26 raw_expr_printed:%s=%s"
+                                        % (name, expr))
+            elif naming["kind"] == "empty":
+                if esc(proj["doc"].get("key_empty_fmt") or "") not in said:
+                    failures.append("SH26 empty_word_missing:%s" % name)
+                for expr in proj["rows"][name]["keys"]["write"]:
+                    if esc(expr) and esc(expr) in said:
+                        failures.append("SH26 empty_raw_expr_printed:%s=%s"
                                         % (name, expr))
             elif naming["kind"] == "runtime":
                 if esc(naming["expr"]) not in said:

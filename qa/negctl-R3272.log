@@ -1,0 +1,31 @@
+OK   C1-live-copy                         rc=0 expect=0 
+OK   C2-head-empty-count-edited           rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH26 count:empty page=1 fresh=0
+OK   C3-head-sentence-edited              rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH26 head_sentence differs from the fresh derivation
+OK   C4-empty-absent-dropped              rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH26 empty_absent_line expected=1 got=0
+OK   C5-empty-word-dropped                rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH26 word_missing:key_empty_fmt
+OK   C6-absent-word-dropped               rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH26 word_missing:key_empty_absent
+OK   C7-empty-slot-dropped                rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH26 slot_missing:key_head_fmt:{empty}
+OK   C8-world-empty-key                   rc=0 expect=0 
+OK   C9-world-empty-concat                rc=0 expect=0 
+OK   C10-world-mixed-keys                 rc=0 expect=0 
+OK   C11-world-absent-on-empty            rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH26 empty_absent_line_on_empty
+OK   C12-world-raw-expr-printed           rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH24 sentence:filing-checklist.html differs from the fresh derivation
+OK   C13-world-direct-literal             rc=0 expect=0 
+OK   C14-live-none-unchanged              rc=0 expect=0 
+NEGCTL PASS cases=14 distinct=14

@@ -1,0 +1,14 @@
+faces=45
+
+[Q1] removeItem sites
+  storage_faces=8 remove_sites=0
+  timing: on-open=0 on-click=0 unnamed-receiver=0
+
+[Q2] empty-string key
+  live faces whose resolved key is the empty string: 0 []
+  today kinds={'literal': 6, 'runtime': 1, 'none': 38}
+  option A (named empty bucket): literal+empty+runtime+none == operable
+  option B (fold '' into runtime): literal+runtime+none == operable, and 'no key' and 'key is empty' still print different attributes but share one kind
+
+[Q3] cost
+  drawer_reading over 45 faces 0.0141s; key_reading 0.0138s; total 0.0794s

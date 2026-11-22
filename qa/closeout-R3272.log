@@ -1,0 +1,5 @@
+CLOSEOUT-GATE PASS files=4702 flags=0 reader_refused=0 gating=flags round_main=OK census=PASS matrix=DOC-CURRENT
+CARRIER bytes=83703 gate=78500 margin=-5203 fold_needed=true layout_ok=true crlf=115 bare_lf=0 indent_anomaly=0 log_items=105
+LEDGER OK rows=14 names=12 bad=0 stale=0 missing=0 broken=0 path=state/qa_replacements.jsonl
+CENSUS-BASELINE name=qa/writer-census-baseline.json bytes=14484 rows=499 sha256=2fe1299ceb9f written=2026-11-21T07:42:42
+CLAIMS captured=94 uncaptured=208 contradicted=10 historic=7 rows=14 present=true
