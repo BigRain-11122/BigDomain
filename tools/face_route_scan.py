@@ -69,7 +69,7 @@ def walk(preview=None, hops_base=None):
     actionable = [f for f in faces if f["controls"] > 0]
     readonly = [f for f in faces if f["controls"] == 0]
     dead = [f["face"] for f in actionable if f["out"] == 0]
-    hops = sorted({h for group in buyer_route.ROUTES.values() for h, _ in group})
+    hops = sorted({h for group in buyer_route.ROUTES.values() for h in group})
     missing_hops = [h for h in hops if not os.path.exists(os.path.join(hops_root, h))]
     return {
         "faces": faces,

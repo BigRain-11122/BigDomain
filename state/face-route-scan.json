@@ -234,7 +234,7 @@
    "out": 0
   },
   {
-   "bytes": 39637,
+   "bytes": 41435,
    "controls": 2,
    "face": "index.html",
    "links": [
@@ -286,7 +286,7 @@
    "out": 44
   },
   {
-   "bytes": 12873,
+   "bytes": 12907,
    "controls": 0,
    "face": "journey-19.9.html",
    "links": [
@@ -319,7 +319,7 @@
    "out": 0
   },
   {
-   "bytes": 29032,
+   "bytes": 29069,
    "controls": 1,
    "face": "lobby-protocol-map.html",
    "links": [
@@ -364,7 +364,7 @@
    "out": 4
   },
   {
-   "bytes": 22956,
+   "bytes": 23088,
    "controls": 9,
    "face": "merchant-onboard.html",
    "links": [
@@ -376,7 +376,7 @@
    "out": 4
   },
   {
-   "bytes": 13164,
+   "bytes": 13359,
    "controls": 3,
    "face": "money-path-demo.html",
    "links": [

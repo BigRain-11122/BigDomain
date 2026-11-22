@@ -24,11 +24,12 @@
     "face": "money-path-demo",
     "hops": [
       {
-        "bytes": 22956,
+        "bytes": 23088,
         "controls": 9,
         "exists": true,
         "href": "merchant-onboard.html",
-        "label": "真收钱还缺什么：商户号 / 服务器 / 域名 / 备案（可填）",
+        "label": "要真收钱还缺什么：商户号 / 服务器 / 域名 / 备案（可填）",
+        "labelled": true,
         "readonly": false
       },
       {
@@ -36,15 +37,17 @@
         "controls": 3,
         "exists": true,
         "href": "buyer-trial.html",
-        "label": "自己点一遍 MOCK 下单与入账（可操作）",
+        "label": "自己点一遍：MOCK 下单与两本账配平（可操作）",
+        "labelled": true,
         "readonly": false
       },
       {
-        "bytes": 12873,
+        "bytes": 12907,
         "controls": 0,
         "exists": true,
         "href": "journey-19.9.html",
         "label": "这单买的是哪八步（只读判定表）",
+        "labelled": true,
         "readonly": true
       },
       {
@@ -52,7 +55,8 @@
         "controls": 0,
         "exists": true,
         "href": "start-here.html",
-        "label": "回到起点：本机能亲手做什么（只读汇总）",
+        "label": "回到起点：这台机器今天能亲手做什么（只读汇总）",
+        "labelled": true,
         "readonly": true
       }
     ],
@@ -112,7 +116,7 @@
       "path": "preview/ceo-blockers.json"
     },
     "journey": {
-      "bytes": 7942,
+      "bytes": 8012,
       "path": "preview/journey-19.9.json"
     },
     "payment": {

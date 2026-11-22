@@ -1,0 +1,32 @@
+PASS AC-DIX1   registry=9 disk=9 missing=[] extra=[]
+PASS AC-DIX2   quoted-sizes=9 of 9, each equal to os.path.getsize
+PASS AC-DIX3   landed-names-newest=True snapshot-label=True fingerprint=dde2fec5c3a6f143
+PASS AC-DIX4   markers=True scheme_free=True fronts_before=5 fronts_after=5 bytes=41438
+PASS AC-DIX5   links=57 relative-and-present=57 bad=[]
+PASS AC-DIX6   compliance=3/3 blocker-named=9/9
+PASS AC-IDX1   first-visit=ok
+PASS AC-DIX7   verdicts-quoted=9/9 defect-rows=0
+PASS AC-DIX8   newest=merchant-onboard.json bytes=8124 names_fresh=True snapshot_label=True
+PASS AC-DIX9   band-rows=44 fresh-scan=44 listed-in-landed=44
+PASS AC-DIX10  pairs=44 missing-targets=[]
+PASS AC-DIX11  check-left-size+mtime-unchanged=True
+PASS AC-DIX12  band-offline=True rows=44
+PASS AC-DIX13  self-referential-bytes-wrong=[]
+PASS AC-DIX14  gate-pages-listed=[]
+PASS AC-DIX17  html-faces=44 unlisted=[] unlabelled-incomplete=[]
+PASS AC-DIX19  export-census_ts=2026-11-22T18:51:46+08:00 printed-in-landed=True
+PASS AC-CVL1   live-readings='claimed=325 captured=94 contradicted=10 uncaptured=221 historic=7 records=16' printed=True
+VERDICT PASS 18/18 fingerprint=dde2fec5c3a6f143
+{"failed": [], "fingerprint": "dde2fec5c3a6f143", "passed": 18, "total": 18}
+R3286 NEGCTL arms=10
+PASS C1 clean live face ok
+PASS C2 landed label drifted ["journey-19.9: hop label drifted money-path-demo.html json='这单的钱在账本里怎么走（可操作）' closure='这笔钱在账本里怎么走（可操作）'"]
+PASS C3 page paraphrases the label ['journey-19.9: page does not print the closure label of money-path-demo.html']
+PASS C4 landed label missing ["journey-19.9: hop label drifted money-path-demo.html json=None closure='这笔钱在账本里怎么走（可操作）'"]
+PASS C5 href without a closure label ['negctl-face: page does not print hop count 1', 'negctl-face: hop file missing closure-gap.html']
+PASS C6 private world clean rc=0 problems=[]
+PASS C7 entry label paraphrased ['index: page does not print the closure label of buyer-trial.html']
+PASS C8 entry hop count edited ['index: page does not print the first-visit hop count 4']
+PASS C9 walk order swapped ["index: walk order printed=[(2, 'buyer-trial.html'), (1, 'start-here.html'), (3, 'merchant-onboard.html'), (4, 'money-path-demo.html')] declared=[(1, 'start-here.html'), (2, 'buyer-trial.html'), (3, 'merchant-onboard.html'), (4, 'money-path-demo.html')]"]
+PASS C10 walk row dropped ['index: page does not print the closure label of start-here.html', "index: walk order printed=[(2, 'buyer-trial.html'), (3, 'merchant-onboard.html'), (4, 'money-path-demo.html')] declared=[(1, 'start-here.html'), (2, 'buyer-trial.html'), (3, 'merchant-onboard.html'), (4, 'money-path-demo.html')]"]
+NEGCTL PASS 10/10

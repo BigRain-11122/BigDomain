@@ -36,6 +36,11 @@ SANDBOX = os.path.join(REPO, "src", "sandbox")
 if SANDBOX not in sys.path:
     sys.path.insert(0, SANDBOX)
 import claims_view  # noqa: E402  (one derivation, shared with the live card)
+
+TOOLS = os.path.join(REPO, "tools")
+if TOOLS not in sys.path:
+    sys.path.insert(0, TOOLS)
+import buyer_route  # noqa: E402  (R3286: one closure of hop labels and order)
 BEGIN = "<!-- BD-DELIVERABLE-INDEX:BEGIN -->"
 END = "<!-- BD-DELIVERABLE-INDEX:END -->"
 TITLE_RE = re.compile(r"<title>(.*?)</title>", re.S)
@@ -303,7 +308,11 @@ def claims_band(block):
 
 
 def render_body(rows, defects_total, newest, pairs, claims):
-    out = [render_newest(newest), ""]
+    # R3286 (AC-IDX1): the entry page used to list every face flat and never say
+    # which page a first-time reader should open first. The walk is the SAME
+    # closure the face footers use, measured at render time.
+    out = [buyer_route.render_block(buyer_route.FIRST_VISIT), ""]
+    out.append(render_newest(newest))
     out.append(render_pairs(pairs))
     out.append("")
     out.append(claims_band(claims))
@@ -477,6 +486,17 @@ def main(argv):
     record("AC-DIX6", len(have) == len(COMPLIANCE) and len(blockers) == len(rows),
            "compliance=%d/%d blocker-named=%d/%d" % (len(have), len(COMPLIANCE),
                                                      len(blockers), len(rows)))
+
+    # AC-IDX1 (pinned 2026-11-22 R3286 in src/os/backlog.md BEFORE this code):
+    # the entry page listed every face flat and said nothing about what to open
+    # first. Measured before this change: index.html was 39637B with 55 hrefs and
+    # no walk; four targets were already linked, so no link target is invented.
+    # Scored against the page a reader opens, from the same closure the face
+    # footers print - the arms live in buyer_route.first_visit_problems().
+    idx_block = get_block(text) if check else block
+    idx_problems = buyer_route.first_visit_problems(idx_block)
+    record("AC-IDX1", not idx_problems,
+           "first-visit=%s" % (idx_problems[:3] or "ok"))
 
     # R2804: scored against the LANDED page, not the block this run just built. AC-DIX3 used
     # to catch a tampered ledger row only because it compared the whole landed block byte for

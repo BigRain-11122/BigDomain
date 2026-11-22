@@ -179,8 +179,9 @@
   "hops": [
    {
     "href": "money-path-demo.html",
-    "label": "这单的钱在账本里怎么走（可操作）",
-    "bytes": 13164,
+    "label": "这笔钱在账本里怎么走（可操作）",
+    "labelled": true,
+    "bytes": 13359,
     "controls": 3,
     "readonly": false,
     "exists": true
@@ -188,14 +189,16 @@
    {
     "href": "merchant-onboard.html",
     "label": "要真收钱还缺什么：商户号 / 服务器 / 域名 / 备案（可填）",
-    "bytes": 22956,
+    "labelled": true,
+    "bytes": 23088,
     "controls": 9,
     "readonly": false,
     "exists": true
    },
    {
     "href": "buyer-trial.html",
-    "label": "自己点一遍：选商品、MOCK 付款、看两本账配平（可操作）",
+    "label": "自己点一遍：MOCK 下单与两本账配平（可操作）",
+    "labelled": true,
     "bytes": 22382,
     "controls": 3,
     "readonly": false,
@@ -204,6 +207,7 @@
    {
     "href": "start-here.html",
     "label": "回到起点：这台机器今天能亲手做什么（只读汇总）",
+    "labelled": true,
     "bytes": 41366,
     "controls": 0,
     "readonly": true,
@@ -215,9 +219,9 @@
   "last_sentence": "本机不接服务器时，这条路最远走到第 3 跳（buyer-trial.html，3 个控件）；再往后只有读数，没有可操作控件。"
  },
  "headline": "6 of 8 steps carry a declared PASS",
- "generated_utc": "2026-11-22T10:47:26Z",
+ "generated_utc": "2026-11-22T10:57:18Z",
  "sizes": {
-  "html": 12873,
-  "json": 7942
+  "html": 12907,
+  "json": 8012
  }
 }
