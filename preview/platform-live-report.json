@@ -15,7 +15,7 @@
    "id": "AC-PLVR2",
    "intent": "every shipped face URL answers a real HTTP 200 with a non-empty body",
    "pass": true,
-   "measured": "lobby=200/10077B city=200/6653B checkout=200/8051B gate=200/7157B ledger=200/7977B ugc=200/8816B panel=200/8462B member=200/8752B"
+   "measured": "lobby=200/10077B city=200/6653B checkout=200/9988B gate=200/7157B ledger=200/7977B ugc=200/8816B panel=200/8462B member=200/8752B"
   },
   {
    "id": "AC-PLVR3",
@@ -61,18 +61,18 @@
   }
  ],
  "faces": {
-  "lobby": "http://127.0.0.1:64700/lobby/",
-  "city": "http://127.0.0.1:64698/city/",
-  "checkout": "http://127.0.0.1:64702/checkout/",
-  "gate": "http://127.0.0.1:64699/gate/",
-  "ledger": "http://127.0.0.1:64703/ledger/",
-  "ugc": "http://127.0.0.1:64704/ugc/",
-  "panel": "http://127.0.0.1:64705/panel/",
-  "member": "http://127.0.0.1:64706/member/"
+  "lobby": "http://127.0.0.1:62289/lobby/",
+  "city": "http://127.0.0.1:62287/city/",
+  "checkout": "http://127.0.0.1:62291/checkout/",
+  "gate": "http://127.0.0.1:62288/gate/",
+  "ledger": "http://127.0.0.1:62292/ledger/",
+  "ugc": "http://127.0.0.1:62293/ugc/",
+  "panel": "http://127.0.0.1:62294/panel/",
+  "member": "http://127.0.0.1:62295/member/"
  },
  "pages": {
   "lobby": {
-   "url": "http://127.0.0.1:64700/lobby/",
+   "url": "http://127.0.0.1:62289/lobby/",
    "status": 200,
    "bytes": 10077,
    "ctype": "text/html",
@@ -80,7 +80,7 @@
    "sha": "6c5513f6c56b8068"
   },
   "city": {
-   "url": "http://127.0.0.1:64698/city/",
+   "url": "http://127.0.0.1:62287/city/",
    "status": 200,
    "bytes": 6653,
    "ctype": "text/html",
@@ -88,15 +88,15 @@
    "sha": "f4da3a32459c2e32"
   },
   "checkout": {
-   "url": "http://127.0.0.1:64702/checkout/",
+   "url": "http://127.0.0.1:62291/checkout/",
    "status": 200,
-   "bytes": 8051,
+   "bytes": 9988,
    "ctype": "text/html",
    "title": "BigDomain 硅基域 · 19.9 入场结账沙箱",
-   "sha": "7e145ec71f17a12a"
+   "sha": "071ac6f7bf261735"
   },
   "gate": {
-   "url": "http://127.0.0.1:64699/gate/",
+   "url": "http://127.0.0.1:62288/gate/",
    "status": 200,
    "bytes": 7157,
    "ctype": "text/html",
@@ -104,7 +104,7 @@
    "sha": "bac08b7b9d63e907"
   },
   "ledger": {
-   "url": "http://127.0.0.1:64703/ledger/",
+   "url": "http://127.0.0.1:62292/ledger/",
    "status": 200,
    "bytes": 7977,
    "ctype": "text/html",
@@ -112,7 +112,7 @@
    "sha": "a3924b40b8d1d2df"
   },
   "ugc": {
-   "url": "http://127.0.0.1:64704/ugc/",
+   "url": "http://127.0.0.1:62293/ugc/",
    "status": 200,
    "bytes": 8816,
    "ctype": "text/html",
@@ -120,7 +120,7 @@
    "sha": "8569ef06639c7c5f"
   },
   "panel": {
-   "url": "http://127.0.0.1:64705/panel/",
+   "url": "http://127.0.0.1:62294/panel/",
    "status": 200,
    "bytes": 8462,
    "ctype": "text/html",
@@ -128,7 +128,7 @@
    "sha": "0042242e0f1cf17c"
   },
   "member": {
-   "url": "http://127.0.0.1:64706/member/",
+   "url": "http://127.0.0.1:62295/member/",
    "status": 200,
    "bytes": 8752,
    "ctype": "text/html",
@@ -137,16 +137,16 @@
   }
  },
  "ports": {
-  "ws": 64697,
-  "city": 64698,
-  "gate": 64699,
-  "web": 64700,
-  "hub": 64701,
-  "checkout": 64702,
-  "ledger": 64703,
-  "ugc": 64704,
-  "panel": 64705,
-  "member": 64706
+  "ws": 62286,
+  "city": 62287,
+  "gate": 62288,
+  "web": 62289,
+  "hub": 62290,
+  "checkout": 62291,
+  "ledger": 62292,
+  "ugc": 62293,
+  "panel": 62294,
+  "member": 62295
  },
  "ports_refusing_after_teardown": {
   "ws": true,
@@ -198,7 +198,7 @@
   "src\\sandbox\\lobby\\config.json": "ab7cc97834f4950d",
   "src\\sandbox\\pay\\config.json": "1f3dd9233a82b565"
  },
- "fingerprint": "3868750817119248",
+ "fingerprint": "a728e7efa001fa4d",
  "reproduce": [
   "python tools/platform_live_report.py",
   "python src/sandbox/start_all.py"
@@ -218,6 +218,6 @@
  ],
  "sizes": {
   "html": 8621,
-  "json": 6451
+  "json": 6228
  }
 }

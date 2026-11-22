@@ -216,7 +216,7 @@
         "src/sandbox/ugc/test_sec_batch_rowpersist.py",
         "src/sandbox/ugc/test_sec_batch_rowsroll.py"
       ],
-      "files": 458,
+      "files": 459,
       "mentions": [],
       "parsed": true,
       "unparsed": []
@@ -295,7 +295,7 @@
   ],
   "sizes": {
     "html": 28799,
-    "json": 20492
+    "json": 20170
   },
   "unparsed": [],
   "unrecorded": {

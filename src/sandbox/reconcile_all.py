@@ -483,6 +483,14 @@ SUITES = [
     # reads live - measured: it no longer does, and the old connect-only
     # reading is printed beside it.)
     ("os-sandbox-hub", os.path.join("lobby", "test_hub_page.py"), 7),
+    # one-click launcher (R3333): the board head asked for the proof to be
+    # scriptized instead of hand-copied into qa/, and for a teardown reading
+    # that can say a child really is gone. The suite runs the shipped launcher
+    # twice - once clean (rc=0, gone=N/N) and once with a child that ignores the
+    # stop file (rc=2, survivor named pid:exe) - so the clean reading is proved
+    # to bite rather than assumed. (AC-OSB1..AC-OSB3 were pre-registered in
+    # src/os/backlog.md at R3333 BEFORE this suite existed.)
+    ("os-sandbox-open", "test_open_sandbox.py", 5),
     # lobby room picker and event ledger (R2464): GET /lobby/api/rooms answers
     # the server OWN configured rooms (never a literal in the module or page),
     # the page gains a selector that subscribes the new room and releases the

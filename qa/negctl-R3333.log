@@ -1,0 +1,5 @@
+hold seam: pid=59984 sleeps 25.0s instead of honouring the stop file
+sandbox up: hub=http://127.0.0.1:49470/hub/ faces=8/8
+descendants=8 gone=7/8 leftovers=59984:python.exe console_hosts=8 python_now=8 settled=3.00s
+reaped=1 still=none
+VERDICT FAIL hub=http://127.0.0.1:49470/hub/ faces=8/8 clean=False

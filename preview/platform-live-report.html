@@ -26,7 +26,7 @@ code{color:#79c0ff}
 <p class="note">2 条只能在本页写成之后核对（字节对、不打字计数），由 <code>--check</code> 对落地件逐条验证：AC-PLVR8, AC-PLVR9。</p>
 <table><tr><th>判据</th><th>意图（预注册）</th><th>实测</th></tr>
 <tr class="ok"><td>AC-PLVR1</td><td>shipped verifier ready with every shipped face, zero errors, one distinct port per plan key</td><td>ready=True faces=['checkout', 'city', 'gate', 'ledger', 'lobby', 'member', 'panel', 'ugc'] errors=none ports_keys=10 distinct=True</td></tr>
-<tr class="ok"><td>AC-PLVR2</td><td>every shipped face URL answers a real HTTP 200 with a non-empty body</td><td>lobby=200/10077B city=200/6653B checkout=200/8051B gate=200/7157B ledger=200/7977B ugc=200/8816B panel=200/8462B member=200/8752B</td></tr>
+<tr class="ok"><td>AC-PLVR2</td><td>every shipped face URL answers a real HTTP 200 with a non-empty body</td><td>lobby=200/10077B city=200/6653B checkout=200/9988B gate=200/7157B ledger=200/7977B ugc=200/8816B panel=200/8462B member=200/8752B</td></tr>
 <tr class="ok"><td>AC-PLVR3</td><td>each door serves its own page: non-empty title, no two bodies identical</td><td>titles_nonempty=8/8 distinct_bodies=8/8</td></tr>
 <tr class="ok"><td>AC-PLVR4</td><td>city/snapshot 200 parsable JSON with as_of; hub probe map reads every face live</td><td>snapshot=200 keys=4 as_of=2026-09-24T14:00:00Z hub_live_all=True equals_verifier=True</td></tr>
 <tr class="ok"><td>AC-PLVR5</td><td>every face URL loopback and its port equal to the planned port for that face</td><td>external_hosts=none port_mismatch=none</td></tr>
@@ -37,30 +37,30 @@ code{color:#79c0ff}
 </table></div>
 <div class="card"><h2>各道门（真实 HTTP 取回）</h2>
 <table><tr><th>门</th><th>地址</th><th>HTTP</th><th>字节</th><th>Content-Type</th><th>页面 title</th></tr>
-<tr class="ok"><td>checkout</td><td><code>http://127.0.0.1:64702/checkout/</code></td><td>200</td><td>8051 B</td><td>text/html</td><td>BigDomain 硅基域 · 19.9 入场结账沙箱</td></tr>
-<tr class="ok"><td>city</td><td><code>http://127.0.0.1:64698/city/</code></td><td>200</td><td>6653 B</td><td>text/html</td><td>硅基城市 · BigDomain</td></tr>
-<tr class="ok"><td>gate</td><td><code>http://127.0.0.1:64699/gate/</code></td><td>200</td><td>7157 B</td><td>text/html</td><td>内容安全闸判据台 · 沙箱</td></tr>
-<tr class="ok"><td>ledger</td><td><code>http://127.0.0.1:64703/ledger/</code></td><td>200</td><td>7977 B</td><td>text/html</td><td>代币账本控制台 · BigDomain 沙箱</td></tr>
-<tr class="ok"><td>lobby</td><td><code>http://127.0.0.1:64700/lobby/</code></td><td>200</td><td>10077 B</td><td>text/html</td><td>硅基大厅 · BigDomain 沙箱</td></tr>
-<tr class="ok"><td>member</td><td><code>http://127.0.0.1:64706/member/</code></td><td>200</td><td>8752 B</td><td>text/html</td><td>BigDomain 会员权益面 · 沙箱</td></tr>
-<tr class="ok"><td>panel</td><td><code>http://127.0.0.1:64705/panel/</code></td><td>200</td><td>8462 B</td><td>text/html</td><td>沙箱控制台 · Sandbox Panel</td></tr>
-<tr class="ok"><td>ugc</td><td><code>http://127.0.0.1:64704/ugc/</code></td><td>200</td><td>8816 B</td><td>text/html</td><td>UGC 管道控制台 · BigDomain 沙箱</td></tr>
+<tr class="ok"><td>checkout</td><td><code>http://127.0.0.1:62291/checkout/</code></td><td>200</td><td>9988 B</td><td>text/html</td><td>BigDomain 硅基域 · 19.9 入场结账沙箱</td></tr>
+<tr class="ok"><td>city</td><td><code>http://127.0.0.1:62287/city/</code></td><td>200</td><td>6653 B</td><td>text/html</td><td>硅基城市 · BigDomain</td></tr>
+<tr class="ok"><td>gate</td><td><code>http://127.0.0.1:62288/gate/</code></td><td>200</td><td>7157 B</td><td>text/html</td><td>内容安全闸判据台 · 沙箱</td></tr>
+<tr class="ok"><td>ledger</td><td><code>http://127.0.0.1:62292/ledger/</code></td><td>200</td><td>7977 B</td><td>text/html</td><td>代币账本控制台 · BigDomain 沙箱</td></tr>
+<tr class="ok"><td>lobby</td><td><code>http://127.0.0.1:62289/lobby/</code></td><td>200</td><td>10077 B</td><td>text/html</td><td>硅基大厅 · BigDomain 沙箱</td></tr>
+<tr class="ok"><td>member</td><td><code>http://127.0.0.1:62295/member/</code></td><td>200</td><td>8752 B</td><td>text/html</td><td>BigDomain 会员权益面 · 沙箱</td></tr>
+<tr class="ok"><td>panel</td><td><code>http://127.0.0.1:62294/panel/</code></td><td>200</td><td>8462 B</td><td>text/html</td><td>沙箱控制台 · Sandbox Panel</td></tr>
+<tr class="ok"><td>ugc</td><td><code>http://127.0.0.1:62293/ugc/</code></td><td>200</td><td>8816 B</td><td>text/html</td><td>UGC 管道控制台 · BigDomain 沙箱</td></tr>
 </table>
-<p class="note">Hub 门：<code>http://127.0.0.1:64701/hub/</code>（hub 自报 live：checkout=True, city=True, gate=True, ledger=True, lobby=True, member=True, panel=True, ugc=True）</p></div>
+<p class="note">Hub 门：<code>http://127.0.0.1:62290/hub/</code>（hub 自报 live：checkout=True, city=True, gate=True, ledger=True, lobby=True, member=True, panel=True, ugc=True）</p></div>
 <div class="card"><h2>深读一例：city /city/snapshot</h2>
 <p>HTTP 200 · 810 B · 顶层键 4 个 · <code>as_of</code> = <code>2026-09-24T14:00:00Z</code></p></div>
 <div class="card"><h2>计划端口与拆台后状态</h2>
 <table><tr><th>端口键</th><th>端口</th><th>拆台后</th></tr>
-<tr><td>checkout</td><td>64702</td><td>已拆台</td></tr>
-<tr><td>city</td><td>64698</td><td>已拆台</td></tr>
-<tr><td>gate</td><td>64699</td><td>已拆台</td></tr>
-<tr><td>hub</td><td>64701</td><td>已拆台</td></tr>
-<tr><td>ledger</td><td>64703</td><td>已拆台</td></tr>
-<tr><td>member</td><td>64706</td><td>已拆台</td></tr>
-<tr><td>panel</td><td>64705</td><td>已拆台</td></tr>
-<tr><td>ugc</td><td>64704</td><td>已拆台</td></tr>
-<tr><td>web</td><td>64700</td><td>已拆台</td></tr>
-<tr><td>ws</td><td>64697</td><td>已拆台</td></tr>
+<tr><td>checkout</td><td>62291</td><td>已拆台</td></tr>
+<tr><td>city</td><td>62287</td><td>已拆台</td></tr>
+<tr><td>gate</td><td>62288</td><td>已拆台</td></tr>
+<tr><td>hub</td><td>62290</td><td>已拆台</td></tr>
+<tr><td>ledger</td><td>62292</td><td>已拆台</td></tr>
+<tr><td>member</td><td>62295</td><td>已拆台</td></tr>
+<tr><td>panel</td><td>62294</td><td>已拆台</td></tr>
+<tr><td>ugc</td><td>62293</td><td>已拆台</td></tr>
+<tr><td>web</td><td>62289</td><td>已拆台</td></tr>
+<tr><td>ws</td><td>62286</td><td>已拆台</td></tr>
 </table>
 <p class="note">端口由操作系统临时分配（<code>plan()</code>），所以这里不承诺固定端口，只承诺「起得来、测得到、拆得净」。</p></div>
 <div class="card"><h2>你自己跑（复制即可）</h2>
