@@ -524,6 +524,31 @@ WHEN_RESERVED = {"if", "for", "while", "switch", "catch", "return", "typeof",
                  "let", "const", "await", "yield"}
 
 
+def _call_sites(blanked):
+    """Bare calls of a name outside its own declaration, in source order. R3281: the
+    one-hop call filter lives here alone, because two readings consume it - "called
+    at all" (the four states) and "called from the script top level" (whether a named
+    function can already have run on open). Two copies of these filters would drift
+    and the page would say one thing while the state said another."""
+    hints = {}
+    for name, got in _decl_index(blanked).items():
+        for _form, hint in got:
+            hints.setdefault(name, set()).add(hint)
+    out = []
+    for match in CALL_NAME.finditer(blanked):
+        before = blanked[max(0, match.start() - 12):match.start()]
+        if re.search(r"function\s+$", before):
+            continue
+        name = match.group(1)
+        if name in KEYWORDS or name in WHEN_RESERVED:
+            continue
+        if any(abs(match.start() - hint) <= 2
+               for hint in hints.get(name) or ()):
+            continue
+        out.append((name, match.start()))
+    return out
+
+
 def _reach_names(blanked):
     """Two definitions of "readable", both text-only and one hop: BOUND (a name passed
     to addEventListener, or assigned to an onX property) and CALLED (a bare call of
@@ -538,22 +563,7 @@ def _reach_names(blanked):
         cb = match.group(3).strip()
         if re.match(r"^[A-Za-z_$][\w$]*$", cb):
             bound.add(cb)
-    hints = {}
-    for name, got in _decl_index(blanked).items():
-        for _form, hint in got:
-            hints.setdefault(name, set()).add(hint)
-    called = set()
-    for match in CALL_NAME.finditer(blanked):
-        before = blanked[max(0, match.start() - 12):match.start()]
-        if re.search(r"function\s+$", before):
-            continue
-        name = match.group(1)
-        if name in KEYWORDS or name in WHEN_RESERVED:
-            continue
-        if any(abs(match.start() - hint) <= 2
-               for hint in hints.get(name) or ()):
-            continue
-        called.add(name)
+    called = {name for name, _pos in _call_sites(blanked)}
     return bound, called
 
 
@@ -579,10 +589,18 @@ def when_reading(text):
     for start, end, target, _kind, _fn, chained in _arrow_spans(blanked, text):
         spans.append((start, end, "live", target, chained))
     bound, called = _reach_names(blanked)
+    # R3281: `handler` is highest-fact-first, and the highest fact it holds is "this
+    # runs when you operate the control". A named function the same face ALSO calls
+    # from the script top level can already have written on open, so the state alone
+    # would say "wait until you click" about a write that may already be on disk. The
+    # four states stay closed (binding-first is one fact, top-level call is another,
+    # orthogonal one); this is a sixth field on the site, not a fifth state.
     # R3281: a `function`-kind owner is a NAME, and a name alone does not say which
     # element it was bound to (or that it was never bound at all). Both binding forms
     # are collected once per face and carried beside the site.
     targets_by_name = _bound_targets(blanked, text)
+    top_called = set(name for name, pos in _call_sites(blanked)
+                     if not any(span[0] <= pos <= span[1] for span in spans))
     counts = {state: 0 for state in WHEN_STATES}
     never = []
     # R3277: the TOTALS said how many sites sit in each state, never WHICH site is
@@ -600,22 +618,23 @@ def when_reading(text):
         holders = [span for span in spans if span[0] <= match.start() <= span[1]]
         if not holders:
             counts["load"] += 1
-            sites.append([expr, "load", "", "top", []])
+            sites.append([expr, "load", "", "top", [], False])
             continue
         inner = min(holders, key=lambda span: span[1] - span[0])
         kind = ("function" if inner[2] == "decl"
                 else ("chain" if inner[4] else "element"))
         binds = list(targets_by_name.get(inner[3]) or []) if kind == "function" else []
+        direct = kind == "function" and inner[3] in top_called
         if inner[2] == "live" or inner[3] in bound:
             counts["handler"] += 1
-            sites.append([expr, "handler", inner[3], kind, binds])
+            sites.append([expr, "handler", inner[3], kind, binds, direct])
         elif inner[3] in called:
             counts["call"] += 1
-            sites.append([expr, "call", inner[3], kind, binds])
+            sites.append([expr, "call", inner[3], kind, binds, direct])
         else:
             counts["never"] += 1
             never.append([expr, inner[3]])
-            sites.append([expr, "never", inner[3], kind, binds])
+            sites.append([expr, "never", inner[3], kind, binds, direct])
     return {"counts": counts, "never": never, "sites": sites}
 
 
@@ -645,6 +664,22 @@ def owner_phrase(doc, kind, owner, targets=None):
     else:
         fmt = doc.get("key_multi_owner_fmt") or "{name}"
     return fmt.format(name=owner, target=want)
+
+
+def site_phrase(doc, expr, state, owner, kind, targets, direct=False, words=None):
+    """R3281: the ONE place a site's visible sentence is built, shared by the page and
+    the criterion. Three blocks print site sentences (multi, func, and the criterion
+    that grades both); building them in three places let the new top-level-call fact
+    exist in only one of them. `direct` appends the extra clause instead of changing
+    the state word, so a site can be both "handler" and "already ran on open"."""
+    words = words or {}
+    base = (doc.get("key_multi_site_fmt") or "").format(
+        expr=expr, kind=owner_phrase(doc, kind, owner, targets),
+        owner=owner_phrase(doc, kind, owner, targets),
+        word=words.get(state) or state)
+    if not direct:
+        return base
+    return base + (doc.get("key_multi_direct_fmt") or "").format(name=owner)
 
 
 def when_attr(naming):
@@ -2450,13 +2485,10 @@ def render(proj):
     if proj["when_multi"]:
         for name, sites in proj["when_multi"]:
             counts = ",".join("%s>%s>%s>%s" % (expr, state, owner or "-", kind)
-                              for expr, state, owner, kind, _targets in sites)
-            phrases = "、".join((doc.get("key_multi_site_fmt") or "").format(
-                expr=expr,
-                kind=owner_phrase(doc, kind, owner, targets),
-                owner=owner_phrase(doc, kind, owner, targets),
-                word=multi_words.get(state) or state)
-                for expr, state, owner, kind, targets in sites)
+                              for expr, state, owner, kind, _targets, _direct in sites)
+            phrases = "、".join(site_phrase(doc, expr, state, owner, kind, targets,
+                                           direct, multi_words)
+                                for expr, state, owner, kind, targets, direct in sites)
             multi_html += (
                 '\n  <p data-key-multi-face="%s" data-key-multi-counts="%s">%s</p>'
                 % (esc(name), esc(counts),
@@ -2468,22 +2500,25 @@ def render(proj):
     # R3281: a declared-function owner gets its own row no matter how many sites the
     # face has, because the name alone does not say which control it is bound to.
     func_sites = sum(len(sites) for _name, sites in proj["when_func"])
+    # R3281: a count of the sites whose named function the same face also calls from
+    # the script top level - the one fact that keeps "wait until you click" from being
+    # the whole story, printed once in the head so a reader does not have to scan rows.
+    func_direct = sum(1 for _name, sites in proj["when_func"]
+                      for site in sites if site[5])
     func_html = (
         '  <p class="keyfunc" data-key-func-faces="%d" '
-        'data-key-func-sites="%d">%s</p>'
-        % (len(proj["when_func"]), func_sites,
+        'data-key-func-sites="%d" data-key-func-direct="%d">%s</p>'
+        % (len(proj["when_func"]), func_sites, func_direct,
            esc((doc.get("key_func_head_fmt") or "").format(
-               faces=len(proj["when_func"]), sites=func_sites))))
+               faces=len(proj["when_func"]), sites=func_sites,
+               direct=func_direct))))
     if proj["when_func"]:
         for name, sites in proj["when_func"]:
             counts = ",".join("%s>%s>%s>%s" % (expr, state, owner or "-", kind)
-                              for expr, state, owner, kind, _targets in sites)
-            phrases = "、".join((doc.get("key_multi_site_fmt") or "").format(
-                expr=expr,
-                kind=owner_phrase(doc, kind, owner, targets),
-                owner=owner_phrase(doc, kind, owner, targets),
-                word=multi_words.get(state) or state)
-                for expr, state, owner, kind, targets in sites)
+                              for expr, state, owner, kind, _targets, _direct in sites)
+            phrases = "、".join(site_phrase(doc, expr, state, owner, kind, targets,
+                                           direct, multi_words)
+                                for expr, state, owner, kind, targets, direct in sites)
             func_html += (
                 '\n  <p data-key-func-face="%s" data-key-func-counts="%s">%s</p>'
                 % (esc(name), esc(counts),
@@ -2655,14 +2690,16 @@ def write():
                               "mixed": len({site[1] for site in sites}) > 1,
                               "sites": [{"expr": expr, "state": state,
                                          "owner": owner, "kind": kind,
-                                         "binds": binds}
-                                        for expr, state, owner, kind, binds in sites]}
+                                         "binds": binds, "direct": direct}
+                                        for expr, state, owner, kind, binds, direct
+                                        in sites]}
                              for name, sites in proj["when_multi"]],
         "write_when_func": [{"face": name,
                              "sites": [{"expr": expr, "state": state,
                                         "owner": owner, "kind": kind,
-                                        "binds": binds}
-                                       for expr, state, owner, kind, binds in sites]}
+                                        "binds": binds, "direct": direct}
+                                       for expr, state, owner, kind, binds, direct
+                                       in sites]}
                             for name, sites in proj["when_func"]],
         "steps_excluded": [{"face": name, "reason": reason}
                            for name, reason in proj["steps_excluded"]],
@@ -3619,7 +3656,8 @@ def check():
                 "key_multi_head_fmt", "key_multi_site_fmt", "key_multi_face_fmt",
                 "key_multi_owner_fmt", "key_multi_owner_none", "key_multi_absent",
                 "key_multi_func_fmt", "key_multi_func_unbound",
-                "key_multi_chain_fmt", "key_func_head_fmt", "key_func_face_fmt",
+                "key_multi_chain_fmt", "key_multi_direct_fmt",
+                "key_func_head_fmt", "key_func_face_fmt",
                 "key_func_absent"):
         if not (proj["doc"].get(key) or "").strip():
             failures.append("SH26 word_missing:%s" % key)
@@ -3672,6 +3710,13 @@ def check():
     # here instead of printing a sentence with the fact missing.
     if "{target}" not in (proj["doc"].get("key_multi_func_fmt") or ""):
         failures.append("SH26 slot_missing:key_multi_func_fmt:{target}")
+    # R3281: the extra clause names the function whose top-level call it is, and the
+    # block head carries the count - a words file that cannot say either reddens here
+    # rather than printing a sentence with the fact silently dropped.
+    if "{name}" not in (proj["doc"].get("key_multi_direct_fmt") or ""):
+        failures.append("SH26 slot_missing:key_multi_direct_fmt:{name}")
+    if "{direct}" not in (proj["doc"].get("key_func_head_fmt") or ""):
+        failures.append("SH26 slot_missing:key_func_head_fmt:{direct}")
     for slot in ("{faces}", "{sites}"):
         if slot not in (proj["doc"].get("key_func_head_fmt") or ""):
             failures.append("SH26 slot_missing:key_func_head_fmt:%s" % slot)
@@ -3908,11 +3953,12 @@ def check():
         for index, (name, counts_raw, said) in enumerate(multi_rows):
             sites = fresh_multi[index][1]
             want_counts = ",".join("%s>%s>%s>%s" % (expr, state, owner or "-", kind)
-                                   for expr, state, owner, kind, _targets in sites)
+                                   for expr, state, owner, kind, _targets, _direct
+                                   in sites)
             if counts_raw != esc(want_counts):
                 failures.append("SH26 multi_counts_attr:%s page=%s fresh=%s"
                                 % (name, counts_raw, want_counts))
-            for _expr, _state, owner, kind, _targets in sites:
+            for _expr, _state, owner, kind, _targets, _direct in sites:
                 if kind not in OWNER_KINDS:
                     failures.append("SH26 owner_kind_open:%s kind=%s"
                                     % (name, kind))
@@ -3929,7 +3975,7 @@ def check():
             # it nowhere. Both are graded from the same fresh reading the sentence
             # arm uses, so a page printing the cut tail or dropping one of two
             # targets reddens here.
-            for expr, _state, owner, kind, targets in sites:
+            for expr, _state, owner, kind, targets, _direct in sites:
                 phrase = owner_phrase(proj["doc"], kind, owner, targets)
                 if kind == "chain":
                     # The owner must not itself be a tail of a chain: locate it in the
@@ -3957,17 +4003,15 @@ def check():
                             failures.append(
                                 "SH26 owner_func_unbound:%s owner=%s said=%s"
                                 % (name, owner, phrase))
-            phrases = "、".join((proj["doc"].get("key_multi_site_fmt") or "").format(
-                expr=expr, kind=owner_phrase(proj["doc"], kind, owner, targets),
-                owner=owner_phrase(proj["doc"], kind, owner, targets),
-                word=multi_words.get(state) or state)
-                for expr, state, owner, kind, targets in sites)
+            phrases = "、".join(site_phrase(proj["doc"], expr, state, owner, kind,
+                                           targets, direct, multi_words)
+                                for expr, state, owner, kind, targets, direct in sites)
             want_text = (proj["doc"].get("key_multi_face_fmt") or "").format(
                 name=name, phrases=phrases)
             if said != esc(want_text):
                 failures.append("SH26 multi_face_sentence:%s" % name)
             tally = {state: 0 for state in WHEN_STATES}
-            for _expr, state, _owner, _kind, _targets in sites:
+            for _expr, state, _owner, _kind, _targets, _direct in sites:
                 tally[state] += 1
             want_attr = when_attr({"when": tally})
             # The two encodings are compared THROUGH THE PAGE when the face has a
@@ -4012,18 +4056,20 @@ def check():
             fresh_func.append((name, got_sites))
     func_head = re.search(
         r'<p class="keyfunc" data-key-func-faces="(\d+)" '
-        r'data-key-func-sites="(\d+)">([^<]*)<', text)
+        r'data-key-func-sites="(\d+)" data-key-func-direct="(\d+)">([^<]*)<', text)
     if not func_head:
         failures.append("SH26 func_head_missing")
     else:
-        faces_raw, sites_raw, said = func_head.groups()
+        faces_raw, sites_raw, direct_raw, said = func_head.groups()
         want_sites = sum(len(sites) for _name, sites in fresh_func)
-        got = (int(faces_raw), int(sites_raw))
-        want = (len(fresh_func), want_sites)
+        want_direct = sum(1 for _name, sites in fresh_func
+                          for site in sites if site[5])
+        got = (int(faces_raw), int(sites_raw), int(direct_raw))
+        want = (len(fresh_func), want_sites, want_direct)
         if got != want:
             failures.append("SH26 func_counts page=%s fresh=%s" % (got, want))
         want_text = (proj["doc"].get("key_func_head_fmt") or "").format(
-            faces=len(fresh_func), sites=want_sites)
+            faces=len(fresh_func), sites=want_sites, direct=want_direct)
         if said != esc(want_text):
             failures.append("SH26 func_sentence differs from the fresh derivation")
     func_rows = re.findall(
@@ -4037,19 +4083,35 @@ def check():
         for index, (name, counts_raw, said) in enumerate(func_rows):
             sites = fresh_func[index][1]
             want_counts = ",".join("%s>%s>%s>%s" % (expr, state, owner or "-", kind)
-                                   for expr, state, owner, kind, _targets in sites)
+                                   for expr, state, owner, kind, _targets, _direct
+                                   in sites)
             if counts_raw != esc(want_counts):
                 failures.append("SH26 func_counts_attr:%s page=%s fresh=%s"
                                 % (name, counts_raw, want_counts))
-            phrases = "、".join((proj["doc"].get("key_multi_site_fmt") or "").format(
-                expr=expr, kind=owner_phrase(proj["doc"], kind, owner, targets),
-                owner=owner_phrase(proj["doc"], kind, owner, targets),
-                word=multi_words.get(state) or state)
-                for expr, state, owner, kind, targets in sites)
+            phrases = "、".join(site_phrase(proj["doc"], expr, state, owner, kind,
+                                           targets, direct, multi_words)
+                                for expr, state, owner, kind, targets, direct in sites)
             want_text = (proj["doc"].get("key_func_face_fmt") or "").format(
                 name=name, phrases=phrases)
             if said != esc(want_text):
                 failures.append("SH26 func_face_sentence:%s" % name)
+            # R3281: the top-level-call clause is a fact about the face's own calls,
+            # and the live tree holds one true case beside one false one - so the arm
+            # that "a name merely called inside some body must NOT carry it" is graded
+            # on a face that exists, not promised for later.
+            for expr, state, owner, kind, targets, direct in sites:
+                if kind != "function":
+                    continue
+                note = (proj["doc"].get("key_multi_direct_fmt")
+                        or "").format(name=owner)
+                text_one = site_phrase(proj["doc"], expr, state, owner, kind,
+                                       targets, direct, multi_words)
+                if direct and note.strip() and note not in text_one:
+                    failures.append("SH26 func_direct_note_missing:%s owner=%s"
+                                    % (name, owner))
+                if not direct and note.strip() and note in text_one:
+                    failures.append("SH26 func_direct_note_spurious:%s owner=%s"
+                                    % (name, owner))
     for name, _counts, _said in func_rows:
         got_sites = (fresh_keys.get(name) or {}).get("when_sites") or []
         if not any(site[3] == "function" for site in got_sites):

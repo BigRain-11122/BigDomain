@@ -1,0 +1,22 @@
+FACES_WITH_WRITES=7 SITES=8 elapsed=0.8571s
+SITE filing-checklist.html  expr=NS       state=handler owner=b        kind=element  binds=-
+SITE lobby-protocol-map.html expr=NS       state=handler owner=apply    kind=function binds=q
+SITE lobby-session-trace.html expr=k        state=load    owner=-        kind=top      binds=-
+SITE membership-face.html   expr=K        state=handler owner=c        kind=element  binds=-
+SITE merchant-onboard.html  expr=KEY      state=call    owner=save     kind=function binds=-
+SITE money-path-demo.html   expr=NS+':'+this.getAttribute('data-ck') state=handler owner=T[n]     kind=element  binds=-
+SITE ship-checklist.html    expr=NS       state=handler owner=b        kind=element  binds=-
+SITE ship-checklist.html    expr=NS       state=handler owner=reset    kind=element  binds=-
+Q1 top-level direct calls:
+ DIRECT lobby-protocol-map.html expr=NS       state=handler owner=apply    bound=yes
+Q1 direct_sites=1 (of function-kind sites=2)
+Q2 site_unpack_points=10 WHEN_STATES_refs=12
+Q2 func_head_bytes=328 page_bytes=40082
+Q2 note_bytes=111 expected_page_delta=111
+Q3 extra_scan=0.0402s per_face=0.00574s (reads each face once more, no write)
+Q3 key_reading_all=0.8571s
+PRIVATE world (synthetic bytes, written nowhere):
+ tops=addEventListener,apply,getElementById,save
+ PSITE expr='NS'   state=handler owner=apply    kind=function binds=q top_call=yes
+ PSITE expr='KEY'  state=handler owner=save     kind=function binds=document.getElementById('reset') top_call=yes
+NOTE zero socket, zero network, zero live write, JS never run

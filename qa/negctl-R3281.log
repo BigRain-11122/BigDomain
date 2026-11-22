@@ -1,0 +1,13 @@
+R3281 NEGCTL cases=12 pass=12 fail=0
+OK   c0-live-copy-passes            rc=0 byte-identical
+OK   c1-direct-count                rc=2 expected=SH26 func_counts
+OK   c2-direct-note-dropped         rc=2 expected=SH26 func_face_sentence
+OK   c3-note-on-false-site          rc=2 expected=SH26 func_face_sentence
+OK   c4-head-sentence               rc=2 expected=SH26 func_sentence
+OK   c5-func-head-gone              rc=2 expected=SH26 func_head_missing
+OK   c6-direct-word-gone            rc=2 expected=word_missing:key_multi_direct_fmt
+OK   c7-head-slot-gone              rc=2 expected=slot_missing:key_func_head_fmt:{direct}
+OK   c8-word-slot-gone              rc=2 expected=slot_missing:key_multi_direct_fmt:{name}
+OK   c9-reader-no-direct            rc=2 expected=SH26 func_counts
+OK   c10-private-world              rc=0 private world
+OK   c11-private-note               one true, one false, same row

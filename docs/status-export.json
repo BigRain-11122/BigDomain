@@ -3,17 +3,17 @@
     "board_pages_skipped": [
       "preview/face-sweep.html (7449B)"
     ],
-    "current": "2026-11-22 R3280 PRODUCT+ENGINEERING: the front door said a write sits in a NAMED FUNCTION but never which control that function is bound to (or that it is bound to nothing). Measured first: of the two live function owners, `apply` is bound to `q` while `save` is bound to NO control at all - it is only called - so the board's assumption that a name always has a target was wrong. Every function-kind owner now prints all of its binding targets (or a dedicated unbound sentence), a member-chain receiver is read WHOLE instead of as a cut tail, and because no live multi-site face carries a function owner, a declared-function row set was added so the fact has a live surface: preview/start-here.html is 40082B (38823B last round) and preview/start-here.json carries write_when_func plus a binds list per site.",
+    "current": "2026-11-22 R3281 GROUP SCAN (content-addressed, read before any work): the ledger carried 0 @BigDomain lines so no dispatch was owed; decisions rows=438 against the stored baseline 438 with no new D- or C- token; the group orders ended at 2026-11-20 22:5x (content-line hand-off, not this company's lane) which is the stored last_order, so no new order; benchmarks refreshed 2026-11-18 (4 days, inside the 7-day window); git held no index.lock and three crawl-lane files modified (not this loop's writes).",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
-    "last_artifact": "preview/start-here.html (40082B) + preview/start-here.json (3211B) [2026-11-22 mtime]",
-    "latest_artifact": "preview/start-here.html (40082B) + preview/start-here.json (3211B) [2026-11-22 mtime]",
+    "last_artifact": "preview/start-here.html (40361B) + preview/start-here.json (3298B) [2026-11-22 mtime]",
+    "latest_artifact": "preview/start-here.html (40361B) + preview/start-here.json (3298B) [2026-11-22 mtime]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\start-here.html",
     "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/negctl-R3273.log (1280B, 2026-11-22)",
     "latest_evidence": "qa/negctl-R3273.log (1280B, 2026-11-22)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3281] next window (<=48h): (0) MAIN — **「具名函数」这一类现在说清了它被绑到哪个控件，但活树上有一处同时「被绑」又「打开就跑」，页上只印了前者**：`lobby-protocol-map.html` 第 49 行是 `q.addEventListener('input',apply); if(q.value){apply();}`——同一行里 `apply` 既被绑到 `q`，又在脚本顶层被直接调用一次，于是 R3276 的四态闭集只能记 `handler`（绑定优先），页上写「要等你操作过才跑」；但只要 `q.value` 在打开时非空，那处写**打开就发生了**。问：值不值得把「又被绑又被直接调用」单独标出来（四态之外加一个「也在打开时跑」的标记），并把这一处的真实时点写清？做法＝先只读量三问：①活树 6 处写里「绑定 + 顶层直调」同时成立的有几处（逐处列，不猜；预计只有 `apply` 一处，`save` 只有调用没有绑定）；②若加标记，是加在四态之外的一列（`handler+load`），还是把四态扩成五态（会动 R3276 的闭集与 WHEN_STATES 的消费者、AC-SH26 的四条拒绝臂），逐项列两种改法各动几处、判据 29 要不要变；③代价（页增多少字节；`data-step-write-when` 与 `data-key-multi-counts` 两种编码要不要同时带这个标记，还是只在具名函数那一块说）。收口三选一＝①不建，只在页上与诚实段写明「绑定优先于直接调用，所以这一处只记 handler」②在具名函数块里加一句「本面还在打开时直接调用过一次」③四态扩成五态并全链同步。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：state 载体 fold_needed=true（bytes=138671·gate=78500·fold 连续多窗因 live-dirty 被拒）、删除侧时机词未建（活树 removeItem=0）、同一键值的不同表达式不入重复桶（活树 0 张）、`keyfunc` 块会把同一张面上非具名函数的写也列进来（下一问的另一半）、tasks.md P-47 站行（零支付能力）、BigDomain-OSLoop LogonType=Interactive。",
-    "next_milestone_due": "2026-11-24T17:48:08+08:00",
-    "updated_at": "2026-11-22T17:48:08+08:00",
+    "next_milestone": "[R3282] next window (<=48h): (0) MAIN — **「打开时也可能已经写过」这句只一跳，函数被另一个函数调用、那个函数在顶层被调用时，页上仍说不会在打开时跑**：`function save(){}; function later(){ save(); } later();` 这种形状里，`save` 里的写**打开就跑**，但页上给它的状态是 `call`、从句也不出现（本轮私有世界实测：`save` 被 `later()` 带上顶层，判据仍判它「顶层 0 处」）。问：值不值得把「顶层可达」做成传递（沿本面声明过的函数做一次闭包），还是只在页上与诚实段写明「只认一跳、间接调用看不见」？做法＝先只读量三问：①活树 8 处写里有几处的包体是「被另一个函数间接带上顶层」的（逐处列，不猜；预计 0 处，故这只在私有世界点亮）；②若做闭包，`direct` 这个名字与从句要不要改词（「直接调用」会变成假话）、属性要不要区分「直接/间接」、AC-SH26 现有两臂怎么扩、判据 29 是否仍够；③代价（闭包要不要迭代到不动点、活树每面多几次扫描、`_call_sites()` 与 `_reach_names()` 的共用会不会被打破）。收口三选一＝①不建，页与诚实段写明「只认一跳」②只在从句里加「或经本面另一个函数间接调用」，不做证明③做一次函数闭包并把「直接/间接」两词分开。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：state 载体 fold_needed=true（bytes=143486·gate=78500·fold 连续多窗因 live-dirty 被拒）、删除侧时机词未建（活树 removeItem=0）、同一键值的不同表达式不入重复桶（活树 0 张）、tasks.md P-47 站行（零支付能力）、BigDomain-OSLoop LogonType=Interactive。",
+    "next_milestone_due": "2026-11-24T18:04:30+08:00",
+    "updated_at": "2026-11-22T18:04:30+08:00",
     "heartbeat": {
       "tick": 3262,
       "state_tick": 3273,
@@ -37,8 +37,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-22 R3280 PRODUCT+ENGINEERING: the front door said a write sits in a NAMED FUNCTION but never which control that function is bound to (or that it is bound to nothing). Measured first: of the two live function owners, `apply` is bound to `q` while `save` is bound to NO control at all - it is only called - so the board's assumption that a name always has a target was wrong. Every function-kind owner now prints all of its binding targets (or a dedicated unbound sentence), a member-chain receiver is read WHOLE instead of as a cut tail, and because no live multi-site face carries a function owner, a declared-function row set was added so the fact has a live surface: preview/start-here.html is 40082B (38823B last round) and preview/start-here.json carries write_when_func plus a binds list per site.",
-  "claims": {"claimed": 321, "captured": 94, "contradicted": 10, "uncaptured": 217, "historic": 7, "rows": 16, "present": true, "census_ts": "2026-11-22T17:48:08+08:00"},
+  "current": "2026-11-22 R3281 GROUP SCAN (content-addressed, read before any work): the ledger carried 0 @BigDomain lines so no dispatch was owed; decisions rows=438 against the stored baseline 438 with no new D- or C- token; the group orders ended at 2026-11-20 22:5x (content-line hand-off, not this company's lane) which is the stored last_order, so no new order; benchmarks refreshed 2026-11-18 (4 days, inside the 7-day window); git held no index.lock and three crawl-lane files modified (not this loop's writes).",
+  "claims": {"claimed": 325, "captured": 94, "contradicted": 10, "uncaptured": 221, "historic": 7, "rows": 16, "present": true, "census_ts": "2026-11-22T18:04:30+08:00"},
   "chain": {"present": true, "rows": 16, "broken": 0, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -67,11 +67,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-22 R3280 PRODUCT+ENGINEERING: the front door said a write sits in a NAMED FUNCTION but never which control that function is bound to (or that it is bound to nothing). Measured first: of the two live function owners, `apply` is bound to `q` while `save` is bound to NO control at all - it is only called - so the board's assumption that a name always has a target was wrong. Every function-kind owner now prints all of its binding targets (or a dedicated unbound sentence), a member-chain receiver is read WHOLE instead of as a cut tail, and because no live multi-site face carries a function owner, a declared-function row set was added so the fact has a live surface: preview/start-here.html is 40082B (38823B last round) and preview/start-here.json carries write_when_func plus a binds list per site.",
-  "export_ts": "2026-11-22T17:48:08+08:00",
-  "latest_artifact": "preview/start-here.html (40082B) + preview/start-here.json (3211B) [2026-11-22 mtime]",
+  "do": "2026-11-22 R3281 GROUP SCAN (content-addressed, read before any work): the ledger carried 0 @BigDomain lines so no dispatch was owed; decisions rows=438 against the stored baseline 438 with no new D- or C- token; the group orders ended at 2026-11-20 22:5x (content-line hand-off, not this company's lane) which is the stored last_order, so no new order; benchmarks refreshed 2026-11-18 (4 days, inside the 7-day window); git held no index.lock and three crawl-lane files modified (not this loop's writes).",
+  "export_ts": "2026-11-22T18:04:30+08:00",
+  "latest_artifact": "preview/start-here.html (40361B) + preview/start-here.json (3298B) [2026-11-22 mtime]",
   "latest_evidence": "qa/negctl-R3273.log (1280B, 2026-11-22)",
-  "next_milestone": "[R3281] next window (<=48h): (0) MAIN — **「具名函数」这一类现在说清了它被绑到哪个控件，但活树上有一处同时「被绑」又「打开就跑」，页上只印了前者**：`lobby-protocol-map.html` 第 49 行是 `q.addEventListener('input',apply); if(q.value){apply();}`——同一行里 `apply` 既被绑到 `q`，又在脚本顶层被直接调用一次，于是 R3276 的四态闭集只能记 `handler`（绑定优先），页上写「要等你操作过才跑」；但只要 `q.value` 在打开时非空，那处写**打开就发生了**。问：值不值得把「又被绑又被直接调用」单独标出来（四态之外加一个「也在打开时跑」的标记），并把这一处的真实时点写清？做法＝先只读量三问：①活树 6 处写里「绑定 + 顶层直调」同时成立的有几处（逐处列，不猜；预计只有 `apply` 一处，`save` 只有调用没有绑定）；②若加标记，是加在四态之外的一列（`handler+load`），还是把四态扩成五态（会动 R3276 的闭集与 WHEN_STATES 的消费者、AC-SH26 的四条拒绝臂），逐项列两种改法各动几处、判据 29 要不要变；③代价（页增多少字节；`data-step-write-when` 与 `data-key-multi-counts` 两种编码要不要同时带这个标记，还是只在具名函数那一块说）。收口三选一＝①不建，只在页上与诚实段写明「绑定优先于直接调用，所以这一处只记 handler」②在具名函数块里加一句「本面还在打开时直接调用过一次」③四态扩成五态并全链同步。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：state 载体 fold_needed=true（bytes=138671·gate=78500·fold 连续多窗因 live-dirty 被拒）、删除侧时机词未建（活树 removeItem=0）、同一键值的不同表达式不入重复桶（活树 0 张）、`keyfunc` 块会把同一张面上非具名函数的写也列进来（下一问的另一半）、tasks.md P-47 站行（零支付能力）、BigDomain-OSLoop LogonType=Interactive。",
+  "next_milestone": "[R3282] next window (<=48h): (0) MAIN — **「打开时也可能已经写过」这句只一跳，函数被另一个函数调用、那个函数在顶层被调用时，页上仍说不会在打开时跑**：`function save(){}; function later(){ save(); } later();` 这种形状里，`save` 里的写**打开就跑**，但页上给它的状态是 `call`、从句也不出现（本轮私有世界实测：`save` 被 `later()` 带上顶层，判据仍判它「顶层 0 处」）。问：值不值得把「顶层可达」做成传递（沿本面声明过的函数做一次闭包），还是只在页上与诚实段写明「只认一跳、间接调用看不见」？做法＝先只读量三问：①活树 8 处写里有几处的包体是「被另一个函数间接带上顶层」的（逐处列，不猜；预计 0 处，故这只在私有世界点亮）；②若做闭包，`direct` 这个名字与从句要不要改词（「直接调用」会变成假话）、属性要不要区分「直接/间接」、AC-SH26 现有两臂怎么扩、判据 29 是否仍够；③代价（闭包要不要迭代到不动点、活树每面多几次扫描、`_call_sites()` 与 `_reach_names()` 的共用会不会被打破）。收口三选一＝①不建，页与诚实段写明「只认一跳」②只在从句里加「或经本面另一个函数间接调用」，不做证明③做一次函数闭包并把「直接/间接」两词分开。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：state 载体 fold_needed=true（bytes=143486·gate=78500·fold 连续多窗因 live-dirty 被拒）、删除侧时机词未建（活树 removeItem=0）、同一键值的不同表达式不入重复桶（活树 0 张）、tasks.md P-47 站行（零支付能力）、BigDomain-OSLoop LogonType=Interactive。",
   "outs": [
     "preview/start-here.html (35942B) + preview/start-here.json (2180B) [2026-11-22 mtime]",
     "preview/ugc-gate-report.html (28112B) + preview/ugc-gate-report.json (20170B) [2026-11-22 mtime]",
@@ -165,8 +165,8 @@
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 139195,
-  "next_milestone_due": "2026-11-24T17:48:08+08:00",
+  "state_bytes": 143486,
+  "next_milestone_due": "2026-11-24T18:04:30+08:00",
   "heartbeat": {
     "tick": 3262,
     "state_tick": 3273,
