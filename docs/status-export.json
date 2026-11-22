@@ -12,8 +12,8 @@
     "latest_evidence": "qa/negctl-R3330.log (230B, 2026-11-23)",
     "newest_pair_on_disk_is_board": true,
     "next_milestone": "[R3330] next window (<=48h): (0) MAIN — 三问在本轮有了读数，三处仍未量到实：(1) 派工回执面：`atbd_rows` 只数行、`conflict` 数令牌冲突——先只读量 ps1 有没有一面能说「某条 @BigDomain 派工行没有对应回执行」；若没有，如实记「回执核对只由读指令的人做」，禁先落闸。(2) 复活守卫只读文件头字节：先量孪生有没有可钉的**执行形状**（如无 `if __name__ == '__main__'` 生产钩子／无任何入口 import 它），能钉则把文本钉升级为形状钉，不能则记文本钉的边界。(3) 安装副本同步只在跑 `test_scan_faces.ps1` 时才被看见——先量在 python 电池侧加一条 sha256 身份臂（源件 vs `.codely-cli` 副本，缺席=SKIP）的代价与误报面，再决定落臂或判负。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。承（未变）：全量 761 行 battery 仍未实跑（R3313 AC-RCA5 只由代码路径证明）；`test_face_sweep` 54/56（AC-FSWB20/20c）。产品真缺口仍是物理件｛商户号／服务器／域名／备案+ICP／小程序 appid+secret｝——买家仍付不了钱。",
-    "next_milestone_due": "2026-11-25T06:36:51+08:00",
-    "updated_at": "2026-11-23T06:36:51+08:00",
+    "next_milestone_due": "2026-11-25T06:39:15+08:00",
+    "updated_at": "2026-11-23T06:39:15+08:00",
     "heartbeat": {
       "tick": 3330,
       "state_tick": 3330,
@@ -38,7 +38,7 @@
     }
   },
   "current": "2026-11-23 R3330 PRODUCT+ENGINEERING: the two questions the board could still only answer by opinion were answered by shipped bytes - a program gate on atbd_rows would redden on a legitimate dispatch row, so it stays a reading, and the dead twin now carries a revival law bound to the substring selectors that create its divergence.",
-  "claims": {"claimed": 313, "captured": 95, "contradicted": 10, "uncaptured": 208, "historic": 7, "rows": 26, "present": true, "census_ts": "2026-11-23T06:36:51+08:00"},
+  "claims": {"claimed": 313, "captured": 95, "contradicted": 10, "uncaptured": 208, "historic": 7, "rows": 26, "present": true, "census_ts": "2026-11-23T06:39:15+08:00"},
   "chain": {"present": true, "rows": 26, "broken": 0, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -68,7 +68,7 @@
     }
   ],
   "do": "2026-11-23 R3330 PRODUCT+ENGINEERING: the two questions the board could still only answer by opinion were answered by shipped bytes - a program gate on atbd_rows would redden on a legitimate dispatch row, so it stays a reading, and the dead twin now carries a revival law bound to the substring selectors that create its divergence.",
-  "export_ts": "2026-11-23T06:36:51+08:00",
+  "export_ts": "2026-11-23T06:39:15+08:00",
   "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20492B) [2026-11-23 commit] (halves differ: html [2026-11-23 commit] + json [2026-11-22 commit]; later=html)",
   "latest_evidence": "qa/negctl-R3330.log (230B, 2026-11-23)",
   "next_milestone": "[R3330] next window (<=48h): (0) MAIN — 三问在本轮有了读数，三处仍未量到实：(1) 派工回执面：`atbd_rows` 只数行、`conflict` 数令牌冲突——先只读量 ps1 有没有一面能说「某条 @BigDomain 派工行没有对应回执行」；若没有，如实记「回执核对只由读指令的人做」，禁先落闸。(2) 复活守卫只读文件头字节：先量孪生有没有可钉的**执行形状**（如无 `if __name__ == '__main__'` 生产钩子／无任何入口 import 它），能钉则把文本钉升级为形状钉，不能则记文本钉的边界。(3) 安装副本同步只在跑 `test_scan_faces.ps1` 时才被看见——先量在 python 电池侧加一条 sha256 身份臂（源件 vs `.codely-cli` 副本，缺席=SKIP）的代价与误报面，再决定落臂或判负。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。承（未变）：全量 761 行 battery 仍未实跑（R3313 AC-RCA5 只由代码路径证明）；`test_face_sweep` 54/56（AC-FSWB20/20c）。产品真缺口仍是物理件｛商户号／服务器／域名／备案+ICP／小程序 appid+secret｝——买家仍付不了钱。",
@@ -157,7 +157,7 @@
   "self_drive": {
     "window": "2026-11-17..2026-11-23",
     "window_days": 7,
-    "log_lines_in_window": 114,
+    "log_lines_in_window": 115,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 21,
@@ -167,8 +167,8 @@
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 65047,
-  "next_milestone_due": "2026-11-25T06:36:51+08:00",
+  "state_bytes": 65594,
+  "next_milestone_due": "2026-11-25T06:39:15+08:00",
   "heartbeat": {
     "tick": 3330,
     "state_tick": 3330,
