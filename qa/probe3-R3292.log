@@ -1,0 +1,10 @@
+report written: C:\Users\sjs20\AppData\Local\Temp\probe3-R3292-1dxs558g\f.html (36146 bytes, sha256 9d6dd297c01bb656)
+attention findings: 5 (severity {"warn": 5})
+report json written: C:\Users\sjs20\AppData\Local\Temp\probe3-R3292-1dxs558g\fresh.json (59515 bytes, schema 17)
+disk bytes=59515 lines=2205 fresh bytes=59515 lines=2205 delta=0
+line count disk=2205 fresh=2205
+L2202 disk='  "html": 36850,'
+L2202 fresh='  "html": 36146,'
+L2203 disk='  "json": 61720'
+L2203 fresh='  "json": 59515'
+sizes={"html": 36850, "json": 61720} schema=17

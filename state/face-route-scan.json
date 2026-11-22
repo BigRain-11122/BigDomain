@@ -210,7 +210,7 @@
    "title": "BigDomain API Market - Settlement Ledger"
   },
   {
-   "bytes": 36850,
+   "bytes": 37005,
    "controls": 0,
    "face": "apimarket-report.html",
    "links": [
@@ -275,12 +275,13 @@
    "title": "Core loop walkthrough"
   },
   {
-   "bytes": 8408,
+   "bytes": 8872,
    "controls": 0,
    "face": "face-sweep.html",
    "links": [
     "apimarket-report-claims-demo.html",
     "apimarket-report-claims.html",
+    "apimarket-report.html",
     "city-face-report.html",
     "first-yuan-chain.html",
     "index.html",
@@ -292,8 +293,8 @@
     "platform-live-report.html",
     "ugc-gate-report.html"
    ],
-   "out": 12,
-   "title": "12 面实况板 / face sweep board"
+   "out": 13,
+   "title": "13 面实况板 / face sweep board"
   },
   {
    "bytes": 12893,
@@ -327,7 +328,7 @@
    "title": "BigDomain 第一笔收入路径"
   },
   {
-   "bytes": 42140,
+   "bytes": 42141,
    "controls": 2,
    "face": "index.html",
    "links": [

@@ -1,0 +1,31 @@
+report written: C:\Users\sjs20\AppData\Local\Temp\probe2-R3292-_mjh0369\fresh.html (36146 bytes, sha256 9d6dd297c01bb656)
+attention findings: 5 (severity {"warn": 5})
+report json written: C:\Users\sjs20\AppData\Local\Temp\probe2-R3292-_mjh0369\fresh.json (59515 bytes, schema 17)
+backhop block found=False bytes=0 sha16_of_page_without_block=099ba38ff0c2773d
+fresh html bytes=36146 sha16=9d6dd297c01bb656
+disk-minus-block == fresh html ? False
+html diff lines=9
+D --- fresh
+D +++ disk-without-block
+D @@ -1549,2 +1549,5 @@
+D  <footer>sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice</footer>
+D -</div></body></html>
+D +</div><div class="backhop" data-back-hop="1" data-back-face="apimarket-report.html" data-back-rule="市场/结算读数面：回到这一族里唯一能下单的那一页" data-back-bytes="22382" data-back-controls="3" style="border-top:1px soli
+D +<span style="opacity:.75">这是读数页，没有可填的东西。</span> 回到可点的那一页：<a href="buyer-trial.html" data-back-target="1">buyer-trial.html</a> <span style="opacity:.7">&middot; 3 个控件 · 22382B</span> <span style="opac
+D +</div>
+D +</body></html>
+json top-level disk=['attention', 'report', 'schema_version', 'sizes'] fresh=['attention', 'report', 'schema_version', 'sizes']
+json schema_version disk=17 fresh=17
+json sizes disk={"html": 36850, "json": 61720} fresh={"html": 36146, "json": 59515}
+report keys disk=11 fresh=11 equal=True
+attention finding_count disk=5 fresh=5 equal=True
+json diff lines=9 (first 20 shown)
+J --- fresh
+J +++ disk
+J @@ -2201,4 +2201,4 @@
+J   "sizes": {
+J -  "html": 36146,
+J -  "json": 59515
+J +  "html": 36850,
+J +  "json": 61720
+J   }

@@ -1,0 +1,16 @@
+report written: C:\Users\sjs20\AppData\Local\Temp\probe-R3292-yobc2xxr\fresh.html (36146 bytes, sha256 9d6dd297c01bb656)
+attention findings: 5 (severity {"warn": 5})
+report json written: C:\Users\sjs20\AppData\Local\Temp\probe-R3292-yobc2xxr\fresh.json (59515 bytes, schema 17)
+HTML exists=True bytes=36850 sha16=099ba38ff0c2773d
+JSON exists=True bytes=61720 sha16=eb358cfb8ecfae56 schema_version=17
+source REPORT_SCHEMA=17 (parsed from src\sandbox\ledger\apimarket_report.py)
+sizes block={"html": 36850, "json": 61720} html_disk=36850 json_disk=61720 agree=True
+Q1 page schema mentions: 'schema'=0 'data-report-schema'=0 'data-schema-banner'=0 'data-back-hop'=1
+Q1 header bytes=1812 lines=28 title=BigDomain API Market - Settlement Ledger
+Q1 .py files naming the page or its json=16 [('.codely-cli\\tmp\\claim_r2101.py', True, False), ('.codely-cli\\tmp\\closeout_R2101.py', True, False), ('.codely-cli\\tmp\\closeout_r2103.py', False, True), ('.codely-cli\\tmp\\closeout_r2889_addendum.py', True, False), ('tmp\\c14dbg\\tools\\face_sweep.py', True, False), ('tmp\\nc_honest.py', True, False), ('tmp\\nc_m1_no_red_never_flag.py', True, False), ('tmp\\nc_m2_mutated_is_green.py', True, False), ('tmp\\nc_m3_gates_writes_board.py', True, False), ('tmp\\negctl_R3291.py', True, True), ('tmp\\probe_R3291.py', True, False), ('tmp\\probe_R3292.py', True, True), ('tmp\\prop010_prereg.py', False, True), ('tmp\\r2869_closeout.py', True, True), ('tmp\\r2869_closeout_notes.py', True, True), ('tools\\face_sweep.py', True, False)]
+Q1 render_html/collect/write paths: render_html=True --check=True
+Q2 reproduce html identical=False disk16=099ba38ff0c2773d fresh16=9d6dd297c01bb656
+Q2 reproduce json identical=False disk16=eb358cfb8ecfae56 fresh16=67b45cae9c117faa
+Q2 html byte delta=-704 (a re-render with no code change)
+Q3 one full demo-world render cost=0.388s
+Q3 badge price: one html line about 120 bytes; sibling sizes must be re-measured (the generator already writes them at --json-out)

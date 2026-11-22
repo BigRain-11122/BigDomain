@@ -110,6 +110,15 @@ FACES = [
      "tools/apimarket_schema_banner.py",
      "preview/apimarket-report-claims.html", "state/apimarket-schema-banner.json",
      "\u9875\u9762\u4e0d\u8bf4\u660e\u53d6\u81ea\u54ea\u4e2a schema\uff0c\u8bfb\u8005\u4f1a\u628a\u8001\u5feb\u7167\u5f53\u6210\u5f53\u524d\u8bfb\u6570\u3002"),
+    # R3292: the thirteen banners above all promise "the current generator renders
+    # that page", so that page has to be able to prove it. Its own check grades the
+    # badge, the sibling numbers, the byte sizes and the fact that the bytes on disk
+    # are what this tree renders now (injection included). Adding the row is how the
+    # check gets a consumer that runs every window instead of a tool nobody calls.
+    ("apimarket-current", "\u5f53\u524d\u8bfb\u6570\u9762\u81ea\u8bc1 / schema \u4e0e\u53ef\u91cd\u73b0",
+     "tools/apimarket_current_face.py",
+     "preview/apimarket-report.html", "preview/apimarket-report.json",
+     "\u5f53\u524d\u8bfb\u6570\u9762\u4e0d\u8bf4 schema \u6216\u4e0e\u73b0\u6e32\u67d3\u4e0d\u7b26\uff0c\u5341\u4e09\u6761\u6a2a\u5e45\u5c31\u90fd\u5728\u6307\u5411\u4e00\u4e2a\u7a7a\u627f\u8bfa\u3002"),
     ("entry-index", "\u5165\u53e3\u9875\u5b9e\u7269\u53f0\u8d26 / index",
      "tools/deliverable_index.py",
      "preview/index.html", "preview/deliverable-index.json",

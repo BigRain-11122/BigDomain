@@ -1,0 +1,11 @@
+PASS clean rc=0 want=None
+PASS badge-number-flipped rc=2 want=E_ACF2
+PASS badge-dropped rc=2 want=E_ACF1
+PASS sentence-paraphrased rc=2 want=E_ACF3
+PASS sizes-html-off-by-one rc=2 want=E_ACF4
+PASS json-schema-bumped rc=2 want=E_ACF2
+PASS json-crlf rc=2 want=E_ACF6
+PASS page-byte-appended rc=2 want=E_ACF5
+PASS pin-removed rc=2 want=E_ACF6
+PASS source-bumped-page-stale rc=2 want=E_ACF2
+NEGCTL 10/10

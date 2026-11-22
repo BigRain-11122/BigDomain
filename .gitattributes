@@ -38,6 +38,18 @@ docs/sandbox-suite-matrix.md text eol=lf
 # never of the machine's git settings. Born at R3208.
 src/os/state.json text eol=crlf
 
+# R3292: the API-market current-reading face records its own byte counts in a
+# sibling `sizes` block, and src/sandbox/ledger/apimarket_report.py --check
+# compares those numbers with the bytes on disk. Measured before this pin: the
+# blob is LF (59515 bytes) while core.autocrlf=true materialised the worktree
+# as CRLF (61720 bytes) - and the recorded number was the CRLF one. A checkout
+# on any host with autocrlf=false (or Linux/macOS) would then fail --check by
+# 2205 bytes that are nothing but dialect. The carrier dialect is a property of
+# the FILE, never of the machine's git settings. Born at R3292, same law as
+# src/os/state.json (R3208) and state/queue/*.md (R2548).
+preview/apimarket-report.html text eol=lf
+preview/apimarket-report.json text eol=lf
+
 # R3209 measured the SCOPE of this law instead of extending it. A pin is owed
 # only to a carrier whose shipped reader refuses or misreads the other dialect.
 # Hard readers (measured): src/os/state.json (both fold doors plus the closeout

@@ -1,22 +1,22 @@
 {
   "ceo_face": {
     "board_pages_skipped": [
-      "preview/face-sweep.html (8408B)"
+      "preview/face-sweep.html (8872B)"
     ],
-    "current": "2026-11-22 R3291 PRODUCT: a frozen page that says 'this is not a current reading' now also says where a current one lives. All thirteen apimarket banners carry one link to preview/apimarket-report.html, the face the current generator (schema 17) renders, and the entry page labels each of the thirteen frozen rows with its own declared schema (nine older than the generator, two unknown, two at 17), so a reader can tell a schema-3 snapshot from a current face BEFORE clicking.",
+    "current": "2026-11-22 R3292 PRODUCT+DIALECT: the API-market current-reading face now states its own schema and that it is a static file, and its recorded byte sizes no longer depend on the host's line endings - the page is 37005B and its sibling json is 59515B of bare LF.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
-    "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-22 mtime] (halves differ: html [2026-11-22 mtime] + json [2026-11-16 commit]; later=html)",
-    "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-22 mtime] (halves differ: html [2026-11-22 mtime] + json [2026-11-16 commit]; later=html)",
-    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/negctl-R3290.log (582B, 2026-11-22)",
-    "latest_evidence": "qa/negctl-R3290.log (582B, 2026-11-22)",
+    "last_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20492B) [2026-11-22 mtime] (halves differ: html [2026-11-22 mtime] + json [2026-11-22 commit]; later=html)",
+    "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20492B) [2026-11-22 mtime] (halves differ: html [2026-11-22 mtime] + json [2026-11-22 commit]; later=html)",
+    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ugc-gate-report.html",
+    "latest_artifact_note": "",
+    "latest_evidence": "qa/negctl-R3292.log (400B, 2026-11-22)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3291] next window (<=48h): (0) MAIN — **14 条链接现在都指向同一张「当前输出面」，可那张页自己一个字都没提 schema**（实测 `preview/apimarket-report.html` 36850B，`schema` 出现 0 次，标题仍叫 `BigDomain API Market - Settlement Ledger`）：横幅承诺「那是当前生成器（schema 17）的输出」，可读者到了那一页无法自证。问：要不要让生成器把自己的 `REPORT_SCHEMA` 印进它渲染的页与 sibling json（并在页内说明「这是当前代码渲染的静态文件，不是实时读数」），还是保持生成器不写版本、只由来源页声明？做法＝先只读量三问：①`apimarket_report.py` 现在把哪些字段写进 html/json，加一个 `schema` 徽章会打破哪些自校闸（`test_apimarket_report*.py`、`apimarket_face_freeze` 豁免面判据、`face_sweep` 里点名该页的行）；②印出的值必须现读 `REPORT_SCHEMA`，`--check` 该怎么比才不是自比自；③代价（改生成器 + 4 张豁免面重渲 + freeze 清单里豁免段是否要跟着改 + index 尺寸重算，几轮固定点）。收口三选一＝①生成器在 html+json 里印 `schema` 与「静态文件非实时」一句，判据 `AC-APR*` 比现读数；②不改生成器，改由 index 那 13 行标签直接写「当前读数面=apimarket-report(未标 schema)」；③不动，把这条缺口写进诚实段。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：state 载体 fold_needed、tasks.md P-47 站行（零支付能力）、BigDomain-OSLoop LogonType=Interactive。",
-    "next_milestone_due": "2026-11-24T20:03:34+08:00",
-    "updated_at": "2026-11-22T20:03:34+08:00",
+    "next_milestone": "[R3292] next window (<=48h): (0) MAIN — **这张页现在能自证 schema，但它没有任何「我是什么时候渲的」的痕迹**：产出器可重跑、检查可逐字节比，可一页字节完全一致地放上一个月也照样 PASS，而底下的 demo 世界、文案与闸都在动（`acf` 七条没有一条看时间）。问：要不要让生成器/产出器在页内印一个**渲染日期**（现读系统时钟，`--check` 只要求「不早于源码与冻结清单的最后改动」这类可机械判的条件，而不是比\"今天\"），还是保持无日期、把新鲜度留给导出面？做法＝先只读量三问：①页内加日期会不会破 `AC-ACF5`（逐字节比现渲：现渲也得用同一时刻，否则永远红）——若渲染时刻必须由参数注入，`--check` 该用「文件 mtime ≈ 页内日期」还是「页内日期 ≥ 源码 mtime」；②`seed_demo` 世界是确定性的，数据会不会随时间漂移（实测：同一输入两次渲字节一致），所以「数据陈旧」这个说法今天有没有事实支撑；③代价（改模板 + 产出器 + 检查件 + 重渲 + 面清扫 13 行重跑，几轮固定点）。收口三选一＝①页内印渲染日期并由 AC-ACF8 机械判「不早于源码改动」；②不印日期，改在导出面/面清扫板写「本页上次重渲于 X」；③不动，把「新鲜度不可见」写进诚实段。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：state 载体 fold_needed=true（bytes=193842·gate=78500）、tasks.md P-47 站行（零支付能力）、BigDomain-OSLoop LogonType=Interactive。",
+    "next_milestone_due": "2026-11-24T20:18:11+08:00",
+    "updated_at": "2026-11-22T20:18:11+08:00",
     "heartbeat": {
-      "tick": 3290,
-      "state_tick": 3290,
+      "tick": 3292,
+      "state_tick": 3292,
       "lag": 0,
       "verdict": "PASS",
       "reason": "fresh"
@@ -37,9 +37,9 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-22 R3291 PRODUCT: a frozen page that says 'this is not a current reading' now also says where a current one lives. All thirteen apimarket banners carry one link to preview/apimarket-report.html, the face the current generator (schema 17) renders, and the entry page labels each of the thirteen frozen rows with its own declared schema (nine older than the generator, two unknown, two at 17), so a reader can tell a schema-3 snapshot from a current face BEFORE clicking.",
-  "claims": {"claimed": 328, "captured": 94, "contradicted": 10, "uncaptured": 224, "historic": 7, "rows": 19, "present": true, "census_ts": "2026-11-22T20:03:34+08:00"},
-  "chain": {"present": true, "rows": 19, "broken": 0, "path": "state/qa_replacements.jsonl"},
+  "current": "2026-11-22 R3292 PRODUCT+DIALECT: the API-market current-reading face now states its own schema and that it is a static file, and its recorded byte sizes no longer depend on the host's line endings - the page is 37005B and its sibling json is 59515B of bare LF.",
+  "claims": {"claimed": 330, "captured": 94, "contradicted": 10, "uncaptured": 226, "historic": 7, "rows": 21, "present": true, "census_ts": "2026-11-22T20:18:11+08:00"},
+  "chain": {"present": true, "rows": 21, "broken": 0, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -67,15 +67,15 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-22 R3291 PRODUCT: a frozen page that says 'this is not a current reading' now also says where a current one lives. All thirteen apimarket banners carry one link to preview/apimarket-report.html, the face the current generator (schema 17) renders, and the entry page labels each of the thirteen frozen rows with its own declared schema (nine older than the generator, two unknown, two at 17), so a reader can tell a schema-3 snapshot from a current face BEFORE clicking.",
-  "export_ts": "2026-11-22T20:03:34+08:00",
-  "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-22 mtime] (halves differ: html [2026-11-22 mtime] + json [2026-11-16 commit]; later=html)",
-  "latest_evidence": "qa/negctl-R3290.log (582B, 2026-11-22)",
-  "next_milestone": "[R3291] next window (<=48h): (0) MAIN — **14 条链接现在都指向同一张「当前输出面」，可那张页自己一个字都没提 schema**（实测 `preview/apimarket-report.html` 36850B，`schema` 出现 0 次，标题仍叫 `BigDomain API Market - Settlement Ledger`）：横幅承诺「那是当前生成器（schema 17）的输出」，可读者到了那一页无法自证。问：要不要让生成器把自己的 `REPORT_SCHEMA` 印进它渲染的页与 sibling json（并在页内说明「这是当前代码渲染的静态文件，不是实时读数」），还是保持生成器不写版本、只由来源页声明？做法＝先只读量三问：①`apimarket_report.py` 现在把哪些字段写进 html/json，加一个 `schema` 徽章会打破哪些自校闸（`test_apimarket_report*.py`、`apimarket_face_freeze` 豁免面判据、`face_sweep` 里点名该页的行）；②印出的值必须现读 `REPORT_SCHEMA`，`--check` 该怎么比才不是自比自；③代价（改生成器 + 4 张豁免面重渲 + freeze 清单里豁免段是否要跟着改 + index 尺寸重算，几轮固定点）。收口三选一＝①生成器在 html+json 里印 `schema` 与「静态文件非实时」一句，判据 `AC-APR*` 比现读数；②不改生成器，改由 index 那 13 行标签直接写「当前读数面=apimarket-report(未标 schema)」；③不动，把这条缺口写进诚实段。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：state 载体 fold_needed、tasks.md P-47 站行（零支付能力）、BigDomain-OSLoop LogonType=Interactive。",
+  "do": "2026-11-22 R3292 PRODUCT+DIALECT: the API-market current-reading face now states its own schema and that it is a static file, and its recorded byte sizes no longer depend on the host's line endings - the page is 37005B and its sibling json is 59515B of bare LF.",
+  "export_ts": "2026-11-22T20:18:11+08:00",
+  "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20492B) [2026-11-22 mtime] (halves differ: html [2026-11-22 mtime] + json [2026-11-22 commit]; later=html)",
+  "latest_evidence": "qa/negctl-R3292.log (400B, 2026-11-22)",
+  "next_milestone": "[R3292] next window (<=48h): (0) MAIN — **这张页现在能自证 schema，但它没有任何「我是什么时候渲的」的痕迹**：产出器可重跑、检查可逐字节比，可一页字节完全一致地放上一个月也照样 PASS，而底下的 demo 世界、文案与闸都在动（`acf` 七条没有一条看时间）。问：要不要让生成器/产出器在页内印一个**渲染日期**（现读系统时钟，`--check` 只要求「不早于源码与冻结清单的最后改动」这类可机械判的条件，而不是比\"今天\"），还是保持无日期、把新鲜度留给导出面？做法＝先只读量三问：①页内加日期会不会破 `AC-ACF5`（逐字节比现渲：现渲也得用同一时刻，否则永远红）——若渲染时刻必须由参数注入，`--check` 该用「文件 mtime ≈ 页内日期」还是「页内日期 ≥ 源码 mtime」；②`seed_demo` 世界是确定性的，数据会不会随时间漂移（实测：同一输入两次渲字节一致），所以「数据陈旧」这个说法今天有没有事实支撑；③代价（改模板 + 产出器 + 检查件 + 重渲 + 面清扫 13 行重跑，几轮固定点）。收口三选一＝①页内印渲染日期并由 AC-ACF8 机械判「不早于源码改动」；②不印日期，改在导出面/面清扫板写「本页上次重渲于 X」；③不动，把「新鲜度不可见」写进诚实段。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：state 载体 fold_needed=true（bytes=193842·gate=78500）、tasks.md P-47 站行（零支付能力）、BigDomain-OSLoop LogonType=Interactive。",
   "outs": [
-    "preview/apimarket-report-slowanswer.html (12555B) + preview/apimarket-report-slowanswer.json (18381B) [2026-11-22 mtime] (halves differ: html [2026-11-22 mtime] + json [2026-10-25 commit]; later=html)",
+    "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20492B) [2026-11-22 mtime] (halves differ: html [2026-11-22 mtime] + json [2026-11-22 commit]; later=html)",
+    "preview/apimarket-report-slowanswer.html (13022B) + preview/apimarket-report-slowanswer.json (18381B) [2026-11-22 mtime] (halves differ: html [2026-11-22 mtime] + json [2026-10-25 commit]; later=html)",
     "preview/start-here.html (41366B) + preview/start-here.json (3298B) [2026-11-22 mtime]",
-    "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20492B) [2026-11-22 mtime]",
     "probe-R3243.log (2178B) + suite-ugc-gate-R3243.log (3094B)",
     "preview/apimarket-monthly-faces.html (7545B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "preview/ledger-business-report.html (5970B) + preview/ledger-business-report.json (1233B) [2026-11-20 commit]",
@@ -142,7 +142,7 @@
       "2026-11-04 R2431 verification window on the item the debt gate named first=yes (reconcile-battery-R2431, carried from R2430): zero product code changed, the R2168 mixed-tree rule honoured. Leg 1 read 542/543 suites with the criteria total 4234 exactly as pre-registered and the only red was reconcile-daily-census at cd7 exit=2 DRIFT-FLAG; the census named the file (qa/battery-R2431-stdout.log, class=cmd-raw) because this window launched the battery with a Start-Process redirect pointed INTO the evidence directory. Repaired at the birth site, never by widening the baseline: the two launcher captures moved to the gitignored logs/ face, after which the census read flags=0 DRIFT-CLEAN with the 529-entry baseline untouched. Retry leg on the repaired tree: RUNNER PASS 543/543 suites plus controls 7/7 in 956.2s at criteria 4234, TMP RECLAIM 932/932. Four follow-up sections: matrix FAILED first on the stale doc without rewriting it, was regenerated stamp-aligned to 52317B, and the re-run read VERDICT R2431 PASS failing=none (fingerprint CLEAN 5 domains, profile byte-identical, census DRIFT-CLEAN). Debt: reconcile-battery-R2431 closed and product-face-R2432 opened first=yes through the shipped CLIs. Zero product points claimed."
     ],
     [
-      "3290",
+      "3292",
       "OSLoop 执行 tick",
       "a failed fold state write takes the appended archive block back and removes the backup"
     ]
@@ -156,21 +156,21 @@
   "self_drive": {
     "window": "2026-11-16..2026-11-22",
     "window_days": 7,
-    "log_lines_in_window": 250,
+    "log_lines_in_window": 272,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 35,
+    "substantive_non_idle_mention_lines": 37,
     "proposals_total": 11,
     "proposals_open": 9,
     "queue_main_open": 6,
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 186637,
-  "next_milestone_due": "2026-11-24T20:03:34+08:00",
+  "state_bytes": 193842,
+  "next_milestone_due": "2026-11-24T20:18:11+08:00",
   "heartbeat": {
-    "tick": 3290,
-    "state_tick": 3290,
+    "tick": 3292,
+    "state_tick": 3292,
     "lag": 0,
     "verdict": "PASS",
     "reason": "fresh"
