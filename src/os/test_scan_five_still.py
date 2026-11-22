@@ -1,4 +1,4 @@
-"""Battery suite for src/os/scan_five_still.py - criteria AC-SFS1..AC-SFS7.
+"""Battery suite for src/os/scan_five_still.py - criteria AC-SFS1..AC-SFS8.
 
 WHY: the group ledger writes wildcard forms ("no reply cites D-20261114-0x") and
 a token regex without a right-hand boundary harvests D-20261114-0 out of them,
@@ -45,6 +45,23 @@ def live_code(text):
     body = re.sub(r'<#.*?#>', '', text, flags=re.S)
     return '\n'.join(ln for ln in body.splitlines()
                      if not ln.lstrip().startswith('#'))
+
+
+def twin_law(text):
+    """The revival law for the dead twin, as a reading of its own bytes.
+
+    R3328 named the divergence in the header; R3330 asked whether a revival
+    would be noticed. The reading below is the answer: the header must say the
+    file is dead, and while any @BigDomain selector is still a plain substring
+    test the header must name the divergence it would reintroduce. Measured
+    before shipping - two live substring sites, both in the ledger and group
+    orders selectors, and the header names both forms.
+    """
+    head = text.split('import io', 1)[0]
+    status = 'DEAD CODE, NAMED' in head and 'zero production callers' in head
+    sub_sites = len(re.findall(r'"@BigDomain" in', text))
+    clause = 'KNOWN DIVERGENCE' in head and '@BigDomainX' in head
+    return status, sub_sites, clause
 
 
 def ok(name, cond, detail=''):
@@ -162,6 +179,32 @@ def main():
            'invoke=%s' % (inv[0].strip()[:60] if inv else 'none'))
     else:
         ok('AC-SFS7 the ps1 scanner is missing', False, 'path=%s' % SCAN_PS1)
+
+    # AC-SFS8 (R3330): the dead twin's revival law. R3328 named the divergence
+    # in the header but left nothing that would notice a revival; the board's
+    # own test was "can a text pin hold the header without executing the twin".
+    # Two readings, both on bytes: the header's dead-code claim, and the
+    # divergence clause bound to the substring selectors that create it.
+    status, sub_sites, clause = twin_law(src)
+    ok('AC-SFS8 the twin header names its dead-code status', status,
+       'status_named=%s' % status)
+    ok('AC-SFS8 a live @BigDomain substring selector still names its divergence',
+       sub_sites == 0 or clause, 'substring_sites=%d clause=%s'
+       % (sub_sites, clause))
+    ds, _, _ = twin_law(src.replace('DEAD CODE, NAMED', 'SCANNER'))
+    ok('AC-SFS8 a stripped header reddens the same reading', not ds,
+       'decoy_status=%s' % ds)
+    named_in = []
+    for p in (os.path.join(ROOT, 'src', 'os', 'iteration_loop.ps1'),
+              os.path.join(ROOT, 'src', 'os', 'register_loop_task.ps1'),
+              os.path.join(ROOT, 'src', 'os', 'iteration_prompt.txt'),
+              SKILL_MD):
+        if os.path.isfile(p):
+            t = io.open(p, 'r', encoding='utf-8-sig', errors='replace').read()
+            if 'scan_five_still.py' in t:
+                named_in.append(os.path.basename(p))
+    ok('AC-SFS8 no production entry names the dead twin', not named_in,
+       'named_in=%s' % named_in)
 
     # Declared units (R2860): the AC inventory below is derived from CHECKS,
     # never echoed from the registry - a declaration copied out of the

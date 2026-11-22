@@ -1,0 +1,21 @@
+SECTION 1 - atbd_rows>0 in shipped evidence (would a gate be red?)
+  reading probe-R3327.log              atbd_rows=1   kind=SYNTHETIC  receipted_note=no
+  reading probe-R3327.log              atbd_rows=1   kind=SYNTHETIC  receipted_note=no
+  reading probe-R3327.log              atbd_rows=1   kind=SYNTHETIC  receipted_note=no
+  reading probe-R3327.log              atbd_rows=1   kind=SYNTHETIC  receipted_note=no
+  reading probe-R3327.log              atbd_rows=1   kind=SYNTHETIC  receipted_note=no
+  reading probe-R3327.log              atbd_rows=1   kind=SYNTHETIC  receipted_note=no
+  reading recovery-R846.log            atbd_rows=26  kind=production receipted_note=YES
+  reading reorg-R1286.log              atbd_rows=26  kind=production receipted_note=no
+  reading scan-gord-R763.log           atbd_rows=26  kind=production receipted_note=no
+  reading scan-ord-drift-R2001.log     atbd_rows=7   kind=production receipted_note=no
+  reading scan-origin-R737.log         atbd_rows=26  kind=production receipted_note=no
+  SUMMARY windows_with_rows=11 production_logs=5 synthetic_lines=6 gated_would_red=11
+SECTION 2 - revival law read from bytes (no execution)
+  live  status=True substring_sites=2 divergence_clause=True
+  decoy status=False substring_sites=2 divergence_clause=True stripped_header=YES
+  production_entries_naming_twin=[] checked=4
+SECTION 3 - install-copy state: one implementation or two?
+  Get-InstallState sites=1 [('src', 'src\\os\\test_scan_faces.ps1')]
+  harness_defs=1 harness_call_lines=5
+  verdict=single-point

@@ -1,0 +1,7 @@
+ARM 1 header moved below the imports
+  naive_anywhere=True
+  shipped_head_only=False
+  naive_green_shipped_red=True
+ARM 2 a legitimate @BigDomain dispatch row
+  atbd_rows=1 naive_gate_exit=2
+  naive_gate_red_on_normal_window=True
