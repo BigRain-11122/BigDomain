@@ -1,104 +1,125 @@
 {
-  "face": "start-here",
-  "title": "从这里开始 · 这台机器上你今天能亲手做什么",
-  "h1": "从这里开始",
-  "sub_fmt": "本仓 {faces} 张预览面，其中 {operable} 张接受你的操作；其余都是只读报告。双击本文件即开，零外链、零网络。",
-  "count_faces": "张预览面（全仓）",
-  "count_operable": "张能动手的面",
-  "kind_counts_head": "同样是「能动手」，点了会改变什么并不一样——分档读自每张面自己的脚本，不是手写：",
-  "kind_tags": {
-    "persists": "本机留存",
-    "screen": "仅屏上",
-    "wires": "仅接线",
-    "inert": "无派生"
+ "face": "start-here",
+ "title": "从这里开始 · 这台机器上你今天能亲手做什么",
+ "h1": "从这里开始",
+ "sub_fmt": "本仓 {faces} 张预览面，其中 {operable} 张接受你的操作；其余都是只读报告。双击本文件即开，零外链、零网络。",
+ "count_faces": "张预览面（全仓）",
+ "count_operable": "张能动手的面",
+ "kind_counts_head": "同样是「能动手」，点了会改变什么并不一样——分档读自每张面自己的脚本，不是手写：",
+ "kind_tags": {
+  "persists": "本机留存",
+  "screen": "仅屏上",
+  "wires": "仅接线",
+  "inert": "无派生"
+ },
+ "kind_notes": {
+  "persists": "勾选/筛选写在本机浏览器存储里，刷新页面还在；存进去的东西下次读不读得回来，本页不判断。",
+  "screen": "状态只活在当前页面里，刷新即失；脚本确实在改屏上读数，改得对不对本页不判断。",
+  "wires": "脚本只挂了监听，本页没有可看见的派生读数。",
+  "inert": "控件在，但后面没有脚本消费它，点了只动浏览器自己的勾选态。"
+ },
+ "kind_absent": "本档今天为 0：没有任何面落在「{tag}」这一档。",
+ "keys_head": "「本机留存」的面各有自己的存储键：下面逐张印出它写几个键、读几个键、读的键是不是从它自己写的键来的（按脚本里的符号配对，全程不执行 JS）：",
+ "keys_fmt": "写 {write} 个键 / 读 {read} 个键；读到的键基座：{paired}；键里用到的未声明符号 {unresolved} 个。",
+ "keys_paired_word": "来自同一组符号",
+ "keys_orphan_word": "有读无写（基座不同）",
+ "keys_absent": "今天没有一张可操作面读到自己没写过的键。",
+ "keys_orphan_fmt": "读的键 {read} / 写的键 {write}——读到的键基座不来自它自己写的键，刷新后可能读不回来。",
+ "keys_unresolved_absent": "今天没有一张可操作面用未声明的符号当键。",
+ "keys_unresolved_fmt": "键表达式里用到的符号 {symbols} 在这张面里从未声明——在浏览器里等于往 undefined 写。",
+ "keys_outside_fmt": "另有 {n} 张面含存储调用但没有可操作控件，未列入上面逐张清单：{names}。",
+ "keys_count_tags": {
+  "persists": "张面用了本机存储",
+  "expr_paired": "写读表达式相同",
+  "base_paired": "写读基座同源",
+  "orphan": "有读无写",
+  "unresolved": "键用未声明符号",
+  "outside": "含存储但无控件（未列入）"
+ },
+ "tiers_head": "键的来源分档（可变部分从哪来，追一层赋值）：写键与读键各自归入一档，跨档的面会单独具名——",
+ "tier_tags": {
+  "literal": "字面量写死",
+  "const": "常量符号",
+  "loop": "循环变量",
+  "runtime": "运行时值",
+  "dom": "DOM 属性"
+ },
+ "tiers_fmt": "键来源：写={write} / 读={read} · {same}。档位只说明可变部分从哪来，不证明拼出的键名相同。",
+ "tiers_same_word": "同档（来源同类）",
+ "tiers_cross_word": "跨档（两边来源不同类）",
+ "tiers_noread_word": "只写不读（本面无取值）",
+ "tiers_noread": "无读键",
+ "tier_count_tags": {
+  "cross": "张面写读跨档",
+  "noread": "张面只写不读"
+ },
+ "tier_cross_fmt": "写键 {write}（{wt}）/ 读键 {read}（{rt}）——两边可变部分来源不同类，键名是否相等本读数不判断。",
+ "tier_cross_absent": "今天没有一张面的写键与读键跨档。",
+ "h2_can": "能动手的 {operable} 张面（逐个点开）",
+ "h2_cannot": "今天还不能做的事（缺口列在这里，不藏在别处）",
+ "h2_rule": "三条常驻说明",
+ "can_tag": "这一步能做什么",
+ "cannot_tag": "它不能证明什么",
+ "open_link": "打开这张面",
+ "missing_head_fmt": "要让买家真能付钱，还缺 {n} 项 CEO 物理件；勾选与演示都不能代替它们。",
+ "missing_absent": "没有缺口项在册（若出现这句，说明数据件已空，须人工核对）。",
+ "missing_tail": "接入自查单把 8 项（含我方 2 项证据）逐项列出并现场重算证据：merchant-onboard.html",
+ "notices": {
+  "aigc": "AI 生成标识：本页由 AI 参与生成并整理，数字均为本机实测派生。",
+  "advice": "非投顾提示：本页与全部预览面不构成任何投资建议。",
+  "mock": "MOCK：本页列出的支付、账本、权益流程全部是页内模拟，不接真实资金通道。"
+ },
+ "faces": {
+  "buyer-trial.html": {
+   "label": "买家试用镜",
+   "can": "点一件商品下单、走 MOCK 支付、看现金账与代币账各自配平、拿到权益与收据，并点『重复回调』自证同一订单只入账一次。",
+   "cannot": "不能真收钱：没有商户号、结算主体、服务器与域名、备案+ICP、小程序 appid+secret。"
   },
-  "kind_notes": {
-    "persists": "勾选/筛选写在本机浏览器存储里，刷新页面还在；存进去的东西下次读不读得回来，本页不判断。",
-    "screen": "状态只活在当前页面里，刷新即失；脚本确实在改屏上读数，改得对不对本页不判断。",
-    "wires": "脚本只挂了监听，本页没有可看见的派生读数。",
-    "inert": "控件在，但后面没有脚本消费它，点了只动浏览器自己的勾选态。"
+  "merchant-onboard.html": {
+   "label": "商户号接入自查单",
+   "can": "看 8 项缺口（6 项 CEO 物理件 + 2 项我方证据），逐项勾自述进度，并同时看到『自述 k/6』与『有证据 m/8』两个计数器。",
+   "cannot": "自述不是验证；两项证据只证沙箱回调与页内账簿自洽，不证明真实商户通道可用；本页永远不收密钥值。"
   },
-  "kind_absent": "本档今天为 0：没有任何面落在「{tag}」这一档。",
-  "keys_head": "「本机留存」的面各有自己的存储键：下面逐张印出它写几个键、读几个键、读的键是不是从它自己写的键来的（按脚本里的符号配对，全程不执行 JS）：",
-  "keys_fmt": "写 {write} 个键 / 读 {read} 个键；读到的键基座：{paired}；键里用到的未声明符号 {unresolved} 个。",
-  "keys_paired_word": "来自同一组符号",
-  "keys_orphan_word": "有读无写（基座不同）",
-  "keys_absent": "今天没有一张可操作面读到自己没写过的键。",
-  "keys_orphan_fmt": "读的键 {read} / 写的键 {write}——读到的键基座不来自它自己写的键，刷新后可能读不回来。",
-  "keys_unresolved_absent": "今天没有一张可操作面用未声明的符号当键。",
-  "keys_unresolved_fmt": "键表达式里用到的符号 {symbols} 在这张面里从未声明——在浏览器里等于往 undefined 写。",
-  "keys_outside_fmt": "另有 {n} 张面含存储调用但没有可操作控件，未列入上面逐张清单：{names}。",
-  "keys_count_tags": {
-    "persists": "张面用了本机存储",
-    "expr_paired": "写读表达式相同",
-    "base_paired": "写读基座同源",
-    "orphan": "有读无写",
-    "unresolved": "键用未声明符号",
-    "outside": "含存储但无控件（未列入）"
+  "money-path-demo.html": {
+   "label": "收款演练（MOCK）",
+   "can": "按打勾步骤走一遍收款到入权益的钱路，看每一步的页内读数。",
+   "cannot": "全程页内模拟：没有一笔真实资金移动，也没有真实订单落在任何支付平台。"
   },
-  "tiers_head": "键的来源分档（可变部分从哪来，追一层赋值）：写键与读键各自归入一档，跨档的面会单独具名——",
-  "tier_tags": {
-    "literal": "字面量写死",
-    "const": "常量符号",
-    "loop": "循环变量",
-    "runtime": "运行时值",
-    "dom": "DOM 属性"
+  "filing-checklist.html": {
+   "label": "小程序备案执行清单",
+   "can": "逐项勾选备案执行步骤，进度存在本机浏览器里，可随时回来接着勾。",
+   "cannot": "勾选是本机自述，不是平台受理回执；本仓没有备案号。"
   },
-  "tiers_fmt": "键来源：写={write} / 读={read} · {same}。档位只说明可变部分从哪来，不证明拼出的键名相同。",
-  "tiers_same_word": "同档（来源同类）",
-  "tiers_cross_word": "跨档（两边来源不同类）",
-  "tiers_noread_word": "只写不读（本面无取值）",
-  "tiers_noread": "无读键",
-  "tier_count_tags": {
-    "cross": "张面写读跨档",
-    "noread": "张面只写不读"
+  "ship-checklist.html": {
+   "label": "上线前置清单",
+   "can": "逐项勾选上线前的硬门（AIGC 标识、msgSecCheck 前置闸等），进度本地留存。",
+   "cannot": "勾满不等于可上线：支付通道、备案、服务器等物理件仍缺。"
   },
-  "tier_cross_fmt": "写键 {write}（{wt}）/ 读键 {read}（{rt}）——两边可变部分来源不同类，键名是否相等本读数不判断。",
-  "tier_cross_absent": "今天没有一张面的写键与读键跨档。",
-  "h2_can": "能动手的 {operable} 张面（逐个点开）",
-  "h2_cannot": "今天还不能做的事（缺口列在这里，不藏在别处）",
-  "h2_rule": "三条常驻说明",
-  "can_tag": "这一步能做什么",
-  "cannot_tag": "它不能证明什么",
-  "open_link": "打开这张面",
-  "missing_head_fmt": "要让买家真能付钱，还缺 {n} 项 CEO 物理件；勾选与演示都不能代替它们。",
-  "missing_absent": "没有缺口项在册（若出现这句，说明数据件已空，须人工核对）。",
-  "missing_tail": "接入自查单把 8 项（含我方 2 项证据）逐项列出并现场重算证据：merchant-onboard.html",
-  "notices": {
-    "aigc": "AI 生成标识：本页由 AI 参与生成并整理，数字均为本机实测派生。",
-    "advice": "非投顾提示：本页与全部预览面不构成任何投资建议。",
-    "mock": "MOCK：本页列出的支付、账本、权益流程全部是页内模拟，不接真实资金通道。"
-  },
-  "faces": {
-    "buyer-trial.html": {
-      "label": "买家试用镜",
-      "can": "点一件商品下单、走 MOCK 支付、看现金账与代币账各自配平、拿到权益与收据，并点『重复回调』自证同一订单只入账一次。",
-      "cannot": "不能真收钱：没有商户号、结算主体、服务器与域名、备案+ICP、小程序 appid+secret。"
-    },
-    "merchant-onboard.html": {
-      "label": "商户号接入自查单",
-      "can": "看 8 项缺口（6 项 CEO 物理件 + 2 项我方证据），逐项勾自述进度，并同时看到『自述 k/6』与『有证据 m/8』两个计数器。",
-      "cannot": "自述不是验证；两项证据只证沙箱回调与页内账簿自洽，不证明真实商户通道可用；本页永远不收密钥值。"
-    },
-    "money-path-demo.html": {
-      "label": "收款演练（MOCK）",
-      "can": "按打勾步骤走一遍收款到入权益的钱路，看每一步的页内读数。",
-      "cannot": "全程页内模拟：没有一笔真实资金移动，也没有真实订单落在任何支付平台。"
-    },
-    "filing-checklist.html": {
-      "label": "小程序备案执行清单",
-      "can": "逐项勾选备案执行步骤，进度存在本机浏览器里，可随时回来接着勾。",
-      "cannot": "勾选是本机自述，不是平台受理回执；本仓没有备案号。"
-    },
-    "ship-checklist.html": {
-      "label": "上线前置清单",
-      "can": "逐项勾选上线前的硬门（AIGC 标识、msgSecCheck 前置闸等），进度本地留存。",
-      "cannot": "勾满不等于可上线：支付通道、备案、服务器等物理件仍缺。"
-    },
-    "lobby-protocol-map.html": {
-      "label": "大厅协议图",
-      "can": "在过滤框里输入消息前缀或判据号，筛出对应的协议节点与判据覆盖。",
-      "cannot": "只读派生视图：不改任何协议，也不连任何服务器。"
-    }
+  "lobby-protocol-map.html": {
+   "label": "大厅协议图",
+   "can": "在过滤框里输入消息前缀或判据号，筛出对应的协议节点与判据覆盖。",
+   "cannot": "只读派生视图：不改任何协议，也不连任何服务器。"
   }
+ },
+ "attrs_head": "存储键的属性名（R3256）：分档只说「两侧的可变部分从哪来」，说不出「两侧取的是不是同一个属性」。下表把两侧的 getAttribute 属性名并排印出——同名才可比，异名即为具名不可比；只有一侧有属性、两侧都没有、以及参数不是字面量（判不出来的）各自单独计数，不混进同名。",
+ "attrs_fmt": "写的属性：{write} ｜ 读的属性：{read} ｜ {verdict}",
+ "attrs_none": "（无）",
+ "attr_words": {
+  "same-name": "两侧同名·可比",
+  "different": "两侧异名·不可比",
+  "one-side": "只有一侧有属性·不判",
+  "no-attr": "两侧都没有属性·不判",
+  "unknown": "参数不是字面量·不猜"
+ },
+ "attr_count_tags": {
+  "same-name": "两侧同名",
+  "different": "两侧异名",
+  "one-side": "仅一侧有属性",
+  "no-attr": "无属性",
+  "unknown": "参数不可判"
+ },
+ "attrs_different_fmt": "两侧属性名不同（不可比）：写侧 {write} / 读侧 {read}——同一张面里两边取的是不同属性，键名不会相等。",
+ "attrs_different_absent": "本轮没有两侧属性名不同的面（不是没判，是都判过了）。",
+ "attrs_unknown_fmt": "有 {calls} 处 getAttribute 的参数不是字面量，属性名判不出来，没有被算进同名。",
+ "attrs_unknown_absent": "本轮没有参数判不出来的 getAttribute（不是没判，是都判过了）。"
 }

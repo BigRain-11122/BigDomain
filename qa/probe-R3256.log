@@ -1,0 +1,15 @@
+face=filing-checklist.html write_attrs=[] read_attrs=[] shared=[] verdict=no-attr tiers=const/const
+face=lobby-protocol-map.html write_attrs=[] read_attrs=[] shared=[] verdict=no-attr tiers=const/const
+face=lobby-session-trace.html write_attrs=[] read_attrs=[] shared=[] verdict=no-attr tiers=const/const
+face=membership-face.html write_attrs=[] read_attrs=[] shared=[] verdict=no-attr tiers=const/const
+face=merchant-onboard.html write_attrs=[] read_attrs=[] shared=[] verdict=no-attr tiers=const/const
+face=money-path-demo.html write_attrs=['data-ck'] read_attrs=['data-ck'] shared=['data-ck'] verdict=same-name tiers=dom/dom
+face=ship-checklist.html write_attrs=[] read_attrs=[] shared=[] verdict=no-attr tiers=const/const
+
+LIVE CENSUS faces_with_storage=7 same-name=1 different=0 one-side=0 no-attr=6
+WORLD same-name: write=['data-ck'] read=['data-ck'] shared=['data-ck'] -> same-name
+WORLD different-name: write=['data-ck'] read=['data-key'] shared=[] -> DIFFERENT
+WORLD no-attr: write=[] read=[] -> no-attr
+
+COST 7 faces attributed in 0.0206s (raw text already in memory from scan_faces; no second read of disk)
+PAGE now 15211B html / 871B json

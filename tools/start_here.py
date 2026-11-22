@@ -205,6 +205,105 @@ def tier_reading(text, keys=None):
             "write_tier": write_tier, "read_tier": read_tier, "same": same}
 
 
+# The tier says where the variable part comes from; it does not say the two sides name
+# the SAME attribute. A face writing NS+':'+this.getAttribute('data-ck') and reading
+# NS+':'+kk (kk = T[n].getAttribute('data-ck')) draws both sides from one attribute
+# name - and a copy that renamed either side would still read dom/dom. The name lives
+# in the raw bytes only, because key_reading blanked every string literal.
+ATTR_GET = re.compile(r"getAttribute\s*\(\s*(?:'([^']*)'|\"([^\"]*)\"|([A-Za-z_$][\w$]*))")
+RAW_ASSIGN = re.compile(r"(?:var|let|const)\s+([A-Za-z_$][\w$]*)\s*=\s*([^;]{0,240})")
+ATTR_NONE = "none"
+ATTR_VERDICTS = ("same-name", "different", "one-side", "no-attr", "unknown")
+
+
+def _blank_strings(text):
+    """Blank string literals in place so offsets still line up with the raw bytes: a
+    call is located on the blanked copy and its argument sliced from the raw copy."""
+    def swap(match):
+        body = match.group(0)
+        return body[0] + " " * (len(body) - 2) + body[-1]
+
+    return STR.sub(swap, text)
+
+
+def _attr_tokens(expr):
+    """Attribute names a RAW expression names, plus how many getAttribute calls take a
+    variable argument (those are not guessed)."""
+    names, unknown = set(), 0
+    for match in ATTR_GET.finditer(expr):
+        literal = match.group(1) if match.group(1) is not None else match.group(2)
+        if literal:
+            names.add(literal)
+        else:
+            unknown += 1
+    return names, unknown
+
+
+def _attr_names(raw, blanked, expr, hops=1):
+    """Attribute names one side rests on, one hop through declared names. Identifiers
+    are followed but never reported as attributes."""
+    names, unknown = _attr_tokens(expr)
+    frontier = set(_key_symbols(expr))
+    visited = set(frontier)
+    for _ in range(hops):
+        nxt = set()
+        for name in sorted(frontier):
+            for match in RAW_ASSIGN.finditer(blanked):
+                if match.group(1) != name:
+                    continue
+                rhs = raw[match.start(2):match.start(2) + len(match.group(2))]
+                got, bad = _attr_tokens(rhs)
+                names |= got
+                unknown += bad
+                nxt |= set(_key_symbols(rhs))
+                break
+        frontier = nxt - visited
+        visited |= nxt
+    return names, unknown
+
+
+def _attr_sides(raw, blanked):
+    """The storage key argument as written, per side (strings intact)."""
+    sides = {"setItem": [], "getItem": []}
+    for match in CALL.finditer(blanked):
+        kind = match.group(1)
+        if kind not in sides:
+            continue
+        arg = _first_arg(raw, match.end() - 1)
+        if arg.strip():
+            sides[kind].append(arg)
+    return sides
+
+
+def attr_reading(text, keys=None):
+    """Whether the two sides of a storage key name the same DOM attribute. Text only:
+    the attribute name is compared, the element identity is NOT decided here."""
+    keys = keys or key_reading(text)
+    blanked = _blank_strings(text)
+    sides = _attr_sides(text, blanked)
+    write, w_bad = set(), 0
+    read, r_bad = set(), 0
+    for expr in sides["setItem"]:
+        got, bad = _attr_names(text, blanked, expr)
+        write |= got
+        w_bad += bad
+    for expr in sides["getItem"]:
+        got, bad = _attr_names(text, blanked, expr)
+        read |= got
+        r_bad += bad
+    shared = sorted(write & read)
+    if w_bad or r_bad:
+        verdict = "unknown"
+    elif write and read:
+        verdict = "same-name" if shared else "different"
+    elif write or read:
+        verdict = "one-side"
+    else:
+        verdict = "no-attr"
+    return {"write": sorted(write), "read": sorted(read), "shared": shared,
+            "unknown": w_bad + r_bad, "verdict": verdict}
+
+
 def scan_faces():
     """Per preview face: how many controls it carries, what a click can change, and
     whether it leaves the machine."""
@@ -226,6 +325,7 @@ def scan_faces():
         if row["storage"]:
             row["keys"] = key_reading(text)
             row["tiers"] = tier_reading(text, row["keys"])
+            row["attrs"] = attr_reading(text, row["keys"])
         rows[name] = row
     return rows
 
@@ -278,6 +378,12 @@ def projection():
             tier_counts[got] += 1
     tier_cross = [n for n in key_faces if rows[n]["tiers"]["same"] == "cross"]
     tier_noread = [n for n in key_faces if rows[n]["tiers"]["same"] == "noread"]
+    attr_counts = {verdict: 0 for verdict in ATTR_VERDICTS}
+    for name in key_faces:
+        attr_counts[rows[name]["attrs"]["verdict"]] += 1
+    attr_different = [n for n in key_faces
+                      if rows[n]["attrs"]["verdict"] == "different"]
+    attr_unknown = [n for n in key_faces if rows[n]["attrs"]["verdict"] == "unknown"]
     return {
         "rows": rows,
         "doc": doc,
@@ -295,6 +401,9 @@ def projection():
         "tier_counts": tier_counts,
         "tier_cross": tier_cross,
         "tier_noread": tier_noread,
+        "attr_counts": attr_counts,
+        "attr_different": attr_different,
+        "attr_unknown": attr_unknown,
         "missing": missing_ceo_items(),
         "data16": sha16(DATA),
     }
@@ -338,6 +447,20 @@ def tier_phrase(doc, tiers):
         write=tier_tag(doc, tiers["write_tier"]), read=read, same=word)
 
 
+def attr_word(doc, verdict):
+    return ((doc.get("attr_words") or {}).get(verdict) or verdict)
+
+
+def attr_phrase(doc, attrs):
+    """One face's attribute names in words. An empty side prints the word for 'none',
+    so 'no attribute here' never reads as 'could not tell'."""
+    none = doc.get("attrs_none") or ATTR_NONE
+    return (doc.get("attrs_fmt") or "").format(
+        write=" , ".join(attrs["write"]) or none,
+        read=" , ".join(attrs["read"]) or none,
+        verdict=attr_word(doc, attrs["verdict"]))
+
+
 def render(proj):
     doc = proj["doc"]
     faces = doc.get("faces") or {}
@@ -371,17 +494,26 @@ def render(proj):
                            esc(tier_phrase(doc, tiers))))
         else:
             tierline = ""
+        if "attrs" in proj["rows"][name]:
+            attrs = proj["rows"][name]["attrs"]
+            attrline = ('    <p class="attrline" data-attrs="%s" data-attrs-write="%s" '
+                        'data-attrs-read="%s" data-attrs-verdict="%s">%s</p>\n'
+                        % (esc(name), esc(",".join(attrs["write"])),
+                           esc(",".join(attrs["read"])), esc(attrs["verdict"]),
+                           esc(attr_phrase(doc, attrs))))
+        else:
+            attrline = ""
         cards.append(
             '  <article class="face" data-face="%s">\n'
             '    <h3><a href="%s">%s</a> <code>%s</code></h3>\n'
             '    <p class="kindline"><span class="kbadge" data-kind="%s">%s</span></p>\n'
-            '%s%s'
+            '%s%s%s'
             '    <p><b>%s</b>%s</p>\n'
             '    <p class="limit"><b>%s</b>%s</p>\n'
             '    <p><a class="go" href="%s">%s &rarr;</a></p>\n'
             '  </article>\n' % (
                 esc(name), esc(name), esc(label), esc(name),
-                esc(kind), esc(kind_tag(doc, kind)), keyline, tierline,
+                esc(kind), esc(kind_tag(doc, kind)), keyline, tierline, attrline,
                 esc(doc["can_tag"]), esc(can),
                 esc(doc["cannot_tag"]), esc(cannot),
                 esc(name), esc(doc["open_link"]),
@@ -475,10 +607,46 @@ def render(proj):
                    '  </div>\n  <div class="legend tiers">\n%s\n  </div>'
                    % (esc(doc.get("tiers_head", "")), tier_counts_html,
                       "\n".join(tier_notes)))
+    attr_tags = doc.get("attr_count_tags") or {}
+    attr_counts_html = "\n".join(
+        '  <span class="kc" data-attr-count="%s"><b>%d</b>%s</span>'
+        % (verdict, proj["attr_counts"][verdict],
+           esc(attr_tags.get(verdict) or attr_word(doc, verdict)))
+        for verdict in ATTR_VERDICTS
+    )
+    attr_notes = []
+    for name in proj["attr_different"] or [None]:
+        if not name:
+            attr_notes.append('  <p data-attrs-different-absent>%s</p>'
+                              % esc(doc.get("attrs_different_absent") or ""))
+            continue
+        attrs = proj["rows"][name]["attrs"]
+        attr_notes.append(
+            '  <p data-attrs-different="%s" data-attrs-write="%s" data-attrs-read="%s">'
+            '%s</p>'
+            % (esc(name), esc(",".join(attrs["write"])), esc(",".join(attrs["read"])),
+               esc((doc.get("attrs_different_fmt") or "").format(
+                   write=" , ".join(attrs["write"]) or doc.get("attrs_none", ""),
+                   read=" , ".join(attrs["read"]) or doc.get("attrs_none", "")))))
+    for name in proj["attr_unknown"] or [None]:
+        if not name:
+            attr_notes.append('  <p data-attrs-unknown-absent>%s</p>'
+                              % esc(doc.get("attrs_unknown_absent") or ""))
+            continue
+        attrs = proj["rows"][name]["attrs"]
+        attr_notes.append(
+            '  <p data-attrs-unknown="%s" data-attrs-calls="%d">%s</p>'
+            % (esc(name), attrs["unknown"],
+               esc((doc.get("attrs_unknown_fmt") or "").format(calls=attrs["unknown"]))))
+    attrs_block = ('  <p class="kindshead">%s</p>\n  <div class="counts kinds">\n%s\n'
+                   '  </div>\n  <div class="legend attrs">\n%s\n  </div>'
+                   % (esc(doc.get("attrs_head", "")), attr_counts_html,
+                      "\n".join(attr_notes)))
     keys_block = ('  <p class="kindshead">%s</p>\n  <div class="counts kinds">\n%s\n'
-                  '  </div>\n  <div class="legend keys">\n%s\n  </div>\n%s'
+                  '  </div>\n  <div class="legend keys">\n%s\n  </div>\n%s\n%s'
                   % (esc(doc.get("keys_head", "")), key_counts_html,
-                     "\n".join(keys_notes), tiers_block))
+                     "\n".join(keys_notes), tiers_block, attrs_block))
+
     if proj["missing"]:
         items = "\n".join(
             '    <li data-ceo-item="%s"><b>%s</b> &mdash; %s</li>'
@@ -592,6 +760,9 @@ def write():
         "kind_counts": proj["kind_counts"],
         "tier_counts": proj["tier_counts"],
         "tier_cross": proj["tier_cross"],
+        "attr_counts": proj["attr_counts"],
+        "attr_different": proj["attr_different"],
+        "attr_unknown": proj["attr_unknown"],
         "missing_ceo_items": [row["id"] for row in proj["missing"]],
         "sizes": {"html_bytes": len(html.encode("utf-8"))},
     }
@@ -815,20 +986,70 @@ def check():
             failures.append("SH12 cross:%s page=%s fresh=%s"
                             % (name, got.groups() if got else "absent", want))
 
+    # AC-SH13: the tier says both sides are dom-derived; it does not say they name the
+    # same attribute. Every storage face prints the attribute names it writes and reads
+    # plus the verdict, every verdict counter equals a fresh reading, and a face whose
+    # two sides name different attributes is NAMED with both names (a same-name face
+    # listed there reddens, so the table cannot cry wolf).
+    for name in proj["key_faces"]:
+        attrs = proj["rows"][name]["attrs"]
+        got = re.search(r'data-attrs="%s" data-attrs-write="([^"]*)" '
+                        r'data-attrs-read="([^"]*)" data-attrs-verdict="([^"]*)"'
+                        % re.escape(name), text)
+        want = (esc(",".join(attrs["write"])), esc(",".join(attrs["read"])),
+                attrs["verdict"])
+        if not got:
+            failures.append("SH13 attrs_line_missing:%s" % name)
+        elif got.groups() != want:
+            failures.append("SH13 attrs:%s page=%s fresh=%s" % (name, got.groups(), want))
+    for verdict in ATTR_VERDICTS:
+        got = re.search(r'data-attr-count="%s"><b>(\d+)</b>' % verdict, text)
+        value = int(got.group(1)) if got else None
+        if value != proj["attr_counts"][verdict]:
+            failures.append("SH13 count:%s page=%s fresh=%d"
+                            % (verdict, value, proj["attr_counts"][verdict]))
+        if not (proj["doc"].get("attr_words") or {}).get(verdict):
+            failures.append("SH13 word_missing:%s" % verdict)
+    if sum(proj["attr_counts"].values()) != len(proj["key_faces"]):
+        failures.append("SH13 sum=%d faces=%d"
+                        % (sum(proj["attr_counts"].values()), len(proj["key_faces"])))
+    for verdict, wanted, tag, absent in (
+            ("different", proj["attr_different"], "data-attrs-different",
+             "data-attrs-different-absent"),
+            ("unknown", proj["attr_unknown"], "data-attrs-unknown",
+             "data-attrs-unknown-absent")):
+        listed = set(re.findall(r'%s="([^"]+)"' % tag, text))
+        if listed != set(wanted):
+            failures.append("SH13 %s_list page=%s fresh=%s"
+                            % (verdict, sorted(listed), sorted(wanted)))
+        if not wanted and absent not in text:
+            failures.append("SH13 %s_absent_line_missing" % verdict)
+    for name in proj["attr_different"]:
+        attrs = proj["rows"][name]["attrs"]
+        got = re.search(r'data-attrs-different="%s" data-attrs-write="([^"]*)" '
+                        r'data-attrs-read="([^"]*)"' % re.escape(name), text)
+        want = (esc(",".join(attrs["write"])), esc(",".join(attrs["read"])))
+        if not got or got.groups() != want:
+            failures.append("SH13 different:%s page=%s fresh=%s"
+                            % (name, got.groups() if got else "absent", want))
+
     if failures:
         for line in failures:
             print("  FAIL " + line)
-        print("VERDICT FAIL criteria=12 failures=%d" % len(failures))
+        print("VERDICT FAIL criteria=13 failures=%d" % len(failures))
         return 2
-    print("VERDICT PASS criteria=12 faces=%d operable=%d missing_ceo=%d external_refs=0 "
-          "kinds=%s keys=%s tiers=%s"
+    print("VERDICT PASS criteria=13 faces=%d operable=%d missing_ceo=%d external_refs=0 "
+          "kinds=%s keys=%s tiers=%s attrs=%s"
           % (proj["faces_total"], len(proj["operable"]), len(proj["missing"]),
              ",".join("%s:%d" % (kind, proj["kind_counts"][kind]) for kind in KINDS),
              ",".join("%s:%d" % (key, proj["key_counts"][key])
                       for key in ("persists", "expr_paired", "base_paired",
                                   "orphan", "unresolved", "outside")),
              ",".join("%s:%d" % (tier, proj["tier_counts"][tier]) for tier in TIERS)
-             + ",cross:%d,noread:%d" % (len(proj["tier_cross"]), len(proj["tier_noread"]))))
+             + ",cross:%d,noread:%d" % (len(proj["tier_cross"]), len(proj["tier_noread"])),
+             ",".join("%s:%d" % (verdict, proj["attr_counts"][verdict])
+                      for verdict in ATTR_VERDICTS)))
+
     return 0
 
 

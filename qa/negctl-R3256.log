@@ -1,0 +1,12 @@
+PASS C1 same-name world passes
+PASS C2 different world names the face with both attributes
+PASS C3 a swapped read attribute reddens SH13 alone
+PASS C4 a missing named-absence line reddens
+PASS C5 a no-attribute face is counted, not judged
+PASS C6 a badge claiming different on a same-name face reddens
+PASS C7 an edited counter reddens
+PASS C8 a variable getAttribute argument is unknown, named, not counted as same
+PASS C9 an unnamed unknown face reddens
+PASS C10 three-face world sums to the storage faces
+PASS C11 live page carries the attribute reading and a mutation reddens
+NEGCTL PASS cases=11 fails=0
