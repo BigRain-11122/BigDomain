@@ -1,0 +1,24 @@
+C1 live-equivalent world still PASS                        PASS rc=0
+C1 no lexical face and the named absence is printed        PASS 
+C2 arrow handler PASS                                      PASS rc=0
+C2 arrow face named with target T[n] and one call          PASS 
+C2 arrow face verdict is lexical, not same-host            PASS 
+C2 no absence line while a lexical face exists             PASS 
+C3 function handler still same-host (no regression)        PASS 
+C3 function face is NOT in the lexical table               PASS 
+C4 addEventListener + function is a span (R3258 fix)       PASS 
+C4 addl-function face resolves this to T[n], same-host     PASS 
+C5 arrow nested in a function keeps the function's target  PASS 
+C5 nested arrow reads same-host, not lexical               PASS 
+C6 addEventListener arrow is a span too                    PASS 
+C6 addEventListener arrow face reads lexical with its target PASS 
+C7 expression-bodied arrow PASS                            PASS 
+C7 expression-bodied arrow falls to unknown, not lexical   PASS 
+C8 an edited lexical call count reddens SH16               PASS rc=2
+C9 a clean face listed in the lexical table reddens SH16   PASS rc=2
+C10 a missing named absence reddens SH16                   PASS rc=2
+C11 a card without the lexical column reddens SH16         PASS rc=2
+C12 a missing lexical word reddens SH16                    PASS rc=2
+C13 a blank absence sentence reddens SH16                  PASS rc=2
+C14 live tree unchanged: no lexical face, no pending rename PASS 
+NEGCTL total_failures=0

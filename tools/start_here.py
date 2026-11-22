@@ -313,11 +313,25 @@ def attr_reading(text, keys=None):
 H_ASSIGN = re.compile(r"([A-Za-z_$][\w$]*\s*(?:\[[^\]]*\])?)\s*\.\s*(on[a-z]+)"
                       r"\s*=\s*function\s*\(")
 H_ADDL = re.compile(r"([A-Za-z_$][\w$]*\s*(?:\[[^\]]*\])?)\s*\.\s*addEventListener"
-                    r"\s*\(\s*['\"][\w-]+['\"]\s*,\s*function\s*\(")
+                    r"\s*\(\s*['\"][^'\"]*['\"]\s*,\s*function\s*\(")
 A_HOST = re.compile(r"([A-Za-z_$][\w$]*\s*(?:\[[^\]]*\])?)\s*\.\s*getAttribute\s*\(")
 THIS_GET = re.compile(r"\bthis\s*\.\s*getAttribute\s*\(")
 HOST_NONE = "none"
-HOST_VERDICTS = ("same-host", "different-host", "one-side", "no-host", "unknown")
+HOST_VERDICTS = ("same-host", "different-host", "one-side", "no-host", "unknown",
+                 "lexical")
+
+# An arrow's `this` is lexical: it belongs to the nearest enclosing NON-arrow
+# function, and if the chain above it holds no function literal it belongs to no
+# element at all (module scope is undefined, a classic script is window). So an
+# arrow body can never be read as the assignment target - the R3257 reader happened
+# to be safe here only because it demanded the literal `= function(`, which also
+# made a lexical `this` indistinguishable from a `this` it simply could not place.
+ARROW = re.compile(r"=>")
+TGT_ASSIGN = re.compile(r"([A-Za-z_$][\w$]*\s*(?:\[[^\]]*\])?)\s*\.\s*(on[a-z]+)\s*=\s*$")
+TGT_ADDL = re.compile(r"([A-Za-z_$][\w$]*\s*(?:\[[^\]]*\])?)\s*\.\s*addEventListener"
+                      r"\s*\(\s*['\"][^'\"]*['\"]\s*,\s*$")
+FUNC_KIND = "function"
+ARROW_KIND = "arrow"
 
 
 def _body_span(text, frm):
@@ -337,20 +351,81 @@ def _body_span(text, frm):
 
 
 def _handler_spans(blanked):
-    """Every element handler literal in the page: body start/end plus the target it is
-    assigned to. Only the two literal forms are recognised; anything else is silence."""
+    """Every handler literal in the page: body start/end, the target it is assigned
+    to, the form, and whether its body is a `function` or an arrow. Only literal
+    forms with a brace body are recognised; anything else stays silence."""
     spans = []
     for match in H_ASSIGN.finditer(blanked):
         got = _body_span(blanked, match.end())
         if got:
             spans.append((got[0], got[1], match.group(1).replace(" ", ""),
-                          match.group(2)))
+                          match.group(2), FUNC_KIND))
     for match in H_ADDL.finditer(blanked):
         got = _body_span(blanked, match.end())
         if got:
             spans.append((got[0], got[1], match.group(1).replace(" ", ""),
-                          "addEventListener"))
+                          "addEventListener", FUNC_KIND))
+    spans.extend(_arrow_spans(blanked))
     return spans
+
+
+def _arrow_target(head):
+    """The element expression an arrow literal is bound to, if the bytes say so."""
+    h = head.rstrip()
+    if h.endswith(")"):
+        depth = 0
+        for k in range(len(h) - 1, -1, -1):
+            if h[k] == ")":
+                depth += 1
+            elif h[k] == "(":
+                depth -= 1
+                if depth == 0:
+                    h = h[:k]
+                    break
+    else:
+        ident = re.findall(r"[A-Za-z_$][\w$]*$", h)
+        if ident:
+            h = h[:len(h) - len(ident[0])]
+    for pat in (TGT_ASSIGN, TGT_ADDL):
+        match = pat.search(h)
+        if match:
+            return match.group(1).replace(" ", "")
+    return None
+
+
+def _arrow_spans(blanked):
+    """Brace-bodied arrows anywhere in the page. A bare `var go = () => {` is a span
+    too - its target is None, and a lexical `this` inside it still is not an element.
+    An expression body (`e => expr`) is not a span: the brace that follows belongs to
+    something else, so it falls to unknown instead of being guessed."""
+    out = []
+    for match in ARROW.finditer(blanked):
+        tail = blanked[match.end():match.end() + 8]
+        i = match.end() + (len(tail) - len(tail.lstrip()))
+        if i >= len(blanked) or blanked[i] != "{":
+            continue
+        got = _body_span(blanked, i)
+        if not got:
+            continue
+        head = blanked[max(0, match.start() - 160):match.start()]
+        out.append((got[0], got[1], _arrow_target(head), "arrow", ARROW_KIND))
+    return out
+
+
+def _resolve_this(at, spans):
+    """(host, lexical) for a `this` read at offset at.
+
+    Nearest enclosing function literal wins - an arrow in between does not change
+    whose `this` it is, which is why an arrow nested in a handler still reads that
+    handler's target. If the enclosing chain is arrows only, the value is lexical and
+    no element is claimed; if nothing encloses it, nothing is claimed either."""
+    inside = [s for s in spans if s[0] <= at <= s[1]]
+    if not inside:
+        return None, False
+    for span in sorted(inside, key=lambda s: s[0], reverse=True):
+        if span[4] == FUNC_KIND:
+            return span[2], False
+    return None, True
 
 
 def _sides_pos(raw, blanked):
@@ -370,7 +445,7 @@ def _sides_pos(raw, blanked):
 
 def _side_hosts(raw, blanked, expr, pos, spans):
     """Host expressions the attribute reads of one key side sit on, one hop deep."""
-    hosts, unknown = set(), 0
+    hosts, unknown, lexical, targets = set(), 0, 0, set()
     for match in A_HOST.finditer(expr):
         # 'this' is not a host name - it is resolved through its enclosing handler.
         # Counting it as a host would make two unresolved sides look equal.
@@ -378,10 +453,12 @@ def _side_hosts(raw, blanked, expr, pos, spans):
         if got != "this":
             hosts.add(got)
     for match in THIS_GET.finditer(expr):
-        at = pos + match.start()
-        owner = [s for s in spans if s[0] <= at <= s[1]]
-        if owner:
-            hosts.add(owner[0][2])
+        host, lex = _resolve_this(pos + match.start(), spans)
+        if host:
+            hosts.add(host)
+        elif lex:
+            lexical += 1
+            targets.add(_arrow_label(pos + match.start(), spans))
         else:
             unknown += 1
     for name in _key_symbols(expr):
@@ -395,13 +472,25 @@ def _side_hosts(raw, blanked, expr, pos, spans):
                     hosts.add(got)
             for match in THIS_GET.finditer(rhs):
                 at = decl.start(2) + match.start()
-                owner = [s for s in spans if s[0] <= at <= s[1]]
-                if owner:
-                    hosts.add(owner[0][2])
+                host, lex = _resolve_this(at, spans)
+                if host:
+                    hosts.add(host)
+                elif lex:
+                    lexical += 1
+                    targets.add(_arrow_label(at, spans))
                 else:
                     unknown += 1
             break
-    return hosts, unknown
+    return hosts, unknown, lexical, targets
+
+
+def _arrow_label(at, spans):
+    """The lexical `this` named by the arrow it sits in: target where one is bound,
+    a bare marker where the arrow is not bound to an element."""
+    inside = [s for s in spans if s[0] <= at <= s[1] and s[4] == ARROW_KIND]
+    if not inside:
+        return HOST_NONE
+    return sorted(inside, key=lambda s: s[0], reverse=True)[0][2] or "arrow"
 
 
 def host_reading(text, keys=None):
@@ -411,19 +500,27 @@ def host_reading(text, keys=None):
     blanked = _blank_strings(text)
     spans = _handler_spans(blanked)
     sides = _sides_pos(text, blanked)
-    write, w_bad = set(), 0
-    read, r_bad = set(), 0
+    write, read = set(), set()
+    w_bad = r_bad = w_lex = r_lex = 0
+    lex_targets = set()
     for expr, pos in sides["setItem"]:
-        got, bad = _side_hosts(text, blanked, expr, pos, spans)
+        got, bad, lex, targets = _side_hosts(text, blanked, expr, pos, spans)
         write |= got
         w_bad += bad
+        w_lex += lex
+        lex_targets |= targets
     for expr, pos in sides["getItem"]:
-        got, bad = _side_hosts(text, blanked, expr, pos, spans)
+        got, bad, lex, targets = _side_hosts(text, blanked, expr, pos, spans)
         read |= got
         r_bad += bad
+        r_lex += lex
+        lex_targets |= targets
     shared = sorted(write & read)
+    lexical = w_lex + r_lex
     if w_bad or r_bad:
         verdict = "unknown"
+    elif lexical:
+        verdict = "lexical"
     elif write and read:
         verdict = "same-host" if shared else "different-host"
     elif write or read:
@@ -431,9 +528,11 @@ def host_reading(text, keys=None):
     else:
         verdict = "no-host"
     return {"write": sorted(write), "read": sorted(read), "shared": shared,
-            "unknown": w_bad + r_bad, "verdict": verdict,
+            "unknown": w_bad + r_bad, "lexical": lexical,
+            "lexical_targets": sorted(lex_targets), "verdict": verdict,
             "handlers": len(spans),
-            "bound": len([s for s in spans if s[3] != "addEventListener"])}
+            "bound": len([s for s in spans if s[4] == FUNC_KIND
+                          and s[3] != "addEventListener"])}
 
 
 def scan_faces():
@@ -524,6 +623,9 @@ def projection():
                       if rows[n]["hosts"]["verdict"] == "different-host"]
     host_unknown = [n for n in key_faces
                     if rows[n]["hosts"]["verdict"] == "unknown"]
+    host_lexical = [n for n in key_faces
+                    if rows[n]["hosts"]["lexical"]]
+    host_lexical_calls = sum(rows[n]["hosts"]["lexical"] for n in host_lexical)
     return {
         "rows": rows,
         "doc": doc,
@@ -547,6 +649,8 @@ def projection():
         "host_counts": host_counts,
         "host_different": host_different,
         "host_unknown": host_unknown,
+        "host_lexical": host_lexical,
+        "host_lexical_calls": host_lexical_calls,
         "missing": missing_ceo_items(),
         "data16": sha16(DATA),
     }
@@ -616,7 +720,8 @@ def host_phrase(doc, hosts):
         write=" , ".join(hosts["write"]) or none,
         read=" , ".join(hosts["read"]) or none,
         verdict=host_word(doc, hosts["verdict"]),
-        unknown=hosts["unknown"])
+        unknown=hosts["unknown"],
+        lexical=hosts["lexical"])
 
 
 def render(proj):
@@ -664,10 +769,11 @@ def render(proj):
         if "hosts" in proj["rows"][name]:
             hosts = proj["rows"][name]["hosts"]
             hostline = ('    <p class="hostline" data-hosts="%s" data-hosts-write="%s" '
-                        'data-hosts-read="%s" data-hosts-verdict="%s">%s</p>\n'
+                        'data-hosts-read="%s" data-hosts-verdict="%s" '
+                        'data-hosts-lexical="%d">%s</p>\n'
                         % (esc(name), esc(",".join(hosts["write"])),
                            esc(",".join(hosts["read"])), esc(hosts["verdict"]),
-                           esc(host_phrase(doc, hosts))))
+                           hosts["lexical"], esc(host_phrase(doc, hosts))))
         else:
             hostline = ""
         cards.append(
@@ -841,6 +947,20 @@ def render(proj):
             '  <p data-hosts-unknown="%s" data-hosts-calls="%d">%s</p>'
             % (esc(name), hosts["unknown"],
                esc((doc.get("host_unknown_fmt") or "").format(calls=hosts["unknown"]))))
+    for name in proj["host_lexical"] or [None]:
+        if not name:
+            host_notes.append('  <p data-hosts-lexical-absent>%s</p>'
+                              % esc(doc.get("host_lexical_absent") or ""))
+            continue
+        hosts = proj["rows"][name]["hosts"]
+        host_notes.append(
+            '  <p data-hosts-lexical="%s" data-hosts-lexical-calls="%d" '
+            'data-hosts-lexical-target="%s">%s</p>'
+            % (esc(name), hosts["lexical"],
+               esc(",".join(hosts["lexical_targets"]) or doc.get("host_none", "")),
+               esc((doc.get("host_lexical_fmt") or "").format(
+                   calls=hosts["lexical"],
+                   target=" , ".join(hosts["lexical_targets"]) or doc.get("host_none", "")))))
     hosts_block = ('  <p class="kindshead">%s</p>\n  <div class="counts kinds">\n%s\n'
                    '  </div>\n  <div class="legend hosts">\n%s\n  </div>\n  <p class="note">%s</p>'
                    % (esc(doc.get("hosts_head", "")), host_counts_html,
@@ -966,6 +1086,9 @@ def write():
         "attr_counts": proj["attr_counts"],
         "attr_different": proj["attr_different"],
         "attr_unknown": proj["attr_unknown"],
+        "host_counts": proj["host_counts"],
+        "host_lexical": proj["host_lexical"],
+        "host_lexical_calls": proj["host_lexical_calls"],
         "missing_ceo_items": [row["id"] for row in proj["missing"]],
         "sizes": {"html_bytes": len(html.encode("utf-8"))},
     }
@@ -1286,13 +1409,61 @@ def check():
             failures.append("SH15 different:%s page=%s fresh=%s"
                             % (name, got.groups() if got else "absent", want))
 
+    # AC-SH16: a lexical `this` is not a parse failure and not an element. Every face
+    # whose `this` read sits in an arrow body above no function literal must be NAMED
+    # with its call count and the arrow's target, every per-face call count on the card
+    # equals a fresh reading, none today prints in words, and a face with zero lexical
+    # reads listed in that table reddens.
+    for name in proj["key_faces"]:
+        hosts = proj["rows"][name]["hosts"]
+        got = re.search(r'data-hosts="%s" data-hosts-write="[^"]*" '
+                        r'data-hosts-read="[^"]*" data-hosts-verdict="[^"]*" '
+                        r'data-hosts-lexical="(\d+)"' % re.escape(name), text)
+        if not got:
+            failures.append("SH16 lexical_column_missing:%s" % name)
+        elif int(got.group(1)) != hosts["lexical"]:
+            failures.append("SH16 lexical:%s page=%s fresh=%d"
+                            % (name, got.group(1), hosts["lexical"]))
+    listed = {}
+    for name, calls, target in re.findall(
+            r'data-hosts-lexical="([^"]+)" data-hosts-lexical-calls="(\d+)" '
+            r'data-hosts-lexical-target="([^"]*)"', text):
+        listed[name] = (int(calls), target)
+    if set(listed) != set(proj["host_lexical"]):
+        failures.append("SH16 list page=%s fresh=%s"
+                        % (sorted(listed), sorted(proj["host_lexical"])))
+    for name in proj["host_lexical"]:
+        hosts = proj["rows"][name]["hosts"]
+        if name in listed and listed[name][0] != hosts["lexical"]:
+            failures.append("SH16 calls:%s page=%d fresh=%d"
+                            % (name, listed[name][0], hosts["lexical"]))
+        if name in listed and listed[name][1] != (",".join(hosts["lexical_targets"])
+                                                  or proj["doc"].get("host_none", "")):
+            failures.append("SH16 target:%s page=%s fresh=%s"
+                            % (name, listed[name][1], hosts["lexical_targets"]))
+        if not hosts["lexical"]:
+            failures.append("SH16 clean_face_listed:%s" % name)
+    if not proj["host_lexical"] and "data-hosts-lexical-absent" not in text:
+        failures.append("SH16 absent_line_missing")
+    if proj["host_lexical_calls"] != sum(proj["rows"][n]["hosts"]["lexical"]
+                                         for n in proj["host_lexical"]):
+        failures.append("SH16 total_calls")
+    if not (proj["doc"].get("host_lexical_fmt") or "").strip():
+        failures.append("SH16 word_missing:host_lexical_fmt")
+    if not (proj["doc"].get("host_lexical_absent") or "").strip():
+        failures.append("SH16 word_missing:host_lexical_absent")
+    if not (proj["doc"].get("host_words") or {}).get("lexical"):
+        failures.append("SH16 word_missing:lexical")
+    if not (proj["doc"].get("host_count_tags") or {}).get("lexical"):
+        failures.append("SH16 tag_missing:lexical")
+
     if failures:
         for line in failures:
             print("  FAIL " + line)
-        print("VERDICT FAIL criteria=15 failures=%d" % len(failures))
+        print("VERDICT FAIL criteria=16 failures=%d" % len(failures))
         return 2
-    print("VERDICT PASS criteria=15 faces=%d operable=%d missing_ceo=%d external_refs=0 "
-          "kinds=%s keys=%s tiers=%s attrs=%s hosts=%s"
+    print("VERDICT PASS criteria=16 faces=%d operable=%d missing_ceo=%d external_refs=0 "
+          "kinds=%s keys=%s tiers=%s attrs=%s hosts=%s lexical=faces:%d,calls:%d"
           % (proj["faces_total"], len(proj["operable"]), len(proj["missing"]),
              ",".join("%s:%d" % (kind, proj["kind_counts"][kind]) for kind in KINDS),
              ",".join("%s:%d" % (key, proj["key_counts"][key])
@@ -1303,7 +1474,8 @@ def check():
              ",".join("%s:%d" % (verdict, proj["attr_counts"][verdict])
                       for verdict in ATTR_VERDICTS),
              ",".join("%s:%d" % (verdict, proj["host_counts"][verdict])
-                      for verdict in HOST_VERDICTS)))
+                      for verdict in HOST_VERDICTS),
+             len(proj["host_lexical"]), proj["host_lexical_calls"]))
 
     return 0
 

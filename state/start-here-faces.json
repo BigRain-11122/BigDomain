@@ -122,26 +122,30 @@
  "attrs_different_absent": "本轮没有两侧属性名不同的面（不是没判，是都判过了）。",
  "attrs_unknown_fmt": "有 {calls} 处 getAttribute 的参数不是字面量，属性名判不出来，没有被算进同名。",
  "attrs_unknown_absent": "本轮没有参数判不出来的 getAttribute（不是没判，是都判过了）。",
- "hosts_head": "属性名相同不等于同一个元素（R3257）：上一段只能说「两侧取的是同一个属性名」。下表把每侧属性读写在哪个元素表达式上也并排印出——直接 X.getAttribute(…)取 X，函数体里的 this 取被赋值的那个目标（如 T[n].onchange），一层赋值追到右值的宿主。宿主表达式相同才叫可比；不同即具名不可比；无 handler 的面、只有一侧、以及 this 找不到所属赋值的面各自单独计数，不混进同一档。",
- "host_fmt": "写在元素：{write} ｜ 读在元素：{read} ｜ {verdict}（未解析 this：{unknown}）",
+ "hosts_head": "属性名相同不等于同一个元素（R3257）：上一段只能说「两侧取的是同一个属性名」。下表把每侧属性读写在哪个元素表达式上也并排印出——直接 X.getAttribute(…)取 X，函数体里的 this 取被赋值的那个目标（如 T[n].onchange），一层赋值追到右值的宿主。宿主表达式相同才叫可比；不同即具名不可比；无 handler 的面、只有一侧、以及 this 找不到所属赋值的面各自单独计数，不混进同一档。R3258 增第六档：箭头函数的 this 是词法的——它归属最近的外层 function，一路上没有 function 就根本不属于该元素，这一档单独计数并具名，不与「找不到所属赋值」混为一谈。",
+ "host_fmt": "写在元素：{write} ｜ 读在元素：{read} ｜ {verdict}（未解析 this：{unknown} ｜ 词法 this：{lexical}）",
  "host_none": "无",
  "host_words": {
   "same-host": "同一个宿主表达式",
   "different-host": "两侧宿主表达式不同",
   "one-side": "仅一侧有宿主",
   "no-host": "无宿主可判（无元素级 handler）",
-  "unknown": "有 this 找不到所属赋值"
+  "unknown": "有 this 找不到所属赋值",
+  "lexical": "词法 this（箭头函数体里，按语义不是该元素）"
  },
  "host_count_tags": {
   "same-host": "同宿主",
   "different-host": "宿主不同",
   "one-side": "仅一侧",
   "no-host": "无宿主",
-  "unknown": "不可判"
+  "unknown": "不可判",
+  "lexical": "词法this"
  },
  "host_different_fmt": "{write} 与 {read} 不是同一个元素表达式：写在 {write} 、读在 {read}。",
  "host_different_absent": "本轮没有两侧宿主表达式不同的面（不是没判，是都判过了）。",
  "host_unknown_fmt": "有 {calls} 处 this 属性读不在任何认得的 handler 赋值里，宿主判不出来，没有被算进同宿主。",
  "host_unknown_absent": "本轮没有找不到所属赋值的 this（不是没判，是都判过了）。",
- "host_note": "宿主表达式相同只说明两侧的属性读写在同一个表达式上（例如都写着 T[n]），不说明写的那一次迭代与读的那一次迭代是同一个节点；全程读文本，不执行 JS。"
+ "host_note": "宿主表达式相同只说明两侧的属性读写在同一个表达式上（例如都写着 T[n]），不说明写的那一次迭代与读的那一次迭代是同一个节点；全程读文本，不执行 JS。",
+ "host_lexical_fmt": "有 {calls} 处 this 属性读落在箭头函数体里，而上方没有 function handler：箭头不改变 this，它取外层作用域的 this（模块里是 undefined、经典脚本里是 window），所以这里不是赋值目标 {target}，没有被算进同宿主。",
+ "host_lexical_absent": "本轮没有落在箭头函数体里的 this（不是没判，是都判过了）。"
 }

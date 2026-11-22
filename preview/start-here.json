@@ -1,7 +1,7 @@
 {
  "face": "start-here",
  "generated_from": {
-  "state/start-here-faces.json": "a44192a630d1eb69"
+  "state/start-here-faces.json": "f3a561b9858977ef"
  },
  "faces_total": 44,
  "operable": [
@@ -43,6 +43,16 @@
  },
  "attr_different": [],
  "attr_unknown": [],
+ "host_counts": {
+  "same-host": 1,
+  "different-host": 0,
+  "one-side": 0,
+  "no-host": 4,
+  "unknown": 0,
+  "lexical": 0
+ },
+ "host_lexical": [],
+ "host_lexical_calls": 0,
  "missing_ceo_items": [
   "mchid",
   "settlement",
@@ -52,6 +62,6 @@
   "pubkey"
  ],
  "sizes": {
-  "html_bytes": 20062
+  "html_bytes": 20699
  }
 }

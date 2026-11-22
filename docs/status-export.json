@@ -3,17 +3,17 @@
     "board_pages_skipped": [
       "preview/face-sweep.html (7449B)"
     ],
-    "current": "2026-11-22 R3257 PRODUCT+ENGINEERING: the front door's host column now names the ELEMENT EXPRESSION each side of a storage key reads an attribute from, instead of only the attribute name - a direct X.getAttribute() names X, a `this` inside TARGET.onX = function(){...} is TARGET, and a name bound one hop to an attribute read takes that right-hand side's host. Live: 5 operable storage faces read same-host:1 (money-path-demo, both sides on T[n]), no-host:4, different-host:0, one-side:0, unknown:0, with the 2 storage faces that carry no controls counted as outside. Criteria 13 -> 15: AC-SH14 grades every host badge and the five counters, AC-SH15 requires a different-host face and an unresolved `this` to be named with both expressions or their call count, requires a named absence when either is zero, and refuses a same-host face listed as different.",
+    "current": "2026-11-22 R3258 PRODUCT+ENGINEERING: a lexical `this` is now its own named bucket instead of hiding inside unknown - an arrow does not change `this`, so it belongs to the nearest enclosing function and, with no function above it, to no element at all, and can never be read as the assignment target; the same round found and fixed a shipped defect where the event name was blanked to spaces before matching, so NO addEventListener handler had ever entered the span table (only Target.onX = function did), which is why the front door's host column rested on one recognised form while claiming two.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
-    "last_artifact": "preview/start-here.html (20062B) + preview/start-here.json (1021B) [2026-11-22 mtime]",
-    "latest_artifact": "preview/start-here.html (20062B) + preview/start-here.json (1021B) [2026-11-22 mtime]",
+    "last_artifact": "preview/start-here.html (20699B) + preview/start-here.json (1195B) [2026-11-22 mtime]",
+    "latest_artifact": "preview/start-here.html (20699B) + preview/start-here.json (1195B) [2026-11-22 mtime]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\start-here.html",
     "latest_artifact_note": "",
     "latest_evidence": "qa/negctl-R3257.log (659B, 2026-11-22)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3256] next window (<=48h): (0) MAIN — **属性名判到「两侧同名 `data-ck`」，但同名不等于同一个元素**：写侧取 `this`（被改的那个 checkbox）的属性、读侧取 `T[n]`（循环里那个 checkbox）的属性，静态读数至今说不出这两个是不是同一个实体；而 `T[n].onchange = function(){ ... this ... }` 这一句本身在文本上就带着一层依据（赋给某元素 handler 的函数里 `this` 即该元素）。问：值不值得把**元素身份**再判一层？做法＝先只读量三问：①七张存储面的 handler 绑定写法各有几种（`X.onchange=` 直接赋值 / `addEventListener` 匿名函数 / 顶层 IIFE 自执行），能否从文本认出「`this` 出现在被赋给哪个元素的函数体里」；②能否给出机械律「handler 赋值目标 == 键的宿主元素」且不误判没有 handler 的面（例如 `lobby-session-trace` 的 IIFE）；③代价（要保存绑定位置还是复用已读原文、页增多少字节）。收口三选一＝①接受现状（属性名同名已是文本边界，页上已写明不判实体）②加一层「`this` 的绑定目标」判据（仍读文本，不执行 JS）③升级为运行证据（无头开页点一次，跨「不执行 JS」边界）。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
-    "next_milestone_due": "2026-11-24T12:34:52+08:00",
-    "updated_at": "2026-11-22T12:34:52+08:00",
+    "next_milestone": "[R3258] next window (<=48h): (0) MAIN — **两条认得的写法之外，handler 还有两种活写法是「沉默」而不是「判过」**：本轮只读量出 `merchant-onboard` 的两处监听都不进 span 表——`$('reset').addEventListener('click', function(){…})` 的目标是**调用表达式**（不是简单元素表达式），`boxes[i].addEventListener('change', onToggle)` 的回调是**具名引用**（handler 体在别处）。两者今天都是静默：既不算宿主、也不算 unknown。问：值不值得像追一层 `var kk=…` 那样，把**具名引用**追一层到它的 `function onToggle(){…}` 声明？做法＝先只读量三问：①活树 45 张面里 handler 目标各是什么形态（简单元素表达式 / 调用表达式如 `$()` 或 `getElementById()` / 具名引用 / 字符串属性），各几处；②追一层具名引用能否给出机械律「回调名 → 同面内唯一的 `function NAME(` 声明体」，且与现有 function/箭头规则不冲突（不把两个同名声明误并成一处）；③代价（要不要保存声明位置表、页增多少字节、活树会不会多出新档）。收口三选一＝①接受现状（页上写明只认简单元素表达式，其余静默）②加 `named-reference` 一档（追一层声明体，仍读文本）③把「目标形态」也做成计数（简单/调用/具名/字符串四档，不追体只命名）。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
+    "next_milestone_due": "2026-11-24T12:52:21+08:00",
+    "updated_at": "2026-11-22T12:52:21+08:00",
     "heartbeat": {
       "tick": 3256,
       "state_tick": 3257,
@@ -37,8 +37,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-22 R3257 PRODUCT+ENGINEERING: the front door's host column now names the ELEMENT EXPRESSION each side of a storage key reads an attribute from, instead of only the attribute name - a direct X.getAttribute() names X, a `this` inside TARGET.onX = function(){...} is TARGET, and a name bound one hop to an attribute read takes that right-hand side's host. Live: 5 operable storage faces read same-host:1 (money-path-demo, both sides on T[n]), no-host:4, different-host:0, one-side:0, unknown:0, with the 2 storage faces that carry no controls counted as outside. Criteria 13 -> 15: AC-SH14 grades every host badge and the five counters, AC-SH15 requires a different-host face and an unresolved `this` to be named with both expressions or their call count, requires a named absence when either is zero, and refuses a same-host face listed as different.",
-  "claims": {"claimed": 313, "captured": 95, "contradicted": 10, "uncaptured": 208, "historic": 7, "rows": 11, "present": true, "census_ts": "2026-11-22T12:34:52+08:00"},
+  "current": "2026-11-22 R3258 PRODUCT+ENGINEERING: a lexical `this` is now its own named bucket instead of hiding inside unknown - an arrow does not change `this`, so it belongs to the nearest enclosing function and, with no function above it, to no element at all, and can never be read as the assignment target; the same round found and fixed a shipped defect where the event name was blanked to spaces before matching, so NO addEventListener handler had ever entered the span table (only Target.onX = function did), which is why the front door's host column rested on one recognised form while claiming two.",
+  "claims": {"claimed": 314, "captured": 95, "contradicted": 10, "uncaptured": 209, "historic": 7, "rows": 11, "present": true, "census_ts": "2026-11-22T12:52:21+08:00"},
   "chain": {"present": true, "rows": 11, "broken": 0, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -67,11 +67,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-22 R3257 PRODUCT+ENGINEERING: the front door's host column now names the ELEMENT EXPRESSION each side of a storage key reads an attribute from, instead of only the attribute name - a direct X.getAttribute() names X, a `this` inside TARGET.onX = function(){...} is TARGET, and a name bound one hop to an attribute read takes that right-hand side's host. Live: 5 operable storage faces read same-host:1 (money-path-demo, both sides on T[n]), no-host:4, different-host:0, one-side:0, unknown:0, with the 2 storage faces that carry no controls counted as outside. Criteria 13 -> 15: AC-SH14 grades every host badge and the five counters, AC-SH15 requires a different-host face and an unresolved `this` to be named with both expressions or their call count, requires a named absence when either is zero, and refuses a same-host face listed as different.",
-  "export_ts": "2026-11-22T12:34:52+08:00",
-  "latest_artifact": "preview/start-here.html (20062B) + preview/start-here.json (1021B) [2026-11-22 mtime]",
+  "do": "2026-11-22 R3258 PRODUCT+ENGINEERING: a lexical `this` is now its own named bucket instead of hiding inside unknown - an arrow does not change `this`, so it belongs to the nearest enclosing function and, with no function above it, to no element at all, and can never be read as the assignment target; the same round found and fixed a shipped defect where the event name was blanked to spaces before matching, so NO addEventListener handler had ever entered the span table (only Target.onX = function did), which is why the front door's host column rested on one recognised form while claiming two.",
+  "export_ts": "2026-11-22T12:52:21+08:00",
+  "latest_artifact": "preview/start-here.html (20699B) + preview/start-here.json (1195B) [2026-11-22 mtime]",
   "latest_evidence": "qa/negctl-R3257.log (659B, 2026-11-22)",
-  "next_milestone": "[R3256] next window (<=48h): (0) MAIN — **属性名判到「两侧同名 `data-ck`」，但同名不等于同一个元素**：写侧取 `this`（被改的那个 checkbox）的属性、读侧取 `T[n]`（循环里那个 checkbox）的属性，静态读数至今说不出这两个是不是同一个实体；而 `T[n].onchange = function(){ ... this ... }` 这一句本身在文本上就带着一层依据（赋给某元素 handler 的函数里 `this` 即该元素）。问：值不值得把**元素身份**再判一层？做法＝先只读量三问：①七张存储面的 handler 绑定写法各有几种（`X.onchange=` 直接赋值 / `addEventListener` 匿名函数 / 顶层 IIFE 自执行），能否从文本认出「`this` 出现在被赋给哪个元素的函数体里」；②能否给出机械律「handler 赋值目标 == 键的宿主元素」且不误判没有 handler 的面（例如 `lobby-session-trace` 的 IIFE）；③代价（要保存绑定位置还是复用已读原文、页增多少字节）。收口三选一＝①接受现状（属性名同名已是文本边界，页上已写明不判实体）②加一层「`this` 的绑定目标」判据（仍读文本，不执行 JS）③升级为运行证据（无头开页点一次，跨「不执行 JS」边界）。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
+  "next_milestone": "[R3258] next window (<=48h): (0) MAIN — **两条认得的写法之外，handler 还有两种活写法是「沉默」而不是「判过」**：本轮只读量出 `merchant-onboard` 的两处监听都不进 span 表——`$('reset').addEventListener('click', function(){…})` 的目标是**调用表达式**（不是简单元素表达式），`boxes[i].addEventListener('change', onToggle)` 的回调是**具名引用**（handler 体在别处）。两者今天都是静默：既不算宿主、也不算 unknown。问：值不值得像追一层 `var kk=…` 那样，把**具名引用**追一层到它的 `function onToggle(){…}` 声明？做法＝先只读量三问：①活树 45 张面里 handler 目标各是什么形态（简单元素表达式 / 调用表达式如 `$()` 或 `getElementById()` / 具名引用 / 字符串属性），各几处；②追一层具名引用能否给出机械律「回调名 → 同面内唯一的 `function NAME(` 声明体」，且与现有 function/箭头规则不冲突（不把两个同名声明误并成一处）；③代价（要不要保存声明位置表、页增多少字节、活树会不会多出新档）。收口三选一＝①接受现状（页上写明只认简单元素表达式，其余静默）②加 `named-reference` 一档（追一层声明体，仍读文本）③把「目标形态」也做成计数（简单/调用/具名/字符串四档，不追体只命名）。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
   "outs": [
     "preview/start-here.html (20062B) + preview/start-here.json (1021B) [2026-11-22 mtime]",
     "preview/ugc-gate-report.html (28112B) + preview/ugc-gate-report.json (20170B) [2026-11-22 mtime]",
@@ -165,8 +165,8 @@
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 73194,
-  "next_milestone_due": "2026-11-24T12:34:52+08:00",
+  "state_bytes": 71239,
+  "next_milestone_due": "2026-11-24T12:52:21+08:00",
   "heartbeat": {
     "tick": 3256,
     "state_tick": 3257,

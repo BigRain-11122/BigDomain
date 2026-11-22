@@ -1,0 +1,16 @@
+Q1 binding forms per storage face (raw text, strings not blanked):
+  filing-checklist.html      {'assign-function': 0, 'assign-arrow': 0, 'addl-function': 1, 'addl-arrow': 0, 'assign-named': 0, 'attr-string': 0, 'arrow-bare': 0, 'arrow-brace-with-this': 0, 'arrow-targets': []}
+  lobby-protocol-map.html    {'assign-function': 0, 'assign-arrow': 0, 'addl-function': 0, 'addl-arrow': 0, 'assign-named': 0, 'attr-string': 0, 'arrow-bare': 0, 'arrow-brace-with-this': 0, 'arrow-targets': []}
+  lobby-session-trace.html   {'assign-function': 0, 'assign-arrow': 0, 'addl-function': 0, 'addl-arrow': 0, 'assign-named': 0, 'attr-string': 0, 'arrow-bare': 0, 'arrow-brace-with-this': 0, 'arrow-targets': []}
+  membership-face.html       {'assign-function': 0, 'assign-arrow': 0, 'addl-function': 1, 'addl-arrow': 0, 'assign-named': 0, 'attr-string': 0, 'arrow-bare': 0, 'arrow-brace-with-this': 0, 'arrow-targets': []}
+  merchant-onboard.html      {'assign-function': 0, 'assign-arrow': 0, 'addl-function': 1, 'addl-arrow': 0, 'assign-named': 0, 'attr-string': 0, 'arrow-bare': 0, 'arrow-brace-with-this': 0, 'arrow-targets': []}
+  money-path-demo.html       {'assign-function': 1, 'assign-arrow': 0, 'addl-function': 0, 'addl-arrow': 0, 'assign-named': 0, 'attr-string': 0, 'arrow-bare': 0, 'arrow-brace-with-this': 0, 'arrow-targets': []}
+  ship-checklist.html        {'assign-function': 0, 'assign-arrow': 0, 'addl-function': 2, 'addl-arrow': 0, 'assign-named': 0, 'attr-string': 0, 'arrow-bare': 0, 'arrow-brace-with-this': 0, 'arrow-targets': []}
+  TOTALS {'addl-function': 5, 'assign-function': 1}
+Q2 private worlds through the SHIPPED host_reading (text in, no files):
+  W1 arrow assign             verdict=unknown       write=[] read=['T[n]'] unknown=1 handlers=0
+  W2 function assign          verdict=same-host     write=['T[n]'] read=['T[n]'] unknown=0 handlers=1
+  W3 arrow addEventListener   verdict=unknown       write=[] read=['T[n]'] unknown=1 handlers=0
+  W4 arrow expression body    verdict=unknown       write=[] read=['T[n]'] unknown=1 handlers=0
+  W5 arrow inside function    verdict=same-host     write=['T[n]'] read=['T[n]'] unknown=0 handlers=1
+Q3 cost: host_reading over 7 storage faces = 0.0126s/pass; arrow span scan over 45 faces = 0.0110s
