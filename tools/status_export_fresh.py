@@ -172,6 +172,24 @@ NEXT_ROW_RE = re.compile(r"\[R(\d{4})\] next window")
 NARRATIVE_SKIP = ("tokens:", "log items", "honest disclosures")
 
 
+_LEDGER_MODULE = None
+
+
+def _ledger_lines_module():
+    """The shipped law module, loaded once and shared by every borrowed shape."""
+    global _LEDGER_MODULE
+    if _LEDGER_MODULE is None:
+        import importlib.util
+
+        path = os.path.join(REAL_ROOT, "src", "os", "ledger_lines.py")
+        spec = importlib.util.spec_from_file_location("ledger_lines_shared",
+                                                      path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        _LEDGER_MODULE = module
+    return _LEDGER_MODULE
+
+
 def _round_label_src():
     """The UPPERCASE-label shape, borrowed from the shipped write gate (R2874).
 
@@ -182,13 +200,18 @@ def _round_label_src():
     lives in the real tree and is stdlib-only; if it cannot be loaded the
     grader refuses loudly rather than grading against a private opinion.
     """
-    import importlib.util
+    return _ledger_lines_module().ROUND_LABEL_SRC
 
-    path = os.path.join(REAL_ROOT, "src", "os", "ledger_lines.py")
-    spec = importlib.util.spec_from_file_location("ledger_lines_shared", path)
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module.ROUND_LABEL_SRC
+
+def _round_meta_re():
+    """The meta-label shape (R3310 AC-EXPW21), same single definition.
+
+    A meta headline is the round's own observation scan, not its artifact; both
+    readers prefer a non-meta headline of the newest round and this face must
+    expect the SAME line src/os/export_round.py publishes, or the export gate
+    would call a correctly published face stale.
+    """
+    return _ledger_lines_module().ROUND_META_RE
 
 
 # AC-SXF11: a line that opens "R#### <UPPERCASE>" IS a round headline, whatever
@@ -196,6 +219,7 @@ def _round_label_src():
 # ships as ROUND_HEAD_RE; the label half is the write gate's own string.
 HEADLINE_RE = re.compile(
     r"^(?:\d{4}-\d{2}-\d{2} )?R(\d{4}) " + _round_label_src())
+META_RE = _round_meta_re()
 FOLD_MARK = "fold of log items"
 
 
@@ -309,6 +333,16 @@ def newest_round(state):
     # gate it must satisfy read stale. The headline's own label is its round
     # (the AC-SXF11/R2835 rule), so the label tier comes first and the mention
     # tiers below are unchanged.
+    # R3310 AC-EXPW21: a meta headline is the round's observation scan, never
+    # its artifact - prefer the first non-meta headline of the newest round and
+    # fall back to position below when the round wrote nothing else. The pattern
+    # is src/os/ledger_lines.py's single definition, shared with the writer.
+    for line in candidates:
+        match = HEADLINE_RE.match(line or "")
+        if not match or is_fold_summary(line):
+            continue
+        if int(match.group(1)) == best_round and not META_RE.match(line or ""):
+            return best_round, line
     for line in candidates:
         match = HEADLINE_RE.match(line or "")
         if not match or is_fold_summary(line):

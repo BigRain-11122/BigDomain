@@ -7464,8 +7464,13 @@ SUITES = [
     # R2901: the note's tag reads `later=` because what it measures is the half
     # with the later STAMP; a re-save with identical bytes moves the stamp and no
     # number on the line moves with it, so the retired `newer=` word is refused.
+    # R3310 grew it to 53: AC-EXPW21 is the headline PREFERENCE law - a round's
+    # own observation scan is a legal headline but never the artifact, so both
+    # CEO-face readers prefer the first non-meta headline of the newest round
+    # (measured at R3309: the published current named the GROUP SCAN line while
+    # every check read PASS). The meta shape is ledger_lines' one definition.
     ("os-export-round",
-     os.path.join("..", "os", "test_export_round.py"), 52),
+     os.path.join("..", "os", "test_export_round.py"), 53),
     # R2806: tools/payment_gate_report.py renders the face that decides whether
     # the 19.9 channel may be connected, and all 690 registered suites were
     # measured to mention ZERO of its AC-PAYG1..AC-PAYG8 tokens, so it was

@@ -117,6 +117,22 @@ ROUND_MAIN_RE = re.compile(r"^\d{4}-\d{2}-\d{2} R(\d{3,5}) ")
 ROUND_LABEL_SRC = r"[A-Z][A-Z0-9 /_-]{2,}"
 ROUND_LABEL_RE = re.compile(
     r"^(?:\d{4}-\d{2}-\d{2}\s+)?R\d{3,5}\s+" + ROUND_LABEL_SRC)
+# R3310 AC-EXPW21: the headline PREFERENCE law, and the only definition of it.
+# A round may write its observation scan before the line about what it did, and
+# both CEO-face readers (src/os/export_round.py last_round_line and
+# tools/status_export_fresh.py newest_round) take the round's FIRST headline by
+# position. Measured at R3309: the round wrote "R3309 GROUP SCAN (...)" first,
+# so the published ceo_face.current named the scan instead of the product, and
+# every check read PASS because the line is a legal headline (GROUP is an
+# uppercase label). A meta label names the OBSERVATION step, never the artifact,
+# so both readers prefer the first non-meta headline of the newest round and
+# fall back to position when the round carries nothing else. This is a
+# selection law, not a validity law: the label law above is untouched, and both
+# readers import this one pattern instead of keeping a second literal.
+META_LABELS = ("GROUP",)
+ROUND_META_RE = re.compile(
+    r"^(?:\d{4}-\d{2}-\d{2}\s+)?R\d{3,5}\s+(?:"
+    + "|".join(META_LABELS) + r")\b")
 ROUND_MAIN_SAMPLE = 40
 LOCAL_NUM_RE = re.compile(r"^(\d+(?:\.\d+)?)([kKmM]?)$")
 API_NUM_RE = re.compile(r"^\d+$")

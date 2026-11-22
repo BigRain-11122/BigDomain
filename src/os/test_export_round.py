@@ -521,6 +521,31 @@ def main():
               mod.is_fold_summary(range_only),
               mod.is_fold_summary(summary_line)))
 
+        # R3310 AC-EXPW21: a round's own observation scan is a legal headline
+        # but never the artifact (measured at R3309: the scan line stood first
+        # and the published current named it while every check read PASS). The
+        # preference must come from ledger_lines' single pattern, and a round
+        # that wrote nothing but the scan must still publish it.
+        scan = ('2026-11-23 R9011 GROUP SCAN (content-addressed, read before '
+                'any work): the ledger carried 0 @BigDomain rows')
+        prod = ('2026-11-23 R9011 PRODUCT+ENGINEERING: the round shipped one '
+                'thing')
+        s11['log'] = [scan, prod, range_only]
+        cur3 = mod.derive(w11, s11, 'T11')['current']
+        ok('AC-EXPW21 a meta scan line above the product line never becomes '
+           'current',
+           'PRODUCT+ENGINEERING' in cur3 and 'GROUP SCAN' not in cur3,
+           cur3[:60])
+        s11['log'] = [scan]
+        cur4 = mod.derive(w11, s11, 'T11')['current']
+        ok('AC-EXPW21 a round carrying only the scan still publishes it',
+           'GROUP SCAN' in cur4, cur4[:60])
+        ok('AC-EXPW21 the meta shape is ledger_lines\' one definition, not a '
+           'second literal in this reader',
+           mod.LL.ROUND_META_RE is not None
+           and 'GROUP' in mod.LL.ROUND_META_RE.pattern,
+           mod.LL.ROUND_META_RE.pattern)
+
         # ---- AC-EXPW13: R2821 archived the results block, and the writer refuses
         # ---- to notice. An archive that still resolves must not block the write,
         # ---- and must not be re-grown a row at a time.

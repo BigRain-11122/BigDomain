@@ -1,0 +1,16 @@
+Q1 live bytes=38602
+Q1 state_io.carrier_face layout_ok=True indent_ok=True caliber=None
+Q1 logs_toolkit.eol_profile layout_ok=True indent_ok=True caliber=16 anomaly=0
+Q1 agree_on_layout=True
+Q1 disease-8sp face.layout_ok=False prof.indent_ok=False prof.caliber=None agree=False
+Q2 live export_round says: 2026-11-23 R3309 PRODUCT+ENGINEERING: the board named two seams at the write face and both
+Q2 live status_export_fresh says (R3309): 2026-11-23 R3309 PRODUCT+ENGINEERING: the board named two seams at the write face and both
+Q2 live readers agree=True
+Q2 published current leads with: 2026-11-23 R3309 PRODUCT+ENGINEERING: the board named two seams at the write face and both
+Q2 ledger_lines carries ROUND_META_RE=True
+Q2 published names a scan line=False
+Q2 synthetic export_round picks: 2026-11-23 R9001 PRODUCT+ENGINEERING: the round shipped one thing
+Q2 synthetic fresh picks (R9001): 2026-11-23 R9001 PRODUCT+ENGINEERING: the round shipped one thing
+Q2 synthetic both pick the SCAN line=False
+Q2 only-meta control export_round: 2026-11-23 R9002 GROUP SCAN: the only narrative of this round
+Q2 only-meta control fresh (R9002): 2026-11-23 R9002 GROUP SCAN: the only narrative of this round

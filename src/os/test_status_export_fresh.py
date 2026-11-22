@@ -523,6 +523,24 @@ def run(root):
            "round=%r label=%r" % (live_round,
                                   live_match.group(1) if live_match else None))
 
+    # AC-SXF23 (R3310): a meta headline is the round's own observation scan, so
+    # the expected line is the first NON-meta headline of the newest round (the
+    # same line src/os/export_round.py publishes, from one shared pattern). A
+    # round carrying only the scan still publishes it - the preference is not a
+    # ban - and the pattern is not retyped here.
+    scan = ("2026-11-23 R9101 GROUP SCAN (content-addressed, read before any "
+            "work): the ledger carried 0 rows")
+    prod = "2026-11-23 R9101 PRODUCT+ENGINEERING: the round shipped one thing"
+    meta_round, meta_line = sx.newest_round({"log": [scan, prod]})
+    only_round, only_line = sx.newest_round({"log": [scan]})
+    shared = (sx.META_RE.pattern
+              == sx._ledger_lines_module().ROUND_META_RE.pattern)
+    record("AC-SXF23",
+           meta_round == 9101 and meta_line == prod
+           and only_round == 9101 and only_line == scan and shared,
+           "round=%r line=%r only=%r shared=%r"
+           % (meta_round, meta_line, only_line, shared))
+
     # AC-SXF22 (R3118): "refused" and "did not land" must be the same fact. R3117
     # proved AFTER the bytes were already under the live name (measured on a
     # private world: rc=8 and the live name grew 1173->1149 bytes carrying a

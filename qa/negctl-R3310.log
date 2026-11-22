@@ -1,0 +1,6 @@
+clean both pick product            PASS  export=True fresh=True
+removed law reddens export         PASS  picks_scan=True
+removed law reddens fresh          PASS  picks_scan=True
+widened law takes the scan         PASS  not_a_second_line_rule=True
+only-meta world still publishes    PASS  export=True fresh=True
+NEGCTL R3310 arms=5 fails=0 verdict=PASS

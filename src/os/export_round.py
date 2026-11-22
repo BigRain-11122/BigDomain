@@ -131,6 +131,12 @@ def last_round_line(state):
     the round HEADLINE (its first narrative line), not its closing disclosures,
     because a round's last lines are its exceptions rather than what it did. The
     ledger line is never a narrative.
+
+    R3310 AC-EXPW21: HEADLINE is now read as "the round's first headline that is
+    not its own observation scan". Measured at R3309, a round that wrote its
+    GROUP SCAN line first published the scan as ceo_face.current while every
+    check read PASS; the meta shape is ledger_lines.ROUND_META_RE, and the gate
+    tools/status_export_fresh.py expects the same line from the same pattern.
     """
     log = state.get('log') or []
     rounds = []
@@ -141,12 +147,25 @@ def last_round_line(state):
     if not rounds:
         return log[-1] if log else ''
     last = rounds[-1]
+    same = []
     for line in log:
         m = ROUND_RE.match(line or '')
         if m and m.group(1) == last and not LEDGER_RE.match(line) \
                 and not is_fold_summary(line):
+            same.append(line)
+    if not same:
+        return log[-1]
+    # R3310 AC-EXPW21: preference, not validity - a meta headline (the round's
+    # own observation scan) must not occupy the artifact slot while the round
+    # wrote a real one. The meta pattern is ledger_lines' single definition.
+    for line in same:
+        if ROUND_HEAD_RE.match(line or '') \
+                and not LL.ROUND_META_RE.match(line or ''):
             return line
-    return log[-1]
+    for line in same:
+        if not LL.ROUND_META_RE.match(line or ''):
+            return line
+    return same[0]
 
 
 def _git(repo, args):
