@@ -100,7 +100,7 @@
     },
     {
       "id": "AC-UGR15",
-      "text": "the refusal rule is judged, not only its output (R3243): R3242 removed one project directory name from the skip set because a name cannot decide whose code it holds, yet the five names that remained were still the final word - measured in qa/probe-R3243.log, a gate written under a self-owned src/sandbox/mypoc/toolchain/ answered zero sites while the same bytes one level up were seen. Refusal is now decided by OWNERSHIP evidence: a file under a vendor-named directory is refused only when git does not track it, tracked files are READ and parsed as this repo's own source, and the report must print which rule decided (`evidence`, or `name` as the named fallback when git cannot answer in a private world) plus the count and every path of the tracked files that were read. --check refuses when the printed rule, count or any owned path disagrees with a fresh reading. A tracked vendored copy would be read, which is the honest direction. R3244 added a SECOND evidence used only where git cannot answer (an installed-package RECORD, graded by AC-UGR16), so the summary word may now also read `marker` or `marker+name`; where neither evidence exists the name rule remains the named fallback rather than pretending coverage"
+      "text": "the refusal rule is judged, not only its output (R3243): R3242 removed one project directory name from the skip set because a name cannot decide whose code it holds, yet the five names that remained were still the final word - measured in qa/probe-R3243.log, a gate written under a self-owned src/sandbox/mypoc/toolchain/ answered zero sites while the same bytes one level up were seen. Refusal is now decided by OWNERSHIP evidence: a file under a vendor-named directory is refused only when git does not track it, tracked files are READ and parsed as this repo's own source, and the report must print which rule decided (`evidence`, or `name` as the named fallback when git cannot answer in a private world) plus the count and every path of the tracked files that were read. --check refuses when the printed rule, count or any owned path disagrees with a fresh reading. A tracked vendored copy would be read, which is the honest direction. R3244 added a SECOND evidence (an installed-package RECORD, graded by AC-UGR16) whose DECISION is used only where git cannot answer, so the summary word may now also read `marker` or `marker+name`; where neither evidence exists the name rule remains the named fallback rather than pretending coverage. R3248 made the RECORD's READING run in every world (graded by AC-UGR20) while keeping its decision rule here unchanged - a count does not become an authority"
     },
     {
       "id": "AC-UGR16",
@@ -117,6 +117,10 @@
     {
       "id": "AC-UGR19",
       "text": "how far a believed RECORD reaches over .py files is a graded count (R3247): AC-UGR18 splits the unlisted side by where it sits, but the directory rule needs at least one listed file to fire, so a root whose RECORD lists NO .py at all leaves its whole .py tree reachable - measured in qa/probe-R3247.log, where a RECORD listing only pkg/core/data.json still read pkg/top.py as ours and a gate inside it entered the site set (listed_py=0, disk_py=2, inside=1, beside=1). Every marker-decided root must now print listed_py=<n> disk_py=<m>, the two must satisfy listed_py + unlisted == disk_py, a root with listed_py == 0 and disk_py > 0 must carry a NAMED warning on its own line, and the face must print how many roots are in that state or say in words that none is. --check refuses when any count, the sum, the warning or the page-level count disagrees with a fresh reading. This does not close the hole - the unreachable root still reads its whole .py tree as ours - it makes that root visible with a count; the stricter red was refused because it would redden every freshly unpacked root"
+    },
+    {
+      "id": "AC-UGR20",
+      "text": "the RECORD is READ in every world and never takes the decision away from git (R3248): the four coverage criteria above only ever ran in a private world without git, so the live page printed a named absence and the RECORD's counts had no live reading - measured in qa/probe-R3248.log, where the live census costs 0.2306 s against a 0.4224 s shipped walk, lists 995 paths covering all 453 live .py files, and shares ZERO paths with git's tracked set. Every coverage row must now name its decider (`decided_by=evidence` or `decided_by=marker`), a row may say `evidence` only when the summary rule is the git evidence and `marker` only where marker (or the mixed fallback) is in force, and a reading that carries a believed RECORD must print a row in either world. The decision itself is unchanged: where git answers, the tracked set still decides read/refuse and the counts are a second opinion that does not overrule it. --check refuses when a decider is missing, a root is unnamed, a decider contradicts the summary rule, or no row is printed. This buys a live reading, not a closure: a hand-edited RECORD is still believed where git cannot answer, and the ~0.23 s census now runs on every collect"
     },
     {
       "id": "AC-SGV1",
@@ -145,7 +149,21 @@
     "raised": null
   },
   "hole_status": "LIVE",
-  "marker_coverage": [],
+  "marker_coverage": [
+    {
+      "beside": 0,
+      "decided_by": "evidence",
+      "disk_py": 453,
+      "exists": 995,
+      "inside": 0,
+      "inside_paths": [],
+      "listed": 995,
+      "listed_py": 453,
+      "root": "src/sandbox/lobby/.venv",
+      "stale": 0,
+      "unlisted": 0
+    }
+  ],
   "parity": {
     "line": "MSGSEC PARITY cases=14 stub_mismatch=0 gate_agree=14 verdict=PARITY-OK",
     "ok": true,
@@ -272,8 +290,8 @@
     }
   ],
   "sizes": {
-    "html": 23870,
-    "json": 17162
+    "html": 26563,
+    "json": 18867
   },
   "unparsed": [],
   "vendor_decisions": {

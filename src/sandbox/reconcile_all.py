@@ -7801,7 +7801,7 @@ SUITES = [
     # .py at all is counted and warned rather than silently reading its whole
     # .py tree as ours - forty-four).
     ("os-ugc-gate-report",
-     os.path.join("..", "os", "test_ugc_gate_report.py"), 44),
+     os.path.join("..", "os", "test_ugc_gate_report.py"), 47),
     # R2875. docs/status-export.json's latest_artifact follows the NEWEST preview
     # pair by mtime, so a fixture that re-renders a tracked pair moves the world
     # another suite measures - measured in the real tree at R2875 as

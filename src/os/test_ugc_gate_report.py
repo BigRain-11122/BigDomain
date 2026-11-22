@@ -1,4 +1,4 @@
-"""Battery suite for tools/ugc_gate_report.py - criteria AC-UGRB0..AC-UGRB19.
+"""Battery suite for tools/ugc_gate_report.py - criteria AC-UGRB0..AC-UGRB44.
 
 WHY THIS SUITE EXISTS (measured at R2814, not hypothesised):
 tools/ugc_gate_report.py renders preview/ugc-gate-report.html + .json, the face
@@ -123,7 +123,7 @@ def main():
         mod.OUT_HTML, mod.OUT_JSON = copy_html, copy_json
 
         rc, base, text, verdict = run_check(mod, data)
-        ok('AC-UGRB0', rc == 0 and len(base) == 17 and all(base.values()),
+        ok('AC-UGRB0', rc == 0 and len(base) == 18 and all(base.values()),
            'baseline rc=%d criteria=%d green=%d %s'
            % (rc, len(base), sum(1 for v in base.values() if v), verdict))
 
@@ -734,6 +734,7 @@ def main():
         half_expect = [{'root': 'src/sandbox/.venv', 'listed': 1,
                         'exists': 1, 'stale': 0, 'unlisted': 1, 'inside': 1,
                         'beside': 0, 'listed_py': 1, 'disk_py': 2,
+                        'decided_by': 'marker',
                         'inside_paths': ['src/sandbox/.venv/pkg/core/unlisted.py']}]
         ok('AC-UGRB35',
            half_hits == []
@@ -753,7 +754,7 @@ def main():
            stale_cov == [{'root': 'src/sandbox/.venv', 'listed': 2, 'exists': 1,
                           'stale': 1, 'unlisted': 0, 'inside': 0, 'beside': 0,
                           'listed_py': 1, 'disk_py': 1,
-                          'inside_paths': []}],
+                          'decided_by': 'marker', 'inside_paths': []}],
            'stale RECORD: coverage=%s (a listed path that is gone is counted, '
            'not silently believed)' % (stale_cov,))
 
@@ -917,6 +918,74 @@ def main():
            'AC-UGR18 stays %s rc=%d'
            % (res42.get('AC-UGR19'), res42.get('AC-UGR18'), rc42))
 
+        # ---- B43/B44: the RECORD is READ where git answers, and it never takes
+        # the decision (R3248). Measured in qa/probe-R3248.log: the live census
+        # costs 0.2306 s, the live tracked set and the live RECORD share zero
+        # paths, and three private worlds kept `evidence` in charge. B43 grades
+        # a git world that prints its RECORD counts (it used to print a named
+        # absence), each row naming its decider. B44 grades the one real
+        # conflict: a git-tracked file that sits where the RECORD forgot it -
+        # git must still READ it, and the marker view must still call it inside,
+        # without either branch reddening AC-UGR18 for disagreeing.
+        git_world = world_tree({
+            'src/sandbox/.venv/pkg/core/listed.py':
+                'from lobby.sec_gate import SecGate\nG = SecGate([], [])\n',
+            'src/sandbox/.venv/pkg/core/ours.py':
+                'from lobby.sec_gate import SecGate\nG = SecGate([], [])\n',
+            'src/sandbox/.venv/our_gate.py':
+                'from lobby.sec_gate import SecGate\nG = SecGate([], [])\n',
+            'src/sandbox/.venv/pool-1.0.dist-info/RECORD':
+                'pkg/core/listed.py,sha256=cc,7\n',
+        })
+        try:
+            mod.ROOT = git_world
+            mod.OUT_HTML = os.path.join(git_world, 'out.html')
+            mod.OUT_JSON = os.path.join(git_world, 'out.json')
+            mod._tracked_sources = lambda: {'src/sandbox/.venv/our_gate.py',
+                                            'src/sandbox/.venv/pkg/core/ours.py'}
+            _gr, _gf, g_owned, _gd, g_cov = mod._walk_all()
+            mod.write_outputs(mod.collect())
+            g_data = mod.collect()
+            rc43, res43, _t43, _v43 = run_check(mod, g_data)
+            page43 = read(mod.OUT_HTML)
+            # B44: the same world with git silent turns the same file into a
+            # refused inside path - one layout, two decisions.
+            mod._tracked_sources = lambda: None
+            _mr, _mf, m_owned, _md, m_cov = mod._walk_all()
+            mod.write_outputs(mod.collect())
+            m_data = mod.collect()
+            rc44, res44, _t44, _v44 = run_check(mod, m_data)
+        finally:
+            mod._tracked_sources = real_tracked
+            mod.ROOT = real_root
+            mod.OUT_HTML, mod.OUT_JSON = real_html, real_json
+            shutil.rmtree(git_world, ignore_errors=True)
+        ok('AC-UGRB43',
+           bool(g_cov) and all(r.get('decided_by') == 'evidence' for r in g_cov)
+           and g_data.get('vendor_rule') == 'evidence'
+           and sorted(g_owned) == ['src/sandbox/.venv/our_gate.py',
+                                   'src/sandbox/.venv/pkg/core/ours.py']
+           and res43.get('AC-UGR20') is True
+           and res43.get('AC-UGR15') is True
+           and res43.get('AC-UGR18') is True
+           and 'decided_by=<b>evidence</b>' in page43,
+           'git world prints its RECORD: coverage=%s owned=%s rule=%s '
+           'AC-UGR20=%s AC-UGR15=%s AC-UGR18=%s rc=%d'
+           % (g_cov, sorted(g_owned), g_data.get('vendor_rule'),
+              res43.get('AC-UGR20'), res43.get('AC-UGR15'),
+              res43.get('AC-UGR18'), rc43))
+        ok('AC-UGRB44',
+           bool(m_cov) and m_cov[0].get('decided_by') == 'marker'
+           and m_cov[0]['inside'] == 1
+           and m_cov[0]['inside_paths'] == ['src/sandbox/.venv/pkg/core/ours.py']
+           and m_owned == ['src/sandbox/.venv/our_gate.py']
+           and res44.get('AC-UGR20') is True
+           and res44.get('AC-UGR18') is True,
+           'one layout, two deciders: marker view coverage=%s owned=%s '
+           'AC-UGR20=%s AC-UGR18=%s rc=%d'
+           % (m_cov, m_owned, res44.get('AC-UGR20'),
+              res44.get('AC-UGR18'), rc44))
+
         # ---- B17: the live tree must read the same site set as before the
         # reader changed (pure addition): three files, four constructions.
         live_hits, live_skipped = mod.direct_call_sites()
@@ -935,7 +1004,7 @@ def main():
     after = real_snapshot()
     rc_real, res_real, _, verdict_real = run_check(mod, mod.collect())
     ok('AC-UGRB10',
-       before == after and rc_real == 0 and len(res_real) == 17 and all(res_real.values()),
+       before == after and rc_real == 0 and len(res_real) == 18 and all(res_real.values()),
        'real pair unchanged=%s real rc=%d green=%d' %
        (before == after, rc_real, sum(1 for v in res_real.values() if v)))
 
@@ -951,7 +1020,7 @@ def main():
             declared = int(tail.strip())
         except ValueError:
             declared = None
-    ok('AC-UGRB11', bool(row) and declared == 44,
+    ok('AC-UGRB11', bool(row) and declared == 47,
        'registry_rows=%d declared=%s' % (len(row), declared))
 
     law_verdict = "PASS" if not FAILS else "FAIL"

@@ -51,11 +51,12 @@ CRITERIA = (
     ("AC-UGR12", "the site reader's own spelling laws are re-proved INSIDE --check on a fixed in-memory sample that never comes from disk (R3239): the sample must answer exactly six pinned coordinates - bare, attribute, attribute-assignment alias, import-as alias, literal-getattr alias and a construction sharing a def line - and zero hits for a prose-only source and for a non-literal getattr alias, so a reader degraded to name-only reddens this face instead of only the suite"),
     ("AC-UGR13", "the walk's OTHER side is measured, printed and graded (R3240): the report must print, for each refusing rule, how many sources it refused and - for the test_ rule, which cannot be narrowed without drowning nine legal fixture doors - the NAME of every refused source that really constructs the gate; --check refuses when either printed count or any refused door file disagrees with a fresh reading, so a production door misnamed test_*.py reddens here instead of vanishing. The vendor rule is counted and never parsed (a class inside a vendor tree is not this module's class), and `data` left the skip set because it is not a non-source name - measured: zero .py under either data directory, so the live reading did not move. R3242: refusal is by OWNERSHIP - the names are package-manager and bundled-toolchain roots, and `ygo-poc` left the set because a project directory name cannot decide whose code it holds (measured: its only two .py files sit under data/toolchain/goroot and are untracked, so `toolchain` refuses them now and a PoC script of ours beside them is read). The vendor side stays unparsed, but it is READ for manners: the printed mention count and every mentioning file are graded here too, so the face can no longer say 'doors=0' in place of 'never looked'"),
     ("AC-UGR14", "the OTHER side of the reader is graded too (R3241): a source that does not parse is dropped from the site set by direct_call_sites(), so a constructing file whose syntax breaks shrinks BOTH the measured set and the page that echoes it and AC-UGR8 stays green - measured in qa/probe-R3241.log, where a broken src/sandbox/frontdoor.py moved 4 sites in 3 files to 3 sites in 2 files and the whole check still read VERDICT PASS 11/11. The report must NAME every unparsed source (read side and the test_ refused side) on the face, and --check must REFUSE while any unparsed source exists: an unreadable production source is a defect rather than a design choice, so unlike the nine legal fixture doors of AC-UGR13 it cannot be made green by printing it. The vendor rule stays counted and never parsed"),
-    ("AC-UGR15", "the refusal rule is judged, not only its output (R3243): R3242 removed one project directory name from the skip set because a name cannot decide whose code it holds, yet the five names that remained were still the final word - measured in qa/probe-R3243.log, a gate written under a self-owned src/sandbox/mypoc/toolchain/ answered zero sites while the same bytes one level up were seen. Refusal is now decided by OWNERSHIP evidence: a file under a vendor-named directory is refused only when git does not track it, tracked files are READ and parsed as this repo's own source, and the report must print which rule decided (`evidence`, or `name` as the named fallback when git cannot answer in a private world) plus the count and every path of the tracked files that were read. --check refuses when the printed rule, count or any owned path disagrees with a fresh reading. A tracked vendored copy would be read, which is the honest direction. R3244 added a SECOND evidence used only where git cannot answer (an installed-package RECORD, graded by AC-UGR16), so the summary word may now also read `marker` or `marker+name`; where neither evidence exists the name rule remains the named fallback rather than pretending coverage"),
+    ("AC-UGR15", "the refusal rule is judged, not only its output (R3243): R3242 removed one project directory name from the skip set because a name cannot decide whose code it holds, yet the five names that remained were still the final word - measured in qa/probe-R3243.log, a gate written under a self-owned src/sandbox/mypoc/toolchain/ answered zero sites while the same bytes one level up were seen. Refusal is now decided by OWNERSHIP evidence: a file under a vendor-named directory is refused only when git does not track it, tracked files are READ and parsed as this repo's own source, and the report must print which rule decided (`evidence`, or `name` as the named fallback when git cannot answer in a private world) plus the count and every path of the tracked files that were read. --check refuses when the printed rule, count or any owned path disagrees with a fresh reading. A tracked vendored copy would be read, which is the honest direction. R3244 added a SECOND evidence (an installed-package RECORD, graded by AC-UGR16) whose DECISION is used only where git cannot answer, so the summary word may now also read `marker` or `marker+name`; where neither evidence exists the name rule remains the named fallback rather than pretending coverage. R3248 made the RECORD's READING run in every world (graded by AC-UGR20) while keeping its decision rule here unchanged - a count does not become an authority"),
     ("AC-UGR16", "the fallback evidence is named and its counts are graded (R3244): AC-UGR15 grades one summary word, and one word cannot tell a world where a package manager's RECORD decided from a world where a bare directory name did - both print the same. Measured in qa/probe-R3244.log: in a world with no .git, a gate of OURS written into the same vendor root as an installed package was refused by name and answered zero sites (hits=[], refused_files=2), while that root's two .dist-info/RECORD files list every one of its 453 .py files. When git cannot answer, ownership now falls back to RECORD membership: a listed file is refused, an unlisted file is READ as ours, a root carrying no RECORD keeps the name rule. The report must print the decision count for each rule (evidence, marker, name) and name every file read as ours; --check refuses when any printed count, the summary rule, or an owned path disagrees with a fresh reading. The marker evidence is the package manager's own account of itself - a hand-edited RECORD is believed, which is the same kind of fallibility as a tracked vendored copy being read, and it is printed rather than implied"),
     ("AC-UGR17", "how far the believed RECORD reaches is a graded reading (R3245): AC-UGR16 grades WHICH evidence decided, and one membership list cannot tell a RECORD that covers its root from one that lists half of it - measured in qa/probe-R3245.log, where a package whose RECORD listed one of two files left the unlisted sibling READ as ours and a gate inside it entered the site set, while the live .venv lists 995 paths (995 exist, 0 stale) covering all 453 of its .py files. Every vendor root decided by marker must be NAMED on the face with its four counts printed (listed, exists, stale, unlisted), and a reading in which no root was decided by marker must print a named absence instead of four zeros. --check refuses when any printed count, an arithmetic inconsistency (exists + stale == listed), a missing root name or the absence sentence disagrees with a fresh reading. This makes a truncated or stale RECORD visible; it does not close the hole - an unlisted file is still read as ours - and it does not verify the RECORD's hash column, so exists asks only whether the path is still on disk"),
     ("AC-UGR18", "the unlisted side is split by WHERE the file sits and both halves are graded (R3246): AC-UGR17 prints how many files a believed RECORD forgot, and a truncated RECORD and a file of OURS in the same root read identically there - measured in qa/probe-R3246.log, where a package whose RECORD listed one of two files in a directory left the forgotten sibling READ as ours and a gate inside it entered the site set (hits=[.../pkg/core/unlisted.py:2]). Every marker-decided root must now print inside=<n> beside=<m>, the two must sum to the printed unlisted count, and every file REFUSED by the directory rule must be NAMED on the face; no such path may also appear among the files printed as ours. The rule is: an unlisted file whose directory holds a file the RECORD DID list is refused (that directory is a package directory), while an unlisted file beside any package is still READ as ours (measured: our own gate beside the package stays readable). --check refuses when a count, the sum, a name or a leak disagrees with a fresh reading. This closes one direction only: a root whose RECORD lists no .py at all still reads its whole tree as ours (the stricter red was refused because it would redden every freshly unpacked root), and the cost is printed - one of ours placed INSIDE a package directory is refused too, as a named inside path"),
 ("AC-UGR19", "how far a believed RECORD reaches over .py files is a graded count (R3247): AC-UGR18 splits the unlisted side by where it sits, but the directory rule needs at least one listed file to fire, so a root whose RECORD lists NO .py at all leaves its whole .py tree reachable - measured in qa/probe-R3247.log, where a RECORD listing only pkg/core/data.json still read pkg/top.py as ours and a gate inside it entered the site set (listed_py=0, disk_py=2, inside=1, beside=1). Every marker-decided root must now print listed_py=<n> disk_py=<m>, the two must satisfy listed_py + unlisted == disk_py, a root with listed_py == 0 and disk_py > 0 must carry a NAMED warning on its own line, and the face must print how many roots are in that state or say in words that none is. --check refuses when any count, the sum, the warning or the page-level count disagrees with a fresh reading. This does not close the hole - the unreachable root still reads its whole .py tree as ours - it makes that root visible with a count; the stricter red was refused because it would redden every freshly unpacked root"),
+    ("AC-UGR20", "the RECORD is READ in every world and never takes the decision away from git (R3248): the four coverage criteria above only ever ran in a private world without git, so the live page printed a named absence and the RECORD's counts had no live reading - measured in qa/probe-R3248.log, where the live census costs 0.2306 s against a 0.4224 s shipped walk, lists 995 paths covering all 453 live .py files, and shares ZERO paths with git's tracked set. Every coverage row must now name its decider (`decided_by=evidence` or `decided_by=marker`), a row may say `evidence` only when the summary rule is the git evidence and `marker` only where marker (or the mixed fallback) is in force, and a reading that carries a believed RECORD must print a row in either world. The decision itself is unchanged: where git answers, the tracked set still decides read/refuse and the counts are a second opinion that does not overrule it. --check refuses when a decider is missing, a root is unnamed, a decider contradicts the summary rule, or no row is printed. This buys a live reading, not a closure: a hand-edited RECORD is still believed where git cannot answer, and the ~0.23 s census now runs on every collect"),
     ("AC-SGV1", "PRE-REGISTERED REPAIR (not applied: src/ bytes are frozen under the live battery leg): SecGate.__init__ must refuse empty wordlists exactly as MsgSecStub does, so the constitutional no-content-safety-no-door rule holds on the direct construction path too"),
 
     ("AC-SGV2", "PRE-REGISTERED: after the repair, SecGate([], []) raises GateOfflineError, the four expected-blocked constructions read 4/4 blocked, and every existing direct call site in src/sandbox stays green because each already passes non-empty config lists"),
@@ -361,13 +362,16 @@ def _walk_all(tracked=_TRACKED_AUTO):
             if name in VENDOR_DIRS:
                 vdir = os.path.join(base, name)
                 rel_root = os.path.relpath(vdir, ROOT).replace("\\", "/")
-                # R3244: ask the marker evidence only when git cannot answer.
-                # Asking it always would spend 0.4 s to decide what git already
-                # decided, and would let a hand-edited RECORD overrule git.
-                if tracked is None:
-                    evidence, has_markers = _marker_sources(vdir)
-                else:
-                    evidence, has_markers = frozenset(), False
+                # R3248: the RECORD is now asked in EVERY world, because the
+                # reading itself is the product (measured cost +0.23 s on the
+                # live tree in qa/probe-R3248.log, not the 0.45 s the board
+                # feared). The DECISION still belongs to git wherever git can
+                # answer - asking a hand-edited RECORD to overrule a tracked
+                # file would turn a number into an authority. So the counts
+                # below describe what the RECORD WOULD decide, and each row
+                # says who actually decided (`decided_by`).
+                evidence, has_markers = _marker_sources(vdir)
+                decided_by = "evidence" if tracked is not None else "marker"
                 # R3245: a RECORD is believed, so how far it actually reaches is
                 # part of the reading. Counted per root: how many paths it lists,
                 # how many of those still exist (the stale face), and how many
@@ -377,7 +381,7 @@ def _walk_all(tracked=_TRACKED_AUTO):
                 if has_markers:
                     cov = {"root": rel_root, "listed": len(evidence), "exists": 0,
                            "stale": 0, "unlisted": 0, "inside": 0, "beside": 0,
-                           "listed_py": 0, "disk_py": 0,
+                           "listed_py": 0, "disk_py": 0, "decided_by": decided_by,
                            "inside_paths": []}
                     for rel in evidence:
                         if os.path.exists(os.path.join(ROOT, rel)):
@@ -406,8 +410,20 @@ def _walk_all(tracked=_TRACKED_AUTO):
                         # R3247: the .py reach of a believed RECORD is a count on
                         # the face, and it rides this walk rather than a second
                         # pass (measured: 453 files counted in 0.0101s).
+                        # R3248: the counts are computed in EVERY world, because
+                        # they describe the RECORD's own view; the branch below
+                        # still decides by `tracked` where git answered.
                         if cov is not None:
                             cov["disk_py"] += 1
+                            if rel in evidence:
+                                cov["listed_py"] += 1
+                            elif os.path.dirname(rel) in listed_dirs:
+                                cov["unlisted"] += 1
+                                cov["inside"] += 1
+                                cov["inside_paths"].append(rel)
+                            else:
+                                cov["unlisted"] += 1
+                                cov["beside"] += 1
                         if tracked is not None:
                             decisions.append((rel, "evidence"))
                             if rel in tracked:
@@ -418,20 +434,14 @@ def _walk_all(tracked=_TRACKED_AUTO):
                         elif has_markers:
                             decisions.append((rel, "marker"))
                             if rel in evidence:
-                                cov["listed_py"] += 1
                                 refused.append((rel, "vendor_dir", text))
                             elif os.path.dirname(rel) in listed_dirs:
                                 # R3246: the RECORD forgot a file inside a
                                 # directory it does list - that directory is a
                                 # package directory, so this file is refused and
                                 # NAMED, not silently read as ours.
-                                cov["unlisted"] += 1
-                                cov["inside"] += 1
-                                cov["inside_paths"].append(rel)
                                 refused.append((rel, "vendor_dir", text))
                             else:
-                                cov["unlisted"] += 1
-                                cov["beside"] += 1
                                 read.append((rel, text))
                                 owned.append(rel)
                         else:
@@ -758,22 +768,31 @@ def render_html(data):
             # no marker-decided root prints a NAMED absence instead of zeros.
             cov_rows = data.get("marker_coverage") or []
             if cov_rows:
-                tail += ("; RECORD coverage per root (graded by AC-UGR17, R3245): <ul>%s</ul>"
-                         "A file the RECORD does not list is READ as ours, so a truncated RECORD "
-                         "makes someone else's code ours; the stale and unlisted counts above are "
+                tail += ("; RECORD coverage per root (graded by AC-UGR17/18/19; since R3248 "
+                         "the RECORD is read in EVERY world and each row names its decider): <ul>%s</ul>"
+                         "The counts describe what the RECORD would decide, not who decided in this "
+                         "reading. Where a row reads <span class='mono'>decided_by=evidence</span> the "
+                         "read/refuse decision was made by the git tracked set, and the counts are a "
+                         "second opinion that does NOT overrule it (a hand-edited RECORD must not turn "
+                         "a count into an authority); where it reads "
+                         "<span class='mono'>decided_by=marker</span> git could not answer, so the "
+                         "RECORD's membership decided and a file it does not list is READ as ours. "
+                         "The stale and unlisted counts above are "
                          "how far each RECORD actually reaches, printed rather than assumed. "
                          "The hash column is not parsed, so exists asks only whether the path is "
                          "still on disk. Since R3246 an unlisted file is split by where it sits "
                          "(graded by AC-UGR18): <span class='mono'>inside</span> a directory that "
-                         "holds a listed file is REFUSED and named, because that directory belongs "
-                         "to an installed package; <span class='mono'>beside</span> a package (no "
-                         "listed sibling) it is still read as ours, so our own gate is never silent "
-                         "again."
+                         "holds a listed file is REFUSED and named where the RECORD decides, and "
+                         "named as a conflict where git decides; <span class='mono'>beside</span> a "
+                         "package (no listed sibling) it is still read as ours, so our own gate is "
+                         "never silent again."
                          % "".join(
-                             "<li><span class='mono'>%s</span> listed=<b>%d</b> exists=<b>%d</b> "
+                             "<li><span class='mono'>%s</span> decided_by=<b>%s</b> "
+                             "listed=<b>%d</b> exists=<b>%d</b> "
                              "stale=<b>%d</b> unlisted=<b>%d</b> inside=<b>%d</b> "
                              "beside=<b>%d</b> listed_py=<b>%d</b> disk_py=<b>%d</b>%s%s</li>"
-                             % (_esc(r["root"]), r["listed"], r["exists"], r["stale"],
+                             % (_esc(r["root"]), _esc(r.get("decided_by", "marker")),
+                                r["listed"], r["exists"], r["stale"],
                                 r["unlisted"], r["inside"], r["beside"],
                                 r["listed_py"], r["disk_py"],
                                 (": inside-refused " + ", ".join(
@@ -1252,14 +1271,20 @@ def check(data):
             arith18 = (row["inside"] + row["beside"] == row["unlisted"]
                        and row["inside"] == len(inside_paths))
             named18 = all(p in html_text for p in inside_paths)
-            leaked = [p for p in inside_paths if p in owned18]
+            # R3248: a leak is only a leak where the RECORD decided. In an
+            # evidence world the same path can be ours by the git tracked set,
+            # and the counts are a second opinion (AC-UGR20 grades that split),
+            # so grading it as a leak here would redden the face for disagreeing
+            # rather than for being wrong.
+            decides18 = row.get("decided_by", "marker") != "evidence"
+            leaked = [p for p in inside_paths if p in owned18] if decides18 else []
             if not (counts_hit and arith18 and named18 and not leaked):
                 cov_ok18 = False
             bits18.append("%s inside=%d beside=%d unlisted=%d printed=%s sum=%s "
-                          "named=%s leaked=%d"
+                          "named=%s decides=%s leaked=%d"
                           % (row["root"], row["inside"], row["beside"],
                              row["unlisted"], counts_hit, arith18, named18,
-                             len(leaked)))
+                             decides18, len(leaked)))
     else:
         absent18 = ("inside/beside split of AC-UGR18 has nothing to divide"
                     in html_text)
@@ -1307,6 +1332,38 @@ def check(data):
         cov_ok19 = absent19
         bits19.append("no marker-decided root; named_absence=%s" % absent19)
     results.append(("AC-UGR19", cov_ok19, " ".join(bits19) or "(no rows)"))
+
+    # AC-UGR20: the RECORD is asked in EVERY world and never takes the decision
+    # away from git (R3248). Measured in qa/probe-R3248.log: the live census
+    # costs 0.2306 s (against a 0.4224 s shipped walk), git's tracked set and
+    # the live RECORD share zero paths, and the three private worlds showed the
+    # decision word stays `evidence` wherever git answers. So the reading itself
+    # is the product: a git world must now PRINT its RECORD counts (it used to
+    # print a named absence), each row must name its decider, and the decider
+    # must agree with the summary rule rather than quietly becoming the marker.
+    cov20 = data.get("marker_coverage") or []
+    rule20 = data.get("vendor_rule")
+    cov_ok20 = True
+    bits20 = []
+    if cov20:
+        for row in cov20:
+            dec = row.get("decided_by")
+            named20 = ("decided_by=<b>%s</b>" % dec) in html_text
+            root_named20 = row["root"] in html_text
+            # A row may only claim `evidence` when the summary rule is the git
+            # evidence; a marker row may only appear where marker (or the mixed
+            # marker+name fallback) is the rule in force.
+            agrees20 = ((dec == "evidence" and rule20 == "evidence")
+                        or (dec == "marker" and rule20 in ("marker", "marker+name")))
+            if not (named20 and root_named20 and agrees20):
+                cov_ok20 = False
+            bits20.append("%s decided_by=%s rule=%s named=%s agrees=%s"
+                          % (row["root"], dec, rule20, named20, agrees20))
+    else:
+        cov_ok20 = False
+        bits20.append("no RECORD row printed; a reading with a believed RECORD "
+                      "must carry one in either world")
+    results.append(("AC-UGR20", cov_ok20, " ".join(bits20) or "(no rows)"))
 
     # AC-UGR9: the sizes block is read back FROM THE LANDED DOCUMENT, never from
     # the in-memory dict, so a --no-write run still gates on what is on disk.

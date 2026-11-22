@@ -1,0 +1,15 @@
+[Q1] git_answers=True tracked_files=601
+[Q1] vendor_roots=29 marker_roots=1 census_sec=0.2005
+[Q1] root=src/sandbox/lobby/.venv markers=True sec=0.0194 listed=995 listed_py=453 disk_py=453 conflict=0
+[Q1] root=src/sandbox/ygo-poc/data/toolchain markers=False sec=0.1688 listed=0 listed_py=0 disk_py=2 conflict=0
+[Q1] shipped_walk_sec=0.6219 coverage_rows=1 decisions=455
+[Q1] projected_walk_sec=0.8224 (shipped + census, same walk)
+[Q2] main line 1401: data = collect()
+[Q2] main line 1407: if args.check:
+[Q2] check() grades marker_coverage rows against html_text that was read FROM DISK, so a recomputed census is compared with the landed page; a check that only compared json with html would prove the two agree, never that the census is fresh.
+[Q3:git-marks-nothing] read=[] refused=['src/sandbox/.venv/our_gate.py', 'src/sandbox/.venv/pkg/core/listed.py', 'src/sandbox/.venv/pkg/core/unlisted.py'] owned=[] rules=['evidence']
+[Q3:git-marks-nothing] coverage={'root': 'src/sandbox/.venv', 'listed': 1, 'exists': 1, 'stale': 0, 'unlisted': 2, 'inside': 1, 'beside': 1, 'listed_py': 1, 'disk_py': 3, 'decided_by': 'evidence', 'inside_paths': ['src/sandbox/.venv/pkg/core/unlisted.py']}
+[Q3:git-tracks-our-gate] read=['src/sandbox/.venv/our_gate.py'] refused=['src/sandbox/.venv/pkg/core/listed.py', 'src/sandbox/.venv/pkg/core/unlisted.py'] owned=['src/sandbox/.venv/our_gate.py'] rules=['evidence']
+[Q3:git-tracks-our-gate] coverage={'root': 'src/sandbox/.venv', 'listed': 1, 'exists': 1, 'stale': 0, 'unlisted': 2, 'inside': 1, 'beside': 1, 'listed_py': 1, 'disk_py': 3, 'decided_by': 'evidence', 'inside_paths': ['src/sandbox/.venv/pkg/core/unlisted.py']}
+[Q3:git-unavailable] read=['src/sandbox/.venv/our_gate.py'] refused=['src/sandbox/.venv/pkg/core/listed.py', 'src/sandbox/.venv/pkg/core/unlisted.py'] owned=['src/sandbox/.venv/our_gate.py'] rules=['marker']
+[Q3:git-unavailable] coverage={'root': 'src/sandbox/.venv', 'listed': 1, 'exists': 1, 'stale': 0, 'unlisted': 2, 'inside': 1, 'beside': 1, 'listed_py': 1, 'disk_py': 3, 'decided_by': 'marker', 'inside_paths': ['src/sandbox/.venv/pkg/core/unlisted.py']}
