@@ -1,0 +1,23 @@
+OK   C1-live-copy                           rc=0 expect=0 
+OK   C2-world-mixed-keys                    rc=0 expect=0 
+OK   C3-world-mixed-joined                  rc=2 expect=2 
+      FAIL SH26 literal_joined:filing-checklist.html=銆宐d-mixed , 銆?
+      FAIL SH26 empty_part_word:filing-checklist.html
+OK   C4-world-empty-part-blanked            rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH24 sentence:filing-checklist.html differs from the fresh derivation
+OK   C5-world-parts-swapped                 rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH24 sentence:filing-checklist.html differs from the fresh derivation
+OK   C6-word-empty-part-dropped             rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH26 word_missing:key_literal_empty_part
+OK   C7-word-join-dropped                   rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH26 word_missing:key_literal_join
+OK   C8-world-three-keys                    rc=0 expect=0 
+OK   C9-world-two-real                      rc=0 expect=0 
+OK   C10-live-literal-attr-edited           rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH26 step_literal:filing-checklist.html page=bd-filing-checklist-v1x fresh=bd-filing-checklist-v1
+NEGCTL PASS cases=10 distinct=10

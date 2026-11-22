@@ -249,14 +249,17 @@ def key_naming(row):
     exactly, so claiming it cannot would be a lie in the opposite direction."""
     keys = row.get("keys")
     if not keys or not keys["write"]:
-        return {"kind": "none", "value": None, "expr": None}
+        return {"kind": "none", "value": None, "expr": None, "parts": []}
     if keys["literal_all"]:
         values = [keys["literal"][expr] for expr in keys["write"]]
+        parts = [("empty", "") if value == "" else ("literal", value)
+                 for value in values]
         if all(value == "" for value in values):
-            return {"kind": "empty", "value": "", "expr": None}
+            return {"kind": "empty", "value": "", "expr": None, "parts": parts}
         return {"kind": "literal", "value": " , ".join(values),
-                "expr": None}
-    return {"kind": "runtime", "value": None, "expr": keys["runtime_exprs"][0]}
+                "expr": None, "parts": parts}
+    return {"kind": "runtime", "value": None,
+            "expr": keys["runtime_exprs"][0], "parts": []}
 
 
 def key_attr(naming):
@@ -1398,12 +1401,34 @@ def esc(text):
             .replace('"', "&quot;"))
 
 
+def key_literal_text(naming, doc):
+    """One part per write-side expression, each in its own quotes (R3273).
+
+    A face writing two keys, one of them empty, used to print `「bd-mixed , 」`:
+    one quoted string carrying a dangling separator, and nothing on the page said
+    which of the two keys was the empty one. The join can only ever carry `literal`
+    and `empty` parts - one unresolvable write makes the whole face `runtime` and
+    no join happens - so per-part printing is the complete answer here. The machine
+    attribute stays `key_attr()`, one function for the page and the criterion."""
+    parts = naming.get("parts") or []
+    if not parts:
+        return (doc.get("key_literal_fmt") or "").format(value=naming["value"])
+    join = doc.get("key_literal_join") or "、"
+    pieces = []
+    for kind, value in parts:
+        if kind == "empty":
+            pieces.append(doc.get("key_literal_empty_part") or "")
+        else:
+            pieces.append((doc.get("key_literal_fmt") or "").format(value=value))
+    return join.join(pieces)
+
+
 def key_name_text(naming, doc):
     """The phrase a step or branch sentence puts where the key name goes. One
     function for the renderer and the checker, so the page cannot print one thing
     while the criterion recomputes another."""
     if naming["kind"] == "literal":
-        return (doc.get("key_literal_fmt") or "").format(value=naming["value"])
+        return key_literal_text(naming, doc)
     if naming["kind"] == "empty":
         return doc.get("key_empty_fmt") or ""
     if naming["kind"] == "runtime":
@@ -3111,7 +3136,8 @@ def check():
     # graded against a FRESH resolution of that face's own bytes, never against the
     # page itself.
     for key in ("key_head", "key_head_fmt", "key_literal_fmt", "key_empty_fmt",
-                "key_empty_absent", "key_runtime_fmt", "key_absent"):
+                "key_empty_absent", "key_runtime_fmt", "key_absent",
+                "key_literal_empty_part", "key_literal_join"):
         if not (proj["doc"].get(key) or "").strip():
             failures.append("SH26 word_missing:%s" % key)
     for slot in ("{total}", "{lit}", "{empty}", "{run}", "{none}"):
@@ -3203,6 +3229,27 @@ def check():
                     if esc(expr) in said:
                         failures.append("SH26 raw_expr_printed:%s=%s"
                                         % (name, expr))
+                # R3273: a face writing more than one key must print one part per
+                # key, and the joined-in-one-quote form is refused - `「bd-mixed , 」`
+                # is one quoted string with a dangling separator, and the reader
+                # cannot tell which key was the empty one. Per-part printing is
+                # complete because one unresolvable write makes the whole face
+                # runtime and no join happens at all.
+                parts = naming.get("parts") or []
+                want_parts = key_literal_text(naming, proj["doc"])
+                if esc(want_parts) not in said:
+                    failures.append("SH26 literal_parts:%s page=%s fresh=%s"
+                                    % (name, said, esc(want_parts)))
+                if len(parts) > 1:
+                    joined = (proj["doc"].get("key_literal_fmt")
+                              or "").format(value=naming["value"])
+                    if esc(joined) and esc(joined) in said:
+                        failures.append("SH26 literal_joined:%s=%s"
+                                        % (name, esc(joined)))
+                    if any(kind == "empty" for kind, _value in parts):
+                        word = proj["doc"].get("key_literal_empty_part") or ""
+                        if not word or esc(word) not in said:
+                            failures.append("SH26 empty_part_word:%s" % name)
             elif naming["kind"] == "empty":
                 if esc(proj["doc"].get("key_empty_fmt") or "") not in said:
                     failures.append("SH26 empty_word_missing:%s" % name)

@@ -1,0 +1,6 @@
+faces=45 elapsed=0.0267s
+Q1 faces with more than one write expression: 0
+Q1 faces by write count:
+  writes=1 faces=7
+Q1 faces whose write side has at least one empty component: 0
+Q3 per-write-kind pass cost 0.0260s over 45 faces
