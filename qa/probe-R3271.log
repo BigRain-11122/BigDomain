@@ -1,0 +1,40 @@
+faces_total=44 operable=6 walk=6
+Q1 per-walk-face drawers (write / read / remove / on_open / words):
+  F buyer-trial.html             write=-              read=-              remove=-              on_open=0 words=-
+  F filing-checklist.html        write=localStorage   read=localStorage   remove=-              on_open=0 words=localStorage
+  F lobby-protocol-map.html      write=localStorage   read=localStorage   remove=-              on_open=0 words=localStorage
+  F merchant-onboard.html        write=localStorage   read=localStorage   remove=-              on_open=0 words=localStorage
+  F money-path-demo.html         write=localStorage   read=localStorage   remove=-              on_open=0 words=localStorage
+  F ship-checklist.html          write=localStorage   read=localStorage   remove=-              on_open=0 words=localStorage
+Q1b read_drawer_differs_from_write=0 []
+Q1c remove_drawer_differs_from_write=0 []
+Q1d write_and_remove_same_drawer=0 []
+Q1e read_but_no_write=0 []
+Q1f storage_faces_all=7
+  A filing-checklist.html        write=localStorage read=localStorage remove=-
+  A lobby-protocol-map.html      write=localStorage read=localStorage remove=-
+  A lobby-session-trace.html     write=localStorage read=localStorage remove=-
+  A membership-face.html         write=localStorage read=localStorage remove=-
+  A merchant-onboard.html        write=localStorage read=localStorage remove=-
+  A money-path-demo.html         write=localStorage read=localStorage remove=-
+  A ship-checklist.html          write=localStorage read=localStorage remove=-
+Q2 present_in_page=data-step-read-drawers 4
+Q2 present_in_page=data-step-remove-drawers 4
+Q2 present_in_page=data-branch-read-drawers 2
+Q2 present_in_page=data-branch-remove-drawers 2
+Q2 present_in_page=data-drawer-split 7
+Q2 present_in_page=drawer_same 0
+Q2 present_in_page=drawer_diff 0
+Q2 present_in_page=drawer_remove_same 0
+Q2 present_in_page=drawer_remove_none 0
+Q2 present_in_doc=drawer_same False
+Q2 present_in_doc=drawer_diff False
+Q2 present_in_doc=drawer_remove_same False
+Q2 present_in_doc=drawer_remove_none False
+Q2 present_in_doc=drawer_read_fmt False
+Q2 present_in_doc=drawer_remove_fmt False
+Q2 present_in_doc=drawer_split_head_fmt True
+Q2 present_in_doc=drawer_split_face_fmt True
+Q2 step_fmt='{n}. {face} —— 点它之后，{key}留在{drawer}里；{when}；离开页面再回来还能接着做。这一步能证明「这里确实会留下状态」，不能证明「这份状态对平台有效」——全部在本机。{unread}'
+Q3 scan_s=0.1816 naming_walk_s=0.00002 per_walk_face_s=0.00000 page_bytes=35739
+Q3 criteria_today=28

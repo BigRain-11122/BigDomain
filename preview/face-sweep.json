@@ -1,17 +1,17 @@
 {
  "schema_version": "face-sweep-v1",
- "generated_utc": "2026-11-22T07:11:52Z",
- "swept_ns": 1795331501134259000,
+ "generated_utc": "2026-11-22T07:42:24Z",
+ "swept_ns": 1795333333768094300,
  "sizes": {
   "html": 7449,
-  "json": 6783
+  "json": 6782
  },
  "headline": {
   "pass": 10,
   "total": 10,
   "verdict": "PASS"
  },
- "fingerprint": "ed6eb694cbeff634",
+ "fingerprint": "ae4c464235c8f376",
  "reading_order": [
   "first-yuan-chain",
   "six-gate-live",
@@ -34,7 +34,7 @@
    "meaning": "一笔付款跨不过支付、会员、账本三段，收入为零。（本行实测 legs=2 tx=1）",
    "exit": 0,
    "verdict": "VERDICT PASS legs=2 entries=2 tx=1 reconcile_rc=0 html=3715B read_only=True",
-   "duration_s": 0.3,
+   "duration_s": 0.29,
    "html_bytes": 3715,
    "json_bytes": 4806,
    "tail": "VERDICT PASS legs=2 entries=2 tx=1 reconcile_rc=0 html=3715B read_only=True",
@@ -50,7 +50,7 @@
    "meaning": "各门实况不可信时，上游数据已偏离，所有面读数都要重看。",
    "exit": 0,
    "verdict": "VERDICT PASS 9/9 fingerprint=3868750817119248 landed=3868750817119248 sizes={'html': 7929, 'json': 6228}",
-   "duration_s": 4.65,
+   "duration_s": 4.7,
    "html_bytes": 7929,
    "json_bytes": 6228,
    "tail": "VERDICT PASS 9/9 fingerprint=3868750817119248 landed=3868750817119248 sizes={'html': 7929, 'json': 6228}",
@@ -82,7 +82,7 @@
    "meaning": "城市观测面读不出真实状态，运营判断失去依据。",
    "exit": 0,
    "verdict": "VERDICT PASS checks=8/8 fresh_fingerprint=df3e72fb3c9d182f landed=df3e72fb3c9d182f",
-   "duration_s": 0.77,
+   "duration_s": 0.7,
    "html_bytes": 7300,
    "json_bytes": 5004,
    "tail": "VERDICT PASS checks=8/8 fresh_fingerprint=df3e72fb3c9d182f landed=df3e72fb3c9d182f",
@@ -98,7 +98,7 @@
    "meaning": "UGC 安全闸未接通，开门即下架，收入归零。",
    "exit": 0,
    "verdict": "VERDICT PASS checks=19/19 failed=(none)",
-   "duration_s": 3.32,
+   "duration_s": 3.31,
    "html_bytes": 28112,
    "json_bytes": 20170,
    "tail": "VERDICT PASS checks=19/19 failed=(none)",
@@ -130,7 +130,7 @@
    "meaning": "月卡权益不可兑现，复购为零。（本行实测 products=0 tiers=4）",
    "exit": 0,
    "verdict": "value-domain: PASS products=0 tiers=4",
-   "duration_s": 0.27,
+   "duration_s": 0.24,
    "html_bytes": 10218,
    "json_bytes": 9817,
    "tail": "value-domain: PASS products=0 tiers=4",
@@ -177,11 +177,11 @@
    "json": "preview/deliverable-index.json",
    "meaning": "交付目录与盘上不一致，读者找不到实物。",
    "exit": 0,
-   "verdict": "VERDICT PASS 17/17 fingerprint=597063976fc7bd29",
+   "verdict": "VERDICT PASS 17/17 fingerprint=0f92c054d954bfb5",
    "duration_s": 0.12,
    "html_bytes": 39632,
    "json_bytes": 2678,
-   "tail": "{\"failed\": [], \"fingerprint\": \"597063976fc7bd29\", \"passed\": 17, \"total\": 17}",
+   "tail": "{\"failed\": [], \"fingerprint\": \"0f92c054d954bfb5\", \"passed\": 17, \"total\": 17}",
    "mutated": false,
    "mutated_files": []
   }

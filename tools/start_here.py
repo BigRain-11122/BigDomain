@@ -73,6 +73,20 @@ SCRIPT_END = re.compile(r"</script\s*>", re.I)
 DRAWER_WHENS = ("on-click", "on-open", "none")
 WHEN_WORDS = {"on-click": "when_click", "on-open": "when_open",
               "none": "when_none"}
+# R3271: the drawer reading already counts three sides (write / read / remove), but
+# the page printed only the write side - so a face that writes localStorage and reads
+# sessionStorage handed a reader the wrong drawer, and a face that erases its own key
+# looked exactly like one that keeps it. One closed word per face, highest fact first:
+# erase (it removes a drawer it writes) > stray (it removes one it never writes) >
+# diff (the drawer it reads is not the one it writes) > noread (it never reads back)
+# > same > none.
+SPLIT_STATUSES = ("erase", "stray", "diff", "noread", "same", "none")
+SPLIT_WORDS = {"erase": "drawer_split_erase_word",
+               "stray": "drawer_split_stray_word",
+               "diff": "drawer_split_diff_word",
+               "noread": "drawer_split_noread_word",
+               "same": "drawer_split_same_word",
+               "none": "drawer_split_none_word"}
 
 # Pairing says WHICH symbols a key rests on; it cannot say WHERE the variable part of
 # the key comes from. A face that reads NS+':'+kk and writes NS+':'+this.getAttribute(..)
@@ -278,17 +292,45 @@ def drawer_reading(text):
     }
 
 
+def split_status(write, read, remove):
+    """R3271: which of the six closed words describes this face's three drawers.
+    The order matters and is stated in the data file: a face that erases a drawer it
+    writes is the most surprising fact and wins over the read side, because a reader
+    who searches for the key will not find it; a face that removes a drawer it never
+    writes is next, because the erased thing is not its own; then the read/write
+    split; then a face that never reads back; then same; nothing at all is none."""
+    w, r, m = set(write), set(read), set(remove)
+    if m & w:
+        return "erase"
+    if m:
+        return "stray"
+    if r and r != w:
+        return "diff"
+    if w and not r:
+        return "noread"
+    if w and r:
+        return "same"
+    return "none"
+
+
 def drawer_naming(row):
     """Which drawer names a row may print, and the closed timing word. A face with
     no storage write prints no drawer name at all, so a branch that keeps nothing
     cannot borrow one from a word mentioned in its text. R3270: the same naming
     carries the write shapes the call reader could not resolve, so a row can say
-    "the page cannot read this face's writes" instead of claiming it writes none."""
+    "the page cannot read this face's writes" instead of claiming it writes none.
+    R3271: it also carries the read and remove sides and the closed split word, so a
+    page can say whether those are the same drawer as the write side."""
     got = row.get("drawers") or {}
     writes = list(got.get("write") or [])
+    reads = list(got.get("read") or [])
+    removes = list(got.get("remove") or [])
     unread = got.get("unread") or {}
     forms = [form for form in UNREAD_FORMS if unread.get(form)]
     return {"drawers": writes,
+            "read": reads,
+            "remove": removes,
+            "split": split_status(writes, reads, removes),
             "when": ("on-open" if got.get("on_open") else "on-click")
                     if writes else "none",
             "unread": forms,
@@ -330,6 +372,17 @@ def when_text(naming, doc):
         if naming.get("words"):
             return doc.get("when_mute") or ""
     return doc.get(WHEN_WORDS[naming["when"]]) or ""
+
+
+def split_side(names, doc):
+    """R3271: one side of the split sentence (write / read / remove). An empty side
+    prints a named "none" instead of vanishing, so "reads nothing" and "writes
+    nothing" are both stated rather than left to be inferred from a gap."""
+    names = list(names or [])
+    if not names:
+        return doc.get("drawer_split_side_none") or ""
+    fmt = doc.get("drawer_names_fmt") or "「{name}」"
+    return "、".join(fmt.format(name=name) for name in names)
 
 
 def key_reading(text):
@@ -1243,6 +1296,12 @@ def projection():
     drawer_unread = [(name, drawer_naming(rows[name])["unread"])
                      for name in sorted(operable)
                      if drawer_naming(rows[name])["unread"]]
+    split_counts = {status: 0 for status in SPLIT_STATUSES}
+    for name in operable:
+        split_counts[drawer_naming(rows[name])["split"]] += 1
+    drawer_split = [(name, drawer_naming(rows[name])["split"])
+                    for name in sorted(operable)
+                    if drawer_naming(rows[name])["split"] not in ("same", "none")]
     return {
         "rows": rows,
         "doc": doc,
@@ -1294,6 +1353,8 @@ def projection():
         "branch_drawers": branch_drawers,
         "drawer_when_counts": drawer_when_counts,
         "drawer_unread": drawer_unread,
+        "split_counts": split_counts,
+        "drawer_split": drawer_split,
         "data16": sha16(DATA),
     }
 
@@ -1790,12 +1851,15 @@ def render(proj):
                 'data-step-ops="%d" data-step-key="%s" '
                 'data-step-key-kind="%s" data-step-literal="%s" '
                 'data-step-drawers="%s" data-step-when="%s" '
-                'data-step-unread="%s">%s</p>'
+                'data-step-unread="%s" data-step-read-drawers="%s" '
+                'data-step-remove-drawers="%s" data-step-split="%s">%s</p>'
                 % (index, esc(name), proj["rows"][name]["ops"],
                    esc(" , ".join(keys)), naming["kind"],
                    esc(naming["value"] or ""),
                    esc(",".join(drawn["drawers"])), esc(drawn["when"]),
                    esc(",".join(drawn["unread"])),
+                   esc(",".join(drawn["read"])), esc(",".join(drawn["remove"])),
+                   esc(drawn["split"]),
                    esc((doc.get("step_fmt") or "").format(
                        n=index, face=name,
                        key=key_name_text(naming, doc),
@@ -1827,11 +1891,16 @@ def render(proj):
                 '  <p class="branch" data-branch="%d" data-branch-face="%s" '
                 'data-branch-reason="%s" data-branch-key-kind="%s" '
                 'data-branch-literal="%s" data-branch-drawers="%s" '
-                'data-branch-when="%s" data-branch-unread="%s">%s</p>'
+                'data-branch-when="%s" data-branch-unread="%s" '
+                'data-branch-read-drawers="%s" data-branch-remove-drawers="%s" '
+                'data-branch-split="%s">%s</p>'
                 % (index, esc(name), esc(reason), naming["kind"],
                    esc(naming["value"] or ""),
                    esc(",".join(drawn["drawers"])), esc(drawn["when"]),
                    esc(",".join(drawn["unread"])),
+                   esc(",".join(drawn.get("read") or [])),
+                   esc(",".join(drawn.get("remove") or [])),
+                   esc(drawn.get("split") or "none"),
                    esc((doc.get("branch_fmt") or "").format(
                        n=index, face=name,
                        word=branch_words.get(reason) or "",
@@ -1876,9 +1945,40 @@ def render(proj):
     else:
         unread_html += ('\n  <p data-drawer-unread-absent>%s</p>'
                         % esc(doc.get("drawer_unread_none") or ""))
+    split = proj["split_counts"]
+    split_html = (
+        '  <p class="drawersplit" data-drawer-split-all="%d" '
+        'data-drawer-split-same="%d" data-drawer-split-diff="%d" '
+        'data-drawer-split-noread="%d" data-drawer-split-erase="%d" '
+        'data-drawer-split-stray="%d">%s</p>'
+        % (len(proj["operable"]), split["same"], split["diff"], split["noread"],
+           split["erase"], split["stray"],
+           esc((doc.get("drawer_split_head_fmt") or "").format(
+               all=len(proj["operable"]),
+               n=len(proj["operable"]) - split["none"],
+               same=split["same"], diff=split["diff"], noread=split["noread"],
+               erase=split["erase"], stray=split["stray"]))))
+    split_words = doc.get("drawer_split_words") or {}
+    if proj["drawer_split"]:
+        for name, status in proj["drawer_split"]:
+            drawn = drawer_naming(proj["rows"][name])
+            split_html += (
+                '\n  <p data-drawer-split-face="%s" data-drawer-split-word="%s" '
+                'data-drawer-split-read="%s" data-drawer-split-remove="%s">%s</p>'
+                % (esc(name), esc(status), esc(",".join(drawn["read"])),
+                   esc(",".join(drawn["remove"])),
+                   esc((doc.get("drawer_split_face_fmt") or "").format(
+                       name=name, word=split_words.get(status) or status,
+                       write=split_side(drawn["drawers"], doc),
+                       read=split_side(drawn["read"], doc),
+                       remove=split_side(drawn["remove"], doc)))))
+    else:
+        split_html += ('\n  <p data-drawer-split-absent>%s</p>'
+                       % esc(doc.get("drawer_split_none") or ""))
     steps_head = ('  <p class="kindshead">%s</p>\n'
                   % esc(doc.get("step_head") or ""))
-    steps_block = (keynames_html + "\n" + unread_html + "\n" + steps_head
+    steps_block = (keynames_html + "\n" + unread_html + "\n" + split_html + "\n"
+                   + steps_head
                    + ("\n".join(steps_html) if steps_html else ""))
 
     if proj["missing"]:
@@ -3232,12 +3332,126 @@ def check():
                 if mute and mute not in said:
                     failures.append("SH28 mute_word_missing:%s" % name)
 
+    # AC-SH29 (R3271): the drawer reading counted three sides all along, but the page
+    # printed only the write side - so a face reading sessionStorage while writing
+    # localStorage handed the reader the wrong drawer, and a face that erases its own
+    # key looked exactly like one that keeps it. Six closed words (erase > stray >
+    # diff > noread > same > none), one header counter block, one named row per dirty
+    # face with a named absence when there is none, and every walk row carrying its
+    # read / remove / split attributes graded against a fresh reading.
+    for key in ("drawer_split_head_fmt", "drawer_split_none",
+                "drawer_split_face_fmt", "drawer_split_side_none"):
+        if not (proj["doc"].get(key) or "").strip():
+            failures.append("SH29 word_missing:%s" % key)
+    if not isinstance(proj["doc"].get("drawer_split_words"), dict):
+        failures.append("SH29 word_missing:drawer_split_words")
+    for slot in ("{all}", "{n}", "{same}", "{diff}", "{noread}", "{erase}",
+                 "{stray}"):
+        if slot not in (proj["doc"].get("drawer_split_head_fmt") or ""):
+            failures.append("SH29 slot_missing:drawer_split_head_fmt:%s" % slot)
+    for slot in ("{name}", "{word}", "{write}", "{read}", "{remove}"):
+        if slot not in (proj["doc"].get("drawer_split_face_fmt") or ""):
+            failures.append("SH29 slot_missing:drawer_split_face_fmt:%s" % slot)
+    split_words = proj["doc"].get("drawer_split_words") or {}
+    for status in SPLIT_STATUSES:
+        if not (split_words.get(status) or "").strip():
+            failures.append("SH29 split_word_missing:%s" % status)
+    fresh_split = {}
+    for name in proj["operable"]:
+        try:
+            with open(os.path.join(PREVIEW, name), encoding="utf-8",
+                      errors="replace") as handle:
+                fresh_split[name] = drawer_naming(
+                    {"drawers": drawer_reading(handle.read())})
+        except OSError:
+            failures.append("SH29 face_unreadable:%s" % name)
+    counts = {status: 0 for status in SPLIT_STATUSES}
+    for naming in fresh_split.values():
+        counts[naming["split"]] += 1
+    dirty_split = sorted((name, naming["split"])
+                         for name, naming in fresh_split.items()
+                         if naming["split"] not in ("same", "none"))
+    head = re.search(
+        r'data-drawer-split-all="(\d+)" data-drawer-split-same="(\d+)" '
+        r'data-drawer-split-diff="(\d+)" data-drawer-split-noread="(\d+)" '
+        r'data-drawer-split-erase="(\d+)" data-drawer-split-stray="(\d+)"', text)
+    if not head:
+        failures.append("SH29 head_missing")
+    else:
+        got_all, got_same, got_diff, got_noread, got_erase, got_stray = (
+            int(value) for value in head.groups())
+        if got_all != len(proj["operable"]):
+            failures.append("SH29 head_all page=%d fresh=%d"
+                            % (got_all, len(proj["operable"])))
+        for label, page_value, want in (
+                ("same", got_same, counts["same"]),
+                ("diff", got_diff, counts["diff"]),
+                ("noread", got_noread, counts["noread"]),
+                ("erase", got_erase, counts["erase"]),
+                ("stray", got_stray, counts["stray"])):
+            if page_value != want:
+                failures.append("SH29 head_%s page=%d fresh=%d"
+                                % (label, page_value, want))
+    face_rows = re.findall(
+        r'data-drawer-split-face="([^"]+)" data-drawer-split-word="([^"]+)" '
+        r'data-drawer-split-read="([^"]*)" data-drawer-split-remove="([^"]*)"',
+        text)
+    got_faces = [(name, word) for name, word, _read, _remove in face_rows]
+    if got_faces != dirty_split:
+        failures.append("SH29 face_rows page=%s fresh=%s" % (got_faces, dirty_split))
+    for name, word, read_raw, remove_raw in face_rows:
+        if name not in fresh_split:
+            failures.append("SH29 not_operable:%s" % name)
+            continue
+        naming = fresh_split[name]
+        if word not in SPLIT_STATUSES:
+            failures.append("SH29 word_not_closed:%s=%s" % (name, word))
+        if [part for part in read_raw.split(",") if part] != naming["read"]:
+            failures.append("SH29 face_read:%s page=%s fresh=%s"
+                            % (name, read_raw, naming["read"]))
+        if [part for part in remove_raw.split(",") if part] != naming["remove"]:
+            failures.append("SH29 face_remove:%s page=%s fresh=%s"
+                            % (name, remove_raw, naming["remove"]))
+    absent = re.findall(r'data-drawer-split-absent', text)
+    if dirty_split and absent:
+        failures.append("SH29 absent_line_on_split")
+    if not dirty_split and len(absent) != 1:
+        failures.append("SH29 absent_line expected=1 got=%d" % len(absent))
+    row_split = re.findall(
+        r'data-(?:step|branch)-face="([^"]+)"[^>]*'
+        r'data-(?:step|branch)-read-drawers="([^"]*)" '
+        r'data-(?:step|branch)-remove-drawers="([^"]*)" '
+        r'data-(?:step|branch)-split="([^"]*)"', text)
+    if len(row_split) != len(proj["operable"]):
+        failures.append("SH29 row_count expected=%d got=%d"
+                        % (len(proj["operable"]), len(row_split)))
+    for name, read_raw, remove_raw, split_raw in row_split:
+        if name not in fresh_split:
+            failures.append("SH29 row_not_operable:%s" % name)
+            continue
+        naming = fresh_split[name]
+        if [part for part in read_raw.split(",") if part] != naming["read"]:
+            failures.append("SH29 row_read:%s page=%s fresh=%s"
+                            % (name, read_raw, naming["read"]))
+        if [part for part in remove_raw.split(",") if part] != naming["remove"]:
+            failures.append("SH29 row_remove:%s page=%s fresh=%s"
+                            % (name, remove_raw, naming["remove"]))
+        if split_raw != naming["split"]:
+            failures.append("SH29 row_split:%s page=%s fresh=%s"
+                            % (name, split_raw, naming["split"]))
+        for token in [part for part in read_raw.split(",") if part]:
+            if token not in DRAWERS:
+                failures.append("SH29 drawer_not_closed:%s=%s" % (name, token))
+        for token in [part for part in remove_raw.split(",") if part]:
+            if token not in DRAWERS:
+                failures.append("SH29 drawer_not_closed:%s=%s" % (name, token))
+
     if failures:
         for line in failures:
             print("  FAIL " + line)
-        print("VERDICT FAIL criteria=28 failures=%d" % len(failures))
+        print("VERDICT FAIL criteria=29 failures=%d" % len(failures))
         return 2
-    print("VERDICT PASS criteria=28 faces=%d operable=%d missing_ceo=%d external_refs=0 "
+    print("VERDICT PASS criteria=29 faces=%d operable=%d missing_ceo=%d external_refs=0 "
           "kinds=%s keys=%s tiers=%s attrs=%s hosts=%s lexical=faces:%d,calls:%d "
           "expr_bodies=%d forms=%s"
           % (proj["faces_total"], len(proj["operable"]), len(proj["missing"]),
@@ -3273,7 +3487,10 @@ def check():
              % ",".join("%s:%d" % (when, proj["drawer_when_counts"][when])
                         for when in DRAWER_WHENS)
              + " unread=%d/%d"
-             % (len(proj["drawer_unread"]), len(proj["operable"]))))
+             % (len(proj["drawer_unread"]), len(proj["operable"]))
+             + " split=%s"
+             % ",".join("%s:%d" % (status, proj["split_counts"][status])
+                        for status in SPLIT_STATUSES)))
 
     return 0
 

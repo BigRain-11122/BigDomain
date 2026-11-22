@@ -240,5 +240,17 @@
  },
  "drawer_mute": "（这张面提到了浏览器存储，但页面读不到它写过任何键）",
  "when_mute": "页面说不出这个键是什么时候出现的",
- "when_unread": "这些写法页面读不出键名，也就说不了写入时机"
+ "when_unread": "这些写法页面读不出键名，也就说不了写入时机",
+ "drawer_split_head_fmt": "走线的 {all} 张面里，{n} 张有键：{same} 张读的抽屉和写的是同一个，{diff} 张读的是另一个抽屉，{noread} 张写完不读回来；{erase} 张写完自己擦掉，{stray} 张擦的是自己没写过的抽屉。",
+ "drawer_split_none": "走线里的每一张有键面，读的抽屉都和写的是同一个，也没有一张写完之后自己擦掉——今天没有一张面出现读、写、删三面分家。",
+ "drawer_split_face_fmt": "{name} —— {word}；写侧 {write}，读侧 {read}，删除侧 {remove}",
+ "drawer_split_side_none": "没有",
+ "drawer_split_words": {
+  "erase": "写进去的键，它自己会擦掉",
+  "stray": "擦的抽屉不是它写过的那一个",
+  "diff": "读的抽屉不是写的那个",
+  "noread": "写完从来不读回来",
+  "same": "读的抽屉和写的是同一个",
+  "none": "三面都没有抽屉"
+ }
 }

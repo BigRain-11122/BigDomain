@@ -1,0 +1,33 @@
+OK   C1-live-copy                       rc=0 expect=0 
+OK   C2-row-split-flipped               rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH29 row_split:filing-checklist.html page=diff fresh=same
+OK   C3-head-same-edited                rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH29 head_same page=4 fresh=5
+OK   C4-head-all-edited                 rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH29 head_all page=5 fresh=6
+OK   C5-absent-line-dropped             rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH29 absent_line expected=1 got=0
+OK   C6-fake-face-row                   rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH29 face_rows page=[('filing-checklist.html', 'diff')] fresh=[]
+OK   C7-split-word-dropped              rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH29 split_word_missing:erase
+OK   C8-head-slot-dropped               rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH29 slot_missing:drawer_split_head_fmt:{erase}
+OK   C9-face-slot-dropped               rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH29 slot_missing:drawer_split_face_fmt:{remove}
+OK   C10-row-read-drawer-edited         rc=2 expect=2 
+      FAIL SH6 page_out_of_date
+      FAIL SH29 row_read:filing-checklist.html page=sessionStorage fresh=['localStorage']
+OK   C11-world-read-other-drawer        rc=0 expect=0 
+OK   C12-world-write-then-erase         rc=0 expect=0 
+OK   C13-world-never-reads-back         rc=0 expect=0 
+OK   C14-world-stray-remove             rc=0 expect=0 
+NEGCTL PASS cases=14 distinct=14
