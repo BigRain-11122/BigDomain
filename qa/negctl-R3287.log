@@ -1,0 +1,11 @@
+NEGCTL PASS c1 clean private world expect=- :: clean PASS
+NEGCTL PASS c2 face not linked from entry expect=AC-FRS6 :: - AC-FRS6 face not reachable from the entry page: read-b.html
+NEGCTL PASS c3 endpoint row dropped expect=AC-FRS7 :: - AC-FRS7 silent endpoint (no declaration): read-b.html
+NEGCTL PASS c4 grave declaration expect=AC-FRS8 :: - AC-FRS8 declared endpoint now links onward: buyer-trial.html (out=1)
+NEGCTL PASS c5 endpoint title drifted expect=AC-FRS7 :: - AC-FRS7 endpoint title drifted read-a.html table='some other page' page='reading a'
+NEGCTL PASS c6 back hop not operable expect=AC-FRS9 :: - AC-FRS9 back hop is not operable: read-a.html -> read-a.html (controls=0)
+NEGCTL PASS c7 endpoint bytes drifted expect=AC-FRS7 :: - AC-FRS7 endpoint measure drifted read-a.html table=85/0 disk=78/0
+NEGCTL PASS c8 operable dead end expect=AC-FRS2 :: - AC-FRS2 operable face links nowhere: dead.html (controls=1)
+NEGCTL PASS c9 table count edited expect=AC-FRS9 :: - AC-FRS9 terminus_count table=3 fresh=2
+NEGCTL PASS c10 back target missing expect=AC-FRS9 :: - AC-FRS9 back hop not on disk: read-a.html -> buyer-trial.html
+NEGCTL TOTAL 10/10

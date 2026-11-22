@@ -1,5 +1,7 @@
 {
  "actionable_count": 7,
+ "back_default": "buyer-trial.html",
+ "back_operable": true,
  "dead_ends": [],
  "declared_hops": [
   "buyer-trial.html",
@@ -10,6 +12,8 @@
   "money-path-demo.html",
   "start-here.html"
  ],
+ "entry": "index.html",
+ "entry_out": 44,
  "face_count": 45,
  "faces": [
   {
@@ -17,133 +21,152 @@
    "controls": 0,
    "face": "apimarket-monthly-faces.html",
    "links": [],
-   "out": 0
+   "out": 0,
+   "title": "硅基域 · 市场月度台账"
   },
   {
    "bytes": 14444,
    "controls": 0,
    "face": "apimarket-report-activity.html",
    "links": [],
-   "out": 0
+   "out": 0,
+   "title": "BigDomain API Market - Settlement Ledger"
   },
   {
    "bytes": 12414,
    "controls": 0,
    "face": "apimarket-report-attention.html",
    "links": [],
-   "out": 0
+   "out": 0,
+   "title": "BigDomain API Market - Settlement Ledger"
   },
   {
    "bytes": 18121,
    "controls": 0,
    "face": "apimarket-report-buyerquestions.html",
    "links": [],
-   "out": 0
+   "out": 0,
+   "title": "BigDomain API Market - Settlement Ledger"
   },
   {
    "bytes": 24167,
    "controls": 0,
    "face": "apimarket-report-buyers.html",
    "links": [],
-   "out": 0
+   "out": 0,
+   "title": "BigDomain API Market - Settlement Ledger"
   },
   {
    "bytes": 45714,
    "controls": 0,
    "face": "apimarket-report-claims-demo.html",
    "links": [],
-   "out": 0
+   "out": 0,
+   "title": "BigDomain API Market - Settlement Ledger"
   },
   {
    "bytes": 35699,
    "controls": 0,
    "face": "apimarket-report-claims.html",
    "links": [],
-   "out": 0
+   "out": 0,
+   "title": "BigDomain API Market - Settlement Ledger"
   },
   {
    "bytes": 31202,
    "controls": 0,
    "face": "apimarket-report-csv.html",
    "links": [],
-   "out": 0
+   "out": 0,
+   "title": "BigDomain API Market - Settlement Ledger"
   },
   {
    "bytes": 28317,
    "controls": 0,
    "face": "apimarket-report-demand.html",
    "links": [],
-   "out": 0
+   "out": 0,
+   "title": "BigDomain API Market - Settlement Ledger"
   },
   {
    "bytes": 19841,
    "controls": 0,
    "face": "apimarket-report-dossiers.html",
    "links": [],
-   "out": 0
+   "out": 0,
+   "title": "BigDomain API Market - Settlement Ledger"
   },
   {
    "bytes": 32761,
    "controls": 0,
    "face": "apimarket-report-duty.html",
    "links": [],
-   "out": 0
+   "out": 0,
+   "title": "BigDomain API Market - Settlement Ledger"
   },
   {
    "bytes": 12414,
    "controls": 0,
    "face": "apimarket-report-json.html",
    "links": [],
-   "out": 0
+   "out": 0,
+   "title": "BigDomain API Market - Settlement Ledger"
   },
   {
    "bytes": 38142,
    "controls": 0,
    "face": "apimarket-report-quality.html",
    "links": [],
-   "out": 0
+   "out": 0,
+   "title": "BigDomain API Market - Settlement Ledger"
   },
   {
    "bytes": 31595,
    "controls": 0,
    "face": "apimarket-report-questions.html",
    "links": [],
-   "out": 0
+   "out": 0,
+   "title": "BigDomain API Market - Settlement Ledger"
   },
   {
    "bytes": 25254,
    "controls": 0,
    "face": "apimarket-report-refunds.html",
    "links": [],
-   "out": 0
+   "out": 0,
+   "title": "BigDomain API Market - Settlement Ledger"
   },
   {
    "bytes": 18894,
    "controls": 0,
    "face": "apimarket-report-selleranswers.html",
    "links": [],
-   "out": 0
+   "out": 0,
+   "title": "BigDomain API Market - Settlement Ledger"
   },
   {
    "bytes": 11268,
    "controls": 0,
    "face": "apimarket-report-slowanswer.html",
    "links": [],
-   "out": 0
+   "out": 0,
+   "title": "BigDomain API Market - Settlement Ledger"
   },
   {
    "bytes": 13915,
    "controls": 0,
    "face": "apimarket-report-workbench.html",
    "links": [],
-   "out": 0
+   "out": 0,
+   "title": "BigDomain API Market - Settlement Ledger"
   },
   {
    "bytes": 36146,
    "controls": 0,
    "face": "apimarket-report.html",
    "links": [],
-   "out": 0
+   "out": 0,
+   "title": "BigDomain API Market - Settlement Ledger"
   },
   {
    "bytes": 16421,
@@ -154,7 +177,8 @@
     "ledger-reconcile-face.html",
     "lobby-session-trace.html"
    ],
-   "out": 3
+   "out": 3,
+   "title": "BigDomain 分片电池面 R3082"
   },
   {
    "bytes": 22382,
@@ -166,21 +190,24 @@
     "money-path-demo.html",
     "start-here.html"
    ],
-   "out": 4
+   "out": 4,
+   "title": "买家试用镜 · 本地演示（MOCK）"
   },
   {
    "bytes": 8454,
    "controls": 0,
    "face": "ceo-blockers.html",
    "links": [],
-   "out": 0
+   "out": 0,
+   "title": "BigDomain &middot; what only the CEO can unblock"
   },
   {
    "bytes": 7300,
    "controls": 0,
    "face": "city-face-report.html",
    "links": [],
-   "out": 0
+   "out": 0,
+   "title": "城市观测面验收报告"
   },
   {
    "bytes": 5433,
@@ -189,7 +216,8 @@
    "links": [
     "index.html"
    ],
-   "out": 1
+   "out": 1,
+   "title": "Core loop walkthrough"
   },
   {
    "bytes": 7449,
@@ -207,7 +235,8 @@
     "platform-live-report.html",
     "ugc-gate-report.html"
    ],
-   "out": 10
+   "out": 10,
+   "title": "10 面实况板 / face sweep board"
   },
   {
    "bytes": 12893,
@@ -217,21 +246,24 @@
     "face-sweep.html",
     "platform-live-report.html"
    ],
-   "out": 2
+   "out": 2,
+   "title": "BigDomain · 小程序备案执行清单"
   },
   {
    "bytes": 3715,
    "controls": 0,
    "face": "first-yuan-chain.html",
    "links": [],
-   "out": 0
+   "out": 0,
+   "title": "First-yuan chain - one purchase through pay, member and ledger"
   },
   {
    "bytes": 3911,
    "controls": 0,
    "face": "first-yuan.html",
    "links": [],
-   "out": 0
+   "out": 0,
+   "title": "BigDomain 第一笔收入路径"
   },
   {
    "bytes": 41435,
@@ -283,7 +315,8 @@
     "start-here.html",
     "ugc-gate-report.html"
    ],
-   "out": 44
+   "out": 44,
+   "title": "硅基域 BigDomain · 产品预览 v0.6"
   },
   {
    "bytes": 12907,
@@ -295,28 +328,32 @@
     "money-path-demo.html",
     "start-here.html"
    ],
-   "out": 4
+   "out": 4,
+   "title": "19.9 算力包用户旅程 v2（含 ¥29.9 入门订阅档两案备裁） - runnable journey face"
   },
   {
    "bytes": 5276,
    "controls": 0,
    "face": "ledger-business-report.html",
    "links": [],
-   "out": 0
+   "out": 0,
+   "title": "代币双式账本业务报告"
   },
   {
    "bytes": 7963,
    "controls": 0,
    "face": "ledger-reconcile-face.html",
    "links": [],
-   "out": 0
+   "out": 0,
+   "title": "BigDomain · 对账实测台 · 双式账本"
   },
   {
    "bytes": 5766,
    "controls": 0,
    "face": "live-sandbox.html",
    "links": [],
-   "out": 0
+   "out": 0,
+   "title": "BigDomain sandbox - live faces"
   },
   {
    "bytes": 29069,
@@ -328,28 +365,32 @@
     "merchant-onboard.html",
     "start-here.html"
    ],
-   "out": 4
+   "out": 4,
+   "title": "P-47-1 lobby protocol map - messages and criterion coverage"
   },
   {
    "bytes": 8347,
    "controls": 0,
    "face": "lobby-session-trace.html",
    "links": [],
-   "out": 0
+   "out": 0,
+   "title": "Lobby session trace - frames the sandbox really answered"
   },
   {
    "bytes": 5952,
    "controls": 0,
    "face": "lobby-ws-report.html",
    "links": [],
-   "out": 0
+   "out": 0,
+   "title": "P-47-1 lobby WebSocket handshake - driven on a real socket"
   },
   {
    "bytes": 10218,
    "controls": 0,
    "face": "membership-benefit-report.html",
    "links": [],
-   "out": 0
+   "out": 0,
+   "title": "会员权益验收报告"
   },
   {
    "bytes": 10881,
@@ -361,7 +402,8 @@
     "money-path-demo.html",
     "payment-gate-report.html"
    ],
-   "out": 4
+   "out": 4,
+   "title": "硅基域 权益 / 月卡面"
   },
   {
    "bytes": 23088,
@@ -373,7 +415,8 @@
     "money-path-demo.html",
     "start-here.html"
    ],
-   "out": 4
+   "out": 4,
+   "title": "商户号接入自查单"
   },
   {
    "bytes": 13359,
@@ -385,21 +428,24 @@
     "merchant-onboard.html",
     "start-here.html"
    ],
-   "out": 4
+   "out": 4,
+   "title": "收款演练（MOCK）"
   },
   {
    "bytes": 6991,
    "controls": 0,
    "face": "payment-gate-report.html",
    "links": [],
-   "out": 0
+   "out": 0,
+   "title": "19.9 支付通道验收报告"
   },
   {
    "bytes": 7929,
    "controls": 0,
    "face": "platform-live-report.html",
    "links": [],
-   "out": 0
+   "out": 0,
+   "title": "BigDomain 沙箱 · 全部门实测在线（一指令拉起）"
   },
   {
    "bytes": 9182,
@@ -413,7 +459,8 @@
     "platform-live-report.html",
     "ugc-gate-report.html"
    ],
-   "out": 6
+   "out": 6,
+   "title": "BigDomain · 上线前置清单"
   },
   {
    "bytes": 41366,
@@ -427,17 +474,279 @@
     "money-path-demo.html",
     "ship-checklist.html"
    ],
-   "out": 6
+   "out": 6,
+   "title": "从这里开始 · 这台机器上你今天能亲手做什么"
   },
   {
    "bytes": 28112,
    "controls": 0,
    "face": "ugc-gate-report.html",
    "links": [],
-   "out": 0
+   "out": 0,
+   "title": "BigDomain - UGC content-safety gate face (P-47 item 3)"
   }
  ],
- "law": "an operable face must link to at least one local html file on disk",
+ "law": "an operable face must link to at least one local html file on disk; every face must be reachable from the entry page; a face with no downstream must be declared as an endpoint with an operable back hop",
  "missing_hops": [],
- "readonly_count": 38
+ "readonly_count": 38,
+ "termini": [
+  {
+   "back": "buyer-trial.html",
+   "back_controls": 3,
+   "bytes": 6834,
+   "controls": 0,
+   "face": "apimarket-monthly-faces.html",
+   "title": "硅基域 · 市场月度台账"
+  },
+  {
+   "back": "buyer-trial.html",
+   "back_controls": 3,
+   "bytes": 14444,
+   "controls": 0,
+   "face": "apimarket-report-activity.html",
+   "title": "BigDomain API Market - Settlement Ledger"
+  },
+  {
+   "back": "buyer-trial.html",
+   "back_controls": 3,
+   "bytes": 12414,
+   "controls": 0,
+   "face": "apimarket-report-attention.html",
+   "title": "BigDomain API Market - Settlement Ledger"
+  },
+  {
+   "back": "buyer-trial.html",
+   "back_controls": 3,
+   "bytes": 18121,
+   "controls": 0,
+   "face": "apimarket-report-buyerquestions.html",
+   "title": "BigDomain API Market - Settlement Ledger"
+  },
+  {
+   "back": "buyer-trial.html",
+   "back_controls": 3,
+   "bytes": 24167,
+   "controls": 0,
+   "face": "apimarket-report-buyers.html",
+   "title": "BigDomain API Market - Settlement Ledger"
+  },
+  {
+   "back": "buyer-trial.html",
+   "back_controls": 3,
+   "bytes": 45714,
+   "controls": 0,
+   "face": "apimarket-report-claims-demo.html",
+   "title": "BigDomain API Market - Settlement Ledger"
+  },
+  {
+   "back": "buyer-trial.html",
+   "back_controls": 3,
+   "bytes": 35699,
+   "controls": 0,
+   "face": "apimarket-report-claims.html",
+   "title": "BigDomain API Market - Settlement Ledger"
+  },
+  {
+   "back": "buyer-trial.html",
+   "back_controls": 3,
+   "bytes": 31202,
+   "controls": 0,
+   "face": "apimarket-report-csv.html",
+   "title": "BigDomain API Market - Settlement Ledger"
+  },
+  {
+   "back": "buyer-trial.html",
+   "back_controls": 3,
+   "bytes": 28317,
+   "controls": 0,
+   "face": "apimarket-report-demand.html",
+   "title": "BigDomain API Market - Settlement Ledger"
+  },
+  {
+   "back": "buyer-trial.html",
+   "back_controls": 3,
+   "bytes": 19841,
+   "controls": 0,
+   "face": "apimarket-report-dossiers.html",
+   "title": "BigDomain API Market - Settlement Ledger"
+  },
+  {
+   "back": "buyer-trial.html",
+   "back_controls": 3,
+   "bytes": 32761,
+   "controls": 0,
+   "face": "apimarket-report-duty.html",
+   "title": "BigDomain API Market - Settlement Ledger"
+  },
+  {
+   "back": "buyer-trial.html",
+   "back_controls": 3,
+   "bytes": 12414,
+   "controls": 0,
+   "face": "apimarket-report-json.html",
+   "title": "BigDomain API Market - Settlement Ledger"
+  },
+  {
+   "back": "buyer-trial.html",
+   "back_controls": 3,
+   "bytes": 38142,
+   "controls": 0,
+   "face": "apimarket-report-quality.html",
+   "title": "BigDomain API Market - Settlement Ledger"
+  },
+  {
+   "back": "buyer-trial.html",
+   "back_controls": 3,
+   "bytes": 31595,
+   "controls": 0,
+   "face": "apimarket-report-questions.html",
+   "title": "BigDomain API Market - Settlement Ledger"
+  },
+  {
+   "back": "buyer-trial.html",
+   "back_controls": 3,
+   "bytes": 25254,
+   "controls": 0,
+   "face": "apimarket-report-refunds.html",
+   "title": "BigDomain API Market - Settlement Ledger"
+  },
+  {
+   "back": "buyer-trial.html",
+   "back_controls": 3,
+   "bytes": 18894,
+   "controls": 0,
+   "face": "apimarket-report-selleranswers.html",
+   "title": "BigDomain API Market - Settlement Ledger"
+  },
+  {
+   "back": "buyer-trial.html",
+   "back_controls": 3,
+   "bytes": 11268,
+   "controls": 0,
+   "face": "apimarket-report-slowanswer.html",
+   "title": "BigDomain API Market - Settlement Ledger"
+  },
+  {
+   "back": "buyer-trial.html",
+   "back_controls": 3,
+   "bytes": 13915,
+   "controls": 0,
+   "face": "apimarket-report-workbench.html",
+   "title": "BigDomain API Market - Settlement Ledger"
+  },
+  {
+   "back": "buyer-trial.html",
+   "back_controls": 3,
+   "bytes": 36146,
+   "controls": 0,
+   "face": "apimarket-report.html",
+   "title": "BigDomain API Market - Settlement Ledger"
+  },
+  {
+   "back": "buyer-trial.html",
+   "back_controls": 3,
+   "bytes": 8454,
+   "controls": 0,
+   "face": "ceo-blockers.html",
+   "title": "BigDomain &middot; what only the CEO can unblock"
+  },
+  {
+   "back": "buyer-trial.html",
+   "back_controls": 3,
+   "bytes": 7300,
+   "controls": 0,
+   "face": "city-face-report.html",
+   "title": "城市观测面验收报告"
+  },
+  {
+   "back": "buyer-trial.html",
+   "back_controls": 3,
+   "bytes": 3715,
+   "controls": 0,
+   "face": "first-yuan-chain.html",
+   "title": "First-yuan chain - one purchase through pay, member and ledger"
+  },
+  {
+   "back": "buyer-trial.html",
+   "back_controls": 3,
+   "bytes": 3911,
+   "controls": 0,
+   "face": "first-yuan.html",
+   "title": "BigDomain 第一笔收入路径"
+  },
+  {
+   "back": "buyer-trial.html",
+   "back_controls": 3,
+   "bytes": 5276,
+   "controls": 0,
+   "face": "ledger-business-report.html",
+   "title": "代币双式账本业务报告"
+  },
+  {
+   "back": "buyer-trial.html",
+   "back_controls": 3,
+   "bytes": 7963,
+   "controls": 0,
+   "face": "ledger-reconcile-face.html",
+   "title": "BigDomain · 对账实测台 · 双式账本"
+  },
+  {
+   "back": "buyer-trial.html",
+   "back_controls": 3,
+   "bytes": 5766,
+   "controls": 0,
+   "face": "live-sandbox.html",
+   "title": "BigDomain sandbox - live faces"
+  },
+  {
+   "back": "buyer-trial.html",
+   "back_controls": 3,
+   "bytes": 8347,
+   "controls": 0,
+   "face": "lobby-session-trace.html",
+   "title": "Lobby session trace - frames the sandbox really answered"
+  },
+  {
+   "back": "buyer-trial.html",
+   "back_controls": 3,
+   "bytes": 5952,
+   "controls": 0,
+   "face": "lobby-ws-report.html",
+   "title": "P-47-1 lobby WebSocket handshake - driven on a real socket"
+  },
+  {
+   "back": "buyer-trial.html",
+   "back_controls": 3,
+   "bytes": 10218,
+   "controls": 0,
+   "face": "membership-benefit-report.html",
+   "title": "会员权益验收报告"
+  },
+  {
+   "back": "buyer-trial.html",
+   "back_controls": 3,
+   "bytes": 6991,
+   "controls": 0,
+   "face": "payment-gate-report.html",
+   "title": "19.9 支付通道验收报告"
+  },
+  {
+   "back": "buyer-trial.html",
+   "back_controls": 3,
+   "bytes": 7929,
+   "controls": 0,
+   "face": "platform-live-report.html",
+   "title": "BigDomain 沙箱 · 全部门实测在线（一指令拉起）"
+  },
+  {
+   "back": "buyer-trial.html",
+   "back_controls": 3,
+   "bytes": 28112,
+   "controls": 0,
+   "face": "ugc-gate-report.html",
+   "title": "BigDomain - UGC content-safety gate face (P-47 item 3)"
+  }
+ ],
+ "terminus_count": 32,
+ "unreachable": []
 }
