@@ -1,0 +1,13 @@
+FACES 43
+WRITE_SITES raw=8 unique=7 repeat_faces=1 same_value_faces=0
+REPEAT ship-checklist.html counts= [('NS', 2)] seq= ['NS', 'NS']
+Q2 expr_paired | set(reads) <= set(writes) - exists only
+Q2 base_paired | set(symbols) - exists only
+Q2 literal_all | no unresolvable write - exists only
+Q2 runtime_exprs | which exprs need the page - exists only
+Q2 key_naming.parts | one segment per UNIQUE write expr
+Q2 key_attr/data-step-key | same unique sequence as parts
+MOVED ship-checklist.html raw=2 unique=1 parts=1
+FACES_WHERE_REPEATS_MOVE_PARTS 1
+KEY_READING_PASS_S 0.0156
+TOTAL_S 0.048

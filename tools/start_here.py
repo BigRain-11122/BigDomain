@@ -249,17 +249,23 @@ def key_naming(row):
     exactly, so claiming it cannot would be a lie in the opposite direction."""
     keys = row.get("keys")
     if not keys or not keys["write"]:
-        return {"kind": "none", "value": None, "expr": None, "parts": []}
+        return {"kind": "none", "value": None, "expr": None, "parts": [],
+                "repeats": [], "repeat_sites": 0}
+    repeats = [list(pair) for pair in (keys.get("repeat") or [])]
+    repeat_sites = sum(count - 1 for _expr, count in repeats)
     if keys["literal_all"]:
         values = [keys["literal"][expr] for expr in keys["write"]]
         parts = [("empty", "") if value == "" else ("literal", value)
                  for value in values]
         if all(value == "" for value in values):
-            return {"kind": "empty", "value": "", "expr": None, "parts": parts}
+            return {"kind": "empty", "value": "", "expr": None, "parts": parts,
+                    "repeats": repeats, "repeat_sites": repeat_sites}
         return {"kind": "literal", "value": " , ".join(values),
-                "expr": None, "parts": parts}
+                "expr": None, "parts": parts,
+                "repeats": repeats, "repeat_sites": repeat_sites}
     return {"kind": "runtime", "value": None,
-            "expr": keys["runtime_exprs"][0], "parts": []}
+            "expr": keys["runtime_exprs"][0], "parts": [],
+            "repeats": repeats, "repeat_sites": repeat_sites}
 
 
 def key_attr(naming):
@@ -431,11 +437,19 @@ def key_reading(text):
     # page's per-key parts and the `data-step-key` attribute come from one sequence
     # instead of two orderings a reader cannot reconcile.
     buckets = {"setItem": {}, "getItem": {}, "removeItem": {}}
+    # R3275: the same key expression can be written from two different call sites
+    # (ship-checklist writes `NS` from save() and again from reset()), and a reader
+    # of the page had no way to know the second write ever happens. The count is
+    # taken in the same loop, so `write` keeps its first-appearance UNIQUE order -
+    # the sequence `parts`, `key_attr()` and `data-step-key` all share.
+    sites = {"setItem": {}, "getItem": {}, "removeItem": {}}
     for match in CALL.finditer(structure):
         expr = re.sub(r"\s+", "", _first_arg_at(text, structure,
                                                match.end() - 1))
         if expr:
             buckets[match.group(1)].setdefault(expr, None)
+            counts = sites[match.group(1)]
+            counts[expr] = counts.get(expr, 0) + 1
     writes = list(buckets["setItem"])
     reads = list(buckets["getItem"])
     removes = list(buckets["removeItem"])
@@ -450,6 +464,12 @@ def key_reading(text):
                      if value is None]
     return {
         "write": writes, "read": reads, "remove": removes,
+        # R3275: how many setItem calls this face makes, and which expressions it
+        # writes more than once. A repeat is a CALL-SITE count by expression text:
+        # it does not say both sites run, nor which one wins at runtime.
+        "write_sites": sum(sites["setItem"].values()),
+        "repeat": [[expr, sites["setItem"][expr]] for expr in writes
+                   if sites["setItem"][expr] > 1],
         "base_write": base_write, "base_read": base_read,
         # R3274: `reads <= writes` on two lists compares lexicographically and says
         # True for ["a"] <= ["b"] - subset is only asked of sets, now that the
@@ -1333,6 +1353,15 @@ def projection():
     key_name_counts = {kind: 0 for kind in KEY_KINDS}
     for name in operable:
         key_name_counts[key_naming(rows[name])["kind"]] += 1
+    # R3275: faces that write one expression more than once, in name order, plus
+    # the write-side call total so the header can say "8 sites / 7 expressions"
+    # instead of a bare repeat count a reader cannot place.
+    key_repeat = [(name, key_naming(rows[name])["repeats"]) for name in sorted(operable)
+                  if key_naming(rows[name])["repeats"]]
+    repeat_extra = sum(sum(count - 1 for _expr, count in pairs)
+                       for _name, pairs in key_repeat)
+    write_sites_total = sum(((rows[name].get("keys") or {}).get("write_sites") or 0)
+                            for name in operable)
     step_drawers = {name: drawer_naming(rows[name]) for name in steps}
     branch_drawers = {name: drawer_naming(rows[name])
                       for name, _reason in steps_excluded}
@@ -1395,6 +1424,9 @@ def projection():
         "step_key_names": step_key_names,
         "branch_key_names": branch_key_names,
         "key_name_counts": key_name_counts,
+        "key_repeat": key_repeat,
+        "repeat_extra": repeat_extra,
+        "write_sites_total": write_sites_total,
         "step_drawers": step_drawers,
         "branch_drawers": branch_drawers,
         "drawer_when_counts": drawer_when_counts,
@@ -1920,12 +1952,13 @@ def render(proj):
                 '  <p class="step" data-step="%d" data-step-face="%s" '
                 'data-step-ops="%d" data-step-key="%s" '
                 'data-step-key-kind="%s" data-step-literal="%s" '
+                'data-step-repeats="%d" '
                 'data-step-drawers="%s" data-step-when="%s" '
                 'data-step-unread="%s" data-step-read-drawers="%s" '
                 'data-step-remove-drawers="%s" data-step-split="%s">%s</p>'
                 % (index, esc(name), proj["rows"][name]["ops"],
                    esc(" , ".join(keys)), naming["kind"],
-                   esc(key_attr(naming)),
+                   esc(key_attr(naming)), naming["repeat_sites"],
                    esc(",".join(drawn["drawers"])), esc(drawn["when"]),
                    esc(",".join(drawn["unread"])),
                    esc(",".join(drawn["read"])), esc(",".join(drawn["remove"])),
@@ -1961,7 +1994,8 @@ def render(proj):
                 '  <p class="branch" data-branch="%d" data-branch-face="%s" '
                 'data-branch-reason="%s" data-branch-key="%s" '
                 'data-branch-key-kind="%s" '
-                'data-branch-literal="%s" data-branch-drawers="%s" '
+                'data-branch-literal="%s" data-branch-repeats="%d" '
+                'data-branch-drawers="%s" '
                 'data-branch-when="%s" data-branch-unread="%s" '
                 'data-branch-read-drawers="%s" data-branch-remove-drawers="%s" '
                 'data-branch-split="%s">%s</p>'
@@ -1969,7 +2003,7 @@ def render(proj):
                    esc(" , ".join((proj["rows"][name].get("keys") or {})
                                   .get("write") or [])),
                    naming["kind"],
-                   esc(key_attr(naming)),
+                   esc(key_attr(naming)), naming.get("repeat_sites", 0),
                    esc(",".join(drawn["drawers"])), esc(drawn["when"]),
                    esc(",".join(drawn["unread"])),
                    esc(",".join(drawn.get("read") or [])),
@@ -2056,7 +2090,33 @@ def render(proj):
                        % esc(doc.get("drawer_split_none") or ""))
     steps_head = ('  <p class="kindshead">%s</p>\n'
                   % esc(doc.get("step_head") or ""))
-    steps_block = (keynames_html + "\n" + unread_html + "\n" + split_html + "\n"
+    # R3275: one counter, one named row per face writing an expression twice, and a
+    # named absence when none does. The row names the EXPRESSION (it is the thing
+    # written twice) and the count; it never claims which call site wins.
+    repeats_html = (
+        '  <p class="keyrepeat" data-key-repeat-faces="%d" '
+        'data-key-repeat-extra="%d" data-key-write-sites="%d">%s</p>'
+        % (len(proj["key_repeat"]), proj["repeat_extra"],
+           proj["write_sites_total"],
+           esc((doc.get("key_repeat_head_fmt") or "").format(
+               total=len(proj["operable"]), faces=len(proj["key_repeat"]),
+               extra=proj["repeat_extra"], sites=proj["write_sites_total"],
+               sites_minus=(proj["write_sites_total"] - proj["repeat_extra"])))))
+    if proj["key_repeat"]:
+        for name, pairs in proj["key_repeat"]:
+            counts = ",".join("%s:%d" % (expr, count) for expr, count in pairs)
+            phrases = "、".join((doc.get("key_repeat_expr_fmt") or "").format(
+                expr=expr, count=count) for expr, count in pairs)
+            repeats_html += (
+                '\n  <p data-key-repeat-face="%s" data-key-repeat-counts="%s">%s</p>'
+                % (esc(name), esc(counts),
+                   esc((doc.get("key_repeat_face_fmt") or "").format(
+                       name=name, phrases=phrases))))
+    else:
+        repeats_html += ('\n  <p data-key-repeat-absent>%s</p>'
+                         % esc(doc.get("key_repeat_absent") or ""))
+    steps_block = (keynames_html + "\n" + repeats_html + "\n" + unread_html
+                   + "\n" + split_html + "\n"
                    + steps_head
                    + ("\n".join(steps_html) if steps_html else ""))
 
@@ -2203,6 +2263,11 @@ def write():
         "missing_ceo_items": [row["id"] for row in proj["missing"]],
         "steps": proj["steps"],
         "step_keys": proj["step_keys"],
+        "key_repeat": [{"face": name, "repeats": [{"expr": expr, "count": count}
+                                                  for expr, count in pairs]}
+                       for name, pairs in proj["key_repeat"]],
+        "repeat_extra": proj["repeat_extra"],
+        "write_sites_total": proj["write_sites_total"],
         "steps_excluded": [{"face": name, "reason": reason}
                            for name, reason in proj["steps_excluded"]],
         "sizes": {"html_bytes": len(html.encode("utf-8"))},
@@ -3150,12 +3215,23 @@ def check():
     # page itself.
     for key in ("key_head", "key_head_fmt", "key_literal_fmt", "key_empty_fmt",
                 "key_empty_absent", "key_runtime_fmt", "key_absent",
-                "key_literal_empty_part", "key_literal_join"):
+                "key_literal_empty_part", "key_literal_join",
+                "key_repeat_head_fmt", "key_repeat_expr_fmt", "key_repeat_face_fmt",
+                "key_repeat_absent"):
         if not (proj["doc"].get(key) or "").strip():
             failures.append("SH26 word_missing:%s" % key)
     for slot in ("{total}", "{lit}", "{empty}", "{run}", "{none}"):
         if slot not in (proj["doc"].get("key_head_fmt") or ""):
             failures.append("SH26 slot_missing:key_head_fmt:%s" % slot)
+    for slot in ("{total}", "{faces}", "{extra}", "{sites}", "{sites_minus}"):
+        if slot not in (proj["doc"].get("key_repeat_head_fmt") or ""):
+            failures.append("SH26 slot_missing:key_repeat_head_fmt:%s" % slot)
+    for slot in ("{expr}", "{count}"):
+        if slot not in (proj["doc"].get("key_repeat_expr_fmt") or ""):
+            failures.append("SH26 slot_missing:key_repeat_expr_fmt:%s" % slot)
+    for slot in ("{name}", "{phrases}"):
+        if slot not in (proj["doc"].get("key_repeat_face_fmt") or ""):
+            failures.append("SH26 slot_missing:key_repeat_face_fmt:%s" % slot)
     if "{value}" not in (proj["doc"].get("key_literal_fmt") or ""):
         failures.append("SH26 slot_missing:key_literal_fmt:{value}")
     if "{expr}" not in (proj["doc"].get("key_runtime_fmt") or ""):
@@ -3200,6 +3276,7 @@ def check():
         failures.append("SH26 absent_line expected=1 got=%d"
                         % len(key_absent_lines))
     fresh = {}
+    fresh_keys = {}
     for name in proj["operable"]:
         try:
             with open(os.path.join(PREVIEW, name), encoding="utf-8",
@@ -3208,15 +3285,73 @@ def check():
         except OSError:
             failures.append("SH26 face_unreadable:%s" % name)
             continue
-        fresh[name] = key_naming({"keys": key_reading(raw_text)})
+        fresh_keys[name] = key_reading(raw_text)
+        fresh[name] = key_naming({"keys": fresh_keys[name]})
+    # R3275: the repeat bucket. A face writing one expression from two call sites
+    # said nothing about it; the head counter, the named rows and both row
+    # attributes are graded against a fresh resolution of each face's own bytes,
+    # and a clean face may not appear in the list.
+    fresh_repeat = [(name, fresh[name]["repeats"]) for name in sorted(proj["operable"])
+                    if fresh[name]["repeats"]]
+    fresh_extra = sum(sum(count - 1 for _expr, count in pairs)
+                      for _name, pairs in fresh_repeat)
+    fresh_sites = sum(fresh_keys[name]["write_sites"] for name in fresh_keys)
+    rep_head = re.search(
+        r'<p class="keyrepeat" data-key-repeat-faces="(\d+)" '
+        r'data-key-repeat-extra="(\d+)" data-key-write-sites="(\d+)">([^<]*)<',
+        text)
+    if not rep_head:
+        failures.append("SH26 repeat_head_missing")
+    else:
+        faces_raw, extra_raw, sites_raw, said = rep_head.groups()
+        want = (len(fresh_repeat), fresh_extra, fresh_sites)
+        got = (int(faces_raw), int(extra_raw), int(sites_raw))
+        if got != want:
+            failures.append("SH26 repeat_counts page=%s fresh=%s" % (got, want))
+        want_text = (proj["doc"].get("key_repeat_head_fmt") or "").format(
+            total=len(proj["operable"]), faces=len(fresh_repeat),
+            extra=fresh_extra, sites=fresh_sites,
+            sites_minus=(fresh_sites - fresh_extra))
+        if said != esc(want_text):
+            failures.append("SH26 repeat_sentence differs from the fresh derivation")
+    rep_rows = re.findall(
+        r'<p data-key-repeat-face="([^"]+)" data-key-repeat-counts="([^"]*)">'
+        r'([^<]*)<', text)
+    want_names = [name for name, _pairs in fresh_repeat]
+    if [name for name, _counts, _said in rep_rows] != want_names:
+        failures.append("SH26 repeat_rows page=%s fresh=%s"
+                        % ([name for name, _c, _s in rep_rows], want_names))
+    else:
+        for index, (name, counts_raw, said) in enumerate(rep_rows):
+            pairs = fresh_repeat[index][1]
+            want_counts = ",".join("%s:%d" % (expr, count) for expr, count in pairs)
+            if counts_raw != esc(want_counts):
+                failures.append("SH26 repeat_counts_attr:%s page=%s fresh=%s"
+                                % (name, counts_raw, want_counts))
+            phrases = "、".join((proj["doc"].get("key_repeat_expr_fmt") or "").format(
+                expr=expr, count=count) for expr, count in pairs)
+            want_text = (proj["doc"].get("key_repeat_face_fmt") or "").format(
+                name=name, phrases=phrases)
+            if said != esc(want_text):
+                failures.append("SH26 repeat_face_sentence:%s" % name)
+    for name, _counts, _said in rep_rows:
+        if not fresh.get(name) or not fresh[name]["repeats"]:
+            failures.append("SH26 repeat_clean_face_listed:%s" % name)
+    rep_absent = re.findall(r'<p data-key-repeat-absent>', text)
+    if fresh_repeat:
+        if rep_absent:
+            failures.append("SH26 repeat_absent_line_on_repeats")
+    elif len(rep_absent) != 1:
+        failures.append("SH26 repeat_absent_line expected=1 got=%d" % len(rep_absent))
     step_key_rows = re.findall(
         r'<p class="step" data-step="\d+" data-step-face="([^"]+)"[^>]*'
         r'data-step-key="([^"]*)" data-step-key-kind="([^"]*)" '
-        r'data-step-literal="([^"]*)"[^>]*>([^<]*)<', text)
+        r'data-step-literal="([^"]*)" data-step-repeats="(\d+)"[^>]*>([^<]*)<', text)
     branch_key_rows = re.findall(
         r'<p class="branch" data-branch="\d+" data-branch-face="([^"]+)"[^>]*'
         r'data-branch-key="([^"]*)" data-branch-key-kind="([^"]*)" '
-        r'data-branch-literal="([^"]*)"[^>]*>([^<]*)<', text)
+        r'data-branch-literal="([^"]*)" data-branch-repeats="(\d+)"[^>]*>'
+        r'([^<]*)<', text)
     for label, rows_got, want_names in (
             ("step", step_key_rows, steps),
             ("branch", branch_key_rows,
@@ -3225,7 +3360,7 @@ def check():
             failures.append("SH26 %s_rows expected=%d got=%d"
                             % (label, len(want_names), len(rows_got)))
             continue
-        for name, key_raw, kind_raw, literal_raw, said in rows_got:
+        for name, key_raw, kind_raw, literal_raw, repeat_raw, said in rows_got:
             if name not in fresh:
                 failures.append("SH26 not_operable:%s" % name)
                 continue
@@ -3236,6 +3371,10 @@ def check():
             if literal_raw != key_attr(naming):
                 failures.append("SH26 %s_literal:%s page=%s fresh=%s"
                                 % (label, name, literal_raw, key_attr(naming)))
+            if int(repeat_raw) != naming["repeat_sites"]:
+                failures.append("SH26 %s_repeats:%s page=%s fresh=%d"
+                                % (label, name, repeat_raw,
+                                   naming["repeat_sites"]))
             if naming["kind"] == "literal":
                 raw_exprs = proj["rows"][name]["keys"]["write"]
                 for expr in raw_exprs:

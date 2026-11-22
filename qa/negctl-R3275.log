@@ -1,0 +1,13 @@
+C1 live_copy PASS expect=rc=0 page_identical got=rc=0 identical=True
+C2 absence_world PASS expect=rc=0 absent_line faces=0 got=rc=0 absent=True faces0=True
+C3 head_faces PASS expect=rc=2 repeat_counts got=rc=2 repeat_counts=True
+C4 head_sentence PASS expect=rc=2 repeat_sentence got=rc=2 repeat_sentence=True
+C5 row_counts PASS expect=rc=2 repeat_counts_attr got=rc=2 attr=True
+C6 row_dropped PASS expect=rc=2 repeat_rows got=rc=2 repeat_rows=True
+C7 clean_face_listed PASS expect=rc=2 repeat_rows|clean_face_listed got=rc=2 rows=True clean=True
+C8 step_repeats PASS expect=rc=2 step_repeats got=rc=2 step=True
+C9 same_value_not_repeat PASS expect=rc=0 absent line kept got=rc=0 absent=True
+C10 three_writes PASS expect=rc=0 counts=NS:3 extra=2 got=rc=0 counts=True extra=True
+C11 absence_removed PASS expect=rc=2 repeat_absent_line got=rc=2 absent=True
+C12 absence_on_repeats PASS expect=rc=2 repeat_absent_line_on_repeats got=rc=2 on_repeats=True
+C13 branch_repeats PASS expect=rc=2 branch_repeats got=rc=2 branch=True
