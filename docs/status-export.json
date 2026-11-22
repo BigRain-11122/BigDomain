@@ -1,17 +1,17 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-22 R3240 PRODUCT+ENGINEERING: the site reader's OTHER half finally has a judge - the walk that decides which files are read at all was the last unmeasured part, and a real SecGate door written at src/sandbox/test_gate_factory.py (or under data/) left the whole check VERDICT PASS. tools/ugc_gate_report.py now splits the walk into what it READS and what it REFUSES, measures the refused side per rule, and the new AC-UGR13 grades the printed counts and every refused door file against a fresh reading; `data` left the skip set because it is not a non-source name.",
+    "current": "2026-11-22 R3241 PRODUCT+ENGINEERING: the reader's unreadable side is now a defect instead of a silence - a source that does not parse used to be dropped from the site set while AC-UGR8 graded only whether the SURVIVING files were named on the page, so a broken src/sandbox/frontdoor.py moved 4 sites in 3 files to 3 sites in 2 files and the whole check still read VERDICT PASS 11/11. tools/ugc_gate_report.py now names every unparsed source on the face (read side and the test_ refused side) and refuses while any exists; the hole card says the face is RED by design instead of not counted either way.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
-    "last_artifact": "preview/ugc-gate-report.html (14203B) + preview/ugc-gate-report.json (9416B) [2026-11-22 mtime]",
-    "latest_artifact": "preview/ugc-gate-report.html (14203B) + preview/ugc-gate-report.json (9416B) [2026-11-22 mtime]",
+    "last_artifact": "preview/ugc-gate-report.html (15200B) + preview/ugc-gate-report.json (10265B) [2026-11-22 mtime]",
+    "latest_artifact": "preview/ugc-gate-report.html (15200B) + preview/ugc-gate-report.json (10265B) [2026-11-22 mtime]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ugc-gate-report.html",
     "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/suite-frontdoor-chain-card-R3223.log (308B, 2026-11-22)",
     "latest_evidence": "qa/suite-frontdoor-chain-card-R3223.log (308B, 2026-11-22)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R3240] next window (<=48h): (0) MAIN — **同一缺陷类在「读」这一侧仍开着：解析失败的文件只被印、不被判**。`direct_call_sites()` 对语法错误的源会把它放进 `unparsed` 并**从站点集里静默移除**；`AC-UGR8` 判的是「站点文件集 ⊆ 页上文件集」，两边同时缩小仍成立 ⇒ 若 `frontdoor.py` 出现语法错误，它的两处构造会消失、页重渲后仍 `VERDICT PASS`。这与本轮刚为「拒」侧关掉的是同一件事（R3240 前 `test_gate_factory.py` 也是静默），只是发生在另一侧。做法＝先只读量三问：①活树今天 `unparsed` 是否为空（预期空），并在私有世界把一处真构造文件改成语法错误，量面 `--check` 是否仍绿（预期绿＝看不见）；②`unparsed` 的文件名今天是否被任何判据要求出现在页上（预期没有：`AC-UGR8` detail 只印计数，页上印名字但无判据）；③收口三选一＝①接受（页上已印名字，判据只罚站点集）②新增 `AC-UGR14`：每一个未解析源必须**具名出现在页上**且计数一致（与 `AC-UGR13` 同构，一处判据两侧对称）③把未解析从「跳过」改为「失败」（`--check` 直接红）——须先想清楚 .pyc/临时文件是否会把门面弄红。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
-    "next_milestone_due": "2026-11-24T08:56:48+08:00",
-    "updated_at": "2026-11-22T08:56:48+08:00",
+    "next_milestone": "[R3241] next window (<=48h): (0) MAIN — **vendor 规则是唯一仍然「只计数、不解析」的遍历分支，因此也是唯一能把门藏掉而不被具名的一侧**。今天 `.venv` 453 + `ygo-poc` 2 = 455 个 `.py` 被计数，`doors=0` 是**因为从不解析**，不是实测为空。做法＝先只读量三问：①这 455 个文件里有多少**文本上提到** `SecGate`（廉价子串普查，不解析、不计为门）；②若有命中，它们是谁的代码（`sys.path` 上的第三方包 vs 本仓 vendored 副本），以及把 `.venv` 从跳过集合移除会让解析代价/站点集怎样变化（预期站点集不动、代价+~1.5s）；③收口三选一＝①接受并**印出 vendor 提及普查**（提到但不算门，页上具名理由）②按**归属**收窄：只跳过真正的第三方根（`.venv`/`node_modules`），`ygo-poc` 若是本仓 PoC 就解析③把 vendor 的 `unparsed` 也纳入 `AC-UGR14`（今天恒空，因为不解析——须先想清楚「不解析」与「解析失败」不能混为一谈）。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
+    "next_milestone_due": "2026-11-24T09:06:56+08:00",
+    "updated_at": "2026-11-22T09:06:56+08:00",
     "heartbeat": {
       "tick": 3223,
       "state_tick": 3223,
@@ -41,8 +41,8 @@
       "readable": 4586
     }
   },
-  "current": "2026-11-22 R3240 PRODUCT+ENGINEERING: the site reader's OTHER half finally has a judge - the walk that decides which files are read at all was the last unmeasured part, and a real SecGate door written at src/sandbox/test_gate_factory.py (or under data/) left the whole check VERDICT PASS. tools/ugc_gate_report.py now splits the walk into what it READS and what it REFUSES, measures the refused side per rule, and the new AC-UGR13 grades the printed counts and every refused door file against a fresh reading; `data` left the skip set because it is not a non-source name.",
-  "claims": {"claimed": 319, "captured": 94, "contradicted": 10, "uncaptured": 215, "historic": 7, "rows": 8, "present": true, "census_ts": "2026-11-22T08:56:48+08:00"},
+  "current": "2026-11-22 R3241 PRODUCT+ENGINEERING: the reader's unreadable side is now a defect instead of a silence - a source that does not parse used to be dropped from the site set while AC-UGR8 graded only whether the SURVIVING files were named on the page, so a broken src/sandbox/frontdoor.py moved 4 sites in 3 files to 3 sites in 2 files and the whole check still read VERDICT PASS 11/11. tools/ugc_gate_report.py now names every unparsed source on the face (read side and the test_ refused side) and refuses while any exists; the hole card says the face is RED by design instead of not counted either way.",
+  "claims": {"claimed": 321, "captured": 94, "contradicted": 10, "uncaptured": 217, "historic": 7, "rows": 8, "present": true, "census_ts": "2026-11-22T09:06:56+08:00"},
   "chain": {"present": true, "rows": 8, "broken": 0, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -71,11 +71,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-22 R3240 PRODUCT+ENGINEERING: the site reader's OTHER half finally has a judge - the walk that decides which files are read at all was the last unmeasured part, and a real SecGate door written at src/sandbox/test_gate_factory.py (or under data/) left the whole check VERDICT PASS. tools/ugc_gate_report.py now splits the walk into what it READS and what it REFUSES, measures the refused side per rule, and the new AC-UGR13 grades the printed counts and every refused door file against a fresh reading; `data` left the skip set because it is not a non-source name.",
-  "export_ts": "2026-11-22T08:56:48+08:00",
-  "latest_artifact": "preview/ugc-gate-report.html (14203B) + preview/ugc-gate-report.json (9416B) [2026-11-22 mtime]",
+  "do": "2026-11-22 R3241 PRODUCT+ENGINEERING: the reader's unreadable side is now a defect instead of a silence - a source that does not parse used to be dropped from the site set while AC-UGR8 graded only whether the SURVIVING files were named on the page, so a broken src/sandbox/frontdoor.py moved 4 sites in 3 files to 3 sites in 2 files and the whole check still read VERDICT PASS 11/11. tools/ugc_gate_report.py now names every unparsed source on the face (read side and the test_ refused side) and refuses while any exists; the hole card says the face is RED by design instead of not counted either way.",
+  "export_ts": "2026-11-22T09:06:56+08:00",
+  "latest_artifact": "preview/ugc-gate-report.html (15200B) + preview/ugc-gate-report.json (10265B) [2026-11-22 mtime]",
   "latest_evidence": "qa/suite-frontdoor-chain-card-R3223.log (308B, 2026-11-22)",
-  "next_milestone": "[R3240] next window (<=48h): (0) MAIN — **同一缺陷类在「读」这一侧仍开着：解析失败的文件只被印、不被判**。`direct_call_sites()` 对语法错误的源会把它放进 `unparsed` 并**从站点集里静默移除**；`AC-UGR8` 判的是「站点文件集 ⊆ 页上文件集」，两边同时缩小仍成立 ⇒ 若 `frontdoor.py` 出现语法错误，它的两处构造会消失、页重渲后仍 `VERDICT PASS`。这与本轮刚为「拒」侧关掉的是同一件事（R3240 前 `test_gate_factory.py` 也是静默），只是发生在另一侧。做法＝先只读量三问：①活树今天 `unparsed` 是否为空（预期空），并在私有世界把一处真构造文件改成语法错误，量面 `--check` 是否仍绿（预期绿＝看不见）；②`unparsed` 的文件名今天是否被任何判据要求出现在页上（预期没有：`AC-UGR8` detail 只印计数，页上印名字但无判据）；③收口三选一＝①接受（页上已印名字，判据只罚站点集）②新增 `AC-UGR14`：每一个未解析源必须**具名出现在页上**且计数一致（与 `AC-UGR13` 同构，一处判据两侧对称）③把未解析从「跳过」改为「失败」（`--check` 直接红）——须先想清楚 .pyc/临时文件是否会把门面弄红。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
+  "next_milestone": "[R3241] next window (<=48h): (0) MAIN — **vendor 规则是唯一仍然「只计数、不解析」的遍历分支，因此也是唯一能把门藏掉而不被具名的一侧**。今天 `.venv` 453 + `ygo-poc` 2 = 455 个 `.py` 被计数，`doors=0` 是**因为从不解析**，不是实测为空。做法＝先只读量三问：①这 455 个文件里有多少**文本上提到** `SecGate`（廉价子串普查，不解析、不计为门）；②若有命中，它们是谁的代码（`sys.path` 上的第三方包 vs 本仓 vendored 副本），以及把 `.venv` 从跳过集合移除会让解析代价/站点集怎样变化（预期站点集不动、代价+~1.5s）；③收口三选一＝①接受并**印出 vendor 提及普查**（提到但不算门，页上具名理由）②按**归属**收窄：只跳过真正的第三方根（`.venv`/`node_modules`），`ygo-poc` 若是本仓 PoC 就解析③把 vendor 的 `unparsed` 也纳入 `AC-UGR14`（今天恒空，因为不解析——须先想清楚「不解析」与「解析失败」不能混为一谈）。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
   "outs": [
     "preview/apimarket-monthly-faces.html (6834B) + preview/apimarket-monthly-faces.json (13015B) [2026-11-21 commit]",
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-20 commit]",
@@ -189,8 +189,8 @@
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 76091,
-  "next_milestone_due": "2026-11-24T08:56:48+08:00",
+  "state_bytes": 72095,
+  "next_milestone_due": "2026-11-24T09:06:56+08:00",
   "heartbeat": {
     "tick": 3223,
     "state_tick": 3223,

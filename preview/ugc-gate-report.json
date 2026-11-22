@@ -95,6 +95,10 @@
       "text": "the walk's OTHER side is measured, printed and graded (R3240): the report must print, for each refusing rule, how many sources it refused and - for the test_ rule, which cannot be narrowed without drowning nine legal fixture doors - the NAME of every refused source that really constructs the gate; --check refuses when either printed count or any refused door file disagrees with a fresh reading, so a production door misnamed test_*.py reddens here instead of vanishing. The vendor rule is counted and never parsed (a class inside a vendor tree is not this module's class), and `data` left the skip set because it is not a non-source name - measured: zero .py under either data directory, so the live reading did not move"
     },
     {
+      "id": "AC-UGR14",
+      "text": "the OTHER side of the reader is graded too (R3241): a source that does not parse is dropped from the site set by direct_call_sites(), so a constructing file whose syntax breaks shrinks BOTH the measured set and the page that echoes it and AC-UGR8 stays green - measured in qa/probe-R3241.log, where a broken src/sandbox/frontdoor.py moved 4 sites in 3 files to 3 sites in 2 files and the whole check still read VERDICT PASS 11/11. The report must NAME every unparsed source (read side and the test_ refused side) on the face, and --check must REFUSE while any unparsed source exists: an unreadable production source is a defect rather than a design choice, so unlike the nine legal fixture doors of AC-UGR13 it cannot be made green by printing it. The vendor rule stays counted and never parsed"
+    },
+    {
       "id": "AC-SGV1",
       "text": "PRE-REGISTERED REPAIR (not applied: src/ bytes are frozen under the live battery leg): SecGate.__init__ must refuse empty wordlists exactly as MsgSecStub does, so the constitutional no-content-safety-no-door rule holds on the direct construction path too"
     },
@@ -245,8 +249,8 @@
     }
   ],
   "sizes": {
-    "html": 14203,
-    "json": 9416
+    "html": 15200,
+    "json": 10265
   },
   "unparsed": [],
   "wordlist": {

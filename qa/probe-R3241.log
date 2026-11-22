@@ -1,0 +1,18 @@
+Q0 read_side_files=186 tool=ugc_gate_report.py
+Q1 live_hits=4 live_files=3 live_unparsed=0 cost_ms=785
+Q1 site src/sandbox/frontdoor.py:647
+Q1 site src/sandbox/journey_demo.py:90
+Q1 site src/sandbox/lobby/msgsec_stub.py:40
+Q1 site src/sandbox/lobby/msgsec_stub.py:123
+Q2 broken_victim=src/sandbox/frontdoor.py hits=3 files=2 unparsed=['src/sandbox/frontdoor.py'] victim_sites=0
+Q3 live_collect unparsed=[] sites=4
+Q3 ARM-A dropped_sites=3 rc=0 verdict=VERDICT PASS checks=11/11 failed=(none) AC-UGR8=True AC-UGR13=True
+Q3 ARM-B ghost_unparsed rc=0 verdict=VERDICT PASS checks=11/11 failed=(none) AC-UGR8=True AC-UGR13=True
+Q3 check_mentions_unparsed=4
+Q3 mention results.append(("AC-UGR8", ok8, "status=%s sites=%d files_carried=%d/%d unparsed=%d"
+Q3 mention len(data.get("unparsed") or []))))
+Q3 mention "sample_hits=%d expected=%d extra=%d missing=%d unparsed=%d"
+Q3 mention slot = refused.get(rule) or {"files": 0, "doors": [], "unparsed": []}
+Q3 mentions_that_grade_against_page=0
+Q4 refused rule=test_prefix files=458 doors=9 unparsed=[]
+Q4 refused rule=vendor_dir files=455 doors=0 unparsed=[]

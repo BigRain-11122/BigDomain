@@ -50,6 +50,7 @@ CRITERIA = (
     ("AC-UGR11", "re-rendering is an explicit act: --write re-renders before checking, and a bare run with no flags still renders, so no caller loses its previous behaviour"),
     ("AC-UGR12", "the site reader's own spelling laws are re-proved INSIDE --check on a fixed in-memory sample that never comes from disk (R3239): the sample must answer exactly six pinned coordinates - bare, attribute, attribute-assignment alias, import-as alias, literal-getattr alias and a construction sharing a def line - and zero hits for a prose-only source and for a non-literal getattr alias, so a reader degraded to name-only reddens this face instead of only the suite"),
     ("AC-UGR13", "the walk's OTHER side is measured, printed and graded (R3240): the report must print, for each refusing rule, how many sources it refused and - for the test_ rule, which cannot be narrowed without drowning nine legal fixture doors - the NAME of every refused source that really constructs the gate; --check refuses when either printed count or any refused door file disagrees with a fresh reading, so a production door misnamed test_*.py reddens here instead of vanishing. The vendor rule is counted and never parsed (a class inside a vendor tree is not this module's class), and `data` left the skip set because it is not a non-source name - measured: zero .py under either data directory, so the live reading did not move"),
+    ("AC-UGR14", "the OTHER side of the reader is graded too (R3241): a source that does not parse is dropped from the site set by direct_call_sites(), so a constructing file whose syntax breaks shrinks BOTH the measured set and the page that echoes it and AC-UGR8 stays green - measured in qa/probe-R3241.log, where a broken src/sandbox/frontdoor.py moved 4 sites in 3 files to 3 sites in 2 files and the whole check still read VERDICT PASS 11/11. The report must NAME every unparsed source (read side and the test_ refused side) on the face, and --check must REFUSE while any unparsed source exists: an unreadable production source is a defect rather than a design choice, so unlike the nine legal fixture doors of AC-UGR13 it cannot be made green by printing it. The vendor rule stays counted and never parsed"),
     ("AC-SGV1", "PRE-REGISTERED REPAIR (not applied: src/ bytes are frozen under the live battery leg): SecGate.__init__ must refuse empty wordlists exactly as MsgSecStub does, so the constitutional no-content-safety-no-door rule holds on the direct construction path too"),
     ("AC-SGV2", "PRE-REGISTERED: after the repair, SecGate([], []) raises GateOfflineError, the four expected-blocked constructions read 4/4 blocked, and every existing direct call site in src/sandbox stays green because each already passes non-empty config lists"),
     ("AC-SGV3", "PRE-REGISTERED: tools/ugc_gate_report.py --check reads VERDICT PASS with AC-UGR2 counting 4 must-refuse constructions and zero measured holes"),
@@ -438,9 +439,10 @@ def render_html(data):
     unparsed = data.get("unparsed") or []
     sites_html = "".join("<li><span class='mono'>%s</span></li>" % _esc(s) for s in sites)
     unparsed_html = ("" if not unparsed else
-                     "<br>Not parsed, so NOT counted either way (named, not hidden): "
-                     "<span class='mono'>%s</span>"
-                     % _esc(", ".join(unparsed)))
+                     "<br><b>%d source(s) do NOT parse, so their sites are MISSING from the set "
+                     "above and this face is RED by design (AC-UGR14, R3241)</b> - named rather "
+                     "than silently subtracted: <span class='mono'>%s</span>"
+                     % (len(unparsed), _esc(", ".join(unparsed))))
     # R3240: the walk's refusing side, printed rather than left implicit. Two
     # rules, two meanings - the vendor tree is not ours, the test_ prefix is a
     # deliberate narrowing that keeps nine legal fixture doors out of the site
@@ -457,6 +459,12 @@ def render_html(data):
                 len(doors),
                 (": " + ", ".join("<span class='mono'>%s</span>" % _esc(d) for d in doors))
                 if doors else "")
+            unparsed_slot = slot.get("unparsed") or []
+            if unparsed_slot:
+                tail += ("; <b>%d</b> do NOT parse and are named: %s"
+                         % (len(unparsed_slot),
+                            ", ".join("<span class='mono'>%s</span>" % _esc(u)
+                                      for u in unparsed_slot)))
         else:
             tail = "counted and NOT parsed - a class inside a vendor tree is not this module's class"
         refused_bits.append("<li>refused %s: %d sources - %s</li>" % (_esc(rule), files, tail))
@@ -465,7 +473,10 @@ def render_html(data):
                     "A production file misnamed with the test_ prefix, or a door written under "
                     "<span class='mono'>data/</span> (which stopped being a skipped name at R3240 - it "
                     "held no Python, measured), is therefore either read or NAMED here. Parsing the "
-                    "refused side costs about 1.5 s over 913 files, paid on every collect and --check."
+                    "refused side costs about 1.5 s over 913 files, paid on every collect and --check. "
+                    "A refused source that does not parse is counted and named above, and it reddens "
+                    "--check by itself (AC-UGR14, R3241): a legal fixture door is a choice, an "
+                    "unreadable file is not."
                     % "".join(refused_bits))
     hole_html = (
         "<div class='card hole'><b>MEASURED HOLE - %s (%s)</b><br>"
@@ -762,6 +773,29 @@ def check(data):
         thirteen.append("%s files=%d doors=%d counted=%s unnamed=%d"
                         % (rule, files, len(doors), counted, len(unnamed)))
     results.append(("AC-UGR13", ok13, " ".join(thirteen)))
+
+    # AC-UGR14: an unparsed source is a DEFECT, not a design choice (R3241).
+    # AC-UGR8 grades whether every MEASURED file is named on the face, so a file
+    # that stops parsing shrinks both sides at once and stays green - measured in
+    # qa/probe-R3241.log: a broken src/sandbox/frontdoor.py moved 4 sites in 3
+    # files to 3 sites in 2 files and the whole check still read PASS 11/11, and
+    # an invented ghost name the page could never carry changed nothing either.
+    # The nine legal fixture doors of AC-UGR13 are a chosen narrowing; an
+    # unreadable source is not, so printing it is not enough - any unparsed
+    # source reddens this face until it parses again.
+    unparsed_read = sorted(data.get("unparsed") or [])
+    unparsed_refused = []
+    for rule in ("test_prefix", "vendor_dir"):
+        slot = refused.get(rule) or {}
+        for rel in (slot.get("unparsed") or []):
+            unparsed_refused.append(rel)
+    unnamed14 = [u for u in unparsed_read if u not in html_text]
+    unnamed14 += [r for r in unparsed_refused if r not in html_text]
+    ok14 = not unparsed_read and not unparsed_refused and not unnamed14
+    results.append(("AC-UGR14", ok14,
+                    "read_unparsed=%d refused_unparsed=%d unnamed=%d named_on_page=%s"
+                    % (len(unparsed_read), len(unparsed_refused), len(unnamed14),
+                       not unnamed14)))
 
     # AC-UGR9: the sizes block is read back FROM THE LANDED DOCUMENT, never from
     # the in-memory dict, so a --no-write run still gates on what is on disk.

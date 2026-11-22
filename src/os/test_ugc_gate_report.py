@@ -123,7 +123,7 @@ def main():
         mod.OUT_HTML, mod.OUT_JSON = copy_html, copy_json
 
         rc, base, text, verdict = run_check(mod, data)
-        ok('AC-UGRB0', rc == 0 and len(base) == 11 and all(base.values()),
+        ok('AC-UGRB0', rc == 0 and len(base) == 12 and all(base.values()),
            'baseline rc=%d criteria=%d green=%d %s'
            % (rc, len(base), sum(1 for v in base.values() if v), verdict))
 
@@ -433,6 +433,58 @@ def main():
               (census.get('test_prefix') or {}).get('doors'),
               (census.get('vendor_dir') or {}).get('files')))
 
+        # ---- B24/B25: the reader's unreadable side is graded (R3241). Measured
+        # in qa/probe-R3241.log: a broken frontdoor.py moved 4 sites in 3 files
+        # to 3 sites in 2 files while the whole check still read PASS 11/11, and
+        # a ghost unparsed name the page could never carry changed nothing. B24
+        # is the data-level split (old criterion blind, new one red); B25 renders
+        # a private world where the broken source IS named on the page and proves
+        # that naming alone does not buy green.
+        def b24(d):
+            victim = 'src/sandbox/frontdoor.py'
+            d['call_sites'] = [s for s in d['call_sites']
+                               if not s.startswith(victim + ':')]
+            d['unparsed'] = [victim]
+
+        mutated24 = copy.deepcopy(data)
+        b24(mutated24)
+        r24, res24, _t24, _v24 = run_check(mod, mutated24)
+        ok('AC-UGRB24',
+           res24.get('AC-UGR14') is False and res24.get('AC-UGR8') is True,
+           'a constructing file dropped as unparsed: AC-UGR14=%s (must be FAIL) '
+           'AC-UGR8=%s (stays PASS) rc=%d'
+           % (res24.get('AC-UGR14'), res24.get('AC-UGR8'), r24))
+
+        broken_world = world_tree({
+            'src/sandbox/visible.py':
+                'from lobby.sec_gate import SecGate\nG = SecGate([], [])\n',
+            'src/sandbox/broken_gate.py':
+                'from lobby.sec_gate import SecGate\nG = SecGate([], []\n',
+        })
+        real_root = mod.ROOT
+        real_html, real_json = mod.OUT_HTML, mod.OUT_JSON
+        try:
+            mod.ROOT = broken_world
+            mod.OUT_HTML = os.path.join(broken_world, 'out.html')
+            mod.OUT_JSON = os.path.join(broken_world, 'out.json')
+            mod.write_outputs(mod.collect())
+            with io.open(mod.OUT_HTML, 'r', encoding='utf-8') as fh:
+                bhtml = fh.read()
+            rc25, res25, _t25, _v25 = run_check(mod, mod.collect())
+        finally:
+            mod.ROOT = real_root
+            mod.OUT_HTML, mod.OUT_JSON = real_html, real_json
+            shutil.rmtree(broken_world, ignore_errors=True)
+        ok('AC-UGRB25',
+           res25.get('AC-UGR14') is False
+           and res25.get('AC-UGR8') is True
+           and 'src/sandbox/broken_gate.py' in bhtml
+           and 'src/sandbox/visible.py' in bhtml,
+           'named yet still red: on_page=%s AC-UGR14=%s (must be FAIL) '
+           'AC-UGR8=%s rc=%d'
+           % ('src/sandbox/broken_gate.py' in bhtml, res25.get('AC-UGR14'),
+              res25.get('AC-UGR8'), rc25))
+
         # ---- B17: the live tree must read the same site set as before the
         # reader changed (pure addition): three files, four constructions.
         live_hits, live_skipped = mod.direct_call_sites()
@@ -451,7 +503,7 @@ def main():
     after = real_snapshot()
     rc_real, res_real, _, verdict_real = run_check(mod, mod.collect())
     ok('AC-UGRB10',
-       before == after and rc_real == 0 and len(res_real) == 11 and all(res_real.values()),
+       before == after and rc_real == 0 and len(res_real) == 12 and all(res_real.values()),
        'real pair unchanged=%s real rc=%d green=%d' %
        (before == after, rc_real, sum(1 for v in res_real.values() if v)))
 
@@ -467,7 +519,7 @@ def main():
             declared = int(tail.strip())
         except ValueError:
             declared = None
-    ok('AC-UGRB11', bool(row) and declared == 24,
+    ok('AC-UGRB11', bool(row) and declared == 26,
        'registry_rows=%d declared=%s' % (len(row), declared))
 
     law_verdict = "PASS" if not FAILS else "FAIL"
