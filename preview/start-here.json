@@ -1,7 +1,7 @@
 {
  "face": "start-here",
  "generated_from": {
-  "state/start-here-faces.json": "dd0c977c31b88ab9"
+  "state/start-here-faces.json": "d8247c3e40e8c9c5"
  },
  "faces_total": 44,
  "operable": [
@@ -103,7 +103,37 @@
   "miniapp",
   "pubkey"
  ],
+ "steps": [
+  "filing-checklist.html",
+  "ship-checklist.html",
+  "merchant-onboard.html",
+  "lobby-protocol-map.html"
+ ],
+ "step_keys": {
+  "filing-checklist.html": [
+   "NS"
+  ],
+  "ship-checklist.html": [
+   "NS"
+  ],
+  "merchant-onboard.html": [
+   "KEY"
+  ],
+  "lobby-protocol-map.html": [
+   "NS"
+  ]
+ },
+ "steps_excluded": [
+  {
+   "face": "buyer-trial.html",
+   "reason": "screen"
+  },
+  {
+   "face": "money-path-demo.html",
+   "reason": "orphan"
+  }
+ ],
  "sizes": {
-  "html_bytes": 29923
+  "html_bytes": 31780
  }
 }

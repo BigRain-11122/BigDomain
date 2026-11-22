@@ -894,6 +894,42 @@ def network_status(rows):
     }
 
 
+STEP_REASONS = ("screen", "wires", "inert", "orphan", "nokey")
+
+
+def step_walk(rows, operable):
+    """R3266: which operable faces a first-time reader should touch first.
+
+    The first screen has said three times that this machine cannot take money,
+    cannot reach the network and holds three zero readings - all true, and none
+    of it a path. This walk is DERIVED, never written: a step is an operable
+    face whose kind is `persists` (the reader's own classification of that
+    face's bytes: state survives leaving the page) AND whose key base is paired
+    (what it reads it also wrote, so a return visit can recompute it). Every
+    operable face outside that set is named with a closed reason, so the two
+    faces a visitor was dropped in front of with no explanation are explained.
+
+    Order is mechanical too: more controls first (a face with 21 checkboxes is a
+    longer errand than one filter box), ties by name. The count is whatever the
+    derivation says - today four, not the three the board guessed - because a
+    hand-fixed three would either hide a step or invent an exclusion.
+    """
+    steps = []
+    excluded = []
+    for name in operable:
+        row = rows[name]
+        if row["kind"] != "persists":
+            excluded.append((name, row["kind"]))
+        elif "keys" not in row:
+            excluded.append((name, "nokey"))
+        elif not row["keys"]["base_paired"]:
+            excluded.append((name, "orphan"))
+        else:
+            steps.append(name)
+    steps.sort(key=lambda n: (-rows[n]["ops"], n))
+    return steps, excluded
+
+
 def projection():
     rows = scan_faces()
     doc = load_json(DATA)
@@ -971,6 +1007,8 @@ def projection():
         for got in rows[name]["forms"]["named"]:
             named_decl_counts[got[3]] += 1
     named_total = sum(named_decl_counts.values())
+    steps, steps_excluded = step_walk(rows, operable)
+    step_keys = {name: list(rows[name]["keys"]["write"]) for name in steps}
     return {
         "rows": rows,
         "doc": doc,
@@ -1012,6 +1050,9 @@ def projection():
         "missing": missing_ceo_items(),
         "money": money_status(),
         "net": network_status(rows),
+        "steps": steps,
+        "steps_excluded": steps_excluded,
+        "step_keys": step_keys,
         "data16": sha16(DATA),
     }
 
@@ -1484,6 +1525,42 @@ def render(proj):
                             esc((doc.get("net_face_fmt") or "").format(
                                 name=name, sites=net["hits"][name], forms=forms))))
 
+    steps = proj["steps"]
+    steps_html = []
+    if steps:
+        for index, name in enumerate(steps, 1):
+            keys = proj["step_keys"][name]
+            shown = " , ".join(keys) or (doc.get("step_key_none") or "")
+            steps_html.append(
+                '  <p class="step" data-step="%d" data-step-face="%s" '
+                'data-step-ops="%d" data-step-key="%s">%s</p>'
+                % (index, esc(name), proj["rows"][name]["ops"],
+                   esc(" , ".join(keys)),
+                   esc((doc.get("step_fmt") or "").format(
+                       n=index, face=name, key=shown))))
+    else:
+        steps_html.append('  <p data-step-absent>%s</p>'
+                          % esc(doc.get("step_absent") or ""))
+    if proj["steps_excluded"]:
+        items = []
+        for name, reason in proj["steps_excluded"]:
+            if reason in KINDS:
+                word = kind_tag(doc, reason)
+            elif reason == "orphan":
+                word = doc.get("step_orphan_word") or reason
+            else:
+                word = doc.get("step_nokey_word") or reason
+            items.append("%s（%s）" % (name, word))
+        steps_html.append(
+            '  <p data-step-excluded="%s">%s</p>'
+            % (esc(",".join("%s:%s" % (name, reason)
+                            for name, reason in proj["steps_excluded"])),
+               esc((doc.get("step_excluded_fmt") or "").format(
+                   items="，".join(items)))))
+    steps_head = ('  <p class="kindshead">%s</p>\n'
+                  % esc(doc.get("step_head") or ""))
+    steps_block = steps_head + ("\n".join(steps_html) if steps_html else "")
+
     if proj["missing"]:
         items = "\n".join(
             '    <li data-ceo-item="%s"><b>%s</b> &mdash; %s</li>'
@@ -1519,6 +1596,8 @@ def render(proj):
         ".freeze{margin-top:14px;background:rgba(255,255,255,.16);border:1px solid #ffd43b;"
         "border-radius:8px;padding:9px 13px;font-size:13px}\n"
         ".net{margin-top:14px;background:rgba(255,255,255,.16);border:1px solid #a5d8ff;"
+        "border-radius:8px;padding:9px 13px;font-size:13px}\n"
+        ".step{margin-top:6px;background:rgba(255,255,255,.10);border:1px solid #8ce99a;"
         "border-radius:8px;padding:9px 13px;font-size:13px}\n"
         ".kc{display:inline-block;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.4);"
         "border-radius:6px;padding:4px 10px;font-size:12px;margin:4px 6px 0 0}\n"
@@ -1564,6 +1643,7 @@ def render(proj):
         "</div>\n"
         "%s\n"
         "%s\n"
+        "%s\n"
         "  <p class=\"kindshead\">%s</p>\n"
         "  <div class=\"counts kinds\">\n%s\n  </div>\n"
         "%s\n"
@@ -1581,6 +1661,7 @@ def render(proj):
         len(proj["operable"]), esc(doc.get("count_operable", "")),
         money_html,
         net_html,
+        steps_block,
         esc(doc.get("kind_counts_head", "")), kind_counts, keys_block, freeze_html,
         esc(doc["h2_can"].format(operable=len(proj["operable"]))), legend_block, "\n".join(cards),
         esc(doc["h2_cannot"]), missing_block,
@@ -1621,6 +1702,10 @@ def write():
         "form_named": {name: proj["rows"][name]["forms"]["named"]
                        for name in proj["form_named"]},
         "missing_ceo_items": [row["id"] for row in proj["missing"]],
+        "steps": proj["steps"],
+        "step_keys": proj["step_keys"],
+        "steps_excluded": [{"face": name, "reason": reason}
+                           for name, reason in proj["steps_excluded"]],
         "sizes": {"html_bytes": len(html.encode("utf-8"))},
     }
     with open(OUT_JSON, "w", encoding="utf-8", newline="\n") as fh:
@@ -2367,12 +2452,87 @@ def check():
             if name not in net["hits"]:
                 failures.append("SH23 clean_face_listed:%s" % name)
 
+    # AC-SH24 (R3266): the real complaint was that a first-time reader was told
+    # three times what this machine cannot do and never told where to start. The
+    # walk is derived (kind=persists AND key base paired; more controls first,
+    # ties by name) and the page must print THAT walk: rank, face, control count,
+    # the key names it leaves, the sentence verbatim, and every operable face left
+    # out with a reason from the closed set. A hand-fixed three would hide a step
+    # or invent an exclusion, so the count is graded against the derivation.
+    for key in ("step_head", "step_fmt", "step_excluded_fmt", "step_absent",
+                "step_key_none"):
+        if not (proj["doc"].get(key) or "").strip():
+            failures.append("SH24 word_missing:%s" % key)
+    for slot in ("{n}", "{face}", "{key}"):
+        if slot not in (proj["doc"].get("step_fmt") or ""):
+            failures.append("SH24 slot_missing:%s" % slot)
+    steps = proj["steps"]
+    excluded = proj["steps_excluded"]
+    rows_step = re.findall(
+        r'data-step="(\d+)" data-step-face="([^"]+)" data-step-ops="(\d+)" '
+        r'data-step-key="([^"]*)">([^<]*)<', text)
+    step_absent = re.findall(r'<p data-step-absent>', text)
+    if not steps:
+        if len(step_absent) != 1:
+            failures.append("SH24 absent_line expected=1 got=%d" % len(step_absent))
+        if rows_step:
+            failures.append("SH24 rows_without_steps=%d" % len(rows_step))
+    else:
+        if step_absent:
+            failures.append("SH24 absent_line_on_steps")
+        if not rows_step:
+            failures.append("SH24 walk_missing")
+        else:
+            got_order = [name for _n, name, _o, _k, _s in rows_step]
+            if got_order != steps:
+                failures.append("SH24 order page=%s fresh=%s"
+                                % (got_order, steps))
+            if len(set(got_order)) != len(got_order):
+                failures.append("SH24 duplicate_step_face")
+            for index, (n_raw, name, ops_raw, key_raw, said) in enumerate(rows_step, 1):
+                if int(n_raw) != index:
+                    failures.append("SH24 rank:%s page=%s fresh=%d"
+                                    % (name, n_raw, index))
+                if name not in steps:
+                    failures.append("SH24 not_a_step:%s" % name)
+                    continue
+                if int(ops_raw) != proj["rows"][name]["ops"]:
+                    failures.append("SH24 ops:%s page=%s fresh=%d"
+                                    % (name, ops_raw, proj["rows"][name]["ops"]))
+                keys = proj["step_keys"][name]
+                if key_raw != esc(" , ".join(keys)):
+                    failures.append("SH24 keys:%s page=%s fresh=%s"
+                                    % (name, key_raw, keys))
+                shown = " , ".join(keys) or (proj["doc"].get("step_key_none") or "")
+                want = (proj["doc"].get("step_fmt") or "").format(
+                    n=index, face=name, key=shown)
+                if said != esc(want):
+                    failures.append("SH24 sentence:%s differs from the fresh "
+                                    "derivation" % name)
+    got = re.search(r'data-step-excluded="([^"]*)"', text)
+    page_excluded = {}
+    if got:
+        for part in got.group(1).split(","):
+            if ":" in part:
+                name, reason = part.split(":", 1)
+                page_excluded[name] = reason
+    for name, reason in page_excluded.items():
+        if reason not in STEP_REASONS:
+            failures.append("SH24 reason_not_closed:%s=%s" % (name, reason))
+        if name in steps:
+            failures.append("SH24 step_listed_as_excluded:%s" % name)
+    if dict(excluded) != page_excluded:
+        failures.append("SH24 excluded page=%s fresh=%s"
+                        % (page_excluded, dict(excluded)))
+    if not excluded and got:
+        failures.append("SH24 excluded_line_without_exclusions")
+
     if failures:
         for line in failures:
             print("  FAIL " + line)
-        print("VERDICT FAIL criteria=23 failures=%d" % len(failures))
+        print("VERDICT FAIL criteria=24 failures=%d" % len(failures))
         return 2
-    print("VERDICT PASS criteria=23 faces=%d operable=%d missing_ceo=%d external_refs=0 "
+    print("VERDICT PASS criteria=24 faces=%d operable=%d missing_ceo=%d external_refs=0 "
           "kinds=%s keys=%s tiers=%s attrs=%s hosts=%s lexical=faces:%d,calls:%d "
           "expr_bodies=%d forms=%s"
           % (proj["faces_total"], len(proj["operable"]), len(proj["missing"]),
@@ -2397,7 +2557,9 @@ def check():
                 proj["money"]["state"], proj["money"]["pending"],
                 proj["money"]["total"], proj["money"]["proven"])
              + " net=%s:%d/%d"
-             % (proj["net"]["state"], proj["net"]["sites"], proj["net"]["total"])))
+             % (proj["net"]["state"], proj["net"]["sites"], proj["net"]["total"])
+             + " steps=%d excluded=%d"
+             % (len(proj["steps"]), len(proj["steps_excluded"]))))
 
     return 0
 

@@ -18,6 +18,7 @@ header .sub{margin-top:8px;font-size:14px;opacity:.94}
 .kindshead{margin-top:14px;font-size:13px;opacity:.94}
 .freeze{margin-top:14px;background:rgba(255,255,255,.16);border:1px solid #ffd43b;border-radius:8px;padding:9px 13px;font-size:13px}
 .net{margin-top:14px;background:rgba(255,255,255,.16);border:1px solid #a5d8ff;border-radius:8px;padding:9px 13px;font-size:13px}
+.step{margin-top:6px;background:rgba(255,255,255,.10);border:1px solid #8ce99a;border-radius:8px;padding:9px 13px;font-size:13px}
 .kc{display:inline-block;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.4);border-radius:6px;padding:4px 10px;font-size:12px;margin:4px 6px 0 0}
 .kc b{font-size:15px;margin-right:5px}
 .legend{background:#eef2ff;border:1px solid #c7d2fe;border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:12px}
@@ -55,6 +56,12 @@ code{background:#eef1f6;border-radius:3px;padding:1px 5px;font-size:12px}
   <p class="money" data-money="blocked" data-money-pending="6" data-money-total="8" data-money-proven="2">第一件要说的事：这台平台现在收不了钱——8 项接入项里有 6 项 CEO 物理件未到位，已证 2 项；这一行与页下那份缺口清单同源，不是手写。</p>
   <p class="net" data-net="offline" data-net-sites="0" data-net-faces="0" data-net-total="44">联网读数：本仓 44 张预览面里共 0 处联网站点，落在 0 张面上——今天一处都没有，全部只在本机打开；这一行读的是页面字节里的站点，不是浏览器能力判定。</p>
   <p data-net-absent>联网面：今天没有——这五类站点一处都没有，但这不等于浏览器不能被唤起：运行期拼出的地址、eval 出来的 URL 与 CSS @import 都不在这五类计数里。</p>
+  <p class="kindshead">从哪一步开始（派生，不是手写）：</p>
+  <p class="step" data-step="1" data-step-face="filing-checklist.html" data-step-ops="21" data-step-key="NS">1. filing-checklist.html —— 点它之后，NS 留在这台机器的浏览器里，离开页面再回来还能接着做；这一步能证明「这里确实会留下状态」，不能证明「这份状态对平台有效」——全部在本机。</p>
+  <p class="step" data-step="2" data-step-face="ship-checklist.html" data-step-ops="12" data-step-key="NS">2. ship-checklist.html —— 点它之后，NS 留在这台机器的浏览器里，离开页面再回来还能接着做；这一步能证明「这里确实会留下状态」，不能证明「这份状态对平台有效」——全部在本机。</p>
+  <p class="step" data-step="3" data-step-face="merchant-onboard.html" data-step-ops="9" data-step-key="KEY">3. merchant-onboard.html —— 点它之后，KEY 留在这台机器的浏览器里，离开页面再回来还能接着做；这一步能证明「这里确实会留下状态」，不能证明「这份状态对平台有效」——全部在本机。</p>
+  <p class="step" data-step="4" data-step-face="lobby-protocol-map.html" data-step-ops="1" data-step-key="NS">4. lobby-protocol-map.html —— 点它之后，NS 留在这台机器的浏览器里，离开页面再回来还能接着做；这一步能证明「这里确实会留下状态」，不能证明「这份状态对平台有效」——全部在本机。</p>
+  <p data-step-excluded="buyer-trial.html:screen,money-path-demo.html:orphan">不进走线的可操作面：buyer-trial.html（仅屏上），money-path-demo.html（读的键不是自己写的）。</p>
   <p class="kindshead">同样是「能动手」，点了会改变什么并不一样——分档读自每张面自己的脚本，不是手写：</p>
   <div class="counts kinds">
   <span class="kc" data-kind-count="persists"><b>5</b>本机留存</span>
@@ -250,7 +257,7 @@ code{background:#eef1f6;border-radius:3px;padding:1px 5px;font-size:12px}
   <p data-notice="advice">非投顾提示：本页与全部预览面不构成任何投资建议。</p>
   <p data-notice="mock">MOCK：本页列出的支付、账本、权益流程全部是页内模拟，不接真实资金通道。</p>
 </div>
-<footer>sources: state/start-here-faces.json dd0c977c31b88ab9 / state/merchant-onboard-items.json via tools/merchant_onboard.project_items()</footer>
+<footer>sources: state/start-here-faces.json d8247c3e40e8c9c5 / state/merchant-onboard-items.json via tools/merchant_onboard.project_items()</footer>
 </div>
 </body>
 </html>

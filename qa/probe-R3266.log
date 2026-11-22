@@ -1,0 +1,44 @@
+faces_total=44 operable=6 kinds=persists:5,screen:1,wires:0,inert:0
+
+PER OPERABLE FACE (the six a visitor can actually touch):
+  buyer-trial.html                 kind=screen   ops=3 keys_base=-      tier=- hosts=- persists=no
+      label=买家试用镜
+      can=点一件商品下单、走 MOCK 支付、看现金账与代币账各自配平、拿到权益与收据，并点『重复回调』自证同一订单只入账一次。
+  filing-checklist.html            kind=persists ops=21 keys_base=paired tier=same hosts=no-host persists=yes
+      label=小程序备案执行清单
+      can=逐项勾选备案执行步骤，进度存在本机浏览器里，可随时回来接着勾。
+  lobby-protocol-map.html          kind=persists ops=1 keys_base=paired tier=same hosts=no-host persists=yes
+      label=大厅协议图
+      can=在过滤框里输入消息前缀或判据号，筛出对应的协议节点与判据覆盖。
+  merchant-onboard.html            kind=persists ops=9 keys_base=paired tier=same hosts=no-host persists=yes
+      label=商户号接入自查单
+      can=看 8 项缺口（6 项 CEO 物理件 + 2 项我方证据），逐项勾自述进度，并同时看到『自述 k/6』与『有证据 m/8』两个计数器。
+  money-path-demo.html             kind=persists ops=3 keys_base=orphan tier=same hosts=same-host persists=no
+      label=收款演练（MOCK）
+      can=按打勾步骤走一遍收款到入权益的钱路，看每一步的页内读数。
+  ship-checklist.html              kind=persists ops=12 keys_base=paired tier=same hosts=no-host persists=yes
+      label=上线前置清单
+      can=逐项勾选上线前的硬门（AIGC 标识、msgSecCheck 前置闸等），进度本地留存。
+
+DERIVABLE STEP CANDIDATES (kind=persists and keys base paired, i.e. a click
+leaves a key that the same page can re-read and --check can recompute):
+  1. filing-checklist.html            hosts=no-host ops=21
+  2. lobby-protocol-map.html          hosts=no-host ops=1
+  3. merchant-onboard.html            hosts=no-host ops=9
+  4. ship-checklist.html              hosts=no-host ops=12
+
+EXCLUDED FROM A DERIVED WALK (operable but no persisted base key):
+  buyer-trial.html                 kind=screen/no key
+  money-path-demo.html             base=orphan
+
+COLLISION CHECK (classes and data-* prefixes already used in the header):
+  class="freeze"   1
+  class="money"    1
+  class="net"      1
+  data-freeze=     1
+  data-money=      1
+  data-net=        1
+  data-step=       0
+  class="step"     0
+
+SIZES header_bytes=16506 page_bytes=29923 criteria_read_from_check=see --check

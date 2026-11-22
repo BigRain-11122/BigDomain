@@ -3,17 +3,17 @@
     "board_pages_skipped": [
       "preview/face-sweep.html (7449B)"
     ],
-    "current": "2026-11-22 R3265 PRODUCT+ENGINEERING: the header has said \"zero links, zero network\" in prose while the per-row external count scan_faces() already computed was read by nobody - the one criterion that touches external refs (AC-SH2) refuses them in the page ITSELF, a different question. The header now carries a derived network line over the 44 faces: five text forms (fetch(, XMLHttpRequest, new WebSocket, <form action=http, src|href=http) counted on the pass that already opens every face, a state word (offline at zero sites, online otherwise), the site and face counts, a sentence that states it counts SITES not capability, and either a named absence or per-face rows with form counts.",
+    "current": "2026-11-22 R3266 PRODUCT+ENGINEERING: the board asked whether a reader told three times what this machine cannot do should finally be told where to start. The first screen now carries a DERIVED walk: a step is an operable face whose own bytes classify it as kind=persists AND whose key base is paired, ordered by control count (many controls first, ties by name); every other operable face is named with a closed reason, and the count is whatever the derivation says - four today, not the three the board guessed.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
-    "last_artifact": "preview/start-here.html (29923B) + preview/start-here.json (1717B) [2026-11-22 mtime]",
-    "latest_artifact": "preview/start-here.html (29923B) + preview/start-here.json (1717B) [2026-11-22 mtime]",
+    "last_artifact": "preview/start-here.html (31780B) + preview/start-here.json (2180B) [2026-11-22 mtime]",
+    "latest_artifact": "preview/start-here.html (31780B) + preview/start-here.json (2180B) [2026-11-22 mtime]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\start-here.html",
     "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/negctl-R3262.log (664B, 2026-11-22)",
     "latest_evidence": "qa/negctl-R3262.log (664B, 2026-11-22)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3266] next window (<=48h): (0) MAIN — **首屏连着三轮在说「不行」：收不了钱、没有联网、三档读数为零；可它至今没给读者一条能走的路**。一个第一次打开的人看到 44 面 / 6 张能操作 / 三句拒绝，但他不知道先点哪一张、点完能看到什么、走到哪一步算「今天这台机器确实能干成一件小事」。问：值不值得把首屏做成一条**派生**的三步入口（不是手写导航）？做法＝先只读量三问：①活树 6 张可操作面里，哪几张真的会改变可见状态并能被同一页的 --check 复算（拿 `kind`、`data-keys-base`、`data-hosts-verdict` 三档读数逐面说：点它之后有什么东西留在页上）；②能否立一条机械律「三步 = 由 kind/keys/hosts 派生出来的那几张面，按 persisted→screen 排序，每步印出面名 + 它到底留下什么 + 它能证明什么/不能证明什么」，且不与 AC-SH21/22/23 三行撞位、不把「导航」变成又一段手写散文；③代价（要不要新增一条判据、会不会破 AC-SH2 的 listed==operable、页增多少字节）。收口三选一＝①不加（首屏保持现状，读者自己找）②加一条派生三步入口 + 一条判据（第几步=哪张面由读数决定）③只把现有 6 张按 kind 排序并印一句「先点这张，因为它会把状态留在页上」而不加判据。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
-    "next_milestone_due": "2026-11-24T14:28:03+08:00",
-    "updated_at": "2026-11-22T14:28:03+08:00",
+    "next_milestone": "[R3267] next window (<=48h): (0) MAIN — **走线把两张最想让人看的面试成了「不进走线」**：`money-path-demo.html`（唯一演示收款到入权益的 MOCK 面）因 `keys base=orphan` 被排除，`buyer-trial.html`（买家试用镜）因 `kind=screen` 被排除——于是首屏给的 4 步全是勾选清单加一个过滤框，**没有一步通向那条钱路**。问：值不值得让「读的键不是自己写的」这类面以**显式标注的旁支**身份进入走线（进了但明说「它不留状态/它的键不是自己写的」），而不是整张被挡在门外？做法＝先只读量三问：①两张被排除面点下去到底会不会有可见变化（`ops`、`keys.read/write`、`hosts.verdict` 逐项读出来：money-path-demo `hosts=same-host` 说明写读落在同一元素表达式上，它到底留不留东西）；②能否立一条机械律「走线 = 主步（persists+paired，按 ops 降序）+ 旁支（operable 但被排除，按闭集理由具名，标注『看得到但留不下/留下的不是它写的』），主支与旁支各自计数、各自可红」，且不破 AC-SH24 现有的 rank/集合判据；③代价（会不会把「能走的路」稀释成「六张面全列一遍」——如果六张全进，走线就退化成目录；页增多少字节；判据 24→25 还是就地扩 SH24）。收口三选一＝①保持现状（排除句已具名理由，读者自己点）②加旁支（一条派生判据，主/旁支双计数）③只把排除句改写为「先看这两张，但要知道它们留不下东西」而不动判据。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
+    "next_milestone_due": "2026-11-24T14:35:58+08:00",
+    "updated_at": "2026-11-22T14:35:58+08:00",
     "heartbeat": {
       "tick": 3262,
       "state_tick": 3262,
@@ -43,9 +43,9 @@
       "readable": 4681
     }
   },
-  "current": "2026-11-22 R3265 PRODUCT+ENGINEERING: the header has said \"zero links, zero network\" in prose while the per-row external count scan_faces() already computed was read by nobody - the one criterion that touches external refs (AC-SH2) refuses them in the page ITSELF, a different question. The header now carries a derived network line over the 44 faces: five text forms (fetch(, XMLHttpRequest, new WebSocket, <form action=http, src|href=http) counted on the pass that already opens every face, a state word (offline at zero sites, online otherwise), the site and face counts, a sentence that states it counts SITES not capability, and either a named absence or per-face rows with form counts.",
-  "claims": {"claimed": 309, "captured": 94, "contradicted": 10, "uncaptured": 205, "historic": 7, "rows": 12, "present": true, "census_ts": "2026-11-22T14:28:03+08:00"},
-  "chain": {"present": true, "rows": 12, "broken": 0, "path": "state/qa_replacements.jsonl"},
+  "current": "2026-11-22 R3266 PRODUCT+ENGINEERING: the board asked whether a reader told three times what this machine cannot do should finally be told where to start. The first screen now carries a DERIVED walk: a step is an operable face whose own bytes classify it as kind=persists AND whose key base is paired, ordered by control count (many controls first, ties by name); every other operable face is named with a closed reason, and the count is whatever the derivation says - four today, not the three the board guessed.",
+  "claims": {"claimed": 309, "captured": 94, "contradicted": 10, "uncaptured": 205, "historic": 7, "rows": 13, "present": true, "census_ts": "2026-11-22T14:35:58+08:00"},
+  "chain": {"present": true, "rows": 13, "broken": 0, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -73,11 +73,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-22 R3265 PRODUCT+ENGINEERING: the header has said \"zero links, zero network\" in prose while the per-row external count scan_faces() already computed was read by nobody - the one criterion that touches external refs (AC-SH2) refuses them in the page ITSELF, a different question. The header now carries a derived network line over the 44 faces: five text forms (fetch(, XMLHttpRequest, new WebSocket, <form action=http, src|href=http) counted on the pass that already opens every face, a state word (offline at zero sites, online otherwise), the site and face counts, a sentence that states it counts SITES not capability, and either a named absence or per-face rows with form counts.",
-  "export_ts": "2026-11-22T14:28:03+08:00",
-  "latest_artifact": "preview/start-here.html (29923B) + preview/start-here.json (1717B) [2026-11-22 mtime]",
+  "do": "2026-11-22 R3266 PRODUCT+ENGINEERING: the board asked whether a reader told three times what this machine cannot do should finally be told where to start. The first screen now carries a DERIVED walk: a step is an operable face whose own bytes classify it as kind=persists AND whose key base is paired, ordered by control count (many controls first, ties by name); every other operable face is named with a closed reason, and the count is whatever the derivation says - four today, not the three the board guessed.",
+  "export_ts": "2026-11-22T14:35:58+08:00",
+  "latest_artifact": "preview/start-here.html (31780B) + preview/start-here.json (2180B) [2026-11-22 mtime]",
   "latest_evidence": "qa/negctl-R3262.log (664B, 2026-11-22)",
-  "next_milestone": "[R3266] next window (<=48h): (0) MAIN — **首屏连着三轮在说「不行」：收不了钱、没有联网、三档读数为零；可它至今没给读者一条能走的路**。一个第一次打开的人看到 44 面 / 6 张能操作 / 三句拒绝，但他不知道先点哪一张、点完能看到什么、走到哪一步算「今天这台机器确实能干成一件小事」。问：值不值得把首屏做成一条**派生**的三步入口（不是手写导航）？做法＝先只读量三问：①活树 6 张可操作面里，哪几张真的会改变可见状态并能被同一页的 --check 复算（拿 `kind`、`data-keys-base`、`data-hosts-verdict` 三档读数逐面说：点它之后有什么东西留在页上）；②能否立一条机械律「三步 = 由 kind/keys/hosts 派生出来的那几张面，按 persisted→screen 排序，每步印出面名 + 它到底留下什么 + 它能证明什么/不能证明什么」，且不与 AC-SH21/22/23 三行撞位、不把「导航」变成又一段手写散文；③代价（要不要新增一条判据、会不会破 AC-SH2 的 listed==operable、页增多少字节）。收口三选一＝①不加（首屏保持现状，读者自己找）②加一条派生三步入口 + 一条判据（第几步=哪张面由读数决定）③只把现有 6 张按 kind 排序并印一句「先点这张，因为它会把状态留在页上」而不加判据。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
+  "next_milestone": "[R3267] next window (<=48h): (0) MAIN — **走线把两张最想让人看的面试成了「不进走线」**：`money-path-demo.html`（唯一演示收款到入权益的 MOCK 面）因 `keys base=orphan` 被排除，`buyer-trial.html`（买家试用镜）因 `kind=screen` 被排除——于是首屏给的 4 步全是勾选清单加一个过滤框，**没有一步通向那条钱路**。问：值不值得让「读的键不是自己写的」这类面以**显式标注的旁支**身份进入走线（进了但明说「它不留状态/它的键不是自己写的」），而不是整张被挡在门外？做法＝先只读量三问：①两张被排除面点下去到底会不会有可见变化（`ops`、`keys.read/write`、`hosts.verdict` 逐项读出来：money-path-demo `hosts=same-host` 说明写读落在同一元素表达式上，它到底留不留东西）；②能否立一条机械律「走线 = 主步（persists+paired，按 ops 降序）+ 旁支（operable 但被排除，按闭集理由具名，标注『看得到但留不下/留下的不是它写的』），主支与旁支各自计数、各自可红」，且不破 AC-SH24 现有的 rank/集合判据；③代价（会不会把「能走的路」稀释成「六张面全列一遍」——如果六张全进，走线就退化成目录；页增多少字节；判据 24→25 还是就地扩 SH24）。收口三选一＝①保持现状（排除句已具名理由，读者自己点）②加旁支（一条派生判据，主/旁支双计数）③只把排除句改写为「先看这两张，但要知道它们留不下东西」而不动判据。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
   "outs": [
     "preview/start-here.html (28420B) + preview/start-here.json (1108B) [2026-11-22 mtime]",
     "preview/ugc-gate-report.html (28112B) + preview/ugc-gate-report.json (20170B) [2026-11-22 mtime]",
@@ -171,8 +171,8 @@
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 55982,
-  "next_milestone_due": "2026-11-24T14:28:03+08:00",
+  "state_bytes": 62807,
+  "next_milestone_due": "2026-11-24T14:35:58+08:00",
   "heartbeat": {
     "tick": 3262,
     "state_tick": 3262,

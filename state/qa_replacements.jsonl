@@ -10,3 +10,4 @@
 {"event": "REPLACED", "name": "suite-ugc-gate-R3246.log", "new_bytes": 5047, "new_sha16": "a786873901849f7d", "old_bytes": 10178, "old_sha16": "8e2c7551223fe8f0", "ts": "2026-11-22T02:15:39Z"}
 {"event": "REPLACED", "name": "negctl-R3254.log", "new_bytes": 1856, "new_sha16": "413fb2fc38839515", "old_bytes": 1590, "old_sha16": "11ac1c9ef4b57d66", "ts": "2026-11-22T03:55:11Z"}
 {"event": "REPLACED", "name": "negctl-R3265.log", "new_bytes": 622, "new_sha16": "20b9c286d555ccc6", "old_bytes": 622, "old_sha16": "20b9c286d555ccc6", "ts": "2026-11-22T06:24:16Z"}
+{"event": "REPLACED", "name": "negctl-R3266.log", "new_bytes": 2115, "new_sha16": "1a8dda6a3cc33eae", "old_bytes": 2258, "old_sha16": "d232060c723dc428", "ts": "2026-11-22T06:32:55Z"}
