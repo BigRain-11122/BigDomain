@@ -48,6 +48,23 @@ this file existed):
           nowhere else: both names freshly derived, the flag computed from them,
           and no preview page may carry the row (the copy is what broke the
           fixed point)
+  AC-COO10 (R3302) the census-day edge is DECLARED and proven width-safe: the
+          entry page prints a ten-character day, the declaration names both
+          files and the remedy, it never enters the byte-edge list, and no
+          preview page carries the declaration row
+
+The day edge (AC-COO10): preview/index.html prints `census day YYYY-MM-DD` and
+AC-DIX19 refuses a page whose day is not the export's current day. That is a
+content edge on a CALENDAR, not on a render, and it is the one edge that stays
+after R3300/R3301 cut the clock copy and the copied newest-pair answer. It is
+declared here instead of being cut because the day is the only thing telling a
+reader which day the six numbers belong to, and because it is ten ASCII
+characters whatever the date: a claims republish on a new day cannot move this
+page's byte count, so it cannot move the chain's data-back-bytes and cannot add
+an iteration to the ring. The cost it does carry is one re-render of the entry
+page, owed only when the six readings did NOT move (when they did, AC-CVL1
+already reddens the page). Measured at R3302: two exports a day apart render the
+same note in the same number of bytes.
 
 Nothing here renders a page itself, runs JS, opens a socket or reads the clock
 for a product number.
@@ -56,6 +73,7 @@ import argparse
 import io
 import json
 import os
+import re
 import subprocess
 import sys
 
@@ -83,6 +101,14 @@ EDGES = [
     ("sweep", "chain", "bytes", "tools/face_sweep.py", "preview/first-yuan-chain.html"),
     ("export", "sweep", "mtime", "src/os/export_round.py", "BOARD_PAGES"),
 ]
+
+# (reader, writer, kind, landed page, prefix, width) - AC-COO10. The census day
+# is a declared content edge whose width is fixed at ten ASCII characters, which
+# is why it is NOT in EDGES: a byte cycle can only be closed by something whose
+# length moves with its value, and this one cannot. Read from the landed page,
+# never from this table, so the declaration cannot agree with itself.
+DAY_EDGE = ("index", "export", "day", "preview/index.html", "census day ", 10)
+DAY_RE = re.compile(r"\d{4}-\d{2}-\d{2}")
 
 # The standalone check face of each artifact (read-only, prints VERDICT).
 CHECKS = [
@@ -245,6 +271,57 @@ def law_row():
     return all(arms.values())
 
 
+def day_view():
+    """AC-COO10 arms, read from the landed page and the declared table.
+
+    The day is taken out of preview/index.html at `census day ` and graded on
+    its own characters: ten, all date-shaped, then a separator. If the page ever
+    prints a differently shaped moment the arm reddens rather than trusting the
+    declaration above it.
+    """
+    reader, writer, kind, page, prefix, width = DAY_EDGE
+    landed = None
+    shaped = False
+    path = os.path.join(ROOT, page)
+    if os.path.isfile(path):
+        with io.open(path, "r", encoding="utf-8", errors="replace") as fh:
+            text = fh.read()
+        at = text.find(prefix)
+        if at >= 0:
+            start = at + len(prefix)
+            landed = text[start:start + width]
+            after = text[start + width:start + width + 1]
+            shaped = (bool(DAY_RE.fullmatch(landed))
+                      and not after.isalnum())
+    in_cycle = any(e[2] == kind for e in EDGES)
+    leaked = []
+    for name in sorted(os.listdir(PREVIEW)):
+        if not name.endswith(".html"):
+            continue
+        with io.open(os.path.join(PREVIEW, name), "r", encoding="utf-8",
+                     errors="replace") as fh:
+            if "DAY-EDGE " in fh.read():
+                leaked.append(name)
+    arms = {
+        "both-named": bool(reader) and bool(writer),
+        "width-10": width == 10 and shaped,
+        "outside-byte-cycle": not in_cycle,
+        "no-page-carries-it": not leaked,
+    }
+    return landed, kind, arms
+
+
+def day_row():
+    """Print the declared day edge and grade AC-COO10. Returns True/False."""
+    landed, kind, arms = day_view()
+    print("DAY-EDGE index <- export kind=%s width=10 landed=%s in-byte-cycle=%s "
+          "remedy=re-render-index-after-claims-republish"
+          % (kind, landed or "-", not arms["outside-byte-cycle"]))
+    print("AC-COO10 %s %s" % ("PASS" if all(arms.values()) else "FAIL",
+                              " ".join("%s=%s" % (k, v) for k, v in sorted(arms.items()))))
+    return all(arms.values())
+
+
 def cmd_plan():
     print("STEPS %d %s" % (len(STEPS), ",".join(n for n, _, _ in STEPS)))
     for row in edge_report():
@@ -254,6 +331,7 @@ def cmd_plan():
     cycles = byte_cycle()
     print("BYTE-CYCLES %d %s" % (len(cycles), ",".join("->".join(c) for c in cycles) or "none"))
     law_ok = law_row()
+    day_ok = day_row()
     bad = [r for r in edge_report() if not (r["file_present"] and r["token_found"])]
     if bad:
         print("VERDICT FAIL %d orphan-edge(s): %s"
@@ -261,6 +339,9 @@ def cmd_plan():
         return 2
     if not law_ok:
         print("VERDICT FAIL AC-COO9 witness row")
+        return 2
+    if not day_ok:
+        print("VERDICT FAIL AC-COO10 day edge")
         return 2
     print("VERDICT PASS edges=%d cycles=%d" % (len(EDGES), len(cycles)))
     return 0

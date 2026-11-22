@@ -1,0 +1,8 @@
+C1 clean-private-page landed=2026-11-22 both-named=True no-page-carries-it=True outside-byte-cycle=True width-10=True judged=PASS
+C2 day-11-chars landed=2026-11-22 both-named=True no-page-carries-it=True outside-byte-cycle=True width-10=False judged=PASS
+C3 day-not-date-shaped landed=2026-1-22  both-named=True no-page-carries-it=True outside-byte-cycle=True width-10=False judged=PASS
+C4 day-absent landed=(the day i both-named=True no-page-carries-it=True outside-byte-cycle=True width-10=False judged=PASS
+C5 page-carries-declaration-row landed=2026-11-22 both-named=True no-page-carries-it=False outside-byte-cycle=True width-10=True judged=PASS
+C6 day-kind-in-edge-table landed=2026-11-22 both-named=True no-page-carries-it=True outside-byte-cycle=False width-10=True judged=PASS
+C7 other-day-still-shaped landed=2026-11-23 both-named=True no-page-carries-it=True outside-byte-cycle=True width-10=True judged=PASS
+NEGCTL PASS cases=7 passed=7

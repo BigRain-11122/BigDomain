@@ -1,0 +1,7 @@
+Q1 same-length-across-days len_a=359 len_b=359 equal=True
+Q1 days-differ a=True b=True
+Q1 only-run-that-moves run_a='2026-11-22' run_b='2026-11-23'
+Q2 landed-day=2026-11-22 width=10 shaped=True separator=' ' live-export-day=2026-11-22 equal=True
+Q3 byte-edges=6 day-kind-in-edges=False cycles=1 chain->index->chain
+Q3 day-view kind=day landed=2026-11-22 arms=both-named=True no-page-carries-it=True outside-byte-cycle=True width-10=True
+Q3 remedy-owed=re-render-index-after-claims-republish (length unchanged so chain untouched)
