@@ -3,7 +3,7 @@
     "board_pages_skipped": [
       "preview/face-sweep.html (8878B)"
     ],
-    "current": "2026-11-23 R3330 PRODUCT+ENGINEERING: the two questions the board could still only answer by opinion were answered by shipped bytes - a program gate on atbd_rows would redden on a legitimate dispatch row, so it stays a reading, and the dead twin now carries a revival law bound to the substring selectors that create its divergence.",
+    "current": "2026-11-23 R3331 PRODUCT: the playable sandbox had a read-only front door as its only one-click path - frontdoor_start.bat started one page while the nine faces still needed five remembered commands. Shipped src/sandbox/open_sandbox.py + sandbox_start.bat: start start_all.py as a child, wait for its own report file, open the browser at the MEASURED hub URL (never a guessed port), stop-file teardown on close. Proof today: open_sandbox.py --check read 'sandbox up: hub=http://127.0.0.1:50678/hub/ faces=8/8' rc=0 and qa/sandbox-onclick-R3331.json is ok=true live=8/8 job assigned=6 verified=true; an independent start_all.py --check run in the same window also passed 8/8 with errors=[]. Also found and removed a leftover ugc_page.py orphan from 11-22 08:39 still holding port 56328 - a teardown leak invisible while check mode only watches its own children.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
     "last_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20492B) [2026-11-23 commit] (halves differ: html [2026-11-23 commit] + json [2026-11-22 commit]; later=html)",
     "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20492B) [2026-11-23 commit] (halves differ: html [2026-11-23 commit] + json [2026-11-22 commit]; later=html)",
@@ -12,8 +12,8 @@
     "latest_evidence": "qa/negctl-R3330.log (230B, 2026-11-23)",
     "newest_pair_on_disk_is_board": true,
     "next_milestone": "[R3330] next window (<=48h): (0) MAIN — 三问在本轮有了读数，三处仍未量到实：(1) 派工回执面：`atbd_rows` 只数行、`conflict` 数令牌冲突——先只读量 ps1 有没有一面能说「某条 @BigDomain 派工行没有对应回执行」；若没有，如实记「回执核对只由读指令的人做」，禁先落闸。(2) 复活守卫只读文件头字节：先量孪生有没有可钉的**执行形状**（如无 `if __name__ == '__main__'` 生产钩子／无任何入口 import 它），能钉则把文本钉升级为形状钉，不能则记文本钉的边界。(3) 安装副本同步只在跑 `test_scan_faces.ps1` 时才被看见——先量在 python 电池侧加一条 sha256 身份臂（源件 vs `.codely-cli` 副本，缺席=SKIP）的代价与误报面，再决定落臂或判负。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。承（未变）：全量 761 行 battery 仍未实跑（R3313 AC-RCA5 只由代码路径证明）；`test_face_sweep` 54/56（AC-FSWB20/20c）。产品真缺口仍是物理件｛商户号／服务器／域名／备案+ICP／小程序 appid+secret｝——买家仍付不了钱。",
-    "next_milestone_due": "2026-11-25T06:39:15+08:00",
-    "updated_at": "2026-11-23T06:39:15+08:00",
+    "next_milestone_due": "2026-11-25T06:49:01+08:00",
+    "updated_at": "2026-11-23T06:49:01+08:00",
     "heartbeat": {
       "tick": 3330,
       "state_tick": 3330,
@@ -37,8 +37,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-23 R3330 PRODUCT+ENGINEERING: the two questions the board could still only answer by opinion were answered by shipped bytes - a program gate on atbd_rows would redden on a legitimate dispatch row, so it stays a reading, and the dead twin now carries a revival law bound to the substring selectors that create its divergence.",
-  "claims": {"claimed": 313, "captured": 95, "contradicted": 10, "uncaptured": 208, "historic": 7, "rows": 26, "present": true, "census_ts": "2026-11-23T06:39:15+08:00"},
+  "current": "2026-11-23 R3331 PRODUCT: the playable sandbox had a read-only front door as its only one-click path - frontdoor_start.bat started one page while the nine faces still needed five remembered commands. Shipped src/sandbox/open_sandbox.py + sandbox_start.bat: start start_all.py as a child, wait for its own report file, open the browser at the MEASURED hub URL (never a guessed port), stop-file teardown on close. Proof today: open_sandbox.py --check read 'sandbox up: hub=http://127.0.0.1:50678/hub/ faces=8/8' rc=0 and qa/sandbox-onclick-R3331.json is ok=true live=8/8 job assigned=6 verified=true; an independent start_all.py --check run in the same window also passed 8/8 with errors=[]. Also found and removed a leftover ugc_page.py orphan from 11-22 08:39 still holding port 56328 - a teardown leak invisible while check mode only watches its own children.",
+  "claims": {"claimed": 313, "captured": 95, "contradicted": 10, "uncaptured": 208, "historic": 7, "rows": 26, "present": true, "census_ts": "2026-11-23T06:49:01+08:00"},
   "chain": {"present": true, "rows": 26, "broken": 0, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -67,8 +67,8 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-23 R3330 PRODUCT+ENGINEERING: the two questions the board could still only answer by opinion were answered by shipped bytes - a program gate on atbd_rows would redden on a legitimate dispatch row, so it stays a reading, and the dead twin now carries a revival law bound to the substring selectors that create its divergence.",
-  "export_ts": "2026-11-23T06:39:15+08:00",
+  "do": "2026-11-23 R3331 PRODUCT: the playable sandbox had a read-only front door as its only one-click path - frontdoor_start.bat started one page while the nine faces still needed five remembered commands. Shipped src/sandbox/open_sandbox.py + sandbox_start.bat: start start_all.py as a child, wait for its own report file, open the browser at the MEASURED hub URL (never a guessed port), stop-file teardown on close. Proof today: open_sandbox.py --check read 'sandbox up: hub=http://127.0.0.1:50678/hub/ faces=8/8' rc=0 and qa/sandbox-onclick-R3331.json is ok=true live=8/8 job assigned=6 verified=true; an independent start_all.py --check run in the same window also passed 8/8 with errors=[]. Also found and removed a leftover ugc_page.py orphan from 11-22 08:39 still holding port 56328 - a teardown leak invisible while check mode only watches its own children.",
+  "export_ts": "2026-11-23T06:49:01+08:00",
   "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20492B) [2026-11-23 commit] (halves differ: html [2026-11-23 commit] + json [2026-11-22 commit]; later=html)",
   "latest_evidence": "qa/negctl-R3330.log (230B, 2026-11-23)",
   "next_milestone": "[R3330] next window (<=48h): (0) MAIN — 三问在本轮有了读数，三处仍未量到实：(1) 派工回执面：`atbd_rows` 只数行、`conflict` 数令牌冲突——先只读量 ps1 有没有一面能说「某条 @BigDomain 派工行没有对应回执行」；若没有，如实记「回执核对只由读指令的人做」，禁先落闸。(2) 复活守卫只读文件头字节：先量孪生有没有可钉的**执行形状**（如无 `if __name__ == '__main__'` 生产钩子／无任何入口 import 它），能钉则把文本钉升级为形状钉，不能则记文本钉的边界。(3) 安装副本同步只在跑 `test_scan_faces.ps1` 时才被看见——先量在 python 电池侧加一条 sha256 身份臂（源件 vs `.codely-cli` 副本，缺席=SKIP）的代价与误报面，再决定落臂或判负。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。承（未变）：全量 761 行 battery 仍未实跑（R3313 AC-RCA5 只由代码路径证明）；`test_face_sweep` 54/56（AC-FSWB20/20c）。产品真缺口仍是物理件｛商户号／服务器／域名／备案+ICP／小程序 appid+secret｝——买家仍付不了钱。",
@@ -167,8 +167,8 @@
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 65594,
-  "next_milestone_due": "2026-11-25T06:39:15+08:00",
+  "state_bytes": 66598,
+  "next_milestone_due": "2026-11-25T06:49:01+08:00",
   "heartbeat": {
     "tick": 3330,
     "state_tick": 3330,
