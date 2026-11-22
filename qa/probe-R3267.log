@@ -1,0 +1,47 @@
+PROBE R3267 faces=44 operable=6 steps=4 excluded=2
+STEPS filing-checklist.html,ship-checklist.html,merchant-onboard.html,lobby-protocol-map.html
+EXCLUDED buyer-trial.html:screen,money-path-demo.html:orphan
+
+FACE buyer-trial.html
+  kind=screen ops_total=3 counts=button:3
+  keys none
+  hosts verdict=None expr_bodies=0 cond_unbal=0
+  in_walk=False
+FACE filing-checklist.html
+  kind=persists ops_total=21 counts=input:21
+  keys base_paired=True expr_paired=True unresolved=0
+  read=['NS']
+  write=['NS']
+  hosts verdict=no-host expr_bodies=0 cond_unbal=0
+  in_walk=True
+FACE lobby-protocol-map.html
+  kind=persists ops_total=1 counts=input:1
+  keys base_paired=True expr_paired=True unresolved=0
+  read=['NS']
+  write=['NS']
+  hosts verdict=no-host expr_bodies=0 cond_unbal=0
+  in_walk=True
+FACE merchant-onboard.html
+  kind=persists ops_total=9 counts=input:8,button:1
+  keys base_paired=True expr_paired=True unresolved=0
+  read=['KEY']
+  write=['KEY']
+  hosts verdict=no-host expr_bodies=0 cond_unbal=0
+  in_walk=True
+FACE money-path-demo.html
+  kind=persists ops_total=3 counts=input:3
+  keys base_paired=False expr_paired=False unresolved=0
+  read=['NS+""+kk']
+  write=['NS+""+this.getAttribute("")']
+  hosts verdict=same-host expr_bodies=0 cond_unbal=0
+  in_walk=False
+FACE ship-checklist.html
+  kind=persists ops_total=12 counts=input:11,button:1
+  keys base_paired=True expr_paired=True unresolved=0
+  read=['NS']
+  write=['NS']
+  hosts verdict=no-host expr_bodies=0 cond_unbal=0
+  in_walk=True
+
+ACCOUNTING steps+excluded=6 operable=6 disjoint=True
+HAS_JS_FETCH money-path-demo=0 buyer-trial=0

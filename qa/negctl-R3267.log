@@ -1,0 +1,16 @@
+OK  C1 live copy                         rc=0 want='' | VERDICT PASS criteria=25 faces=44 operable=6 missing_ceo=6 external_refs=0 kinds=persists:5,screen:1,wires:0,inert:0 keys=persists:5,expr_paired:4,base_paired:4,orphan:1,unresolved:0,outside:2 tiers=literal:0,const:4,loop:0,runtime:0,dom:1,cross:0,noread:0 attrs=same-name:1,different:0,one-side:0,no-attr:4,unknown:0 hosts=same-host:1,different-host:0,one-side:0,no-host:4,unknown:0,lexical:0 lexical=faces:0,calls:0 expr_bodies=0 forms=simple:4,call:1,named:2,attr:0 decl=func:2,varfunc:0,arrow:0,mixed:0,none:0 cond_unbal=0 freeze=frozen-zero money=blocked:6/8/2 net=offline:0/44 steps=4 excluded=2 branches=2
+OK  C2 edited branch count               rc=2 want='SH25 count' | FAIL SH6 page_out_of_date
+OK  C3 edited main count                 rc=2 want='SH25 main_count' | FAIL SH6 page_out_of_date
+OK  C4 dropped branch row                rc=2 want='SH25 rows' | FAIL SH6 page_out_of_date
+OK  C5 swapped branch ranks              rc=2 want='SH25 rank' | FAIL SH6 page_out_of_date
+OK  C6 edited branch sentence            rc=2 want='SH25 sentence' | FAIL SH6 page_out_of_date
+OK  C7 edited head sentence              rc=2 want='SH25 head_sentence' | FAIL SH6 page_out_of_date
+OK  C8 reason not closed                 rc=2 want='SH25 reason_not_closed' | FAIL SH6 page_out_of_date
+OK  C9 step listed as branch             rc=2 want='SH25 step_listed_as_branch' | FAIL SH6 page_out_of_date
+OK  C10 branch face not operable         rc=2 want='SH25 not_a_branch' | FAIL SH6 page_out_of_date
+OK  C11 branch word missing              rc=2 want='SH25 branch_word_missing:orphan' | FAIL SH6 page_out_of_date
+OK  C12 branch_fmt slot missing          rc=2 want='SH25 slot_missing:branch_fmt:{word}' | FAIL SH6 page_out_of_date
+OK  C13 head slot missing                rc=2 want='SH25 slot_missing:step_excluded_fmt:{side}' | FAIL SH6 page_out_of_date
+OK  world lobby-protocol-map.html        rc=0 absent=True rows=0 | VERDICT PASS criteria=25 faces=1 operable=1 missing_ceo=6 external_refs=0 kinds=persists:1,screen:0,wires:0,inert:0 keys=persists:1,expr_paired:1,base_paired:1,orphan:0,unresolved:0,outside:0 tiers=literal:0,const:1,loop:0,runtime:0,dom:0,cross:0,noread:0 attrs=same-name:0,different:0,one-side:0,no-attr:1,unknown:0 hosts=same-host:0,different-host:0,one-side:0,no-host:1,unknown:0,lexical:0 lexical=faces:0,calls:0 expr_bodies=0 forms=simple:0,call:0,named:1,attr:0 decl=func:1,varfunc:0,arrow:0,mixed:0,none:0 cond_unbal=0 freeze=frozen-zero money=blocked:6/8/2 net=offline:0/1 steps=1 excluded=0 branches=0
+OK  world buyer-trial.html               rc=0 absent=False rows=1 | VERDICT PASS criteria=25 faces=1 operable=1 missing_ceo=6 external_refs=0 kinds=persists:0,screen:1,wires:0,inert:0 keys=persists:0,expr_paired:0,base_paired:0,orphan:0,unresolved:0,outside:0 tiers=literal:0,const:0,loop:0,runtime:0,dom:0,cross:0,noread:0 attrs=same-name:0,different:0,one-side:0,no-attr:0,unknown:0 hosts=same-host:0,different-host:0,one-side:0,no-host:0,unknown:0,lexical:0 lexical=faces:0,calls:0 expr_bodies=0 forms=simple:0,call:0,named:0,attr:0 decl=func:0,varfunc:0,arrow:0,mixed:0,none:0 cond_unbal=0 freeze=frozen-zero money=blocked:6/8/2 net=offline:0/1 steps=0 excluded=1 branches=1
+NEGCTL PASS cases=15/15

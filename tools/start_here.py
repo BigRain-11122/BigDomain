@@ -913,6 +913,10 @@ def step_walk(rows, operable):
     longer errand than one filter box), ties by name. The count is whatever the
     derivation says - today four, not the three the board guessed - because a
     hand-fixed three would either hide a step or invent an exclusion.
+
+    R3267: the excluded faces are not discarded - they are BRANCHES, ordered by a
+    closed reason set then by name, so R3267's accounting law holds: every
+    operable face is exactly one of a main step or a branch.
     """
     steps = []
     excluded = []
@@ -927,6 +931,9 @@ def step_walk(rows, operable):
         else:
             steps.append(name)
     steps.sort(key=lambda n: (-rows[n]["ops"], n))
+    excluded.sort(key=lambda item: (STEP_REASONS.index(item[1])
+                                    if item[1] in STEP_REASONS
+                                    else len(STEP_REASONS), item[0]))
     return steps, excluded
 
 
@@ -1542,21 +1549,30 @@ def render(proj):
         steps_html.append('  <p data-step-absent>%s</p>'
                           % esc(doc.get("step_absent") or ""))
     if proj["steps_excluded"]:
-        items = []
-        for name, reason in proj["steps_excluded"]:
-            if reason in KINDS:
-                word = kind_tag(doc, reason)
-            elif reason == "orphan":
-                word = doc.get("step_orphan_word") or reason
-            else:
-                word = doc.get("step_nokey_word") or reason
-            items.append("%s（%s）" % (name, word))
+        branch_words = doc.get("branch_words") or {}
+        # R3267: the exclusion sentence became the branch head, so it is still the
+        # word AC-SH24 requires to exist - now derived with both counts in it.
         steps_html.append(
-            '  <p data-step-excluded="%s">%s</p>'
+            '  <p class="branchhead" data-step-excluded="%s" '
+            'data-branch-count="%d" data-branch-main="%d">%s</p>'
             % (esc(",".join("%s:%s" % (name, reason)
                             for name, reason in proj["steps_excluded"])),
+               len(proj["steps_excluded"]), len(steps),
                esc((doc.get("step_excluded_fmt") or "").format(
-                   items="，".join(items)))))
+                   main=len(steps), side=len(proj["steps_excluded"])))))
+        for index, (name, reason) in enumerate(proj["steps_excluded"], 1):
+            steps_html.append(
+                '  <p class="branch" data-branch="%d" data-branch-face="%s" '
+                'data-branch-reason="%s">%s</p>'
+                % (index, esc(name), esc(reason),
+                   esc((doc.get("branch_fmt") or "").format(
+                       n=index, face=name,
+                       word=branch_words.get(reason) or ""))))
+    else:
+        steps_html.append(
+            '  <p class="branchhead" data-branch-count="0" '
+            'data-branch-main="%d" data-branch-absent>%s</p>'
+            % (len(steps), esc(doc.get("branch_absent") or "")))
     steps_head = ('  <p class="kindshead">%s</p>\n'
                   % esc(doc.get("step_head") or ""))
     steps_block = steps_head + ("\n".join(steps_html) if steps_html else "")
@@ -2527,12 +2543,104 @@ def check():
     if not excluded and got:
         failures.append("SH24 excluded_line_without_exclusions")
 
+    # AC-SH25 (R3267): the two faces a visitor most wants to open were dropped
+    # from the walk with one exclusion sentence and nothing else. Both are
+    # operable: one changes the screen and keeps nothing (screen), the other
+    # writes a key it cannot read back (orphan). A branch is that second class -
+    # still on the page, each labelled by a reason from the closed set - and the
+    # accounting law is that every operable face is exactly one of a main step or
+    # a branch. Two counts, two grades; a hand-typed branch list would either
+    # lose a face or invent one.
+    for key in ("branch_fmt", "branch_absent"):
+        if not (proj["doc"].get(key) or "").strip():
+            failures.append("SH25 word_missing:%s" % key)
+    branch_words = proj["doc"].get("branch_words") or {}
+    for reason in STEP_REASONS:
+        if not (branch_words.get(reason) or "").strip():
+            failures.append("SH25 branch_word_missing:%s" % reason)
+    for slot in ("{n}", "{face}", "{word}"):
+        if slot not in (proj["doc"].get("branch_fmt") or ""):
+            failures.append("SH25 slot_missing:branch_fmt:%s" % slot)
+    for slot in ("{main}", "{side}"):
+        if slot not in (proj["doc"].get("step_excluded_fmt") or ""):
+            failures.append("SH25 slot_missing:step_excluded_fmt:%s" % slot)
+    step_set = set(steps)
+    branch_set = set(name for name, _reason in excluded)
+    if step_set & branch_set:
+        failures.append("SH25 overlap:%s" % sorted(step_set & branch_set))
+    if len(step_set) + len(branch_set) != len(proj["operable"]):
+        failures.append("SH25 accounting steps=%d branches=%d operable=%d"
+                        % (len(step_set), len(branch_set), len(proj["operable"])))
+    branch_rows = re.findall(
+        r'<p class="branch" data-branch="(\d+)" data-branch-face="([^"]+)" '
+        r'data-branch-reason="([^"]+)">([^<]*)<', text)
+    if excluded:
+        head = re.search(
+            r'<p class="branchhead" data-step-excluded="([^"]*)" '
+            r'data-branch-count="(\d+)" data-branch-main="(\d+)">([^<]*)<', text)
+        if not head:
+            failures.append("SH25 branch_head_missing")
+        else:
+            raw_set, count_raw, main_raw, said = head.groups()
+            if int(count_raw) != len(excluded):
+                failures.append("SH25 count page=%s fresh=%d"
+                                % (count_raw, len(excluded)))
+            if int(main_raw) != len(steps):
+                failures.append("SH25 main_count page=%s fresh=%d"
+                                % (main_raw, len(steps)))
+            parsed = {}
+            for part in raw_set.split(","):
+                if ":" in part:
+                    name, reason = part.split(":", 1)
+                    parsed[name] = reason
+            if parsed != dict(excluded):
+                failures.append("SH25 head_set page=%s fresh=%s"
+                                % (parsed, dict(excluded)))
+            want_head = (proj["doc"].get("step_excluded_fmt") or "").format(
+                main=len(steps), side=len(excluded))
+            if said != esc(want_head):
+                failures.append("SH25 head_sentence differs from the fresh "
+                                "derivation")
+        if re.search(r'data-branch-absent', text):
+            failures.append("SH25 absent_line_on_branches")
+        if len(branch_rows) != len(excluded):
+            failures.append("SH25 rows expected=%d got=%d"
+                            % (len(excluded), len(branch_rows)))
+        else:
+            got_pairs = [(name, reason) for _n, name, reason, _s in branch_rows]
+            if got_pairs != excluded:
+                failures.append("SH25 order page=%s fresh=%s"
+                                % (got_pairs, excluded))
+            for index, (n_raw, name, reason, said) in enumerate(branch_rows, 1):
+                if int(n_raw) != index:
+                    failures.append("SH25 rank:%s page=%s fresh=%d"
+                                    % (name, n_raw, index))
+                if reason not in STEP_REASONS:
+                    failures.append("SH25 reason_not_closed:%s=%s"
+                                    % (name, reason))
+                if name in step_set:
+                    failures.append("SH25 step_listed_as_branch:%s" % name)
+                if name not in branch_set:
+                    failures.append("SH25 not_a_branch:%s" % name)
+                    continue
+                want = (proj["doc"].get("branch_fmt") or "").format(
+                    n=index, face=name, word=branch_words.get(reason) or "")
+                if said != esc(want):
+                    failures.append("SH25 sentence:%s differs from the fresh "
+                                    "derivation" % name)
+    else:
+        if branch_rows:
+            failures.append("SH25 rows_without_branches=%d" % len(branch_rows))
+        absent = re.findall(r'data-branch-absent', text)
+        if len(absent) != 1:
+            failures.append("SH25 absent_line expected=1 got=%d" % len(absent))
+
     if failures:
         for line in failures:
             print("  FAIL " + line)
-        print("VERDICT FAIL criteria=24 failures=%d" % len(failures))
+        print("VERDICT FAIL criteria=25 failures=%d" % len(failures))
         return 2
-    print("VERDICT PASS criteria=24 faces=%d operable=%d missing_ceo=%d external_refs=0 "
+    print("VERDICT PASS criteria=25 faces=%d operable=%d missing_ceo=%d external_refs=0 "
           "kinds=%s keys=%s tiers=%s attrs=%s hosts=%s lexical=faces:%d,calls:%d "
           "expr_bodies=%d forms=%s"
           % (proj["faces_total"], len(proj["operable"]), len(proj["missing"]),
@@ -2558,8 +2666,9 @@ def check():
                 proj["money"]["total"], proj["money"]["proven"])
              + " net=%s:%d/%d"
              % (proj["net"]["state"], proj["net"]["sites"], proj["net"]["total"])
-             + " steps=%d excluded=%d"
-             % (len(proj["steps"]), len(proj["steps_excluded"]))))
+             + " steps=%d excluded=%d branches=%d"
+             % (len(proj["steps"]), len(proj["steps_excluded"]),
+                len(proj["steps_excluded"]))))
 
     return 0
 
