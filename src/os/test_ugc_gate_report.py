@@ -123,7 +123,7 @@ def main():
         mod.OUT_HTML, mod.OUT_JSON = copy_html, copy_json
 
         rc, base, text, verdict = run_check(mod, data)
-        ok('AC-UGRB0', rc == 0 and len(base) == 15 and all(base.values()),
+        ok('AC-UGRB0', rc == 0 and len(base) == 16 and all(base.values()),
            'baseline rc=%d criteria=%d green=%d %s'
            % (rc, len(base), sum(1 for v in base.values() if v), verdict))
 
@@ -685,14 +685,14 @@ def main():
            % (res34.get('AC-UGR16'), res34.get('AC-UGR15'), r34))
 
         # ---- B35/B36: a believed RECORD is graded for how far it reaches
-        # (R3245). Measured in qa/probe-R3245.log: with a RECORD listing one of
-        # two files of a package, the unlisted sibling was READ as ours and a
-        # gate inside it entered the site set (hits=[.../unlisted.py:2]), and
-        # the live .venv lists 995 paths (995 present, 0 stale) covering all 453
-        # of its .py files. B35 proves the truncation is COUNTED (listed=1,
-        # unlisted=1) and that a page carrying an edited count reddens AC-UGR17
-        # while AC-UGR16 stays green; B36 proves a listed-but-missing path is
-        # counted as stale instead of being believed quietly.
+        # (R3245) and then split by where the forgotten file sits (R3246).
+        # Measured in qa/probe-R3245.log the forgotten sibling was READ as ours
+        # and its gate entered the site set; measured in qa/probe-R3246.log the
+        # same world now answers REFUSE for that sibling, because its directory
+        # holds a listed file. B35 grades that reading (listed=1, unlisted=1,
+        # inside=1, beside=0) and that an edited unlisted count reddens AC-UGR17
+        # while an edited inside count reddens AC-UGR18 - AC-UGR16 stays green
+        # in both; B36 proves a listed-but-missing path is counted as stale.
         half_world = world_tree({
             'src/sandbox/.venv/pkg/core/listed.py': 'x = 1\n',
             'src/sandbox/.venv/pkg/core/unlisted.py':
@@ -721,28 +721,131 @@ def main():
             drifted35 = copy.deepcopy(half_data)
             drifted35['marker_coverage'][0]['unlisted'] = 0
             rc35b, res35b, _t35b, _v35b = run_check(mod, drifted35)
+            drifted18 = copy.deepcopy(half_data)
+            drifted18['marker_coverage'][0]['inside'] = 0
+            drifted18['marker_coverage'][0]['beside'] = 1
+            rc35c, res35c, _t35c, _v35c = run_check(mod, drifted18)
         finally:
             mod._tracked_sources = real_tracked
             mod.ROOT = real_root
             mod.OUT_HTML, mod.OUT_JSON = real_html, real_json
             shutil.rmtree(half_world, ignore_errors=True)
             shutil.rmtree(stale_world, ignore_errors=True)
+        half_expect = [{'root': 'src/sandbox/.venv', 'listed': 1,
+                        'exists': 1, 'stale': 0, 'unlisted': 1, 'inside': 1,
+                        'beside': 0,
+                        'inside_paths': ['src/sandbox/.venv/pkg/core/unlisted.py']}]
         ok('AC-UGRB35',
-           half_hits == ['src/sandbox/.venv/pkg/core/unlisted.py:2']
-           and half_cov == [{'root': 'src/sandbox/.venv', 'listed': 1,
-                             'exists': 1, 'stale': 0, 'unlisted': 1}]
+           half_hits == []
+           and half_cov == half_expect
            and res35.get('AC-UGR17') is True
+           and res35.get('AC-UGR18') is True
            and res35b.get('AC-UGR17') is False
-           and res35b.get('AC-UGR16') is True,
-           'half-listed RECORD: read=%s coverage=%s page AC-UGR17=%s (must PASS) '
-           'edited count AC-UGR17=%s (must FAIL) AC-UGR16=%s rc=%d/%d'
-           % (half_hits, half_cov, res35.get('AC-UGR17'), res35b.get('AC-UGR17'),
-              res35b.get('AC-UGR16'), rc35, rc35b))
+           and res35b.get('AC-UGR16') is True
+           and res35c.get('AC-UGR18') is False
+           and res35c.get('AC-UGR17') is True,
+           'half-listed RECORD: read=%s coverage=%s page 17/18=%s/%s (must PASS) '
+           'edited unlisted 17=%s 16=%s, edited inside 18=%s 17=%s rc=%d/%d/%d'
+           % (half_hits, half_cov, res35.get('AC-UGR17'), res35.get('AC-UGR18'),
+              res35b.get('AC-UGR17'), res35b.get('AC-UGR16'),
+              res35c.get('AC-UGR18'), res35c.get('AC-UGR17'), rc35, rc35b, rc35c))
         ok('AC-UGRB36',
            stale_cov == [{'root': 'src/sandbox/.venv', 'listed': 2, 'exists': 1,
-                          'stale': 1, 'unlisted': 0}],
+                          'stale': 1, 'unlisted': 0, 'inside': 0, 'beside': 0,
+                          'inside_paths': []}],
            'stale RECORD: coverage=%s (a listed path that is gone is counted, '
            'not silently believed)' % (stale_cov,))
+
+        # ---- B37/B38/B39: the unlisted side split by WHERE the file sits
+        # (R3246). Told apart in qa/probe-R3246.log: inside a package directory
+        # the forgotten file is refused; BESIDE the package our own gate is
+        # still read; a file of OURS placed inside a package directory is
+        # refused too, and that cost is printed rather than hidden. B39 proves
+        # the page cannot quietly drop an inside count or an inside name.
+        beside_world = world_tree({
+            'src/sandbox/.venv/our_gate.py':
+                'from lobby.sec_gate import SecGate\nG = SecGate([], [])\n',
+            'src/sandbox/.venv/pkg/core/listed.py': 'x = 1\n',
+            'src/sandbox/.venv/pkg/core/unlisted.py':
+                'from lobby.sec_gate import SecGate\nG = SecGate([], [])\n',
+            'src/sandbox/.venv/pkg/pkg-1.0.dist-info/RECORD':
+                'core/listed.py,sha256=aa,7\n',
+        })
+        inside_world = world_tree({
+            'src/sandbox/.venv/pkg/__init__.py': 'y = 2\n',
+            'src/sandbox/.venv/pkg/our_helper.py':
+                'from lobby.sec_gate import SecGate\nG = SecGate([], [])\n',
+            'src/sandbox/.venv/pkg/core/listed.py': 'x = 1\n',
+            'src/sandbox/.venv/pkg/core/unlisted.py':
+                'from lobby.sec_gate import SecGate\nG = SecGate([], [])\n',
+            'src/sandbox/.venv/pkg/pkg-1.0.dist-info/RECORD':
+                '__init__.py,sha256=aa,5\ncore/listed.py,sha256=bb,7\n',
+        })
+        try:
+            mod.ROOT = beside_world
+            mod._tracked_sources = lambda: None
+            beside_hits, _bs = mod.direct_call_sites()
+            _br, _bf, beside_owned, _bd, beside_cov = mod._walk_all()
+            mod.OUT_HTML = os.path.join(beside_world, 'out.html')
+            mod.OUT_JSON = os.path.join(beside_world, 'out.json')
+            mod.write_outputs(mod.collect())
+            beside_data = mod.collect()
+            rc37, res37, _t37, _v37 = run_check(mod, beside_data)
+
+            mod.ROOT = inside_world
+            inside_hits, _is = mod.direct_call_sites()
+            _ir, _if, inside_owned, _id, inside_cov = mod._walk_all()
+            mod.OUT_HTML = os.path.join(inside_world, 'out.html')
+            mod.OUT_JSON = os.path.join(inside_world, 'out.json')
+            mod.write_outputs(mod.collect())
+            inside_data = mod.collect()
+            rc38, res38, _t38, _v38 = run_check(mod, inside_data)
+
+            # B39: the page drops the inside count; then the inside name.
+            page39 = read(mod.OUT_HTML)
+            write(mod.OUT_HTML, page39.replace(
+                'inside=<b>2</b> beside=<b>0</b>', 'inside=<b>1</b> beside=<b>0</b>'))
+            rc39a, res39a, _t39a, _v39a = run_check(mod, inside_data)
+            write(mod.OUT_HTML, page39.replace(
+                'pkg/core/unlisted.py', 'pkg/core/redacted.py'))
+            rc39b, res39b, _t39b, _v39b = run_check(mod, inside_data)
+            write(mod.OUT_HTML, page39)
+        finally:
+            mod._tracked_sources = real_tracked
+            mod.ROOT = real_root
+            mod.OUT_HTML, mod.OUT_JSON = real_html, real_json
+            shutil.rmtree(beside_world, ignore_errors=True)
+            shutil.rmtree(inside_world, ignore_errors=True)
+        ok('AC-UGRB37',
+           beside_hits == ['src/sandbox/.venv/our_gate.py:2']
+           and beside_owned == ['src/sandbox/.venv/our_gate.py']
+           and beside_cov[0]['inside'] == 1
+           and beside_cov[0]['beside'] == 1
+           and beside_cov[0]['inside_paths']
+           == ['src/sandbox/.venv/pkg/core/unlisted.py']
+           and res37.get('AC-UGR18') is True,
+           'beside vs inside: read=%s owned=%s coverage=%s AC-UGR18=%s rc=%d'
+           % (beside_hits, beside_owned, beside_cov,
+              res37.get('AC-UGR18'), rc37))
+        ok('AC-UGRB38',
+           inside_hits == []
+           and inside_owned == []
+           and inside_cov[0]['inside'] == 2
+           and inside_cov[0]['beside'] == 0
+           and sorted(inside_cov[0]['inside_paths'])
+           == ['src/sandbox/.venv/pkg/core/unlisted.py',
+               'src/sandbox/.venv/pkg/our_helper.py']
+           and res38.get('AC-UGR18') is True,
+           'our own file inside a package directory is refused and counted: '
+           'read=%s coverage=%s AC-UGR18=%s rc=%d'
+           % (inside_hits, inside_cov, res38.get('AC-UGR18'), rc38))
+        ok('AC-UGRB39',
+           res39a.get('AC-UGR18') is False and res39a.get('AC-UGR17') is True
+           and res39b.get('AC-UGR18') is False and res39b.get('AC-UGR17') is True,
+           'an edited inside count reddens AC-UGR18=%s (17=%s) and a redacted '
+           'inside name reddens AC-UGR18=%s (17=%s) rc=%d/%d'
+           % (res39a.get('AC-UGR18'), res39a.get('AC-UGR17'),
+              res39b.get('AC-UGR18'), res39b.get('AC-UGR17'), rc39a, rc39b))
 
         # ---- B17: the live tree must read the same site set as before the
         # reader changed (pure addition): three files, four constructions.
@@ -762,7 +865,7 @@ def main():
     after = real_snapshot()
     rc_real, res_real, _, verdict_real = run_check(mod, mod.collect())
     ok('AC-UGRB10',
-       before == after and rc_real == 0 and len(res_real) == 15 and all(res_real.values()),
+       before == after and rc_real == 0 and len(res_real) == 16 and all(res_real.values()),
        'real pair unchanged=%s real rc=%d green=%d' %
        (before == after, rc_real, sum(1 for v in res_real.values() if v)))
 
@@ -778,7 +881,7 @@ def main():
             declared = int(tail.strip())
         except ValueError:
             declared = None
-    ok('AC-UGRB11', bool(row) and declared == 38,
+    ok('AC-UGRB11', bool(row) and declared == 41,
        'registry_rows=%d declared=%s' % (len(row), declared))
 
     law_verdict = "PASS" if not FAILS else "FAIL"

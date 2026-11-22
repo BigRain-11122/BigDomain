@@ -1,0 +1,15 @@
+Q1 live marker roots: unlisted .py by directory relationship
+  src/sandbox/lobby/.venv                  markers=True listed_py=453 unlisted_py=0 with_listed_sibling=0 beside=0
+  src/sandbox/ygo-poc/data/toolchain       markers=False listed_py=0 unlisted_py=2 with_listed_sibling=0 beside=2
+  live totals: with_listed_sibling=0 beside=2
+Q2 decisive arm: RECORD lists only half of pkg/core/
+  today: hits=['src/sandbox/.venv/our_gate.py:2', 'src/sandbox/.venv/pkg/core/unlisted.py:2', 'src/sandbox/.venv/pkg/our_helper.py:2']
+  today: owned=['src/sandbox/.venv/our_gate.py', 'src/sandbox/.venv/pkg/our_helper.py', 'src/sandbox/.venv/pkg/core/unlisted.py']
+  today: refused_files=2 decisions={'src/sandbox/.venv/our_gate.py': 'marker', 'src/sandbox/.venv/pkg/__init__.py': 'marker', 'src/sandbox/.venv/pkg/our_helper.py': 'marker', 'src/sandbox/.venv/pkg/core/listed.py': 'marker', 'src/sandbox/.venv/pkg/core/unlisted.py': 'marker'}
+  proposed dir rule: listed_dirs=['src/sandbox/.venv/pkg', 'src/sandbox/.venv/pkg/core']
+    src/sandbox/.venv/our_gate.py                  -> READ
+    src/sandbox/.venv/pkg/our_helper.py            -> REFUSE
+    src/sandbox/.venv/pkg/core/unlisted.py         -> REFUSE
+Q3 cost of one directory set per marker root, live tree
+  roots_with_markers=1 cost=0.203s
+Q3 done, no live write

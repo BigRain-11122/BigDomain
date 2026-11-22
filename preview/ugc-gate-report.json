@@ -111,6 +111,10 @@
       "text": "how far the believed RECORD reaches is a graded reading (R3245): AC-UGR16 grades WHICH evidence decided, and one membership list cannot tell a RECORD that covers its root from one that lists half of it - measured in qa/probe-R3245.log, where a package whose RECORD listed one of two files left the unlisted sibling READ as ours and a gate inside it entered the site set, while the live .venv lists 995 paths (995 exist, 0 stale) covering all 453 of its .py files. Every vendor root decided by marker must be NAMED on the face with its four counts printed (listed, exists, stale, unlisted), and a reading in which no root was decided by marker must print a named absence instead of four zeros. --check refuses when any printed count, an arithmetic inconsistency (exists + stale == listed), a missing root name or the absence sentence disagrees with a fresh reading. This makes a truncated or stale RECORD visible; it does not close the hole - an unlisted file is still read as ours - and it does not verify the RECORD's hash column, so exists asks only whether the path is still on disk"
     },
     {
+      "id": "AC-UGR18",
+      "text": "the unlisted side is split by WHERE the file sits and both halves are graded (R3246): AC-UGR17 prints how many files a believed RECORD forgot, and a truncated RECORD and a file of OURS in the same root read identically there - measured in qa/probe-R3246.log, where a package whose RECORD listed one of two files in a directory left the forgotten sibling READ as ours and a gate inside it entered the site set (hits=[.../pkg/core/unlisted.py:2]). Every marker-decided root must now print inside=<n> beside=<m>, the two must sum to the printed unlisted count, and every file REFUSED by the directory rule must be NAMED on the face; no such path may also appear among the files printed as ours. The rule is: an unlisted file whose directory holds a file the RECORD DID list is refused (that directory is a package directory), while an unlisted file beside any package is still READ as ours (measured: our own gate beside the package stays readable). --check refuses when a count, the sum, a name or a leak disagrees with a fresh reading. This closes one direction only: a root whose RECORD lists no .py at all still reads its whole tree as ours (the stricter red was refused because it would redden every freshly unpacked root), and the cost is printed - one of ours placed INSIDE a package directory is refused too, as a named inside path"
+    },
+    {
       "id": "AC-SGV1",
       "text": "PRE-REGISTERED REPAIR (not applied: src/ bytes are frozen under the live battery leg): SecGate.__init__ must refuse empty wordlists exactly as MsgSecStub does, so the constitutional no-content-safety-no-door rule holds on the direct construction path too"
     },
@@ -264,8 +268,8 @@
     }
   ],
   "sizes": {
-    "html": 21213,
-    "json": 14630
+    "html": 22688,
+    "json": 16020
   },
   "unparsed": [],
   "vendor_decisions": {

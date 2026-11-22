@@ -54,7 +54,9 @@ CRITERIA = (
     ("AC-UGR15", "the refusal rule is judged, not only its output (R3243): R3242 removed one project directory name from the skip set because a name cannot decide whose code it holds, yet the five names that remained were still the final word - measured in qa/probe-R3243.log, a gate written under a self-owned src/sandbox/mypoc/toolchain/ answered zero sites while the same bytes one level up were seen. Refusal is now decided by OWNERSHIP evidence: a file under a vendor-named directory is refused only when git does not track it, tracked files are READ and parsed as this repo's own source, and the report must print which rule decided (`evidence`, or `name` as the named fallback when git cannot answer in a private world) plus the count and every path of the tracked files that were read. --check refuses when the printed rule, count or any owned path disagrees with a fresh reading. A tracked vendored copy would be read, which is the honest direction. R3244 added a SECOND evidence used only where git cannot answer (an installed-package RECORD, graded by AC-UGR16), so the summary word may now also read `marker` or `marker+name`; where neither evidence exists the name rule remains the named fallback rather than pretending coverage"),
     ("AC-UGR16", "the fallback evidence is named and its counts are graded (R3244): AC-UGR15 grades one summary word, and one word cannot tell a world where a package manager's RECORD decided from a world where a bare directory name did - both print the same. Measured in qa/probe-R3244.log: in a world with no .git, a gate of OURS written into the same vendor root as an installed package was refused by name and answered zero sites (hits=[], refused_files=2), while that root's two .dist-info/RECORD files list every one of its 453 .py files. When git cannot answer, ownership now falls back to RECORD membership: a listed file is refused, an unlisted file is READ as ours, a root carrying no RECORD keeps the name rule. The report must print the decision count for each rule (evidence, marker, name) and name every file read as ours; --check refuses when any printed count, the summary rule, or an owned path disagrees with a fresh reading. The marker evidence is the package manager's own account of itself - a hand-edited RECORD is believed, which is the same kind of fallibility as a tracked vendored copy being read, and it is printed rather than implied"),
     ("AC-UGR17", "how far the believed RECORD reaches is a graded reading (R3245): AC-UGR16 grades WHICH evidence decided, and one membership list cannot tell a RECORD that covers its root from one that lists half of it - measured in qa/probe-R3245.log, where a package whose RECORD listed one of two files left the unlisted sibling READ as ours and a gate inside it entered the site set, while the live .venv lists 995 paths (995 exist, 0 stale) covering all 453 of its .py files. Every vendor root decided by marker must be NAMED on the face with its four counts printed (listed, exists, stale, unlisted), and a reading in which no root was decided by marker must print a named absence instead of four zeros. --check refuses when any printed count, an arithmetic inconsistency (exists + stale == listed), a missing root name or the absence sentence disagrees with a fresh reading. This makes a truncated or stale RECORD visible; it does not close the hole - an unlisted file is still read as ours - and it does not verify the RECORD's hash column, so exists asks only whether the path is still on disk"),
+    ("AC-UGR18", "the unlisted side is split by WHERE the file sits and both halves are graded (R3246): AC-UGR17 prints how many files a believed RECORD forgot, and a truncated RECORD and a file of OURS in the same root read identically there - measured in qa/probe-R3246.log, where a package whose RECORD listed one of two files in a directory left the forgotten sibling READ as ours and a gate inside it entered the site set (hits=[.../pkg/core/unlisted.py:2]). Every marker-decided root must now print inside=<n> beside=<m>, the two must sum to the printed unlisted count, and every file REFUSED by the directory rule must be NAMED on the face; no such path may also appear among the files printed as ours. The rule is: an unlisted file whose directory holds a file the RECORD DID list is refused (that directory is a package directory), while an unlisted file beside any package is still READ as ours (measured: our own gate beside the package stays readable). --check refuses when a count, the sum, a name or a leak disagrees with a fresh reading. This closes one direction only: a root whose RECORD lists no .py at all still reads its whole tree as ours (the stricter red was refused because it would redden every freshly unpacked root), and the cost is printed - one of ours placed INSIDE a package directory is refused too, as a named inside path"),
     ("AC-SGV1", "PRE-REGISTERED REPAIR (not applied: src/ bytes are frozen under the live battery leg): SecGate.__init__ must refuse empty wordlists exactly as MsgSecStub does, so the constitutional no-content-safety-no-door rule holds on the direct construction path too"),
+
     ("AC-SGV2", "PRE-REGISTERED: after the repair, SecGate([], []) raises GateOfflineError, the four expected-blocked constructions read 4/4 blocked, and every existing direct call site in src/sandbox stays green because each already passes non-empty config lists"),
     ("AC-SGV3", "PRE-REGISTERED: tools/ugc_gate_report.py --check reads VERDICT PASS with AC-UGR2 counting 4 must-refuse constructions and zero measured holes"),
 )
@@ -333,6 +335,9 @@ def _walk_all(tracked=_TRACKED_AUTO):
     (rel, "test_prefix"|"vendor_dir", text). `owned_paths` names the files a
     vendor-named directory held that the available evidence claimed as ours
     (R3243/R3244): those are this repo's own source and are read, not refused.
+    Since R3246 an unlisted file is split by WHERE it sits: inside a directory
+    that holds a listed file it is refused (that directory is a package
+    directory), beside any package it is still read as ours.
     `decisions` is one (rel, "evidence"|"marker"|"name") per vendor-named file,
     so the face can print which rule decided each count instead of one word for
     a mixed world.
@@ -362,13 +367,23 @@ def _walk_all(tracked=_TRACKED_AUTO):
                 # how many of those still exist (the stale face), and how many
                 # .py files on disk it lists at all (the truncated face).
                 cov = None
+                listed_dirs = frozenset()
                 if has_markers:
                     cov = {"root": rel_root, "listed": len(evidence), "exists": 0,
-                           "stale": 0, "unlisted": 0}
+                           "stale": 0, "unlisted": 0, "inside": 0, "beside": 0,
+                           "inside_paths": []}
                     for rel in evidence:
                         if os.path.exists(os.path.join(ROOT, rel)):
                             cov["exists"] += 1
                     cov["stale"] = cov["listed"] - cov["exists"]
+                    # R3246: a directory that holds a file the RECORD DID list is
+                    # a package directory, so a file the RECORD forgot there is
+                    # refused rather than read as ours. Measured in
+                    # qa/probe-R3246.log: the forgotten sibling of a half-listed
+                    # package was READ as ours and its gate entered the site set,
+                    # while our own gate BESIDE the package must stay readable.
+                    listed_dirs = frozenset(
+                        rel.rsplit("/", 1)[0] for rel in evidence if "/" in rel)
                 for vbase, _vdirs, vfiles in os.walk(vdir):
                     for vname in sorted(vfiles):
                         if not vname.endswith(".py"):
@@ -392,8 +407,18 @@ def _walk_all(tracked=_TRACKED_AUTO):
                             decisions.append((rel, "marker"))
                             if rel in evidence:
                                 refused.append((rel, "vendor_dir", text))
+                            elif os.path.dirname(rel) in listed_dirs:
+                                # R3246: the RECORD forgot a file inside a
+                                # directory it does list - that directory is a
+                                # package directory, so this file is refused and
+                                # NAMED, not silently read as ours.
+                                cov["unlisted"] += 1
+                                cov["inside"] += 1
+                                cov["inside_paths"].append(rel)
+                                refused.append((rel, "vendor_dir", text))
                             else:
                                 cov["unlisted"] += 1
+                                cov["beside"] += 1
                                 read.append((rel, text))
                                 owned.append(rel)
                         else:
@@ -725,16 +750,29 @@ def render_html(data):
                          "makes someone else's code ours; the stale and unlisted counts above are "
                          "how far each RECORD actually reaches, printed rather than assumed. "
                          "The hash column is not parsed, so exists asks only whether the path is "
-                         "still on disk."
+                         "still on disk. Since R3246 an unlisted file is split by where it sits "
+                         "(graded by AC-UGR18): <span class='mono'>inside</span> a directory that "
+                         "holds a listed file is REFUSED and named, because that directory belongs "
+                         "to an installed package; <span class='mono'>beside</span> a package (no "
+                         "listed sibling) it is still read as ours, so our own gate is never silent "
+                         "again."
                          % "".join(
                              "<li><span class='mono'>%s</span> listed=<b>%d</b> exists=<b>%d</b> "
-                             "stale=<b>%d</b> unlisted=<b>%d</b></li>"
+                             "stale=<b>%d</b> unlisted=<b>%d</b> inside=<b>%d</b> "
+                             "beside=<b>%d</b>%s</li>"
                              % (_esc(r["root"]), r["listed"], r["exists"], r["stale"],
-                                r["unlisted"]) for r in cov_rows))
+                                r["unlisted"], r["inside"], r["beside"],
+                                (": inside-refused " + ", ".join(
+                                    "<span class='mono'>%s</span>" % _esc(p)
+                                    for p in r.get("inside_paths") or []))
+                                if r.get("inside_paths") else
+                                " (no unlisted file inside a package directory)")
+                             for r in cov_rows))
             else:
                 tail += ("; no vendor root decided by marker in this reading (AC-UGR17, R3245): "
                          "git answered, or no root carried a RECORD, so there are no coverage "
-                         "counts to print")
+                         "counts to print; no unlisted file was decided by marker, so the "
+                         "inside/beside split of AC-UGR18 has nothing to divide")
         refused_bits.append("<li>refused %s: %d sources - %s</li>" % (_esc(rule), files, tail))
     refused_html = ("<br>The walk refuses two kinds of source, and both are counted on this face "
                     "rather than left implicit (AC-UGR13, R3240):<ul>%s</ul>"
@@ -1168,6 +1206,40 @@ def check(data):
         cov_ok17 = absent
         cov_bits.append("no marker-decided root; named_absence=%s" % absent)
     results.append(("AC-UGR17", cov_ok17, " ".join(cov_bits) or "(no rows)"))
+
+    # AC-UGR18: the unlisted side is split by WHERE the file sits (R3246). A
+    # forgotten file inside a package directory and a file of ours beside the
+    # package used to read identically - measured in qa/probe-R3246.log, where
+    # the forgotten sibling was read as ours and its gate entered the site set.
+    # The root must print inside/beside, the two must sum to the printed
+    # unlisted count, every inside path must be named, and none of them may be
+    # printed among the files read as ours.
+    cov18 = data.get("marker_coverage") or []
+    owned18 = set(data.get("vendor_owned") or [])
+    cov_ok18 = True
+    bits18 = []
+    if cov18:
+        for row in cov18:
+            inside_paths = row.get("inside_paths") or []
+            counts_hit = ("inside=<b>%d</b> beside=<b>%d</b>"
+                          % (row["inside"], row["beside"])) in html_text
+            arith18 = (row["inside"] + row["beside"] == row["unlisted"]
+                       and row["inside"] == len(inside_paths))
+            named18 = all(p in html_text for p in inside_paths)
+            leaked = [p for p in inside_paths if p in owned18]
+            if not (counts_hit and arith18 and named18 and not leaked):
+                cov_ok18 = False
+            bits18.append("%s inside=%d beside=%d unlisted=%d printed=%s sum=%s "
+                          "named=%s leaked=%d"
+                          % (row["root"], row["inside"], row["beside"],
+                             row["unlisted"], counts_hit, arith18, named18,
+                             len(leaked)))
+    else:
+        absent18 = ("inside/beside split of AC-UGR18 has nothing to divide"
+                    in html_text)
+        cov_ok18 = absent18
+        bits18.append("no marker-decided root; named_absence=%s" % absent18)
+    results.append(("AC-UGR18", cov_ok18, " ".join(bits18) or "(no rows)"))
 
     # AC-UGR9: the sizes block is read back FROM THE LANDED DOCUMENT, never from
     # the in-memory dict, so a --no-write run still gates on what is on disk.

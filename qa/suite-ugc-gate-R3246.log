@@ -1,0 +1,41 @@
+PASS AC-UGRB0 baseline rc=0 criteria=16 green=16 VERDICT PASS checks=16/16 failed=(none)
+PASS AC-UGRB1 AC-UGR1 red under duplicated trace id, rc=2
+PASS AC-UGRB2 AC-UGR2 red when the hole stops reading NOT BLOCKED, rc=2
+PASS AC-UGRB3 AC-UGR3 red on decision/recompute mismatch, rc=2
+PASS AC-UGRB4 AC-UGR4 red when the provider contract is blanked, rc=2
+PASS AC-UGRB5 AC-UGR5 red when the quoted source line is stripped (line=154), rc=2
+PASS AC-UGRB6 tool ascii=True and the same law rejects a poisoned twin=True
+PASS AC-UGRB7 AC-UGR7 red when the parity line stops being carried, rc=2
+PASS AC-UGRB8 AC-UGR8 red on a status outside LIVE/LATENT, rc=2
+PASS AC-UGRB9 AC-UGR9 red when the landed size disagrees with disk, rc=2
+PASS AC-UGRB12 AC-UGR8 stays green when only line numbers move (rc=0)
+PASS AC-UGRB13 AC-UGR8 red when a constructing file is not named on the face, rc=2
+PASS AC-UGRB14 a name in prose is not a construction: hits=[]
+PASS AC-UGRB15 a construction sharing a def line is counted: hits=['src/sandbox/beta.py:1']
+PASS AC-UGRB16 one-level module aliases are followed: hits=['src/sandbox/delta.py:3', 'src/sandbox/gamma.py:2']
+PASS AC-UGRB18 a literal getattr alias is counted: hits=['src/sandbox/epsilon.py:3']
+PASS AC-UGRB19 a getattr with a non-literal or defaulted class name is not counted: hits=[]
+PASS AC-UGRB20 degraded reader: AC-UGR12=False (must be FAIL) AC-UGR8=True (stays PASS) rc=2
+PASS AC-UGRB21 a refused door not named on the face: AC-UGR13=False (must be FAIL) AC-UGR8=True (stays PASS) rc=2
+PASS AC-UGRB22 a visible door is AC-UGR8's job and leaves AC-UGR13 green: AC-UGR8=False (must be FAIL) AC-UGR13=True rc=2
+PASS AC-UGRB23 data door read=['src/sandbox/data/hidden_gate.py:2'] test door hits=[] refused doors=['src/sandbox/test_hidden.py'] vendor files=1
+PASS AC-UGRB24 a constructing file dropped as unparsed: AC-UGR14=False (must be FAIL) AC-UGR8=True (stays PASS) rc=2
+PASS AC-UGRB25 named yet still red: on_page=True AC-UGR14=False (must be FAIL) AC-UGR8=True rc=2
+PASS AC-UGRB26 vendor mention: hits=[] files=1 doors=[] mentions=['src/sandbox/.venv/lib/vendor_mention.py'] (a mention is not a construction)
+PASS AC-UGRB27 ownership: project-local ygo-poc door read=['src/sandbox/ygo-poc/mypoc_gate.py:2'] under the shipped set, read=[] under the old name-skip, and the toolchain door stayed refused
+PASS AC-UGRB28 an unprinted vendor mention reddens AC-UGR13=False (must be FAIL) while AC-UGR8=True stays PASS rc=2
+PASS AC-UGRB29 ownership evidence: gate under our own toolchain/ read=['src/sandbox/mypoc/toolchain/door.py:2'] owned=['src/sandbox/mypoc/toolchain/door.py'] refused_files=1 (the untracked sibling stays refused)
+PASS AC-UGRB30 name fallback where git cannot answer: read=[] owned=[] refused_files=2 (today behaviour kept, and the face must say name)
+PASS AC-UGRB31 an unprinted owned path reddens AC-UGR15=False (must be FAIL) while AC-UGR13=True stays PASS rc=2
+PASS AC-UGRB32 RECORD evidence, no git: read=['src/sandbox/.venv/our_gate.py:2'] owned=['src/sandbox/.venv/our_gate.py'] refused_files=1 decisions={'src/sandbox/.venv/our_gate.py': 'marker', 'src/sandbox/.venv/pip/core/vendor.py': 'marker'} (the unlisted file beside an installed package is READ)
+PASS AC-UGRB33 no marker, no git: read=[] refused_files=2 decisions={'src/sandbox/mypoc/toolchain/door.py': 'name', 'src/sandbox/mypoc/toolchain/plain.py': 'name'} (the name rule stays, and it is named)
+PASS AC-UGRB34 an unprinted marker count reddens AC-UGR16=False (must be FAIL) while AC-UGR15=True stays PASS rc=2
+PASS AC-UGRB35 half-listed RECORD: read=[] coverage=[{'root': 'src/sandbox/.venv', 'listed': 1, 'exists': 1, 'stale': 0, 'unlisted': 1, 'inside': 1, 'beside': 0, 'inside_paths': ['src/sandbox/.venv/pkg/core/unlisted.py']}] page 17/18=True/True (must PASS) edited unlisted 17=False 16=True, edited inside 18=False 17=True rc=0/2/2
+PASS AC-UGRB36 stale RECORD: coverage=[{'root': 'src/sandbox/.venv', 'listed': 2, 'exists': 1, 'stale': 1, 'unlisted': 0, 'inside': 0, 'beside': 0, 'inside_paths': []}] (a listed path that is gone is counted, not silently believed)
+PASS AC-UGRB37 beside vs inside: read=['src/sandbox/.venv/our_gate.py:2'] owned=['src/sandbox/.venv/our_gate.py'] coverage=[{'root': 'src/sandbox/.venv', 'listed': 1, 'exists': 1, 'stale': 0, 'unlisted': 2, 'inside': 1, 'beside': 1, 'inside_paths': ['src/sandbox/.venv/pkg/core/unlisted.py']}] AC-UGR18=True rc=0
+PASS AC-UGRB38 our own file inside a package directory is refused and counted: read=[] coverage=[{'root': 'src/sandbox/.venv', 'listed': 2, 'exists': 2, 'stale': 0, 'unlisted': 2, 'inside': 2, 'beside': 0, 'inside_paths': ['src/sandbox/.venv/pkg/our_helper.py', 'src/sandbox/.venv/pkg/core/unlisted.py']}] AC-UGR18=True rc=0
+PASS AC-UGRB39 an edited inside count reddens AC-UGR18=False (17=True) and a redacted inside name reddens AC-UGR18=False (17=True) rc=2/2
+PASS AC-UGRB17 live reader: files=3 sites=4 unparsed=0
+PASS AC-UGRB10 real pair unchanged=True real rc=0 green=16
+PASS AC-UGRB11 registry_rows=1 declared=41
+SUITE PASS 40/40

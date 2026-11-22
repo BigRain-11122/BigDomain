@@ -133,7 +133,7 @@
    "exists": true,
    "face": "preview/ugc-gate-report.html",
    "face_state": {
-    "bytes": 19945,
+    "bytes": 22688,
     "path": "preview/ugc-gate-report.html",
     "state": "PRESENT"
    },
@@ -172,5 +172,5 @@
   "html": 8454,
   "json": 6755
  },
- "tick": "3244"
+ "tick": "3246"
 }
