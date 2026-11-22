@@ -232,6 +232,14 @@ CODE_UNSEP = "E_EDMJ_UNSEP"
 # trails the table). It is told apart by the CELLS it carries, not by a digit.
 WORD_NUMHEAD = "NUMBERED-HEADER"
 CODE_NUMHEAD = "E_EDML_NUMHEAD"
+# R3324: a registry carrying a duplicate label is refused HERE with the word
+# the runner already refuses with, asked of the SAME shipped law
+# (reconcile_all.registry_dups) at CALL time. Measured at R3323: the shipped
+# render answers TWO-ROWS for a duplicated registry and the row count still
+# agrees with SUITES, so a hand-edited registry plus a stale PASS leg could
+# publish a duplicated row and still read DOC-CURRENT.
+WORD_DUP = "DUP-LABEL"
+CODE_DUP = "E_RCA_DUP_LABEL"
 # AC-EDMF1: a fenced code block quotes example text. A quoted data-shaped row
 # is not a matrix row, so the row law has to know where the fence is.
 FENCE_MARK = "```"
@@ -495,6 +503,22 @@ def doc_rows(text, patterns=None):
 
 def registry_counts():
     return len(RA.SUITES), sum(c for _, _, c in RA.SUITES)
+
+
+def registry_dups_answer(doc_path=None):
+    """R3324: the duplicate-label refusal, or None when the registry is clean.
+
+    Asked at CALL time of the shipped duplicate law, so a registry doctored
+    between the runner gate and this write cannot publish a duplicated row.
+    Cost is one pass over the rows - the declaration face's file reads belong
+    to a different question and are not paid here."""
+    dups = RA.registry_dups(RA.SUITES)
+    if not dups:
+        return None
+    return {"verdict": WORD_DUP, "doc": rel(doc_path or DOC), "exit": 3,
+            "written": False, "code": CODE_DUP, "dups": dups,
+            "reason": "the registry carries %d duplicate label(s)"
+                      % len(dups)}
 
 
 def newest_pass_leg_scanned(qa_dir=None, ceiling=None, names=None):
@@ -836,6 +860,9 @@ def report(doc_path=None, evidence_path=None, qa_dir=None, ceiling=None):
                                 % fence_problem["line"])
             answer["verdict"] = WORD_FENCE
         return answer
+    dup_answer = registry_dups_answer(doc_path)
+    if dup_answer is not None:
+        return dup_answer
     rows, criteria = registry_counts()
     # AC-EDMD4: a document carrying the matrix title more than once was read
     # as its FIRST table with every other table dropped in silence.
@@ -975,13 +1002,20 @@ def report(doc_path=None, evidence_path=None, qa_dir=None, ceiling=None):
 def write(doc_path=None, evidence_path=None, qa_dir=None, stamp_from=None,
           ceiling=None):
     doc_path = doc_path or DOC
+    # R3324: the refusal comes BEFORE the missing-document branch, because a
+    # compose from --stamp-from renders rows from the same registry and would
+    # otherwise publish a duplicated row into a document that never existed.
+    dup_answer = registry_dups_answer(doc_path)
+    if dup_answer is not None:
+        return dup_answer
     if not os.path.exists(doc_path) and stamp_from is not None:
         return _compose_missing(doc_path, evidence_path, qa_dir, stamp_from,
                                 ceiling)
     result = report(doc_path, evidence_path, qa_dir, ceiling)
     if result["verdict"] in (WORD_CURRENT, WORD_NONE, WORD_RED,
                              "READABILITY-REFUSED", WORD_HEADER, WORD_SEP,
-                             WORD_TITLE, WORD_CEILING, WORD_FENCE, WORD_NEST):
+                             WORD_TITLE, WORD_CEILING, WORD_FENCE, WORD_NEST,
+                             WORD_DUP):
         return result
     # A TABLE-MISSING answer (AC-EDMC2) carries no resolved evidence because
     # the shape was refused before the leg was looked at, so the leg is

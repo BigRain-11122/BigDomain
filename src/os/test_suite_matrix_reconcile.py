@@ -32,13 +32,13 @@ import suite_matrix_reconcile as SMR  # noqa: E402
 import suite_matrix as SM  # noqa: E402
 import reconcile_all as RA  # noqa: E402
 
-EXPECTED_CRITERIA = 14
+EXPECTED_CRITERIA = 15
 MODULE = os.path.join(BASE, "suite_matrix_reconcile.py")
 DOC = os.path.join(REPO, "docs", "sandbox-suite-matrix.md")
 QA_DIR = os.path.join(REPO, "qa")
 RUNNER = os.path.join(SANDBOX, "reconcile_all.py")
 WIRED_LABEL = '"os-suite-matrix-reconcile",'
-WIRED_SUITE = '"test_suite_matrix_reconcile.py"), 14),'
+WIRED_SUITE = '"test_suite_matrix_reconcile.py"), 15),'
 NET = ("urllib", "requests", "socket", "http", "ftplib", "xmlrpc",
        "smtplib", "asyncio", "time")
 
@@ -444,6 +444,59 @@ def verify():
                law_src.count("def is_data_row(")
                + law_src.count("def numbered_header("),
                registry_row[0][2] if len(registry_row) == 1 else None)))
+
+        # AC-EDM7 (R3324): a registry carrying a DUPLICATE label is refused at
+        # CALL time with the runner's own word. Measured at R3323 and re-used
+        # here as the fixture: the shipped render answers TWO-ROWS for a
+        # duplicated registry while the doc row count still agrees with
+        # SUITES, so a hand-edited registry plus a stale PASS leg could publish
+        # a duplicated row and still read DOC-CURRENT.
+        live_text7 = read(DOC)
+        row7 = [line for line in live_text7.splitlines()
+                if line.startswith("| ") and
+                "| os-suite-matrix-reconcile |" in line]
+        dup_doc7 = os.path.join(workdir, "dup-registry.md")
+        body7 = []
+        for line in live_text7.splitlines():
+            body7.append(line)
+            if row7 and line == row7[0]:
+                body7.append(line)
+        write_text(dup_doc7, "\n".join(body7) + "\n")
+        saved_rows7 = RA.SUITES
+        dup_dups7 = None
+        try:
+            RA.SUITES = list(saved_rows7) + [
+                row for row in saved_rows7
+                if row[0] == "os-suite-matrix-reconcile"]
+            dup_dups7 = RA.registry_dups(RA.SUITES)
+            refused7 = SMR.report(dup_doc7)
+            before7 = open(dup_doc7, "rb").read()
+            wrote7 = SMR.write(dup_doc7)
+            after7 = open(dup_doc7, "rb").read()
+            saved_gate7 = SMR.registry_dups_answer
+            try:
+                SMR.registry_dups_answer = lambda *a, **k: None
+                control7 = SMR.report(dup_doc7)
+            finally:
+                SMR.registry_dups_answer = saved_gate7
+        finally:
+            RA.SUITES = saved_rows7
+        live_dups7 = RA.registry_dups(RA.SUITES)
+        results.append(check(
+            len(row7) == 1 and live_dups7 == []
+            and RA.registry_dups(RA.SUITES + [
+                row for row in RA.SUITES
+                if row[0] == "os-suite-matrix-reconcile"]) == dup_dups7
+            and dup_dups7 == ["os-suite-matrix-reconcile"]
+            and refused7["verdict"] == SMR.WORD_DUP
+            and refused7["code"] == SMR.CODE_DUP and refused7["exit"] == 3
+            and refused7["written"] is False
+            and wrote7["verdict"] == SMR.WORD_DUP and before7 == after7
+            and control7["verdict"] != SMR.WORD_DUP,
+            "AC-EDM7 duplicate registry refused: live_dups=%r dup=%r"
+            " report=%s write=%s control=%s doc_bytes_moved=%s"
+            % (live_dups7, dup_dups7, refused7["verdict"], wrote7["verdict"],
+               control7["verdict"], before7 != after7)))
 
         # AC-EDM6: hygiene and registration.
         with open(MODULE, "rb") as handle:

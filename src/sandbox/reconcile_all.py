@@ -5178,7 +5178,7 @@ SUITES = [
     # criteria-first law - a case-variant path to the live document takes the
     # scratch cross-check.)
     ("os-suite-matrix-reconcile",
-     os.path.join("..", "os", "test_suite_matrix_reconcile.py"), 14),
+     os.path.join("..", "os", "test_suite_matrix_reconcile.py"), 15),
     # R2602: the evidence face of the matrix reconciliation - a PASS leg that
     # differs from the leg the document records reads its own word naming BOTH
     # legs, the candidate walk reports what it decoded, a MISSING document can
@@ -8310,6 +8310,18 @@ EXPECTED_CRIT_RE = re.compile(r"(?m)^EXPECTED_CRITERIA[ \t]*=[ \t]*(\d+)"
                               r"[ \t]*(?:#.*)?$")
 
 
+def registry_dups(rows):
+    """R3324: the duplicate-label face ALONE, so a consumer that needs only
+    this law does not pay for the file reads the declaration face costs. It is
+    the SAME law registry_declarations asks - one implementation, two callers -
+    which is why the matrix writer can refuse with the runner's own word
+    instead of growing a second opinion."""
+    counts = {}
+    for label, _rel, _crit in rows:
+        counts[label] = counts.get(label, 0) + 1
+    return sorted(label for label, n in counts.items() if n > 1)
+
+
 def registry_declarations(rows):
     """R3314 AC-RCA6: ask each suite what count it declares, then answer the
     whole registry face as (declared, inherited, drift, dups, zeros).
@@ -8317,10 +8329,7 @@ def registry_declarations(rows):
     drift is [(label, table_cell, suite_declaration)]; dups and zeros are
     label lists. A suite with no declaration is legal and counted as
     inherited, so the 463 legacy rows keep running exactly as before."""
-    counts = {}
-    for label, _rel, _crit in rows:
-        counts[label] = counts.get(label, 0) + 1
-    dups = sorted(label for label, n in counts.items() if n > 1)
+    dups = registry_dups(rows)
     zeros = [label for label, _rel, crit in rows if int(crit) <= 0]
     declared = 0
     drift = []

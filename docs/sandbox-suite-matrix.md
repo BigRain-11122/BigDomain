@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 761 | 6360 | 675/675 | R2739 |
+| 761 | 6361 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -517,7 +517,7 @@
 | 478 | os-export-freshness | ../os/test_export_freshness.py | 6 | green | 0.9 |
 | 479 | os-debt-append | ../os/test_debt_append.py | 6 | green | 0.2 |
 | 480 | os-debt-note-append | ../os/test_debt_note_append.py | 6 | green | 0.2 |
-| 481 | os-suite-matrix-reconcile | ../os/test_suite_matrix_reconcile.py | 14 | green | 1.0 |
+| 481 | os-suite-matrix-reconcile | ../os/test_suite_matrix_reconcile.py | 15 | green | 1.0 |
 | 482 | os-suite-matrix-reconcile-evidence-face | ../os/test_suite_matrix_reconcile_evidence_face.py | 7 | green | 0.7 |
 | 483 | os-suite-matrix-reconcile-table-shape | ../os/test_suite_matrix_reconcile_table_shape.py | 6 | green | 32.3 |
 | 484 | os-suite-matrix-reconcile-shape | ../os/test_suite_matrix_reconcile_shape.py | 6 | green | 0.6 |
@@ -798,7 +798,7 @@
 | 759 | claim-census | test_claim_census.py | 9 | no-evidence | - |
 | 760 | os-stage-residue | ../os/test_stage_residue.py | 4 | no-evidence | - |
 | 761 | os-corpus-supply-chain | ../os/test_corpus_supply_chain.py | 7 | no-evidence | - |
-|  | 合计 |  | 6360 | green 675 / FAIL 0 / no-evidence 86 |  |
+|  | 合计 |  | 6361 | green 675 / FAIL 0 / no-evidence 86 |  |
 
 ## 证据出处
 

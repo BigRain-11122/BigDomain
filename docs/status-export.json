@@ -3,20 +3,20 @@
     "board_pages_skipped": [
       "preview/face-sweep.html (8878B)"
     ],
-    "current": "2026-11-23 R3323 PRODUCT+ENGINEERING: all four slice anchors in test_qa_log could be slid onto a decoy row without one shipped predicate noticing, so each anchor now pins uniqueness at its birth station; and the one shipped reader that printed lag=0 for an ahead heartbeat row now names the gap (ahead=N) instead of printing a number that is not the truth.",
+    "current": "2026-11-23 R3324 PRODUCT+ENGINEERING: the residue the board named at R3323 is closed at its birth - the matrix writer now asks the shipped duplicate law at CALL time and refuses a doctored registry with the runner own word, so a hand-edited registry carrying one label twice can no longer render a duplicated row and still read DOC-CURRENT.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
     "last_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20492B) [2026-11-23 commit] (halves differ: html [2026-11-23 commit] + json [2026-11-22 commit]; later=html)",
     "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20492B) [2026-11-23 commit] (halves differ: html [2026-11-23 commit] + json [2026-11-22 commit]; later=html)",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ugc-gate-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/negctl-R3323.log (571B, 2026-11-23)",
-    "latest_evidence": "qa/negctl-R3323.log (571B, 2026-11-23)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/probe-R3324.log (2505B, 2026-11-23)",
+    "latest_evidence": "qa/probe-R3324.log (2505B, 2026-11-23)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3323] next window (<=48h): (0) MAIN 三问。(1) Q3 的残余面（手写重复注册表 + 陈旧 PASS 腿可渲两行且读 DOC-CURRENT）：先只读量 `suite_matrix_reconcile.report/write` 若在 CALL time 询 `reconcile_all.registry_declarations` 的 dups 面、并沿用 `E_RCA_DUP_LABEL` 同一词拒绝，会让十个 `test_suite_matrix_reconcile*` 套件里哪几个变红（今日实测：render 对重复标签照渲 `TWO-ROWS`）；再决定是加这一条「导入判断」的拒绝，还是保持判负并把残余面写成文档行。(2) QA/心跳两侧的 ahead 读数是否有臂钉住：`scan_five_still.ps1` [HB] 面新增 `ahead=N` 分支后，`test_crawl_runner` 对它的四处引用本轮实测只读 crawl 令牌（未读 HB 分支），所以先量还有没有别的套件按文本钉 HB 三行；若有，补一条「hb 领先印 ahead」的臂，若无，判为无人钉并记下。(3) `frontdoor.heartbeat_card` 仍原样渲染负 lag（卡片 verdict 来自 face）：先只读量历史 qa 证据里是否真的出现过负 lag 行；从未出现＝不可达判负留白，出现过＝按出生站让卡片印 ahead。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。承（未变）：全量 761 行 battery 仍未实跑（R3313 AC-RCA5 只由代码路径证明）；`test_face_sweep` 54/56（AC-FSWB20/20c）；载体 60836B / 78500（余 17664B，本轮无需 fold）。产品真缺口仍是物理件｛商户号／服务器／域名／备案+ICP／小程序 appid+secret｝——买家仍付不了钱。",
-    "next_milestone_due": "2026-11-25T05:11:02+08:00",
-    "updated_at": "2026-11-23T05:11:02+08:00",
+    "next_milestone": "[R3324] next window (<=48h): (0) MAIN — 板头 (2) 量出的真空：ps1 `scan_five_still.ps1` 的 [HB] 三行**无任何套件钉住**——`test_scan_five_still.py` 测的是 python 孪生 `src/os/scan_five_still.py`，而该孪生**整段没有 HB 面**（本轮 grep：无 HB/lag/ahead 行），`test_crawl_runner` 四处引用只读 crawl 令牌（R3323 实测）。故 R3323 交付的 `ahead=N` 分支至今只有人手跑过一次。三问：(1) 文本级钉的出生站该是谁——先只读量 `test_scan_five_still.py`／`test_crawl_runner.py` 各自已读哪些源文件，能否在不执行 PowerShell 的前提下读 ps1 源并钉三行；(2) **孪生该不该补 HB 面**——先只读量两个入口（计划任务参数、`launch_battery`／`heartbeat` 调用点）谁在跑 ps1、谁在跑 py，若 py 对集团扫描是死码，就记死码而不是长出第二个面；(3) 文本臂怎么写才不会被**注释掉的同名行**骗绿——在私有世界把 ahead 行改成注释再量，哪种断言形状会红。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。承（未变）：全量 761 行 battery 仍未实跑（R3313 AC-RCA5 只由代码路径证明）；`test_face_sweep` 54/56（AC-FSWB20/20c）；载体 70898B / 78500（**余 7602B，下轮需 fold**）。产品真缺口仍是物理件｛商户号／服务器／域名／备案+ICP／小程序 appid+secret｝——买家仍付不了钱。",
+    "next_milestone_due": "2026-11-25T05:20:34+08:00",
+    "updated_at": "2026-11-23T05:20:34+08:00",
     "heartbeat": {
-      "tick": 3323,
-      "state_tick": 3323,
+      "tick": 3324,
+      "state_tick": 3324,
       "lag": 0,
       "verdict": "PASS",
       "reason": "fresh"
@@ -35,16 +35,10 @@
       "note_claims": 0,
       "criteria_stale": 0,
       "criteria_claims": 0
-    },
-    "corpus": {
-      "files": 4795,
-      "bytes": 511571262,
-      "mb": 511.6,
-      "readable": 4795
     }
   },
-  "current": "2026-11-23 R3323 PRODUCT+ENGINEERING: all four slice anchors in test_qa_log could be slid onto a decoy row without one shipped predicate noticing, so each anchor now pins uniqueness at its birth station; and the one shipped reader that printed lag=0 for an ahead heartbeat row now names the gap (ahead=N) instead of printing a number that is not the truth.",
-  "claims": {"claimed": 316, "captured": 97, "contradicted": 10, "uncaptured": 209, "historic": 7, "rows": 26, "present": true, "census_ts": "2026-11-23T05:11:02+08:00"},
+  "current": "2026-11-23 R3324 PRODUCT+ENGINEERING: the residue the board named at R3323 is closed at its birth - the matrix writer now asks the shipped duplicate law at CALL time and refuses a doctored registry with the runner own word, so a hand-edited registry carrying one label twice can no longer render a duplicated row and still read DOC-CURRENT.",
+  "claims": {"claimed": 316, "captured": 97, "contradicted": 10, "uncaptured": 209, "historic": 7, "rows": 26, "present": true, "census_ts": "2026-11-23T05:20:34+08:00"},
   "chain": {"present": true, "rows": 26, "broken": 0, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -73,11 +67,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-23 R3323 PRODUCT+ENGINEERING: all four slice anchors in test_qa_log could be slid onto a decoy row without one shipped predicate noticing, so each anchor now pins uniqueness at its birth station; and the one shipped reader that printed lag=0 for an ahead heartbeat row now names the gap (ahead=N) instead of printing a number that is not the truth.",
-  "export_ts": "2026-11-23T05:11:02+08:00",
+  "do": "2026-11-23 R3324 PRODUCT+ENGINEERING: the residue the board named at R3323 is closed at its birth - the matrix writer now asks the shipped duplicate law at CALL time and refuses a doctored registry with the runner own word, so a hand-edited registry carrying one label twice can no longer render a duplicated row and still read DOC-CURRENT.",
+  "export_ts": "2026-11-23T05:20:34+08:00",
   "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20492B) [2026-11-23 commit] (halves differ: html [2026-11-23 commit] + json [2026-11-22 commit]; later=html)",
-  "latest_evidence": "qa/negctl-R3323.log (571B, 2026-11-23)",
-  "next_milestone": "[R3323] next window (<=48h): (0) MAIN 三问。(1) Q3 的残余面（手写重复注册表 + 陈旧 PASS 腿可渲两行且读 DOC-CURRENT）：先只读量 `suite_matrix_reconcile.report/write` 若在 CALL time 询 `reconcile_all.registry_declarations` 的 dups 面、并沿用 `E_RCA_DUP_LABEL` 同一词拒绝，会让十个 `test_suite_matrix_reconcile*` 套件里哪几个变红（今日实测：render 对重复标签照渲 `TWO-ROWS`）；再决定是加这一条「导入判断」的拒绝，还是保持判负并把残余面写成文档行。(2) QA/心跳两侧的 ahead 读数是否有臂钉住：`scan_five_still.ps1` [HB] 面新增 `ahead=N` 分支后，`test_crawl_runner` 对它的四处引用本轮实测只读 crawl 令牌（未读 HB 分支），所以先量还有没有别的套件按文本钉 HB 三行；若有，补一条「hb 领先印 ahead」的臂，若无，判为无人钉并记下。(3) `frontdoor.heartbeat_card` 仍原样渲染负 lag（卡片 verdict 来自 face）：先只读量历史 qa 证据里是否真的出现过负 lag 行；从未出现＝不可达判负留白，出现过＝按出生站让卡片印 ahead。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。承（未变）：全量 761 行 battery 仍未实跑（R3313 AC-RCA5 只由代码路径证明）；`test_face_sweep` 54/56（AC-FSWB20/20c）；载体 60836B / 78500（余 17664B，本轮无需 fold）。产品真缺口仍是物理件｛商户号／服务器／域名／备案+ICP／小程序 appid+secret｝——买家仍付不了钱。",
+  "latest_evidence": "qa/probe-R3324.log (2505B, 2026-11-23)",
+  "next_milestone": "[R3324] next window (<=48h): (0) MAIN — 板头 (2) 量出的真空：ps1 `scan_five_still.ps1` 的 [HB] 三行**无任何套件钉住**——`test_scan_five_still.py` 测的是 python 孪生 `src/os/scan_five_still.py`，而该孪生**整段没有 HB 面**（本轮 grep：无 HB/lag/ahead 行），`test_crawl_runner` 四处引用只读 crawl 令牌（R3323 实测）。故 R3323 交付的 `ahead=N` 分支至今只有人手跑过一次。三问：(1) 文本级钉的出生站该是谁——先只读量 `test_scan_five_still.py`／`test_crawl_runner.py` 各自已读哪些源文件，能否在不执行 PowerShell 的前提下读 ps1 源并钉三行；(2) **孪生该不该补 HB 面**——先只读量两个入口（计划任务参数、`launch_battery`／`heartbeat` 调用点）谁在跑 ps1、谁在跑 py，若 py 对集团扫描是死码，就记死码而不是长出第二个面；(3) 文本臂怎么写才不会被**注释掉的同名行**骗绿——在私有世界把 ahead 行改成注释再量，哪种断言形状会红。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。承（未变）：全量 761 行 battery 仍未实跑（R3313 AC-RCA5 只由代码路径证明）；`test_face_sweep` 54/56（AC-FSWB20/20c）；载体 70898B / 78500（**余 7602B，下轮需 fold**）。产品真缺口仍是物理件｛商户号／服务器／域名／备案+ICP／小程序 appid+secret｝——买家仍付不了钱。",
   "outs": [
     "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20492B) [2026-11-23 commit] (halves differ: html [2026-11-23 commit] + json [2026-11-22 commit]; later=html)",
     "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-23 mtime] (halves differ: html [2026-11-23 mtime] + json [2026-11-16 commit]; later=html)",
@@ -149,7 +143,7 @@
       "2026-11-04 R2431 verification window on the item the debt gate named first=yes (reconcile-battery-R2431, carried from R2430): zero product code changed, the R2168 mixed-tree rule honoured. Leg 1 read 542/543 suites with the criteria total 4234 exactly as pre-registered and the only red was reconcile-daily-census at cd7 exit=2 DRIFT-FLAG; the census named the file (qa/battery-R2431-stdout.log, class=cmd-raw) because this window launched the battery with a Start-Process redirect pointed INTO the evidence directory. Repaired at the birth site, never by widening the baseline: the two launcher captures moved to the gitignored logs/ face, after which the census read flags=0 DRIFT-CLEAN with the 529-entry baseline untouched. Retry leg on the repaired tree: RUNNER PASS 543/543 suites plus controls 7/7 in 956.2s at criteria 4234, TMP RECLAIM 932/932. Four follow-up sections: matrix FAILED first on the stale doc without rewriting it, was regenerated stamp-aligned to 52317B, and the re-run read VERDICT R2431 PASS failing=none (fingerprint CLEAN 5 domains, profile byte-identical, census DRIFT-CLEAN). Debt: reconcile-battery-R2431 closed and product-face-R2432 opened first=yes through the shipped CLIs. Zero product points claimed."
     ],
     [
-      "3323",
+      "3324",
       "OSLoop 执行 tick",
       "a failed fold state write takes the appended archive block back and removes the backup"
     ]
@@ -163,21 +157,21 @@
   "self_drive": {
     "window": "2026-11-17..2026-11-23",
     "window_days": 7,
-    "log_lines_in_window": 105,
+    "log_lines_in_window": 113,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 16,
+    "substantive_non_idle_mention_lines": 17,
     "proposals_total": 11,
     "proposals_open": 9,
     "queue_main_open": 6,
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 66119,
-  "next_milestone_due": "2026-11-25T05:11:02+08:00",
+  "state_bytes": 70898,
+  "next_milestone_due": "2026-11-25T05:20:34+08:00",
   "heartbeat": {
-    "tick": 3323,
-    "state_tick": 3323,
+    "tick": 3324,
+    "state_tick": 3324,
     "lag": 0,
     "verdict": "PASS",
     "reason": "fresh"
@@ -196,11 +190,5 @@
     "note_claims": 0,
     "criteria_stale": 0,
     "criteria_claims": 0
-  },
-  "corpus": {
-    "files": 4795,
-    "bytes": 511571262,
-    "mb": 511.6,
-    "readable": 4795
   }
 }

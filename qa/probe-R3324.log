@@ -1,0 +1,38 @@
+R3324 evidence: duplicate-registry refusal asked at CALL time (matrix writer)
+round: R3324  date: 2026-11-23  scope: read-only on the live tree except the
+shipped gate itself; zero socket, zero network.
+
+[Q1] the writer was asked the SHIPPED duplicate law (reconcile_all.registry_dups,
+     one implementation shared with registry_declarations) at CALL time.
+  live registry dups = []  (761 rows, 0 duplicates)
+  residue fixture (R3323 shape): the live matrix doc with one data row repeated
+    -> doc 762 rows, registry 762 rows with the label carried twice
+  SMR.report(dup_doc)     -> DUP-LABEL code=E_RCA_DUP_LABEL exit=3 dups=['os-suite-matrix-reconcile']
+  SMR.write(dup_doc)      -> DUP-LABEL written=False, doc bytes identical (moved=False)
+  negative control (gate stubbed to None on the same world) -> STALE-CONTENT,
+    i.e. NOT DUP-LABEL: the refusal is load-bearing, not incidental.
+  ten test_suite_matrix_reconcile* suites re-run with the gate live:
+    test_suite_matrix_reconcile.py              SUITE PASS 15/15 (AC-EDM7 new)
+    test_suite_matrix_reconcile_evidence_face.py SUITE PASS 7/7
+    test_suite_matrix_reconcile_fence.py         SUITE PASS 6/6
+    test_suite_matrix_reconcile_fence_rows.py    SUITE PASS 6/6
+    test_suite_matrix_reconcile_fence_table.py   SUITE PASS 6/6
+    test_suite_matrix_reconcile_row_membership.py SUITE PASS 6/6
+    test_suite_matrix_reconcile_row_shape.py     SUITE PASS 6/6
+    test_suite_matrix_reconcile_second_table_separator.py SUITE PASS 6/6
+    test_suite_matrix_reconcile_shape.py         SUITE PASS 6/6
+    test_suite_matrix_reconcile_table_shape.py   SUITE PASS 6/6
+  why none reddens: all ten read RA.SUITES only to locate their own wired row
+  ([row for row in RA.SUITES if row[0] == LABEL]); none builds a duplicate.
+
+[Q2] HB three-line text pin: ZERO suites pin the scanner [HB] face.
+  test_scan_five_still.py targets src/os/scan_five_still.py (the python twin),
+  and that twin carries NO HB section at all (grep: no HB|lag|ahead lines).
+  test_crawl_runner reads crawl tokens only (four refs, measured R3323).
+  => the ps1 [HB] face, including the ahead=N branch shipped at R3323, is
+  pinned by nobody. Recorded as the next board item; no arm invented here.
+
+[Q3] negative heartbeat lag in historical evidence: ZERO occurrences.
+  rg "lag=-[0-9]" over qa/*.log -> no match (exit 1).
+  => frontdoor.heartbeat_card rendering a negative lag is unreachable on this
+  evidence pile; judged negative and left blank rather than guessed at.
