@@ -1,0 +1,17 @@
+=== Q1/Q3: the three [HB] anchors in the executed source ===
+source bytes=24877 lines=440
+raw_counts   A_debt=1 B_ahead=1 C_fresh=1
+live_counts  A_debt=1 B_ahead=1 C_fresh=1
+order        A_at=11758 B_at=11946 C_at=12092 ascending=True
+decoy        b_commented_live_count=0 (0 means the pin reddens)
+decoy        line_removed_live_count=0
+=== Q2: who runs which copy ===
+scheduled_action names_scan=False
+twin_production_callers=0 []
+twin_nonprod_mentions=10 ['src/os/append_R2676.py', 'src/os/backlog_carry_R2673.py', 'src/os/board_R2674.py', 'src/os/launch_battery_R2781.py', 'src/os/scan_five_still.py (self header)', 'src/os/state_indent_fix_R2673.py']
+ps1_mentions=5 ['src/os/heartbeat.py', 'src/os/test_crawl_runner.py', 'src/os/test_heartbeat.py', 'src/os/test_scan_faces.ps1', 'tools/skills/bigdomain-loop-scan/scripts/scan_five_still.ps1']
+skill_invoke_line_points_at_source=True
+harness_targets_installed=True targets_source=False
+=== installed copy drift ===
+installed bytes=24469 ahead=0 sha_match=False
+source sha256=18136d5043b48ac69ea28092b02f7576746fd5cdae12f1aa57bc3fcfc3acbfb5

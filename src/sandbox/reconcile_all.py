@@ -7597,9 +7597,11 @@ SUITES = [
     # D-20261114-0 out of them, inventing a decision that never existed. Every
     # round's decisions face reads through this scanner.
     # (AC-SFS1..AC-SFS6 written into src/os/backlog.md in the SAME window as the
-    # suite, after the repair - disclosed rather than backdated.)
+    # suite, after the repair - disclosed rather than backdated. AC-SFS7 (R3325)
+    # pins the ps1 [HB] three lines at the source SKILL.md runs, and the cell is
+    # now graded by the suite against its own derived criteria count.)
     ("os-scan-five-still",
-     os.path.join("..", "os", "test_scan_five_still.py"), 6),
+     os.path.join("..", "os", "test_scan_five_still.py"), 7),
     # R2781: the official mini-program filing guide landed at R2778 as PROSE and
     # filing is the hard pre-release gate (the bureau must issue the filing
     # number before version release). tools/filing_checklist.py turns that row

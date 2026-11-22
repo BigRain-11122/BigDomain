@@ -1,0 +1,5 @@
+baseline live_counts=[1, 1, 1] live_ok=True
+decoy 1 commented ahead line  count=0 reddens=True
+decoy 2 deleted ahead line    count=0 reddens=True
+decoy 3 duplicate ahead line  count=2 exactly_once_arm_reddens=True
+decoy 4 registry cell         cell=7 derived=7 old_cell_6_reddens=True

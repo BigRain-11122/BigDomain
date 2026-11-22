@@ -1,4 +1,4 @@
-"""Battery suite for src/os/scan_five_still.py - criteria AC-SFS1..AC-SFS6.
+"""Battery suite for src/os/scan_five_still.py - criteria AC-SFS1..AC-SFS7.
 
 WHY: the group ledger writes wildcard forms ("no reply cites D-20261114-0x") and
 a token regex without a right-hand boundary harvests D-20261114-0 out of them,
@@ -8,6 +8,16 @@ through this scanner, so the boundary is pinned here.
 Criteria AC-SFS1..AC-SFS6 were written into src/os/backlog.md in the SAME window
 as this suite, NOT before it: the boundary repair and the measurement came first
 and the pinning was recorded afterwards, which is disclosed rather than backdated.
+
+AC-SFS7 (R3325) closes the other half: the ps1 scanner the skill actually runs
+carried a [HB] face that NO suite read. Measured before shipping - the python
+twin holds zero HB/lag/ahead tokens, the five ps1 mentions inside
+test_crawl_runner are all "must not appear" crawl assertions, and the twin has
+zero production callers (scheduled action runs iteration_loop.ps1 and names no
+scan), so the twin is dead code for the group scan and got no second HB face.
+The pin therefore reads the executed source named by SKILL.md - tools/skills/...
+- and not the gitignored .codely-cli install, which is what the ps1 harness
+test_scan_faces.ps1 points at.
 Source discipline: pure ASCII, stdlib only, no clock, no network.
 """
 import io
@@ -18,8 +28,23 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 TOOL = os.path.join(ROOT, 'src', 'os', 'scan_five_still.py')
 DEC = os.path.join(os.path.dirname(os.path.dirname(ROOT)), 'docs', 'decisions.md')
+SCAN_PS1 = os.path.join(ROOT, 'tools', 'skills', 'bigdomain-loop-scan',
+                        'scripts', 'scan_five_still.ps1')
+SKILL_MD = os.path.join(ROOT, 'tools', 'skills', 'bigdomain-loop-scan', 'SKILL.md')
+HB_DEBT = r'[HB] FLAG hb_tick=$hbTick state_tick=$stTick lag=$($stTick - $hbTick)'
+HB_AHEAD = r'[HB] PASS hb_tick=$hbTick state_tick=$stTick ahead=$($hbTick - $stTick)'
+HB_FRESH = r'[HB] PASS hb_tick=$hbTick state_tick=$stTick lag=0'
 FAILS = []
 CHECKS = []
+
+
+def live_code(text):
+    """Comments out of the count: block comments stripped, comment-only lines
+    dropped. Counting the raw text would keep a pin green on a branch somebody
+    commented out - measured at R3325 (commented line: raw=1, live=0)."""
+    body = re.sub(r'<#.*?#>', '', text, flags=re.S)
+    return '\n'.join(ln for ln in body.splitlines()
+                     if not ln.lstrip().startswith('#'))
 
 
 def ok(name, cond, detail=''):
@@ -52,7 +77,7 @@ def load_tool():
 
 def main():
     if not os.path.isfile(TOOL):
-        print('SUITE FAIL 0/6 tool missing')
+        print('SUITE FAIL 0/10 tool missing')
         return 1
     ns, src, out, err = load_tool()
     tokre = ns['TOKRE']
@@ -97,7 +122,7 @@ def main():
     ok('AC-SFS5 the scan runs and prints its faces',
        not err and len(faces) >= 3, 'err=%s faces=%s' % (err[:40], faces))
 
-    # AC-SFS6: hygiene, one registry row at six criteria
+    # AC-SFS6: hygiene, one registry row whose cell matches the criteria count
     ok('AC-SFS6 tool source is pure ASCII', all(ord(c) < 128 for c in src))
     reg = io.open(os.path.join(ROOT, 'src', 'sandbox', 'reconcile_all.py'),
                   'r', encoding='utf-8').read()
@@ -110,7 +135,34 @@ def main():
     ok('AC-SFS6 exactly one battery row for this suite',
        len(rows) == 1, 'rows=%s' % rows)
 
-    total = len(CHECKS)
+    # AC-SFS7 (R3325): the [HB] three lines of the ps1 scanner the skill runs.
+    if os.path.isfile(SCAN_PS1):
+        ptext = io.open(SCAN_PS1, 'r', encoding='utf-8-sig',
+                        errors='replace').read()
+        live = live_code(ptext)
+        got = [live.count(h) for h in (HB_DEBT, HB_AHEAD, HB_FRESH)]
+        ok('AC-SFS7 the three [HB] lines appear exactly once each in live ps1 code',
+           got == [1, 1, 1], 'counts=%s' % got)
+        at = [live.find(h) for h in (HB_DEBT, HB_AHEAD, HB_FRESH)]
+        ok('AC-SFS7 the debt branch is tested before ahead and ahead before lag=0',
+           at[0] >= 0 and at[0] < at[1] < at[2], 'at=%s' % at)
+        commented = '\n'.join(('# ' + ln) if HB_AHEAD in ln else ln
+                              for ln in live.splitlines())
+        ok('AC-SFS7 a commented-out ahead line drops its live count to zero',
+           live_code(commented).count(HB_AHEAD) == 0,
+           'decoy_count=%d' % live_code(commented).count(HB_AHEAD))
+        skill_src = (io.open(SKILL_MD, 'r', encoding='utf-8-sig',
+                             errors='replace').read()
+                     if os.path.isfile(SKILL_MD) else '')
+        inv = [ln for ln in skill_src.splitlines()
+               if 'scan_five_still.ps1' in ln and 'powershell' in ln]
+        ok('AC-SFS7 the skill invocation names the pinned source, not the install',
+           bool(inv) and 'tools/skills/bigdomain-loop-scan/scripts/'
+           'scan_five_still.ps1' in inv[0],
+           'invoke=%s' % (inv[0].strip()[:60] if inv else 'none'))
+    else:
+        ok('AC-SFS7 the ps1 scanner is missing', False, 'path=%s' % SCAN_PS1)
+
     # Declared units (R2860): the AC inventory below is derived from CHECKS,
     # never echoed from the registry - a declaration copied out of the
     # registry could never disagree with it.
@@ -121,6 +173,13 @@ def main():
             if token[cut - 1].isdigit():
                 acs.add(token[:cut])
                 break
+    # R3325: this suite declares no EXPECTED_CRITERIA, so the registry counter
+    # (the third SUITES cell) is graded against the count derived above; a new
+    # arm added without its cell makes this line red instead of drifting.
+    ok('AC-SFS6 the registry cell equals this suite own derived criteria count',
+       rows == [str(len(acs))], 'cell=%s derived=%d' % (rows, len(acs)))
+
+    total = len(CHECKS)
     print('suite: %d assertions over %d criteria' % (total, len(acs)))
     if FAILS:
         print('SUITE FAIL %d/%d failed=%s' % (total - len(FAILS), total, FAILS))
