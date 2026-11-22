@@ -152,9 +152,31 @@ def newest_artifact():
             "html": html_name, "html_bytes": html_bytes, "empty": False}
 
 
-PRODUCER_REL = "src/os/preview_apimarket_current.py"
-PRODUCER = os.path.join(REPO, *PRODUCER_REL.split("/"))
+# R3298 (AC-DIX23): this binding used to be ONE global producer constant, so the
+# command was only truthful while the apimarket pair happened to be newest. The
+# day first-yuan-chain took the band the row degraded to a named absence - and a
+# stamp alone would have been worse, because the printed command would have run
+# the wrong producer (37201B instead of this pair's 4403B). The producer is now
+# read from a per-pair table, and a producer whose only read-only flag is
+# `--check` gets a check command carrying a named caveat: it proves the recipe
+# still reproduces these bytes, not that the numbers are live.
+PAIR_PRODUCERS = {
+    "apimarket-report.json": "src/os/preview_apimarket_current.py",
+    "first-yuan-chain.json": "tools/first_yuan_chain.py",
+}
 SELF_VERIFY_FLAGS = ("--dry-run", "--stamp")
+CHECK_CAVEAT = (
+    "\u53ea\u8bc1\u8fd9\u4efd\u914d\u65b9\u8fd8\u80fd\u9020\u51fa\u540c\u4e00"
+    "\u4efd\u5b57\u8282\uff0c\u4e0d\u8bc1\u9875\u5185\u6570\u5b57\u662f\u5b9e\u51b5")
+
+
+def producer_for(new):
+    """(rel_path, why_not) - the producer recorded for THIS pair, never a global."""
+    rel = PAIR_PRODUCERS.get(new.get("json") or "")
+    if not rel:
+        return None, ("no producer is recorded for %s"
+                      % (new.get("json") or "this pair"))
+    return rel, None
 
 
 def newest_rendered_on(new):
@@ -170,30 +192,36 @@ def newest_rendered_on(new):
 
 
 def self_verify(new):
-    """(command, why_not) for the one command that reproduces the newest pair.
+    """(command, mode, why_not) for the one command that reproduces the newest pair.
 
     R3296 (AC-DIX21): the index lists this pair as the newest deliverable and
-    the reader still has to guess what to run. Every part of the command is
-    taken from a source, never typed: the module path from PRODUCER_REL, the
-    two flags from the producer source (both must still be declared there, or
-    the command would be a paragraph of fiction), and the stamp from the json
-    the page itself quotes. Measured first (qa/probe-R3296.log): the dry run
-    reports 37201 bytes, equal to the html on disk, and writes nothing - which
-    is why the row must also quote the html byte count it prints.
+    the reader still has to guess what to run. R3298 (AC-DIX23): the producer is
+    the one the PAIR is recorded against, and two modes are told apart instead
+    of one being assumed - a producer that declares `--dry-run`/`--stamp` and a
+    json that records `rendered_on` gets the byte-counting dry run (mode
+    'dry', the row may promise a number); a producer whose only read-only flag
+    is `--check` gets that (mode 'check', the row quotes the recipe caveat,
+    because re-deriving the bytes proves the recipe, not the readings).
     """
     if new.get("empty"):
-        return None, "no artifact pair on disk"
+        return None, None, "no artifact pair on disk"
+    rel, why_not = producer_for(new)
+    if rel is None:
+        return None, None, why_not
+    path = os.path.join(REPO, *rel.split("/"))
     try:
-        source = read(PRODUCER)
+        source = read(path)
     except OSError:
-        return None, "producer %s is not on disk" % PRODUCER_REL
+        return None, None, "producer %s is not on disk" % rel
+    stamp = newest_rendered_on(new)
+    if stamp and all(('"%s"' % f) in source for f in SELF_VERIFY_FLAGS):
+        return ("python %s --dry-run --stamp %s" % (rel, stamp)), "dry", None
+    if '"--check"' in source:
+        return ("python %s --check" % rel), "check", None
     missing = [f for f in SELF_VERIFY_FLAGS if ('"%s"' % f) not in source]
     if missing:
-        return None, ("producer no longer declares %s" % ",".join(missing))
-    stamp = newest_rendered_on(new)
-    if not stamp:
-        return None, "the newest json records no rendered_on date"
-    return ("python %s --dry-run --stamp %s" % (PRODUCER_REL, stamp)), None
+        return None, None, ("producer no longer declares %s" % ",".join(missing))
+    return None, None, "producer %s declares no read-only verify flag" % rel
 
 
 # R3297 (AC-DIX22): two CEO pages answered "which pair is newest" with two
@@ -261,8 +289,8 @@ def render_newest(new):
     out = []
     out.append("<h2>\u6700\u65b0\u5b9e\u7269\uff08\u76d8\u4e0a mtime \u6d3e\u751f\uff0c\u7981\u5199\u6b7b\uff09</h2>")
     out.append('<div class="note">%s</div>' % html.escape(newest_line(new)))
-    command, why_not = self_verify(new)
-    if command:
+    command, mode, why_not = self_verify(new)
+    if command and mode == "dry":
         out.append(
             '<div class="note">\u81ea\u5df1\u9a8c\u4e00\u904d\uff08\u547d\u4ee4'
             '\u53c2\u6570\u73b0\u8bfb\u81ea\u4ea7\u51fa\u5668\u4e0e\u8be5\u5bf9'
@@ -270,6 +298,16 @@ def render_newest(new):
             '<code>%s</code>\uff0d\u5b83\u4f1a\u62a5\u51fa\u540c\u4e00\u4e2a '
             '<b>%dB</b> \u5e76\u4e14\u4e0d\u5199\u4efb\u4f55\u5b57\u8282\u3002</div>'
             % (html.escape(command), new.get("html_bytes", 0)))
+    elif command:
+        # R3298 (AC-DIX23): a check-mode producer re-derives and compares bytes;
+        # the row must not let that read as proof of the numbers themselves.
+        out.append(
+            '<div class="note">\u81ea\u5df1\u9a8c\u4e00\u904d\uff08\u547d\u4ee4'
+            '\u4e0e\u4ea7\u51fa\u5668\u73b0\u8bfb\u81ea\u914d\u5bf9\u8868\uff0c'
+            '\u975e\u624b\u5199\uff09\uff1a<code>%s</code>'
+            '\uff0d\u5b83%s\uff1b'
+            '\u8dd1\u5b83\u4e0d\u5199\u4efb\u4f55\u5b57\u8282\u3002</div>'
+            % (html.escape(command), html.escape(CHECK_CAVEAT)))
     else:
         out.append('<div class="note">\u65e0\u81ea\u9a8c\u547d\u4ee4\uff1a%s'
                    '\uff08\u5982\u5b9e\u547d\u540d\uff0c\u4e0d\u7f16\u9020\uff09</div>'
@@ -844,14 +882,17 @@ def main(argv):
     # identical, so the row must quote both numbers for the command to be true.
     # Cost: one extra deterministic render, measured 0.292s (the sweep the
     # closeout already runs; no standing second pass is added to production).
-    command, why_not = self_verify(fresh)
+    command, mode, why_not = self_verify(fresh)
     band = landed_block if check else block
+    rel = None
     if command is None:
         absence = "\u65e0\u81ea\u9a8c\u547d\u4ee4\uff1a%s" % html.escape(why_not)
         record("AC-DIX21", absence in band,
                "no-command-reason=%r printed-as-named-absence=%s"
                % (why_not, absence in band))
     else:
+        rel, _why = producer_for(fresh)
+        target = os.path.join(REPO, *rel.split("/"))
         stamp = newest_rendered_on(fresh)
         html_path = os.path.join(PREVIEW, fresh["html"])
         json_path = os.path.join(PREVIEW, fresh["json"])
@@ -863,36 +904,92 @@ def main(argv):
                 return None
 
         before = (stat_pair(html_path), stat_pair(json_path))
+        flags = (["--dry-run", "--stamp", stamp] if mode == "dry"
+                 else ["--check"])
         proc = subprocess.run(
-            [sys.executable, PRODUCER, "--dry-run", "--stamp", stamp],
+            [sys.executable, target] + flags,
             cwd=REPO, capture_output=True, text=True)
         after = (stat_pair(html_path), stat_pair(json_path))
-        dry_lines = [ln for ln in (proc.stdout or "").splitlines()
-                     if ln.startswith("DRY ")]
-        dry = dry_lines[-1] if dry_lines else ""
-        m_bytes = re.search(r"bytes=(\d+)", dry)
-        m_stamp = re.search(r"stamp=(\d{4}-\d{2}-\d{2})", dry)
-        reported = int(m_bytes.group(1)) if m_bytes else -1
-        reported_stamp = m_stamp.group(1) if m_stamp else ""
         printed_once = band.count(html.escape(command)) == 1
         printed_html = ("html=%dB" % fresh.get("html_bytes", 0)) in band
-        arms = {
-            "printed-once": printed_once,
-            "module-on-disk": os.path.exists(PRODUCER),
-            "rc0": proc.returncode == 0,
-            "dry-line": bool(dry),
-            "bytes-eq-html-eq-row": (reported == fresh.get("html_bytes", 0)
-                                     == (os.path.getsize(html_path)
-                                        if os.path.exists(html_path) else -2)),
-            "row-quotes-html": printed_html,
-            "stamp-eq-page": reported_stamp == stamp,
-            "nothing-written": before == after,
-        }
-        record("AC-DIX21", all(arms.values()),
-               "cmd=%r dry=%r html=%dB json=%dB %s"
-               % (command, dry, fresh.get("html_bytes", 0), fresh["bytes"],
-                  " ".join("%s=%s" % (k, v) for k, v in sorted(arms.items())
-                           if not v) or "all-arms-green"))
+        if mode == "dry":
+            dry_lines = [ln for ln in (proc.stdout or "").splitlines()
+                         if ln.startswith("DRY ")]
+            dry = dry_lines[-1] if dry_lines else ""
+            m_bytes = re.search(r"bytes=(\d+)", dry)
+            m_stamp = re.search(r"stamp=(\d{4}-\d{2}-\d{2})", dry)
+            reported = int(m_bytes.group(1)) if m_bytes else -1
+            reported_stamp = m_stamp.group(1) if m_stamp else ""
+            arms = {
+                "printed-once": printed_once,
+                "module-on-disk": os.path.exists(target),
+                "rc0": proc.returncode == 0,
+                "dry-line": bool(dry),
+                "bytes-eq-html-eq-row": (reported == fresh.get("html_bytes", 0)
+                                         == (os.path.getsize(html_path)
+                                            if os.path.exists(html_path)
+                                            else -2)),
+                "row-quotes-html": printed_html,
+                "stamp-eq-page": reported_stamp == stamp,
+                "nothing-written": before == after,
+            }
+            record("AC-DIX21", all(arms.values()),
+                   "mode=dry cmd=%r dry=%r html=%dB json=%dB %s"
+                   % (command, dry, fresh.get("html_bytes", 0), fresh["bytes"],
+                      " ".join("%s=%s" % (k, v)
+                               for k, v in sorted(arms.items())
+                               if not v) or "all-arms-green"))
+        else:
+            m_html = re.search(r"html=(\d+)B", proc.stdout or "")
+            reported = int(m_html.group(1)) if m_html else -1
+            arms = {
+                "printed-once": printed_once,
+                "module-on-disk": os.path.exists(target),
+                "rc0": proc.returncode == 0,
+                "nothing-written": before == after,
+                "html-eq-row": (reported == fresh.get("html_bytes", 0)
+                                == (os.path.getsize(html_path)
+                                   if os.path.exists(html_path) else -2)),
+                "caveat-printed": html.escape(CHECK_CAVEAT) in band,
+                "row-quotes-html": printed_html,
+            }
+            record("AC-DIX21", all(arms.values()),
+                   "mode=check cmd=%r html=%dB json=%dB rc=%d %s"
+                   % (command, fresh.get("html_bytes", 0), fresh["bytes"],
+                      proc.returncode,
+                      " ".join("%s=%s" % (k, v)
+                               for k, v in sorted(arms.items())
+                               if not v) or "all-arms-green"))
+
+    # AC-DIX23 (pinned 2026-11-22 R3298 in src/os/backlog.md BEFORE this code):
+    # the command used to be bound to ONE producer constant, so the day another
+    # pair took the band the row either lied (wrong producer) or went silent.
+    # This criterion grades the BINDING, not a number: the path printed must be
+    # the table's value for this very json, the table must carry more than one
+    # producer, an unknown pair must be refused by name, and the mode must be
+    # announced in the row (a byte promise for a dry run, the recipe caveat for
+    # a check run) - neither may stand in for the other.
+    unknown, _umode, why_unknown = self_verify({"json": "no-such-pair.json",
+                                                "empty": False})
+    if command and mode == "dry":
+        promise = ("<b>%dB</b>" % fresh.get("html_bytes", 0)) in band
+    else:
+        promise = html.escape(CHECK_CAVEAT) in band
+    arms = {
+        "one-command-or-absence": (band.count(html.escape(command)) == 1
+                                   if command else absence in band),
+        "per-pair-table": (len(PAIR_PRODUCERS) >= 2
+                           and len(set(PAIR_PRODUCERS.values())) >= 2),
+        "path-from-table": (command is None
+                            or rel == PAIR_PRODUCERS.get(fresh["json"])),
+        "unknown-refused": unknown is None and bool(why_unknown),
+        "mode-announced": promise,
+    }
+    record("AC-DIX23", all(arms.values()),
+           "pair=%s producer=%s mode=%s %s"
+           % (fresh.get("json") or "-", rel or "-", mode or "-",
+              " ".join("%s=%s" % (k, v) for k, v in sorted(arms.items())
+                       if not v) or "all-arms-green"))
 
     # AC-DIX22 (pinned 2026-11-22 R3297 in src/os/backlog.md BEFORE this code):
     # two CEO pages ranked "newest" by two different clocks and published two
