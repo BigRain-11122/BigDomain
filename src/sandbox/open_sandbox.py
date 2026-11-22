@@ -35,8 +35,24 @@ The previous run's port table now survives long enough to be read: before this
 run deletes logs/sandbox-start.json it takes that report's ports, connects to
 each one, and prints preoccupied=<port>:<key>,... or none. A port that still
 answers makes the launcher REFUSE and exit 2 without starting nine faces on top
-of a leftover. The reading is a connect answer only - it does not name the
-owner, and the refusal says so rather than claiming our face.
+of a leftover.
+
+R3335: the previous report already carries three tables a refusal can check
+instead of guessing - hub_url, face_ports and pids - so a port that answers can
+now be attributed. preoccupied=<port>:<key>:<owner> where owner is
+
+  ours     the hub port answers GET /hub/api/faces with THIS project's payload
+           (read_only + mock + face_ports), or the port appears in that
+           payload's face_ports, or the face that owned the port last run still
+           has its pid alive in the process snapshot as a python image;
+  foreign  the face owned that port last run and its pid is GONE, so whatever
+           answers now is not that process;
+  unknown  the report carried no pid for that port (for example the ws port).
+
+The boundary is printed with each refusal: pid-alive proves the previous run's
+process is still running, hub-api proves the answering server CALLS ITSELF our
+hub, and neither proves socket ownership - foreign is an argument from a dead
+pid, not a claim about who took the number.
 
 Usage:
   python src/sandbox/open_sandbox.py             # serve and open the browser
@@ -54,6 +70,9 @@ import socket
 import subprocess
 import sys
 import time
+import urllib.error
+import urllib.parse
+import urllib.request
 import webbrowser
 from ctypes import wintypes
 
@@ -193,11 +212,113 @@ def previous_port_table(report):
     return table
 
 
-def occupied_ports(report, host="127.0.0.1"):
-    """[(port, key)] of the previous run's ports that still answer, ascending."""
-    table = previous_port_table(report)
-    return [(port, table[port]) for port in sorted(table)
-            if probe_port(host, port)]
+def report_hub_port(report):
+    """The hub port the previous report published, or None.
+
+    hub_url is the value the child measured, so it is preferred over any map;
+    a report without it simply has no hub to ask.
+    """
+    if not isinstance(report, dict):
+        return None
+    try:
+        port = urllib.parse.urlparse(str(report.get("hub_url") or "")).port
+    except ValueError:
+        return None
+    return int(port) if port else None
+
+
+def hub_payload(host, port, timeout=0.6):
+    """The shipped hub payload on that port, or None.
+
+    Only this project's own shape counts - a dict carrying read_only, mock and
+    face_ports - because a random HTTP server on the same number must not be
+    able to claim our identity. A 404, an HTML answer or a JSON body without
+    those keys reads None and falls back to the weaker readings.
+    """
+    if not port:
+        return None
+    url = "http://%s:%d/hub/api/faces" % (host, int(port))
+    try:
+        with urllib.request.urlopen(url, timeout=timeout) as resp:
+            if resp.status != 200:
+                return None
+            ctype = (resp.headers.get("Content-Type") or "").lower()
+            if "application/json" not in ctype:
+                return None
+            data = json.loads(resp.read(65536).decode("utf-8"))
+    except (OSError, ValueError):
+        return None
+    if not isinstance(data, dict):
+        return None
+    if data.get("read_only") is not True or data.get("mock") is not True:
+        return None
+    if not isinstance(data.get("face_ports"), dict):
+        return None
+    return data
+
+
+def face_by_port(report):
+    """{port: face} from the previous report's face_ports map."""
+    out = {}
+    for face, port in ((report or {}).get("face_ports") or {}).items():
+        try:
+            out[int(port)] = str(face)
+        except (TypeError, ValueError):
+            continue
+    return out
+
+
+def port_owners(report, host="127.0.0.1", table=None):
+    """[(port, key, owner, basis)] of recorded ports that still answer.
+
+    owner is ours / foreign / unknown and basis names the reading behind it, so
+    a refusal carries evidence instead of a guess. Ascending by port, one entry
+    per number.
+    """
+    table = process_table() if table is None else table
+    recorded = previous_port_table(report)
+    face_of = face_by_port(report)
+    pids = (report or {}).get("pids") or {}
+    hub_port = report_hub_port(report)
+    payload = hub_payload(host, hub_port) if hub_port else None
+    published = set()
+    if payload:
+        for value in (payload.get("face_ports") or {}).values():
+            try:
+                published.add(int(value))
+            except (TypeError, ValueError):
+                continue
+    owners = []
+    for port in sorted(recorded):
+        if not probe_port(host, port):
+            continue
+        key = recorded[port]
+        if payload is not None and port == hub_port:
+            owners.append((port, key, "ours", "hub-api"))
+            continue
+        if port in published:
+            owners.append((port, key, "ours", "hub-api-listed"))
+            continue
+        face = face_of.get(port)
+        pid = pids.get(face) if face else None
+        try:
+            pid = int(pid) if pid is not None else None
+        except (TypeError, ValueError):
+            pid = None
+        if pid is not None and pid in table and \
+                table[pid][1].lower().startswith("python"):
+            owners.append((port, key, "ours", "pid-alive"))
+            continue
+        if pid is not None:
+            owners.append((port, key, "foreign", "pid-gone"))
+            continue
+        owners.append((port, key, "unknown", "no-pid"))
+    return owners
+
+
+def occupied_ports(report, host="127.0.0.1", table=None):
+    """[(port, key, owner, basis)] of the previous run's ports still answering."""
+    return port_owners(report, host, table)
 
 
 def write_disposition(args, lines):
@@ -259,13 +380,21 @@ def main(argv=None):
     # refusing names it instead.
     previous = read_report(args.prev_report or report_path)
     probe_host = (previous or {}).get("host") or "127.0.0.1"
-    answered = occupied_ports(previous, probe_host)
+    answered = port_owners(previous, probe_host)
     say("preoccupied=%s"
-        % (",".join("%d:%s" % pair for pair in answered) or "none"))
+        % (",".join("%d:%s:%s" % (port, key, owner)
+                    for port, key, owner, _basis in answered) or "none"))
     if answered:
-        say("REFUSED a port from the previous run still answers (owner not "
-            "identified); that earlier sandbox was not torn down, so nothing "
-            "was started here")
+        detail = "; ".join("%d:%s owner=%s basis=%s" % row for row in answered)
+        unknown = [row for row in answered if row[2] == "unknown"]
+        say("REFUSED %d port(s) from the previous run still answer (%s); that "
+            "earlier sandbox was not torn down, so nothing was started here"
+            % (len(answered), detail))
+        if unknown:
+            say("BOUNDARY %s -> owner not identified (the previous report "
+                "carried no pid for that port, so only 'something answers' is "
+                "proven)"
+                % ", ".join("%d:%s" % (row[0], row[1]) for row in unknown))
         say("VERDICT FAIL hub=- faces=0/8 clean=False")
         if args.qa_log and not write_disposition(args, lines):
             return 2

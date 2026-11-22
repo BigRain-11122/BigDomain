@@ -1,0 +1,3 @@
+ARM1 old_connect=True new_attribution=[(62751, 'checkout', 'foreign', 'pid-gone')] pid=20868 port=62751
+ARM1 verdict old_names_owner=False new_names_owner='foreign'
+ARM2 live_pid=59276 closed_port=62751 old_connect=False new_attribution=[]

@@ -1,0 +1,8 @@
+SECTION 0 prev_report ports=10 pids=6 hub=53761
+  occupied=[]
+SECTION 1 world_alive pid=53008 port=51132 -> [(51132, 'checkout', 'ours', 'pid-alive')]
+SECTION 2 world_dead pid=53008 port=51132 -> [(51132, 'checkout', 'foreign', 'pid-gone')]
+SECTION 3 world_hub port=51143 payload_keys=['chargeable', 'checkout', 'checkout_note', 'face_ports'] -> [(51143, 'hub', 'ours', 'hub-api')]
+NEGCTL A probe_port disabled: alive=[] dead=[] hub=[]
+NEGCTL B hub_payload disabled: hub=[(51143, 'hub', 'unknown', 'no-pid')]
+SECTION 5 closed: alive=[] dead=[] hub=[]

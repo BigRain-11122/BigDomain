@@ -1,10 +1,12 @@
 """Suite for the one-click sandbox launcher (open_sandbox.py).
 
-Six criteria. AC-OSB1..AC-OSB3 were pre-registered in src/os/backlog.md at
+Seven criteria. AC-OSB1..AC-OSB3 were pre-registered in src/os/backlog.md at
 R3333 BEFORE this module existed (the board head asked for the disposition to be
 scriptized instead of hand-copied into qa/, and for a teardown reading that can
 say a child really is gone); AC-OSB6 was pre-registered at R3334 (the board head
-asked for a pre-launch probe of the previous run's port table):
+asked for a pre-launch probe of the previous run's port table); AC-OSB7 was
+pre-registered at R3335 (the board head asked whether an answering port can be
+attributed to US without guessing):
 
   AC-OSB1  the process-table reader the launcher uses is real: a child started
            by this suite appears in descendants(), and after it exits the same
@@ -29,11 +31,17 @@ asked for a pre-launch probe of the previous run's port table):
            table on disk makes the launcher refuse (rc=2, port named, boundary
            stated, no face started). The two real runs above point --prev-report
            at a private empty table so ambient machine state cannot red them.
+  AC-OSB7  an answering port is ATTRIBUTED without guessing: a port whose face
+           pid is still alive reads ours:pid-alive, the same port after that pid
+           is gone reads foreign:pid-gone, and a REAL shipped hub answering its
+           own payload reads ours:hub-api - with a control that disables the
+           payload reader and reads unknown:no-pid, so the identity check is
+           load-bearing rather than decorative.
 
 Cost measured at R3333: the two sandbox runs are about 3.6s each (the faces come
 up and are torn down for real); the collector arm and the socket arms are under
-a second, and the refusal arm returns before any face is spawned. Loopback only -
-no external host is touched.
+a second, and the refusal arm returns before any face is spawned. AC-OSB7 adds
+one sleeping child and one in-process hub (well under a second).
 """
 
 import importlib.util
@@ -52,7 +60,7 @@ MODULE = os.path.join(HERE, "open_sandbox.py")
 WRITER = os.path.join(ROOT, "tools", "qa_log.py")
 REGISTRY = os.path.join(HERE, "reconcile_all.py")
 NO_WINDOW = getattr(subprocess, "CREATE_NO_WINDOW", 0)
-TOTAL = 6
+TOTAL = 7
 
 
 def load_module():
@@ -252,6 +260,88 @@ def main():
     except (AssertionError, OSError, subprocess.SubprocessError) as exc:
         failed += 1
         print("FAIL AC-OSB6 :: %s" % exc)
+
+    # ---------------- AC-OSB7 ----------------
+    hub = None
+    sock = None
+    child = None
+    try:
+        # (a) a live python child that owned the port last run -> ours:pid-alive
+        sock = socket.socket()
+        sock.bind(("127.0.0.1", 0))
+        sock.listen(5)
+        busy = sock.getsockname()[1]
+        child = subprocess.Popen([sys.executable, "-c", "import time; time.sleep(25)"],
+                                 stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
+                                 stderr=subprocess.DEVNULL, creationflags=NO_WINDOW)
+        time.sleep(0.4)
+        alive_world = {"host": "127.0.0.1", "ports": {"ws": 1},
+                       "face_ports": {"checkout": busy},
+                       "pids": {"checkout": child.pid}}
+        got = [tuple(row) for row in module.port_owners(alive_world)]
+        assert got == [(busy, "checkout", "ours", "pid-alive")], (
+            "a live owner read %r" % (got,))
+
+        # (b) the same port after that pid is gone -> foreign:pid-gone
+        child.kill()
+        child.wait(timeout=20)
+        time.sleep(0.4)
+        got = [tuple(row) for row in module.port_owners(alive_world)]
+        assert got == [(busy, "checkout", "foreign", "pid-gone")], (
+            "a dead owner read %r" % (got,))
+
+        # (c) a REAL shipped hub answering its own payload -> ours:hub-api
+        sys.path.insert(0, os.path.join(HERE, "lobby"))
+        import hub_page
+        faces = hub_page.build_faces("127.0.0.1", 1, web_port=2)
+        hub = hub_page.start_hub_http("127.0.0.1", 0, faces)
+        hub_port = hub.server_address[1]
+        time.sleep(0.4)
+        hub_world = {"host": "127.0.0.1", "ports": {"hub": hub_port},
+                     "hub_url": "http://127.0.0.1:%d/hub/" % hub_port}
+        got = [tuple(row) for row in module.port_owners(hub_world)]
+        assert [(row[2], row[3]) for row in got] == [("ours", "hub-api")], (
+            "a real hub read %r" % (got,))
+
+        # (d) control: without the payload reader the same world is unknown
+        real_payload = module.hub_payload
+        module.hub_payload = lambda host, port, timeout=0.6: None
+        try:
+            got = [tuple(row) for row in module.port_owners(hub_world)]
+        finally:
+            module.hub_payload = real_payload
+        assert [(row[2], row[3]) for row in got] == [("unknown", "no-pid")], (
+            "without its payload the hub port still read %r" % (got,))
+
+        # (e) a closed world clears every reading
+        hub.shutdown()
+        hub.server_close()
+        hub = None
+        sock.close()
+        sock = None
+        time.sleep(0.3)
+        assert module.port_owners(alive_world) == [], "a closed world still answered"
+        assert module.port_owners(hub_world) == [], "a closed hub still answered"
+        print("PASS AC-OSB7 alive=ours:pid-alive dead=foreign:pid-gone"
+              " hub=ours:hub-api without_payload=unknown:no-pid closed=none")
+    except (AssertionError, OSError, subprocess.SubprocessError, ImportError) as exc:
+        failed += 1
+        print("FAIL AC-OSB7 :: %s" % exc)
+    finally:
+        if child is not None and child.poll() is None:
+            child.kill()
+            try:
+                child.wait(timeout=10)
+            except subprocess.SubprocessError:
+                pass
+        if hub is not None:
+            try:
+                hub.shutdown()
+                hub.server_close()
+            except OSError:
+                pass
+        if sock is not None:
+            sock.close()
 
     if failed:
         print("SUITE FAIL %d/%d" % (TOTAL - failed, TOTAL))

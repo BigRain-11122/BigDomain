@@ -492,8 +492,11 @@ SUITES = [
     # src/os/backlog.md at R3333 BEFORE this suite existed.) R3334 added AC-OSB6
     # for the previous run's port table: the reading is a real loopback connect,
     # and a recorded port that still answers makes the launcher refuse before it
-    # spawns anything.
-    ("os-sandbox-open", "test_open_sandbox.py", 6),
+    # spawns anything. R3335 added AC-OSB7 for attribution: an answering port is
+    # read as ours when its previous face pid is still alive or when the hub
+    # answers its own payload, as foreign when that pid is gone, and the payload
+    # reader is proved load-bearing by a control that disables it.
+    ("os-sandbox-open", "test_open_sandbox.py", 7),
     # lobby room picker and event ledger (R2464): GET /lobby/api/rooms answers
     # the server OWN configured rooms (never a literal in the module or page),
     # the page gains a selector that subscribes the new room and releases the
