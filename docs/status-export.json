@@ -5,15 +5,15 @@
     ],
     "current": "R3267 PRODUCT+ENGINEERING: the walk dropped the two faces a visitor most wants to open; they are now branches on the same page, each named with a closed reason and a derived sentence, and AC-SH25 grades both counts plus the accounting law that every operable face is exactly one main step or one branch.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
-    "last_artifact": "preview/start-here.html (32325B) + preview/start-here.json (2180B) [2026-11-22 mtime]",
-    "latest_artifact": "preview/start-here.html (32325B) + preview/start-here.json (2180B) [2026-11-22 mtime]",
+    "last_artifact": "preview/start-here.html (32325B) + preview/start-here.json (2180B) [2026-11-22 commit]",
+    "latest_artifact": "preview/start-here.html (32325B) + preview/start-here.json (2180B) [2026-11-22 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\start-here.html",
     "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/negctl-R3262.log (664B, 2026-11-22)",
     "latest_evidence": "qa/negctl-R3262.log (664B, 2026-11-22)",
     "newest_pair_on_disk_is_board": true,
     "next_milestone": "[R3268] next window (<=48h): (0) MAIN — **走线告诉读者「点它之后 NS 留在这台机器的浏览器里」，可 `NS` 是脚本里的变量，读者拿着它在浏览器里什么也找不到**：`merchant-onboard.html` 那条印的是 `KEY`，四张清单面印的都是 `NS`——同一个词既可能是存储键的字面前缀，也可能只是命名空间常量。问：值不值得把这句承诺变成可核对的键名（或它的具名缺席）？做法＝先只读量三问：①六张可操作面的写侧符号能否在**同一个文件的字节里**解析成字符串字面量（`NS` 是否等于某个 `var/const NS=\"…\"` 的字面前缀、写表达式里有没有 `+` 拼接、拼接里有没有 `this.getAttribute('')` 这类运行期才定的段），逐面列出「可解析成字面量 / 只在运行期成型 / 根本没有」；②能否立一条机械律「主步与旁支的键名必须印成（a）从本文件字节解析出的字面键（逐字节等于解析值）或（b）一句具名说明『这个键名只在运行期成型，页面给不出你能直接搜的字符串』」，且不破 AC-SH24/25 现有的键名与句判据（另立一条，还是在 SH24/25 上就地扩）；③代价（要不要新增判据、页增多少字节、`keys[\"write\"]` 的原表达式是否保留以便对照）。收口三选一＝①保持现状（页上已说清「证明什么/不证明什么」）②解析字面键并打印，解析不出时用同一句具名缺席 ③只加一句「`NS`/`KEY` 是脚本里的符号名，不是浏览器里能直接搜到的字符串」。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
-    "next_milestone_due": "2026-11-24T14:45:59+08:00",
-    "updated_at": "2026-11-22T14:45:59+08:00",
+    "next_milestone_due": "2026-11-24T14:47:28+08:00",
+    "updated_at": "2026-11-22T14:47:28+08:00",
     "heartbeat": {
       "tick": 3262,
       "state_tick": 3262,
@@ -44,7 +44,7 @@
     }
   },
   "current": "R3267 PRODUCT+ENGINEERING: the walk dropped the two faces a visitor most wants to open; they are now branches on the same page, each named with a closed reason and a derived sentence, and AC-SH25 grades both counts plus the accounting law that every operable face is exactly one main step or one branch.",
-  "claims": {"claimed": 309, "captured": 94, "contradicted": 10, "uncaptured": 205, "historic": 7, "rows": 14, "present": true, "census_ts": "2026-11-22T14:45:59+08:00"},
+  "claims": {"claimed": 309, "captured": 94, "contradicted": 10, "uncaptured": 205, "historic": 7, "rows": 14, "present": true, "census_ts": "2026-11-22T14:47:28+08:00"},
   "chain": {"present": true, "rows": 14, "broken": 0, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -74,8 +74,8 @@
     }
   ],
   "do": "R3267 PRODUCT+ENGINEERING: the walk dropped the two faces a visitor most wants to open; they are now branches on the same page, each named with a closed reason and a derived sentence, and AC-SH25 grades both counts plus the accounting law that every operable face is exactly one main step or one branch.",
-  "export_ts": "2026-11-22T14:45:59+08:00",
-  "latest_artifact": "preview/start-here.html (32325B) + preview/start-here.json (2180B) [2026-11-22 mtime]",
+  "export_ts": "2026-11-22T14:47:28+08:00",
+  "latest_artifact": "preview/start-here.html (32325B) + preview/start-here.json (2180B) [2026-11-22 commit]",
   "latest_evidence": "qa/negctl-R3262.log (664B, 2026-11-22)",
   "next_milestone": "[R3268] next window (<=48h): (0) MAIN — **走线告诉读者「点它之后 NS 留在这台机器的浏览器里」，可 `NS` 是脚本里的变量，读者拿着它在浏览器里什么也找不到**：`merchant-onboard.html` 那条印的是 `KEY`，四张清单面印的都是 `NS`——同一个词既可能是存储键的字面前缀，也可能只是命名空间常量。问：值不值得把这句承诺变成可核对的键名（或它的具名缺席）？做法＝先只读量三问：①六张可操作面的写侧符号能否在**同一个文件的字节里**解析成字符串字面量（`NS` 是否等于某个 `var/const NS=\"…\"` 的字面前缀、写表达式里有没有 `+` 拼接、拼接里有没有 `this.getAttribute('')` 这类运行期才定的段），逐面列出「可解析成字面量 / 只在运行期成型 / 根本没有」；②能否立一条机械律「主步与旁支的键名必须印成（a）从本文件字节解析出的字面键（逐字节等于解析值）或（b）一句具名说明『这个键名只在运行期成型，页面给不出你能直接搜的字符串』」，且不破 AC-SH24/25 现有的键名与句判据（另立一条，还是在 SH24/25 上就地扩）；③代价（要不要新增判据、页增多少字节、`keys[\"write\"]` 的原表达式是否保留以便对照）。收口三选一＝①保持现状（页上已说清「证明什么/不证明什么」）②解析字面键并打印，解析不出时用同一句具名缺席 ③只加一句「`NS`/`KEY` 是脚本里的符号名，不是浏览器里能直接搜到的字符串」。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。",
   "outs": [
@@ -172,7 +172,7 @@
     "queue_explore_open": 4
   },
   "state_bytes": 65956,
-  "next_milestone_due": "2026-11-24T14:45:59+08:00",
+  "next_milestone_due": "2026-11-24T14:47:28+08:00",
   "heartbeat": {
     "tick": 3262,
     "state_tick": 3262,
