@@ -1,0 +1,36 @@
+# closeout_order R3299 evidence (measured at 2026-11-22, BigDomain)
+# chain/sweep/export green; index 21/22 (AC-DIX22 clock-quoted) - the 3-cycle is disclosed, not smoothed
+
+$ python tools/closeout_order.py --plan
+rc=0
+STEPS 5 chain,index,backhop,sweep,export
+EDGE chain   <- index   bytes tools/face_backhop.py:data-back-bytes found=True
+EDGE index   <- chain   bytes tools/deliverable_index.py:html_bytes found=True
+EDGE index   <- export  bytes tools/deliverable_index.py:census_ts found=True
+EDGE sweep   <- index   bytes tools/face_sweep.py:preview/index.html found=True
+EDGE sweep   <- chain   bytes tools/face_sweep.py:preview/first-yuan-chain.html found=True
+EDGE export  <- sweep   mtime src/os/export_round.py:BOARD_PAGES found=True
+BYTE-CYCLES 1 chain->index->chain
+VERDICT PASS edges=6 cycles=1
+
+
+$ python tools/closeout_order.py --dry-run
+rc=2
+PLAN steps=chain,index,backhop,sweep,export
+CHECK chain  PASS VERDICT PASS legs=2 entries=2 tx=1 reconcile_rc=0 html=4403B read_only=True
+CHECK index  FAIL VERDICT FAIL 21/22 fingerprint=d5152d2e771a4c51
+CHECK sweep  PASS VERDICT PASS 21/21
+CHECK export PASS VERDICT PASS tick=R3299 - tick: 3298 -> 3299.
+READ-ONLY unchanged=True
+VERDICT FAIL red=index (dry run: nothing written)
+
+
+$ python tools/closeout_order.py --check
+rc=2
+CHECK chain  PASS VERDICT PASS legs=2 entries=2 tx=1 reconcile_rc=0 html=4403B read_only=True
+CHECK index  FAIL VERDICT FAIL 21/22 fingerprint=d5152d2e771a4c51
+CHECK sweep  PASS VERDICT PASS 21/21
+CHECK export PASS VERDICT PASS tick=R3299 - tick: 3298 -> 3299.
+REDGE index <- chain bytes tools/deliverable_index.py
+REDGE index <- export bytes tools/deliverable_index.py
+VERDICT FAIL red=index read_only=True
