@@ -84,8 +84,12 @@ try {
   $gt = Get-GroupFile 'docs/decisions.md'
   $draw = $gt.raw
   $D = @(($draw.TrimEnd("`r", "`n")) -split "\r?\n")
-  $tok = @([regex]::Matches($draw, '(?:D|C)-\d{8}-\d{2}') | ForEach-Object { $_.Value } | Sort-Object -Unique)
-  $decTokRe = '(?:D|C)-\d{8}-\d{2}'
+  # R3326: the right-boundary law (R2780) lived only in the dead py twin; it is
+  # applied here, on the face that actually runs. Measured without it:
+  # "D-20261114-01x", "D-20261114-012" and "C-20261010-02ab" harvest as real
+  # tokens; the live decisions.md carries 0 such forms today.
+  $tok = @([regex]::Matches($draw, '(?:D|C)-\d{8}-\d{2}(?![0-9A-Za-z])') | ForEach-Object { $_.Value } | Sort-Object -Unique)
+  $decTokRe = '(?:D|C)-\d{8}-\d{2}(?![0-9A-Za-z])'
   $ownerRaw = @()
   $refRaw = @()
   $ownerRow = @{}

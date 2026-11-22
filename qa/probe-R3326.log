@@ -1,0 +1,18 @@
+SECTION 1: the token right-boundary (ps1 DEC face)
+  in=[D-20261114-01x] old=['D-20261114-01'] new=[]
+  in=[D-20261114-012] old=['D-20261114-01'] new=[]
+  in=[C-20261010-02ab] old=['C-20261010-02'] new=[]
+  in=[D-20261114-0x] old=[] new=[]
+  in=[D-20261114-01.] old=['D-20261114-01'] new=['D-20261114-01']
+  in=[D-20261114-01 ] old=['D-20261114-01'] new=['D-20261114-01']
+  live decisions.md: continuation-forms=0 old_tokens=143 new_tokens=143 delta=[]
+SECTION 2: the graded file (harness source of truth)
+  source=25197B sha16=4394febeaf35df0e
+  install=25197B sha16=4394febeaf35df0e
+  SKILL.md:19 names the source path, and git ls-files tracks it
+SECTION 3: [HB] behaviour readings (run live by test_scan_faces.ps1)
+  behind row  tick 7  state 9  -> FLAG hb_tick=7 state_tick=9 lag=2
+  ahead row   tick 11 state 9  -> PASS hb_tick=11 state_tick=9 ahead=2
+  fresh row   tick 9  state 9  -> PASS hb_tick=9 state_tick=9 lag=0 (with two trailing blank lines)
+  absent/unparseable           -> FLAG heartbeat_missing_or_unparsed
+VERDICT: three faces measured, one live-face guard shipped, one harness re-pointed

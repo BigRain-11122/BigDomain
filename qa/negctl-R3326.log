@@ -1,0 +1,12 @@
+ARM 1 token boundary (fixture "D-20261114-04x" as an owner cell)
+  old      -> ['D-20261114-04']
+  shipped  -> []
+  the old form invents a decision row; the shipped form names none
+ARM 2 heartbeat ahead (state 9, row 11)
+  old branch  -> "[HB] PASS hb_tick=11 state_tick=9 lag=0" (a false number)
+  shipped     -> "[HB] PASS hb_tick=11 state_tick=9 ahead=2"
+  the harness asserts the second and refuses the first
+ARM 3 graded file (install copy stale by 5 lines at R3325)
+  old harness read .codely-cli, so a stale copy could answer PASS
+  shipped harness reads tools/skills and FAILS on drift: observed FAIL then PASS after the sync
+VERDICT: all three guards observed load-bearing on the same run

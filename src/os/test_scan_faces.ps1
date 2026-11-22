@@ -112,6 +112,19 @@
 #   AC-SC10 harness laws: sandbox scan copy is byte-identical to the real
 #           script (copied at run time = single source of truth, zero drift);
 #           harness file is pure ASCII; exit 0 all-pass / 2 any-fail.
+#   AC-SC24 (R3326, pinned in src/os/backlog.md BEFORE this arm existed): the
+#           graded file is the git-tracked source SKILL.md:19 names, and the
+#           .codely-cli install copy's drift is printed as [SCANFACES]
+#           source=NB install=match|drift|absent; drift FAILS (the R3325
+#           measured defect: a copy 5 lines stale that no harness could see).
+#   AC-SC25 [HB] behaviour rather than text: a behind row -> FLAG lag=N; an
+#           ahead row -> PASS ahead=N and never the old lag=0; trailing blank
+#           lines still parse the last tick row; absent and unparseable rows
+#           both -> heartbeat_missing_or_unparsed.
+#   AC-SC26 the token right-boundary law runs on the LIVE face: an owner cell
+#           carrying "D-...-04x" yields no token, while a real new owner row is
+#           still flagged by name (R3326 measured the old regex harvesting
+#           D-20261114-01 out of D-20261114-01x).
 #
 # SAFETY: everything runs inside a per-run TEMP sandbox shaped as
 # FluxGroup\domain\BigDomain plus FluxGroup-level fixture files. The real
@@ -124,7 +137,12 @@
 $ErrorActionPreference = 'Continue'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $repo = (Resolve-Path (Join-Path $here '..\..')).Path
-$realScan = Join-Path $repo '.codely-cli\skills\bigdomain-loop-scan\scripts\scan_five_still.ps1'
+# R3326: the harness grades the SHIPPED source (git-tracked, and the path
+# SKILL.md:19 tells the loop to run), not the .codely-cli install copy, which
+# is a per-machine artifact measured one round stale at R3325. The sandbox
+# still places the copy at the install shape so the script's own repo-root
+# arithmetic (..\..\..\..) is unchanged.
+$realScan = Join-Path $repo 'tools\skills\bigdomain-loop-scan\scripts\scan_five_still.ps1'
 $today = (Get-Date).ToString('yyyy-MM-dd')
 $yesterday = (Get-Date).AddDays(-1).ToString('yyyy-MM-dd')
 $script:fail = 0
@@ -569,6 +587,94 @@ try {
     $after = '' + (Get-Item -LiteralPath $fsp).Length + '/' + (Get-Item -LiteralPath $fsp).LastWriteTimeUtc.Ticks
     Assert ($before -eq $after) 'AC-SC23d' 'preview/face-sweep.html bytes and mtime unchanged by the scan'
 
+    # --- AC-SC24..26 (R3326, pinned in src/os/backlog.md BEFORE these arms
+    # existed): the graded file is the shipped source, the [HB] face gets
+    # behaviour readings, and the token right-boundary law runs on the live face.
+    $srcScan = Join-Path $repo 'tools\skills\bigdomain-loop-scan\scripts\scan_five_still.ps1'
+    $instScan = Join-Path $repo '.codely-cli\skills\bigdomain-loop-scan\scripts\scan_five_still.ps1'
+    Assert (Test-Path -LiteralPath $srcScan) 'AC-SC24' 'shipped scanner source exists at tools/skills'
+    $sha2 = [System.Security.Cryptography.SHA256]::Create()
+    $srcSha = ''
+    $instState = 'absent'
+    if (Test-Path -LiteralPath $srcScan) { $srcSha = [System.BitConverter]::ToString($sha2.ComputeHash([System.IO.File]::ReadAllBytes($srcScan))) }
+    if (Test-Path -LiteralPath $instScan) {
+        $instSha = [System.BitConverter]::ToString($sha2.ComputeHash([System.IO.File]::ReadAllBytes($instScan)))
+        if ($instSha -eq $srcSha) { $instState = 'match' } else { $instState = 'drift' }
+    }
+    $sha2.Dispose()
+    $srcLen = 0
+    if (Test-Path -LiteralPath $srcScan) { $srcLen = (Get-Item -LiteralPath $srcScan).Length }
+    Write-Output ("[SCANFACES] source=" + $srcLen + "B install=" + $instState)
+    Assert ($realScan -eq $srcScan) 'AC-SC24' 'the graded path is the shipped source, not the install copy'
+    Assert ($instState -ne 'drift') 'AC-SC24' ("install copy is absent or byte-identical to source (install=" + $instState + ")")
+
+    function Write-Heartbeat([string[]]$lines) {
+        [System.IO.File]::WriteAllLines((Join-Path $sbxRepo 'heartbeat.txt'), $lines, $utf8NoBom)
+    }
+
+    # AC-SC25a: a behind row is a FLAG naming the lag.
+    Reset-Sandbox
+    Setup-Fixtures @('| 2026-09-28 22:1x | order row | open |') (New-StateJson '2026-09-28 22:1x' $today) $false
+    Write-Heartbeat @('tick 7')
+    Git-Baseline
+    $r = Invoke-Scan
+    Assert ($r.text -match '\[HB\] FLAG hb_tick=7 state_tick=9 lag=2') 'AC-SC25' 'a behind heartbeat row is a FLAG naming the lag'
+
+    # AC-SC25b: an ahead row names ahead= and never prints the old lag=0.
+    Reset-Sandbox
+    Setup-Fixtures @('| 2026-09-28 22:1x | order row | open |') (New-StateJson '2026-09-28 22:1x' $today) $false
+    Write-Heartbeat @('tick 11')
+    Git-Baseline
+    $r = Invoke-Scan
+    Assert ($r.text -match '\[HB\] PASS hb_tick=11 state_tick=9 ahead=2') 'AC-SC25' 'an ahead row names ahead='
+    Assert ($r.text -notmatch '\[HB\] PASS hb_tick=11 state_tick=9 lag=0') 'AC-SC25' 'an ahead row never prints lag=0 (the R3323 false number)'
+
+    # AC-SC25c: trailing blank lines still parse the last tick row (R1386).
+    Reset-Sandbox
+    Setup-Fixtures @('| 2026-09-28 22:1x | order row | open |') (New-StateJson '2026-09-28 22:1x' $today) $false
+    [System.IO.File]::WriteAllText((Join-Path $sbxRepo 'heartbeat.txt'), "tick 9`r`n`r`n", $utf8NoBom)
+    Git-Baseline
+    $r = Invoke-Scan
+    Assert ($r.text -match '\[HB\] PASS hb_tick=9 state_tick=9 lag=0') 'AC-SC25' 'trailing blank lines still parse the last tick row (R1386)'
+
+    # AC-SC25d/e: an absent row and an unparseable row are the same named FLAG.
+    Reset-Sandbox
+    Setup-Fixtures @('| 2026-09-28 22:1x | order row | open |') (New-StateJson '2026-09-28 22:1x' $today) $false
+    Git-Baseline
+    $r = Invoke-Scan
+    Assert ($r.text -match '\[HB\] FLAG heartbeat_missing_or_unparsed') 'AC-SC25' 'no heartbeat.txt -> missing_or_unparsed FLAG'
+
+    Reset-Sandbox
+    Setup-Fixtures @('| 2026-09-28 22:1x | order row | open |') (New-StateJson '2026-09-28 22:1x' $today) $false
+    Write-Heartbeat @('no tick here')
+    Git-Baseline
+    $r = Invoke-Scan
+    Assert ($r.text -match '\[HB\] FLAG heartbeat_missing_or_unparsed') 'AC-SC25' 'an unparseable row -> missing_or_unparsed FLAG'
+
+    # AC-SC26: a token continued by a letter/number is not harvested, while a
+    # real new owner token still flags by name (measured R3326: the old ps1 regex
+    # answered D-20261114-01 for "D-20261114-01x").
+    Reset-Sandbox
+    Setup-Fixtures @('| 2026-09-28 22:1x | order row | open |') ('{"tick":9,"last_order":"2026-09-28 22:1x","last_decision_rows":1,"benchmarks_refreshed":"' + $today + '","last_dec_tokens":"D-20261114-01","log":["a","b"]}') $false
+    Write-Group 'docs\decisions.md' @(
+        '| 2026-11-14 | D-20261114-01 real owner row | detail |',
+        '| 2026-11-14 | D-20261114-04x wildcard-shaped owner cell | detail |'
+    )
+    Git-Baseline
+    $r = Invoke-Scan
+    Assert ($r.text -notmatch 'D-20261114-04') 'AC-SC26' 'a token followed by a letter is not harvested (phantom law on the live face)'
+    Assert ($r.text -match '\[DEC\] PASS') 'AC-SC26' 'the baseline row still reads DEC PASS'
+
+    Reset-Sandbox
+    Setup-Fixtures @('| 2026-09-28 22:1x | order row | open |') ('{"tick":9,"last_order":"2026-09-28 22:1x","last_decision_rows":1,"benchmarks_refreshed":"' + $today + '","last_dec_tokens":"D-20261114-01","log":["a","b"]}') $false
+    Write-Group 'docs\decisions.md' @(
+        '| 2026-11-14 | D-20261114-01 real owner row | detail |',
+        '| 2026-11-14 | D-20261114-05 brand new owner row | detail |'
+    )
+    Git-Baseline
+    $r = Invoke-Scan
+    Assert ($r.text -match 'dec_new_tok D-20261114-05') 'AC-SC26' 'a real new owner token still flags by name'
+
     # --- AC-SC10: harness laws ---------------------------------------------
     [System.IO.File]::Copy($realScan, $sbxScan, $true)
     $a = [System.IO.File]::ReadAllBytes($realScan)
@@ -587,6 +693,6 @@ finally {
     Remove-Item -LiteralPath $sbxRoot -Recurse -Force -ErrorAction SilentlyContinue
 }
 
-if ($script:fail -eq 0) { Write-Output ("ALL CRITERIA PASS (AC-SC1..SC23, " + $script:pass + " checks)"); exit 0 }
+if ($script:fail -eq 0) { Write-Output ("ALL CRITERIA PASS (AC-SC1..SC26, " + $script:pass + " checks)"); exit 0 }
 Write-Output ("FAILURES=" + $script:fail)
 exit 2
