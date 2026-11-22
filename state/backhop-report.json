@@ -166,8 +166,8 @@
   },
   "apimarket-report.html": {
    "back": "buyer-trial.html",
-   "bytes_after": 37005,
-   "bytes_before": 37005,
+   "bytes_after": 37201,
+   "bytes_before": 37201,
    "face": "apimarket-report.html",
    "how": "inserted",
    "rule_reason": "市场/结算读数面：回到这一族里唯一能下单的那一页",
