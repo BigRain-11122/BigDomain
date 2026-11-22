@@ -5,15 +5,15 @@
     ],
     "current": "2026-11-22 R3285 PRODUCT+ENGINEERING: the two remaining operable dead ends now lead somewhere - merchant-onboard (the page that lists what is still missing to actually charge) and lobby-protocol-map (the protocol dictionary) each carry the same four-hop route block the other three faces already had, and a new site law refuses any operable face that links nowhere. preview/merchant-onboard.html is 22956B (20402B last round), preview/lobby-protocol-map.html is 29032B (27260B last round), and state/face-route-scan.json (8375B) lists all 45 faces with bytes, control count and out-degree.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
-    "last_artifact": "preview/money-path-demo.html (13164B) + preview/money-path-demo.json (6011B) [2026-11-22 mtime]",
-    "latest_artifact": "preview/money-path-demo.html (13164B) + preview/money-path-demo.json (6011B) [2026-11-22 mtime]",
+    "last_artifact": "preview/money-path-demo.html (13164B) + preview/money-path-demo.json (6011B) [2026-11-22 commit]",
+    "latest_artifact": "preview/money-path-demo.html (13164B) + preview/money-path-demo.json (6011B) [2026-11-22 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\money-path-demo.html",
     "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/negctl-R3273.log (1280B, 2026-11-22)",
     "latest_evidence": "qa/negctl-R3273.log (1280B, 2026-11-22)",
     "newest_pair_on_disk_is_board": true,
     "next_milestone": "[R3286] next window (<=48h): (0) MAIN — **跳表顺序已是单一闭集，但每跳的「那句话」仍是五份副本；而唯一入口 `index.html` 把 44 条链平铺、没有「第一次来先开哪一页」的顺序**。问：要不要把跳标签也收进闭集（每跳一句唯一定义、五张面共用），并给入口页加一块同构的「第一次来先走这四步」路线块（判据沿用同一套 `buyer_route.check`，新增 AC-IDX1）？做法＝先只读量三问：①五张面跳表里同一 href 的标签有几句不同版本、差异是什么（逐条列，不猜）；②若收标签，`ROUTES` 要改成「href → 唯一标签 + 每面只声明 href 顺序」，五张面的 `--check` 与已有负控臂要不要同步改；③代价（入口页 39634B 会增多少、是否触发 index 的自我尺寸引用、负控臂数）。收口三选一＝①只收标签不动入口页 ②收标签并给入口页加首访路线 ③不动。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：state 载体 fold_needed=true（bytes=161935·gate=78500）、删除侧时机词未建、tasks.md P-47 站行（零支付能力）、BigDomain-OSLoop LogonType=Interactive。",
-    "next_milestone_due": "2026-11-24T18:50:24+08:00",
-    "updated_at": "2026-11-22T18:50:24+08:00",
+    "next_milestone_due": "2026-11-24T18:51:46+08:00",
+    "updated_at": "2026-11-22T18:51:46+08:00",
     "heartbeat": {
       "tick": 3262,
       "state_tick": 3273,
@@ -38,7 +38,7 @@
     }
   },
   "current": "2026-11-22 R3285 PRODUCT+ENGINEERING: the two remaining operable dead ends now lead somewhere - merchant-onboard (the page that lists what is still missing to actually charge) and lobby-protocol-map (the protocol dictionary) each carry the same four-hop route block the other three faces already had, and a new site law refuses any operable face that links nowhere. preview/merchant-onboard.html is 22956B (20402B last round), preview/lobby-protocol-map.html is 29032B (27260B last round), and state/face-route-scan.json (8375B) lists all 45 faces with bytes, control count and out-degree.",
-  "claims": {"claimed": 325, "captured": 94, "contradicted": 10, "uncaptured": 221, "historic": 7, "rows": 16, "present": true, "census_ts": "2026-11-22T18:50:24+08:00"},
+  "claims": {"claimed": 325, "captured": 94, "contradicted": 10, "uncaptured": 221, "historic": 7, "rows": 16, "present": true, "census_ts": "2026-11-22T18:51:46+08:00"},
   "chain": {"present": true, "rows": 16, "broken": 0, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -68,8 +68,8 @@
     }
   ],
   "do": "2026-11-22 R3285 PRODUCT+ENGINEERING: the two remaining operable dead ends now lead somewhere - merchant-onboard (the page that lists what is still missing to actually charge) and lobby-protocol-map (the protocol dictionary) each carry the same four-hop route block the other three faces already had, and a new site law refuses any operable face that links nowhere. preview/merchant-onboard.html is 22956B (20402B last round), preview/lobby-protocol-map.html is 29032B (27260B last round), and state/face-route-scan.json (8375B) lists all 45 faces with bytes, control count and out-degree.",
-  "export_ts": "2026-11-22T18:50:24+08:00",
-  "latest_artifact": "preview/money-path-demo.html (13164B) + preview/money-path-demo.json (6011B) [2026-11-22 mtime]",
+  "export_ts": "2026-11-22T18:51:46+08:00",
+  "latest_artifact": "preview/money-path-demo.html (13164B) + preview/money-path-demo.json (6011B) [2026-11-22 commit]",
   "latest_evidence": "qa/negctl-R3273.log (1280B, 2026-11-22)",
   "next_milestone": "[R3286] next window (<=48h): (0) MAIN — **跳表顺序已是单一闭集，但每跳的「那句话」仍是五份副本；而唯一入口 `index.html` 把 44 条链平铺、没有「第一次来先开哪一页」的顺序**。问：要不要把跳标签也收进闭集（每跳一句唯一定义、五张面共用），并给入口页加一块同构的「第一次来先走这四步」路线块（判据沿用同一套 `buyer_route.check`，新增 AC-IDX1）？做法＝先只读量三问：①五张面跳表里同一 href 的标签有几句不同版本、差异是什么（逐条列，不猜）；②若收标签，`ROUTES` 要改成「href → 唯一标签 + 每面只声明 href 顺序」，五张面的 `--check` 与已有负控臂要不要同步改；③代价（入口页 39634B 会增多少、是否触发 index 的自我尺寸引用、负控臂数）。收口三选一＝①只收标签不动入口页 ②收标签并给入口页加首访路线 ③不动。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：state 载体 fold_needed=true（bytes=161935·gate=78500）、删除侧时机词未建、tasks.md P-47 站行（零支付能力）、BigDomain-OSLoop LogonType=Interactive。",
   "outs": [
@@ -166,7 +166,7 @@
     "queue_explore_open": 4
   },
   "state_bytes": 161935,
-  "next_milestone_due": "2026-11-24T18:50:24+08:00",
+  "next_milestone_due": "2026-11-24T18:51:46+08:00",
   "heartbeat": {
     "tick": 3262,
     "state_tick": 3273,
