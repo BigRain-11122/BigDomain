@@ -115,7 +115,10 @@ FACES = [
     # badge, the sibling numbers, the byte sizes and the fact that the bytes on disk
     # are what this tree renders now (injection included). Adding the row is how the
     # check gets a consumer that runs every window instead of a tool nobody calls.
-    ("apimarket-current", "\u5f53\u524d\u8bfb\u6570\u9762\u81ea\u8bc1 / schema \u4e0e\u53ef\u91cd\u73b0",
+    # R3293: the date and the source fingerprints join the badge, so the row
+    # also grades that the copy says how old it is and that the three files it
+    # was rendered from still hash to what it recorded (a moved gate is red).
+    ("apimarket-current", "\u5f53\u524d\u8bfb\u6570\u9762\u81ea\u8bc1 / schema\u3001\u65e5\u671f\u4e0e\u51fa\u5904",
      "tools/apimarket_current_face.py",
      "preview/apimarket-report.html", "preview/apimarket-report.json",
      "\u5f53\u524d\u8bfb\u6570\u9762\u4e0d\u8bf4 schema \u6216\u4e0e\u73b0\u6e32\u67d3\u4e0d\u7b26\uff0c\u5341\u4e09\u6761\u6a2a\u5e45\u5c31\u90fd\u5728\u6307\u5411\u4e00\u4e2a\u7a7a\u627f\u8bfa\u3002"),

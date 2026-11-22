@@ -24,7 +24,10 @@ Usage:
     python src/os/preview_R3292.py --dry-run  # render + report, write nothing
 """
 
+import datetime
+import hashlib
 import io
+import json
 import os
 import shutil
 import sys
@@ -46,8 +49,29 @@ FACE = "apimarket-report.html"
 HTML = os.path.join(BASE, "preview", FACE)
 JSON = os.path.join(BASE, "preview", "apimarket-report.json")
 
+# R3293: the three sources whose bytes decide what this page says. The pair
+# records their sha256 at render time, so the checker can name "the gate moved
+# after the render" instead of letting an untouched page pass forever.
+SOURCES = {
+    "generator": os.path.join(LEDGER, "apimarket_report.py"),
+    "injector": os.path.join(TOOLS, "face_backhop.py"),
+    "producer": os.path.join(BASE, "src", "os", "preview_apimarket_current.py"),
+}
 
-def render(out_html, out_json):
+
+def local_day():
+    return datetime.date.today().isoformat()
+
+
+def provenance():
+    out = {}
+    for key in sorted(SOURCES):
+        with io.open(SOURCES[key], "rb") as fh:
+            out[key] = hashlib.sha256(fh.read()).hexdigest()
+    return out
+
+
+def render(out_html, out_json, stamp):
     """Render the report from a fresh deterministic demo world."""
     tmp = tempfile.mkdtemp(prefix="apimarket-current-face-")
     try:
@@ -60,18 +84,19 @@ def render(out_html, out_json):
             dk.close()
             mtr.close()
             led.close()
-        R.main(["--db", db, "--out", out_html, "--json-out", out_json])
+        R.main(["--db", db, "--out", out_html, "--json-out", out_json,
+                "--rendered-on", stamp])
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
 
-def expected_page():
+def expected_page(stamp=None):
     """The page this tree would produce now: render + back-hop injection."""
     tmp = tempfile.mkdtemp(prefix="apimarket-current-face-probe-")
     try:
         out_html = os.path.join(tmp, FACE)
         out_json = os.path.join(tmp, "apimarket-report.json")
-        render(out_html, out_json)
+        render(out_html, out_json, stamp or local_day())
         with io.open(out_html, "r", encoding="utf-8", newline="") as fh:
             text = fh.read()
         text, how = B.inject_text(text, FACE)
@@ -80,22 +105,50 @@ def expected_page():
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def record_provenance(path, stamp):
+    """Add the date and the source fingerprints to the sibling json.
+
+    Written through the generator's own serializer and then re-fixed by
+    face_backhop.patch_sizes, so the recorded byte counts still equal the
+    files on disk after this append.
+    """
+    with io.open(path, "r", encoding="utf-8", newline="") as fh:
+        doc = json.load(fh)
+    doc["rendered_on"] = stamp
+    doc["source_sha256"] = provenance()
+    with io.open(path, "w", encoding="utf-8", newline="") as fh:
+        fh.write(R.dump_payload(doc))
+
+
 def main(argv):
     dry = "--dry-run" in argv
+    stamp = local_day()
+    for i, token in enumerate(argv):
+        if token == "--stamp" and i + 1 < len(argv):
+            stamp = argv[i + 1]
+        elif token.startswith("--stamp="):
+            stamp = token.split("=", 1)[1]
+    try:
+        datetime.date.fromisoformat(stamp)
+    except ValueError:
+        print("--stamp must be YYYY-MM-DD, got %r" % stamp)
+        return 2
     if dry:
-        text, how = expected_page()
-        print("DRY %s %s bytes=%d (nothing written)"
-              % (FACE, how, len(text.encode("utf-8"))))
+        text, how = expected_page(stamp)
+        print("DRY %s %s bytes=%d stamp=%s (nothing written)"
+              % (FACE, how, len(text.encode("utf-8")), stamp))
         return 0
-    render(HTML, JSON)
+    render(HTML, JSON, stamp)
     with io.open(HTML, "r", encoding="utf-8", newline="") as fh:
         text = fh.read()
     text, how = B.inject_text(text, FACE)
     with io.open(HTML, "w", encoding="utf-8", newline="") as fh:
         fh.write(text)
+    record_provenance(JSON, stamp)
     patched = B.patch_sizes(HTML)
-    print("PASS preview %s (%d bytes, %s, sizes_patched=%s) + %s (%d bytes)"
-          % (FACE, os.path.getsize(HTML), how, patched,
+    print("PASS preview %s (%d bytes, %s, sizes_patched=%s, stamp=%s)"
+          " + %s (%d bytes)"
+          % (FACE, os.path.getsize(HTML), how, patched, stamp,
              os.path.basename(JSON), os.path.getsize(JSON)))
     return 0
 

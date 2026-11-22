@@ -3,17 +3,17 @@
     "board_pages_skipped": [
       "preview/face-sweep.html (8872B)"
     ],
-    "current": "2026-11-22 R3292 PRODUCT+DIALECT: the API-market current-reading face now states its own schema and that it is a static file, and its recorded byte sizes no longer depend on the host's line endings - the page is 37005B and its sibling json is 59515B of bare LF.",
+    "current": "2026-11-22 R3293 HONEST: (a) the date says when the bytes were rendered, not that the numbers were a live reading that day - the world behind them is still seed_demo; (b) ACF9 compares source hashes, so a moved gate is red, but it cannot tell you the demo data is a week stale, only that the code that builds it is the code recorded; (c) the future bound reads the machine clock, so a host whose clock is behind the stamp reds instead of passing silently; (d) the floor 2026-11-22 is a constant chosen today, not a natural law; (e) the producer is idempotent within a day but rewrites the page on another day - the date is an input by design; (f) carried unchanged: tasks.md P-47 standing rows (ZERO payment capability), Docker absent, BigDomain-OSLoop LogonType=Interactive, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand, 18 BOM-carrying scripts, reconcile.py as the uncovered fourth ledger input, the single default crawl source is one page, the cap of 31 as a chosen law, series_file_order=day, the state carrier fold_needed=true (bytes 193842, gate 78500), and the machine local day law.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
-    "last_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20492B) [2026-11-22 mtime] (halves differ: html [2026-11-22 mtime] + json [2026-11-22 commit]; later=html)",
-    "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20492B) [2026-11-22 mtime] (halves differ: html [2026-11-22 mtime] + json [2026-11-22 commit]; later=html)",
-    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ugc-gate-report.html",
+    "last_artifact": "preview/apimarket-report.html (37049B) + preview/apimarket-report.json (59815B) [2026-11-22 mtime]",
+    "latest_artifact": "preview/apimarket-report.html (37049B) + preview/apimarket-report.json (59815B) [2026-11-22 mtime]",
+    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\apimarket-report.html",
     "latest_artifact_note": "",
     "latest_evidence": "qa/negctl-R3292.log (400B, 2026-11-22)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3292] next window (<=48h): (0) MAIN — **这张页现在能自证 schema，但它没有任何「我是什么时候渲的」的痕迹**：产出器可重跑、检查可逐字节比，可一页字节完全一致地放上一个月也照样 PASS，而底下的 demo 世界、文案与闸都在动（`acf` 七条没有一条看时间）。问：要不要让生成器/产出器在页内印一个**渲染日期**（现读系统时钟，`--check` 只要求「不早于源码与冻结清单的最后改动」这类可机械判的条件，而不是比\"今天\"），还是保持无日期、把新鲜度留给导出面？做法＝先只读量三问：①页内加日期会不会破 `AC-ACF5`（逐字节比现渲：现渲也得用同一时刻，否则永远红）——若渲染时刻必须由参数注入，`--check` 该用「文件 mtime ≈ 页内日期」还是「页内日期 ≥ 源码 mtime」；②`seed_demo` 世界是确定性的，数据会不会随时间漂移（实测：同一输入两次渲字节一致），所以「数据陈旧」这个说法今天有没有事实支撑；③代价（改模板 + 产出器 + 检查件 + 重渲 + 面清扫 13 行重跑，几轮固定点）。收口三选一＝①页内印渲染日期并由 AC-ACF8 机械判「不早于源码改动」；②不印日期，改在导出面/面清扫板写「本页上次重渲于 X」；③不动，把「新鲜度不可见」写进诚实段。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：state 载体 fold_needed=true（bytes=193842·gate=78500）、tasks.md P-47 站行（零支付能力）、BigDomain-OSLoop LogonType=Interactive。",
-    "next_milestone_due": "2026-11-24T20:18:11+08:00",
-    "updated_at": "2026-11-22T20:18:11+08:00",
+    "next_milestone": "[R3293] next window (<=48h): (0) MAIN — **写盘处不拦、只靠事后检查**：产出器 `--stamp` 现在可以写入低于地板（2026-11-22）或晚于本机日的日期，页照样落盘，直到面清扫的 ACF10 才红——这违反「缺陷出生地拦截律」（缺陷应在最早可检站拦，而不是交给下游闸）。问：要不要让产出器在写之前就拒收越界的 stamp（并给具名拒绝理由），还是保持「写完由检查器判」？做法＝先只读量三问：①地板常数今天在检查器里（`STAMP_FLOOR`），产出器要不要也有一份、还是从数据件/检查器导入一处（重复常量本身就是新债）；②越界拒绝时该返回什么（rc + 具名行）、要不要顺带拒绝「stamp 与 sibling json 现有 rendered_on 相差超过 N 天」这类可疑重渲；③代价（产出器 1 个校验 + 1 组负控臂 + 面清扫不需改），以及会不会让「跨日正常重渲」被误拒。收口三选一＝①产出器写前拒收越界 stamp（地板一处定义）②不拒，只在 `--dry-run` 里警告 ③不动，把「写盘处不拦」写进诚实段。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：state 载体 fold_needed=true（bytes=195848·gate=78500）、tasks.md P-47 站行（零支付能力）、BigDomain-OSLoop LogonType=Interactive。",
+    "next_milestone_due": "2026-11-24T20:32:54+08:00",
+    "updated_at": "2026-11-22T20:32:54+08:00",
     "heartbeat": {
       "tick": 3292,
       "state_tick": 3292,
@@ -37,8 +37,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-22 R3292 PRODUCT+DIALECT: the API-market current-reading face now states its own schema and that it is a static file, and its recorded byte sizes no longer depend on the host's line endings - the page is 37005B and its sibling json is 59515B of bare LF.",
-  "claims": {"claimed": 330, "captured": 94, "contradicted": 10, "uncaptured": 226, "historic": 7, "rows": 21, "present": true, "census_ts": "2026-11-22T20:18:11+08:00"},
+  "current": "2026-11-22 R3293 HONEST: (a) the date says when the bytes were rendered, not that the numbers were a live reading that day - the world behind them is still seed_demo; (b) ACF9 compares source hashes, so a moved gate is red, but it cannot tell you the demo data is a week stale, only that the code that builds it is the code recorded; (c) the future bound reads the machine clock, so a host whose clock is behind the stamp reds instead of passing silently; (d) the floor 2026-11-22 is a constant chosen today, not a natural law; (e) the producer is idempotent within a day but rewrites the page on another day - the date is an input by design; (f) carried unchanged: tasks.md P-47 standing rows (ZERO payment capability), Docker absent, BigDomain-OSLoop LogonType=Interactive, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand, 18 BOM-carrying scripts, reconcile.py as the uncovered fourth ledger input, the single default crawl source is one page, the cap of 31 as a chosen law, series_file_order=day, the state carrier fold_needed=true (bytes 193842, gate 78500), and the machine local day law.",
+  "claims": {"claimed": 330, "captured": 94, "contradicted": 10, "uncaptured": 226, "historic": 7, "rows": 21, "present": true, "census_ts": "2026-11-22T20:32:54+08:00"},
   "chain": {"present": true, "rows": 21, "broken": 0, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -67,11 +67,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-22 R3292 PRODUCT+DIALECT: the API-market current-reading face now states its own schema and that it is a static file, and its recorded byte sizes no longer depend on the host's line endings - the page is 37005B and its sibling json is 59515B of bare LF.",
-  "export_ts": "2026-11-22T20:18:11+08:00",
-  "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20492B) [2026-11-22 mtime] (halves differ: html [2026-11-22 mtime] + json [2026-11-22 commit]; later=html)",
+  "do": "2026-11-22 R3293 HONEST: (a) the date says when the bytes were rendered, not that the numbers were a live reading that day - the world behind them is still seed_demo; (b) ACF9 compares source hashes, so a moved gate is red, but it cannot tell you the demo data is a week stale, only that the code that builds it is the code recorded; (c) the future bound reads the machine clock, so a host whose clock is behind the stamp reds instead of passing silently; (d) the floor 2026-11-22 is a constant chosen today, not a natural law; (e) the producer is idempotent within a day but rewrites the page on another day - the date is an input by design; (f) carried unchanged: tasks.md P-47 standing rows (ZERO payment capability), Docker absent, BigDomain-OSLoop LogonType=Interactive, AC-VAC1..6, the AC-LNKF1 queue head, the R2778 stand, 18 BOM-carrying scripts, reconcile.py as the uncovered fourth ledger input, the single default crawl source is one page, the cap of 31 as a chosen law, series_file_order=day, the state carrier fold_needed=true (bytes 193842, gate 78500), and the machine local day law.",
+  "export_ts": "2026-11-22T20:32:54+08:00",
+  "latest_artifact": "preview/apimarket-report.html (37049B) + preview/apimarket-report.json (59815B) [2026-11-22 mtime]",
   "latest_evidence": "qa/negctl-R3292.log (400B, 2026-11-22)",
-  "next_milestone": "[R3292] next window (<=48h): (0) MAIN — **这张页现在能自证 schema，但它没有任何「我是什么时候渲的」的痕迹**：产出器可重跑、检查可逐字节比，可一页字节完全一致地放上一个月也照样 PASS，而底下的 demo 世界、文案与闸都在动（`acf` 七条没有一条看时间）。问：要不要让生成器/产出器在页内印一个**渲染日期**（现读系统时钟，`--check` 只要求「不早于源码与冻结清单的最后改动」这类可机械判的条件，而不是比\"今天\"），还是保持无日期、把新鲜度留给导出面？做法＝先只读量三问：①页内加日期会不会破 `AC-ACF5`（逐字节比现渲：现渲也得用同一时刻，否则永远红）——若渲染时刻必须由参数注入，`--check` 该用「文件 mtime ≈ 页内日期」还是「页内日期 ≥ 源码 mtime」；②`seed_demo` 世界是确定性的，数据会不会随时间漂移（实测：同一输入两次渲字节一致），所以「数据陈旧」这个说法今天有没有事实支撑；③代价（改模板 + 产出器 + 检查件 + 重渲 + 面清扫 13 行重跑，几轮固定点）。收口三选一＝①页内印渲染日期并由 AC-ACF8 机械判「不早于源码改动」；②不印日期，改在导出面/面清扫板写「本页上次重渲于 X」；③不动，把「新鲜度不可见」写进诚实段。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：state 载体 fold_needed=true（bytes=193842·gate=78500）、tasks.md P-47 站行（零支付能力）、BigDomain-OSLoop LogonType=Interactive。",
+  "next_milestone": "[R3293] next window (<=48h): (0) MAIN — **写盘处不拦、只靠事后检查**：产出器 `--stamp` 现在可以写入低于地板（2026-11-22）或晚于本机日的日期，页照样落盘，直到面清扫的 ACF10 才红——这违反「缺陷出生地拦截律」（缺陷应在最早可检站拦，而不是交给下游闸）。问：要不要让产出器在写之前就拒收越界的 stamp（并给具名拒绝理由），还是保持「写完由检查器判」？做法＝先只读量三问：①地板常数今天在检查器里（`STAMP_FLOOR`），产出器要不要也有一份、还是从数据件/检查器导入一处（重复常量本身就是新债）；②越界拒绝时该返回什么（rc + 具名行）、要不要顺带拒绝「stamp 与 sibling json 现有 rendered_on 相差超过 N 天」这类可疑重渲；③代价（产出器 1 个校验 + 1 组负控臂 + 面清扫不需改），以及会不会让「跨日正常重渲」被误拒。收口三选一＝①产出器写前拒收越界 stamp（地板一处定义）②不拒，只在 `--dry-run` 里警告 ③不动，把「写盘处不拦」写进诚实段。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：state 载体 fold_needed=true（bytes=195848·gate=78500）、tasks.md P-47 站行（零支付能力）、BigDomain-OSLoop LogonType=Interactive。",
   "outs": [
     "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20492B) [2026-11-22 mtime] (halves differ: html [2026-11-22 mtime] + json [2026-11-22 commit]; later=html)",
     "preview/apimarket-report-slowanswer.html (13022B) + preview/apimarket-report-slowanswer.json (18381B) [2026-11-22 mtime] (halves differ: html [2026-11-22 mtime] + json [2026-10-25 commit]; later=html)",
@@ -166,8 +166,8 @@
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 193842,
-  "next_milestone_due": "2026-11-24T20:18:11+08:00",
+  "state_bytes": 195848,
+  "next_milestone_due": "2026-11-24T20:32:54+08:00",
   "heartbeat": {
     "tick": 3292,
     "state_tick": 3292,

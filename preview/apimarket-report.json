@@ -42,6 +42,7 @@
    "warn": 5
   }
  },
+ "rendered_on": "2026-11-22",
  "report": {
   "activity": {
    "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
@@ -2199,7 +2200,12 @@
  },
  "schema_version": 17,
  "sizes": {
-  "html": 37005,
-  "json": 59515
+  "html": 37049,
+  "json": 59815
+ },
+ "source_sha256": {
+  "generator": "8ebb0137a7b177a307331541c70a93ce38c8168f0e0758acb8da4c391e56cd94",
+  "injector": "b2c3b25d7d99483e07697f4b9d4d01f5ed64c1fbc54cefcd39ff0f7dbe273f7a",
+  "producer": "d192cc0dc2abae443246748ef0a976134e305618a8347e46cf37dda3f3e92f91"
  }
 }

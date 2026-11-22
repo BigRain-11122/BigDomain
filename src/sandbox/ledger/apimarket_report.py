@@ -60,6 +60,7 @@ resident non-advisory disclaimer) and references no external resource.
 
 import argparse
 import csv
+import datetime
 import hashlib
 import html
 import io
@@ -142,8 +143,13 @@ REPORT_SCHEMA = 17
 # (tools/apimarket_current_face.py) all speak from one template; the check
 # parses the NUMBER out of this file instead of importing it, so a bumped
 # constant with a stale page is caught rather than agreed with.
-SCHEMA_BADGE = ("schema %d &middot; this page is a static file rendered by"
-                " the current code, not a live reading")
+# R3293: the date joins the sentence, but as an INPUT, never a clock read at
+# render time - a page that stamped "today" every run could never be compared
+# byte for byte with a fresh render. --rendered-on carries it (default: the
+# machine local day), tools/apimarket_current_face.py re-renders with the date
+# the page itself claims, and a reader can at last tell how old the copy is.
+SCHEMA_BADGE = ("schema %d &middot; this page is a static file rendered on %s"
+                " by the current code, not a live reading")
 
 # One day. A seller who leaves a buyer waiting longer than this shows
 # up in the attention digest; the boundary stays silent on the exact
@@ -988,7 +994,7 @@ def quality_block(quality):
                       row_table(quality_rows(quality), QUALITY_EMPTY)])
 
 
-def render_html(report):
+def render_html(report, rendered_on=None):
     parts = []
     parts.append("<!DOCTYPE html>")
     parts.append("<html lang=\"zh-CN\"><head><meta charset=\"UTF-8\">")
@@ -1004,9 +1010,13 @@ def render_html(report):
     # one; the sibling json already states the same number, so the pair can be
     # cross-checked. It says "static file" because that is what it is: the
     # bytes on disk, not a live reading.
-    parts.append("<div class=\"sub schema-badge\" data-report-schema=\"%d\">"
-                 "%s</div>"
-                 % (REPORT_SCHEMA, SCHEMA_BADGE % REPORT_SCHEMA))
+    # R3293: the same argument applies to age, so the date rides on the badge
+    # as a data attribute the check can read back.
+    stamp = rendered_on or datetime.date.today().isoformat()
+    parts.append("<div class=\"sub schema-badge\" data-report-schema=\"%d\""
+                 " data-rendered-on=\"%s\">%s</div>"
+                 % (REPORT_SCHEMA, stamp,
+                    SCHEMA_BADGE % (REPORT_SCHEMA, stamp)))
     parts.append("<div class=\"marker\">%s</div>" % esc(MARKER))
     parts.append("</div></header><div class=\"wrap\">")
 
@@ -1323,6 +1333,11 @@ def build_parser():
     parser.add_argument("--csv-out", default=None,
                         help="optional directory for the settlement CSV"
                              " bundle (three month tables, LF endings)")
+    parser.add_argument("--rendered-on", default=None,
+                        help="YYYY-MM-DD date printed in the header badge"
+                             " (default: the machine local day). Passed in"
+                             " on purpose: a clock read would make the page"
+                             " impossible to reproduce byte for byte")
     parser.add_argument("--check", action="store_true",
                         help="read-only verification of the sizes block in"
                              " --json-out against the bytes on disk; renders"
@@ -1391,13 +1406,20 @@ def main(argv=None):
     if not args.db:
         sys.stderr.write("db is required unless --check is passed\n")
         return 2
+    if args.rendered_on is not None:
+        try:
+            datetime.date.fromisoformat(args.rendered_on)
+        except ValueError:
+            sys.stderr.write("--rendered-on must be YYYY-MM-DD, got %r\n"
+                             % args.rendered_on)
+            return 2
     led = mtr = dk = am = None
     try:
         led, mtr, dk, am = build_stack(args.db)
         if args.seed:
             seed_demo(am, led, dk)
         report = collect(am)
-        page = render_html(report)
+        page = render_html(report, args.rendered_on)
         out_dir = os.path.dirname(os.path.abspath(args.out))
         if out_dir and not os.path.isdir(out_dir):
             os.makedirs(out_dir)
