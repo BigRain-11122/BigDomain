@@ -1,0 +1,47 @@
+PASS W0 live-copy expected_hit token=VERDICT PASS criteria=29
+PASS W0 live-row expected_hit token=data-key-multi-face="ship-checklist.html"
+PASS W0 live-owner-b expected_hit token=写在「b」的处理函数里
+PASS W0 live-owner-reset expected_hit token=写在「reset」的处理函数里
+PASS W0 no-mixed-live expected_hit token=data-key-multi-mixed="0"
+PASS W0 old-table-gone expected_absent token=class="keymixed"
+PASS W1 open+handler PASS expected_hit token=VERDICT PASS criteria=29
+PASS W1 mixed-count expected_hit token=data-key-multi-mixed="1"
+PASS W1 load-owner-word expected_hit token=写在脚本顶层，打开就写
+PASS W1 handler-owner expected_hit token=写在「getElementById('b')」的处理函数里
+PASS W1 load-owner-dash expected_hit token=&gt;load&gt;-
+PASS W2 same-owner PASS expected_hit token=VERDICT PASS criteria=29
+PASS W2 faces expected_hit token=data-key-multi-faces="1"
+PASS W2 sites expected_hit token=data-key-multi-sites="2"
+PASS W2 not-mixed expected_hit token=data-key-multi-mixed="0"
+PASS W2 owner-twice expected_hit token=写在「save」的处理函数里
+PASS W3 single-site PASS expected_hit token=VERDICT PASS criteria=29
+PASS W3 no-row expected_absent token=data-key-multi-face=
+PASS W3 absence expected_hit token=data-key-multi-absent
+PASS W3 faces-zero expected_hit token=data-key-multi-faces="0"
+PASS C11 row-in-single-world expected_hit token=SH26 multi_rows
+PASS C11 single-site-arm expected_hit token=SH26 multi_single_face_listed:ship-checklist.html
+PASS W0 restored PASS expected_hit token=VERDICT PASS criteria=29
+PASS C1 faces expected_hit token=SH26 multi_counts
+PASS C1 faces verdict expected_hit token=VERDICT FAIL
+PASS C2 sites expected_hit token=SH26 multi_counts
+PASS C2 sites verdict expected_hit token=VERDICT FAIL
+PASS C3 mixed expected_hit token=SH26 multi_counts
+PASS C3 mixed verdict expected_hit token=VERDICT FAIL
+PASS C4 sentence expected_hit token=SH26 multi_sentence
+PASS C4 sentence verdict expected_hit token=VERDICT FAIL
+PASS C5 counts-attr expected_hit token=SH26 multi_counts_attr:ship-checklist.html
+PASS C5 counts-attr verdict expected_hit token=VERDICT FAIL
+PASS C6 row-sentence expected_hit token=SH26 multi_face_sentence:ship-checklist.html
+PASS C6 row-sentence verdict expected_hit token=VERDICT FAIL
+PASS C7 drop-row expected_hit token=SH26 multi_rows
+PASS C7 drop-row verdict expected_hit token=VERDICT FAIL
+PASS C8 single-site-listed expected_hit token=SH26 multi_rows
+PASS C8 single-site-listed verdict expected_hit token=VERDICT FAIL
+PASS C9 old-table-name expected_hit token=SH26 multi_head_missing
+PASS C9 old-table-name verdict expected_hit token=VERDICT FAIL
+PASS C10 old-table-residue expected_hit token=SH26 multi_old_table_residue
+PASS C10 old-table-residue verdict expected_hit token=VERDICT FAIL
+PASS D1 owner-none-word expected_hit token=SH26 word_missing:key_multi_owner_none
+PASS D2 owner-slot expected_hit token=SH26 slot_missing:key_multi_site_fmt:{owner}
+PASS D3 state-word expected_hit token=SH26 multi_state_word_missing:never
+NEGCTL cases=46 passed=46 verdict=PASS

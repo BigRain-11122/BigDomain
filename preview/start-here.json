@@ -1,7 +1,7 @@
 {
  "face": "start-here",
  "generated_from": {
-  "state/start-here-faces.json": "d83bf7d3963c7ab8"
+  "state/start-here-faces.json": "2117173dd555cc1b"
  },
  "faces_total": 44,
  "operable": [
@@ -143,7 +143,24 @@
   "never": 0
  },
  "write_when_never": [],
- "write_when_mixed": [],
+ "write_when_multi": [
+  {
+   "face": "ship-checklist.html",
+   "mixed": false,
+   "sites": [
+    {
+     "expr": "NS",
+     "state": "handler",
+     "owner": "b"
+    },
+    {
+     "expr": "NS",
+     "state": "handler",
+     "owner": "reset"
+    }
+   ]
+  }
+ ],
  "steps_excluded": [
   {
    "face": "buyer-trial.html",
@@ -155,6 +172,6 @@
   }
  ],
  "sizes": {
-  "html_bytes": 38534
+  "html_bytes": 38702
  }
 }

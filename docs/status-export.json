@@ -3,17 +3,17 @@
     "board_pages_skipped": [
       "preview/face-sweep.html (7449B)"
     ],
-    "current": "2026-11-22 R3277 PRODUCT+ENGINEERING: the front door counted WHEN each storage write can run (load/handler/call/never) but only as a per-FACE total, so a face writing one key at script top level and another from a bound handler read as load:1,handler:1 with no way to tell which write was which. Measured first: 0 of the 5 storage faces on the live tree mix states (6 sites: handler 5 / call 1), so the premise was wrong live - the reading is therefore built as a MIXED-ONLY table (one row per site, named face) instead of per-site detail everywhere, and the page prints a named absence when no face mixes. preview/start-here.html is 38534B (37859B last round) and preview/start-here.json (2482B) carries write_when_mixed.",
+    "current": "2026-11-22 R3278 PRODUCT+ENGINEERING: the table R3277 shipped listed a face only when its write states DISAGREED, so ship-checklist (two write sites, both handler) still read as \"NS written twice\" with no way to tell that one site sits in b and the other in reset. The table is now a MULTI-SITE table: every operable face with two or more write sites gets one row, each site names its owner, and \"the states disagree\" is a column (data-key-multi-mixed) instead of the reason a face appears. The R3277 mixed table is gone, not kept beside it.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
-    "last_artifact": "preview/start-here.html (38534B) + preview/start-here.json (2482B) [2026-11-22 mtime]",
-    "latest_artifact": "preview/start-here.html (38534B) + preview/start-here.json (2482B) [2026-11-22 mtime]",
+    "last_artifact": "preview/start-here.html (38702B) + preview/start-here.json (2717B) [2026-11-22 mtime]",
+    "latest_artifact": "preview/start-here.html (38702B) + preview/start-here.json (2717B) [2026-11-22 mtime]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\start-here.html",
     "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/negctl-R3273.log (1280B, 2026-11-22)",
     "latest_evidence": "qa/negctl-R3273.log (1280B, 2026-11-22)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3278] next window (<=48h): (0) MAIN — **写侧的多处写现在能说「哪一处是打开就写」了，但仍不说「每一处写在哪个函数里」**：`ship-checklist.html` 的两处 `NS` 分别写在 `b` 与 `reset` 两个监听器里，页上只有一句「`NS` 写了 2 遍」，读者拿着这句话回代码里仍要自己找那两处。问：值不值得给「一处面写了不止一处键」的面逐处署上所在函数名（不分状态，单址面不印）？做法＝先只读量三问：①43 张预览面里写侧调用 ≥2 处的面有几张（逐面列，不猜；活树很可能只有 `ship-checklist` 一张、两处都 `handler`）；②若逐处署 owner，与 R3277 的 mixed 表怎么不互相重复（一张 multi-site 单一状态的面该走哪张表：①把 mixed 表改名为「多址表」并把「状态不同」降为其中一列，还是②另立一张表；AC-SH26 现有 mixed 九臂怎么复用、判据数是否仍 29）逐项列；③代价（活树会多印 1 条具名行还是 0 条；页增多少字节；`data-key-mixed-counts` 这个属性要不要跟着加第三段 owner，加了 R3277 的逐项比臂怎么改）。收口三选一＝①不建，只在页上与诚实段写明「同面多址不署函数名」②多址面（≥2 处写）逐处署 owner，mixed 表扩成「多址表」③一律署 owner（含单址面）。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：state 载体 fold_needed=true（bytes=115621·gate=78500·fold 连续多窗因 live-dirty 被拒）、删除侧时机词未建（活树 removeItem=0）、同一键值的不同表达式不入重复桶（活树 0 张）、tasks.md P-47 站行（零支付能力）、BigDomain-OSLoop LogonType=Interactive。",
-    "next_milestone_due": "2026-11-24T17:02:09+08:00",
-    "updated_at": "2026-11-22T17:02:09+08:00",
+    "next_milestone": "[R3279] next window (<=48h): (0) MAIN — **多址面现在逐处说「这一处写在哪个函数里」，但这个名字有两种来路，页上不说是哪一种**：一份监听器写成 `b.addEventListener('click', function(){…})` 时报的是接收者 `b`（元素表达式），写成 `document.getElementById('b').addEventListener('click', function(){…})` 时报的是被截到最后一节的调用 `getElementById('b')`（`document.` 被读取器的捕获组切掉），而写成具名回调 `…addEventListener('click', save)` 时 R3278 报的是函数名 `save`——三种都被同一句「「名字」的处理函数里」包住。问：值不值得把 owner 的**来路**也读出来并按来路换词（元素表达式 / 具名函数 / 脚本顶层），并把链式接收者的截断如实标成一类？做法＝先只读量三问：①活树 6 张可操作面的 6 处写逐一列出 owner 与来路分类（逐处列，不猜；预计 `b`/`reset` 两处是元素标识符、`save` 类具名 0 处、链式 0 处）；②若按来路换词，页上句子与 `data-key-multi-counts` 第三段要不要跟着带 kind（带＝属性变四段，AC-SH26 的逐项比臂与 46 条负控里几条要改；不带＝句子与属性两种编码不一致的风险怎么避）；③代价（活树会多印几类词、页增多少字节；是否顺便把链式接收者的完整链读出来，还是只标「只读到最后一次调用」）。收口三选一＝①不建，只在页上与诚实段写明「owner 只有名字、不区分来路」②按来路换词（元素表达式 / 具名函数 / 脚本顶层）③按来路换词并把链式截断标成第四类。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：state 载体 fold_needed=true（bytes=123311·gate=78500·fold 连续多窗因 live-dirty 被拒）、删除侧时机词未建（活树 removeItem=0）、同一键值的不同表达式不入重复桶（活树 0 张）、tasks.md P-47 站行（零支付能力）、BigDomain-OSLoop LogonType=Interactive。",
+    "next_milestone_due": "2026-11-24T17:18:33+08:00",
+    "updated_at": "2026-11-22T17:18:33+08:00",
     "heartbeat": {
       "tick": 3262,
       "state_tick": 3273,
@@ -37,9 +37,9 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-22 R3277 PRODUCT+ENGINEERING: the front door counted WHEN each storage write can run (load/handler/call/never) but only as a per-FACE total, so a face writing one key at script top level and another from a bound handler read as load:1,handler:1 with no way to tell which write was which. Measured first: 0 of the 5 storage faces on the live tree mix states (6 sites: handler 5 / call 1), so the premise was wrong live - the reading is therefore built as a MIXED-ONLY table (one row per site, named face) instead of per-site detail everywhere, and the page prints a named absence when no face mixes. preview/start-here.html is 38534B (37859B last round) and preview/start-here.json (2482B) carries write_when_mixed.",
-  "claims": {"claimed": 317, "captured": 94, "contradicted": 10, "uncaptured": 213, "historic": 7, "rows": 14, "present": true, "census_ts": "2026-11-22T17:02:09+08:00"},
-  "chain": {"present": true, "rows": 14, "broken": 0, "path": "state/qa_replacements.jsonl"},
+  "current": "2026-11-22 R3278 PRODUCT+ENGINEERING: the table R3277 shipped listed a face only when its write states DISAGREED, so ship-checklist (two write sites, both handler) still read as \"NS written twice\" with no way to tell that one site sits in b and the other in reset. The table is now a MULTI-SITE table: every operable face with two or more write sites gets one row, each site names its owner, and \"the states disagree\" is a column (data-key-multi-mixed) instead of the reason a face appears. The R3277 mixed table is gone, not kept beside it.",
+  "claims": {"claimed": 318, "captured": 94, "contradicted": 10, "uncaptured": 214, "historic": 7, "rows": 15, "present": true, "census_ts": "2026-11-22T17:18:33+08:00"},
+  "chain": {"present": true, "rows": 15, "broken": 0, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -67,11 +67,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-22 R3277 PRODUCT+ENGINEERING: the front door counted WHEN each storage write can run (load/handler/call/never) but only as a per-FACE total, so a face writing one key at script top level and another from a bound handler read as load:1,handler:1 with no way to tell which write was which. Measured first: 0 of the 5 storage faces on the live tree mix states (6 sites: handler 5 / call 1), so the premise was wrong live - the reading is therefore built as a MIXED-ONLY table (one row per site, named face) instead of per-site detail everywhere, and the page prints a named absence when no face mixes. preview/start-here.html is 38534B (37859B last round) and preview/start-here.json (2482B) carries write_when_mixed.",
-  "export_ts": "2026-11-22T17:02:09+08:00",
-  "latest_artifact": "preview/start-here.html (38534B) + preview/start-here.json (2482B) [2026-11-22 mtime]",
+  "do": "2026-11-22 R3278 PRODUCT+ENGINEERING: the table R3277 shipped listed a face only when its write states DISAGREED, so ship-checklist (two write sites, both handler) still read as \"NS written twice\" with no way to tell that one site sits in b and the other in reset. The table is now a MULTI-SITE table: every operable face with two or more write sites gets one row, each site names its owner, and \"the states disagree\" is a column (data-key-multi-mixed) instead of the reason a face appears. The R3277 mixed table is gone, not kept beside it.",
+  "export_ts": "2026-11-22T17:18:33+08:00",
+  "latest_artifact": "preview/start-here.html (38702B) + preview/start-here.json (2717B) [2026-11-22 mtime]",
   "latest_evidence": "qa/negctl-R3273.log (1280B, 2026-11-22)",
-  "next_milestone": "[R3278] next window (<=48h): (0) MAIN — **写侧的多处写现在能说「哪一处是打开就写」了，但仍不说「每一处写在哪个函数里」**：`ship-checklist.html` 的两处 `NS` 分别写在 `b` 与 `reset` 两个监听器里，页上只有一句「`NS` 写了 2 遍」，读者拿着这句话回代码里仍要自己找那两处。问：值不值得给「一处面写了不止一处键」的面逐处署上所在函数名（不分状态，单址面不印）？做法＝先只读量三问：①43 张预览面里写侧调用 ≥2 处的面有几张（逐面列，不猜；活树很可能只有 `ship-checklist` 一张、两处都 `handler`）；②若逐处署 owner，与 R3277 的 mixed 表怎么不互相重复（一张 multi-site 单一状态的面该走哪张表：①把 mixed 表改名为「多址表」并把「状态不同」降为其中一列，还是②另立一张表；AC-SH26 现有 mixed 九臂怎么复用、判据数是否仍 29）逐项列；③代价（活树会多印 1 条具名行还是 0 条；页增多少字节；`data-key-mixed-counts` 这个属性要不要跟着加第三段 owner，加了 R3277 的逐项比臂怎么改）。收口三选一＝①不建，只在页上与诚实段写明「同面多址不署函数名」②多址面（≥2 处写）逐处署 owner，mixed 表扩成「多址表」③一律署 owner（含单址面）。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：state 载体 fold_needed=true（bytes=115621·gate=78500·fold 连续多窗因 live-dirty 被拒）、删除侧时机词未建（活树 removeItem=0）、同一键值的不同表达式不入重复桶（活树 0 张）、tasks.md P-47 站行（零支付能力）、BigDomain-OSLoop LogonType=Interactive。",
+  "next_milestone": "[R3279] next window (<=48h): (0) MAIN — **多址面现在逐处说「这一处写在哪个函数里」，但这个名字有两种来路，页上不说是哪一种**：一份监听器写成 `b.addEventListener('click', function(){…})` 时报的是接收者 `b`（元素表达式），写成 `document.getElementById('b').addEventListener('click', function(){…})` 时报的是被截到最后一节的调用 `getElementById('b')`（`document.` 被读取器的捕获组切掉），而写成具名回调 `…addEventListener('click', save)` 时 R3278 报的是函数名 `save`——三种都被同一句「「名字」的处理函数里」包住。问：值不值得把 owner 的**来路**也读出来并按来路换词（元素表达式 / 具名函数 / 脚本顶层），并把链式接收者的截断如实标成一类？做法＝先只读量三问：①活树 6 张可操作面的 6 处写逐一列出 owner 与来路分类（逐处列，不猜；预计 `b`/`reset` 两处是元素标识符、`save` 类具名 0 处、链式 0 处）；②若按来路换词，页上句子与 `data-key-multi-counts` 第三段要不要跟着带 kind（带＝属性变四段，AC-SH26 的逐项比臂与 46 条负控里几条要改；不带＝句子与属性两种编码不一致的风险怎么避）；③代价（活树会多印几类词、页增多少字节；是否顺便把链式接收者的完整链读出来，还是只标「只读到最后一次调用」）。收口三选一＝①不建，只在页上与诚实段写明「owner 只有名字、不区分来路」②按来路换词（元素表达式 / 具名函数 / 脚本顶层）③按来路换词并把链式截断标成第四类。判据先落板再动代码。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。产品真缺口仍是物理件｛商户号/服务器/域名/备案+ICP/小程序 appid+secret｝——买家仍付不了钱。承传（未变）：state 载体 fold_needed=true（bytes=123311·gate=78500·fold 连续多窗因 live-dirty 被拒）、删除侧时机词未建（活树 removeItem=0）、同一键值的不同表达式不入重复桶（活树 0 张）、tasks.md P-47 站行（零支付能力）、BigDomain-OSLoop LogonType=Interactive。",
   "outs": [
     "preview/start-here.html (35942B) + preview/start-here.json (2180B) [2026-11-22 mtime]",
     "preview/ugc-gate-report.html (28112B) + preview/ugc-gate-report.json (20170B) [2026-11-22 mtime]",
@@ -165,8 +165,8 @@
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 115621,
-  "next_milestone_due": "2026-11-24T17:02:09+08:00",
+  "state_bytes": 123311,
+  "next_milestone_due": "2026-11-24T17:18:33+08:00",
   "heartbeat": {
     "tick": 3262,
     "state_tick": 3273,

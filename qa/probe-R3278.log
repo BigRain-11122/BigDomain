@@ -1,0 +1,50 @@
+Q1 operable=6 with_sites>=2=1
+Q1 face=ship-checklist.html sites=2 states=handler,handler
+Q1   site expr=NS state=handler owner=b
+Q1   site expr=NS state=handler owner=reset
+Q1 single_site_faces=4
+Q1 mixed_states=0
+Q1b sites_without_owner_not_load=0 []
+Q2 consumers=36
+Q2 line=1511 token=when_mixed when_mixed = [(name, key_naming(rows[name])["when_sites"])
+Q2 line=1582 token=when_mixed "when_mixed": when_mixed,
+Q2 line=2303 token=when_mixed mixed_sites = sum(len(sites) for _name, sites in proj["when_mixed"])
+Q2 line=2305 token=data-key-mixed '  <p class="keymixed" data-key-mixed-faces="%d" '
+Q2 line=2306 token=data-key-mixed 'data-key-mixed-sites="%d">%s</p>'
+Q2 line=2307 token=when_mixed % (len(proj["when_mixed"]), mixed_sites,
+Q2 line=2308 token=key_mixed esc((doc.get("key_mixed_head_fmt") or "").format(
+Q2 line=2309 token=when_mixed faces=len(proj["when_mixed"]), sites=mixed_sites))))
+Q2 line=2310 token=key_mixed when_words = doc.get("key_mixed_state_words") or {}
+Q2 line=2311 token=when_mixed if proj["when_mixed"]:
+Q2 line=2312 token=when_mixed for name, sites in proj["when_mixed"]:
+Q2 line=2315 token=key_mixed phrases = "、".join((doc.get("key_mixed_site_fmt") or "").format(
+Q2 line=2319 token=data-key-mixed '\n  <p data-key-mixed-face="%s" data-key-mixed-counts="%s">%s</p>'
+Q2 line=2321 token=key_mixed esc((doc.get("key_mixed_face_fmt") or "").format(
+Q2 line=2324 token=data-key-mixed mixed_html += ('\n  <p data-key-mixed-absent>%s</p>'
+Q2 line=2325 token=key_mixed % esc(doc.get("key_mixed_absent") or ""))
+Q2 line=2485 token=when_mixed "write_when_mixed": [{"face": name,
+Q2 line=2489 token=when_mixed for name, sites in proj["when_mixed"]],
+Q2 line=3442 token=key_mixed "key_mixed_head_fmt", "key_mixed_site_fmt", "key_mixed_face_fmt",
+Q2 line=3443 token=key_mixed "key_mixed_absent"):
+Q2 line=3473 token=key_mixed if slot not in (proj["doc"].get("key_mixed_head_fmt") or ""):
+Q2 line=3474 token=key_mixed failures.append("SH26 slot_missing:key_mixed_head_fmt:%s" % slot)
+Q2 line=3476 token=key_mixed if slot not in (proj["doc"].get("key_mixed_site_fmt") or ""):
+Q2 line=3477 token=key_mixed failures.append("SH26 slot_missing:key_mixed_site_fmt:%s" % slot)
+Q2 line=3479 token=key_mixed if slot not in (proj["doc"].get("key_mixed_face_fmt") or ""):
+Q2 line=3480 token=key_mixed failures.append("SH26 slot_missing:key_mixed_face_fmt:%s" % slot)
+Q2 line=3481 token=key_mixed mixed_words = proj["doc"].get("key_mixed_state_words") or {}
+Q2 line=3484 token=mixed_state_word failures.append("SH26 mixed_state_word_missing:%s" % state)
+Q2 line=3669 token=data-key-mixed r'<p class="keymixed" data-key-mixed-faces="(\d+)" '
+Q2 line=3670 token=data-key-mixed r'data-key-mixed-sites="(\d+)">([^<]*)<', text)
+Q2 line=3682 token=key_mixed want_text = (proj["doc"].get("key_mixed_head_fmt") or "").format(
+Q2 line=3687 token=data-key-mixed r'<p data-key-mixed-face="([^"]+)" data-key-mixed-counts="([^"]*)">'
+Q2 line=3702 token=key_mixed phrases = "、".join((proj["doc"].get("key_mixed_site_fmt") or "").format(
+Q2 line=3705 token=key_mixed want_text = (proj["doc"].get("key_mixed_face_fmt") or "").format(
+Q2 line=3727 token=mixed_vs_aggregate failures.append("SH26 mixed_vs_aggregate:%s sites=%s totals=%s"
+Q2 line=3733 token=data-key-mixed mixed_absent = re.findall(r'<p data-key-mixed-absent>', text)
+Q2b data_mixed_keys=key_mixed_absent,key_mixed_face_fmt,key_mixed_head_fmt,key_mixed_site_fmt,key_mixed_state_words
+Q3 key_reading_total=0.0623s per_face=0.01039s worst=0.0166s faces=6
+Q3 page_chars=26317 page_bytes=38534
+Q3 mixed_block_bytes=318 prospective_multi_block_bytes=417 delta=99
+Q3 prospective_rows=1 sites=2 new_attributes=2 per_row=1
+Q3 criteria=29 (AC-SH26 extended in place, no new criterion)
