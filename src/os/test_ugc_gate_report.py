@@ -1,4 +1,4 @@
-"""Battery suite for tools/ugc_gate_report.py - criteria AC-UGRB0..AC-UGRB44.
+﻿"""Battery suite for tools/ugc_gate_report.py - criteria AC-UGRB0..AC-UGRB46.
 
 WHY THIS SUITE EXISTS (measured at R2814, not hypothesised):
 tools/ugc_gate_report.py renders preview/ugc-gate-report.html + .json, the face
@@ -123,7 +123,7 @@ def main():
         mod.OUT_HTML, mod.OUT_JSON = copy_html, copy_json
 
         rc, base, text, verdict = run_check(mod, data)
-        ok('AC-UGRB0', rc == 0 and len(base) == 18 and all(base.values()),
+        ok('AC-UGRB0', rc == 0 and len(base) == 19 and all(base.values()),
            'baseline rc=%d criteria=%d green=%d %s'
            % (rc, len(base), sum(1 for v in base.values() if v), verdict))
 
@@ -709,9 +709,9 @@ def main():
             mod.ROOT = half_world
             mod._tracked_sources = lambda: None
             half_hits, _hskip = mod.direct_call_sites()
-            _hr, _hf, _ho, _hd, half_cov = mod._walk_all()
+            _hr, _hf, _ho, _hd, half_cov, _unrec = mod._walk_all()
             mod.ROOT = stale_world
-            _sr, _sf, _so, _sd, stale_cov = mod._walk_all()
+            _sr, _sf, _so, _sd, stale_cov, _unrec = mod._walk_all()
             mod.ROOT = half_world
             mod.OUT_HTML = os.path.join(half_world, 'out.html')
             mod.OUT_JSON = os.path.join(half_world, 'out.json')
@@ -787,7 +787,7 @@ def main():
             mod.ROOT = beside_world
             mod._tracked_sources = lambda: None
             beside_hits, _bs = mod.direct_call_sites()
-            _br, _bf, beside_owned, _bd, beside_cov = mod._walk_all()
+            _br, _bf, beside_owned, _bd, beside_cov, _unrec = mod._walk_all()
             mod.OUT_HTML = os.path.join(beside_world, 'out.html')
             mod.OUT_JSON = os.path.join(beside_world, 'out.json')
             mod.write_outputs(mod.collect())
@@ -796,7 +796,7 @@ def main():
 
             mod.ROOT = inside_world
             inside_hits, _is = mod.direct_call_sites()
-            _ir, _if, inside_owned, _id, inside_cov = mod._walk_all()
+            _ir, _if, inside_owned, _id, inside_cov, _unrec = mod._walk_all()
             mod.OUT_HTML = os.path.join(inside_world, 'out.html')
             mod.OUT_JSON = os.path.join(inside_world, 'out.json')
             mod.write_outputs(mod.collect())
@@ -871,7 +871,7 @@ def main():
             mod.ROOT = zero_world
             mod._tracked_sources = lambda: None
             zero_hits, _zs = mod.direct_call_sites()
-            _zr, _zf, zero_owned, _zd, zero_cov = mod._walk_all()
+            _zr, _zf, zero_owned, _zd, zero_cov, _unrec = mod._walk_all()
             mod.OUT_HTML = os.path.join(zero_world, 'out.html')
             mod.OUT_JSON = os.path.join(zero_world, 'out.json')
             mod.write_outputs(mod.collect())
@@ -943,7 +943,7 @@ def main():
             mod.OUT_JSON = os.path.join(git_world, 'out.json')
             mod._tracked_sources = lambda: {'src/sandbox/.venv/our_gate.py',
                                             'src/sandbox/.venv/pkg/core/ours.py'}
-            _gr, _gf, g_owned, _gd, g_cov = mod._walk_all()
+            _gr, _gf, g_owned, _gd, g_cov, _unrec = mod._walk_all()
             mod.write_outputs(mod.collect())
             g_data = mod.collect()
             rc43, res43, _t43, _v43 = run_check(mod, g_data)
@@ -951,7 +951,7 @@ def main():
             # B44: the same world with git silent turns the same file into a
             # refused inside path - one layout, two decisions.
             mod._tracked_sources = lambda: None
-            _mr, _mf, m_owned, _md, m_cov = mod._walk_all()
+            _mr, _mf, m_owned, _md, m_cov, _unrec = mod._walk_all()
             mod.write_outputs(mod.collect())
             m_data = mod.collect()
             rc44, res44, _t44, _v44 = run_check(mod, m_data)
@@ -986,6 +986,67 @@ def main():
            % (m_cov, m_owned, res44.get('AC-UGR20'),
               res44.get('AC-UGR18'), rc44))
 
+        # ---- B45/B46: a vendor root with NO RECORD used to print nothing, so
+        # "no RECORD here" read exactly like "no root here" (R3249). Measured in
+        # qa/probe-R3249.log: 29 live roots, 1 with a RECORD, 28 without, and
+        # exactly one of the 28 holds .py. B45 grades the live reading; B46
+        # grades a private name-decided root and shows that a rewritten count or
+        # a redacted root name reddens AC-UGR21 alone.
+        live_unrec = mod._walk_all()[5]
+        rc45, res45, _t45, _v45 = run_check(mod, mod.collect())
+        ok('AC-UGRB45',
+           live_unrec.get('total') == 28
+           and [r['root'] for r in live_unrec.get('rows') or []] ==
+           ['src/sandbox/ygo-poc/data/toolchain']
+           and live_unrec['rows'][0]['disk_py'] == 2
+           and live_unrec['rows'][0]['decided_by'] == 'evidence'
+           and res45.get('AC-UGR21') is True
+           and res45.get('AC-UGR20') is True,
+           'live RECORD-less roots: total=%s rows=%s AC-UGR21=%s AC-UGR20=%s '
+           'rc=%d'
+           % (live_unrec.get('total'), live_unrec.get('rows'),
+              res45.get('AC-UGR21'), res45.get('AC-UGR20'), rc45))
+
+        unrec_world = world_tree({
+            'src/sandbox/toolchain/pkg/one.py': 'VALUE = 1\n',
+            'src/sandbox/toolchain/two.py': 'VALUE = 2\n',
+        })
+        try:
+            mod.ROOT = unrec_world
+            mod.OUT_HTML = os.path.join(unrec_world, 'out.html')
+            mod.OUT_JSON = os.path.join(unrec_world, 'out.json')
+            mod._tracked_sources = lambda: None
+            u_data = mod.collect()
+            u_unrec = u_data.get('unrecorded') or {}
+            mod.write_outputs(u_data)
+            rc46a, res46a, _t46a, _v46a = run_check(mod, u_data)
+            page46 = read(mod.OUT_HTML)
+            write(mod.OUT_HTML,
+                  page46.replace('disk_py=<b>2</b>', 'disk_py=<b>3</b>'))
+            rc46b, res46b, _t46b, _v46b = run_check(mod, u_data)
+            write(mod.OUT_HTML, page46.replace(
+                "<span class='mono'>src/sandbox/toolchain</span>", 'redacted'))
+            rc46c, res46c, _t46c, _v46c = run_check(mod, u_data)
+        finally:
+            mod._tracked_sources = real_tracked
+            mod.ROOT = real_root
+            mod.OUT_HTML, mod.OUT_JSON = real_html, real_json
+            shutil.rmtree(unrec_world, ignore_errors=True)
+        ok('AC-UGRB46',
+           u_unrec.get('total') == 1
+           and [r['root'] for r in u_unrec.get('rows') or []] ==
+           ['src/sandbox/toolchain']
+           and u_unrec['rows'][0]['decided_by'] == 'name'
+           and u_unrec['rows'][0]['disk_py'] == 2
+           and res46a.get('AC-UGR21') is True
+           and 'decided_by=<b>name</b>' in page46
+           and res46b.get('AC-UGR21') is False
+           and res46c.get('AC-UGR21') is False,
+           'name-decided root: unrecorded=%s AC-UGR21=%s edited count=%s '
+           'redacted name=%s rc=%d/%d/%d'
+           % (u_unrec, res46a.get('AC-UGR21'), res46b.get('AC-UGR21'),
+              res46c.get('AC-UGR21'), rc46a, rc46b, rc46c))
+
         # ---- B17: the live tree must read the same site set as before the
         # reader changed (pure addition): three files, four constructions.
         live_hits, live_skipped = mod.direct_call_sites()
@@ -1004,7 +1065,7 @@ def main():
     after = real_snapshot()
     rc_real, res_real, _, verdict_real = run_check(mod, mod.collect())
     ok('AC-UGRB10',
-       before == after and rc_real == 0 and len(res_real) == 18 and all(res_real.values()),
+       before == after and rc_real == 0 and len(res_real) == 19 and all(res_real.values()),
        'real pair unchanged=%s real rc=%d green=%d' %
        (before == after, rc_real, sum(1 for v in res_real.values() if v)))
 
@@ -1020,7 +1081,7 @@ def main():
             declared = int(tail.strip())
         except ValueError:
             declared = None
-    ok('AC-UGRB11', bool(row) and declared == 47,
+    ok('AC-UGRB11', bool(row) and declared == 50,
        'registry_rows=%d declared=%s' % (len(row), declared))
 
     law_verdict = "PASS" if not FAILS else "FAIL"

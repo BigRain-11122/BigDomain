@@ -57,6 +57,7 @@ CRITERIA = (
     ("AC-UGR18", "the unlisted side is split by WHERE the file sits and both halves are graded (R3246): AC-UGR17 prints how many files a believed RECORD forgot, and a truncated RECORD and a file of OURS in the same root read identically there - measured in qa/probe-R3246.log, where a package whose RECORD listed one of two files in a directory left the forgotten sibling READ as ours and a gate inside it entered the site set (hits=[.../pkg/core/unlisted.py:2]). Every marker-decided root must now print inside=<n> beside=<m>, the two must sum to the printed unlisted count, and every file REFUSED by the directory rule must be NAMED on the face; no such path may also appear among the files printed as ours. The rule is: an unlisted file whose directory holds a file the RECORD DID list is refused (that directory is a package directory), while an unlisted file beside any package is still READ as ours (measured: our own gate beside the package stays readable). --check refuses when a count, the sum, a name or a leak disagrees with a fresh reading. This closes one direction only: a root whose RECORD lists no .py at all still reads its whole tree as ours (the stricter red was refused because it would redden every freshly unpacked root), and the cost is printed - one of ours placed INSIDE a package directory is refused too, as a named inside path"),
 ("AC-UGR19", "how far a believed RECORD reaches over .py files is a graded count (R3247): AC-UGR18 splits the unlisted side by where it sits, but the directory rule needs at least one listed file to fire, so a root whose RECORD lists NO .py at all leaves its whole .py tree reachable - measured in qa/probe-R3247.log, where a RECORD listing only pkg/core/data.json still read pkg/top.py as ours and a gate inside it entered the site set (listed_py=0, disk_py=2, inside=1, beside=1). Every marker-decided root must now print listed_py=<n> disk_py=<m>, the two must satisfy listed_py + unlisted == disk_py, a root with listed_py == 0 and disk_py > 0 must carry a NAMED warning on its own line, and the face must print how many roots are in that state or say in words that none is. --check refuses when any count, the sum, the warning or the page-level count disagrees with a fresh reading. This does not close the hole - the unreachable root still reads its whole .py tree as ours - it makes that root visible with a count; the stricter red was refused because it would redden every freshly unpacked root"),
     ("AC-UGR20", "the RECORD is READ in every world and never takes the decision away from git (R3248): the four coverage criteria above only ever ran in a private world without git, so the live page printed a named absence and the RECORD's counts had no live reading - measured in qa/probe-R3248.log, where the live census costs 0.2306 s against a 0.4224 s shipped walk, lists 995 paths covering all 453 live .py files, and shares ZERO paths with git's tracked set. Every coverage row must now name its decider (`decided_by=evidence` or `decided_by=marker`), a row may say `evidence` only when the summary rule is the git evidence and `marker` only where marker (or the mixed fallback) is in force, and a reading that carries a believed RECORD must print a row in either world. The decision itself is unchanged: where git answers, the tracked set still decides read/refuse and the counts are a second opinion that does not overrule it. --check refuses when a decider is missing, a root is unnamed, a decider contradicts the summary rule, or no row is printed. This buys a live reading, not a closure: a hand-edited RECORD is still believed where git cannot answer, and the ~0.23 s census now runs on every collect"),
+    ("AC-UGR21", "a vendor root with NO RECORD is counted, not silent (R3249): every vendor root the walk meets now reports whether it carries a RECORD, because the 28 roots that do not carried no row at all and therefore read exactly like a root that is not there - measured in qa/probe-R3249.log, where 29 live vendor roots split 1 with a RECORD and 28 without, exactly one of the 28 holds .py (2 files), and the page named none of them. The face must print the total number of RECORD-less roots and, for each of them that holds .py, its root path, its disk_py count and its decider (`evidence` where git answered, `name` where the name rule did), and a reading with no such .py-holding root must print a named absence instead of zeros. --check refuses when the totals disagree with a fresh walk, a root is unnamed, a count is rewritten, or a decider contradicts the rule in force. This buys visibility, not closure: the name rule still refuses those files, no root reddens for lacking a RECORD, and the 27 roots holding no .py are counted in the total only, which the page states"),
     ("AC-SGV1", "PRE-REGISTERED REPAIR (not applied: src/ bytes are frozen under the live battery leg): SecGate.__init__ must refuse empty wordlists exactly as MsgSecStub does, so the constitutional no-content-safety-no-door rule holds on the direct construction path too"),
 
     ("AC-SGV2", "PRE-REGISTERED: after the repair, SecGate([], []) raises GateOfflineError, the four expected-blocked constructions read 4/4 blocked, and every existing direct call site in src/sandbox stays green because each already passes non-empty config lists"),
@@ -348,6 +349,11 @@ def _walk_all(tracked=_TRACKED_AUTO):
     all. A root with listed_py == 0 cannot fire the directory rule at all, so its
     whole .py tree is read as ours; that state is counted and warned rather than
     left implicit (measured in qa/probe-R3247.log).
+    Since R3249 a root that carries NO RECORD is counted too ({total, rows}),
+    because those roots printed nothing at all and so read exactly like a root
+    that is not there (measured in qa/probe-R3249.log: 29 live vendor roots, 1
+    with a RECORD, 28 without, and exactly one of the 28 holds .py). This adds
+    visibility and moves no decision: the name rule still decides those files.
     """
     if tracked is _TRACKED_AUTO:
         tracked = _tracked_sources()
@@ -356,6 +362,8 @@ def _walk_all(tracked=_TRACKED_AUTO):
     owned = []
     decisions = []
     coverage = []
+    unrecorded = []
+    unrecorded_total = 0
     walk_root = os.path.join(ROOT, "src", "sandbox")
     for base, dirs, files in os.walk(walk_root):
         for name in list(dirs):
@@ -372,6 +380,13 @@ def _walk_all(tracked=_TRACKED_AUTO):
                 # says who actually decided (`decided_by`).
                 evidence, has_markers = _marker_sources(vdir)
                 decided_by = "evidence" if tracked is not None else "marker"
+                # R3249: a root with no RECORD produced no coverage row at all,
+                # so "no RECORD here" and "no root here" printed the same nothing
+                # (measured in qa/probe-R3249.log). Counted here per root; the .py
+                # count rides this walk, so it costs no second pass.
+                u_py = 0
+                if not has_markers:
+                    unrecorded_total += 1
                 # R3245: a RECORD is believed, so how far it actually reaches is
                 # part of the reading. Counted per root: how many paths it lists,
                 # how many of those still exist (the stale face), and how many
@@ -424,6 +439,8 @@ def _walk_all(tracked=_TRACKED_AUTO):
                             else:
                                 cov["unlisted"] += 1
                                 cov["beside"] += 1
+                        else:
+                            u_py += 1
                         if tracked is not None:
                             decisions.append((rel, "evidence"))
                             if rel in tracked:
@@ -449,6 +466,10 @@ def _walk_all(tracked=_TRACKED_AUTO):
                             refused.append((rel, "vendor_dir", text))
                 if cov is not None:
                     coverage.append(cov)
+                elif u_py:
+                    unrecorded.append({
+                        "root": rel_root, "disk_py": u_py,
+                        "decided_by": ("evidence" if tracked is not None else "name")})
         dirs[:] = [d for d in dirs if d not in VENDOR_DIRS]
         for name in sorted(files):
             if not name.endswith(".py"):
@@ -467,13 +488,14 @@ def _walk_all(tracked=_TRACKED_AUTO):
                     read.append((rel, fh.read()))
             except OSError:
                 continue
-    return read, refused, owned, decisions, coverage
+    return read, refused, owned, decisions, coverage, {"total": unrecorded_total,
+                                                       "rows": unrecorded}
 
 
 def _sandbox_walk(tracked=_TRACKED_AUTO):
     """The four partitions only; callers that grade RECORD coverage use
     `_walk_all` (R3245), so the walk still runs once per collect."""
-    read, refused, owned, decisions, _coverage = _walk_all(tracked)
+    read, refused, owned, decisions, _coverage, _unrec = _walk_all(tracked)
     return read, refused, owned, decisions
 
 
@@ -635,7 +657,8 @@ def collect():
     # same split the face prints, so the page cannot describe a different world
     # than the site set came from.
     tracked = _tracked_sources()
-    read_pairs, refused_pairs, owned, decisions, coverage = _walk_all(tracked=tracked)
+    read_pairs, refused_pairs, owned, decisions, coverage, unrecorded = _walk_all(
+        tracked=tracked)
     sites, skipped = direct_call_sites(sources=read_pairs)
     # R3244: one word cannot describe a mixed world (one vendor root with a
     # RECORD, another without). The counts are the honest reading; the word is
@@ -665,6 +688,10 @@ def collect():
         # a reading where git answered (or no root carried a RECORD), and the
         # face says so rather than printing four zeros.
         "marker_coverage": coverage,
+        # R3249: the roots that carry NO RECORD, counted so that "no RECORD
+        # here" cannot read like "no root here". Visibility only - the name rule
+        # still decides these files, and no root reddens for lacking a RECORD.
+        "unrecorded": unrecorded,
         "hole_status": "LIVE" if sites else "LATENT",
         "parity": parity_line(),
         "aigc": aigc_face(),
@@ -819,6 +846,32 @@ def render_html(data):
                          "inside/beside split of AC-UGR18 has nothing to divide, and the .py "
                          "reach of AC-UGR19 has nothing to measure")
         refused_bits.append("<li>refused %s: %d sources - %s</li>" % (_esc(rule), files, tail))
+    # R3249: a vendor root carrying NO RECORD used to print nothing at all, so it
+    # read exactly like a root that is not there (measured in qa/probe-R3249.log:
+    # 28 of the 29 live roots carry no RECORD and the page named none of them).
+    # Graded by AC-UGR21. The read/refuse rule is untouched, and no root reddens
+    # for lacking a RECORD - what is bought here is that the name-decided side is
+    # visible instead of silent.
+    unrec = data.get("unrecorded") or {}
+    unrec_rows = unrec.get("rows") or []
+    unrec_total = unrec.get("total", 0)
+    unrec_text = ("vendor roots with NO RECORD (graded by AC-UGR21, R3249): "
+                  "<b>%d</b> in this reading, <b>%d</b> of them holding .py"
+                  % (unrec_total, len(unrec_rows)))
+    if unrec_rows:
+        unrec_text += (": <ul>%s</ul>Every .py under these roots is decided by the "
+                       "rule in force (<span class='mono'>%s</span>), never by a "
+                       "RECORD; a root holding no .py is counted in the total only, "
+                       "because it holds nothing a door could hide in."
+                       % ("".join("<li><span class='mono'>%s</span> decided_by=<b>%s</b> "
+                                  "disk_py=<b>%d</b></li>"
+                                  % (_esc(r["root"]), _esc(r["decided_by"]),
+                                     r["disk_py"]) for r in unrec_rows),
+                          _esc(data.get("vendor_rule"))))
+    else:
+        unrec_text += (" - no vendor root without a RECORD holds a .py file in this "
+                       "reading")
+    refused_bits.append("<li>%s</li>" % unrec_text)
     refused_html = ("<br>The walk refuses two kinds of source, and both are counted on this face "
                     "rather than left implicit (AC-UGR13, R3240):<ul>%s</ul>"
                     "A production file misnamed with the test_ prefix, or a door written under "
@@ -1364,6 +1417,44 @@ def check(data):
         bits20.append("no RECORD row printed; a reading with a believed RECORD "
                       "must carry one in either world")
     results.append(("AC-UGR20", cov_ok20, " ".join(bits20) or "(no rows)"))
+
+    # AC-UGR21: a vendor root carrying NO RECORD printed nothing, so "no RECORD
+    # here" and "no root here" were the same nothing (R3249). Measured in
+    # qa/probe-R3249.log: 29 live vendor roots, 1 with a RECORD, 28 without, and
+    # exactly one of the 28 holds .py (2 files) - the page named none of them.
+    # The total and every .py-holding root must be printed, each root must name
+    # its decider, and the decider must agree with the rule in force. This buys
+    # visibility, not closure: the name rule still refuses those files.
+    unrec21 = data.get("unrecorded") or {}
+    rows21 = unrec21.get("rows") or []
+    total21 = unrec21.get("total", 0)
+    ok21 = True
+    bits21 = []
+    head21 = ("vendor roots with NO RECORD (graded by AC-UGR21, R3249): "
+              "<b>%d</b> in this reading, <b>%d</b> of them holding .py"
+              % (total21, len(rows21))) in html_text
+    if not head21:
+        ok21 = False
+    bits21.append("total=%d rows=%d head_printed=%s"
+                  % (total21, len(rows21), head21))
+    for row in rows21:
+        dec21 = row.get("decided_by")
+        named21 = row["root"] in html_text
+        line21 = ("<span class='mono'>%s</span> decided_by=<b>%s</b> disk_py=<b>%d</b>"
+                  % (_esc(row["root"]), _esc(dec21), row["disk_py"])) in html_text
+        agrees21 = ((dec21 == "evidence" and rule20 == "evidence")
+                    or (dec21 == "name" and rule20 in ("name", "marker+name")))
+        if not (named21 and line21 and agrees21):
+            ok21 = False
+        bits21.append("%s decided_by=%s rule=%s named=%s line=%s agrees=%s"
+                      % (row["root"], dec21, rule20, named21, line21, agrees21))
+    if not rows21:
+        absent21 = ("no vendor root without a RECORD holds a .py file in this "
+                    "reading" in html_text)
+        if not absent21:
+            ok21 = False
+        bits21.append("named_absence=%s" % absent21)
+    results.append(("AC-UGR21", ok21, " ".join(bits21)))
 
     # AC-UGR9: the sizes block is read back FROM THE LANDED DOCUMENT, never from
     # the in-memory dict, so a --no-write run still gates on what is on disk.

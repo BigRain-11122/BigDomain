@@ -7799,9 +7799,12 @@ SUITES = [
     # added B37/B38/B39: an unlisted file is refused inside a package directory
     # and still read beside one; R3247 adds B40/B41/B42: a RECORD that lists no
     # .py at all is counted and warned rather than silently reading its whole
-    # .py tree as ours - forty-four).
+    # .py tree as ours - forty-four; R3248 added B43/B44: the RECORD is read
+    # where git answers and never takes the decision - forty-seven; R3249 adds
+    # B45/B46: a vendor root with NO RECORD is counted and named instead of
+    # printing nothing at all - fifty).
     ("os-ugc-gate-report",
-     os.path.join("..", "os", "test_ugc_gate_report.py"), 47),
+     os.path.join("..", "os", "test_ugc_gate_report.py"), 50),
     # R2875. docs/status-export.json's latest_artifact follows the NEWEST preview
     # pair by mtime, so a fixture that re-renders a tracked pair moves the world
     # another suite measures - measured in the real tree at R2875 as

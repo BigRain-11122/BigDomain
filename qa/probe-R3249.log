@@ -1,0 +1,15 @@
+Q1 live vendor roots=29
+Q1 marker+py census 0.5064s
+Q1 roots with RECORD=1 -> [('src/sandbox/lobby/.venv', 453)]
+Q1 roots without RECORD=28
+Q1 no-RECORD roots holding .py=1 -> [('src/sandbox/ygo-poc/data/toolchain', 2)]
+Q1 no-RECORD roots holding zero .py=27
+Q1 shipped walk 0.9003s read=186 refused=913 coverage_rows=1
+Q1 live coverage rows=['src/sandbox/lobby/.venv']
+Q1 live page could name only these vendor roots by RECORD; the other 28 are counted by name alone and never appear as a row
+Q2 private root toolchain (2 .py, no RECORD): coverage_rows=0 []
+Q2 private decisions={'evidence': 0, 'marker': 0, 'name': 2}
+Q2 private vendor_rule=name refused_files=1 owned=[]
+Q2 so today: a root with .py and no RECORD is READ (or refused) by the name rule and leaves ZERO rows, i.e. it is indistinguishable from a root that is not there
+Q3 standing second pass over vendor .py costs 0.2309s; riding the shipped walk costs 0 by construction (same loop, one increment)
+Q3 totals: 1 roots, 2 .py decided by name on the live tree
