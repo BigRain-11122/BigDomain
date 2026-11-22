@@ -153,6 +153,20 @@ function Assert([bool]$cond, [string]$name, [string]$detail) {
     else { Write-Output "FAIL $name ($detail)"; $script:fail = $script:fail + 1 }
 }
 
+# R3327: the install-copy state is one decision with three answers, so it lives in
+# one function and can be asked with a path that does not exist (the new-machine
+# shape, where the per-machine copy was never created). Measured R3327: the old
+# inline block folded absent into "not drift" by accident of an initialised local,
+# which is a claim no one could re-run.
+function Get-InstallState([string]$instPath, [string]$srcSha) {
+    if (-not (Test-Path -LiteralPath $instPath)) { return 'absent' }
+    $sha = [System.Security.Cryptography.SHA256]::Create()
+    try { $digest = [System.BitConverter]::ToString($sha.ComputeHash([System.IO.File]::ReadAllBytes($instPath))) }
+    finally { $sha.Dispose() }
+    if ($digest -eq $srcSha) { return 'match' }
+    return 'drift'
+}
+
 $sbxRoot = Join-Path ([System.IO.Path]::GetTempPath()) ("bd_scanfaces_" + [System.IO.Path]::GetRandomFileName().Replace('.', ''))
 $sbxGroup = Join-Path $sbxRoot 'FluxGroup'
 $sbxRepo = Join-Path $sbxGroup 'domain\BigDomain'
@@ -186,10 +200,14 @@ function New-StateJson([string]$lastOrder, [string]$benchDate) {
     return '{"tick":9,"last_order":"' + $lastOrder + '","last_decision_rows":1,"benchmarks_refreshed":"' + $benchDate + '","log":["a","b"]}'
 }
 
-function Setup-Fixtures([string[]]$repoOrders, [string]$stateJson, [bool]$qaEvidence) {
-    Write-Group 'cph4\evolution-ledger.md' @('ledger fixture row 1 (no atbd no conflict)')
+function Setup-Fixtures([string[]]$repoOrders, [string]$stateJson, [bool]$qaEvidence, [string[]]$ledgerLines, [string[]]$gordLines) {
+    # R3327: the two group fixtures became parameters so a world can carry a
+    # near-miss spelling; the defaults keep every earlier arm unchanged.
+    if ($null -eq $ledgerLines) { $ledgerLines = @('ledger fixture row 1 (no atbd no conflict)') }
+    if ($null -eq $gordLines) { $gordLines = @('| 09-28 | group order fixture | dispatched |') }
+    Write-Group 'cph4\evolution-ledger.md' $ledgerLines
     Write-Group 'docs\decisions.md' @('decision fixture row 1')
-    Write-Group 'docs\orders.md' @('| 09-28 | group order fixture | dispatched |')
+    Write-Group 'docs\orders.md' $gordLines
     Write-All 'orders.md' $repoOrders
     Write-All 'src\os\state.json' @($stateJson)
     Write-All 'src\os\backlog.md' @('- [ ] bootstrap item blocked on CEO physical parts')
@@ -591,21 +609,24 @@ try {
     # existed): the graded file is the shipped source, the [HB] face gets
     # behaviour readings, and the token right-boundary law runs on the live face.
     $srcScan = Join-Path $repo 'tools\skills\bigdomain-loop-scan\scripts\scan_five_still.ps1'
-    $instScan = Join-Path $repo '.codely-cli\skills\bigdomain-loop-scan\scripts\scan_five_still.ps1'
+    # R3327 seam: BD_INST_SCAN asks the absent-machine question without renaming
+    # this machine's copy; unset, the graded path is the per-machine install copy.
+    $instScan = $env:BD_INST_SCAN
+    if (-not $instScan) { $instScan = Join-Path $repo '.codely-cli\skills\bigdomain-loop-scan\scripts\scan_five_still.ps1' }
     Assert (Test-Path -LiteralPath $srcScan) 'AC-SC24' 'shipped scanner source exists at tools/skills'
-    $sha2 = [System.Security.Cryptography.SHA256]::Create()
     $srcSha = ''
-    $instState = 'absent'
-    if (Test-Path -LiteralPath $srcScan) { $srcSha = [System.BitConverter]::ToString($sha2.ComputeHash([System.IO.File]::ReadAllBytes($srcScan))) }
-    if (Test-Path -LiteralPath $instScan) {
-        $instSha = [System.BitConverter]::ToString($sha2.ComputeHash([System.IO.File]::ReadAllBytes($instScan)))
-        if ($instSha -eq $srcSha) { $instState = 'match' } else { $instState = 'drift' }
+    if (Test-Path -LiteralPath $srcScan) {
+        $shaSrc = [System.Security.Cryptography.SHA256]::Create()
+        $srcSha = [System.BitConverter]::ToString($shaSrc.ComputeHash([System.IO.File]::ReadAllBytes($srcScan)))
+        $shaSrc.Dispose()
     }
-    $sha2.Dispose()
+    $instState = Get-InstallState $instScan $srcSha
+    $absentProbe = Get-InstallState (Join-Path $sbxRoot 'no-such-install-copy.ps1') $srcSha
     $srcLen = 0
     if (Test-Path -LiteralPath $srcScan) { $srcLen = (Get-Item -LiteralPath $srcScan).Length }
-    Write-Output ("[SCANFACES] source=" + $srcLen + "B install=" + $instState)
+    Write-Output ("[SCANFACES] source=" + $srcLen + "B install=" + $instState + " absent_branch=" + $absentProbe)
     Assert ($realScan -eq $srcScan) 'AC-SC24' 'the graded path is the shipped source, not the install copy'
+    Assert ($absentProbe -eq 'absent') 'AC-SC24' 'a missing install copy answers absent (new machine) rather than throwing'
     Assert ($instState -ne 'drift') 'AC-SC24' ("install copy is absent or byte-identical to source (install=" + $instState + ")")
 
     function Write-Heartbeat([string[]]$lines) {
@@ -675,6 +696,39 @@ try {
     $r = Invoke-Scan
     Assert ($r.text -match 'dec_new_tok D-20261114-05') 'AC-SC26' 'a real new owner token still flags by name'
 
+    # AC-SC27 (R3327, pinned in src/os/backlog.md BEFORE these arms existed):
+    # the [LEDGER] program-number display and both @BigDomain counters answered
+    # a continuation spelling as if it were a row. Measured R3327 in a private
+    # world: "P-2026-09-24-56x" printed lastp=P-2026-09-24-56 (phantom program
+    # number) and "@BigDomainX" counted atbd_rows=1 - byte-identical lines to the
+    # clean world, so no reader could tell. Today's live group files carry 0 such
+    # forms; the law is applied to the family anyway (same right-boundary law the
+    # D-/C- tokens took at R3326).
+    Reset-Sandbox
+    Setup-Fixtures @('| 2026-09-28 22:1x | order row | open |') (New-StateJson '2026-09-28 22:1x' $today) $false `
+        @('- [2026-09-24] P-2026-09-24-56 @BigDomain dispatch row') @('| 09-28 | group order fixture @BigDomain | dispatched |')
+    Git-Baseline
+    $r = Invoke-Scan
+    Assert ($r.text -match '\[LEDGER\] PASS lines=1 atbd_rows=1 conflict=0 lastp=P-2026-09-24-56') 'AC-SC27' 'a real program number and @BigDomain row are still harvested'
+    Assert ($r.text -match '\[GORD\] INFO lines=1 tbl_rows=1 atbd=1') 'AC-SC27' 'GORD counts the real @BigDomain mention'
+
+    Reset-Sandbox
+    Setup-Fixtures @('| 2026-09-28 22:1x | order row | open |') (New-StateJson '2026-09-28 22:1x' $today) $false `
+        @('- [2026-09-24] P-2026-09-24-56x @BigDomainX near-miss row') @('| 09-28 | group order fixture @BigDomain2 | dispatched |')
+    Git-Baseline
+    $r = Invoke-Scan
+    Assert ($r.text -notmatch 'lastp=P-2026-09-24-56') 'AC-SC27' 'a program number followed by a letter is not harvested'
+    Assert ($r.text -match '\[LEDGER\] PASS lines=1 atbd_rows=0') 'AC-SC27' '@BigDomainX is not counted as a dispatch row'
+    Assert ($r.text -match '\[GORD\] INFO lines=1 tbl_rows=1 atbd=0') 'AC-SC27' 'GORD does not count @BigDomain2 as a dispatch row'
+
+    Reset-Sandbox
+    Setup-Fixtures @('| 2026-09-28 22:1x | order row | open |') (New-StateJson '2026-09-28 22:1x' $today) $false `
+        @('- [2026-09-24] P-2026-09-24-561 @BigDomain-OSLoop task mention') @('| 09-28 | group order fixture @BigDomain-OSLoop | dispatched |')
+    Git-Baseline
+    $r = Invoke-Scan
+    Assert ($r.text -notmatch 'lastp=P-2026-09-24-56') 'AC-SC27' 'a program number continued by a digit is not harvested'
+    Assert ($r.text -match '\[LEDGER\] PASS lines=1 atbd_rows=1') 'AC-SC27' 'a hyphenated machine mention still counts as this company'
+
     # --- AC-SC10: harness laws ---------------------------------------------
     [System.IO.File]::Copy($realScan, $sbxScan, $true)
     $a = [System.IO.File]::ReadAllBytes($realScan)
@@ -693,6 +747,6 @@ finally {
     Remove-Item -LiteralPath $sbxRoot -Recurse -Force -ErrorAction SilentlyContinue
 }
 
-if ($script:fail -eq 0) { Write-Output ("ALL CRITERIA PASS (AC-SC1..SC26, " + $script:pass + " checks)"); exit 0 }
+if ($script:fail -eq 0) { Write-Output ("ALL CRITERIA PASS (AC-SC1..SC27, " + $script:pass + " checks)"); exit 0 }
 Write-Output ("FAILURES=" + $script:fail)
 exit 2

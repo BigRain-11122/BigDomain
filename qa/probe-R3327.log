@@ -1,0 +1,17 @@
+SECTION 1 - [LEDGER]/[GORD] continuation spellings
+WORLD A clean      : [LEDGER] PASS lines=1 atbd_rows=1 conflict=0 lastp=P-2026-09-24-56 [GORD] INFO lines=1 tbl_rows=1 atbd=1 sha16=515A41F6650C43A8 gord_new_rows=baseline_missing (init state.json last_gord_tbl_rows at ack closeout)
+WORLD B near-miss  : [LEDGER] PASS lines=1 atbd_rows=1 conflict=0 lastp=P-2026-09-24-56 [GORD] INFO lines=1 tbl_rows=1 atbd=1 sha16=49BA8B8259BF8436 gord_new_rows=baseline_missing (init state.json last_gord_tbl_rows at ack closeout)
+WORLD C digit/loop : [LEDGER] PASS lines=1 atbd_rows=1 conflict=0 lastp=P-2026-09-24-56 [GORD] INFO lines=1 tbl_rows=1 atbd=1 sha16=04B92DC98B7F2EAF gord_new_rows=baseline_missing (init state.json last_gord_tbl_rows at ack closeout)
+READING ledger_clean  = [LEDGER] PASS lines=1 atbd_rows=1 conflict=0 lastp=P-2026-09-24-56
+READING ledger_near   = [LEDGER] PASS lines=1 atbd_rows=1 conflict=0 lastp=P-2026-09-24-56
+READING ledger_digit  = [LEDGER] PASS lines=1 atbd_rows=1 conflict=0 lastp=P-2026-09-24-56
+READING silent_near_miss = YES (identical line)
+READING silent_digit_form = YES (identical line)
+READING gord_clean    = [GORD] INFO lines=1 tbl_rows=1 atbd=1 sha16=515A41F6650C43A8 gord_new_rows=baseline_missing (init state.json last_gord_tbl_rows at ack closeout)
+READING gord_near     = [GORD] INFO lines=1 tbl_rows=1 atbd=1 sha16=49BA8B8259BF8436 gord_new_rows=baseline_missing (init state.json last_gord_tbl_rows at ack closeout)
+READING atbd_clean=1 atbd_near=1
+SECTION 2 - live group files: any continuation spelling today?
+  ledger: P_continuation=0 DC_continuation=0 atbd_boundary_forms=0 
+  orders: P_continuation=0 DC_continuation=4 atbd_boundary_forms=0 
+  decisions: P_continuation=0 DC_continuation=0 atbd_boundary_forms=0 
+PROBE R3327 DONE

@@ -1,0 +1,8 @@
+NEGCTL R3327: old (no right boundary) vs shipped (boundary)
+  clean    in=P-2026-09-24-56 @BigDomain row     old_p=['P-2026-09-24-56'] new_p=['P-2026-09-24-56'] old_atbd=1 new_atbd=1
+  near     in=P-2026-09-24-56x @BigDomainX row   old_p=['P-2026-09-24-56'] new_p=[] old_atbd=1 new_atbd=0
+  digit    in=P-2026-09-24-561 @BigDomain2 row   old_p=['P-2026-09-24-56'] new_p=[] old_atbd=1 new_atbd=0
+  loop     in=P-2026-09-24-56 @BigDomain-OSLoop row old_p=['P-2026-09-24-56'] new_p=['P-2026-09-24-56'] old_atbd=1 new_atbd=1
+READING near_miss old=['P-2026-09-24-56'] shipped=[] (old named a program number the row does not carry)
+READING atbd old_near=1 shipped_near=0 shipped_loop=1 (machine spelling kept)
+READING clean row still harvested by both: p=['P-2026-09-24-56'] atbd=1

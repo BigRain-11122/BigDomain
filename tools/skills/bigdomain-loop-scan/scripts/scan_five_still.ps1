@@ -59,13 +59,20 @@ try {
 try {
   $gt = Get-GroupFile 'cph4/evolution-ledger.md'
   $L = @(($gt.raw.TrimEnd("`r", "`n")) -split "\r?\n")
-  $atbd = @($L | Select-String -SimpleMatch '@BigDomain')
+  # R3327: boundary on the mention itself - measured "@BigDomainX" and
+  # "@BigDomain2" counted as dispatch rows in a world with no such row; the
+  # hyphenated machine spelling "@BigDomain-OSLoop" still counts (it names us).
+  $atbd = @($L | Select-String -Pattern '@BigDomain(?![A-Za-z0-9])')
   # R2907: anchor the merge-marker test to the START of a line. The unanchored form
   # matched prose that DESCRIBES an old cleanup ("(`<<<<<<< HEAD` / ... / `>>>>>>>`)"),
   # which kept this face red for rounds against a file with no conflict in it, and once
   # sent a false escalation to HQ-FEEDBACK. A real marker is the whole leading token.
   $conf = @($L | Select-String -Pattern '^(<<<<<<<|>>>>>>>|\|\|\|\|\|\|\|)( |$)')
-  $pnums = @($L | Select-String -Pattern 'P-\d{4}-\d{2}-\d{2}-\d{2}' -AllMatches | ForEach-Object { $_.Matches } | ForEach-Object { $_.Value })
+  # R3327: the same right-boundary law the D-/C- tokens took at R3326. Measured
+  # in a private world without it: "P-2026-09-24-56x" and "P-2026-09-24-561" both
+  # printed lastp=P-2026-09-24-56 (a phantom program number). The live ledger
+  # carries 0 such forms today.
+  $pnums = @($L | Select-String -Pattern 'P-\d{4}-\d{2}-\d{2}-\d{2}(?![0-9A-Za-z])' -AllMatches | ForEach-Object { $_.Matches } | ForEach-Object { $_.Value })
   $lastp = (@($pnums | Select-Object -Last 3) -join ',')
   if ($conf.Count -gt 0) {
     Write-Output "[LEDGER] FLAG lines=$($L.Count) atbd_rows=$($atbd.Count) conflict=$($conf.Count) lastp=$lastp"
@@ -163,7 +170,7 @@ try {
   $sha16 = [System.BitConverter]::ToString($shaProv.ComputeHash($utf8.GetBytes($gordRaw))).Replace('-','').Substring(0,16)
   $shaProv.Dispose()
   $tbl = @($O | Select-String -Pattern '^\|\s*\d{2}-\d{2}')
-  $atbd = @($O | Select-String -SimpleMatch '@BigDomain').Count
+  $atbd = @($O | Select-String -Pattern '@BigDomain(?![A-Za-z0-9])').Count
   $gordBaseRows = $null
   if ($st -ne $null -and @($st.PSObject.Properties.Name) -contains 'last_gord_tbl_rows') { $gordBaseRows = [int]$st.last_gord_tbl_rows }
   if ($null -ne $gordBaseRows) {
