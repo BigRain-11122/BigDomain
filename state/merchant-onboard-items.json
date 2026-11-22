@@ -1,0 +1,96 @@
+{
+  "face": "merchant-onboard",
+  "title": "商户号接入自查单",
+  "sub": "双击本地打开，零网络；只收名字与勾选，永不收密钥值。",
+  "ui": {
+    "h1": "商户号接入自查单",
+    "h1_tail": "· 双击本地打开，零网络",
+    "sub_fmt": "清单与商品全部派生自 preview/payment-gate-report.json（sha256 前 16 位 {src16}）与 state/merchant-onboard-items.json（前 16 位 {items16}）。8 项缺口按「谁负责 / 怎么验」逐项列出。",
+    "h2_items": "接入清单（8 项：6 项 CEO 物理件 + 2 项我方既有证据）",
+    "h2_progress": "进度",
+    "h2_standard": "受此清单约束的商品（标准商户通道）",
+    "h2_selftest": "本页自检（AC-MO5 / AC-MO4 / AC-MO6）",
+    "h2_rules": "两条硬规则",
+    "h2_legend": "状态说明",
+    "tag_ceo": "CEO 物理件",
+    "tag_ours": "我方",
+    "tag_proven": "证据在册",
+    "progress_fmt": "自述已就位 {declared}/{ceo} · 有证据 {proven}/{total} · 合计 {done}/{total}",
+    "verdict_missing": "还不能开门：还缺 {missing} 项。自述完成不等于验证完成。",
+    "verdict_declared": "自述已全部就位（{ceo}/{ceo}）：仍不能开门 —— 还需一条真实回调验签 + 一笔对公结算对账，且本页无法代为验证物理件。",
+    "verdict_proven_all": "全部 {total} 项有证据（仅构造场景）：仍不做真实收款。",
+    "footer_ledger": "本页不联网、不扣款、不产生商户订单；勾选态只存本机 localStorage。清单是本机自述，不是验证。",
+    "blocked_note": "两件商品走标准商户通道：物理件未到即拒绝放行，本页只登记缺口，不假装可付。",
+    "reset": "清除本机勾选",
+    "legend": "「证据在册」= 本轮现场读了证据文件并通过，勾选框锁定；「CEO 物理件」未勾 = 待物理件；勾上 = 运营自述已收到（不是验证）。",
+    "how_prefix": "怎么验：",
+    "evidence_prefix": "证据：",
+    "pending": "待物理件",
+    "selftest_head": "以下三行由页面现场重算，不是写死的字。"
+  },
+  "items": [
+    {
+      "id": "mchid",
+      "label": "真实微信支付商户号（MchID）",
+      "owner": "ceo",
+      "how": "在微信支付商户平台申请并下发；本页只登记它的名字，不填任何密钥值。",
+      "evidence_source": ""
+    },
+    {
+      "id": "settlement",
+      "label": "结算主体（营业执照 / 对公账户）",
+      "owner": "ceo",
+      "how": "与商户号绑定的对公结算账户，入账前须与营业执照主体一致。",
+      "evidence_source": ""
+    },
+    {
+      "id": "domain",
+      "label": "服务器 + 可公网访问域名（回调可达）",
+      "owner": "ceo",
+      "how": "一台公网服务器与已解析域名；支付回调 URL 由本司提供后在此登记。",
+      "evidence_source": ""
+    },
+    {
+      "id": "filing",
+      "label": "网站备案 + ICP 号",
+      "owner": "ceo",
+      "how": "境内域名须完成 ICP 备案，商户平台审核会核验主体与域名一致。",
+      "evidence_source": ""
+    },
+    {
+      "id": "miniapp",
+      "label": "小程序 appid + secret",
+      "owner": "ceo",
+      "how": "appid 可登记；secret 只进 .env（不入 git），也不在任何页面或浏览器里粘贴。",
+      "evidence_source": ""
+    },
+    {
+      "id": "pubkey",
+      "label": "平台公钥（APIv3 RSA 验签模式）",
+      "owner": "ceo",
+      "how": "现有 HMAC 替身已通过；切真实 APIv3 验签需要商户平台下发的平台公钥。",
+      "evidence_source": ""
+    },
+    {
+      "id": "callback",
+      "label": "回调验签在沙箱里通过（HMAC 替身，2/2 接受）",
+      "owner": "ours",
+      "how": "读 preview/payment-gate-report.json 的 channel_positive；任一不接受则本项失去证据、自动退回待办。",
+      "evidence_source": "callback"
+    },
+    {
+      "id": "books",
+      "label": "双式记账 + 幂等回调本机自证",
+      "owner": "ours",
+      "how": "读 preview/buyer-trial.json 的 AC-BT4/AC-BT5；任一不 PASS 则本项失去证据、自动退回待办。",
+      "evidence_source": "books"
+    }
+  ],
+  "bands": [
+    "MOCK 非真实支付 · 不联网 · 不扣款",
+    "AIGC 标识在册",
+    "非投资建议"
+  ],
+  "secret_rule": "密钥面红线：本页只收名字与勾选。appkey / secret / 私钥只进 .env（不入 git），不在浏览器、不在聊天、不在这张单上出现。",
+  "honest": "诚实边界：自述完成 ≠ 验证完成。6 项物理件由 CEO 下发，本页无法代为验证；标准通道真正开门还需要一条真实回调验签与一笔对公结算对账。零支付、零外网，买家仍付不了钱。"
+}

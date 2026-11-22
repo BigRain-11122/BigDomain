@@ -1,0 +1,18 @@
+PASS initial progress printed :: 鑷堪宸插氨浣?0/6 路 鏈夎瘉鎹?2/8 路 鍚堣 2/8
+PASS initial proven count matches payload :: 鑷堪宸插氨浣?0/6 路 鏈夎瘉鎹?2/8 路 鍚堣 2/8
+PASS initial verdict refuses to open the door :: 杩樹笉鑳藉紑闂細杩樼己 6 椤广€傝嚜杩板畬鎴愪笉绛変簬楠岃瘉瀹屾垚銆?PASS initial verdict carries the fail class :: verdict fail
+PASS proven boxes are checked and disabled
+PASS ceo boxes start unticked and enabled
+PASS all ceo declared printed :: 鑷堪宸插氨浣?6/6 路 鏈夎瘉鎹?2/8 路 鍚堣 8/8
+PASS declared-but-not-verified verdict :: 鑷堪宸插叏閮ㄥ氨浣嶏紙6/6锛夛細浠嶄笉鑳藉紑闂?鈥斺€?杩橀渶涓€鏉＄湡瀹炲洖璋冮獙绛?+ 涓€绗斿鍏粨绠楀璐︼紝涓旀湰椤垫棤娉曚唬涓洪獙璇佺墿鐞嗕欢銆?PASS verdict stays fail at full declaration :: verdict fail
+PASS ticks persisted to localStorage :: {"mchid":true,"settlement":true,"domain":true,"filing":true,"miniapp":true,"pubkey":true,"callback":true,"books":true}
+PASS untick lowers declared count :: 鑷堪宸插氨浣?5/6 路 鏈夎瘉鎹?2/8 路 鍚堣 7/8
+PASS missing count printed :: 杩樹笉鑳藉紑闂細杩樼己 1 椤广€傝嚜杩板畬鎴愪笉绛変簬楠岃瘉瀹屾垚銆?PASS reset returns declared to zero :: 鑷堪宸插氨浣?0/6 路 鏈夎瘉鎹?2/8 路 鍚堣 2/8
+PASS reset keeps proven evidence
+PASS self-test has three lines :: lines=3
+PASS self-test all PASS :: PASS AC-MO5 arithmetic: done == proven + declared | PASS AC-MO4 secret face: one checkbox per item, rule printed | PASS AC-MO6 bands: MOCK / AIGC / non-advice
+PASS no password input in the face
+PASS no textarea in the face
+PASS secret rule sentence present
+PASS three bands present
+HARNESS PASS checks=20
