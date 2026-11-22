@@ -1,0 +1,8 @@
+C1 live_copy PASS expect=rc=0 page_identical got=rc=0 identical=True
+C2 source_order PASS expect=rc=0 zeta_before_alpha got=rc=0 zeta=5330 alpha=5342
+C3 sorted_parts PASS expect=rc=2 SH26 literal_parts got=rc=2 literal_parts=True
+C4 sorted_read PASS expect=rc=2 SH26 branch_keys got=rc=2 branch_keys=True
+C5 swapped_sentence PASS expect=rc=2 order_parts got=rc=2 order_parts=True
+C6 three_keys PASS expect=rc=0 ascending got=rc=0 pos=[5330, 5342, 5355]
+C7 reading_order PASS expect=parts=zeta,alpha got=write=["'bd-zeta'", "'bd-alpha'"] parts=[('literal', 'bd-zeta'), ('literal', 'bd-alpha')]
+C8 reversed_read PASS expect=rc=2 SH26 branch_keys got=rc=2 branch_keys=True

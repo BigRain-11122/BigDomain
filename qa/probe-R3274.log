@@ -1,0 +1,25 @@
+Q1 faces=45 multi_write_faces=0 unsorted_faces=0
+Q1 type:write=list
+Q1 type:read=list
+Q1 type:remove=list
+Q1 type:base_write=list
+Q1 type:literal_all=bool
+Q1 type:expr_paired=bool
+Q1 type:base_paired=bool
+Q1 type:runtime_exprs=list
+Q1 judgment:expr_paired <- reads <= writes
+Q1 judgment:base_paired <- set(base_read) <= set(base_write)
+Q1 judgment:literal_all <- bool(writes) and not runtime_exprs
+Q2 step_key source: step_keys = list(rows[name]['keys']['write'])
+Q2 page attr joins the same list: esc(' , '.join(keys))
+Q2 checker joins the same list: key_raw != esc(' , '.join(keys))
+Q2 key_naming consumes keys['write'] in its own order: yes
+Q3 scan_seconds=0.0276 faces=45
+Q3 live faces with more than one written key=0
+Q3 live faces whose write order differs from sorted=0
+Q3 expected live page byte change=0 (every live face writes a single key)
+Q1 private source_order=['bd-zeta', 'bd-alpha']
+Q1 private write_now=["'bd-alpha'", "'bd-zeta'"]
+Q1 private naming_value='bd-alpha , bd-zeta' kind=literal
+Q1 private parts=[('literal', 'bd-alpha'), ('literal', 'bd-zeta')]
+Q2 list_le_is_lexicographic_not_subset=True (no error raised)

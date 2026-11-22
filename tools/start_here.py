@@ -426,26 +426,35 @@ def key_reading(text):
     bare = STR.sub('""', text)
     structure = _blank_strings(text)
     declared = set(DECL.findall(bare))
-    buckets = {"setItem": set(), "getItem": set(), "removeItem": set()}
+    # R3274: the expressions keep the order they first appear in the face's own
+    # bytes, not alphabetical order. A dict is the ordered unique set here, so the
+    # page's per-key parts and the `data-step-key` attribute come from one sequence
+    # instead of two orderings a reader cannot reconcile.
+    buckets = {"setItem": {}, "getItem": {}, "removeItem": {}}
     for match in CALL.finditer(structure):
         expr = re.sub(r"\s+", "", _first_arg_at(text, structure,
                                                match.end() - 1))
         if expr:
-            buckets[match.group(1)].add(expr)
-    writes, reads, removes = buckets["setItem"], buckets["getItem"], buckets["removeItem"]
-    symbols = {expr: _key_symbols(expr) for expr in writes | reads | removes}
+            buckets[match.group(1)].setdefault(expr, None)
+    writes = list(buckets["setItem"])
+    reads = list(buckets["getItem"])
+    removes = list(buckets["removeItem"])
+    symbols = {expr: _key_symbols(expr) for expr in writes + reads + removes}
     base_write = sorted({tok for expr in writes for tok in symbols[expr]})
     base_read = sorted({tok for expr in reads for tok in symbols[expr]})
     unresolved = sorted({tok for expr in symbols for tok in symbols[expr]
                          if tok not in declared})
     table = _literal_decls(text)
-    literals = {expr: resolve_key_expr(expr, table) for expr in sorted(writes)}
-    runtime_exprs = sorted(expr for expr, value in literals.items()
-                           if value is None)
+    literals = {expr: resolve_key_expr(expr, table) for expr in writes}
+    runtime_exprs = [expr for expr, value in literals.items()
+                     if value is None]
     return {
-        "write": sorted(writes), "read": sorted(reads), "remove": sorted(removes),
+        "write": writes, "read": reads, "remove": removes,
         "base_write": base_write, "base_read": base_read,
-        "expr_paired": bool(reads) and reads <= writes,
+        # R3274: `reads <= writes` on two lists compares lexicographically and says
+        # True for ["a"] <= ["b"] - subset is only asked of sets, now that the
+        # sequences carry order.
+        "expr_paired": bool(reads) and set(reads) <= set(writes),
         "base_paired": set(base_read) <= set(base_write),
         "unresolved": unresolved,
         "literal": literals,
@@ -1950,12 +1959,16 @@ def render(proj):
                                                          "when": "none"}
             steps_html.append(
                 '  <p class="branch" data-branch="%d" data-branch-face="%s" '
-                'data-branch-reason="%s" data-branch-key-kind="%s" '
+                'data-branch-reason="%s" data-branch-key="%s" '
+                'data-branch-key-kind="%s" '
                 'data-branch-literal="%s" data-branch-drawers="%s" '
                 'data-branch-when="%s" data-branch-unread="%s" '
                 'data-branch-read-drawers="%s" data-branch-remove-drawers="%s" '
                 'data-branch-split="%s">%s</p>'
-                % (index, esc(name), esc(reason), naming["kind"],
+                % (index, esc(name), esc(reason),
+                   esc(" , ".join((proj["rows"][name].get("keys") or {})
+                                  .get("write") or [])),
+                   naming["kind"],
                    esc(key_attr(naming)),
                    esc(",".join(drawn["drawers"])), esc(drawn["when"]),
                    esc(",".join(drawn["unread"])),
@@ -3198,12 +3211,12 @@ def check():
         fresh[name] = key_naming({"keys": key_reading(raw_text)})
     step_key_rows = re.findall(
         r'<p class="step" data-step="\d+" data-step-face="([^"]+)"[^>]*'
-        r'data-step-key-kind="([^"]*)" data-step-literal="([^"]*)"[^>]*>'
-        r'([^<]*)<', text)
+        r'data-step-key="([^"]*)" data-step-key-kind="([^"]*)" '
+        r'data-step-literal="([^"]*)"[^>]*>([^<]*)<', text)
     branch_key_rows = re.findall(
         r'<p class="branch" data-branch="\d+" data-branch-face="([^"]+)"[^>]*'
-        r'data-branch-key-kind="([^"]*)" data-branch-literal="([^"]*)"[^>]*>'
-        r'([^<]*)<', text)
+        r'data-branch-key="([^"]*)" data-branch-key-kind="([^"]*)" '
+        r'data-branch-literal="([^"]*)"[^>]*>([^<]*)<', text)
     for label, rows_got, want_names in (
             ("step", step_key_rows, steps),
             ("branch", branch_key_rows,
@@ -3212,7 +3225,7 @@ def check():
             failures.append("SH26 %s_rows expected=%d got=%d"
                             % (label, len(want_names), len(rows_got)))
             continue
-        for name, kind_raw, literal_raw, said in rows_got:
+        for name, key_raw, kind_raw, literal_raw, said in rows_got:
             if name not in fresh:
                 failures.append("SH26 not_operable:%s" % name)
                 continue
@@ -3250,6 +3263,31 @@ def check():
                         word = proj["doc"].get("key_literal_empty_part") or ""
                         if not word or esc(word) not in said:
                             failures.append("SH26 empty_part_word:%s" % name)
+                # R3274: the order printed in the sentence must be the order of the
+                # row's own `data-step-key` attribute. That attribute holds the write
+                # expressions and AC-SH24 pins it byte-for-byte to the order they
+                # appear in the face's bytes, so mapping each attribute expression to
+                # its resolved literal is what makes "the sentence prints the file's
+                # order, not alphabetical order" checkable at all.
+                key_cell = (proj["rows"][name].get("keys")
+                            or {"write": [], "literal": {}})
+                if label == "branch":
+                    # A branch row carries the same expression attribute as a step
+                    # row, so it is pinned to the fresh reading the same way AC-SH24
+                    # pins steps (R3274: the negative control landed an orphan face
+                    # here and found the attribute missing entirely).
+                    if key_raw != esc(" , ".join(key_cell["write"])):
+                        failures.append("SH26 branch_keys:%s page=%s fresh=%s"
+                                       % (name, key_raw, key_cell["write"]))
+                attr_seq = key_raw.split(" , ") if key_raw else []
+                want_seq = []
+                for token in attr_seq:
+                    value = key_cell["literal"].get(token)
+                    want_seq.append(esc("" if value is None else value))
+                part_seq = [esc(value) for _kind, value in parts]
+                if want_seq != part_seq:
+                    failures.append("SH26 order_parts:%s attr=%s parts=%s"
+                                    % (name, want_seq, part_seq))
             elif naming["kind"] == "empty":
                 if esc(proj["doc"].get("key_empty_fmt") or "") not in said:
                     failures.append("SH26 empty_word_missing:%s" % name)
