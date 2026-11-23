@@ -1,0 +1,12 @@
+SHARD scope=SHARD registry_suites=763 registry_criteria=6386 selected=10 selected_criteria=105 cap=600s leg_cap=0s overrides=1 exact=10 state=COMPLETE
+SHARD row ledger-apimarket-sellerrefundmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.7s
+SHARD row ledger-apimarket-sellerclaimmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.7s
+SHARD row ledger-apimarket-buyerclaimoutcomemonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.6s
+SHARD row ledger-apimarket-marketrestockmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 1.1s
+SHARD row ledger-apimarket-categoryrestockmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.9s
+SHARD row ledger-apimarket-buyerquestionmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 1.0s
+SHARD row ledger-apimarket-sellerdelistmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.6s
+SHARD row ledger-apimarket-sellerchurnmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.7s
+SHARD row ledger-apimarket-discountmonths rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 0.5s
+SHARD row ledger-monthly-faces-preview rc=0 pass=33 fail=0 detail=yes suite=PASS 33/33 crit=33 24.1s
+SHARD rc=0 scope=SHARD selected=10 executed=10 green=10 criteria=105 crit_mismatch=0 elapsed=30.9s crit_checked=10 crit_unchecked=0

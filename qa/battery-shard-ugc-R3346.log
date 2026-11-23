@@ -1,0 +1,5 @@
+SHARD scope=SHARD registry_suites=763 registry_criteria=6386 selected=3 selected_criteria=16 cap=600s leg_cap=0s overrides=1 exact=3 state=COMPLETE
+SHARD row ugc-msgsec-face rc=0 pass=0 fail=0 detail=none suite=PASS 55/55 crit=6 0.4s
+SHARD row ugc-msgsec-wire rc=0 pass=5 fail=0 detail=yes suite=PASS 5/5 crit=5 11.8s
+SHARD row ugc-msgsec-gaps rc=0 pass=5 fail=0 detail=yes suite=PASS 5/5 crit=5 11.5s
+SHARD rc=0 scope=SHARD selected=3 executed=3 green=3 criteria=16 crit_mismatch=0 elapsed=23.6s crit_checked=3 crit_unchecked=0

@@ -212,6 +212,7 @@ import hashlib
 import io
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -264,6 +265,31 @@ def shipped_marks():
         os.path.isfile(M.OUT_JSON),
         sha16_file(M.OUT_JSON) if os.path.isfile(M.OUT_JSON) else None,
     )
+
+
+FACE = "apimarket-monthly-faces.html"
+BACKHOP_RE = re.compile(r'<div class="backhop"[^>]*>.*?</div>\s*', re.S)
+
+
+def page_without_channel(raw):
+    """The shipped page minus its post-render back-hop block(s).
+
+    R3288 gave every silent face a visible way back through ONE post-render
+    channel, so the shipped page is the generator's own bytes plus exactly
+    one block. The purity law is therefore "render == page - block" together
+    with "exactly one block, aimed at buyer-trial.html" - never
+    "page == render", which would forbid the channel the platform installed.
+    """
+    text = raw.decode("utf-8")
+    return BACKHOP_RE.sub("", text).encode("utf-8"), BACKHOP_RE.findall(text)
+
+
+def channel_ok(blocks):
+    """Exactly one block, for this face, pointing at the file it claims."""
+    return (len(blocks) == 1
+            and 'data-back-face="%s"' % FACE in blocks[0]
+            and 'data-back-target="1"' in blocks[0]
+            and 'href="buyer-trial.html"' in blocks[0])
 
 
 def check_contract():
@@ -398,8 +424,8 @@ def check_hygiene():
     banned = [line for line in imports
               if ("socket" in line or "urllib" in line
                   or "http.client" in line or "requests" in line)]
-    allowed = ("hashlib", "io", "json", "os", "shutil", "subprocess", "sys",
-               "tempfile", "monthly_faces_preview")
+    allowed = ("hashlib", "io", "json", "os", "re", "shutil", "subprocess",
+               "sys", "tempfile", "monthly_faces_preview")
     stray = []
     for line in imports:
         parts = line.replace(",", " ").split()
@@ -555,7 +581,7 @@ def check_copy_bytes():
     html_now = M.render_html(copy, faces).encode("utf-8")
     json_now = M.render_json(faces).encode("utf-8")
     with open(M.OUT_HTML, "rb") as fh:
-        html_shipped = fh.read()
+        html_gen, blocks = page_without_channel(fh.read())
     with open(M.OUT_JSON, "rb") as fh:
         json_shipped = fh.read()
     out_dir = temp_root("copy-bytes-cli")
@@ -569,13 +595,15 @@ def check_copy_bytes():
             cli_html = fh.read()
         with open(out_json, "rb") as fh:
             cli_json = fh.read()
-        cli_equal = cli_html == html_shipped and cli_json == json_shipped
+        cli_equal = cli_html == html_gen and cli_json == json_shipped
     record("AC-MFPC4",
-           html_now == html_shipped and json_now == json_shipped
-           and proc.returncode == 0 and cli_equal,
-           "html_bytes=%d json_bytes=%d inproc_equal=%s cli_equal=%s"
-           % (len(html_shipped), len(json_shipped),
-              html_now == html_shipped and json_now == json_shipped,
+           html_now == html_gen and json_now == json_shipped
+           and proc.returncode == 0 and cli_equal and channel_ok(blocks),
+           "html_bytes=%d blocks=%d channel=%s json_bytes=%d "
+           "inproc_equal=%s cli_equal=%s"
+           % (len(html_gen), len(blocks), channel_ok(blocks),
+              len(json_shipped),
+              html_now == html_gen and json_now == json_shipped,
               cli_equal))
 
 
@@ -707,7 +735,7 @@ def check_read_bytes():
     html_now = M.render_html(copy, faces).encode("utf-8")
     json_now = M.render_json(faces).encode("utf-8")
     with open(M.OUT_HTML, "rb") as fh:
-        html_shipped = fh.read()
+        html_gen, blocks = page_without_channel(fh.read())
     with open(M.OUT_JSON, "rb") as fh:
         json_shipped = fh.read()
     root = temp_root("read-bytes-copy")
@@ -725,14 +753,16 @@ def check_read_bytes():
             cli_html = fh.read()
         with open(out_json, "rb") as fh:
             cli_json = fh.read()
-        cli_equal = cli_html == html_shipped and cli_json == json_shipped
+        cli_equal = cli_html == html_gen and cli_json == json_shipped
     record("AC-MFPR3",
-           html_now == html_shipped and json_now == json_shipped
-           and same_dict and proc.returncode == 0 and cli_equal,
-           "html_bytes=%d json_bytes=%d inproc_equal=%s twin_dict=%s "
-           "cli_equal=%s"
-           % (len(html_shipped), len(json_shipped),
-              html_now == html_shipped and json_now == json_shipped,
+           html_now == html_gen and json_now == json_shipped
+           and same_dict and proc.returncode == 0 and cli_equal
+           and channel_ok(blocks),
+           "html_bytes=%d blocks=%d channel=%s json_bytes=%d "
+           "inproc_equal=%s twin_dict=%s cli_equal=%s"
+           % (len(html_gen), len(blocks), channel_ok(blocks),
+              len(json_shipped),
+              html_now == html_gen and json_now == json_shipped,
               same_dict, cli_equal))
 
 
@@ -966,7 +996,7 @@ def check_write_bytes():
     out_json = os.path.join(root, "page.json")
     M.write_outputs(faces, copy, out_html, out_json)
     with open(M.OUT_HTML, "rb") as fh:
-        html_shipped = fh.read()
+        html_gen, blocks = page_without_channel(fh.read())
     with open(M.OUT_JSON, "rb") as fh:
         json_shipped = fh.read()
     with open(out_html, "rb") as fh:
@@ -984,14 +1014,16 @@ def check_write_bytes():
             cli_html_bytes = fh.read()
         with open(cli_json, "rb") as fh:
             cli_json_bytes = fh.read()
-        cli_equal = (cli_html_bytes == html_shipped
+        cli_equal = (cli_html_bytes == html_gen
                      and cli_json_bytes == json_shipped)
     record("AC-MFPW4",
-           html_now == html_shipped and json_now == json_shipped
-           and proc.returncode == 0 and cli_equal,
-           "html_bytes=%d json_bytes=%d inproc_equal=%s cli_equal=%s"
-           % (len(html_shipped), len(json_shipped),
-              html_now == html_shipped and json_now == json_shipped,
+           html_now == html_gen and json_now == json_shipped
+           and proc.returncode == 0 and cli_equal and channel_ok(blocks),
+           "html_bytes=%d blocks=%d channel=%s json_bytes=%d "
+           "inproc_equal=%s cli_equal=%s"
+           % (len(html_gen), len(blocks), channel_ok(blocks),
+              len(json_shipped),
+              html_now == html_gen and json_now == json_shipped,
               cli_equal))
 
 
@@ -1727,6 +1759,7 @@ def check_log_readback():
 def check_verify_proof():
     """AC-MFPX8: a proven log is named on stdout, and never inside itself."""
     problems = []
+    faces = M.collect(temp_root("proof-world"))
     root = temp_root("verify-proof")
     log = os.path.join(root, "verify.log")
     proc = subprocess.run([sys.executable, MODULE, "--verify", "--log", log],
@@ -1754,15 +1787,25 @@ def check_verify_proof():
         problems.append("a.mismatch=%s disk=%dB/%s"
                         % (lines[-1][:64], len(disk), sha16_bytes(disk)))
 
-    # b) the proof never enters the log, and nothing shipped moved
+    # b) the proof never enters the log, and nothing shipped moved. The log
+    # is pinned against the ANSWER this run printed, not a magic sha16: the
+    # answer quotes the demo snapshot's own size, which the seeder rewrites
+    # on every run, so a hard-coded digest could never be stable.
     if b"LOG OK" in disk:
         problems.append("b.proof-in-log")
-    if len(disk) != 661 or sha16_bytes(disk) != "271ba9eb7b2d1230":
-        problems.append("b.log=%dB/%s" % (len(disk), sha16_bytes(disk)))
+    answer = out[: out.rfind("LOG OK ")].replace("\r\n", "\n").encode("utf-8")
+    if disk != answer:
+        problems.append("b.log=%dB/%s answer=%dB/%s"
+                        % (len(disk), sha16_bytes(disk),
+                           len(answer), sha16_bytes(answer)))
     page = io.open(M.OUT_HTML, "rb").read()
     payload = io.open(M.OUT_JSON, "rb").read()
-    marks = (len(page), sha16_bytes(page), len(payload), sha16_bytes(payload))
-    if marks != (6834, "30527da5ec5dc7e2", 13015, "76e42600895a4dc5"):
+    html_gen, blocks = page_without_channel(page)
+    marks = (len(html_gen), sha16_bytes(html_gen), len(payload),
+             sha16_bytes(payload), len(blocks), channel_ok(blocks))
+    if not (html_gen == M.render_html(M.load_copy(), faces).encode("utf-8")
+            and payload == M.render_json(faces).encode("utf-8")
+            and channel_ok(blocks)):
         problems.append("b.shipped=%r" % (marks,))
 
     # c) a refusal never invents a proof - two failure faces

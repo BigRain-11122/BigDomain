@@ -457,17 +457,20 @@ def run(db_path, cfg, lobby_cfg, shas_before, clock, tmp):
            and wired
            and hygiene(os.path.join(BASE, "apimarket.py"))
            and hygiene(os.path.abspath(__file__)))
-    record("AC-BQM8 purity+determinism+wiring", ok8,
-           "tables_same=%s tx_same=%s twice=%s twin=%s wired=%s"
-           % (digests_before == digests_after,
-              txs_before == txs_after, first == second,
-              first == twin, wired))
 
     # -- product files untouched by the suite itself ---------------
+    # R3346: this reading used to be a second row carrying the same AC-BQM8
+    # label, so the suite recorded nine rows for eight declared criteria and
+    # the shard refused the leg as undeclared. The law is "one row per
+    # criterion", so both halves are judged here and printed together.
     shas_after = {p: sha_file(p) for p in PRODUCT_FILES}
     ok_pure = (shas_before == shas_after)
-    record("AC-BQM8 product files byte-identical", ok_pure,
-           "files=%d" % len(PRODUCT_FILES))
+    record("AC-BQM8 purity+determinism+wiring", ok8 and ok_pure,
+           "tables_same=%s tx_same=%s twice=%s twin=%s wired=%s files=%d "
+           "files_same=%s"
+           % (digests_before == digests_after,
+              txs_before == txs_after, first == second,
+              first == twin, wired, len(PRODUCT_FILES), ok_pure))
 
     close_stack(am, dk, metered, led)
 

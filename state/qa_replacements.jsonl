@@ -30,3 +30,6 @@
 {"event": "REPLACED", "name": "battery-shard-frontdoor-R3345.log", "new_bytes": 812, "new_sha16": "75fb032622af77f2", "old_bytes": 684, "old_sha16": "7ed8777e0eaab749", "ts": "2026-11-23T07:28:46Z"}
 {"event": "REPLACED", "name": "probe-R3345.log", "new_bytes": 424, "new_sha16": "d20a4cff6bb65959", "old_bytes": 424, "old_sha16": "d20a4cff6bb65959", "ts": "2026-11-23T07:29:57Z"}
 {"event": "REPLACED", "name": "negctl-R3345.log", "new_bytes": 260, "new_sha16": "6e8410e91e115ec7", "old_bytes": 261, "old_sha16": "9f3f939a07c89f5d", "ts": "2026-11-23T07:29:58Z"}
+{"event": "REPLACED", "name": "battery-shard-ledger-R3346.log", "new_bytes": 5849, "new_sha16": "e4bd059034743902", "old_bytes": 1182, "old_sha16": "ff485d84c291e03a", "ts": "2026-11-23T07:46:53Z"}
+{"event": "REPLACED", "name": "battery-shard-ledger-R3346.log", "new_bytes": 1315, "new_sha16": "0d364eff8675d1f8", "old_bytes": 1182, "old_sha16": "5e5bd4e621db1825", "ts": "2026-11-23T08:00:49Z"}
+{"event": "REPLACED", "name": "battery-shard-ugc-R3346.log", "new_bytes": 529, "new_sha16": "967fdf8bb661cd7e", "old_bytes": 401, "old_sha16": "fad04421447112f0", "ts": "2026-11-23T08:01:24Z"}

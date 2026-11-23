@@ -3,20 +3,20 @@
     "board_pages_skipped": [
       "preview/face-sweep.html (8878B)"
     ],
-    "current": "2026-11-23 R3345 PRODUCT+ENGINEERING: the largest honest debt of this company - 762 registry suites that no full battery leg has ever measured - became a reading: tools/shard_coverage.py now reports which suites a shard leg actually measured, green or red, at which round, and the first uncovered family was run and registered green.",
+    "current": "2026-11-23 R3346 PRODUCT+ENGINEERING: the coverage ledger advanced by family - the ten ledger suites and the three ugc suites were run as shard legs - and the ledger leg found a real red instead of a green tick: the monthly-faces page had grown the R3288 post-render back-hop block while its own suite still pinned the generator raw bytes, so four arms read a healthy shipped page as never-produced.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
     "last_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-23 commit]",
     "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-23 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ugc-gate-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/negctl-R3345.log (260B, 2026-11-23)",
-    "latest_evidence": "qa/negctl-R3345.log (260B, 2026-11-23)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/battery-shard-ugc-R3346.log (529B, 2026-11-23)",
+    "latest_evidence": "qa/battery-shard-ugc-R3346.log (529B, 2026-11-23)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3344] next window (<=48h): (1) 全量 762 行 battery 从未实跑（上一份全量证据 R2739：675 套件 / 4986.4s）——根因已量出=83 分钟而一窗 25 分钟；下窗用 `tools/battery_shard.py`（`--cap` 限单支、`--evidence` 落盘）按族切片逐窗跑一片并登记已跑族，直到覆盖 762。(2) 孤儿普查的**跨轮真形状**仍未实跑：本轮只证「记录在盘 + 活进程被点名」，未证「启动器被硬杀后其子进程留下记录、下一次起树拒绝」这条端到端链（硬杀会同时留下握端口的子进程，preoccupied 会先拦，需设计一个不握端口的子进程世界才能隔离）——下窗做这个隔离世界，判据=硬杀前后两次起树的判词并列。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。承（未变）：全量 762 行 battery 未实跑（R3313 AC-RCA5 只由代码路径证明）；`test_face_sweep` 54/56（AC-FSWB20/20c）；`BigDomain-OSLoop` LogonType=Interactive。产品真缺口仍是物理件｛商户号／服务器／域名／备案+ICP／小程序 appid+secret｝——买家仍付不了钱。",
-    "next_milestone_due": "2026-11-25T15:34:39+08:00",
-    "updated_at": "2026-11-23T15:34:39+08:00",
+    "next_milestone": "[R3345] next window (<=48h): (1) 覆盖读数已立，但**未覆盖 94 套件 / 933 判据仍在**，且 669 条已测量里 663 条早于 R3100——下窗按 `shard_coverage` 的族分组继续消耗，优先 `ledger`（10 支）与 `ugc`（3 支）两个小而单一族，每族一次 `battery_shard --evidence` 并在收口行登记新旧覆盖数对比。(2) `os` 族 73 支未覆盖里含 `os-sandbox-open`/`os-shard-coverage` 自身（自指是诚实噪声），下窗先只读量「os 未覆盖里有多少是 R3300 后新增的套件」再决定跑哪一片，禁整族盲跑。(3) 孤儿普查的**跨轮真形状**仍未实跑（R3344 搬来）：需一个不握端口的子进程世界，判据=硬杀前后两次起树的判词并列。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。承（未变）：全量 battery 未实跑；`test_face_sweep` 54/56（AC-FSWB20/20c）；`BigDomain-OSLoop` LogonType=Interactive；产品真缺口仍是物理件｛商户号／服务器／域名／备案+ICP／小程序 appid+secret｝——买家仍付不了钱。",
+    "next_milestone_due": "2026-11-25T16:06:16+08:00",
+    "updated_at": "2026-11-23T16:06:16+08:00",
     "heartbeat": {
-      "tick": 3345,
-      "state_tick": 3345,
+      "tick": 3346,
+      "state_tick": 3346,
       "lag": 0,
       "verdict": "PASS",
       "reason": "fresh"
@@ -35,17 +35,11 @@
       "note_claims": 0,
       "criteria_stale": 0,
       "criteria_claims": 0
-    },
-    "corpus": {
-      "files": 4835,
-      "bytes": 511603698,
-      "mb": 511.6,
-      "readable": 4835
     }
   },
-  "current": "2026-11-23 R3345 PRODUCT+ENGINEERING: the largest honest debt of this company - 762 registry suites that no full battery leg has ever measured - became a reading: tools/shard_coverage.py now reports which suites a shard leg actually measured, green or red, at which round, and the first uncovered family was run and registered green.",
-  "claims": {"claimed": 314, "captured": 95, "contradicted": 10, "uncaptured": 209, "historic": 7, "rows": 32, "present": true, "census_ts": "2026-11-23T15:34:39+08:00"},
-  "chain": {"present": true, "rows": 32, "broken": 0, "path": "state/qa_replacements.jsonl"},
+  "current": "2026-11-23 R3346 PRODUCT+ENGINEERING: the coverage ledger advanced by family - the ten ledger suites and the three ugc suites were run as shard legs - and the ledger leg found a real red instead of a green tick: the monthly-faces page had grown the R3288 post-render back-hop block while its own suite still pinned the generator raw bytes, so four arms read a healthy shipped page as never-produced.",
+  "claims": {"claimed": 315, "captured": 95, "contradicted": 10, "uncaptured": 210, "historic": 7, "rows": 35, "present": true, "census_ts": "2026-11-23T16:06:16+08:00"},
+  "chain": {"present": true, "rows": 35, "broken": 1, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -73,11 +67,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-23 R3345 PRODUCT+ENGINEERING: the largest honest debt of this company - 762 registry suites that no full battery leg has ever measured - became a reading: tools/shard_coverage.py now reports which suites a shard leg actually measured, green or red, at which round, and the first uncovered family was run and registered green.",
-  "export_ts": "2026-11-23T15:34:39+08:00",
+  "do": "2026-11-23 R3346 PRODUCT+ENGINEERING: the coverage ledger advanced by family - the ten ledger suites and the three ugc suites were run as shard legs - and the ledger leg found a real red instead of a green tick: the monthly-faces page had grown the R3288 post-render back-hop block while its own suite still pinned the generator raw bytes, so four arms read a healthy shipped page as never-produced.",
+  "export_ts": "2026-11-23T16:06:16+08:00",
   "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-23 commit]",
-  "latest_evidence": "qa/negctl-R3345.log (260B, 2026-11-23)",
-  "next_milestone": "[R3344] next window (<=48h): (1) 全量 762 行 battery 从未实跑（上一份全量证据 R2739：675 套件 / 4986.4s）——根因已量出=83 分钟而一窗 25 分钟；下窗用 `tools/battery_shard.py`（`--cap` 限单支、`--evidence` 落盘）按族切片逐窗跑一片并登记已跑族，直到覆盖 762。(2) 孤儿普查的**跨轮真形状**仍未实跑：本轮只证「记录在盘 + 活进程被点名」，未证「启动器被硬杀后其子进程留下记录、下一次起树拒绝」这条端到端链（硬杀会同时留下握端口的子进程，preoccupied 会先拦，需设计一个不握端口的子进程世界才能隔离）——下窗做这个隔离世界，判据=硬杀前后两次起树的判词并列。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。承（未变）：全量 762 行 battery 未实跑（R3313 AC-RCA5 只由代码路径证明）；`test_face_sweep` 54/56（AC-FSWB20/20c）；`BigDomain-OSLoop` LogonType=Interactive。产品真缺口仍是物理件｛商户号／服务器／域名／备案+ICP／小程序 appid+secret｝——买家仍付不了钱。",
+  "latest_evidence": "qa/battery-shard-ugc-R3346.log (529B, 2026-11-23)",
+  "next_milestone": "[R3345] next window (<=48h): (1) 覆盖读数已立，但**未覆盖 94 套件 / 933 判据仍在**，且 669 条已测量里 663 条早于 R3100——下窗按 `shard_coverage` 的族分组继续消耗，优先 `ledger`（10 支）与 `ugc`（3 支）两个小而单一族，每族一次 `battery_shard --evidence` 并在收口行登记新旧覆盖数对比。(2) `os` 族 73 支未覆盖里含 `os-sandbox-open`/`os-shard-coverage` 自身（自指是诚实噪声），下窗先只读量「os 未覆盖里有多少是 R3300 后新增的套件」再决定跑哪一片，禁整族盲跑。(3) 孤儿普查的**跨轮真形状**仍未实跑（R3344 搬来）：需一个不握端口的子进程世界，判据=硬杀前后两次起树的判词并列。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。承（未变）：全量 battery 未实跑；`test_face_sweep` 54/56（AC-FSWB20/20c）；`BigDomain-OSLoop` LogonType=Interactive；产品真缺口仍是物理件｛商户号／服务器／域名／备案+ICP／小程序 appid+secret｝——买家仍付不了钱。",
   "outs": [
     "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-23 commit]",
     "preview/platform-live-report.html (8621B) + preview/platform-live-report.json (6228B) [2026-11-23 mtime]",
@@ -149,7 +143,7 @@
       "2026-11-04 R2431 verification window on the item the debt gate named first=yes (reconcile-battery-R2431, carried from R2430): zero product code changed, the R2168 mixed-tree rule honoured. Leg 1 read 542/543 suites with the criteria total 4234 exactly as pre-registered and the only red was reconcile-daily-census at cd7 exit=2 DRIFT-FLAG; the census named the file (qa/battery-R2431-stdout.log, class=cmd-raw) because this window launched the battery with a Start-Process redirect pointed INTO the evidence directory. Repaired at the birth site, never by widening the baseline: the two launcher captures moved to the gitignored logs/ face, after which the census read flags=0 DRIFT-CLEAN with the 529-entry baseline untouched. Retry leg on the repaired tree: RUNNER PASS 543/543 suites plus controls 7/7 in 956.2s at criteria 4234, TMP RECLAIM 932/932. Four follow-up sections: matrix FAILED first on the stale doc without rewriting it, was regenerated stamp-aligned to 52317B, and the re-run read VERDICT R2431 PASS failing=none (fingerprint CLEAN 5 domains, profile byte-identical, census DRIFT-CLEAN). Debt: reconcile-battery-R2431 closed and product-face-R2432 opened first=yes through the shipped CLIs. Zero product points claimed."
     ],
     [
-      "3345",
+      "3346",
       "OSLoop 执行 tick",
       "a failed fold state write takes the appended archive block back and removes the backup"
     ]
@@ -163,21 +157,21 @@
   "self_drive": {
     "window": "2026-11-17..2026-11-23",
     "window_days": 7,
-    "log_lines_in_window": 143,
+    "log_lines_in_window": 142,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 24,
+    "substantive_non_idle_mention_lines": 18,
     "proposals_total": 11,
     "proposals_open": 9,
     "queue_main_open": 6,
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 78614,
-  "next_milestone_due": "2026-11-25T15:34:39+08:00",
+  "state_bytes": 77982,
+  "next_milestone_due": "2026-11-25T16:06:16+08:00",
   "heartbeat": {
-    "tick": 3345,
-    "state_tick": 3345,
+    "tick": 3346,
+    "state_tick": 3346,
     "lag": 0,
     "verdict": "PASS",
     "reason": "fresh"
@@ -196,11 +190,5 @@
     "note_claims": 0,
     "criteria_stale": 0,
     "criteria_claims": 0
-  },
-  "corpus": {
-    "files": 4835,
-    "bytes": 511603698,
-    "mb": 511.6,
-    "readable": 4835
   }
 }
