@@ -39,6 +39,10 @@ DEFAULT_EVIDENCE = os.path.join(ROOT, "qa")
 SHARD_GLOB = "battery-shard-*.log"
 ROW = re.compile(r"(?m)^SHARD row (\S+) rc=(-?\d+)")
 ROUND = re.compile(r"R(\d+)")
+# AC-ORC4: the shipped negative-control leg names itself in its evidence file
+# name, so a control arm is a fact about provenance rather than a hardcoded
+# label list every reader has to remember (R3345 explained the two in prose).
+CONTROL_LEG = re.compile(r"(?i)(^|[-_])negctl([-_]|$)")
 
 
 class Refuse(Exception):
@@ -95,11 +99,13 @@ def scan(evidence_dir):
         except OSError:
             continue
         rnd = round_of(path)
+        origin = os.path.basename(path)
         for label, rc in ROW.findall(text):
             rc = int(rc)
             current = measured.get(label)
             if current is None:
-                measured[label] = {"round": rnd, "rc": rc, "readings": 1}
+                measured[label] = {"round": rnd, "rc": rc, "readings": 1,
+                                   "source": origin}
                 continue
             current["readings"] += 1
             newer = rnd > current["round"]
@@ -108,6 +114,7 @@ def scan(evidence_dir):
             if newer or same_round_green:
                 current["round"] = rnd
                 current["rc"] = rc
+                current["source"] = origin
     return logs, measured
 
 
@@ -130,6 +137,7 @@ def report(rows, evidence_dir, stale_before=0):
             stale.append(label)
     uncovered = [(label, criteria) for label, criteria in rows if label not in covered]
     orphans = sorted(label for label in measured if label not in known)
+    census = orphan_census(orphans, measured)
     return {
         "evidence_logs": len(logs),
         "registry_suites": len(rows),
@@ -142,11 +150,31 @@ def report(rows, evidence_dir, stale_before=0):
         "uncovered_criteria": sum(criteria for _label, criteria in uncovered),
         "uncovered_labels": sorted(label for label, _criteria in uncovered),
         "orphan_labels": orphans,
+        "orphan_census": census,
+        "orphan_control": sum(1 for row in census if row["kind"] == "control"),
+        "orphan_unexplained": sum(1 for row in census
+                                  if row["kind"] == "unexplained"),
         "stale_before": int(stale_before),
         "stale": len(stale),
         "stale_labels": sorted(stale),
         "verdict": "COVERED-ALL" if not uncovered else "UNCOVERED",
     }
+
+
+def orphan_census(orphans, measured):
+    """AC-ORC1/AC-ORC4: each orphan label says what it is and where it came from.
+
+    A label is a control arm when the newest evidence that measured it comes
+    from a leg whose file name declares itself a negative control. Anything
+    else is unexplained and must be named as such - the census never guesses
+    and never silently absolves a label.
+    """
+    out = []
+    for label in orphans:
+        source = measured.get(label, {}).get("source", "")
+        kind = "control" if CONTROL_LEG.search(source or "") else "unexplained"
+        out.append({"label": label, "source": source, "kind": kind})
+    return out
 
 
 def render_text(result, rows_by_label):
@@ -164,6 +192,13 @@ def render_text(result, rows_by_label):
     if result["orphan_labels"]:
         out.append("SHARD-COVERAGE orphans %s"
                    % ",".join(result["orphan_labels"]))
+        out.append("SHARD-COVERAGE orphan-census total=%d control=%d "
+                   "unexplained=%d"
+                   % (len(result["orphan_census"]), result["orphan_control"],
+                      result["orphan_unexplained"]))
+        for row in result["orphan_census"]:
+            out.append("SHARD-COVERAGE orphan-kind %s %s source=%s"
+                       % (row["kind"], row["label"], row["source"] or "unknown"))
     if result["stale"]:
         out.append("SHARD-COVERAGE stale_before=R%d %s"
                    % (result["stale_before"], ",".join(result["stale_labels"])))
@@ -186,6 +221,9 @@ def main(argv=None):
     parser.add_argument("--stale-before", type=int, default=0,
                         help="round number; covered rows measured earlier are named stale")
     parser.add_argument("--json", action="store_true")
+    parser.add_argument("--strict-orphans", action="store_true",
+                        help="AC-ORC3: rc=4 when any orphan label is not a "
+                             "declared control arm")
     args = parser.parse_args(argv)
     try:
         rows = registry_rows(args.registry or None)
@@ -197,6 +235,8 @@ def main(argv=None):
         print(json.dumps(result, indent=2, sort_keys=True))
     else:
         print(render_text(result, {label: criteria for label, criteria in rows}))
+    if args.strict_orphans and result["orphan_unexplained"]:
+        return 4
     return 0
 
 

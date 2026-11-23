@@ -513,7 +513,7 @@ SUITES = [
     # newest reading follows the round in the evidence name instead of its mtime,
     # and orphan labels are named without ever counting as covered.
     ("os-shard-coverage",
-     os.path.join("..", "os", "test_shard_coverage.py"), 6),
+     os.path.join("..", "os", "test_shard_coverage.py"), 12),
     # snapshot pin census (R3348): R3347 cleared two reds that were not product
     # defects but assertions writing the current shape of the tree into a number.
     # The corpus is every test_*.py (a UTF-8 BOM is its own dialect reading and

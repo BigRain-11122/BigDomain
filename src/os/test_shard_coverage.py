@@ -18,6 +18,7 @@ TOOL_REL = os.path.join(ROOT, "tools", "shard_coverage.py")
 REGISTRY_REL = os.path.join(ROOT, "src", "sandbox", "reconcile_all.py")
 
 FAILS = []
+EXPECTED = 12
 
 
 def check(name, ok, detail):
@@ -140,6 +141,104 @@ def main():
               % (empty_result["verdict"], full_result["verdict"],
                  missing_dir, refused_registry))
 
+        # AC-ORC1..AC-ORC6 (R3376): the orphan census says what each label is.
+        census_dir = os.path.join(tmp, "census")
+        os.makedirs(census_dir)
+        write_log(census_dir, "battery-shard-negctl-R2797.log",
+                  "SHARD row ctl-good rc=0\nSHARD row ctl-bad rc=1\n")
+        write_log(census_dir, "battery-shard-real-R3300.log",
+                  "SHARD row %s rc=0\n" % labels[0])
+        census = tool.report(rows, census_dir)
+        kinds = dict((row["label"], row["kind"]) for row in census["orphan_census"])
+        text = tool.render_text(census, by_label)
+        check("AC-ORC1", kinds == {"ctl-bad": "control", "ctl-good": "control"}
+              and census["orphan_control"] == 2
+              and census["orphan_unexplained"] == 0
+              and all(row["source"] == "battery-shard-negctl-R2797.log"
+                      for row in census["orphan_census"])
+              and "orphan-census total=2 control=2 unexplained=0" in text
+              and "orphan-kind control ctl-bad source=battery-shard-negctl-R2797.log"
+              in text,
+              "kinds=%s text_has_census=%s"
+              % (kinds, "orphan-census total=2" in text))
+
+        # AC-ORC2: classifying an orphan never inflates a coverage counter.
+        check("AC-ORC2", census["covered"] == 1
+              and census["green"] == 1 and census["red"] == 0
+              and census["uncovered"] == len(rows) - 1
+              and not (set(census["orphan_labels"])
+                       & set(labels)),
+              "covered=%d green=%d red=%d uncovered=%d orphan_in_registry=%d"
+              % (census["covered"], census["green"], census["red"],
+                 census["uncovered"],
+                 len(set(census["orphan_labels"]) & set(labels))))
+
+        # AC-ORC3: an unexplained orphan reddens only under --strict-orphans.
+        lonely = os.path.join(tmp, "lonely")
+        os.makedirs(lonely)
+        write_log(lonely, "battery-shard-alone-R3300.log",
+                  "SHARD row ghost-orphan rc=0\n")
+        default_rc = tool.main(["--evidence-dir", lonely])
+        strict_rc = tool.main(["--evidence-dir", lonely, "--strict-orphans"])
+        control_only_rc = tool.main(["--evidence-dir", census_dir,
+                                     "--strict-orphans"])
+        check("AC-ORC3", default_rc == 0 and strict_rc == 4
+              and control_only_rc == 0,
+              "default_rc=%d strict_rc=%d control_only_rc=%d"
+              % (default_rc, strict_rc, control_only_rc))
+
+        # AC-ORC4: the newest round decides, so a label graduates out of control.
+        graduate = os.path.join(tmp, "graduate")
+        os.makedirs(graduate)
+        write_log(graduate, "battery-shard-negctl-R2900.log",
+                  "SHARD row ctl-grad rc=0\n")
+        write_log(graduate, "battery-shard-realleg-R3300.log",
+                  "SHARD row ctl-grad rc=0\n")
+        graduated = tool.report(rows, graduate)
+        back = os.path.join(tmp, "backdated")
+        os.makedirs(back)
+        write_log(back, "battery-shard-realleg-R2900.log",
+                  "SHARD row ctl-grad rc=0\n")
+        write_log(back, "battery-shard-negctl-R3300.log",
+                  "SHARD row ctl-grad rc=0\n")
+        backdated = tool.report(rows, back)
+        check("AC-ORC4",
+              graduated["orphan_census"][0]["kind"] == "unexplained"
+              and graduated["orphan_census"][0]["source"]
+              == "battery-shard-realleg-R3300.log"
+              and backdated["orphan_census"][0]["kind"] == "control"
+              and backdated["orphan_census"][0]["source"]
+              == "battery-shard-negctl-R3300.log",
+              "graduated=%s backdated=%s"
+              % (graduated["orphan_census"][0]["kind"],
+                 backdated["orphan_census"][0]["kind"]))
+
+        # AC-ORC5: the census writes nothing and its json is byte-stable.
+        listing_before = sorted(os.listdir(census_dir))
+        runs = []
+        for _ in range(2):
+            buffer = io.StringIO()
+            with contextlib.redirect_stdout(buffer):
+                rc = tool.main(["--json", "--evidence-dir", census_dir,
+                                "--strict-orphans"])
+            runs.append((rc, buffer.getvalue()))
+        listing_after = sorted(os.listdir(census_dir))
+        check("AC-ORC5", runs[0][0] == 0 and runs[1][0] == 0
+              and runs[0][1] == runs[1][1]
+              and listing_before == listing_after
+              and "orphan_census" in runs[0][1],
+              "json_bytes=%d identical=%s dir_unchanged=%s"
+              % (len(runs[0][1]), runs[0][1] == runs[1][1],
+                 listing_before == listing_after))
+
+        # AC-ORC6: no control label is hardcoded - provenance is the only source.
+        check("AC-ORC6", "ctl-good" not in source and "ctl-bad" not in source
+              and "negctl" in source
+              and EXPECTED == 12,
+              "hardcoded=%s negctl_rule=%s criteria=%d"
+              % ("ctl-good" in source or "ctl-bad" in source,
+                 "negctl" in source, EXPECTED))
+
         # AC-SHC6: the reading writes nothing and its json is byte-stable.
         stable = os.path.join(tmp, "stable")
         os.makedirs(stable)
@@ -168,7 +267,7 @@ def main():
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
-    criteria = 6
+    criteria = EXPECTED
     passed = criteria - len(FAILS)
     if FAILS:
         print("SUITE FAIL %d/%d failed=%s" % (passed, criteria, ",".join(FAILS)))
