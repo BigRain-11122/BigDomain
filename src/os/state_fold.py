@@ -73,6 +73,17 @@ VERDICTS = ("FOLD-CLEAR", "FOLD-DUE")
 # exists to prevent.
 ARCHIVE_MARKER_RE = re.compile(r"^#\s*---\s*R(\d{3,5})\b")
 ROUND_LABEL_RE = re.compile(r"^R(\d{3,5})$")
+# R3365 (AC-SF8, pinned in src/os/backlog.md before this edit): the header
+# writes round_label verbatim, while the archive reader can only recover a
+# round from two numeric shapes (R####, and the legacy bare #### read by
+# logs_toolkit CEN_HDR_BARE) plus its own probe labels. The measured defect
+# was a fold called with the FOLD NUMBER in the round slot - "642" - which
+# round_marker() cannot order (so no collision check ran) and CEN_HDR_BARE
+# cannot read (so the section landed unlabelled in the census). A writer that
+# emits a header its reader cannot read is refused here, before any byte
+# moves; letter-initial labels stay free because the probe path (RTEST) is a
+# documented consumer of this door rather than a numeric round.
+ROUND_LABEL_WRITE_RE = re.compile(r"^(?:R?\d{4,}|[A-Za-z][A-Za-z0-9_-]*)$")
 REFOLD_DECL = "re-fold"
 
 ITEM_INDENT = 16
@@ -481,6 +492,13 @@ def fold(root, round_label, fold_no, window_start, window_end, summary,
     window for one round, a silent one may not.
     """
     path = state_path(root)
+    if not ROUND_LABEL_WRITE_RE.match(str(round_label if round_label is not None else "")):
+        raise StateFoldError(
+            "E_SF_BAD_ROUND",
+            "round label %r is not a shape the archive reader can read: pass "
+            "R#### (or a legacy bare ####), never a fold number; the header "
+            "is written verbatim and an unreadable label lands as an "
+            "unlabelled section" % (round_label,))
     raw, state = read_state(path)
     cov_archive = archive_path or default_archive(root)
     covered = archive_tokens(cov_archive)

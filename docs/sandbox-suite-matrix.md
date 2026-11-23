@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 764 | 6401 | 675/675 | R2739 |
+| 764 | 6402 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -508,7 +508,7 @@
 | 469 | os-ledger-closeout | ../os/test_ledger_closeout.py | 8 | green | 1.4 |
 | 470 | os-logs-inventory | ../os/test_logs_inventory.py | 31 | green | 2.0 |
 | 471 | os-queue-floor | ../os/test_queue_floor.py | 8 | green | 1.2 |
-| 472 | os-state-fold | ../os/test_state_fold.py | 7 | green | 1.0 |
+| 472 | os-state-fold | ../os/test_state_fold.py | 8 | green | 1.0 |
 | 473 | os-state-fold-run | ../os/test_state_fold_run.py | 18 | green | 0.2 |
 | 474 | os-fold-round-block-boundary | ../os/test_fold_round_block_boundary.py | 6 | green | 0.4 |
 | 475 | os-state-io | ../os/test_state_io.py | 12 | green | 1.5 |
@@ -801,7 +801,7 @@
 | 762 | claim-census | test_claim_census.py | 10 | no-evidence | - |
 | 763 | os-stage-residue | ../os/test_stage_residue.py | 4 | no-evidence | - |
 | 764 | os-corpus-supply-chain | ../os/test_corpus_supply_chain.py | 7 | no-evidence | - |
-|  | 合计 |  | 6401 | green 675 / FAIL 0 / no-evidence 89 |  |
+|  | 合计 |  | 6402 | green 675 / FAIL 0 / no-evidence 89 |  |
 
 ## 证据出处
 

@@ -1,0 +1,10 @@
+state_fold_run --check rc=0 STATE FOLD bytes=56734 gate=78500 margin=21766 log_lines=110 verdict=FOLD-CLEAR archive=present
+logs_toolkit census rc=0 pass=True unlabeled=[] unknown_mismatch=0 header_lines=832 section_mismatches=4
+test_state_fold rc=0 SUITE PASS 8/8
+test_logs_toolkit rc=0 SUITE PASS 179/179
+test_state_fold_run rc=0 SUITE PASS 18/18
+test_archive_provenance rc=0 SUITE PASS 6/6 criteria
+test_carrier_dialect_pin rc=0 SUITE PASS 8/8 in 7.3s
+test_ledger_archive rc=0 SUITE PASS 15/15 criteria
+# R3365: the archive marker was corrected to "# --- R3351 fold append" with payload lines byte-identical and declared 123 == body 123
+# the gate is load-bearing: see qa/negctl-R3365.log

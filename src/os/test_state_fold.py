@@ -8,7 +8,8 @@ window moves verbatim and its tokens survive in the summary (AC-SF2), the
 archive grows by append and never by rewrite (AC-SF3), --check writes nothing
 (AC-SF4), the same plan run twice equals itself and every bad plan is refused
 before any write (AC-SF5), and the module is pure ASCII, stdlib, no network
-and wired into the battery (AC-SF6).
+and wired into the battery (AC-SF6); the writer refuses a round label its
+archive reader cannot read (AC-SF8, R3365).
 
 Stdlib only, ASCII source, zero network. Exit 0 = all green.
 """
@@ -29,7 +30,7 @@ sys.path.insert(0, BASE)
 
 import state_fold as SF  # noqa: E402
 
-EXPECTED_CRITERIA = 7
+EXPECTED_CRITERIA = 8
 MODULE = os.path.join(BASE, "state_fold.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-state-fold"
@@ -309,10 +310,10 @@ def run():
     # after the needle opens the arm, and so does dropping the needle.
     if needle in runner and runner.count(needle) == 1:
         window = runner[runner.find(needle):][:60]
-        wired = ", 7)" in window
+        wired = ", 8)" in window
     check(ascii_ok and clean and wired and "AC-SF" in source,
           "AC-SF6 source ASCII, stdlib only, no network, predicate single "
-          "owned and wired as os-state-fold(7)")
+          "owned and wired as os-state-fold(8)")
 
     # AC-SF7: a marker is never reused SILENTLY (R3088). Measured before the
     # gate was written: 5 post-pin archive windows carry 4 markers between
@@ -380,6 +381,52 @@ def run():
     finally:
         drop_world(world)
 
+    # AC-SF8: the writer refuses a label its own archive reader cannot read
+    # (R3365). Measured before the gate existed: a fold called with the FOLD
+    # number in the round slot wrote "# --- 642 fold append", which the census
+    # reads as an unlabelled section - round_marker() cannot order "642", so
+    # even the collision check never ran.
+    world = make_world(["R3001 alpha AC-SF8", "R3002 beta AC-SF8",
+                        "R3003 gamma"])
+    try:
+        import logs_toolkit as LT
+        before = digest_tree(world)
+        refused = {}
+        for label in ("642", "", "   "):
+            try:
+                SF.fold(world, label, 643, 1, 1,
+                        "carry-forward R3001 (AC-SF8 refused)", execute=True)
+            except SF.StateFoldError as exc:
+                refused[label] = exc.code
+        refused_ok = (refused.get("642") == "E_SF_BAD_ROUND"
+                      and refused.get("") == "E_SF_BAD_ROUND"
+                      and refused.get("   ") == "E_SF_BAD_ROUND"
+                      and digest_tree(world) == before)
+        legacy = SF.fold(world, "2857", 644, 1, 1,
+                         "carry-forward R3001 (AC-SF8 legacy bare, AC-SF8)",
+                         execute=True)
+        with io.open(SF.default_archive(world), "r", encoding="utf-8") as fh:
+            last_header = [ln for ln in fh.read().split("\n")
+                           if ln.startswith("# --- ")][-1]
+        readback = LT.header_rounds(last_header)
+        legacy_ok = (legacy["would_fail"] == []
+                     and readback == ["R2857"]
+                     and legacy["predicted_eq_actual"] is True)
+        probe = SF.fold(world, "RTEST", 645, 1, 1,
+                        "carry-forward R3002 (AC-SF8 probe label)",
+                        execute=True)
+        with io.open(SF.default_archive(world), "r", encoding="utf-8") as fh:
+            probe_header = [ln for ln in fh.read().split("\n")
+                            if ln.startswith("# --- ")][-1]
+        probe_ok = (probe["would_fail"] == []
+                    and probe_header.startswith("# --- RTEST fold append ("))
+        check(refused_ok and legacy_ok and probe_ok,
+              "AC-SF8 a fold-number label ('642') and an empty label are "
+              "refused before any write, while a legacy bare #### and a "
+              "letter-initial probe label still write headers the archive "
+              "reader reads back")
+    finally:
+        drop_world(world)
 
 if __name__ == "__main__":
     run()

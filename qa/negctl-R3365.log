@@ -1,0 +1,3 @@
+shipped=E_SF_BAD_ROUND archive_absent=True state_bytes_held=True
+mutant_would_fail=[] header='# --- 642 fold append (2026-11-24,' reader=None marker=None
+NEGCTL PASS
