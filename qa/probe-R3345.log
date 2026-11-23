@@ -1,0 +1,8 @@
+R3345 shard coverage probe (read-only over qa/, no network)
+registry suites=763 criteria=6386
+BEFORE logs=90 covered=663 green=662 red=1 uncovered=100/954 orphan=2
+AFTER logs=91 covered=669 green=668 red=1 uncovered=94/933 orphan=2
+DELTA covered=+6 uncovered=-6 from battery-shard-frontdoor-R3345.log
+STALE stale_before=R3100 measured=663 of covered=669
+ORPHANS ctl-bad,ctl-good
+VERDICT UNCOVERED (a shard is not a battery)

@@ -1,0 +1,5 @@
+R3345 negative control for tools/shard_coverage.py (private corpus)
+M1 mtime-newest rc=2 shipped_red=1 reddens=True
+M2 any-mention covered=7 shipped_covered=2 reddens=True
+M3 fold-red-into-green green=2 shipped_green=1 reddens=True
+CONTROL verdict=PASS arms=3

@@ -506,6 +506,14 @@ SUITES = [
     # depending only on the report, which is what makes the OS reading carry the
     # verdict instead of the report's self-description.
     ("os-sandbox-open", "test_open_sandbox.py", 10),
+    # shard coverage (R3345): "the full battery has never been run" was carried
+    # as a sentence while ninety shard legs already sat in qa/. The suite set is
+    # read from this same registry, a suite counts as measured only from a
+    # "SHARD row" line, rc!=0 stays red rather than being folded into green, the
+    # newest reading follows the round in the evidence name instead of its mtime,
+    # and orphan labels are named without ever counting as covered.
+    ("os-shard-coverage",
+     os.path.join("..", "os", "test_shard_coverage.py"), 6),
     # lobby room picker and event ledger (R2464): GET /lobby/api/rooms answers
     # the server OWN configured rooms (never a literal in the module or page),
     # the page gains a selector that subscribes the new room and releases the
