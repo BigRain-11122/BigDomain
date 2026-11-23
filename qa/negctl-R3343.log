@@ -1,0 +1,5 @@
+CONTROL intact        covered=8/8 missing=- unlinked=- unwired=-
+M1 card removed covered=7/8 names=gate
+M2 anchor removed covered=7/8 names=gate
+M3 wire removed covered=7/8 names=gate
+NEGCTL verdict=PASS

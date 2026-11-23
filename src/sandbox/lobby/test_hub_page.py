@@ -4,7 +4,8 @@ Nine criteria plus AC-HUB10, each read off a REAL server process and the ports
 it actually bound (AC-HUB1..AC-HUB6 were pre-registered in src/os/backlog.md at
 R2462 BEFORE this module, the page and this suite existed; AC-HUB7 was
 pre-registered in the R3332 backlog row, AC-HUB8 in the R3336 row, AC-HUB9 in
-the R3337 row and AC-HUB10 in the R3338 row, each before their code landed):
+the R3337 row, AC-HUB10 in the R3338 row and AC-HUB12 in the R3343 row, each
+before their code landed):
 
   AC-HUB1  GET /hub/ answers 200 text/html with bytes identical to the page on
            disk, bigger than 2000 bytes, and the page makes no external
@@ -70,6 +71,16 @@ the R3337 row and AC-HUB10 in the R3338 row, each before their code landed):
            stalled body is bounded, a face that never answers is still dead and
            still costs its read budget, and a face that needs 350ms to answer
            is still live so the header phase keeps the whole budget.
+  AC-HUB12 every face the hub can publish is reachable from the page (R3343
+           counted the payload's eight face ids against the page's seven cards:
+           the missing one was the entrance gate, which the R3332 click chain
+           made the FIRST step of the 19.9 flow - 403 E_ENTRANCE_REQUIRED):
+           build_faces with all eight ports reads a card, a link anchor and a
+           wire() consumer for each id, the gate card is wiring-real, and the
+           SAME parser over a copy with the gate card/anchor/read removed reads
+           covered=7/8 naming gate - so the reading decides, not a constant.
+           The standing page laws are re-read in the same arm (no autotimer,
+           exactly two fetch calls) so this card cannot cost AC-HUB9.
 """
 
 import hashlib
@@ -109,6 +120,30 @@ def free_port():
     port = sock.getsockname()[1]
     sock.close()
     return port
+
+
+def page_cover(text, faces):
+    """Which published faces the page really exposes: card, anchor, wire().
+
+    AC-HUB12: the three parts are separate on purpose - a card with no anchor
+    is a dead promise, an anchor with no wire() keeps a literal '#', and a
+    wire() read with no card prints the URL to nobody.
+    """
+    covered = 0
+    missing, unlinked, unwired = [], [], []
+    for face in faces:
+        has_card = ('data-face="%s"' % face) in text
+        has_link = ('id="link-%s"' % face) in text
+        has_wire = ("data.%s" % face) in text
+        if has_card and has_link and has_wire:
+            covered += 1
+        if not has_card:
+            missing.append(face)
+        if not has_link:
+            unlinked.append(face)
+        if not has_wire:
+            unwired.append(face)
+    return covered, missing, unlinked, unwired
 
 
 def http_get(url, timeout=6.0):
@@ -687,7 +722,56 @@ def main():
         if leg is not None:
             leg.close()
 
-    total = 11
+    # ---------------- AC-HUB12 ----------------
+    try:
+        # (a) coverage: every face the hub CAN publish is on the page
+        all_faces = hub_page.build_faces(
+            "127.0.0.1", free_port(), web_port=free_port(),
+            city_port=free_port(), checkout_port=free_port(),
+            gate_port=free_port(), ledger_port=free_port(),
+            ugc_port=free_port(), panel_port=free_port(),
+            member_port=free_port())
+        published = sorted(all_faces["face_ports"])
+        page_text = disk_bytes.decode("utf-8")
+        covered, missing, unlinked, unwired = page_cover(page_text, published)
+        assert len(published) == 8, "published faces=%r" % (published,)
+        assert not missing, "no card for published face(s): %s" % (missing,)
+        assert not unlinked, "no link anchor for: %s" % (unlinked,)
+        assert not unwired, "wire() never reads data.<face> for: %s" % (unwired,)
+
+        # (b) the gate card is wiring-real and its fallback is honest
+        assert 'id="link-gate"' in page_text, "gate anchor id missing"
+        assert 'id="link-gate" href="#"' in page_text, (
+            "the gate anchor does not start on a literal #")
+        assert "data.gate" in page_text, "wire() does not consume data.gate"
+
+        # (c) negative control: the same parser over a page with gate removed
+        hole = page_text.replace('data-face="gate"', 'data-face="gate-x"')
+        hole = hole.replace('id="link-gate"', 'id="link-gate-x"')
+        hole = hole.replace("data.gate", "data.GATE_OFF")
+        h_covered, h_missing, _, _ = page_cover(hole, published)
+        assert h_missing == ["gate"], (
+            "the hole read missing=%r, so the reading is not load-bearing"
+            % (h_missing,))
+        assert h_covered == len(published) - 1, (
+            "hole covered=%d of %d" % (h_covered, len(published)))
+
+        # (d) this card must not cost the standing page laws
+        assert not re.search(r"setInterval|setTimeout|requestAnimationFrame",
+                             page_text), "an autotimer appeared on the page"
+        assert page_text.count("fetch(") == 2, (
+            "fetch count=%d, expected the list read and the probe read"
+            % page_text.count("fetch("))
+
+        print("PASS AC-HUB12 covered=%d/%d gate_card=True hole=%d/%d "
+              "hole_missing=%s timers=0 fetch=2"
+              % (covered, len(published), h_covered, len(published),
+                 ",".join(h_missing)))
+    except AssertionError as exc:
+        failed += 1
+        print("FAIL AC-HUB12 :: %s" % exc)
+
+    total = 12
     if failed:
         print("SUITE FAIL %d/%d" % (total - failed, total))
         return 1

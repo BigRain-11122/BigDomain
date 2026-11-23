@@ -1,0 +1,4 @@
+R3343 PUBLISHED faces=8 ids=checkout,city,gate,ledger,lobby,member,panel,ugc
+BEFORE(HEAD) covered=7/8 missing=gate unlinked=gate unwired=gate gate_card=False
+AFTER(disk) covered=8/8 missing=- unlinked=- unwired=- gate_anchor=True gate_wire=True
+HOLE(gate removed) covered=7/8 missing=gate
