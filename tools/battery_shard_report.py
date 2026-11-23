@@ -422,9 +422,13 @@ def do_check():
     if fails:
         print("BSR-CHECK RED %s" % ",".join(fails))
         return 2
-    print("BSR-CHECK name=battery-shard-report checks=8 bytes_html=%d "
-          "bytes_json=%d verdict=%s read_only=True"
-          % (stats[OUT_HTML][0], stats[OUT_JSON][0], payload["verdict"]))
+    # R3354: the check line announces the pair's bytes in the shape the
+    # deliverable index reads from a producer (`html=NNNB`), so a row that
+    # quotes this pair is verifiable by running the command it prints.
+    print("BSR-CHECK name=battery-shard-report checks=8 html=%dB json=%dB "
+          "bytes_html=%d bytes_json=%d verdict=%s read_only=True"
+          % (stats[OUT_HTML][0], stats[OUT_JSON][0],
+             stats[OUT_HTML][0], stats[OUT_JSON][0], payload["verdict"]))
     print("BSR-CHECK VERDICT PASS")
     return 0
 

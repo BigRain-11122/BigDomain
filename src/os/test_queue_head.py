@@ -15,6 +15,7 @@ Stdlib only, ASCII source, zero network. Exit 0 = all green.
 import io
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -229,8 +230,112 @@ def ac_qhd5():
     check(ok, "AC-QHD5 CLI codes 0/2/3/5, --json pinned, nothing written")
 
 
+LIVE_HEAD_RE = re.compile(
+    r"^QUEUE HEAD (\S+) line=(\d+) prefix=(\S+) skipped_before=(\d+)")
+LIVE_NONE_RE = re.compile(
+    r"^QUEUE HEAD (\S+) NO-HEAD open=(\d+) claimable=(\d+) gated=(\d+)")
+LIVE_SKIP_RE = re.compile(r"^  SKIP (\S+):(\d+) (\S+)")
+
+
+def live_defects(report, rows):
+    """AC-QHD6 (R3354): name every way a live report disagrees with its file.
+
+    The old arm required the live queue to carry a claimable head, so a queue
+    that legitimately drained turned red. This judges the RELATIONSHIP instead:
+    whatever verdict the reading prints has to be accounted for by the file.
+    """
+    out = []
+    open_rows = {}
+    for idx, row in enumerate(rows, 1):
+        if row.startswith("- [ ]"):
+            open_rows[idx] = row
+    skips = []
+    head = None
+    none = None
+    for line in report.splitlines():
+        m = LIVE_SKIP_RE.match(line)
+        if m:
+            skips.append((m.group(1), int(m.group(2)), m.group(3)))
+            continue
+        m = LIVE_HEAD_RE.match(line)
+        if m:
+            head = (int(m.group(2)), m.group(3), int(m.group(4)))
+            continue
+        m = LIVE_NONE_RE.match(line)
+        if m:
+            none = (int(m.group(2)), int(m.group(3)), int(m.group(4)))
+    if head is None and none is None:
+        return ["verdict-missing"]
+    if head is not None and none is not None:
+        out.append("two-verdicts")
+    skip_lines = [s[1] for s in skips]
+    for line_no in skip_lines:
+        if line_no not in open_rows:
+            out.append("skip-not-open:%d" % line_no)
+    if len(set(skip_lines)) != len(skip_lines):
+        out.append("skip-duplicated")
+    if head is not None:
+        line_no, prefix, skipped_before = head
+        if line_no not in open_rows:
+            out.append("head-not-open:%d" % line_no)
+        elif prefix not in open_rows[line_no]:
+            out.append("head-prefix-missing:%s@%d" % (prefix, line_no))
+        earlier = [n for n in sorted(open_rows) if n < line_no]
+        for n in earlier:
+            if n not in skip_lines:
+                out.append("earlier-open-not-skipped:%d" % n)
+        if skipped_before != len(earlier):
+            out.append("skipped-before:%d!=%d" % (skipped_before, len(earlier)))
+    if none is not None:
+        opn, claim, gated = none
+        if opn != len(open_rows):
+            out.append("open-count:%d!=%d" % (opn, len(open_rows)))
+        if len(skips) != opn:
+            out.append("skip-count:%d!=%d" % (len(skips), opn))
+        if claim + gated != opn:
+            out.append("split:%d+%d!=%d" % (claim, gated, opn))
+    return out
+
+
+def live_control():
+    """AC-QHD6 (R3354) control: the faithful-reading law must redden.
+
+    Synthetic report strings, so the control does not depend on today's queue.
+    """
+    rows = ["# queue world", "",
+            "- [ ] bare row without criteria",
+            "- [x] [done] a closed row",
+            "- [ ] the real head (Criteria prefix AC-ZZ1)"]
+    rows_none = ["# queue world", "- [ ] bare row"]
+    good = ("QUEUE HEAD tech line=5 prefix=AC-ZZ1 skipped_before=1 "
+            "claimable=1\n  SKIP state/queue/tech.md:3 NO-CRITERIA\n")
+    none_good = ("QUEUE HEAD tech NO-HEAD open=1 claimable=1 gated=0\n"
+                 "  SKIP state/queue/tech.md:2 NO-CRITERIA\n")
+    cases = [
+        ("head-closed", good.replace("line=5 ", "line=4 "), rows),
+        ("head-prefix", good.replace("prefix=AC-ZZ1 ", "prefix=AC-YY2 "), rows),
+        ("skip-closed", good.replace(":3 ", ":4 "), rows),
+        ("earlier-open", good.replace(
+            "  SKIP state/queue/tech.md:3 NO-CRITERIA\n", ""), rows),
+        ("skipped-before", good.replace("skipped_before=1", "skipped_before=0"),
+         rows),
+        ("none-open-count", none_good.replace("open=1", "open=2"), rows_none),
+        ("none-skip-count", none_good + "  SKIP state/queue/tech.md:2 "
+         "NO-CRITERIA\n", rows_none),
+    ]
+    green = []
+    if live_defects(good, rows):
+        green.append("head-arm:%r" % (live_defects(good, rows),))
+    if live_defects(none_good, rows_none):
+        green.append("none-arm:%r" % (live_defects(none_good, rows_none),))
+    reds = [name for name, rep, rowset in cases if not live_defects(rep, rowset)]
+    if reds:
+        green.append("not-load-bearing:%s" % ",".join(reds))
+    return (not green and len(cases) == 7, ",".join(green) or "all-7-red")
+
+
 def ac_qhd6():
-    """Purity, ASCII source, no network, wired, live head names a real row."""
+    """Purity, ASCII source, no network, wired, live reading is faithful."""
     with io.open(MODULE, "rb") as handle:
         raw = handle.read()
     ascii_only = True
@@ -247,27 +352,23 @@ def ac_qhd6():
     wired = (LABEL in wiring) and ("test_queue_head.py" in wiring) \
         and ("os\", \"test_queue_head.py\"), 6)" in wiring)
     live = run_cli(["--head", "tech"])
-    live_ok = False
-    if live[0] == 0:
-        line_no = None
-        prefix = None
-        for part in live[1].split():
-            if part.startswith("line="):
-                line_no = int(part.split("=", 1)[1])
-            elif part.startswith("prefix="):
-                prefix = part.split("=", 1)[1]
-        if line_no is not None and prefix is not None:
-            with io.open(os.path.join(REPO, "state", "queue", "tech.md"),
-                         "r", encoding="utf-8") as handle:
-                rows = handle.read().split("\n")
-            if 0 < line_no <= len(rows):
-                row = rows[line_no - 1]
-                live_ok = (row.startswith("- [ ]") and prefix in row)
+    with io.open(os.path.join(REPO, "state", "queue", "tech.md"),
+                 "r", encoding="utf-8") as handle:
+        rows = handle.read().split("\n")
+    defects = live_defects(live[1], rows)
+    # AC-QHD6 (R3354): the reading must be a faithful reading of the live file,
+    # not a claim that the queue happens to carry a head today. Both branches
+    # are law: a named head has to be the row it says and every earlier open
+    # row has to appear as a skip; a NO-HEAD verdict has to account for every
+    # open row with a named line number and a matching split.
+    ctrl_ok, ctrl_detail = live_control()
+    live_ok = live[0] in (0, 2) and not defects and ctrl_ok
     ok = ascii_only and no_net and wired and live_ok
     if not ok:
-        print("  measured: ascii=%r net=%r wired=%r live=%r %r"
-              % (ascii_only, no_net, wired, live_ok, live), flush=True)
-    check(ok, "AC-QHD6 pure ASCII, no network, wired, live head is real")
+        print("  measured: ascii=%r net=%r wired=%r live=%r %r %r ctrl=%r"
+              % (ascii_only, no_net, wired, live_ok, live, defects,
+                 ctrl_detail), flush=True)
+    check(ok, "AC-QHD6 pure ASCII, no network, wired, live reading is faithful")
 
 
 def main():
