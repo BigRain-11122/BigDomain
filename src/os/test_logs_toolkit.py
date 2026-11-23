@@ -1198,6 +1198,99 @@ def main():
        and T.ROUND_TAG.pattern == r'\bR\d{3,5}\b',
        'no token law moved: PAT and round_tag keep their patterns (AC-BRC6)')
 
+    # ---- fold refuses to erase a bare round pointer (AC-RLW1..AC-RLW6, R3380) ----
+    # Pinned in src/os/backlog.md R3380 BEFORE this code. `rounds` (R3379) reads
+    # the risk; this block pins the writer's refusal, which reuses that reading
+    # instead of re-deriving it.
+    RL_LOGS = ['2026-11-20 R8001 alpha item',
+               '2026-11-21 R8002 beta item',
+               '2026-11-22 R8003 gamma item']
+    rlroot = tempfile.mkdtemp(prefix='bd-roundloss-')
+    rlpath = build_ps_state(rlroot, RL_LOGS)
+    rlarc = os.path.join(rlroot, 'logs', archive_name())
+    rl_dir_before = sorted(os.listdir(os.path.join(rlroot, 'logs')))
+    rl_stat_before = os.stat(rlpath)
+    rl_arc_before = open(rlarc, 'rb').read()
+    rl_rc, rl_out, rl_err = run(rlroot, 'fold', '--round', 'R9201', '--fold-no',
+                               '921', '--desc', 'round-loss refusal',
+                               '--window-tail', '2',
+                               '--summary-sentence', 'folded two items')
+    rl_plan = json.loads(rl_out)
+    rl_stat_after = os.stat(rlpath)
+    ok(rl_rc == 2 and rl_plan['round_pointer_lost'] == ['R8002', 'R8003']
+       and 'round-lost' in rl_plan['would_fail'],
+       'an unnamed bare round in the window reddens the fold (AC-RLW1)')
+    ok('E_ROUND_LOST' in rl_err and 'R8002' in rl_err and 'R8003' in rl_err,
+       'the refusal is named and lists every lost round (AC-RLW1)')
+    ok((rl_stat_before.st_size, rl_stat_before.st_mtime_ns)
+       == (rl_stat_after.st_size, rl_stat_after.st_mtime_ns)
+       and open(rlarc, 'rb').read() == rl_arc_before
+       and sorted(os.listdir(os.path.join(rlroot, 'logs'))) == rl_dir_before,
+       'the dry-run refusal writes nothing at all (AC-RLW5)')
+    rc, out, _ = run(rlroot, 'fold', '--round', 'R9202', '--fold-no', '922',
+                     '--desc', 'refusal on execute', '--window-tail', '2',
+                     '--summary-sentence', 'folded two items', '--execute')
+    ok(rc == 2 and os.stat(rlpath).st_size == rl_stat_before.st_size,
+       'the execute path refuses on the same loss, before any byte is written '
+       '(AC-RLW1)')
+    # AC-RLW3: the writer's lost set is the reading's lost set on the same tree.
+    rl3root = tempfile.mkdtemp(prefix='bd-roundloss3-')
+    build_ps_state(rl3root, RL_LOGS)
+    want_line, werr = T.compose_summary('folded two items', [])
+    rl3sum = os.path.join(rl3root, 'logs', 'sum-rlw.txt')
+    open(rl3sum, 'wb').write((want_line + '\n').encode('utf-8'))
+    _, rout3, _ = run(rl3root, 'rounds', '--window-slice', '2:3',
+                      '--file', rl3sum)
+    rdoc3 = json.loads(rout3)
+    read_lost = [r['round'] for r in rdoc3['rounds'] if r['lost']]
+    _, fout3, _ = run(rl3root, 'fold', '--round', 'R9203', '--fold-no', '923',
+                      '--desc', 'parity arm', '--window-slice', '2:3',
+                      '--summary-file', rl3sum)
+    ok(json.loads(fout3)['round_pointer_lost'] == read_lost == ['R8002', 'R8003'],
+       "the fold's lost set equals the shipped rounds reading (AC-RLW3)")
+    # AC-RLW4 positive control: a bare round named in the human sentence counts.
+    _, pout, _ = run(rl3root, 'fold', '--round', 'R9204', '--fold-no', '924',
+                     '--desc', 'positive control', '--window-tail', '2',
+                     '--summary-sentence', 'items R8002 and R8003 merged')
+    ok(json.loads(pout)['round_pointer_lost'] == []
+       and json.loads(pout)['would_fail'] == [],
+       'naming the rounds in the human sentence clears the loss (AC-RLW4)')
+    # AC-RLW4 negative control: a round inside a PAT token is not a bare round.
+    rl5root = tempfile.mkdtemp(prefix='bd-roundloss5-')
+    build_ps_state(rl5root, ['2026-11-20 pre item',
+                             '2026-11-21 AC-R8001 inside a token',
+                             '2026-11-22 no round here'])
+    _, tout, _ = run(rl5root, 'fold', '--round', 'R9205', '--fold-no', '925',
+                     '--desc', 'pat token arm', '--window-tail', '2',
+                     '--summary-sentence', 'merged window')
+    ok(json.loads(tout)['round_pointer_lost'] == [],
+       'a round inside a PAT token is never a bare round (AC-RLW4)')
+    # AC-RLW2: --allow-round-loss declares the loss and records it.
+    rl6root = tempfile.mkdtemp(prefix='bd-roundloss6-')
+    rl6path = build_ps_state(rl6root, RL_LOGS)
+    rl6arc = os.path.join(rl6root, 'logs', archive_name())
+    rc6, out6, _ = run(rl6root, 'fold', '--round', 'R9206', '--fold-no', '926',
+                       '--desc', 'declared loss', '--window-tail', '2',
+                       '--summary-sentence', 'folded two items',
+                       '--allow-round-loss', '--execute')
+    res6 = json.loads(out6)
+    ok(rc6 == 0 and res6['round_loss_declared'] is True
+       and res6['round_pointer_lost'] == ['R8002', 'R8003']
+       and res6['predicted_eq_actual'] is True,
+       'a declared loss lands and the result carries the declaration (AC-RLW2)')
+    arc6 = open(rl6arc, 'rb').read().decode('utf-8')
+    ok('round-loss declared: R8002,R8003' in arc6,
+       'the archive header records which pointers were declared away (AC-RLW2)')
+    st6 = json.load(open(rl6path, encoding='utf-8'))
+    want6, werr6 = T.compose_summary('folded two items', [])
+    ok(werr6 is None and st6['log'][-1] == want6 and len(st6['log']) == 2,
+       'the landed item is the composer output and the window is gone (AC-RLW2)')
+    # AC-RLW6: the token law and the round shapes did not move.
+    ok(T.BARE_ROUND.pattern == r'(?<![0-9A-Za-z-])R\d{3,5}(?![0-9A-Za-z-])'
+       and T.PAT.pattern == (r'(?:AC|BD|C|D|O|P|T|XL|OH|R)'
+                             r'-[0-9A-Za-z][0-9A-Za-z]*(?:-[0-9A-Za-z]+)*'),
+       'no token or round pattern moved for this refusal (AC-RLW6)')
+
     # ---- weights per-item face (AC-LTW1..AC-LTW6, R3377 slice) ----
     # Pinned in state/queue/explore.md R3176 b before this code. The face is
     # read-only and its conservation is measured against the SHIPPED gauge
@@ -1296,7 +1389,8 @@ def main():
 
     rc, out, err = run(sw, 'fold', '--round', 'R9101', '--fold-no', '911',
                        '--desc', 'two-part dry', '--window-tail', '3',
-                       '--summary-sentence', 'two part dry run')
+                       '--summary-sentence', 'two part dry run',
+                       '--allow-round-loss')
     pl2 = json.loads(out)
     ok(rc == 0 and pl2['summary_source'] == 'sentence'
        and pl2['summary_two_part'] is True,
@@ -1308,7 +1402,8 @@ def main():
 
     rc, out, err = run(sw, 'fold', '--round', 'R9102', '--fold-no', '912',
                        '--desc', 'tokenless', '--window-tail', '1',
-                       '--summary-sentence', 'tokenless window')
+                       '--summary-sentence', 'tokenless window',
+                       '--allow-round-loss')
     pl3 = json.loads(out)
     ok(rc == 0 and pl3['summary_head'].endswith('tokens: none')
        and pl3['token_ok'] is True,
@@ -1369,11 +1464,13 @@ def main():
     # execute parity: the composer's line is the line the fold lands
     rc, out, err = run(sw, 'fold', '--round', 'R9107', '--fold-no', '917',
                        '--desc', 'parity dry', '--window-tail', '2',
-                       '--summary-sentence', 'parity arm')
+                       '--summary-sentence', 'parity arm',
+                       '--allow-round-loss')
     p_dry = json.loads(out)
     rc, out, err = run(sw, 'fold', '--round', 'R9107', '--fold-no', '917',
                        '--desc', 'parity exec', '--window-tail', '2',
-                       '--summary-sentence', 'parity arm', '--execute')
+                       '--summary-sentence', 'parity arm',
+                       '--allow-round-loss', '--execute')
     p_exec = json.loads(out)
     ok(p_exec['post_bytes'] == p_dry['predicted_bytes']
        and p_exec['predicted_eq_actual'] is True,

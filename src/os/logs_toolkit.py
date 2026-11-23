@@ -309,6 +309,16 @@ def rounds_report(state_path, st, mode, start, end, summary_text):
     }
 
 
+def lost_rounds(st, start, end, summary_text):
+    """Bare rounds the fold would erase: read off the shipped `rounds` face.
+
+    AC-RLW3: the writer refuses on this list and the read-only pre-fold face
+    prints it, so the two can never disagree - there is no second arithmetic.
+    """
+    rep = rounds_report('<fold>', st, 'slice', start, end, summary_text)
+    return [row['round'] for row in rep['rounds'] if row['lost']]
+
+
 def cmd_rounds(args):
     """Pre-fold bare-round pointer reading (AC-BRC1). Writes nothing."""
     path, raw, st = load_state(args.root)
@@ -1149,6 +1159,12 @@ def cmd_fold(args):
 
     # verifications (all BEFORE any write; R1157 write-before-verify lesson)
     missing = sorted(t for t in toks if t not in summary)
+    # AC-RLW1/AC-RLW3: a bare round named neither in the summary nor in an item
+    # that stays live would become unfindable, so the writer refuses by name
+    # rather than landing a silent loss; the list is read off the shipped
+    # read-only `rounds` face so refusal and reading cannot disagree.
+    lost = lost_rounds(st, w_start, w_end, summary)
+    round_loss_declared = bool(getattr(args, 'allow_round_loss', False))
 
     new_lines, predicted = fold_rewrite(lines, log_start, w_start, n,
                                        len(st['log']), item_caliber, summary)
@@ -1165,6 +1181,10 @@ def cmd_fold(args):
               'fold R%s %s, pre-op sha16 %s)') % (
         args.round, date, len(window), args.desc, args.fold_no,
         'mid-window' if window_mode == 'slice' else 'window', sha16)
+    if lost and round_loss_declared:
+        # AC-RLW2: the declaration is written where the fold is recorded, not
+        # only printed, so the archive itself says which pointers went away.
+        header += '; round-loss declared: %s' % ','.join(lost)
     archive_exists = os.path.exists(archive)
     appendix = (header + '\n' + '\n'.join(window) + '\n').encode('utf-8')
     preamble = None
@@ -1180,6 +1200,8 @@ def cmd_fold(args):
     verdicts = {
         'token_missing': missing,
         'token_ok': not missing,
+        'round_pointer_lost': lost,
+        'round_loss_declared': round_loss_declared,
         'gate_ok': gate_ok,
         'predicted_bytes': predicted,
         'reserve_bytes': args.reserve_bytes,
@@ -1209,11 +1231,19 @@ def cmd_fold(args):
     fail = []
     if missing:
         fail.append('token-missing')
+    if lost and not round_loss_declared:
+        fail.append('round-lost')
     if not gate_ok:
         fail.append('gate-exceed')
     if not archive_exists and not args.allow_create:
         fail.append('archive-missing')
     plan['would_fail'] = fail
+
+    if lost and not round_loss_declared:
+        print('error: E_ROUND_LOST: %s named neither in the summary nor in the '
+              'remaining live items (refusing; name them in --summary-sentence '
+              'or declare with --allow-round-loss)' % ','.join(lost),
+              file=sys.stderr)
 
     if not args.execute:
         print(json.dumps(plan, ensure_ascii=False, indent=2))
@@ -1594,6 +1624,10 @@ def main(argv=None):
                          'takes no window selector and writes nothing')
     pf.add_argument('--archive-file', help='override archive path (default: logs/state-log-archive-<month>.md)')
     pf.add_argument('--allow-create', action='store_true', help='create archive if missing (else fail-closed)')
+    pf.add_argument('--allow-round-loss', action='store_true',
+                    help='declare that the fold erases bare R#### pointers named '
+                         'nowhere else; without it such a fold refuses by name '
+                         '(E_ROUND_LOST)')
     pf.add_argument('--execute', action='store_true', help='perform surgery (default: dry-run, zero mutation)')
     ps = sub.add_parser('summary', help='two-part fold summary reading (read-only)')
     ps.add_argument('--file', required=True,
