@@ -74,3 +74,4 @@
 {"event": "REPLACED", "name": "battery-shard-cov7-R3370.log", "new_bytes": 1708, "new_sha16": "63d5a41cddb5ad13", "old_bytes": 1579, "old_sha16": "fb5d7871151310e4", "ts": "2026-11-23T19:01:37Z"}
 {"event": "REPLACED", "name": "battery-shard-qch-R3371.log", "new_bytes": 352, "new_sha16": "87914b6e4b4532da", "old_bytes": 264, "old_sha16": "b8f492442cb712c8", "prev_kind": "progress", "ts": "2026-11-23T19:42:27Z"}
 {"event": "REPLACED", "name": "battery-shard-qch-R3371.log", "new_bytes": 351, "new_sha16": "25a414dc0fbd7ed6", "old_bytes": 263, "old_sha16": "7f555b0ed748524f", "prev_kind": "progress", "ts": "2026-11-23T19:43:57Z"}
+{"event": "REPLACED", "name": "qa-logs-toolkit-R3373.log", "new_bytes": 10709, "new_sha16": "0106dd1da0697426", "old_bytes": 10909, "old_sha16": "96893fcd8e59d4a2", "prev_kind": "evidence", "ts": "2026-11-23T21:01:37Z"}

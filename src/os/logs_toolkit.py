@@ -53,6 +53,11 @@ from datetime import datetime, timezone, timedelta
 
 CST = timezone(timedelta(hours=8))
 GATE = 78500
+# R3373 (AC-LTP5): the byte width the replacement summary item line is assumed
+# to occupy when `fold --plan-only` is given no --summary-file. The plan reports
+# it back as summary_source=assumed; only the byte prediction moves with it,
+# never the minimality reading (a wider summary cannot make a smaller window fit).
+PLAN_SUMMARY_ITEM_BYTES = 200
 PAT = re.compile(r'(?:AC|BD|C|D|O|P|T|XL|OH|R)-[0-9A-Za-z][0-9A-Za-z]*(?:-[0-9A-Za-z]+)*')
 
 # prune classes -> keep-newest counts (retention policy, R1686 AC-LT4)
@@ -686,11 +691,150 @@ def split_ps_layout(text, log_len):
     return lines, log_start, items, close_idx, caliber
 
 
+def one_summary_line(path):
+    """Read the fold summary file: (summary, error). One rule, one site."""
+    with open(path, encoding='utf-8') as f:
+        slines = [l for l in (x.rstrip('\n').rstrip('\r') for x in f) if l.strip()]
+    if len(slines) != 1:
+        return None, ('summary file must hold exactly one non-empty line (got %d)'
+                      % len(slines))
+    return slines[0], None
+
+
+def fold_rewrite(lines, log_start, w_start, n, log_len, item_caliber, summary):
+    """Replace log lines w_start..w_start+n-1 (1-based) with one summary item
+    line. Returns (new_lines, predicted_bytes).
+
+    The ONE arithmetic: the read-only plan searches widths with this function
+    and the execute path writes the lines it returns, so a plan can never
+    predict a size the fold does not produce (AC-LTP1, R3373).
+    """
+    summary_literal = ' ' * item_caliber + ps_escape(summary)
+    if w_start - 1 + n < log_len:
+        summary_literal += ','  # mid-window: item lines follow the summary
+    first_window_idx = log_start + 1 + (w_start - 1)
+    new_lines = (lines[:first_window_idx] + [summary_literal]
+                 + lines[first_window_idx + n:])
+    return new_lines, len('\r\n'.join(new_lines).encode('utf-8'))
+
+
+def fold_layout_or_none(root):
+    """Load state and locate its canonical item lines. Returns
+    (path, raw, st, layout) or None after printing the refusal and its hint."""
+    path, raw, st = load_state(root)
+    text = raw.decode('utf-8')
+    if '\r\n' not in text:
+        print('error: E_STATE_LAYOUT: CRLF layout not found (refusing)', file=sys.stderr)
+        print('hint: run: python src/os/logs_toolkit.py eol --fix --execute', file=sys.stderr)
+        return None
+    layout = split_ps_layout(text, len(st['log']))
+    if layout is None:
+        print('error: E_STATE_LAYOUT: PS item-line layout mismatch (refusing)',
+              file=sys.stderr)
+        print('hint: run: python src/os/logs_toolkit.py eol --fix-indent --execute',
+              file=sys.stderr)
+        return None
+    return path, raw, st, layout
+
+
+def cmd_fold_plan(args):
+    """Read-only minimal-width plan (AC-LTP1..AC-LTP5, pinned in backlog R3373).
+
+    Answers the question the execute path cannot: how many log lines must be
+    folded to clear the gate with a given reserve. Writes nothing.
+    """
+    got = fold_layout_or_none(args.root)
+    if got is None:
+        return 2
+    path, raw, st, layout = got
+    lines, log_start, item_idx, close_idx, caliber = layout
+    log_len = len(st['log'])
+
+    if args.summary_file:
+        summary, err = one_summary_line(args.summary_file)
+        if err:
+            print('error: ' + err, file=sys.stderr)
+            return 2
+        summary_source = 'file'
+    else:
+        # A declared placeholder, not a guess about the caller's prose: the
+        # assumed width of the replacement item line itself (indent + the two
+        # quotes ps_escape writes around the literal + the text).
+        summary = 'x' * max(1, PLAN_SUMMARY_ITEM_BYTES - caliber - 2)
+        summary_source = 'assumed'
+    item_bytes = len(' ' * caliber + ps_escape(summary))
+
+    pre = len(raw)
+    target = GATE - args.reserve_bytes
+
+    def predict(n):
+        return fold_rewrite(lines, log_start, log_len - n + 1, n, log_len,
+                            caliber, summary)[1]
+
+    max_post = predict(log_len) if log_len else pre
+    minimal, predicted = 0, pre
+    if pre > target:
+        minimal = None
+        for n in range(1, log_len + 1):
+            if predict(n) <= target:
+                minimal, predicted = n, predict(n)
+                break
+
+    below = predict(minimal - 1) if minimal and minimal >= 2 else None
+    window = st['log'][log_len - minimal:] if minimal else []
+    tokens = set()
+    for line in window:
+        tokens |= set(PAT.findall(line))
+
+    archive = args.archive_file or os.path.join(
+        args.root, 'logs', 'state-log-archive-%s.md' % datetime.now(CST).strftime('%Y-%m'))
+    would_fail = []
+    if minimal is None:
+        would_fail.append('gate-unreachable')
+    elif minimal and not os.path.exists(archive) and not args.allow_create:
+        # the execute path would refuse here; the plan says so instead of
+        # creating an archive to make its own answer true
+        would_fail.append('archive-missing')
+
+    plan = {
+        'mode': 'plan-only',
+        'state_path': path,
+        'pre_bytes': pre,
+        'gate': GATE,
+        'reserve_bytes': args.reserve_bytes,
+        'target_bytes': target,
+        'log_lines': log_len,
+        'summary_source': summary_source,
+        'summary_item_bytes': item_bytes,
+        'minimal_window_lines': minimal,
+        'minimal_window_start': (log_len - minimal + 1) if minimal else None,
+        'window_content_bytes': sum(len(x.encode('utf-8')) for x in window),
+        'window_token_count': len(tokens),
+        'window_tokens': sorted(tokens),
+        'predicted_post_bytes': predicted,
+        'width_below_minimal_bytes': below,
+        'width_below_minimal_clears_gate': (None if below is None
+                                            else below <= target),
+        'max_fold_post_bytes': max_post,
+        'archive_file': archive,
+        'would_fail': would_fail,
+        'writes_nothing': True,
+    }
+    print(json.dumps(plan, ensure_ascii=False, indent=2))
+    return 0 if not would_fail else 2
+
+
 def cmd_fold(args):
     # window selector: exactly one of --window-tail / --window-slice
     # (mid-window support; AC-LT20 pre-registered in tech.md R1690 claim)
     has_tail = args.window_tail > 0
     has_slice = args.window_slice is not None
+    if args.plan_only:
+        if has_tail or has_slice:
+            print('error: --plan-only takes no --window-tail / --window-slice '
+                  '(it searches for the minimal width)', file=sys.stderr)
+            return 2
+        return cmd_fold_plan(args)
     if has_tail == has_slice:
         print('error: exactly one of --window-tail / --window-slice is required',
               file=sys.stderr)
@@ -720,27 +864,15 @@ def cmd_fold(args):
         print('error: --round must match R + 4+ digits like R1968 (got %r)'
               % (args.round,), file=sys.stderr)
         return 2
-    with open(args.summary_file, encoding='utf-8') as f:
-        slines = [l for l in (x.rstrip('\n').rstrip('\r') for x in f) if l.strip()]
-    if len(slines) != 1:
-        print('error: summary file must hold exactly one non-empty line (got %d)'
-              % len(slines), file=sys.stderr)
+    summary, err = one_summary_line(args.summary_file)
+    if err:
+        print('error: ' + err, file=sys.stderr)
         return 2
-    summary = slines[0]
 
-    path, raw, st = load_state(args.root)
-    text = raw.decode('utf-8')
-    if '\r\n' not in text:
-        print('error: E_STATE_LAYOUT: CRLF layout not found (refusing)', file=sys.stderr)
-        print('hint: run: python src/os/logs_toolkit.py eol --fix --execute', file=sys.stderr)
+    got = fold_layout_or_none(args.root)
+    if got is None:
         return 2
-    layout = split_ps_layout(text, len(st['log']))
-    if layout is None:
-        print('error: E_STATE_LAYOUT: PS item-line layout mismatch (refusing)',
-              file=sys.stderr)
-        print('hint: run: python src/os/logs_toolkit.py eol --fix-indent --execute',
-              file=sys.stderr)
-        return 2
+    path, raw, st, layout = got
     lines, log_start, item_idx, close_idx, item_caliber = layout
     if window_mode == 'tail':
         if args.window_tail > len(st['log']):
@@ -764,14 +896,9 @@ def cmd_fold(args):
         toks |= set(PAT.findall(line))
     missing = sorted(t for t in toks if t not in summary)
 
-    summary_literal = ' ' * item_caliber + ps_escape(summary)
-    if w_end < len(st['log']):
-        summary_literal += ','  # mid-window: item lines follow the summary
-    first_window_idx = log_start + 1 + (w_start - 1)
-    new_lines = (lines[:first_window_idx] + [summary_literal]
-                 + lines[first_window_idx + n:])
+    new_lines, predicted = fold_rewrite(lines, log_start, w_start, n,
+                                       len(st['log']), item_caliber, summary)
     new_text = '\r\n'.join(new_lines)
-    predicted = len(new_text.encode('utf-8'))
     gate_ok = predicted + args.reserve_bytes <= GATE
 
     now = datetime.now(CST)
@@ -1194,6 +1321,10 @@ def main(argv=None):
                     help='window = log lines START:END (1-based inclusive, mid-array)')
     pf.add_argument('--summary-file', help='file holding exactly one non-empty summary line')
     pf.add_argument('--reserve-bytes', type=int, default=3000)
+    pf.add_argument('--plan-only', action='store_true',
+                    help='read-only: report the MINIMAL window width that clears '
+                         'gate - reserve, its predicted post size and tokens; '
+                         'takes no window selector and writes nothing')
     pf.add_argument('--archive-file', help='override archive path (default: logs/state-log-archive-<month>.md)')
     pf.add_argument('--allow-create', action='store_true', help='create archive if missing (else fail-closed)')
     pf.add_argument('--execute', action='store_true', help='perform surgery (default: dry-run, zero mutation)')

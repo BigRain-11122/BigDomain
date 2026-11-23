@@ -7978,7 +7978,7 @@ SUITES = [
     # suite's shard, and the 27 unmeasured deep shard-6 rows are tracked by that
     # mapping.
     ("os-logs-toolkit",
-     os.path.join("..", "os", "test_logs_toolkit.py"), 185),
+     os.path.join("..", "os", "test_logs_toolkit.py"), 199),
     # R2918: the census that answers "which registry rows can the battery
     # reader refute at run time" with a MEASURED list (readable / unparsed /
     # silent, pinned in src/os/registry_counter_census_pin.json) instead of the

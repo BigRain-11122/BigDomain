@@ -538,6 +538,136 @@ def main():
     ok(rc == 0 and gplan['round_label'] == 'R9009' and gplan['would_fail'] == [],
        'fold --round legal form passes + plan round_label echo (AC-LT25)')
 
+    # ---- fold --plan-only minimal width (AC-LTP1..AC-LTP5, R3373 slice) ----
+    # The execute path always demanded a hand-picked window width, so "how many
+    # lines must I fold to clear the gate" was answered outside the tool. These
+    # arms pin the read-only answer against the writer that has to obey it.
+    def build_big_key_state(broot, blogs, big_bytes):
+        """Canonical layout plus one big NON-log key, so folding the whole log
+        still cannot reach the gate (the unreachable arm)."""
+        import logs_toolkit as T2
+        os.makedirs(os.path.join(broot, 'src', 'os'), exist_ok=True)
+        os.makedirs(os.path.join(broot, 'logs'), exist_ok=True)
+        blines = ['{', '    "big":  "%s",' % ('x' * big_bytes), '    "log":  [']
+        for i, s in enumerate(blogs):
+            comma = ',' if i < len(blogs) - 1 else ''
+            blines.append(' ' * 16 + T2.ps_escape(s) + comma)
+        blines.append('            ]')
+        blines.append('}')
+        bpath = os.path.join(broot, 'src', 'os', 'state.json')
+        with open(bpath, 'wb') as f:
+            f.write('\r\n'.join(blines).encode('utf-8'))
+        return bpath
+
+    PLAN_LOGS = ['2026-11-24 R9001 filler AC-R9001 ' + 'y' * 1500 for _ in range(60)]
+    PLAN_SUMMARY = '2026-11-24 roll window line AC-R9001 folded verbatim'
+    pw = tempfile.mkdtemp(prefix='bd-foldplan-')
+    pspath = build_ps_state(pw, PLAN_LOGS)
+    pfile = os.path.join(pw, 'summary.txt')
+    open(pfile, 'w', encoding='utf-8').write(PLAN_SUMMARY + '\n')
+    pre_plan = open(pspath, 'rb').read()
+    parc = os.path.join(pw, 'logs', archive_name())
+    pre_parc = open(parc, 'rb').read()
+
+    rc, out, err = run(pw, 'fold', '--plan-only', '--summary-file', pfile)
+    pl = json.loads(out)
+    W = pl['minimal_window_lines']
+    ok(rc == 0 and pl['mode'] == 'plan-only' and 2 <= W < len(PLAN_LOGS),
+       'plan-only answers a minimal width inside the log (AC-LTP1)')
+    ok(pl['predicted_post_bytes'] <= pl['target_bytes']
+       and pl['width_below_minimal_bytes'] > pl['target_bytes']
+       and pl['width_below_minimal_clears_gate'] is False,
+       'plan minimality witness: W clears the gate and W-1 does not (AC-LTP2)')
+    ok(pl['window_token_count'] == 1 and pl['window_tokens'] == ['AC-R9001'],
+       'plan reports the window token set it would have to preserve (AC-LTP1)')
+
+    # both sides of the boundary are judged by the writer, not by the plan
+    rc, out, err = run(pw, 'fold', '--round', 'R9011', '--fold-no', '910',
+                       '--desc', 'plan width arm', '--window-tail', str(W),
+                       '--summary-file', pfile)
+    fplan = json.loads(out)
+    ok(rc == 0 and fplan['predicted_bytes'] == pl['predicted_post_bytes']
+       and fplan['gate_ok'] is True,
+       'fold at the planned width predicts the very size the plan published (AC-LTP1)')
+    rc, out, err = run(pw, 'fold', '--round', 'R9011', '--fold-no', '910',
+                       '--desc', 'plan width minus one', '--window-tail', str(W - 1),
+                       '--summary-file', pfile)
+    ok(rc == 2 and json.loads(out)['would_fail'] == ['gate-exceed'],
+       'fold one line narrower is refused by the gate (AC-LTP2)')
+
+    # integer boundary: equality with the target still counts as clearing
+    reserve_eq = pl['gate'] - pl['predicted_post_bytes']
+    rc, out, err = run(pw, 'fold', '--plan-only', '--summary-file', pfile,
+                       '--reserve-bytes', str(reserve_eq))
+    pe = json.loads(out)
+    ok(rc == 0 and pe['target_bytes'] == pl['predicted_post_bytes']
+       and pe['minimal_window_lines'] == W,
+       'target exactly equal to the prediction keeps the same width (AC-LTP2)')
+    rc, out, err = run(pw, 'fold', '--plan-only', '--summary-file', pfile,
+                       '--reserve-bytes', str(reserve_eq + 1))
+    pb = json.loads(out)
+    ok(rc == 0 and pb['minimal_window_lines'] == W + 1,
+       'one byte tighter target needs exactly one more line (AC-LTP2)')
+
+    # purity: a plan that answered for the same tree twice must not have written
+    st_before = os.stat(pspath)
+    entries_before = sorted(os.listdir(os.path.join(pw, 'logs')))
+    rc, out, err = run(pw, 'fold', '--plan-only', '--summary-file', pfile)
+    st_after = os.stat(pspath)
+    ok(open(pspath, 'rb').read() == pre_plan
+       and st_after.st_mtime_ns == st_before.st_mtime_ns
+       and open(parc, 'rb').read() == pre_parc
+       and sorted(os.listdir(os.path.join(pw, 'logs'))) == entries_before,
+       'plan-only writes nothing: state bytes/mtime, archive and logs dir hold (AC-LTP4)')
+    rc, out, err = run(pw, 'fold', '--plan-only', '--window-tail', '3',
+                       '--summary-file', pfile)
+    ok(rc == 2 and out == '' and 'takes no --window-tail' in err,
+       'plan-only refuses a window selector by name (AC-LTP4)')
+
+    # unreachable: a big non-log key survives every fold width
+    unreach = tempfile.mkdtemp(prefix='bd-foldplan-')
+    build_big_key_state(unreach, ['2026-11-24 R9002 small window AC-R9002'], 90000)
+    rc, out, err = run(unreach, 'fold', '--plan-only')
+    pu = json.loads(out)
+    ok(rc == 2 and pu['would_fail'] == ['gate-unreachable']
+       and pu['minimal_window_lines'] is None
+       and pu['max_fold_post_bytes'] > pu['target_bytes'],
+       'folding every line still over the gate reads gate-unreachable (AC-LTP3)')
+
+    # a needed fold with no archive is named, and --allow-create clears the
+    # reason WITHOUT creating the archive (a plan is not a writer)
+    am = tempfile.mkdtemp(prefix='bd-foldplan-')
+    build_ps_state(am, PLAN_LOGS, archive_text=None)
+    amfile = os.path.join(am, 'summary.txt')
+    open(amfile, 'w', encoding='utf-8').write(PLAN_SUMMARY + '\n')
+    rc, out, err = run(am, 'fold', '--plan-only', '--summary-file', amfile)
+    pa = json.loads(out)
+    ok(rc == 2 and pa['would_fail'] == ['archive-missing']
+       and pa['minimal_window_lines'] >= 2,
+       'a needed fold with no archive reads archive-missing (AC-LTP3)')
+    rc, out, err = run(am, 'fold', '--plan-only', '--summary-file', amfile,
+                       '--allow-create')
+    ok(rc == 0 and json.loads(out)['would_fail'] == []
+       and not os.path.exists(os.path.join(am, 'logs', archive_name())),
+       'allow-create clears the reason and still creates nothing (AC-LTP3)')
+
+    # the assumption is declared, and a longer summary moves the prediction
+    rc, out, err = run(pw, 'fold', '--plan-only')
+    pas = json.loads(out)
+    ok(rc == 0 and pas['summary_source'] == 'assumed'
+       and pas['summary_item_bytes'] == T.PLAN_SUMMARY_ITEM_BYTES
+       and pas['minimal_window_lines'] >= W,
+       'no summary file reads a declared assumption and never a smaller width (AC-LTP5)')
+    pfile2 = os.path.join(pw, 'summary2.txt')
+    open(pfile2, 'w', encoding='utf-8').write(PLAN_SUMMARY + 'z' * 50 + '\n')
+    rc, out, err = run(pw, 'fold', '--plan-only', '--summary-file', pfile2)
+    p2 = json.loads(out)
+    ok(rc == 0 and p2['summary_source'] == 'file'
+       and p2['summary_item_bytes'] - pl['summary_item_bytes'] == 50
+       and p2['minimal_window_lines'] >= W
+       and p2['predicted_post_bytes'] >= pl['predicted_post_bytes'],
+       'a +50 byte summary moves the reported item width by exactly +50 (AC-LTP5)')
+
     # ---- census (AC-LT15..LT17, R1688 slice; non-ASCII markers via escapes) ----
     SEC = '\u00a7'   # section pointer marker
     YUAN = '\u539f'  # original-archive marker
