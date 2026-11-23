@@ -1,0 +1,13 @@
+R3347 probe - the two reds found by the first small-family leg, and the readings that replace their pins
+FIRST LEG (battery-shard-smallfamilies-R3347.log, before the fix): selected=8 green=6 elapsed=125.3s
+FIRST LEG row launcher-registry rc=2 pass=8 fail=1 suite=FAIL 1/9 crit=9 -> FAIL AC-LND8 unreadable-0
+FIRST LEG row claims-view-parity rc=2 pass=2 fail=1 suite=FAIL 1/3 crit=3 -> FAIL AC-CVP3 tool-calls-2
+DIAGNOSIS both reds are ambient-snapshot pins, not product defects:
+  AC-LND8 pinned "exactly 1 unparsable fixture IN THIS TREE"; that BOM file is gone, so the count is 0.
+  AC-CVP3 pinned "exactly 1 claims_view call in the file"; R3234 added a second LEGITIMATE consumer.
+PROBE unreadable_fixture=['test_bom_fixture.py'] unreadable_after_removal=[] unreadable_shipped_when_nonfixture=['helper.py']
+PROBE claims_calls tool=2 card=1 band_shared=True card_shared=True
+SECOND LEG (battery-shard-smallfamilies-R3347.log, after the fix): selected=8 green=8 criteria=83 elapsed=149.8s rc=0
+STALE RED re-measured: battery-shard-export-round-R3347.log row os-export-round rc=0 pass=185 fail=0 suite=PASS 185/185 crit=55 35.9s (the lone red was R2882 and is green today)
+PROBE coverage evidence=95 covered=690 green=690 red=0 uncovered=73 uncovered_criteria=729
+BEFORE coverage evidence=93 covered=682 green=681 red=1 uncovered=81 uncovered_criteria=812

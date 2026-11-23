@@ -613,15 +613,35 @@ def main():
         bad.append("shipped-unproven-%d" % len(coverage["unproven"]))
     if coverage["missing"]:
         bad.append("shipped-missing-%d" % len(coverage["missing"]))
-    # one BOM fixture in the tree cannot be parsed; that is published and does
-    # NOT turn the verdict red, while an unreadable SHIPPED module would.
-    if len(coverage["unreadable"]) != 1:
-        bad.append("unreadable-%d" % len(coverage["unreadable"]))
+    # R3347: the R2978 arm pinned "exactly one unreadable fixture IN THIS TREE",
+    # which read AC-LND8 red once a later round removed that BOM file - a
+    # snapshot of the tree, not a law. The law is now proved where it can be
+    # held: a private world proves an unparsable file is COUNTED and NAMED,
+    # and the live tree keeps "any unreadable file is a test fixture, none is
+    # shipped". The ambient count is printed, never gated.
+    bom_world = os.path.join(tmpdir, "bom-world")
+    if os.path.isdir(bom_world):
+        for name in os.listdir(bom_world):
+            os.remove(os.path.join(bom_world, name))
+    os.makedirs(bom_world, exist_ok=True)
+    bom_fixture = os.path.join(bom_world, "test_bom_fixture.py")
+    with open(bom_fixture, "wb") as handle:
+        handle.write(b"\xef\xbb\xbfimport launcher_registry\n")
+    bom_read = record_writers.writer_coverage(bom_world)
+    os.remove(bom_fixture)
+    empty_read = record_writers.writer_coverage(bom_world)
+    if bom_read["unreadable"] != ["test_bom_fixture.py"]:
+        bad.append("bom-not-named-%r" % (bom_read["unreadable"],))
+    if empty_read["unreadable"]:
+        bad.append("removed-bom-still-counted-%d"
+                   % len(empty_read["unreadable"]))
     for rel in coverage["unreadable"]:
         if not os.path.basename(rel).startswith("test_"):
             bad.append("unreadable-not-a-fixture-" + rel)
     if coverage["unreadable_shipped"]:
         bad.append("unreadable-shipped-%d" % len(coverage["unreadable_shipped"]))
+    print("  | unreadable-in-tree=%d named=%r"
+          % (len(coverage["unreadable"]), coverage["unreadable"]))
     report("AC-LND8", bool(bad), ",".join(bad))
 
     # ---- AC-LND9 (R2978): the pin can say NO, and the READER stays kind -----

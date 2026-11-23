@@ -18,8 +18,10 @@ AC-CVP1  same block, both faces: same shape verdict, same six readings.
 AC-CVP2  ONE derivation: patching the shared judgement moves BOTH faces
          (a negative control - if either face kept its own parsing it would
          not move).
-AC-CVP3  wiring and hygiene: ASCII/LF, zero I/O in the shared module, one
-         call per face, registry declares three criteria.
+AC-CVP3  wiring and hygiene: ASCII/LF, zero I/O in the shared module, each
+         face (band and card) reaches the shared judgement, registry declares
+         three criteria. R3347: judged per FACE, not by a call-site count - a
+         legitimate second consumer turned the old "exactly one" pin red.
 
 Usage: python test_claims_view_parity.py
 Exit: 0 = SUITE PASS, 2 = FAIL.
@@ -89,6 +91,21 @@ def face_state(text):
     if readings(text):
         return "reading"
     return "unknown"
+
+
+def function_body(text, name):
+    """The source of one top-level function, up to the next top-level def.
+
+    R3347: the wiring arm judges a FACE, not the number of call sites in a
+    file, so it needs the face's own body. Indentation-based slicing keeps
+    this a reading of the shipped bytes rather than an import side effect.
+    """
+    found = re.search(r"(?m)^def\s+%s\s*\(" % re.escape(name), text)
+    if not found:
+        return None
+    nxt = re.search(r"(?m)^def\s+\w+\s*\(", text[found.end():])
+    end = found.end() + nxt.start() if nxt else len(text)
+    return text[found.start():end]
 
 
 def live_block():
@@ -228,13 +245,22 @@ def main():
                 if required not in text:
                     bad3.append("shared-missing-%s" % required.split("(")[0])
         elif label == "tool":
-            if text.count("claims_view.claims_view(") != 1:
-                bad3.append("tool-calls-%d"
-                            % text.count("claims_view.claims_view("))
+            # R3347: this used to pin "exactly one shared call in the file",
+            # which the R3234 parity site (a legitimate second consumer of the
+            # same judgement) turned red. The law is per FACE, not per file
+            # occurrence: the band that emits the readings must go through the
+            # shared judgement. An extra consumer is growth, not drift.
+            body = function_body(text, "claims_band")
+            if body is None:
+                bad3.append("tool-no-claims-band")
+            elif "claims_view.claims_view(" not in body:
+                bad3.append("tool-band-bypasses-shared")
         else:
-            if text.count("claims_view_mod.claims_view(") != 1:
-                bad3.append("card-calls-%d"
-                            % text.count("claims_view_mod.claims_view("))
+            body = function_body(text, "claims_card")
+            if body is None:
+                bad3.append("card-no-claims-card")
+            elif "claims_view_mod.claims_view(" not in body:
+                bad3.append("card-bypasses-shared")
 
     with io.open(REGISTRY, encoding="utf-8") as handle:
         registry = handle.read()

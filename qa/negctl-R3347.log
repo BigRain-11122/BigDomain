@@ -1,0 +1,5 @@
+R3347 negative control - the two replacement laws bite, and do not false-red on growth
+NEGCTL claims band_real=True local_parse_mutant=True extra_consumer=True
+  reading: the real claims_band body keeps the shared call; a decoy replacing it with a local parse loses it (red); appending an extra consumer still reads green (no false red).
+NEGCTL unreadable fixture_named=True nonfixture_shipped=True
+  reading: a BOM fixture is counted and named; the same bytes in a non-fixture file land in unreadable_shipped, so the shipped-module clause still reddens.
