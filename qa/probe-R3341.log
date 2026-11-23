@@ -1,0 +1,46 @@
+PROBE R3341: four loopback worlds through the shipped face_serves
+(connect budget 0.15s, answer budget 1.5s, zero external network)
+
+SHIPPED shape (headers and body share the answer budget)
+OLD normal    live=True       1ms
+OLD silent    live=False   1514ms   accepts the connection, never answers
+OLD slowbody  live=True     902ms   headers at once, body 900ms later
+OLD slowhead  live=True     701ms   says nothing for 700ms, then 200 html
+OLD closed    live=False    164ms   closed loopback port
+
+CANDIDATE: answer phase split into a short header budget plus a body remainder
+head=0.15s  silent=152ms  slowhead=dead at 157ms
+head=0.30s  silent=307ms  slowhead=dead at 327ms
+head=0.50s  silent=511ms  slowhead=dead at 512ms
+
+RULING: the trade is REFUSED. What a dead face costs and what a slow but
+legitimate face costs are the same currency, so the header phase keeps the
+whole remaining budget and the silent face keeps paying it (R3338 sensitivity
+law unchanged). The defect that was real points the other way: read() sat
+inside the verdict, so a face that had already answered 200 text/html was
+reported DEAD when its body was slower than the budget.
+
+SUITE RED FIRST (arm AC-HUB11 added, shipped code untouched)
+FAIL AC-HUB11 :: a face that answered 200 html read live=False - the body overturned the verdict
+SUITE FAIL 10/11
+
+SUITE AFTER THE FIX
+PASS AC-HUB11 body=live/607ms stalled_body=live/604ms silent=False/1015ms slowhead=live/352ms
+SUITE PASS 11/11
+
+NEGATIVE CONTROL (qa/negctl-R3341.log): mutant A puts the body read back
+inside the verdict and reddens arm (a); mutant B gives the header phase a
+0.5s budget and reddens arms (c) and (d).
+
+GATES
+test_start_all        SUITE PASS 20/20
+test_pre_commit_gate  SUITE PASS 32/32 checks over 21 criteria, matrix DOC-CURRENT
+test_closeout         SUITE PASS 29/29 after the heartbeat row was repaired 3339 -> 3340
+suite_matrix_reconcile --write  79061 bytes, 762 rows
+
+OWN ERROR this round: the first drain wrote conn.sock.settimeout after
+getresponse(), which clears conn.sock in this Python version, so the suite
+died with AttributeError at the first live face. The socket is captured right
+after connect instead. The R3341 probe hit the same wall, which is why its
+three SPLIT rows carried raised:AttributeError; the numbers above are from the
+suite readings that ran to completion.

@@ -60,6 +60,16 @@ the R3337 row and AC-HUB10 in the R3338 row, each before their code landed):
            answers inside 100ms; the connect-only path is held to the same law
            (dead port 155ms shipped against 1507ms with the shared budget), and
            eight dead faces through the shipped live_map cost under 400ms.
+  AC-HUB11 the body can never overturn the verdict (R3341 measured the answer
+           phase from four loopback worlds: splitting it into a short header
+           budget read a silent face in 152/307/511ms but also read a face that
+           needs 700ms to say anything at all as dead, while the shipped shape
+           read it live in 701ms - that trade is refused because a dead face
+           and a slow-but-legitimate face cost the same currency): a face that
+           answers 200 text/html and streams (or stalls) its body is LIVE, the
+           stalled body is bounded, a face that never answers is still dead and
+           still costs its read budget, and a face that needs 350ms to answer
+           is still live so the header phase keeps the whole budget.
 """
 
 import hashlib
@@ -177,6 +187,37 @@ def serve_deep(route="/deep/"):
     threading.Thread(target=httpd.serve_forever, daemon=True).start()
     port = httpd.server_address[1]
     return httpd, "http://127.0.0.1:%d%s" % (port, route), port
+
+
+class _SlowBodyFace(_Face):
+    """A face that answers 200 html at once and streams the body late."""
+
+    delay = 1.0
+
+    def do_GET(self):
+        body = b"<html><body>ok</body></html>"
+        self.send_response(200)
+        self.send_header("Content-Type", "text/html; charset=utf-8")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.flush()
+        time.sleep(self.delay)
+        try:
+            self.wfile.write(body)
+        except OSError:
+            # the probe closes as soon as the verdict is known, so a stalled
+            # body legitimately loses its client; this is the fixture's own
+            # thread, not a reading.
+            pass
+
+
+def serve_slow_body(delay=1.0):
+    handler = type("SlowBody%s" % str(delay).replace(".", "_"),
+                   (_SlowBodyFace,), {"delay": delay})
+    httpd = ThreadingHTTPServer(("127.0.0.1", 0), handler)
+    threading.Thread(target=httpd.serve_forever, daemon=True).start()
+    port = httpd.server_address[1]
+    return httpd, "http://127.0.0.1:%d/" % port, port
 
 
 def http_post(url, payload=b"{}", timeout=6.0):
@@ -582,11 +623,71 @@ def main():
                     srv.shutdown()
                     srv.server_close()
 
+        # ---------------- AC-HUB11 ----------------
+        body_srv = staller_srv = silent2_srv = slowhead_srv = None
+        try:
+            # (a) the body cannot overturn the verdict: a face that answered
+            # 200 html at once and streams late is LIVE, not dead.
+            body_srv, body_url, body_port = serve_slow_body(1.0)
+            started = time.perf_counter()
+            body_read = hub_page.face_serves(body_url, timeout=0.6)
+            body_ms = (time.perf_counter() - started) * 1000.0
+            assert body_read is True, (
+                "a face that answered 200 html read live=%s - the body "
+                "overturned the verdict" % body_read)
+
+            # (b) the strongest form of the same defect: headers arrive, the
+            # body never does. Its status line and type are the whole law.
+            staller_srv, staller_url, staller_port = serve_slow_body(5.0)
+            started = time.perf_counter()
+            staller_read = hub_page.face_serves(staller_url, timeout=0.6)
+            staller_ms = (time.perf_counter() - started) * 1000.0
+            assert staller_read is True, (
+                "a face that answered 200 html and stalled its body read "
+                "live=%s" % staller_read)
+            assert staller_ms < 1400.0, (
+                "the stalled body cost %.0fms, so it was not bounded" % staller_ms)
+
+            # (c) sensitivity is NOT traded: accepts and never answers -> dead
+            # and still costs its read budget (same currency as AC-HUB10).
+            silent2_srv, silent2_url, silent2_port = serve_slow(3.0)
+            started = time.perf_counter()
+            silent2_read = hub_page.face_serves(silent2_url, timeout=1.0)
+            silent2_ms = (time.perf_counter() - started) * 1000.0
+            assert silent2_read is False, "a silent face was read as serving"
+            assert silent2_ms >= 700.0, (
+                "a silent face cost %.0fms, so a header budget was introduced"
+                % silent2_ms)
+
+            # (d) the header phase keeps the WHOLE budget: a face needs 350ms
+            # before it says anything and is still live (a short header budget
+            # would kill it - measured in the R3341 probe, refused).
+            slowhead_srv, slowhead_url, slowhead_port = serve_slow(0.35)
+            started = time.perf_counter()
+            slowhead_read = hub_page.face_serves(slowhead_url, timeout=1.5)
+            slowhead_ms = (time.perf_counter() - started) * 1000.0
+            assert slowhead_read is True, (
+                "a face that needed %.0fms to answer read dead - the header "
+                "budget was cut" % slowhead_ms)
+
+            print("PASS AC-HUB11 body=live/%.0fms stalled_body=live/%.0fms "
+                  "silent=%s/%.0fms slowhead=live/%.0fms"
+                  % (body_ms, staller_ms, silent2_read, silent2_ms,
+                     slowhead_ms))
+        except AssertionError as exc:
+            failed += 1
+            print("FAIL AC-HUB11 :: %s" % exc)
+        finally:
+            for srv in (body_srv, staller_srv, silent2_srv, slowhead_srv):
+                if srv is not None:
+                    srv.shutdown()
+                    srv.server_close()
+
     finally:
         if leg is not None:
             leg.close()
 
-    total = 10
+    total = 11
     if failed:
         print("SUITE FAIL %d/%d" % (total - failed, total))
         return 1

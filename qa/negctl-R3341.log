@@ -1,0 +1,10 @@
+NEGCTL R3341 baseline: AC-HUB11 reads on the shipped module
+  SHIPPED body(a)   live=True   600ms
+  SHIPPED head(d)   live=True   702ms
+  SHIPPED silent(c) live=False 1012ms
+NEGCTL R3341 mutant A: the body read is back inside the verdict
+  MUT-A   body(a)   live=False  608ms  arm(a) RED
+NEGCTL R3341 mutant B: the header phase gets a 0.5s budget
+  MUT-B   head(d)   live=False  513ms  arm(d) RED
+  MUT-B   silent(c) live=False  530ms  arm(c) RED
+NEGCTL verdict=LOAD-BEARING mutant_a_reddens_body=True mutant_b_reddens_head_and_budget=True

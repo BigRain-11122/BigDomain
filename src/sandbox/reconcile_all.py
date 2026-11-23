@@ -485,7 +485,7 @@ SUITES = [
     # the answer apart, so a dead face costs the short connect budget instead
     # of the whole HTTP timeout, with the same four verdicts and the silent
     # face still paying its read budget.)
-    ("os-sandbox-hub", os.path.join("lobby", "test_hub_page.py"), 10),
+    ("os-sandbox-hub", os.path.join("lobby", "test_hub_page.py"), 11),
     # one-click launcher (R3333): the board head asked for the proof to be
     # scriptized instead of hand-copied into qa/, and for a teardown reading
     # that can say a child really is gone. The suite runs the shipped launcher

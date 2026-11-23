@@ -105,6 +105,17 @@ def face_serves(url, timeout=1.5, connect_timeout=PROBE_CONNECT):
     verdict is the same 200-and-html test as before. Redirects are not
     followed here; the eight published paths answer 200 directly (measured at
     R3336), so following one would be guessing a route the hub never published.
+    R3341 (measured): the answer phase was not split, because it cannot be.
+    A header budget of 0.15/0.3/0.5s read a silent face in 152/307/511ms, but
+    the SAME three budgets read a face that needs 700ms to say anything at all
+    as dead, while the shipped shape read it live in 701ms. That trade is
+    refused: what a dead face costs and what a slow-but-legitimate face costs
+    are the same currency, so the header phase keeps the whole remaining
+    budget. The defect that WAS real is the other direction - ``read()`` used
+    to sit inside the verdict, so a face that answered 200 text/html and then
+    streamed (or stalled) its body timed out there and was reported dead. The
+    verdict is the status line and the type, which is the law; the drain below
+    is courtesy and can never overturn it.
     """
     parts = urllib.parse.urlsplit(url)
     if parts.scheme != "http" or not parts.hostname:
@@ -117,13 +128,23 @@ def face_serves(url, timeout=1.5, connect_timeout=PROBE_CONNECT):
                                       timeout=connect_timeout)
     try:
         conn.connect()
+        # getresponse() may clear conn.sock in this Python version, so the
+        # socket is held here for the drain below.
+        sock = conn.sock
         left = timeout - (time.monotonic() - started)
-        conn.sock.settimeout(max(left, 0.05))
+        sock.settimeout(max(left, 0.05))
         conn.request("GET", target)
         resp = conn.getresponse()
         ctype = (resp.getheader("Content-Type") or "").lower()
         ok = resp.status == 200 and "text/html" in ctype
-        resp.read()
+        # R3341: the verdict is already decided above; the drain stays inside
+        # the remaining budget and is not allowed to turn a serving face dead.
+        left = timeout - (time.monotonic() - started)
+        try:
+            sock.settimeout(max(left, 0.05))
+            resp.read()
+        except (OSError, ValueError, http.client.HTTPException):
+            pass
         return ok
     except (OSError, ValueError, http.client.HTTPException):
         return False
