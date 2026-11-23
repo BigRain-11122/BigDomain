@@ -37,6 +37,16 @@ before their code landed):
            workers=1 costs at least 1.5s of wall time, the shipped default
            costs under 1.2s, and 200/503/closed/non-root verdicts are
            unchanged.
+  AC-HUB9  the page asks on load and on the button, never on a timer (R3337
+           measured zero autotimers, a dead face costing its whole timeout -
+           357ms on the connect reading, 1500ms on the HTTP reading - against
+           1.1ms for a pool of eight threads, so the cost is the dead face and
+           not the threads): the page carries no setInterval/setTimeout/
+           requestAnimationFrame, exactly two fetch calls with the unprobed
+           list issued BEFORE the probing one, and the refresh control wired to
+           the same probe; measured, the unprobed list carries no live key and
+           answers inside half a second, while the probing read carries one
+           entry per published face.
 """
 
 import hashlib
@@ -430,11 +440,48 @@ def main():
                     srv.shutdown()
                     srv.server_close()
 
+        # ---------------- AC-HUB9 ----------------
+        try:
+            page = disk_bytes.decode("utf-8")
+            timers = sum(page.count(name) for name in
+                         ("setInterval", "setTimeout", "requestAnimationFrame"))
+            assert timers == 0, "page carries %d auto-timer mentions" % timers
+            fetches = page.count("fetch(")
+            assert fetches == 2, "page issues %d fetch calls, expected 2" % fetches
+            plain_at = page.index("\n  fetch('/hub/api/faces'")
+            assert page.count("probe();") == 1, (
+                "the probing read is not triggered exactly once in the boot path")
+            assert plain_at < page.index("probe();"), (
+                "the boot path triggers the probing read before the plain answer")
+            assert 'id="refresh"' in page, "page carries no refresh control"
+            assert "refresh.addEventListener('click', probe)" in page, (
+                "the refresh control is not wired to the same probe")
+
+            started = time.perf_counter()
+            status, ctype, plain_body = http_get(base + "/hub/api/faces")
+            plain_ms = (time.perf_counter() - started) * 1000.0
+            assert status == 200 and "application/json" in ctype.lower(), (status, ctype)
+            plain = json.loads(plain_body.decode("utf-8"))
+            assert "live" not in plain, "the unprobed list already carries live readings"
+            assert plain_ms < 500, "the unprobed list took %.0fms" % plain_ms
+
+            _, _, probed_body = http_get(base + "/hub/api/faces?probe=1")
+            probed = json.loads(probed_body.decode("utf-8"))
+            ports = probed.get("face_ports") or {}
+            assert set(probed.get("live") or {}) == set(ports), (
+                "probing read covers %r against published %r"
+                % (sorted(probed.get("live") or {}), sorted(ports)))
+            print("PASS AC-HUB9 timers=0 fetches=2 plain_first=True refresh_wired=True "
+                  "plain_ms=%.0f live_entries=%d" % (plain_ms, len(ports)))
+        except AssertionError as exc:
+            failed += 1
+            print("FAIL AC-HUB9 :: %s" % exc)
+
     finally:
         if leg is not None:
             leg.close()
 
-    total = 8
+    total = 9
     if failed:
         print("SUITE FAIL %d/%d" % (total - failed, total))
         return 1

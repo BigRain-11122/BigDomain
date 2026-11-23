@@ -482,7 +482,7 @@ SUITES = [
     # the shipped probe whether a listening port whose page answers 503 still
     # reads live - measured: it no longer does, and the old connect-only
     # reading is printed beside it.)
-    ("os-sandbox-hub", os.path.join("lobby", "test_hub_page.py"), 8),
+    ("os-sandbox-hub", os.path.join("lobby", "test_hub_page.py"), 9),
     # one-click launcher (R3333): the board head asked for the proof to be
     # scriptized instead of hand-copied into qa/, and for a teardown reading
     # that can say a child really is gone. The suite runs the shipped launcher

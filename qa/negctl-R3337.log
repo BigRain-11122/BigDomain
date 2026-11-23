@@ -1,0 +1,5 @@
+ARM0 live fails=[]
+ARM timer fails=['timers=1']
+ARM unwired fails=['refresh not wired']
+ARM probing-boot fails=['no plain boot fetch']
+ARM double-trigger fails=['probe triggers=2']
