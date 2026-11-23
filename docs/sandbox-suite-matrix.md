@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 764 | 6400 | 675/675 | R2739 |
+| 764 | 6401 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -651,7 +651,7 @@
 | 612 | os-queue-export-freshness-gate | ../os/test_queue_export_freshness_gate.py | 6 | green | 1.7 |
 | 613 | os-queue-export-gate-wire | ../os/test_queue_export_gate_wire.py | 6 | green | 0.6 |
 | 614 | os-export-driver-queue-face | ../os/test_export_driver_queue_face.py | 6 | green | 0.4 |
-| 615 | os-export-consistency-queue-face | ../os/test_export_consistency_queue_face.py | 6 | green | 0.4 |
+| 615 | os-export-consistency-queue-face | ../os/test_export_consistency_queue_face.py | 7 | green | 0.4 |
 | 616 | os-closeout-export-parity-text-binding | ../os/test_closeout_export_parity_text_binding.py | 6 | green | 0.9 |
 | 617 | os-export-closeout-gate-parity | ../os/test_export_closeout_gate_parity.py | 6 | green | 1.0 |
 | 618 | os-closeout-export-parity-wire | ../os/test_closeout_export_parity_wire.py | 16 | green | 0.5 |
@@ -801,7 +801,7 @@
 | 762 | claim-census | test_claim_census.py | 10 | no-evidence | - |
 | 763 | os-stage-residue | ../os/test_stage_residue.py | 4 | no-evidence | - |
 | 764 | os-corpus-supply-chain | ../os/test_corpus_supply_chain.py | 7 | no-evidence | - |
-|  | 合计 |  | 6400 | green 675 / FAIL 0 / no-evidence 89 |  |
+|  | 合计 |  | 6401 | green 675 / FAIL 0 / no-evidence 89 |  |
 
 ## 证据出处
 

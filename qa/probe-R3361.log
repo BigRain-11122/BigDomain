@@ -1,0 +1,8 @@
+1 copy-derived-equals-live=True
+2 copy-world self_drive PASS=11 FAIL=0
+2 copy-world claims row="FAIL claims numbers stored={'claimed': 188, 'captured': 57, "
+3 moved-world named-row='FAIL self_drive.log_lines_in_window stored=120 recomputed=119'
+4 missing-file-refusal=FileNotFoundError
+5 live-reading-unchanged=True
+6 live-face pass=22 fail=0 verdict=SUMMARY pass=22 fail=0 state_tick=3360 window=2026-11-17..2026-11-23 W=119 idle=0 nop=0 sub=20 proposals=11/9 queues=6/8/4
+7 copy-world pass=21 fail=1

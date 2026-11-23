@@ -70,8 +70,13 @@ def queue_line(queue_verdict, drifted):
 
 
 def read(root=".", export_path=None):
-    """The twenty-one shipped checks plus the live queue reading, at CALL time."""
-    base_lines, base_pass, base_fail = CEC.check()
+    """The twenty-one shipped checks plus the live queue reading, at CALL time.
+
+    R3361 AC-ECQF7: root names the world for BOTH faces - the base checks and
+    the queue gate now read the same tree, so a private world is graded on
+    both instead of the base face silently grading the shipped tree.
+    """
+    base_lines, base_pass, base_fail = CEC.check(root)
     path = export_path or os.path.join(root, DEFAULT_EXPORT)
     try:
         result, queue_code = QEF.check(root, path)

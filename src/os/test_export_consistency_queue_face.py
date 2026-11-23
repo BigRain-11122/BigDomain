@@ -1,7 +1,8 @@
-"""export_consistency_queue_face suite (R2498).
+"""export_consistency_queue_face suite (R2498, AC-ECQF7 at R3361).
 
-Criteria AC-ECQF1..AC-ECQF6 were pinned inside the R2497 tech seed row of
-state/queue/tech.md:533 BEFORE this code existed.
+Criteria AC-ECQF1..AC-ECQF7 were pinned inside the R2497 tech seed row of
+state/queue/tech.md:533 BEFORE this code existed; AC-ECQF7 was pinned in the
+R3361 board head before the root parameter existed.
 
 What this proves: check_export_consistency is the twenty-two-check face every
 window trusts, and it never opens the export's queue block. R2497 MEASURED a
@@ -30,12 +31,21 @@ import check_export_consistency as CEC  # noqa: E402
 import export_consistency_queue_face as ECQF  # noqa: E402
 import queue_export_freshness_gate as QEF  # noqa: E402
 
-EXPECTED_CRITERIA = 6
+EXPECTED_CRITERIA = 7
 MODULE = os.path.join(BASE, "export_consistency_queue_face.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 EXPORT = os.path.join(REPO, "docs", "status-export.json")
 LABEL = "os-export-consistency-queue-face"
-WIRED_EXPECT = '"test_export_consistency_queue_face.py"), 6),'
+WIRED_EXPECT = '"test_export_consistency_queue_face.py"), 7),'
+WORLD_FILES = (
+    "src/os/state.json",
+    "docs/status-export.json",
+    "docs/proposals.md",
+    "src/os/export_consistency_patterns.json",
+    "state/queue/main.md",
+    "state/queue/tech.md",
+    "state/queue/explore.md",
+)
 ALLOWED_IMPORTS = {"json", "os", "sys", "check_export_consistency",
                    "queue_export_freshness_gate"}
 
@@ -110,6 +120,18 @@ def current_export(tmpdir):
     return path
 
 
+def private_world(tmpdir):
+    """A byte copy of the seven files the shipped caliber reads, one world."""
+    for rel in WORLD_FILES:
+        src = os.path.join(REPO, rel)
+        dst = os.path.join(tmpdir, rel)
+        parent = os.path.dirname(dst)
+        if not os.path.isdir(parent):
+            os.makedirs(parent)
+        shutil.copyfile(src, dst)
+    return tmpdir
+
+
 def run_cli(args):
     proc = subprocess.run([sys.executable, MODULE] + args, cwd=REPO,
                           stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -138,7 +160,7 @@ def ac_ecqf1_call_time():
           "AC-ECQF1 queue reading asked at CALL time (patched gate moves it)")
 
     fake_base = (["PASS base.sentinel stored=1"], 22, 0)
-    with patched(CEC, "check", lambda: fake_base):
+    with patched(CEC, "check", lambda root=None: fake_base):
         result = ECQF.read(REPO, EXPORT)
     check(result["base_lines"] == ["PASS base.sentinel stored=1"]
           and result["base_pass"] == 22 and result["base_fail"] == 0,
@@ -236,8 +258,50 @@ def ac_ecqf6_hygiene():
           "AC-ECQF6 imports are stdlib plus the two shipped faces only")
     runner = read_text(RUNNER)
     check(runner.count(WIRED_EXPECT) == 1 and runner.count('"%s"' % LABEL) == 1,
-          "AC-ECQF6 exactly one registry row wires this suite with 6 criteria")
-    check(EXPECTED_CRITERIA == 6, "AC-ECQF6 six criteria declared")
+          "AC-ECQF6 exactly one registry row wires this suite with 7 criteria")
+    check(EXPECTED_CRITERIA == 7, "AC-ECQF6 seven criteria declared")
+
+
+def ac_ecqf7_world_root():
+    """AC-ECQF7 a named root is graded, never skipped, and never borrows.
+
+    R3361: the caliber took no root, so a date-anchored private world could
+    only be skipped. Three arms: an identical copy reads identically, a moved
+    copy is graded with the field NAMED, and a world missing one of its six
+    files refuses instead of reading the real tree's copy of it.
+    """
+    tmpdir = tempfile.mkdtemp(prefix="ecqf-world-")
+    try:
+        world = private_world(tmpdir)
+        live_derived = CEC.recompute()[0]
+        world_derived = CEC.recompute(world)[0]
+        check(world_derived == live_derived,
+              "AC-ECQF7 an identical private world derives the shipped reading")
+
+        world_state = os.path.join(world, "src", "os", "state.json")
+        data = json.loads(read_text(world_state))
+        data["log"].append("2026-11-23 world arm line, dated and in window")
+        with io.open(world_state, "w", encoding="utf-8", newline="\n") as handle:
+            handle.write(json.dumps(data, ensure_ascii=False))
+        lines, _n_pass, n_fail = CEC.check(world)
+        named = [ln for ln in lines
+                 if ln.startswith("FAIL self_drive.log_lines_in_window stored=")
+                 and "recomputed=" in ln]
+        check(n_fail >= 1 and len(named) == 1,
+              "AC-ECQF7 a moved private world is graded and the field is named")
+
+        os.remove(os.path.join(world, "state", "queue", "explore.md"))
+        refused = False
+        try:
+            CEC.recompute(world)
+        except OSError:
+            refused = True
+        check(refused,
+              "AC-ECQF7 a world missing one file raises instead of borrowing")
+        check(CEC.recompute()[0] == live_derived,
+              "AC-ECQF7 grading a private world left the shipped reading intact")
+    finally:
+        shutil.rmtree(tmpdir, ignore_errors=True)
 
 
 def main():
@@ -247,6 +311,7 @@ def main():
     ac_ecqf4_current_shape()
     ac_ecqf5_purity()
     ac_ecqf6_hygiene()
+    ac_ecqf7_world_root()
     ok_run = FAILS == 0 and PASSES >= EXPECTED_CRITERIA
     law_verdict = "SUITE PASS" if ok_run else "SUITE FAIL"
     print("%s %d/%d" % (law_verdict,

@@ -6497,9 +6497,10 @@ SUITES = [
     # trusts and it never opens the export's queue block - R2497 MEASURED a
     # doctored export reading pass=21 fail=0 while queue_export_freshness_gate
     # read STALE on the same document. (AC-ECQF1..AC-ECQF6 were pinned in
-    # state/queue/tech.md:533 as the R2497 seed row BEFORE the code.)
+    # state/queue/tech.md:533 as the R2497 seed row BEFORE the code; AC-ECQF7
+    # came with the R3361 board head: a named root is graded, not skipped.)
     ("os-export-consistency-queue-face",
-     os.path.join("..", "os", "test_export_consistency_queue_face.py"), 6),
+     os.path.join("..", "os", "test_export_consistency_queue_face.py"), 7),
     # R2501: the closeout parity wire lands either transport but trusts the text
     # its caller hands in - a composition made from document A published over
     # document B read WRITTEN/AGREES and wrote A's content into B (measured at

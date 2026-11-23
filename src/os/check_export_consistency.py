@@ -117,19 +117,49 @@ def _read_text(path):
     return raw.decode("utf-8-sig")
 
 
-def _load_patterns():
-    pat = json.loads(_read_text(P_PATTERNS))
+def _load_patterns(path=None):
+    pat = json.loads(_read_text(path or P_PATTERNS))
     for key in ("tick_row_label", "proposal_open_marker", "declaration_close_marker"):
         if key not in pat or not isinstance(pat[key], str) or not pat[key]:
             raise KeyError("patterns file missing key: %s" % key)
     return pat
 
 
-def recompute():
-    """Return (derived dict, state dict, export dict, info list). Canonical caliber."""
-    pat = _load_patterns()
-    state = json.loads(_read_text(P_STATE))
-    export = json.loads(_read_text(P_EXPORT))
+def _world_paths(root=None):
+    """Resolve every file this face reads inside ONE named world.
+
+    R3361 AC-ECQF7: root=None means the tree this file ships in. A caller may
+    name another tree and get the same derivation applied to it, so a
+    date-anchored private world is graded instead of skipped. Every path moves
+    together or not at all - a reading can never mix two worlds, and a world
+    missing one of the six files raises instead of borrowing the real tree's.
+    """
+    base = ROOT if root is None else os.path.abspath(root)
+    return {
+        "state": os.path.join(base, "src", "os", "state.json"),
+        "export": os.path.join(base, "docs", "status-export.json"),
+        "proposals": os.path.join(base, "docs", "proposals.md"),
+        "patterns": os.path.join(base, "src", "os",
+                                 "export_consistency_patterns.json"),
+        "queues": {
+            "queue_main_open": os.path.join(base, "state", "queue", "main.md"),
+            "queue_tech_open": os.path.join(base, "state", "queue", "tech.md"),
+            "queue_explore_open": os.path.join(base, "state", "queue",
+                                               "explore.md"),
+        },
+    }
+
+
+def recompute(root=None):
+    """Return (derived dict, state dict, export dict, info list). Canonical caliber.
+
+    root=None reads the shipped tree; any other root applies the same caliber
+    to that world's own state, export, proposals, queues and patterns.
+    """
+    paths = _world_paths(root)
+    pat = _load_patterns(paths["patterns"])
+    state = json.loads(_read_text(paths["state"]))
+    export = json.loads(_read_text(paths["export"]))
     log = state.get("log", [])
     if not isinstance(log, list) or not log:
         raise ValueError("state.json log missing/empty")
@@ -180,13 +210,13 @@ def recompute():
             continue
         sub += 1
 
-    prop_lines = [ln for ln in _read_text(P_PROPOSALS).splitlines()
+    prop_lines = [ln for ln in _read_text(paths["proposals"]).splitlines()
                   if RE_PROPOSAL_HEADER.match(ln)]
     proposals_total = len(prop_lines)
     proposals_open = sum(1 for ln in prop_lines if pat["proposal_open_marker"] in ln)
 
     queues = {}
-    for key, path in P_QUEUES.items():
+    for key, path in paths["queues"].items():
         with open(path, "rb") as fh:
             text = fh.read().decode("utf-8-sig")
         queues[key] = sum(1 for ln in text.splitlines() if RE_QUEUE_OPEN.match(ln))
@@ -205,8 +235,11 @@ def recompute():
     return derived, state, export, pat
 
 
-def check():
-    """Return (report lines, n_pass, n_fail). Exit-code semantics per AC-EC3."""
+def check(root=None):
+    """Return (report lines, n_pass, n_fail). Exit-code semantics per AC-EC3.
+
+    root names the world graded; None means the shipped tree.
+    """
     out = []
     n_pass = 0
     n_fail = 0
@@ -220,8 +253,9 @@ def check():
             n_fail += 1
             out.append("FAIL %s stored=%r recomputed=%r" % (field, stored, recomputed))
 
+    world = ROOT if root is None else os.path.abspath(root)
     try:
-        derived, state, export, pat = recompute()
+        derived, state, export, pat = recompute(root)
     except AnchorError as exc:
         # AC-RMS5: a shape failure of the log is reported as one FAIL row
         # naming its code, never as an uncaught traceback at the caller.
@@ -282,6 +316,8 @@ def check():
         out.append("FAIL export_ts not ISO8601-parseable: %r" % (ts,))
         n_fail += 1
 
+    # The grade is the SHIPPED checker's own bytes, so it is read from this
+    # file even when the world graded is elsewhere.
     with open(P_SELF, "rb") as fh:
         src = fh.read()
     bad = [b for b in src if b >= 128]
@@ -300,7 +336,9 @@ def check():
         sys.path.insert(0, tools)
     import claim_census as CC
     landed_claims = export.get("claims")
-    derived_claims = CC.census(ROOT)
+    # One shipped implementation, applied to the named world: the module is
+    # loaded from the real tree, the walk is the world's.
+    derived_claims = CC.census(world)
     reading = {key: derived_claims.get(key) for key in
                ("claimed", "captured", "contradicted", "uncaptured",
                 "historic", "rows", "present")}
@@ -324,9 +362,11 @@ def check():
 def main():
     ap = argparse.ArgumentParser(description="status-export derived-face consistency checker")
     ap.add_argument("--out", default=None, help="write report to this file instead of stdout")
+    ap.add_argument("--root", default=None,
+                    help="repository root of the world to grade (default: this tree)")
     args = ap.parse_args()
     try:
-        lines, n_pass, n_fail = check()
+        lines, n_pass, n_fail = check(args.root)
     except Exception as exc:  # fail-closed on any unreadable/malformed input
         lines = ["FATAL %s: %s" % (type(exc).__name__, exc)]
         n_fail = 1
