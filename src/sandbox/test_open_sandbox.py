@@ -63,11 +63,22 @@ OS itself can name the owner instead of the report):
            a host whose creation time cannot be read keeps the image test and
            says so. The old "pid in table" form is reproduced in the same arm
            as the decoy, so the arm shows what it is protecting against.
+  AC-OSB10 an orphan a run never watched start is named by the NEXT run
+           (R3342): a live python child recorded by an earlier run makes the
+           launcher REFUSE with rc=2 before any face is started and the survivor
+           is named pid:exe; a recycled number (same image, moved creation time)
+           does NOT refuse and reads reused=1; after that child is gone the same
+           record reads orphans=none and is cleared. The record is what a HARD
+           killed launcher leaves behind, which is the only witness of the
+           11-22 shape (a leftover holding no port, invisible to a teardown that
+           only sees its own subtree).
 
 Cost measured at R3333: the two sandbox runs are about 3.6s each (the faces come
 up and are torn down for real); the collector arm and the socket arms are under
 a second, and the refusal arm returns before any face is spawned. AC-OSB7 adds
-one sleeping child and one in-process hub (well under a second).
+one sleeping child and one in-process hub (well under a second). AC-OSB10 adds
+three launcher runs - two refuse or clear before any face is started, one runs
+the full tree - about 8s on this machine.
 """
 
 import importlib.util
@@ -86,7 +97,7 @@ MODULE = os.path.join(HERE, "open_sandbox.py")
 WRITER = os.path.join(ROOT, "tools", "qa_log.py")
 REGISTRY = os.path.join(HERE, "reconcile_all.py")
 NO_WINDOW = getattr(subprocess, "CREATE_NO_WINDOW", 0)
-TOTAL = 9
+TOTAL = 10
 
 
 class _TableAbsent(Exception):
@@ -152,6 +163,7 @@ def main():
             json.dump({"host": "127.0.0.1", "ports": {}, "face_ports": {}}, fh)
         name = "sandbox-onclick-R3333.log"
         rc, out = run_launcher(["--check", "--prev-report", prev,
+                                "--tree", os.path.join(evidence_dir, "tree.json"),
                                 "--qa-log", name, "--qa-dir", evidence_dir])
         assert rc == 0, "real check run exited %d :: %s" % (
             rc, " | ".join(out.strip().splitlines()[-4:]))
@@ -185,6 +197,7 @@ def main():
             json.dump({"host": "127.0.0.1", "ports": {}, "face_ports": {}}, fh)
         rc, out = run_launcher(["--check", "--hold-secs", "25",
                                 "--prev-report", prev,
+                                "--tree", os.path.join(hold_dir, "tree.json"),
                                 "--qa-log", "hold.log", "--qa-dir", hold_dir])
         assert rc == 2, "a surviving child still exited %d" % rc
         match = re.search(r"descendants=(\d+) gone=(\d+)/(\d+) leftovers=([^,]+,|none|\d+:\S+)", out)
@@ -569,6 +582,84 @@ def main():
     except (AssertionError, AttributeError) as exc:
         failed += 1
         print("FAIL AC-OSB9 :: %s" % exc)
+
+    # ---------------- AC-OSB10 ----------------
+    try:
+        # The 11-22 orphan: a face that outlived its launcher and holds no port
+        # was invisible to every later run, because the teardown reading only
+        # ever saw ITS OWN subtree. Real processes here - a real python child is
+        # seeded into a record, so the census must read the OS table, not a
+        # number typed into the test.
+        orphan_dir = tempfile.mkdtemp(prefix="osb-orphan-")
+        prev = os.path.join(tempfile.mkdtemp(prefix="osb-prev-"),
+                            "sandbox-start.json")
+        with open(prev, "w", encoding="utf-8") as fh:
+            json.dump({"host": "127.0.0.1", "ports": {}, "face_ports": {}}, fh)
+        tree = os.path.join(orphan_dir, "tree.json")
+
+        child = subprocess.Popen([sys.executable, "-c",
+                                  "import time; time.sleep(60)"],
+                                 stdin=subprocess.DEVNULL,
+                                 stdout=subprocess.DEVNULL,
+                                 stderr=subprocess.DEVNULL,
+                                 creationflags=NO_WINDOW)
+        try:
+            time.sleep(0.4)
+            birth = module.process_start(child.pid)
+            assert module.write_tree(tree, [(child.pid, "python.exe", birth),
+                                            (999999, "python.exe", 1)]), \
+                "the tree record could not be written"
+
+            # (a) a live orphan from an earlier run refuses the run by name,
+            #     before nine new processes could bury it.
+            rc, out = run_launcher(["--check", "--prev-report", prev,
+                                    "--tree", tree])
+            assert rc == 2, "a live orphan still started faces (rc=%d)" % rc
+            assert "preoccupied=none" in out, \
+                "the refusal did not come from the orphan census"
+            named = re.search(r"orphans=(\d+):(\S+)", out)
+            assert named, "the orphan was not named pid:exe :: %s" % out[-300:]
+            assert named.group(1) == str(child.pid), (
+                "the wrong pid was named (%s vs %s)" % (named.group(1), child.pid))
+            assert "sandbox up:" not in out, "faces were started over an orphan"
+            assert os.path.isfile(tree), "the record of an unfinished run was deleted"
+
+            # (b) a RECYCLED number is reused, not an orphan: the same pid with a
+            #     moved creation time must not make this run refuse a stranger.
+            if birth is not None:
+                module.write_tree(tree, [(child.pid, "python.exe", birth + 1)])
+                rc, out = run_launcher(["--check", "--prev-report", prev,
+                                        "--tree", tree])
+                reused = re.search(r"reused=(\d+)", out)
+                assert rc == 0, "a recycled pid refused the run (rc=%d)" % rc
+                assert "orphans=none" in out, "a recycled pid read as an orphan"
+                assert reused and reused.group(1) == "1", \
+                    "the recycled pid was not named reused: %r" % (reused,)
+        finally:
+            try:
+                child.kill()
+                child.wait(timeout=10)
+            except (OSError, subprocess.SubprocessError):
+                pass
+
+        # (c) the same record once the process is gone: clean, and the record is
+        #     cleared instead of refusing forever.
+        module.write_tree(tree, [(child.pid, "python.exe", birth)])
+        deadline = time.time() + 10.0
+        while time.time() < deadline and child.pid in module.process_table():
+            time.sleep(0.25)
+        rc, out = run_launcher(["--check", "--prev-report", prev,
+                                "--tree", tree])
+        assert rc == 0, "a stale record still refused the run (rc=%d)" % rc
+        assert "orphans=none" in out, "a dead recorded pid read as an orphan"
+        assert "sandbox up:" in out, "the run did not proceed past a stale record"
+        assert not os.path.isfile(tree), "a stale record was left on disk"
+        print("PASS AC-OSB10 live_refused=%s recycled=reused stale=cleared "
+              "faces_over_orphan=0" % child.pid)
+    except (AssertionError, OSError, AttributeError,
+            subprocess.SubprocessError) as exc:
+        failed += 1
+        print("FAIL AC-OSB10 :: %s" % exc)
 
     if failed:
         print("SUITE FAIL %d/%d" % (TOTAL - failed, TOTAL))

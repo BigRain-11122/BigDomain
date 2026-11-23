@@ -1,0 +1,9 @@
+R3342 orphan census probe - shipped launcher, looback only, zero external network
+A seeded=[59268 python alive birth=read, 999999 absent] rc=2
+A orphans=orphans=59268:python.exe preoccupied=none faces_started=no record_kept=True
+A verdict=PASS
+B same record, child gone: rc=0 orphans=none sandbox_up=yes record_still_there=False
+B verdict=PASS
+C recycled birth=134398715781642630 recorded=134398715781642631 rc=0 orphans=none reused=1 faces_started=yes
+C verdict=PASS
+D old_shape_pid_in_table=[59400] shipped_live=[] verdict=PASS

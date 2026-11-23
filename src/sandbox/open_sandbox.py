@@ -279,6 +279,62 @@ def leftovers(started, table, births=None):
     return left, reused, gone
 
 
+def read_tree(path):
+    """[(pid, exe, birth)] written by an earlier run; [] when absent or junk.
+
+    R3342: the teardown reading only ever sees the subtree THIS run started, so a
+    process that outlived its launcher (the 11-22 orphan) could not be named by
+    any later run. A run therefore writes its subtree to disk while the tree is
+    still alive; whatever is on disk when a launcher is HARD killed is the only
+    surviving witness of what it started.
+    """
+    try:
+        with open(path, encoding="utf-8") as fh:
+            body = json.load(fh)
+    except (OSError, ValueError):
+        return []
+    rows = body.get("pids") if isinstance(body, dict) else None
+    if not isinstance(rows, list):
+        return []
+    out = []
+    for row in rows:
+        if not isinstance(row, list) or len(row) != 3:
+            continue
+        pid, exe, birth = row
+        if not isinstance(pid, int) or not isinstance(exe, str):
+            continue
+        out.append((pid, exe, birth if isinstance(birth, int) else None))
+    return out
+
+
+def write_tree(path, recorded):
+    """Record the subtree this run started, so a hard kill cannot hide it."""
+    payload = {"pids": [[pid, exe, birth] for pid, exe, birth in recorded]}
+    try:
+        os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
+        with open(path, "w", encoding="utf-8") as fh:
+            json.dump(payload, fh)
+        return True
+    except OSError:
+        return False
+
+
+def orphans(recorded, table=None):
+    """(live, reused, gone) for pids recorded by an EARLIER run.
+
+    A different question from leftovers(): a leftover is a survivor of THIS run's
+    subtree and was seen alive before the stop file was written; an orphan was
+    started by a run this one never watched, so the only evidence it exists is
+    the record on disk plus the OS table. Same identity test - same image AND,
+    when readable, the same creation time - so a recycled number is named reused
+    instead of being called an orphan (and killed).
+    """
+    table = process_table() if table is None else table
+    births = {pid: process_start(pid) for pid, _e, _b in recorded
+              if pid in table}
+    return leftovers(recorded, table, births)
+
+
 def python_count(table):
     """Live python interpreters on this machine - context only, never a gate."""
     return sum(1 for _pid, (_ppid, exe) in table.items()
@@ -523,6 +579,10 @@ def main(argv=None):
                         help="read this file as the previous run's port table "
                              "(default logs/sandbox-start.json); suites point "
                              "it at a private world")
+    parser.add_argument("--tree", default=None, metavar="PATH",
+                        help="subtree record written by each run and read by "
+                             "the next one (default logs/sandbox-tree.json); "
+                             "suites point it at a private world")
     args = parser.parse_args(argv)
 
     lines = []
@@ -535,6 +595,7 @@ def main(argv=None):
     report_path = os.path.join(LOGS, "sandbox-start.json")
     stop_path = os.path.join(LOGS, "sandbox-stop.txt")
     child_log = os.path.join(LOGS, "sandbox-start.log")
+    tree_path = args.tree or os.path.join(LOGS, "sandbox-tree.json")
 
     # R3334: the previous run's port table is on disk until this run deletes it,
     # so read it FIRST and ask every recorded port whether something still
@@ -561,6 +622,39 @@ def main(argv=None):
         if args.qa_log and not write_disposition(args, lines):
             return 2
         return 2
+
+    # R3342: a port is only one way a leftover announces itself. A face that
+    # outlived its launcher and holds no port was invisible to every later run
+    # (the 11-22 orphan). The subtree record left on disk is the witness, and it
+    # is read BEFORE nine new processes would bury it. Nothing is killed here:
+    # a number may have been recycled, so a live same-process pid is named and
+    # this run refuses instead of guessing.
+    recorded_tree = read_tree(tree_path)
+    live_orphans, reused_orphans, stale_orphans = (
+        orphans(recorded_tree) if recorded_tree else ([], [], []))
+    was_called = {pid: exe for pid, exe, _b in recorded_tree}
+    say("orphans=%s records=%d reused=%d gone=%d"
+        % (",".join("%d:%s" % (pid, was_called.get(pid, "?"))
+                    for pid in live_orphans) or "none",
+           len(recorded_tree), len(reused_orphans), len(stale_orphans)))
+    if live_orphans:
+        say("REFUSED %d process(es) recorded by an earlier run are still the "
+            "same processes (%d record(s) read, %d recycled, %d gone); nothing "
+            "was started here and nothing was killed, because a recycled pid "
+            "belongs to a stranger"
+            % (len(live_orphans), len(recorded_tree), len(reused_orphans),
+               len(stale_orphans)))
+        say("VERDICT FAIL hub=- faces=0/8 clean=False")
+        if args.qa_log and not write_disposition(args, lines):
+            return 2
+        return 2
+    if recorded_tree:
+        # Every recorded pid is gone or recycled: the record outlived what it
+        # described, so it is cleared instead of refusing forever.
+        try:
+            os.remove(tree_path)
+        except OSError:
+            pass
 
     for path in (report_path, stop_path):
         try:
@@ -620,6 +714,12 @@ def main(argv=None):
     hosts_seen = sum(1 for pid in descendants(os.getpid(), now)
                      if now[pid][1].lower().startswith("conhost"))
 
+    # R3342: written while the tree is still alive, so a launcher that is HARD
+    # killed here leaves the only witness of what it started. Deleted again on a
+    # clean teardown, so a record on disk always means "the run before this one
+    # did not finish".
+    tree_written = write_tree(tree_path, started) if started else False
+
     try:
         if args.check:
             time.sleep(2.0)
@@ -678,8 +778,19 @@ def main(argv=None):
             except OSError:
                 pass
         if reaped:
+            # R3342 (measured the same round): this reading used to take ONE
+            # snapshot right after os.kill, and the first AC-OSB3 run of the
+            # round read "a survivor outlived the reap" while two later runs of
+            # the same arm read still=none - the kill is asynchronous, so the
+            # number was racing the table. Bounded wait, same criterion: a
+            # process that really survived stays for the whole window.
+            reap_end = time.time() + min(args.settle, 1.0)
             after = process_table()
             still = [pid for pid in reaped if pid in after]
+            while still and time.time() < reap_end:
+                time.sleep(0.1)
+                after = process_table()
+                still = [pid for pid in reaped if pid in after]
             say("reaped=%d still=%s"
                 % (len(reaped), ", ".join(str(p) for p in still) or "none"))
             clean = clean and not still
@@ -688,6 +799,19 @@ def main(argv=None):
         say("descendants=unread gone=unread leftovers=unread"
             " python_now=unread tree=snapshot-refused")
         clean = False
+
+    # R3342: the record outlives this process only when the teardown did not
+    # finish, so the next run can name what this one left behind.
+    if tree_written:
+        if clean:
+            try:
+                os.remove(tree_path)
+            except OSError:
+                pass
+            say("tree=removed")
+        else:
+            say("tree=kept pids=%d (an unfinished teardown is the next run's "
+                "orphan census)" % len(started))
 
     verdict = ok and clean
     say("VERDICT %s hub=%s faces=%d/%d clean=%s"

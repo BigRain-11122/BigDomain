@@ -3,7 +3,7 @@
     "board_pages_skipped": [
       "preview/face-sweep.html (8878B)"
     ],
-    "current": "2026-11-23 R3341 PRODUCT+ENGINEERING: the sandbox probe could report a LIVE face as dead, because read() sat inside the verdict - a face that answered 200 text/html and then streamed its body was called dead, so the CEO page would have written not-started. The same round measured and REFUSED the faster dead-face trade.",
+    "current": "2026-11-23 R3342 PRODUCT+ENGINEERING: the launcher can now name an orphan it never watched start - the 11-22 shape (a face that outlived its launcher and holds no port) was invisible to a teardown reading that only ever saw its own subtree, and the nine rounds of carrying that item were a missing problem definition rather than a missing sentence.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
     "last_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-23 commit]",
     "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-23 commit]",
@@ -11,9 +11,9 @@
     "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/negctl-R3341.log (540B, 2026-11-23)",
     "latest_evidence": "qa/negctl-R3341.log (540B, 2026-11-23)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3340] next window (<=48h): (1) 11-22 孤儿案写进 QA charter 的 teardown 检查项（R3332..R3340 **八轮**原封搬来，仍未做）。(2) 静默面（接受连接却不出话）仍吃满读取预算（1.0s 预算实测 1013ms）——先只读量「首字节/部分响应」或「HTTP 头单独预算」能否在**不猜**的前提下提速：若给头单独短预算会把合法慢面读死，则如实留边界并写明代价。(3) 全量 762 行 battery 至今未实跑（R3313 起只由代码路径证明·**最大诚实欠账**）——先只读量电池的 suite 数与最慢几支，给出分批跑法与总预算，能在窗内跑完就落一次实跑证据。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。承（未变）：`test_face_sweep` 54/56（AC-FSWB20/20c）。产品真缺口仍是物理件｛商户号／服务器／域名／备案+ICP／小程序 appid+secret｝——买家仍付不了钱。",
-    "next_milestone_due": "2026-11-25T09:27:32+08:00",
-    "updated_at": "2026-11-23T09:27:32+08:00",
+    "next_milestone": "[R3342] next window (<=48h): (1) 静默面仍吃满读取预算（1.0s 预算实测 1015ms）——R3341 已量并拒绝短头预算，剩下的只有**产品口径**一途（页上写「探测中」而不是等满超时）；本窗未做，下窗先只读量页面现状（`src/sandbox/lobby/hub_page.py` 的等待分支与页面文案）再决定是否改口径，判据=改前后同一静默面的**用户可见等待时间**读数并列，且不得把死面读活。(2) 全量 762 行 battery 从未实跑（上一份全量证据 R2739：675 套件 / 4986.4s）——根因已量出=83 分钟而一窗 25 分钟；下窗用 `tools/battery_shard.py`（`--cap` 限单支、`--evidence` 落盘）按族切片逐窗跑一片并登记已跑族，直到覆盖 762。(3) 孤儿普查的**跨轮真形状**仍未实跑：本轮只证「记录在盘 + 活进程被点名」，未证「启动器被硬杀后其子进程留下记录、下一次起树拒绝」这条端到端链（硬杀会同时留下握端口的子进程，preoccupied 会先拦，需设计一个不握端口的子进程世界才能隔离）——下窗做这个隔离世界，判据=硬杀前后两次起树的判词并列。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。承（未变）：全量 762 行 battery 未实跑（R3313 AC-RCA5 只由代码路径证明）；`test_face_sweep` 54/56（AC-FSWB20/20c）；`BigDomain-OSLoop` LogonType=Interactive。产品真缺口仍是物理件｛商户号／服务器／域名／备案+ICP／小程序 appid+secret｝——买家仍付不了钱。",
+    "next_milestone_due": "2026-11-25T09:48:43+08:00",
+    "updated_at": "2026-11-23T09:48:43+08:00",
     "heartbeat": {
       "tick": 3341,
       "state_tick": 3341,
@@ -37,8 +37,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-23 R3341 PRODUCT+ENGINEERING: the sandbox probe could report a LIVE face as dead, because read() sat inside the verdict - a face that answered 200 text/html and then streamed its body was called dead, so the CEO page would have written not-started. The same round measured and REFUSED the faster dead-face trade.",
-  "claims": {"claimed": 313, "captured": 95, "contradicted": 10, "uncaptured": 208, "historic": 7, "rows": 29, "present": true, "census_ts": "2026-11-23T09:27:32+08:00"},
+  "current": "2026-11-23 R3342 PRODUCT+ENGINEERING: the launcher can now name an orphan it never watched start - the 11-22 shape (a face that outlived its launcher and holds no port) was invisible to a teardown reading that only ever saw its own subtree, and the nine rounds of carrying that item were a missing problem definition rather than a missing sentence.",
+  "claims": {"claimed": 314, "captured": 95, "contradicted": 10, "uncaptured": 209, "historic": 7, "rows": 29, "present": true, "census_ts": "2026-11-23T09:48:43+08:00"},
   "chain": {"present": true, "rows": 29, "broken": 0, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -67,11 +67,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-23 R3341 PRODUCT+ENGINEERING: the sandbox probe could report a LIVE face as dead, because read() sat inside the verdict - a face that answered 200 text/html and then streamed its body was called dead, so the CEO page would have written not-started. The same round measured and REFUSED the faster dead-face trade.",
-  "export_ts": "2026-11-23T09:27:32+08:00",
+  "do": "2026-11-23 R3342 PRODUCT+ENGINEERING: the launcher can now name an orphan it never watched start - the 11-22 shape (a face that outlived its launcher and holds no port) was invisible to a teardown reading that only ever saw its own subtree, and the nine rounds of carrying that item were a missing problem definition rather than a missing sentence.",
+  "export_ts": "2026-11-23T09:48:43+08:00",
   "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-23 commit]",
   "latest_evidence": "qa/negctl-R3341.log (540B, 2026-11-23)",
-  "next_milestone": "[R3340] next window (<=48h): (1) 11-22 孤儿案写进 QA charter 的 teardown 检查项（R3332..R3340 **八轮**原封搬来，仍未做）。(2) 静默面（接受连接却不出话）仍吃满读取预算（1.0s 预算实测 1013ms）——先只读量「首字节/部分响应」或「HTTP 头单独预算」能否在**不猜**的前提下提速：若给头单独短预算会把合法慢面读死，则如实留边界并写明代价。(3) 全量 762 行 battery 至今未实跑（R3313 起只由代码路径证明·**最大诚实欠账**）——先只读量电池的 suite 数与最慢几支，给出分批跑法与总预算，能在窗内跑完就落一次实跑证据。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。承（未变）：`test_face_sweep` 54/56（AC-FSWB20/20c）。产品真缺口仍是物理件｛商户号／服务器／域名／备案+ICP／小程序 appid+secret｝——买家仍付不了钱。",
+  "next_milestone": "[R3342] next window (<=48h): (1) 静默面仍吃满读取预算（1.0s 预算实测 1015ms）——R3341 已量并拒绝短头预算，剩下的只有**产品口径**一途（页上写「探测中」而不是等满超时）；本窗未做，下窗先只读量页面现状（`src/sandbox/lobby/hub_page.py` 的等待分支与页面文案）再决定是否改口径，判据=改前后同一静默面的**用户可见等待时间**读数并列，且不得把死面读活。(2) 全量 762 行 battery 从未实跑（上一份全量证据 R2739：675 套件 / 4986.4s）——根因已量出=83 分钟而一窗 25 分钟；下窗用 `tools/battery_shard.py`（`--cap` 限单支、`--evidence` 落盘）按族切片逐窗跑一片并登记已跑族，直到覆盖 762。(3) 孤儿普查的**跨轮真形状**仍未实跑：本轮只证「记录在盘 + 活进程被点名」，未证「启动器被硬杀后其子进程留下记录、下一次起树拒绝」这条端到端链（硬杀会同时留下握端口的子进程，preoccupied 会先拦，需设计一个不握端口的子进程世界才能隔离）——下窗做这个隔离世界，判据=硬杀前后两次起树的判词并列。备选=P2 队头 `state/queue/tech.md`、P3 队头 `state/queue/explore.md`。承（未变）：全量 762 行 battery 未实跑（R3313 AC-RCA5 只由代码路径证明）；`test_face_sweep` 54/56（AC-FSWB20/20c）；`BigDomain-OSLoop` LogonType=Interactive。产品真缺口仍是物理件｛商户号／服务器／域名／备案+ICP／小程序 appid+secret｝——买家仍付不了钱。",
   "outs": [
     "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-23 commit]",
     "preview/platform-live-report.html (8621B) + preview/platform-live-report.json (6228B) [2026-11-23 mtime]",
@@ -167,8 +167,8 @@
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 76349,
-  "next_milestone_due": "2026-11-25T09:27:32+08:00",
+  "state_bytes": 75707,
+  "next_milestone_due": "2026-11-25T09:48:43+08:00",
   "heartbeat": {
     "tick": 3341,
     "state_tick": 3341,

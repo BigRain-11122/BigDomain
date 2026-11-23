@@ -1,0 +1,4 @@
+R3342 negative control - three mutants, each expected RED
+M1 naive_pid_in_table=[56600] shipped_live=[] verdict=PASS
+M2 image_only_left=[56600] shipped_live=[] verdict=PASS
+M3 no_census rc=0 refused=False faces_started=True mutant_deleted=True verdict=PASS
