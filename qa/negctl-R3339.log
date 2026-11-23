@@ -1,0 +1,14 @@
+SECTION 1 live control (shipped code, real OS table)
+ARM match                  expect=[('ours', 'sock-pid')] got=[('ours', 'sock-pid')] -> OK
+ARM mismatch               expect=[('foreign', 'sock-pid-other')] got=[('foreign', 'sock-pid-other')] -> OK
+SECTION 2 mutant: hide the OS table (the R3335 reading)
+ARM blind-mismatch         expect=[('foreign', 'sock-pid-other')] got=[('ours', 'pid-alive')] -> OK
+  blind table reads [('ours', 'pid-alive')] - a FALSE ours on the same socket
+SECTION 3 mutant: the OS names a pid the report never recorded
+ARM hub-unrecorded         expect=[('foreign', 'sock-pid-unrecorded')] got=[('foreign', 'sock-pid-unrecorded')] -> OK
+SECTION 4 mutant: the OS table lies about the owner
+ARM forged-row             expect=[('ours', 'sock-pid')] got=[('ours', 'sock-pid')] -> OK
+SECTION 5 live control again (must stay green)
+ARM match                  expect=[('ours', 'sock-pid')] got=[('ours', 'sock-pid')] -> OK
+ARM mismatch               expect=[('foreign', 'sock-pid-other')] got=[('foreign', 'sock-pid-other')] -> OK
+DONE unexpected=0

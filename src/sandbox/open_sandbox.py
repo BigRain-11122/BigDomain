@@ -54,6 +54,20 @@ process is still running, hub-api proves the answering server CALLS ITSELF our
 hub, and neither proves socket ownership - foreign is an argument from a dead
 pid, not a claim about who took the number.
 
+R3339: ownership stopped being self-reported. The OS listen table (iphlpapi
+GetExtendedTcpTable, LISTEN rows) names the process that actually holds each
+IPv4 listening socket, so a face port whose recorded pid matches that owner and
+whose image is python now reads ours:sock-pid, and a port whose recorded pid is
+a DIFFERENT process reads foreign:sock-pid-other with both pids printed. The
+hub port is upgraded only when its OS owner appears in the pids the report
+already recorded - it has no per-face pid of its own. A refused table (or a
+port missing from it) changes nothing: the older bases above still decide, so a
+host without iphlpapi keeps today's readings. Measured before this landed: a
+real launcher run showed the hub, ws, city and gate ports owned by the LOBBY
+child (pid 57592) while the report's registry pid was the launcher (55616), so
+comparing the hub port against registry.pid would have invented a foreign
+owner - only a per-port pid match is treated as evidence.
+
 Usage:
   python src/sandbox/open_sandbox.py             # serve and open the browser
   python src/sandbox/open_sandbox.py --no-browser
@@ -85,6 +99,21 @@ START_ALL = os.path.join(HERE, "start_all.py")
 NO_WINDOW = getattr(subprocess, "CREATE_NO_WINDOW", 0)
 
 TH32CS_SNAPPROCESS = 0x00000002
+
+AF_INET = 2
+TCP_TABLE_OWNER_PID_LISTENER = 3
+_ERROR_INSUFFICIENT_BUFFER = 122
+
+
+class _MIB_TCPROW_OWNER_PID(ctypes.Structure):
+    _fields_ = [
+        ("dwState", wintypes.DWORD),
+        ("dwLocalAddr", wintypes.DWORD),
+        ("dwLocalPort", wintypes.DWORD),
+        ("dwRemoteAddr", wintypes.DWORD),
+        ("dwRemotePort", wintypes.DWORD),
+        ("dwOwningPid", wintypes.DWORD),
+    ]
 
 
 class _PROCESSENTRY32W(ctypes.Structure):
@@ -131,6 +160,43 @@ def process_table():
             kernel32.CloseHandle(ctypes.c_void_p(snap))
         return table
     except OSError:
+        return {}
+
+
+def listen_owners():
+    """{port: pid} for every IPv4 socket in LISTEN state; {} when refused.
+
+    R3339 (measured): the OS named this machine's own listeners correctly - a
+    port bound in this process read back this pid, a port bound in a child read
+    back the child pid, and a closed port was absent - which is what turns
+    "the report says it was ours" into "the OS says this process holds it". A
+    refused or missing table answers {} and never a guess, so the older bases
+    keep deciding on a host without iphlpapi.
+    """
+    if not hasattr(ctypes, "WinDLL"):
+        return {}
+    try:
+        api = ctypes.WinDLL("iphlpapi", use_last_error=True)
+        size = wintypes.DWORD(0)
+        rc = api.GetExtendedTcpTable(None, ctypes.byref(size), False, AF_INET,
+                                     TCP_TABLE_OWNER_PID_LISTENER, 0)
+        if rc != _ERROR_INSUFFICIENT_BUFFER:
+            return {}
+        buf = ctypes.create_string_buffer(size.value)
+        rc = api.GetExtendedTcpTable(buf, ctypes.byref(size), False, AF_INET,
+                                     TCP_TABLE_OWNER_PID_LISTENER, 0)
+        if rc != 0:
+            return {}
+        count = ctypes.cast(buf, ctypes.POINTER(wintypes.DWORD))[0]
+        row_size = ctypes.sizeof(_MIB_TCPROW_OWNER_PID)
+        base = ctypes.addressof(buf) + ctypes.sizeof(wintypes.DWORD)
+        out = {}
+        for idx in range(count):
+            row = _MIB_TCPROW_OWNER_PID.from_address(base + idx * row_size)
+            out[int(socket.ntohs(row.dwLocalPort & 0xFFFF))] = \
+                int(row.dwOwningPid)
+        return out
+    except (OSError, AttributeError, ValueError):
         return {}
 
 
@@ -268,17 +334,34 @@ def face_by_port(report):
     return out
 
 
-def port_owners(report, host="127.0.0.1", table=None):
+def port_owners(report, host="127.0.0.1", table=None, sockets=None):
     """[(port, key, owner, basis)] of recorded ports that still answer.
 
     owner is ours / foreign / unknown and basis names the reading behind it, so
     a refusal carries evidence instead of a guess. Ascending by port, one entry
     per number.
+
+    R3339: when the OS listen table names the process holding the socket, that
+    beats every self-reported reading. A face port whose recorded pid IS the
+    socket owner (and whose image is python) reads ours:sock-pid; a face port
+    whose recorded pid is a different live process reads foreign:sock-pid-other
+    and both pids are printed. Only a per-port pid match counts: a real launcher
+    run measured the hub, ws, city and gate ports owned by the lobby child while
+    the report records the launcher as registry, so those ports are never
+    compared against the registry pid. With no socket row, or no recorded pid,
+    the pre-R3339 bases decide exactly as before.
     """
     table = process_table() if table is None else table
+    sockets = listen_owners() if sockets is None else sockets
     recorded = previous_port_table(report)
     face_of = face_by_port(report)
     pids = (report or {}).get("pids") or {}
+    known_pids = set()
+    for value in pids.values():
+        try:
+            known_pids.add(int(value))
+        except (TypeError, ValueError):
+            continue
     hub_port = report_hub_port(report)
     payload = hub_payload(host, hub_port) if hub_port else None
     published = set()
@@ -293,18 +376,35 @@ def port_owners(report, host="127.0.0.1", table=None):
         if not probe_port(host, port):
             continue
         key = recorded[port]
-        if payload is not None and port == hub_port:
-            owners.append((port, key, "ours", "hub-api"))
-            continue
-        if port in published:
-            owners.append((port, key, "ours", "hub-api-listed"))
-            continue
         face = face_of.get(port)
         pid = pids.get(face) if face else None
         try:
             pid = int(pid) if pid is not None else None
         except (TypeError, ValueError):
             pid = None
+        sock_pid = sockets.get(port)
+        sock_exe = table.get(sock_pid, (None, ""))[1].lower() if sock_pid else ""
+        if sock_pid is not None and pid is not None:
+            if sock_pid == pid and sock_exe.startswith("python"):
+                owners.append((port, key, "ours", "sock-pid"))
+                continue
+            if sock_pid != pid:
+                owners.append((port, key, "foreign", "sock-pid-other"))
+                continue
+        if sock_pid is not None and port == hub_port and payload is not None \
+                and known_pids:
+            if sock_pid in known_pids and sock_exe.startswith("python"):
+                owners.append((port, key, "ours", "sock-pid"))
+                continue
+            if sock_pid not in known_pids:
+                owners.append((port, key, "foreign", "sock-pid-unrecorded"))
+                continue
+        if payload is not None and port == hub_port:
+            owners.append((port, key, "ours", "hub-api"))
+            continue
+        if port in published:
+            owners.append((port, key, "ours", "hub-api-listed"))
+            continue
         if pid is not None and pid in table and \
                 table[pid][1].lower().startswith("python"):
             owners.append((port, key, "ours", "pid-alive"))
@@ -316,9 +416,9 @@ def port_owners(report, host="127.0.0.1", table=None):
     return owners
 
 
-def occupied_ports(report, host="127.0.0.1", table=None):
+def occupied_ports(report, host="127.0.0.1", table=None, sockets=None):
     """[(port, key, owner, basis)] of the previous run's ports still answering."""
-    return port_owners(report, host, table)
+    return port_owners(report, host, table, sockets)
 
 
 def write_disposition(args, lines):

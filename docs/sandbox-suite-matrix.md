@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 762 | 6374 | 675/675 | R2739 |
+| 762 | 6375 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -56,7 +56,7 @@
 | 17 | panel-lobby | test_panel_lobby.py | 6 | green | 9.1 |
 | 18 | os-lobby-lobby-page | lobby/test_lobby_page.py | 6 | green | 1.3 |
 | 19 | os-sandbox-hub | lobby/test_hub_page.py | 10 | green | 0.6 |
-| 20 | os-sandbox-open | test_open_sandbox.py | 7 | no-evidence | - |
+| 20 | os-sandbox-open | test_open_sandbox.py | 8 | no-evidence | - |
 | 21 | os-lobby-room-picker | lobby/test_lobby_rooms.py | 8 | green | 11.7 |
 | 22 | os-content-gate-console | lobby/test_gate_console.py | 6 | green | 0.6 |
 | 23 | os-ledger-page | ledger/test_ledger_page.py | 6 | green | 1.9 |
@@ -799,7 +799,7 @@
 | 760 | claim-census | test_claim_census.py | 9 | no-evidence | - |
 | 761 | os-stage-residue | ../os/test_stage_residue.py | 4 | no-evidence | - |
 | 762 | os-corpus-supply-chain | ../os/test_corpus_supply_chain.py | 7 | no-evidence | - |
-|  | 合计 |  | 6374 | green 675 / FAIL 0 / no-evidence 87 |  |
+|  | 合计 |  | 6375 | green 675 / FAIL 0 / no-evidence 87 |  |
 
 ## 证据出处
 

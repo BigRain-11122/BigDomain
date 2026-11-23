@@ -1,0 +1,33 @@
+readings:
+  our_port=62178 our_pid=9568 table_pid=9568 ok=True
+  child_port=62181 child_pid=57648 table_pid=57648 ok=True
+  closed_port=62179 present=False ok=True
+  listen_rows=53 rc=0
+  self_owned_among_the_two=1 (child must NOT be ours)
+hub_port=61655 registry_pid=59204 listen_rows=51 rc=0
+port key            answers sock_pid/sock_exe record_pid/record_exe match
+61651  -            False   None  /-            59204 /?            False
+61652  city         False   None  /-            None  /-            False
+61653  gate         False   None  /-            None  /-            False
+61654  lobby        False   None  /-            59696 /?            False
+61655  -            False   None  /-            59204 /?            False
+61656  checkout     False   None  /-            49768 /?            False
+61657  ledger       False   None  /-            60812 /?            False
+61658  ugc          False   None  /-            61064 /?            False
+61659  panel        False   None  /-            22508 /?            False
+61660  member       False   None  /-            61264 /?            False
+launcher_pid=59704 exited=None report=yes
+hub_port=62201 registry_pid=59704 listen_rows=61 rc=0
+port key            answers sock_pid/sock_exe record_pid/record_exe match
+62197  -            True    57012 /python.exe   59704 /python.exe   False
+62198  city         True    57012 /python.exe   None  /-            False
+62199  gate         True    57012 /python.exe   None  /-            False
+62200  lobby        True    57012 /python.exe   57012 /python.exe   True
+62201  -            True    57012 /python.exe   59704 /python.exe   False
+62202  checkout     True    60920 /python.exe   60920 /python.exe   True
+62203  ledger       True    22808 /python.exe   22808 /python.exe   True
+62204  ugc          True    60264 /python.exe   60264 /python.exe   True
+62205  panel        True    59172 /python.exe   59172 /python.exe   True
+62206  member       True    50280 /python.exe   50280 /python.exe   True
+registry_state=serving published=True
+teardown rc=0 stop_file_removed=False

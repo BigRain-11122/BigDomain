@@ -498,8 +498,14 @@ SUITES = [
     # spawns anything. R3335 added AC-OSB7 for attribution: an answering port is
     # read as ours when its previous face pid is still alive or when the hub
     # answers its own payload, as foreign when that pid is gone, and the payload
-    # reader is proved load-bearing by a control that disables it.
-    ("os-sandbox-open", "test_open_sandbox.py", 7),
+    # reader is proved load-bearing by a control that disables it. R3339 added
+    # AC-OSB8 for OS-level ownership: the iphlpapi listen table names the process
+    # that really holds each port, so a face whose recorded pid matches the
+    # socket owner reads ours:sock-pid and one recorded against a different live
+    # process reads foreign:sock-pid-other - the same socket answering both ways
+    # depending only on the report, which is what makes the OS reading carry the
+    # verdict instead of the report's self-description.
+    ("os-sandbox-open", "test_open_sandbox.py", 8),
     # lobby room picker and event ledger (R2464): GET /lobby/api/rooms answers
     # the server OWN configured rooms (never a literal in the module or page),
     # the page gains a selector that subscribes the new room and releases the
