@@ -1,0 +1,8 @@
+MUTANT A - connect budget restored to the whole HTTP budget
+  dead verdict=False cost=1511ms -> arm dead_new_ms<400 REDS
+MUTANT B - verdict taken from the connect alone
+  silent face connect_only=True shipped=False -> arm silent_read is False REDS
+MUTANT C - control: a live face with a wide connect budget
+  live verdict=True cost=2ms -> arms live is True stays GREEN
+MUTANT D - eight dead faces read serially
+  serial=1245ms parallel=171ms all_dead=False/False -> arm map8_dead_ms<400 REDS

@@ -1,10 +1,10 @@
 """Suite for the sandbox entry face (hub_page.py + hub.html).
 
-Seven criteria plus AC-HUB8, each read off a REAL server process and the ports
+Nine criteria plus AC-HUB10, each read off a REAL server process and the ports
 it actually bound (AC-HUB1..AC-HUB6 were pre-registered in src/os/backlog.md at
 R2462 BEFORE this module, the page and this suite existed; AC-HUB7 was
-pre-registered in the R3332 backlog row and AC-HUB8 in the R3336 row, both
-before their code landed):
+pre-registered in the R3332 backlog row, AC-HUB8 in the R3336 row, AC-HUB9 in
+the R3337 row and AC-HUB10 in the R3338 row, each before their code landed):
 
   AC-HUB1  GET /hub/ answers 200 text/html with bytes identical to the page on
            disk, bigger than 2000 bytes, and the page makes no external
@@ -47,6 +47,19 @@ before their code landed):
            the same probe; measured, the unprobed list carries no live key and
            answers inside half a second, while the probing read carries one
            entry per published face.
+  AC-HUB10 the dead-face cost is the connect budget, not the HTTP budget
+           (R3338 measured a closed loopback port hanging to its timeout
+           instead of refusing - 363ms at 0.35s, 155ms at 0.15s, stable over
+           repeats): the SAME closed port is read twice, once with the connect
+           budget restored to the whole 1.5s (the old shape, must cost more
+           than 1.4s) and once as shipped (must cost less than 0.4s), both
+           answering dead; a face that accepts and stays silent still reads
+           dead AND still costs its read budget, so the split shortens the
+           dead path without trading away sensitivity; the four verdicts
+           (200 / 503 / closed / non-root) are unchanged and a live face
+           answers inside 100ms; the connect-only path is held to the same law
+           (dead port 155ms shipped against 1507ms with the shared budget), and
+           eight dead faces through the shipped live_map cost under 400ms.
 """
 
 import hashlib
@@ -477,11 +490,103 @@ def main():
             failed += 1
             print("FAIL AC-HUB9 :: %s" % exc)
 
+        # ---------------- AC-HUB10 ----------------
+        silent_srv = ok200c = bad503c = deep_c = None
+        try:
+            # four verdicts, unchanged from R3332/R3336/R3337
+            ok200c, url200c, port200c = serve_face(200)
+            bad503c, url503c, port503c = serve_face(503)
+            deep_c, deep_url_c, deep_port_c = serve_deep("/deep/")
+            closed_c = free_port()
+            closed_url_c = "http://127.0.0.1:%d/" % closed_c
+            silent_srv, silent_url, silent_port = serve_slow(3.0)
+
+            verdicts = {
+                "ok": hub_page.face_serves(url200c),
+                "bad": hub_page.face_serves(url503c),
+                "closed": hub_page.face_serves(closed_url_c),
+                "deep": hub_page.face_serves(deep_url_c),
+            }
+            assert verdicts == {"ok": True, "bad": False, "closed": False,
+                                "deep": True}, "verdicts=%r" % (verdicts,)
+            assert http_get("http://127.0.0.1:%d/" % deep_port_c)[0] == 404, (
+                "the deep face port root is not 404")
+
+            # the same dead port, old shape against shipped shape
+            started = time.perf_counter()
+            old_shape = hub_page.face_serves(closed_url_c, connect_timeout=1.5)
+            old_ms = (time.perf_counter() - started) * 1000.0
+            started = time.perf_counter()
+            new_shape = hub_page.face_serves(closed_url_c)
+            new_ms = (time.perf_counter() - started) * 1000.0
+            assert old_shape is False and new_shape is False, (
+                "a dead face must read dead on both shapes: old=%s new=%s"
+                % (old_shape, new_shape))
+            assert old_ms > 1400.0, (
+                "the old shape cost %.0fms, so the split is not what saves time"
+                % old_ms)
+            assert new_ms < 400.0, "the shipped shape still costs %.0fms" % new_ms
+
+            # sensitivity is not traded: accepts, never answers -> still dead,
+            # still costs the read budget
+            started = time.perf_counter()
+            silent_read = hub_page.face_serves(silent_url, timeout=1.0)
+            silent_ms = (time.perf_counter() - started) * 1000.0
+            assert silent_read is False, "a silent face was read as serving"
+            assert silent_ms >= 700.0, (
+                "a silent face cost %.0fms, so the read budget was cut too"
+                % silent_ms)
+
+            started = time.perf_counter()
+            live_ok = hub_page.face_serves(url200c)
+            live_ms = (time.perf_counter() - started) * 1000.0
+            assert live_ok is True and live_ms < 100.0, (
+                "a live face read %s in %.0fms" % (live_ok, live_ms))
+
+            # the connect-only path carries the same budget law
+            started = time.perf_counter()
+            live_new = hub_page.face_live("127.0.0.1", closed_c)
+            live_new_ms = (time.perf_counter() - started) * 1000.0
+            started = time.perf_counter()
+            live_old = hub_page.face_live("127.0.0.1", closed_c, timeout=1.5)
+            live_old_ms = (time.perf_counter() - started) * 1000.0
+            assert live_new is False and live_old is False, (
+                "live readings=%s/%s" % (live_new, live_old))
+            assert live_new_ms < 400.0, (
+                "the shipped connect budget costs %.0fms" % live_new_ms)
+            assert live_old_ms > 1400.0, (
+                "the shared budget costs %.0fms, so the split is not the saving"
+                % live_old_ms)
+
+            # eight dead faces through the shipped map: the hub poll itself
+            dead_ports = dict(("f%d" % idx, free_port()) for idx in range(8))
+            started = time.perf_counter()
+            dead_map = hub_page.live_map({"face_ports": dead_ports}, "127.0.0.1")
+            dead_map_ms = (time.perf_counter() - started) * 1000.0
+            assert len(dead_map) == 8 and not any(dead_map.values()), (
+                "dead map=%r" % (dead_map,))
+            assert dead_map_ms < 400.0, (
+                "eight dead faces cost %.0fms through the shipped map" % dead_map_ms)
+
+            print("PASS AC-HUB10 verdicts=ok:True bad:False closed:False deep:True "
+                  "dead_old_ms=%.0f dead_new_ms=%.0f silent=%s/%.0fms live=%.0fms "
+                  "connect_old_ms=%.0f connect_new_ms=%.0f map8_dead_ms=%.0f"
+                  % (old_ms, new_ms, silent_read, silent_ms, live_ms,
+                     live_old_ms, live_new_ms, dead_map_ms))
+        except AssertionError as exc:
+            failed += 1
+            print("FAIL AC-HUB10 :: %s" % exc)
+        finally:
+            for srv in (ok200c, bad503c, deep_c, silent_srv):
+                if srv is not None:
+                    srv.shutdown()
+                    srv.server_close()
+
     finally:
         if leg is not None:
             leg.close()
 
-    total = 9
+    total = 10
     if failed:
         print("SUITE FAIL %d/%d" % (total - failed, total))
         return 1

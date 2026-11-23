@@ -19,14 +19,14 @@ a lie a reader can disprove in one click.
 """
 
 import concurrent.futures
+import http.client
 import json
 import os
 import socket
 import sys
 import threading
-import urllib.error
+import time
 import urllib.parse
-import urllib.request
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -64,8 +64,15 @@ MEMBER_NOTE = ("the membership page is a separate process - start "
 
 PROBE_PARAMS = ("1", "true", "yes", "on")
 
+# R3338 (measured): a closed loopback port on this machine does not refuse the
+# connection - it hangs until the budget runs out (363ms at 0.35s, 155ms at
+# 0.15s, stable over repeats) - so the budget given to the connect stage IS the
+# cost of a dead face. A live loopback face answers the SYN in under a
+# millisecond, so this is a wide margin, not a tight one.
+PROBE_CONNECT = 0.15
 
-def face_live(host, port, timeout=0.35):
+
+def face_live(host, port, timeout=PROBE_CONNECT):
     """True when something is really listening on that port right now.
 
     A TCP connect is the cheapest honest liveness test: it needs no HTTP
@@ -80,7 +87,7 @@ def face_live(host, port, timeout=0.35):
         return False
 
 
-def face_serves(url, timeout=1.5):
+def face_serves(url, timeout=1.5, connect_timeout=PROBE_CONNECT):
     """True when the face's own published root answers 200 text/html.
 
     R3332: a listening port is not a serving face. The checkout face once
@@ -88,13 +95,40 @@ def face_serves(url, timeout=1.5):
     probe that read the connect alone called it live - the same lie as a page
     naming a dead port, only harder to see. This asks for the root the hub
     itself publishes, so a face that cannot serve its page reads dead.
+
+    R3338: the connect and the answer are budgeted apart. One shared budget
+    made every dead face cost the whole HTTP timeout (measured 1520ms against a
+    1.5s budget, while the connect stage alone failed at 155ms with a 0.15s
+    budget), so the request path now gets a short connect budget and the rest
+    of the same total for the answer. A face that accepts and never answers
+    still costs the read budget - only the dead path is shortened, and the
+    verdict is the same 200-and-html test as before. Redirects are not
+    followed here; the eight published paths answer 200 directly (measured at
+    R3336), so following one would be guessing a route the hub never published.
     """
-    try:
-        with urllib.request.urlopen(url, timeout=timeout) as resp:
-            ctype = (resp.headers.get("Content-Type") or "").lower()
-            return resp.status == 200 and "text/html" in ctype
-    except (OSError, ValueError, urllib.error.URLError):
+    parts = urllib.parse.urlsplit(url)
+    if parts.scheme != "http" or not parts.hostname:
         return False
+    target = parts.path or "/"
+    if parts.query:
+        target = target + "?" + parts.query
+    started = time.monotonic()
+    conn = http.client.HTTPConnection(parts.hostname, parts.port or 80,
+                                      timeout=connect_timeout)
+    try:
+        conn.connect()
+        left = timeout - (time.monotonic() - started)
+        conn.sock.settimeout(max(left, 0.05))
+        conn.request("GET", target)
+        resp = conn.getresponse()
+        ctype = (resp.getheader("Content-Type") or "").lower()
+        ok = resp.status == 200 and "text/html" in ctype
+        resp.read()
+        return ok
+    except (OSError, ValueError, http.client.HTTPException):
+        return False
+    finally:
+        conn.close()
 
 
 def live_map(faces, host, workers=None):

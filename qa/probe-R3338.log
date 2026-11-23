@@ -1,0 +1,12 @@
+SECTION 1 - closed port (nothing bound)
+closed    port=61645  live=False/TimeoutError 358ms | urlopen=False/URLError 1525ms | twostage=False/TimeoutError connect=155ms total=155ms
+SECTION 2 - listening but silent (accepts, sleeps 3.0s)
+silent    port=61664  live=True/- 1ms | urlopen=False/TimeoutError 1504ms | twostage=False/TimeoutError connect=1378ms total=1379ms
+SECTION 3 - listening, answers 503 in 0.5ms
+bad503    port=61715  live=True/- 1ms | urlopen=False/HTTPError 1ms | twostage=False/status=503 connect=0ms total=1ms
+SECTION 4 - listening, answers 200 html
+ok200     port=61725  live=True/- 1ms | urlopen=True/status=200 1ms | twostage=True/status=200 connect=0ms total=1ms
+SECTION 5 - repeat closed x3 (is the reading stable?)
+  run0 port=61733 live=False/TimeoutError 358.4ms
+  run1 port=61738 live=False/TimeoutError 359.9ms
+  run2 port=61740 live=False/TimeoutError 357.7ms
