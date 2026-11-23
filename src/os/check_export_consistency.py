@@ -37,7 +37,8 @@ one caliber; that closes the two-caliber gap):
 
 Checks (fail-closed): every self_drive numeric/window field, the tick row,
 ceo_face three lines non-empty, do/depts/outs/results containers non-empty,
-export_ts ISO8601-parseable, and this source file pure ASCII.
+export_ts ISO8601-parseable, the claims block against the same census the
+writer publishes (R3359), and this source file pure ASCII.
 
 Reads only; writes only the evidence log given via --out.
 Exit 0 = all fields PASS. Exit 2 = any drift or missing field.
@@ -285,6 +286,30 @@ def check():
         src = fh.read()
     bad = [b for b in src if b >= 128]
     emit("checker source pure ASCII", not bad, ("%d non-ascii bytes" % len(bad)) if bad else "0", 0)
+
+    # R3359: the export's `claims` block had exactly ONE consumer that compared
+    # it against a derivation (tools/status_export_fresh.py), so staleness was
+    # invisible to this face - measured at R3358, where a stale block read
+    # PASS here while the other check named the drift. The value is asked from
+    # claim_census itself (the derivation the writer publishes), never parsed
+    # a second time, so writer, the other checker and this one share one
+    # reading. A block whose numbers moved after the last publish reads FAIL
+    # with both sides named.
+    tools = os.path.join(ROOT, "tools")
+    if tools not in sys.path:
+        sys.path.insert(0, tools)
+    import claim_census as CC
+    landed_claims = export.get("claims")
+    derived_claims = CC.census(ROOT)
+    reading = {key: derived_claims.get(key) for key in
+               ("claimed", "captured", "contradicted", "uncaptured",
+                "historic", "rows", "present")}
+    if not isinstance(landed_claims, dict):
+        out.append("FAIL claims block missing (not an object)")
+        n_fail += 1
+    else:
+        stored = {key: landed_claims.get(key, "<missing>") for key in reading}
+        emit("claims numbers", stored == reading, stored, reading)
 
     out.append("SUMMARY pass=%d fail=%d state_tick=%s window=%s W=%d idle=%d nop=%d sub=%d "
                "proposals=%d/%d queues=%d/%d/%d"

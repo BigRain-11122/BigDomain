@@ -3,9 +3,9 @@
 Criteria AC-ECQF1..AC-ECQF6 were pinned inside the R2497 tech seed row of
 state/queue/tech.md:533 BEFORE this code existed.
 
-What this proves: check_export_consistency is the twenty-one-check face every
+What this proves: check_export_consistency is the twenty-two-check face every
 window trusts, and it never opens the export's queue block. R2497 MEASURED a
-doctored export reading pass=21 fail=0 while queue_export_freshness_gate read
+doctored export reading pass=22 fail=0 while queue_export_freshness_gate read
 STALE on the same document. One face now asks that shipped gate at CALL time and
 publishes its verdict beside the twenty-one checks, never inside them.
 
@@ -137,11 +137,11 @@ def ac_ecqf1_call_time():
           and seen["root"] == REPO and seen["path"] == EXPORT,
           "AC-ECQF1 queue reading asked at CALL time (patched gate moves it)")
 
-    fake_base = (["PASS base.sentinel stored=1"], 21, 0)
+    fake_base = (["PASS base.sentinel stored=1"], 22, 0)
     with patched(CEC, "check", lambda: fake_base):
         result = ECQF.read(REPO, EXPORT)
     check(result["base_lines"] == ["PASS base.sentinel stored=1"]
-          and result["base_pass"] == 21 and result["base_fail"] == 0,
+          and result["base_pass"] == 22 and result["base_fail"] == 0,
           "AC-ECQF1 base checks asked at CALL time (patched face moves them)")
 
 
@@ -150,7 +150,7 @@ def ac_ecqf2_base_unchanged():
     lines, n_pass, n_fail = CEC.check()
     result = ECQF.read(REPO, EXPORT)
     check(result["base_lines"] == lines
-          and result["base_checks"] == n_pass + n_fail == 21,
+          and result["base_checks"] == n_pass + n_fail == 22,
           "AC-ECQF2 twenty-one base lines identical and counted")
 
 
@@ -169,7 +169,7 @@ def ac_ecqf3_drift_named():
               and "queue:tech" in drifted
               and any(name.startswith("section:") for name in drifted),
               "AC-ECQF3 stale block reads DRIFT naming queue and sections")
-        check(result["base_fail"] == 0 and result["base_pass"] == 21
+        check(result["base_fail"] == 0 and result["base_pass"] == 22
               and result["base_lines"] == CEC.check()[0],
               "AC-ECQF3 queue drift is never folded into the twenty-one")
     finally:

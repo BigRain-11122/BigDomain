@@ -1,0 +1,4 @@
+PROBE R3359 check_export_consistency
+live pass=22 fail=0
+PASS claims numbers stored={'claimed': 188, 'captured': 58, 'contradicted': 10, 'uncaptured': 120, 'historic': 7, 'rows': 43, 'present': True}
+VERDICT PASS

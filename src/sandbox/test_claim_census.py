@@ -1,8 +1,8 @@
 """Suite for the claims census: the numbers this company writes get a reader.
 
-NINE criteria. AC-CLAIM1..3 were pre-registered in the R3225 backlog PIN row,
-AC-CLAIM4..6 in the R3226 PIN row, AC-CLAIM7..9 in the R3227 PIN row - every
-group before the code it grades existed.
+TEN criteria. AC-CLAIM1..3 were pre-registered in the R3225 backlog PIN row,
+AC-CLAIM4..6 in the R3226 PIN row, AC-CLAIM7..9 in the R3227 PIN row, and
+AC-CLAIM10 in the R3359 PIN row - every group before the code it grades.
 
 R3224 measured the hole: the board wrote `LEDGER OK rows=2` while the ledger as
 that round's own commit recorded it held one row, and nothing read the number
@@ -190,7 +190,7 @@ def main():
         with io.open(REGISTRY, encoding="utf-8") as handle:
             reg = handle.read()
         found = re.search(r'test_claim_census\.py"\)\s*,\s*(\d+)', reg)
-        if not found or int(found.group(1)) != 9:
+        if not found or int(found.group(1)) != 10:
             bad3.append("registry-count-%s" % (found.group(1) if found else "-"))
         if len(RESULTS) != 2:
             bad3.append("results-before-this-arm-%d" % len(RESULTS))
@@ -422,6 +422,38 @@ def main():
             bad9.append("live-range-%d/%d" % (live["historic"],
                                               live["contradicted"]))
         report("AC-CLAIM9", bool(bad9), ",".join(bad9))
+        # ---- AC-CLAIM10: only a token that STARTS a word is a claim. -------
+        bad10 = []
+        tokens = [
+            # a compound identifier's tail is a different reading, not a claim
+            ("- trend newest_rows=2 window_rows=5 last_stamp_rows=2026-11-20",
+             []),
+            # the same numbers behind a boundary are real claims
+            ("- prose only rows=7 in a sentence", [7]),
+            ("- quoted `rows=4` inside backticks", [4]),
+            ("- after a colon: rows=6", [6]),
+            ("- prefixed xrows=4 and my_rows=5 stay out", []),
+        ]
+        for line, want in tokens:
+            got = [item["rows"] for item in CC.classify(root, line, 1)]
+            if got != want:
+                bad10.append("token-%r=%s want=%s" % (line[:28], got, want))
+        # A cited file that carries only the compound form cannot speak for a
+        # genuine claim: the two sides must agree about what a token is.
+        write(os.path.join(root, "qa", "compound.log"),
+              "TREND newest_rows=9 window_rows=9\n")
+        cite = ["- cites compound only rows=9 (qa/compound.log)"]
+        if [i["status"] for i in statuses(root, cite)] != ["uncaptured"]:
+            bad10.append("compound-captured-%s"
+                         % [i["status"] for i in statuses(root, cite)])
+        # And a lattice: the live face's own number still classifies.
+        world(root, ["- live agrees rows=1 path=state/qa_replacements.jsonl"],
+              ledger_rows=1)
+        if [i["status"] for i in statuses(
+                root, ["- live agrees rows=1 path=state/qa_replacements.jsonl"])] \
+                != ["captured"]:
+            bad10.append("boundary-broke-genuine")
+        report("AC-CLAIM10", bool(bad10), ",".join(bad10))
     finally:
         shutil.rmtree(root, ignore_errors=True)
 

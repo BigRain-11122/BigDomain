@@ -3,23 +3,23 @@
     "board_pages_skipped": [
       "preview/battery-shard-report.html (16424B)"
     ],
-    "current": "2026-11-23 R3358 PRODUCT+ENGINEERING: the CEO face was stale on three of its own derived fields (self_drive.log_lines_in_window 83 vs 95, substantive_non_idle_mention_lines 16 vs 17, results.tick_row 3356 vs 3357) and os-queue-floor-export-face read FAIL 5/6 on AC-QFE3; the shipped round writer src/os/export_round.py was re-run on the live tree so the three fields equal their own recount, check_export_consistency now reads pass=21 fail=0 and the suite is back to PASS 6/6 - no check was loosened and no number was hand-edited.",
+    "current": "2026-11-23 R3359 PRODUCT+ENGINEERING: the CEO face claims block had two readers and one of them was blind - the block was never a second derivation, it was ONE census read at two different times, and the number moved only because the round writes the very prose the census counts; the blind reader is now a reader.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
     "last_artifact": "preview/ledger-reconcile-face.html (7963B) + preview/ledger-reconcile-face.json (6151B) [2026-11-23 commit]",
     "latest_artifact": "preview/ledger-reconcile-face.html (7963B) + preview/ledger-reconcile-face.json (6151B) [2026-11-23 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ledger-reconcile-face.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/negctl-carrier-dialect-pin-R3357.log (4203B, 2026-11-23)",
-    "latest_evidence": "qa/negctl-carrier-dialect-pin-R3357.log (4203B, 2026-11-23)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/negctl-R3359.log (372B, 2026-11-23)",
+    "latest_evidence": "qa/negctl-R3359.log (372B, 2026-11-23)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3358] next window (<=48h): (0) MAIN 头号——**`claims` 块的两个派生必须收敛成一个**：`src/os/export_round.py` 稳定写 `claimed=320 captured=97`，`tools/status_export_fresh.py` 自己的派生稳定答 `321/98`，两者对同一棵树给出不同读数（R2832 的 `_grader_reconcile` 只收敛了 `current`/`next_milestone`/`state_bytes` 三份顶层拷贝，没碰 `claims`）。先只读量：两个派生各自从哪里数、差的这一行/一摘要在哪；判据=任写者写完，`status_export_fresh --check` 与 `check_export_consistency` 同时 PASS 且两派生同值，禁靠「再 apply 一次」掩盖。 (1) `tools/status_export_fresh.py --check` 未比较 `self_drive.log_lines_in_window`／`substantive_non_idle_mention_lines`／`results.tick_row` 三项，陈旧在它眼里不可见（R3358 实测：三项陈旧时它仍读 PASS）——纳入比对并配三臂负控。 (2) 队列卫生：`queue_head` 三线仍无合法队头（tech `NO-HEAD open=8 claimable=7 gated=1`、explore `NO-HEAD open=4 claimable=4`），认领其中一条时行内先立 AC，禁为凑满队列空写判据。 (3) 覆盖仍 61/764 套件（8.0%），703 支未覆盖是欠账不是绿；按小片 `--exact --evidence` 推进。 (4) 孤儿普查跨轮真形状（R3342 起第十七轮搬运）：需不握端口的子进程世界，判据=硬杀前后两次起树判词并列。 (5) 载体：`state_fold_run --check` 读 `FOLD-CLEAR`（49485B / margin 29015），本窗未折；下窗按读数决定。 承（未变）：全量 battery 未实跑；`BigDomain-OSLoop` LogonType=Interactive；产品真缺口仍是物理件｛商户号／服务器／域名／备案+ICP／小程序 appid+secret｝——买家仍付不了钱。",
-    "next_milestone_due": "2026-11-25T22:12:20+08:00",
-    "updated_at": "2026-11-23T22:12:20+08:00",
+    "next_milestone": "[R3360] next window (<=48h): (1) **CEO 可见分片页 `RED E_REGISTRY_DRIFT`**（页 764/6398 对注册表 764/6399）：按 shipped `tools/battery_shard_report.py` 六族腿重生 `preview/battery-shard-report.{html,json}` 并 `--check`，禁手改数字；本轮该腿跑到 5 分钟无输出被中断，未落盘。 (2) `tools/status_export_fresh.py --check` 仍未比较 `self_drive.log_lines_in_window`／`substantive_non_idle_mention_lines`／`results.tick_row` 三项（R3358 原板头 (1) 未做）——纳入比对并配三臂负控。 (3) 队列卫生：`queue_head` 三线仍无合法队头（tech `NO-HEAD open=8 claimable=7 gated=1`、explore `open=4 claimable=4`），认领其中一条时行内先立 AC，禁为凑满队列空写判据。 (4) 覆盖仍 61/764 套件（8.0%），703 支未覆盖是欠账不是绿；按小片 `--exact --evidence` 推进。 (5) 孤儿普查跨轮真形状（R3342 起第十八轮搬运）：需不握端口的子进程世界，判据=硬杀前后两次起树判词并列。 (6) 载体：`state_fold_run --check` 本窗读 `FOLD-CLEAR`（append 后 margin 23180），未折。 承（未变）：全量 battery 未实跑；`BigDomain-OSLoop` LogonType=Interactive；产品真缺口仍是物理件｛商户号／服务器／域名／备案+ICP／小程序 appid+secret｝——买家仍付不了钱。",
+    "next_milestone_due": "2026-11-25T22:38:50+08:00",
+    "updated_at": "2026-11-23T22:38:50+08:00",
     "heartbeat": {
-      "tick": 3356,
-      "state_tick": 3358,
-      "lag": 2,
-      "verdict": "FLAG",
-      "reason": "heartbeat_row_debt"
+      "tick": 3359,
+      "state_tick": 3359,
+      "lag": 0,
+      "verdict": "PASS",
+      "reason": "fresh"
     },
     "outs_age": {
       "rows": 9,
@@ -37,8 +37,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-23 R3358 PRODUCT+ENGINEERING: the CEO face was stale on three of its own derived fields (self_drive.log_lines_in_window 83 vs 95, substantive_non_idle_mention_lines 16 vs 17, results.tick_row 3356 vs 3357) and os-queue-floor-export-face read FAIL 5/6 on AC-QFE3; the shipped round writer src/os/export_round.py was re-run on the live tree so the three fields equal their own recount, check_export_consistency now reads pass=21 fail=0 and the suite is back to PASS 6/6 - no check was loosened and no number was hand-edited.",
-  "claims": {"claimed": 319, "captured": 96, "contradicted": 10, "uncaptured": 213, "historic": 7, "rows": 43, "present": true, "census_ts": "2026-11-23T22:12:20+08:00"},
+  "current": "2026-11-23 R3359 PRODUCT+ENGINEERING: the CEO face claims block had two readers and one of them was blind - the block was never a second derivation, it was ONE census read at two different times, and the number moved only because the round writes the very prose the census counts; the blind reader is now a reader.",
+  "claims": {"claimed": 188, "captured": 58, "contradicted": 10, "uncaptured": 120, "historic": 7, "rows": 43, "present": true, "census_ts": "2026-11-23T22:38:50+08:00"},
   "chain": {"present": true, "rows": 43, "broken": 3, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -67,11 +67,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-23 R3358 PRODUCT+ENGINEERING: the CEO face was stale on three of its own derived fields (self_drive.log_lines_in_window 83 vs 95, substantive_non_idle_mention_lines 16 vs 17, results.tick_row 3356 vs 3357) and os-queue-floor-export-face read FAIL 5/6 on AC-QFE3; the shipped round writer src/os/export_round.py was re-run on the live tree so the three fields equal their own recount, check_export_consistency now reads pass=21 fail=0 and the suite is back to PASS 6/6 - no check was loosened and no number was hand-edited.",
-  "export_ts": "2026-11-23T22:12:20+08:00",
+  "do": "2026-11-23 R3359 PRODUCT+ENGINEERING: the CEO face claims block had two readers and one of them was blind - the block was never a second derivation, it was ONE census read at two different times, and the number moved only because the round writes the very prose the census counts; the blind reader is now a reader.",
+  "export_ts": "2026-11-23T22:38:50+08:00",
   "latest_artifact": "preview/ledger-reconcile-face.html (7963B) + preview/ledger-reconcile-face.json (6151B) [2026-11-23 commit]",
-  "latest_evidence": "qa/negctl-carrier-dialect-pin-R3357.log (4203B, 2026-11-23)",
-  "next_milestone": "[R3358] next window (<=48h): (0) MAIN 头号——**`claims` 块的两个派生必须收敛成一个**：`src/os/export_round.py` 稳定写 `claimed=320 captured=97`，`tools/status_export_fresh.py` 自己的派生稳定答 `321/98`，两者对同一棵树给出不同读数（R2832 的 `_grader_reconcile` 只收敛了 `current`/`next_milestone`/`state_bytes` 三份顶层拷贝，没碰 `claims`）。先只读量：两个派生各自从哪里数、差的这一行/一摘要在哪；判据=任写者写完，`status_export_fresh --check` 与 `check_export_consistency` 同时 PASS 且两派生同值，禁靠「再 apply 一次」掩盖。 (1) `tools/status_export_fresh.py --check` 未比较 `self_drive.log_lines_in_window`／`substantive_non_idle_mention_lines`／`results.tick_row` 三项，陈旧在它眼里不可见（R3358 实测：三项陈旧时它仍读 PASS）——纳入比对并配三臂负控。 (2) 队列卫生：`queue_head` 三线仍无合法队头（tech `NO-HEAD open=8 claimable=7 gated=1`、explore `NO-HEAD open=4 claimable=4`），认领其中一条时行内先立 AC，禁为凑满队列空写判据。 (3) 覆盖仍 61/764 套件（8.0%），703 支未覆盖是欠账不是绿；按小片 `--exact --evidence` 推进。 (4) 孤儿普查跨轮真形状（R3342 起第十七轮搬运）：需不握端口的子进程世界，判据=硬杀前后两次起树判词并列。 (5) 载体：`state_fold_run --check` 读 `FOLD-CLEAR`（49485B / margin 29015），本窗未折；下窗按读数决定。 承（未变）：全量 battery 未实跑；`BigDomain-OSLoop` LogonType=Interactive；产品真缺口仍是物理件｛商户号／服务器／域名／备案+ICP／小程序 appid+secret｝——买家仍付不了钱。",
+  "latest_evidence": "qa/negctl-R3359.log (372B, 2026-11-23)",
+  "next_milestone": "[R3360] next window (<=48h): (1) **CEO 可见分片页 `RED E_REGISTRY_DRIFT`**（页 764/6398 对注册表 764/6399）：按 shipped `tools/battery_shard_report.py` 六族腿重生 `preview/battery-shard-report.{html,json}` 并 `--check`，禁手改数字；本轮该腿跑到 5 分钟无输出被中断，未落盘。 (2) `tools/status_export_fresh.py --check` 仍未比较 `self_drive.log_lines_in_window`／`substantive_non_idle_mention_lines`／`results.tick_row` 三项（R3358 原板头 (1) 未做）——纳入比对并配三臂负控。 (3) 队列卫生：`queue_head` 三线仍无合法队头（tech `NO-HEAD open=8 claimable=7 gated=1`、explore `open=4 claimable=4`），认领其中一条时行内先立 AC，禁为凑满队列空写判据。 (4) 覆盖仍 61/764 套件（8.0%），703 支未覆盖是欠账不是绿；按小片 `--exact --evidence` 推进。 (5) 孤儿普查跨轮真形状（R3342 起第十八轮搬运）：需不握端口的子进程世界，判据=硬杀前后两次起树判词并列。 (6) 载体：`state_fold_run --check` 本窗读 `FOLD-CLEAR`（append 后 margin 23180），未折。 承（未变）：全量 battery 未实跑；`BigDomain-OSLoop` LogonType=Interactive；产品真缺口仍是物理件｛商户号／服务器／域名／备案+ICP／小程序 appid+secret｝——买家仍付不了钱。",
   "outs": [
     "preview/ledger-reconcile-face.html (7963B) + preview/ledger-reconcile-face.json (6151B) [2026-11-23 commit]",
     "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-23 commit]",
@@ -144,7 +144,7 @@
       "2026-11-04 R2431 verification window on the item the debt gate named first=yes (reconcile-battery-R2431, carried from R2430): zero product code changed, the R2168 mixed-tree rule honoured. Leg 1 read 542/543 suites with the criteria total 4234 exactly as pre-registered and the only red was reconcile-daily-census at cd7 exit=2 DRIFT-FLAG; the census named the file (qa/battery-R2431-stdout.log, class=cmd-raw) because this window launched the battery with a Start-Process redirect pointed INTO the evidence directory. Repaired at the birth site, never by widening the baseline: the two launcher captures moved to the gitignored logs/ face, after which the census read flags=0 DRIFT-CLEAN with the 529-entry baseline untouched. Retry leg on the repaired tree: RUNNER PASS 543/543 suites plus controls 7/7 in 956.2s at criteria 4234, TMP RECLAIM 932/932. Four follow-up sections: matrix FAILED first on the stale doc without rewriting it, was regenerated stamp-aligned to 52317B, and the re-run read VERDICT R2431 PASS failing=none (fingerprint CLEAN 5 domains, profile byte-identical, census DRIFT-CLEAN). Debt: reconcile-battery-R2431 closed and product-face-R2432 opened first=yes through the shipped CLIs. Zero product points claimed."
     ],
     [
-      "3358",
+      "3359",
       "OSLoop 执行 tick",
       "a failed fold state write takes the appended archive block back and removes the backup"
     ]
@@ -158,24 +158,24 @@
   "self_drive": {
     "window": "2026-11-17..2026-11-23",
     "window_days": 7,
-    "log_lines_in_window": 98,
+    "log_lines_in_window": 108,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 18,
+    "substantive_non_idle_mention_lines": 19,
     "proposals_total": 11,
     "proposals_open": 9,
     "queue_main_open": 6,
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 50428,
-  "next_milestone_due": "2026-11-25T22:12:20+08:00",
+  "state_bytes": 55320,
+  "next_milestone_due": "2026-11-25T22:38:50+08:00",
   "heartbeat": {
-    "tick": 3356,
-    "state_tick": 3358,
-    "lag": 2,
-    "verdict": "FLAG",
-    "reason": "heartbeat_row_debt"
+    "tick": 3359,
+    "state_tick": 3359,
+    "lag": 0,
+    "verdict": "PASS",
+    "reason": "fresh"
   },
   "outs_age": {
     "rows": 9,

@@ -8192,8 +8192,11 @@ SUITES = [
     # R3227: the same nine were true when written, so the row publishes the
     # sub-count `historic=` beside `contradicted=` (never shrinking it);
     # AC-CLAIM7..9 pinned in the R3227 PIN row before the token existed.
+    # R3359: AC-CLAIM10 pinned in the R3359 PIN row before the regex moved -
+    # `rows=` now has to start a word, so compound identifiers
+    # (`newest_rows=`, `window_rows=`) stop being counted as ledger claims.
     ("claim-census",
-     os.path.join("test_claim_census.py"), 9),
+     os.path.join("test_claim_census.py"), 10),
     # R3119: the stage doors made "a refusal lands nothing" structural, but the
     # stage names still exist while they are written and a killed process can
     # leave one behind. Measured before the sweep existed: 0 shipped .py files

@@ -36,13 +36,15 @@ import queue_export_freshness_gate as QEF
 
 NAME = "export-consistency-queue-face"
 LABEL = "os-export-consistency-queue-face"
-BASE_CHECKS = 21
+# R3359: the base face gained a claims row (nothing there compared the block
+# against its derivation, so a stale census read PASS). Twenty-one -> twenty-two.
+BASE_CHECKS = 22
 DEFAULT_EXPORT = QEF.DEFAULT_EXPORT
 
 USAGE = (
     "usage: export_consistency_queue_face.py --check [--root PATH] "
     "[--export PATH] [--json]\n"
-    "  --check        run the twenty-one base checks plus the queue reading\n"
+    "  --check        run the twenty-two base checks plus the queue reading\n"
     "  --root PATH    repository root to read the queues from (default .)\n"
     "  --export PATH  export document to check "
     "(default docs/status-export.json)\n"

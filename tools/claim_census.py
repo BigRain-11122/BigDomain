@@ -51,7 +51,13 @@ FACES = (("board", os.path.join("src", "os", "backlog.md")),
          ("state", os.path.join("src", "os", "state.json")),
          ("export", os.path.join("docs", "status-export.json")))
 
-ROWS_RE = re.compile(r"rows=(\d+)")
+# R3359 measured the loose form on the live tree: `rows=(\d+)` also matched the
+# TAIL of a longer identifier, so `newest_rows=2`, `window_rows=5`,
+# `last_stamp_rows=...` and `_newest_rows` were counted as claims about the
+# ledger - 311 board tokens fell to 183 with a left boundary, and state 8 to 5.
+# Those are different readings (a trend row's width, a series cut), so grading
+# them here named a hole the reader never had. The token must start a word.
+ROWS_RE = re.compile(r"(?<![A-Za-z0-9_])rows=(\d+)")
 QA_REF_RE = re.compile(r"qa/([A-Za-z0-9._-]+\.(?:log|txt|json|md))")
 LEDGER_ROW_RE = re.compile(r"LEDGER\s+\S+\s+rows=(\d+)")
 ROUND_RE = re.compile(r"R(\d{3,4})")
@@ -81,10 +87,15 @@ def _evidence(root, line):
 
 
 def _same_shape(line, number):
-    """The token that would stand for this claim in another file."""
+    """The token that would stand for this claim in another file.
+
+    R3359: the same left boundary the claim reader uses, so a compound
+    identifier in a cited file (`newest_rows=3`) cannot capture a genuine
+    `rows=3` sentence - the two sides must agree about what a token is.
+    """
     if "LEDGER" in line:
         return re.compile(r"LEDGER\s+\S+\s+rows=%d\b" % number)
-    return re.compile(r"rows=%d\b" % number)
+    return re.compile(r"(?<![A-Za-z0-9_])rows=%d\b" % number)
 
 
 def classify(root, line, live_rows):

@@ -1,0 +1,5 @@
+NEGCTL R3359 claims row on a block moved by one
+patched pass=21 fail=1
+FAIL claims numbers stored={'claimed': 189, 'captured': 58, 'contradicted': 10, 'uncaptured': 120, 'historic': 7, 'rows': 43, 'present': True} recomputed={'claimed': 188, 'captured': 58, 'contradicted': 10, 'uncaptured': 120, 'historic': 7, 'rows': 43, 'present': True}
+RED_ON_TAMPER yes
+VERDICT PASS
