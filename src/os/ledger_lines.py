@@ -691,6 +691,49 @@ def load_archive_lines(logs_dir=None, state_path=None):
 FOLD_CARRY_PIN = 2914
 FOLD_MARKER_RE = re.compile(r"^#\s*---\s*R(\d{3,5})\b")
 
+# R3356: NAMED exemptions for windows whose round can never carry a ledger
+# line - a tick-alignment round that was never a work round. The table is
+# not a licence: both halves are re-proved from the tree on every read and
+# an entry that fails either half is reported as an ordinary gap.
+#   (1) no ledger payload may exist for that round among the rounds the
+#       reader was handed (archives; the suite re-checks the live log), and
+#   (2) the round's OWN narrative must carry the recorded span.
+# Measured: R3112 is the only such window in the shipped archives - its
+# narrative says 'tick moved 3111 -> 3112' because the duplicate law read a
+# replay probe as a new append, so no budget line was ever written for it
+# to carry. Nothing else is excused: an unnamed round, a named entry whose
+# span went missing, and any SECOND gap in the same archive all still red.
+FOLD_CARRY_EXEMPT = {
+    3112: {
+        "why": ("tick-alignment closeout: a replay probe was read as a new "
+                "append, so the tick moved 3111 -> 3112 and no budget line "
+                "was written"),
+        "narrative_span": "tick moved 3111 -> 3112",
+    },
+}
+
+
+def fold_carry_exemption(round_no, narrative_texts, ledger_rounds):
+    """Admit or refuse ONE named exemption; it never widens on its own.
+
+    Returns (verdict, why). verdict is True only when the round is in the
+    table, has no ledger line among `ledger_rounds`, and its own narrative
+    text carries the recorded span. Every other shape answers False with a
+    named reason so a caller can tell a refusal from a missing entry.
+    """
+    entry = FOLD_CARRY_EXEMPT.get(round_no)
+    if entry is None:
+        return False, "not-named"
+    if round_no in ledger_rounds:
+        return False, "ledger-exists"
+    span = entry.get("narrative_span")
+    if not span:
+        return False, "no-span-recorded"
+    for text in narrative_texts:
+        if span in text:
+            return True, entry.get("why", "named exemption")
+    return False, "narrative-lacks-span"
+
 
 def load_archive_windows(path):
     """Split ONE archive section file into its fold windows (R2914).
@@ -836,6 +879,8 @@ def audit_fold_carry(paths, min_round=None, provenance=None):
                 continue
             examined.append(window)
     gaps = []
+    exemptions = []
+    exemption_refusals = []
     same_window = []
     rounds = 0
     # R3086: two PUBLISHED diagnostics, neither of which may change the
@@ -848,6 +893,7 @@ def audit_fold_carry(paths, min_round=None, provenance=None):
     # measured before this line was written.
     window_rounds = []
     window_indices = []
+    narrative_text = {}
     for index, window in enumerate(examined):
         here = set()
         for line in window["lines"]:
@@ -857,17 +903,45 @@ def audit_fold_carry(paths, min_round=None, provenance=None):
         narratives = sorted(set(
             int(NARRATIVE_RE.match(line).group(1))
             for line in window["lines"] if classify(line) == "round"))
+        # R3356: the exemption evidence is the round's OWN words, so the
+        # narrative lines are kept per round while the window is walked.
+        for line in window["lines"]:
+            if classify(line) == "round":
+                narrative_text.setdefault(
+                    int(NARRATIVE_RE.match(line).group(1)), []).append(line)
         window_rounds.append(narratives)
         window_indices.append(index + 1)
         rounds += len(narratives)
         for round_no in narratives:
             if round_no not in archive_rounds:
+                verdict, why = fold_carry_exemption(
+                    round_no, narrative_text.get(round_no, []),
+                    archive_rounds)
+                if verdict:
+                    exemptions.append({"window": window["round"],
+                                       "round": round_no,
+                                       "why": why,
+                                       "path": window["path"],
+                                       "file": os.path.basename(window["path"]),
+                                       "file_ordinal": window["ordinal"],
+                                       "line": window["line"]})
+                    continue
                 gaps.append({"window": window["round"],
                              "round": round_no,
                              "path": window["path"],
                              "file": os.path.basename(window["path"]),
                              "file_ordinal": window["ordinal"],
                              "line": window["line"]})
+                if round_no in FOLD_CARRY_EXEMPT:
+                    exemption_refusals.append({"window": window["round"],
+                                               "round": round_no,
+                                               "why": why,
+                                               "path": window["path"],
+                                               "file": os.path.basename(
+                                                   window["path"]),
+                                               "file_ordinal":
+                                                   window["ordinal"],
+                                               "line": window["line"]})
             if round_no not in here:
                 # R3087 AC-LGA12: the marker alone cannot locate a short
                 # window - two folds in one round write two windows with
@@ -915,6 +989,8 @@ def audit_fold_carry(paths, min_round=None, provenance=None):
         "skipped_windows": skipped,
         "rounds": rounds,
         "gaps": gaps,
+        "exemptions": exemptions,
+        "exemption_refusals": exemption_refusals,
         "split_rounds": split,
         "same_window_gaps": same_window,
         "duplicate_markers": duplicate_markers,
@@ -967,6 +1043,19 @@ def format_fold_carry(report):
     bytes exactly.
     """
     token = provenance_token(report)
+
+    # R3356: a narrow named exemption is only honest if the reader can SEE
+    # it, so the excused rounds are printed by name. A report with no
+    # exemption renders the pre-R3356 bytes exactly, which is why the
+    # fixture pins on the two green shapes did not have to move.
+    def _exempt_token():
+        entries = report.get("exemptions") or []
+        if not entries:
+            return ""
+        return " exempt=%d(%s)" % (
+            len(entries),
+            ",".join("R%d" % item["round"] for item in entries))
+
     if report["vacuous"]:
         return ("FOLD-CARRY VACUOUS since=%d windows=0 skipped=%d "
                 "(no window opened at or after the pin yet) dup=0 "
@@ -974,11 +1063,12 @@ def format_fold_carry(report):
                 % (report["since"], report["skipped_windows"])) + token
     if report["clean"]:
         return ("FOLD-CARRY OK since=%d windows=%d rounds=%d skipped=%d "
-                "split=%d same_window=%d dup=%d loc=file@line"
+                "split=%d same_window=%d dup=%d"
                 % (report["since"], report["windows"], report["rounds"],
                    report["skipped_windows"], len(report["split_rounds"]),
                    len(report["same_window_gaps"]),
-                   len(report["duplicate_markers"]))) + token
+                   len(report["duplicate_markers"]))
+                + _exempt_token() + " loc=file@line") + token
     # R3090: a gap entry already knows where its window opens; printing only
     # the marker left the reader to search. The locator is appended INSIDE
     # the per-gap token so every existing reader (which matches R<n>) keeps
@@ -993,11 +1083,12 @@ def format_fold_carry(report):
 
     gaps = ",".join(_gap_token(item) for item in report["gaps"])
     return ("FOLD-CARRY FAIL E_LFC_CARRY since=%d windows=%d gaps=%s "
-            "split=%d same_window=%d dup=%d loc=file@line"
+            "split=%d same_window=%d dup=%d"
             % (report["since"], report["windows"], gaps,
                len(report["split_rounds"]),
                len(report["same_window_gaps"]),
-               len(report["duplicate_markers"]))) + token
+               len(report["duplicate_markers"]))
+            + _exempt_token() + " loc=file@line") + token
 
 
 def coverage_floor(report, minimum=MIN_COVERAGE_LINES):

@@ -1,0 +1,6 @@
+R3356 negative control: the named exemption is not a licence
+ordinary-gap clean=False gaps=[5003]
+same-prose-unnamed clean=False gaps=[5003] exemptions=[]
+second-gap-not-swallowed clean=False gaps=[5003] exemptions=[3112]
+span-removed clean=False gaps=[3112] refusals=['narrative-lacks-span']
+ledger-exists clean=True exemptions=[] gaps=[]

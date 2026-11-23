@@ -5002,8 +5002,11 @@ SUITES = [
     # (or prov=n/a when the index cannot be read) to the printed line, so
     # the reader learns how strong the loc claim is; a library report
     # without provenance keeps the pre-R3092 bytes.)
+    # R3356: AC-LGA15 added - a named fold-carry exemption whose two halves
+    # (no ledger line anywhere / the round's own narrative carries the
+    # recorded span) are re-proved on every read, so 14 -> 15.
     ("os-ledger-archive",
-     os.path.join("..", "os", "test_ledger_archive.py"), 14),
+     os.path.join("..", "os", "test_ledger_archive.py"), 15),
     # R3091: the archive's own provenance is now readable WITHOUT a child
     # process - the tracked set comes from the repository index (DIRC v2
     # only; 3/4 and a bad magic are refused by name), so a reader of a

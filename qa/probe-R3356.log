@@ -1,0 +1,5 @@
+R3356 probe: named fold-carry exemption read on the shipped tree
+FOLD-CARRY OK since=2914 windows=83 rounds=454 skipped=725 split=11 same_window=12 dup=4 exempt=1(R3112) loc=file@line prov=tracked=1/3
+live ledger rounds carry R3112: False
+archive ledger rounds carry R3112: False
+exemptions=[3112] refusals=[] clean=True gaps=0

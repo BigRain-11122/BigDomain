@@ -1,22 +1,22 @@
 {
   "ceo_face": {
     "board_pages_skipped": [
-      "preview/battery-shard-report.html (16416B)"
+      "preview/battery-shard-report.html (16413B)"
     ],
-    "current": "2026-11-23 R3355 PRODUCT+ENGINEERING: the six reds on the CEO-visible shard face were adjudicated one by one - five are cleared at their birth sites and one is a real red with a named, un-movable coordinate.",
+    "current": "2026-11-23 R3356 PRODUCT+ENGINEERING: the last red on the CEO-visible shard face with a real coordinate was a fold-carry gap that had nothing to carry - R3112 is a tick-alignment round that never wrote a budget line, so the law now admits it only by name and only while both halves of its evidence are re-proved on every read.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
-    "last_artifact": "preview/ledger-reconcile-face.html (7963B) + preview/ledger-reconcile-face.json (6151B) [2026-11-23 mtime]",
-    "latest_artifact": "preview/ledger-reconcile-face.html (7963B) + preview/ledger-reconcile-face.json (6151B) [2026-11-23 mtime]",
+    "last_artifact": "preview/ledger-reconcile-face.html (7963B) + preview/ledger-reconcile-face.json (6151B) [2026-11-23 commit]",
+    "latest_artifact": "preview/ledger-reconcile-face.html (7963B) + preview/ledger-reconcile-face.json (6151B) [2026-11-23 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ledger-reconcile-face.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/probe-R3355.log (1011B, 2026-11-23)",
-    "latest_evidence": "qa/probe-R3355.log (1011B, 2026-11-23)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/battery-shard-lga-R3356.log (363B, 2026-11-23)",
+    "latest_evidence": "qa/battery-shard-lga-R3356.log (363B, 2026-11-23)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3355] next window (<=48h): (1) **`os-ledger-archive` 5 条真红要定**（LGA9/10/11/12/13 共用 `real_carry[\"clean\"] is True`）：实读唯一缺口 `R3112(w3135@state-log-archive-2026-11.md:241:5790)`，且 R3112 在归档与活树 log 里都没有 `R3112 tokens:` 行（`False/False`），其叙事自述「tick 对齐轮」——**没有行可搬**。下窗按两条预注册判据二选一：**(a)** 给 `audit_fold_carry` 加一条**有据的具名豁免**（只豁免「叙事自报 tick 对齐且树中从无预算行」的窗口，具名 R3112），并配三臂负控（普通缺行仍红／豁免外窗口仍红／豁免格不吞第二个缺口）；**(b)** 保持永久披露、把这 5 条从红名单降级为「已知真红」并在报告页具名。禁把 `clean` 放宽成「允许任意缺口」。 (2) 队列卫生：`queue_head --head tech` 读 `NO-HEAD open=8 claimable=7`，7 条可认领行全无判据前缀——真要认领其中一条时行内先立 AC，禁为凑满队列空写判据。 (3) 覆盖仍 694/764（70 支未覆盖，48 支 `os-probe-seam-*`），按小片 `--exact --evidence` 推进。 (4) 孤儿普查跨轮真形状（R3342 起第十四轮搬运）：需不握端口的子进程世界，判据=硬杀前后两次起树判词并列。 (5) 载体现值见 `state_fold_run --check`（本窗未报 FOLD-NEEDED，未折）。承（未变）：全量 battery 未实跑；`tools/face_sweep.py` 判 `VERDICT FAIL red=sweep`（`test_face_sweep` 54/56，AC-FSWB20/20c）；`BigDomain-OSLoop` LogonType=Interactive；产品真缺口仍是物理件｛商户号／服务器／域名／备案+ICP／小程序 appid+secret｝——买家仍付不了钱。",
-    "next_milestone_due": "2026-11-25T21:04:13+08:00",
-    "updated_at": "2026-11-23T21:04:13+08:00",
+    "next_milestone": "[R3356] next window (<=48h): (1) 队列卫生：`queue_head --head tech` 读 `NO-HEAD open=8 claimable=7`，7 条可认领行全无判据前缀——真要认领其中一条时行内先立 AC，禁为凑满队列空写判据。 (2) 覆盖仍 694/764（70 支未覆盖，48 支 `os-probe-seam-*`），按小片 `--exact --evidence` 推进。 (3) 孤儿普查跨轮真形状（R3342 起第十五轮搬运）：需不握端口的子进程世界，判据=硬杀前后两次起树判词并列。 (4) 载体现值见 `state_fold_run --check`（本窗未报 FOLD-NEEDED，未折）。 (5) CEO 可见报告页在本窗末随注册表 +1 判据重生，若 `--check` 仍报 `E_REGISTRY_DRIFT` 则下窗按 shipped 六族腿再跑。 (6) 本窗实跑 `test_carrier_dialect_pin` 才发现既存红 `FAIL 6/8`（`AC-CDPIN5`+`AC-CDPIN8`，`law_unrepresented=['preview/apimarket-report.html','preview/apimarket-report.json','docs/status-export.json']`）——`.gitattributes` 法律行与套件自带的 STRICT 表漂移，`.gitattributes` 本窗未改故非本轮引入；下窗先只读量三条漂移各属于「表该补」还是「法律行该收」，禁盲改表凑绿。承（未变）：全量 battery 未实跑；`tools/face_sweep.py` 判 `VERDICT FAIL red=sweep`（`test_face_sweep` 54/56，AC-FSWB20/20c）；`BigDomain-OSLoop` LogonType=Interactive；产品真缺口仍是物理件｛商户号／服务器／域名／备案+ICP／小程序 appid+secret｝——买家仍付不了钱。",
+    "next_milestone_due": "2026-11-25T21:32:14+08:00",
+    "updated_at": "2026-11-23T21:32:14+08:00",
     "heartbeat": {
-      "tick": 3355,
-      "state_tick": 3355,
+      "tick": 3356,
+      "state_tick": 3356,
       "lag": 0,
       "verdict": "PASS",
       "reason": "fresh"
@@ -37,9 +37,9 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-23 R3355 PRODUCT+ENGINEERING: the six reds on the CEO-visible shard face were adjudicated one by one - five are cleared at their birth sites and one is a real red with a named, un-movable coordinate.",
-  "claims": {"claimed": 316, "captured": 95, "contradicted": 10, "uncaptured": 211, "historic": 7, "rows": 42, "present": true, "census_ts": "2026-11-23T21:04:13+08:00"},
-  "chain": {"present": true, "rows": 42, "broken": 3, "path": "state/qa_replacements.jsonl"},
+  "current": "2026-11-23 R3356 PRODUCT+ENGINEERING: the last red on the CEO-visible shard face with a real coordinate was a fold-carry gap that had nothing to carry - R3112 is a tick-alignment round that never wrote a budget line, so the law now admits it only by name and only while both halves of its evidence are re-proved on every read.",
+  "claims": {"claimed": 317, "captured": 95, "contradicted": 10, "uncaptured": 212, "historic": 7, "rows": 43, "present": true, "census_ts": "2026-11-23T21:32:14+08:00"},
+  "chain": {"present": true, "rows": 43, "broken": 3, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -67,13 +67,13 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-23 R3355 PRODUCT+ENGINEERING: the six reds on the CEO-visible shard face were adjudicated one by one - five are cleared at their birth sites and one is a real red with a named, un-movable coordinate.",
-  "export_ts": "2026-11-23T21:04:13+08:00",
-  "latest_artifact": "preview/ledger-reconcile-face.html (7963B) + preview/ledger-reconcile-face.json (6151B) [2026-11-23 mtime]",
-  "latest_evidence": "qa/probe-R3355.log (1011B, 2026-11-23)",
-  "next_milestone": "[R3355] next window (<=48h): (1) **`os-ledger-archive` 5 条真红要定**（LGA9/10/11/12/13 共用 `real_carry[\"clean\"] is True`）：实读唯一缺口 `R3112(w3135@state-log-archive-2026-11.md:241:5790)`，且 R3112 在归档与活树 log 里都没有 `R3112 tokens:` 行（`False/False`），其叙事自述「tick 对齐轮」——**没有行可搬**。下窗按两条预注册判据二选一：**(a)** 给 `audit_fold_carry` 加一条**有据的具名豁免**（只豁免「叙事自报 tick 对齐且树中从无预算行」的窗口，具名 R3112），并配三臂负控（普通缺行仍红／豁免外窗口仍红／豁免格不吞第二个缺口）；**(b)** 保持永久披露、把这 5 条从红名单降级为「已知真红」并在报告页具名。禁把 `clean` 放宽成「允许任意缺口」。 (2) 队列卫生：`queue_head --head tech` 读 `NO-HEAD open=8 claimable=7`，7 条可认领行全无判据前缀——真要认领其中一条时行内先立 AC，禁为凑满队列空写判据。 (3) 覆盖仍 694/764（70 支未覆盖，48 支 `os-probe-seam-*`），按小片 `--exact --evidence` 推进。 (4) 孤儿普查跨轮真形状（R3342 起第十四轮搬运）：需不握端口的子进程世界，判据=硬杀前后两次起树判词并列。 (5) 载体现值见 `state_fold_run --check`（本窗未报 FOLD-NEEDED，未折）。承（未变）：全量 battery 未实跑；`tools/face_sweep.py` 判 `VERDICT FAIL red=sweep`（`test_face_sweep` 54/56，AC-FSWB20/20c）；`BigDomain-OSLoop` LogonType=Interactive；产品真缺口仍是物理件｛商户号／服务器／域名／备案+ICP／小程序 appid+secret｝——买家仍付不了钱。",
+  "do": "2026-11-23 R3356 PRODUCT+ENGINEERING: the last red on the CEO-visible shard face with a real coordinate was a fold-carry gap that had nothing to carry - R3112 is a tick-alignment round that never wrote a budget line, so the law now admits it only by name and only while both halves of its evidence are re-proved on every read.",
+  "export_ts": "2026-11-23T21:32:14+08:00",
+  "latest_artifact": "preview/ledger-reconcile-face.html (7963B) + preview/ledger-reconcile-face.json (6151B) [2026-11-23 commit]",
+  "latest_evidence": "qa/battery-shard-lga-R3356.log (363B, 2026-11-23)",
+  "next_milestone": "[R3356] next window (<=48h): (1) 队列卫生：`queue_head --head tech` 读 `NO-HEAD open=8 claimable=7`，7 条可认领行全无判据前缀——真要认领其中一条时行内先立 AC，禁为凑满队列空写判据。 (2) 覆盖仍 694/764（70 支未覆盖，48 支 `os-probe-seam-*`），按小片 `--exact --evidence` 推进。 (3) 孤儿普查跨轮真形状（R3342 起第十五轮搬运）：需不握端口的子进程世界，判据=硬杀前后两次起树判词并列。 (4) 载体现值见 `state_fold_run --check`（本窗未报 FOLD-NEEDED，未折）。 (5) CEO 可见报告页在本窗末随注册表 +1 判据重生，若 `--check` 仍报 `E_REGISTRY_DRIFT` 则下窗按 shipped 六族腿再跑。 (6) 本窗实跑 `test_carrier_dialect_pin` 才发现既存红 `FAIL 6/8`（`AC-CDPIN5`+`AC-CDPIN8`，`law_unrepresented=['preview/apimarket-report.html','preview/apimarket-report.json','docs/status-export.json']`）——`.gitattributes` 法律行与套件自带的 STRICT 表漂移，`.gitattributes` 本窗未改故非本轮引入；下窗先只读量三条漂移各属于「表该补」还是「法律行该收」，禁盲改表凑绿。承（未变）：全量 battery 未实跑；`tools/face_sweep.py` 判 `VERDICT FAIL red=sweep`（`test_face_sweep` 54/56，AC-FSWB20/20c）；`BigDomain-OSLoop` LogonType=Interactive；产品真缺口仍是物理件｛商户号／服务器／域名／备案+ICP／小程序 appid+secret｝——买家仍付不了钱。",
   "outs": [
-    "preview/ledger-reconcile-face.html (7963B) + preview/ledger-reconcile-face.json (6151B) [2026-11-23 mtime]",
+    "preview/ledger-reconcile-face.html (7963B) + preview/ledger-reconcile-face.json (6151B) [2026-11-23 commit]",
     "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-23 commit]",
     "preview/platform-live-report.html (8621B) + preview/platform-live-report.json (6228B) [2026-11-23 mtime]",
     "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-23 mtime] (halves differ: html [2026-11-23 mtime] + json [2026-11-16 commit]; later=html)",
@@ -144,7 +144,7 @@
       "2026-11-04 R2431 verification window on the item the debt gate named first=yes (reconcile-battery-R2431, carried from R2430): zero product code changed, the R2168 mixed-tree rule honoured. Leg 1 read 542/543 suites with the criteria total 4234 exactly as pre-registered and the only red was reconcile-daily-census at cd7 exit=2 DRIFT-FLAG; the census named the file (qa/battery-R2431-stdout.log, class=cmd-raw) because this window launched the battery with a Start-Process redirect pointed INTO the evidence directory. Repaired at the birth site, never by widening the baseline: the two launcher captures moved to the gitignored logs/ face, after which the census read flags=0 DRIFT-CLEAN with the 529-entry baseline untouched. Retry leg on the repaired tree: RUNNER PASS 543/543 suites plus controls 7/7 in 956.2s at criteria 4234, TMP RECLAIM 932/932. Four follow-up sections: matrix FAILED first on the stale doc without rewriting it, was regenerated stamp-aligned to 52317B, and the re-run read VERDICT R2431 PASS failing=none (fingerprint CLEAN 5 domains, profile byte-identical, census DRIFT-CLEAN). Debt: reconcile-battery-R2431 closed and product-face-R2432 opened first=yes through the shipped CLIs. Zero product points claimed."
     ],
     [
-      "3355",
+      "3356",
       "OSLoop 执行 tick",
       "a failed fold state write takes the appended archive block back and removes the backup"
     ]
@@ -158,21 +158,21 @@
   "self_drive": {
     "window": "2026-11-17..2026-11-23",
     "window_days": 7,
-    "log_lines_in_window": 71,
+    "log_lines_in_window": 83,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 15,
+    "substantive_non_idle_mention_lines": 16,
     "proposals_total": 11,
     "proposals_open": 9,
     "queue_main_open": 6,
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 36598,
-  "next_milestone_due": "2026-11-25T21:04:13+08:00",
+  "state_bytes": 42759,
+  "next_milestone_due": "2026-11-25T21:32:14+08:00",
   "heartbeat": {
-    "tick": 3355,
-    "state_tick": 3355,
+    "tick": 3356,
+    "state_tick": 3356,
     "lag": 0,
     "verdict": "PASS",
     "reason": "fresh"

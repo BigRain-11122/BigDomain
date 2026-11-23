@@ -28,7 +28,7 @@ sys.path.insert(0, BASE)
 
 import ledger_lines as LL  # noqa: E402
 
-EXPECTED_CRITERIA = 14
+EXPECTED_CRITERIA = 15
 MODULE = os.path.join(BASE, "ledger_lines.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 STATE = os.path.join(BASE, "state.json")
@@ -831,13 +831,109 @@ def run():
             "the index is unreadable) while a library report without "
             "provenance keeps the pre-R3092 bytes")
 
+        # AC-LGA15 (R3356): a window whose round can never carry a ledger
+        # line may be excused, but only BY NAME and only while BOTH halves
+        # of its evidence still hold. Measured before this block: the only
+        # such gap on the shipped tree is R3112, a round-alignment closeout
+        # whose narrative says 'tick moved 3111 -> 3112' because a replay
+        # probe was read as a new append; no budget line exists for it in
+        # either the archives or the live log. The table is not a licence:
+        # an unnamed round with the same prose, a named entry whose span was
+        # removed, an entry that gained a ledger line, and a SECOND gap in
+        # the same archive all still red, and the excused round is printed
+        # by name on the verdict line.
+        span = "tick moved 3111 -> 3112"
+        ex_dir = os.path.join(world, "logs-lga15")
+        os.makedirs(ex_dir)
+        ex_file = os.path.join(ex_dir, "state-log-archive-2026-12.md")
+
+        def ex_window(marker, body):
+            write_text(ex_file,
+                       "# state-log-archive fixture header\n"
+                       "# --- R%d fold append (fixture)\n" % marker
+                       + "".join(item + "\n" for item in body))
+            return LL.audit_fold_carry([ex_file], 3000)
+
+        plain_gap = ex_window(5003, [narrative(5003)])
+        span_other = ex_window(5003, ["R5003 %s" % span])
+        excused = ex_window(3130, ["2026-11-21 R3112 PRODUCT: round "
+                                   "alignment closeout, %s" % span])
+        not_swallowed = ex_window(3130,
+                                  ["2026-11-21 R3112 PRODUCT: %s" % span,
+                                   narrative(5003)])
+        span_gone = ex_window(3130, ["2026-11-21 R3112 PRODUCT: round "
+                                     "alignment closeout with no span"])
+        has_line = ex_window(3130, ["2026-11-21 R3112 PRODUCT: %s" % span,
+                                    ledger(3112)])
+        live_rounds = set()
+        for item in LL.load_state_log(STATE):
+            hit = LL.LEDGER_PRESENCE_RE.match(item)
+            if hit is not None:
+                live_rounds.add(int(hit.group(1)))
+        archive_rounds = set()
+        for path in real_paths:
+            for window in LL.load_archive_windows(path):
+                for item in window["lines"]:
+                    hit = LL.LEDGER_PRESENCE_RE.match(item)
+                    if hit is not None:
+                        archive_rounds.add(int(hit.group(1)))
+        real_excused = LL.audit_fold_carry(real_paths)
+        excused_line = LL.format_fold_carry(excused)
+        check(
+            # a: an ordinary missing ledger line still reds, unnamed
+            plain_gap["clean"] is False
+            and [(item["round"], item["window"])
+                 for item in plain_gap["gaps"]] == [(5003, 5003)]
+            and plain_gap["exemptions"] == []
+            # b: the same prose under a round the table does not name is red
+            and span_other["clean"] is False
+            and [item["round"] for item in span_other["gaps"]] == [5003]
+            and span_other["exemptions"] == []
+            # c: the named entry with both halves is excused and printed
+            and excused["clean"] is True
+            and [item["round"] for item in excused["exemptions"]] == [3112]
+            and [item["why"] for item in excused["exemptions"]]
+            == [LL.FOLD_CARRY_EXEMPT[3112]["why"]]
+            and "exempt=1(R3112)" in excused_line
+            and excused_line.startswith("FOLD-CARRY OK")
+            and excused_line.isascii()
+            # d: the exemption cell never swallows a second gap
+            and not_swallowed["clean"] is False
+            and [item["round"] for item in not_swallowed["gaps"]] == [5003]
+            and [item["round"] for item in not_swallowed["exemptions"]]
+            == [3112]
+            # e: evidence removed or contradicted refuses by name
+            and span_gone["clean"] is False
+            and [item["round"] for item in span_gone["gaps"]] == [3112]
+            and [item["why"] for item in span_gone["exemption_refusals"]]
+            == ["narrative-lacks-span"]
+            and has_line["clean"] is True
+            and has_line["gaps"] == []
+            and has_line["exemptions"] == []
+            and LL.fold_carry_exemption(3112, [], set())[0] is False
+            and LL.fold_carry_exemption(3112, [span], {3112})[0] is False
+            and LL.fold_carry_exemption(5003, [span], set())[0] is False
+            # f: the shipped tree's own evidence agrees - the excused round
+            #    has no budget line anywhere, and it is the table that did it
+            and 3112 not in live_rounds
+            and 3112 not in archive_rounds
+            and real_excused["clean"] is True
+            and 3112 in [item["round"]
+                         for item in real_excused["exemptions"]]
+            and all(item["round"] in LL.FOLD_CARRY_EXEMPT
+                    for item in real_excused["exemptions"])
+            and real_excused["exemption_refusals"] == [],
+            "AC-LGA15 a tick-alignment window with no ledger line anywhere is "
+            "excused only by name and only while its own narrative still "
+            "carries the recorded span")
+
     finally:
         shutil.rmtree(world, ignore_errors=True)
 
 
 
 def main():
-    print("suite: archive-aware ledger coverage (R2224 AC-LGA1..AC-LGA12)")
+    print("suite: archive-aware ledger coverage (R2224 AC-LGA1..AC-LGA15)")
     run()
     total = PASSES + FAILS
     print("SUITE %s %d/%d criteria"

@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 764 | 6397 | 675/675 | R2739 |
+| 764 | 6398 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -497,7 +497,7 @@
 | 458 | ledger-census-negative | ../os/test_census_negative.py | 13 | green | 0.2 |
 | 459 | ledger-census-baseline-add | ../os/test_census_baseline_add.py | 6 | green | 0.2 |
 | 460 | os-ledger-lines | ../os/test_ledger_lines.py | 8 | green | 9.8 |
-| 461 | os-ledger-archive | ../os/test_ledger_archive.py | 14 | green | 1.0 |
+| 461 | os-ledger-archive | ../os/test_ledger_archive.py | 15 | green | 1.0 |
 | 462 | os-archive-provenance | ../os/test_archive_provenance.py | 6 | no-evidence | - |
 | 463 | os-ledger-baseline | ../os/test_ledger_baseline.py | 8 | green | 1.7 |
 | 464 | os-ledger-fold-kind | ../os/test_ledger_fold_kind.py | 6 | green | 0.3 |
@@ -801,7 +801,7 @@
 | 762 | claim-census | test_claim_census.py | 9 | no-evidence | - |
 | 763 | os-stage-residue | ../os/test_stage_residue.py | 4 | no-evidence | - |
 | 764 | os-corpus-supply-chain | ../os/test_corpus_supply_chain.py | 7 | no-evidence | - |
-|  | 合计 |  | 6397 | green 675 / FAIL 0 / no-evidence 89 |  |
+|  | 合计 |  | 6398 | green 675 / FAIL 0 / no-evidence 89 |  |
 
 ## 证据出处
 
