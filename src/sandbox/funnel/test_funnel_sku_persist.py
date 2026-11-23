@@ -130,6 +130,25 @@ def _book(carrier, w):
     carrier.book_orders(w["day3"], DAY3)
 
 
+def _lead_ids():
+    """The order ids the three booked days carry, from the lead lists."""
+    return sorted(o["order_id"] for o in DAY1_ORDERS + DAY2_ORDERS + DAY3_ORDERS)
+
+
+def _booked_orders():
+    """Lifetime order count, taken from the lead lists themselves.
+
+    A literal 6 here would write the fixture shape into a number and redden
+    on any fixture edit without naming what moved; deriving both sides keeps
+    the law (every booked order lands, none twice) and names the drift.
+    """
+    return sum(len(rows) for rows in (DAY1_ORDERS, DAY2_ORDERS, DAY3_ORDERS))
+
+
+def _booked_orders_after_late():
+    return _booked_orders() + len(DAY3_LATE_ORDERS)
+
+
 def _assert_shape(face, where):
     for sku, bucket in face.items():
         assert isinstance(sku, str), "%s non-str sku bucket" % where
@@ -167,8 +186,9 @@ def case_fsp1(tmp):
     assert life["new-sku-1"] == {"orders": 1, "amount_cent": 100}
     assert life[""] == {"orders": 1, "amount_cent": 500}, \
         "AC-FSP1 blank sku merged or lost: %r" % (life[""],)
-    assert sum(b["orders"] for b in life.values()) == 6, \
-        "AC-FSP1 lifetime total drifted"
+    assert sum(b["orders"] for b in life.values()) == _booked_orders(), \
+        "AC-FSP1 lifetime total drifted: %r against %d booked" % (
+            sum(b["orders"] for b in life.values()), _booked_orders())
 
     assert faces["day1"] == {
         "": {"orders": 1, "amount_cent": 500},
@@ -186,7 +206,10 @@ def case_fsp1(tmp):
 
     SNAP["fsp1_faces"] = _dump(faces)
     SNAP["fsp1_rows"] = _rows(w["db"])
-    assert len(SNAP["fsp1_rows"]) == 6, "AC-FSP1 order rows drifted"
+    got_ids = [r[0] for r in SNAP["fsp1_rows"]]
+    assert got_ids == _lead_ids(), \
+        "AC-FSP1 order rows drifted: %r against lead ids %r" % (
+            got_ids, _lead_ids())
 
 
 def case_fsp2(tmp):
@@ -309,9 +332,14 @@ def case_fsp5(tmp):
     finally:
         g.close()
 
-    assert sum(b["orders"] for b in pre["lifetime"].values()) == 6
-    assert sum(b["orders"] for b in post["lifetime"].values()) == 9, \
-        "AC-FSP5 lifetime drift missing"
+    assert sum(b["orders"] for b in pre["lifetime"].values()) == _booked_orders(), \
+        "AC-FSP5 pre-restart lifetime total drifted: %r against %d booked" % (
+            sum(b["orders"] for b in pre["lifetime"].values()), _booked_orders())
+    assert sum(b["orders"] for b in post["lifetime"].values()) == \
+        _booked_orders_after_late(), \
+        "AC-FSP5 lifetime drift missing: %r against %d booked" % (
+            sum(b["orders"] for b in post["lifetime"].values()),
+            _booked_orders_after_late())
     assert _dump(post["day1"]) == _dump(pre["day1"]), \
         "AC-FSP5 day1 window drifted with lifetime growth"
     assert _dump(post["day2"]) == _dump(pre["day2"]), \
@@ -344,7 +372,9 @@ def case_fsp6(tmp):
 
     assert rows_open == rows_first, "AC-FSP6 restart wrote rows"
     assert rows_after == rows_first, "AC-FSP6 read batch wrote rows"
-    assert count_after == count_first == 6, "AC-FSP6 row count drifted"
+    assert count_after == count_first == _booked_orders(), \
+        "AC-FSP6 row count drifted: %r/%r against %d booked" % (
+            count_after, count_first, _booked_orders())
 
 
 def case_fsp7(tmp):
@@ -380,7 +410,9 @@ def case_fsp7(tmp):
     assert _dump(third["day1"]) == _dump(anchor_faces["day1"]), \
         "AC-FSP7 day1 window thawed across double restart"
     assert third["no_rows"] == {}, "AC-FSP7 no-row face on 3rd open"
-    assert count == 9, "AC-FSP7 final order count %r" % (count,)
+    assert count == _booked_orders_after_late(), \
+        "AC-FSP7 final order count %r against %d booked" % (
+            count, _booked_orders_after_late())
 
 
 def case_fsp8(tmp):

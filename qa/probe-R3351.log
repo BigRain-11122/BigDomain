@@ -1,0 +1,10 @@
+FUNNEL lead_ids=6 booked=6 after_late=9
+FUNNEL lead_ids_sample=O1,O2,O3,O4,O5,O6
+FUNNEL short_world total=5 expected=6 red=True
+FUNNEL short_world missing_ids=O6 id_set_red=True
+HUB reads=/hub/api/faces?probe=1,/hub/api/faces
+HUB decls=1 calls=['show_probing();']
+HUB extra_read strangers=/hub/api/other
+HUB twice_calls=['show_probing();', 'show_probing();']
+HUB moved_calls=['show_probing();'] moved_order=(False, 'show_probing(); sits after the probing request')
+HUB shrunk_names=checkout,city,gate,ledger,lobby,panel,ugc

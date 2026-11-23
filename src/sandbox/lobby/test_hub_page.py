@@ -145,6 +145,31 @@ def boot_triggers(page):
     return re.findall(r"^[ \t]*(probe\(\);)[ \t]*$", page, re.M)
 
 
+LIST_READ = "/hub/api/faces"
+PROBE_READ = "/hub/api/faces?probe=1"
+FETCH_RE = re.compile(r"fetch\(\s*'([^']*)'")
+
+
+def fetch_sites(page):
+    """Every endpoint the page reads, in file order.
+
+    The law is "the page reads the face list and the probing read, and nothing
+    else"; a count of the literal 'fetch(' cannot say WHICH endpoint appeared,
+    so an added read would redden without naming the URL that did it.
+    """
+    return FETCH_RE.findall(page)
+
+
+def probing_decls(page):
+    """Every definition site of the probing label, by its line text."""
+    return re.findall(r"^[ \t]*(function show_probing\(\) \{)[ \t]*$", page, re.M)
+
+
+def probing_calls(page):
+    """Every statement-level call of the probing label, in file order."""
+    return re.findall(r"^[ \t]*(show_probing\(\);)[ \t]*$", page, re.M)
+
+
 def page_cover(text, faces):
     """Which published faces the page really exposes: card, anchor, wire().
 
@@ -584,8 +609,10 @@ def main():
             timers = sum(page.count(name) for name in
                          ("setInterval", "setTimeout", "requestAnimationFrame"))
             assert timers == 0, "page carries %d auto-timer mentions" % timers
-            fetches = page.count("fetch(")
-            assert fetches == 2, "page issues %d fetch calls, expected 2" % fetches
+            fetches = fetch_sites(page)
+            assert sorted(fetches) == sorted([LIST_READ, PROBE_READ]), (
+                "page reads %r, expected the list read and the probe read"
+                % (fetches,))
             plain_at = page.index("\n  fetch('/hub/api/faces'")
             triggers = boot_triggers(page)
             assert triggers == ["probe();"], (
@@ -789,7 +816,25 @@ def main():
         published = sorted(all_faces["face_ports"])
         page_text = disk_bytes.decode("utf-8")
         covered, missing, unlinked, unwired = page_cover(page_text, published)
-        assert len(published) == 8, "published faces=%r" % (published,)
+        # The law is coverage of whatever the hub publishes, not a count of
+        # eight: a ninth face is growth, so dropping one port must remove
+        # exactly that face from the published set and the page must still
+        # cover the rest - a count could never say which face moved.
+        assert published, "the hub published no faces, so coverage is vacuous"
+        shrunk_faces = hub_page.build_faces(
+            "127.0.0.1", free_port(), web_port=free_port(),
+            city_port=free_port(), checkout_port=free_port(),
+            gate_port=free_port(), ledger_port=free_port(),
+            ugc_port=free_port(), panel_port=free_port(), member_port=None)
+        shrunk = sorted(shrunk_faces["face_ports"])
+        assert set(shrunk) == set(published) - {"member"}, (
+            "dropping member_port reads published=%r, expected %r"
+            % (shrunk, sorted(set(published) - {"member"})))
+        s_covered, s_missing, s_unlinked, s_unwired = page_cover(
+            page_text, shrunk)
+        assert not (s_missing or s_unlinked or s_unwired), (
+            "the shrunk face set is not covered: missing=%s unlinked=%s "
+            "unwired=%s" % (s_missing, s_unlinked, s_unwired))
         assert not missing, "no card for published face(s): %s" % (missing,)
         assert not unlinked, "no link anchor for: %s" % (unlinked,)
         assert not unwired, "wire() never reads data.<face> for: %s" % (unwired,)
@@ -814,14 +859,24 @@ def main():
         # (d) this card must not cost the standing page laws
         assert not re.search(r"setInterval|setTimeout|requestAnimationFrame",
                              page_text), "an autotimer appeared on the page"
-        assert page_text.count("fetch(") == 2, (
-            "fetch count=%d, expected the list read and the probe read"
-            % page_text.count("fetch("))
+        sites = fetch_sites(page_text)
+        assert sorted(sites) == sorted([LIST_READ, PROBE_READ]), (
+            "page reads %r, expected exactly the list read and the probe "
+            "read" % (sites,))
+        # load-bearing: an unknown endpoint is named, not merely counted
+        extra = page_text.replace(
+            "fetch('/hub/api/faces', { cache: 'no-store' })",
+            "fetch('/hub/api/faces', { cache: 'no-store' });"
+            " fetch('/hub/api/other');", 1)
+        strangers = [u for u in fetch_sites(extra)
+                     if u not in (LIST_READ, PROBE_READ)]
+        assert strangers == ["/hub/api/other"], (
+            "an added read reads strangers=%r" % (strangers,))
 
-        print("PASS AC-HUB12 covered=%d/%d gate_card=True hole=%d/%d "
-              "hole_missing=%s timers=0 fetch=2"
-              % (covered, len(published), h_covered, len(published),
-                 ",".join(h_missing)))
+        print("PASS AC-HUB12 covered=%d/%d shrunk=%d/%d gate_card=True "
+              "hole=%d/%d hole_missing=%s timers=0 reads=%s"
+              % (covered, len(published), s_covered, len(shrunk), h_covered,
+                 len(published), ",".join(h_missing), ",".join(sites)))
     except AssertionError as exc:
         failed += 1
         print("FAIL AC-HUB12 :: %s" % exc)
@@ -854,31 +909,55 @@ def main():
         # must redden the same reading - the order law is not a constant.
         page_text13 = disk_bytes.decode("utf-8")
         dropped = page_text13.replace("    show_probing();\n", "", 1)
+        # moved: the same call put back as a statement AFTER the request, at the
+        # end of probe() - an inline splice would not be a page that runs, so
+        # the mutant is the real placement the order law is about.
         moved = dropped.replace(
-            "fetch('/hub/api/faces?probe=1', { cache: 'no-store' })",
-            "fetch('/hub/api/faces?probe=1', { cache: 'no-store' });"
-            " show_probing();", 1)
+            "      .catch(function () {\n"
+            "        offline();\n"
+            "        refresh.disabled = false;\n"
+            "      });\n"
+            "  }\n",
+            "      .catch(function () {\n"
+            "        offline();\n"
+            "        refresh.disabled = false;\n"
+            "      });\n"
+            "    show_probing();\n"
+            "  }\n", 1)
         dropped_ok, dropped_why = probe_order(dropped)
         moved_ok, moved_why = probe_order(moved)
         assert dropped_ok is False, "a page with no label call still read ordered"
         assert moved_ok is False, "a page with the label after the request still read ordered"
-        assert moved.count("show_probing") == 2, (
-            "the moved copy did not keep one definition and one call: %d"
-            % moved.count("show_probing"))
+        defs = probing_decls(moved)
+        calls = probing_calls(moved)
+        assert defs == probing_decls(page_text13), (
+            "the moved copy changed the label definition: %r" % (defs,))
+        assert calls == probing_calls(page_text13) == ["show_probing();"], (
+            "label call sites shipped=%r moved=%r" % (
+                probing_calls(page_text13), calls))
+        # load-bearing: a second statement-level call is named, not counted
+        twice = page_text13.replace(
+            "    show_probing();\n",
+            "    show_probing();\n    show_probing();\n", 1)
+        assert probing_calls(twice) == ["show_probing();", "show_probing();"], (
+            "a page with two label calls reads %r"
+            % (probing_calls(twice),))
 
         # (d) the standing page laws stay intact
         assert not re.search(r"setInterval|setTimeout|requestAnimationFrame",
                              page_text13), "an autotimer appeared on the page"
-        assert page_text13.count("fetch(") == 2, (
-            "fetch count=%d, expected the list read and the probe read"
-            % page_text13.count("fetch("))
+        reads13 = fetch_sites(page_text13)
+        assert sorted(reads13) == sorted([LIST_READ, PROBE_READ]), (
+            "page reads %r, expected the list read and the probe read"
+            % (reads13,))
         assert "marks[i].textContent = '检测中'" in page_text13, (
             "show_probing() does not put the cards back to their probing label")
 
-        print("PASS AC-HUB13 ordered=True calls=1 silent=dead/%.0fms "
+        print("PASS AC-HUB13 ordered=True calls=%d silent=dead/%.0fms "
               "stale_before=%.0fms stale_after=0ms dropped=%s moved=%s "
-              "timers=0 fetch=2"
-              % (silent3_ms, silent3_ms, dropped_why or "red", moved_why or "red"))
+              "timers=0 reads=%s"
+              % (len(calls), silent3_ms, silent3_ms, dropped_why or "red",
+                 moved_why or "red", ",".join(reads13)))
     except AssertionError as exc:
         failed += 1
         print("FAIL AC-HUB13 :: %s" % exc)

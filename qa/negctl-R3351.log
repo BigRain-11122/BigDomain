@@ -1,0 +1,5 @@
+NC1 fixture_grown total=7 old_shape_red=True new_shape_red=False
+NC2 row_missing total=5 old_shape_red=True new_shape_red=True named_missing=True
+NC3 extra_read old_count=3 old_red=True named=/hub/api/other
+NC4 dup_call old_count=3 old_red=True named=['show_probing();', 'show_probing();']
+NC5 ninth_face old_red=True published=9 missing=membership covered=8/9
