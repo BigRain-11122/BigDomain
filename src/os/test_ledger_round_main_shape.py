@@ -241,7 +241,9 @@ def ac_rms5():
     bare_gone = 'raise ValueError("no date prefixes' not in source
     original = CEC.recompute
 
-    def boom():
+    def boom(root=None):
+        # The shipped reader takes the world it grades (R3361); the stand-in
+        # follows that signature so check() still hands it the root.
         raise CEC.AnchorError("E_EC_NO_DATE_ANCHOR",
                               "the live log holds 2 line(s) and none carries "
                               "a YYYY-MM-DD prefix")
