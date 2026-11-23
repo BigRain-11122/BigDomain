@@ -1,0 +1,11 @@
+R3381 fold --plan-only reports the bare-round loss (AC-RLP1..AC-RLP6)
+suite: SUITE PASS 259/259 (was 250, +9 assertions); registry row os-logs-toolkit 250 -> 259
+arm1 plan with a round only in the window: rc=2 round_pointer_lost=[R9101] round_loss_exact=true would_fail=[round-lost]
+arm2 same tree with --allow-round-loss: rc=0 round_loss_declared=true lost=[R9101] would_fail=[]
+arm3 summary that names the round: rc=0 lost=[] round_loss_exact=true would_fail=[]
+arm4 no --summary-file (assumed): rc=0 lost=[R9101] round_loss_exact=false would_fail=[] (upper bound, no predicted refusal)
+arm5 one arithmetic: rounds --window-tail W --file plain lost set == plan lost set; writer dry-run names R9101 (E_ROUND_LOST)
+arm6 purity: state bytes+mtime, archive bytes and logs listing unchanged across every arm
+live: fold --plan-only reads minimal_window_lines=0 (fold_needed false, state 58447B vs target 75500B)
+live tight: --reserve-bytes 30000 --summary-file <empty> reads minimal=24 start=107 lost=[R3379,R3380] exact=true would_fail=[round-lost] rc=2, state still 58447B
+patterns: PAT, ROUND_TAG and BARE_ROUND unchanged; plan key order pinned in the suite

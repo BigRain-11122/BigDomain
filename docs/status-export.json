@@ -4,21 +4,21 @@
       "preview/face-sweep.html (8878B)",
       "preview/battery-shard-report.html (16424B)"
     ],
-    "current": "2026-11-24 R3380 PRODUCT+ENGINEERING: the fold writer can no longer erase a bare round pointer in silence - a window round named nowhere else now refuses by name (E_ROUND_LOST) instead of landing a fold that leaves no way back to it.",
+    "current": "2026-11-24 R3381 PRODUCT+ENGINEERING: the pre-fold plan can no longer publish a width the writer will refuse on a bare round - it names that round itself, off the same reading the refusal uses.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
     "last_artifact": "preview/platform-live-report.html (8621B) + preview/platform-live-report.json (6228B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-23 commit]; later=html)",
     "latest_artifact": "preview/platform-live-report.html (8621B) + preview/platform-live-report.json (6228B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-23 commit]; later=html)",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\platform-live-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/round-loss-R3380.log (1165B, 2026-11-24)",
-    "latest_evidence": "qa/round-loss-R3380.log (1165B, 2026-11-24)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/battery-shard-rlp-R3381.log (369B, 2026-11-24)",
+    "latest_evidence": "qa/battery-shard-rlp-R3381.log (369B, 2026-11-24)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3380] next window (<=48h): (1) `fold --plan-only` 仍不报丢失集（给 `--summary-file` 时可算），若要它同判需先钉 AC 再动代码；另注 `lost_rounds` 只认得 `BARE_ROUND` 的形状（五位数轮号、文件名片段不可见）。 (2) 三条队列仍无合法头：main open=6 claimable=5 gated=1、tech open=5 claimable=4 gated=1、explore open=1 claimable=1，全部 `NO-CRITERIA`——认领=先把判据写进那一行。 (3) 承账不变：`qa_log --ledger-check` rows=85 broken=5（R3371 裁定=诊断不修）；全量 battery 未实跑；Docker 缺位；`BigDomain-OSLoop` LogonType=Interactive；`test_face_sweep` 54/56（AC-FSWB20/20c）。 (4) 载体：state 58447B／margin 20053，`fold_needed=false`。 (5) 诚实承账：物理件五件仍缺（商户号／服务器／域名／备案+ICP／小程序 appid+secret）——买家仍付不了钱。",
-    "next_milestone_due": "2026-11-26T07:21:59+08:00",
-    "updated_at": "2026-11-24T07:21:59+08:00",
+    "next_milestone": "[R3381] next window (<=48h): (1) MAIN 头号——`fold --plan-only` 的 `round_loss_exact=false` 分支只是**上界**：若要它也对「调用者会用一段点名轮号的散文」给出精确答案，需要先钉判据（例如 `--summary-sentence` 参与计划面），本窗未动。 (2) 队列卫生：main open=6 claimable=5 gated=1、tech open=5 claimable=4 gated=1、explore open=1 claimable=1，全部 `NO-CRITERIA`——认领=先把判据写进那一行，禁为凑满队列空写判据。 (3) 承账不变：`qa_log --ledger-check` rows=85 broken=5（R3371 裁定=诊断不修）；全量 battery 未实跑；Docker 缺位；`BigDomain-OSLoop` LogonType=Interactive；`test_face_sweep` 54/56（AC-FSWB20/20c）。 (4) 载体：state 63215B／gate 78500／target 75500，`fold_needed=false`（余量 12285B）。 (5) 诚实承账：物理件五件仍缺（商户号／服务器／域名／备案+ICP／小程序 appid+secret）——买家仍付不了钱。",
+    "next_milestone_due": "2026-11-26T07:41:25+08:00",
+    "updated_at": "2026-11-24T07:41:25+08:00",
     "heartbeat": {
       "tick": 3365,
-      "state_tick": 3380,
-      "lag": 15,
+      "state_tick": 3381,
+      "lag": 16,
       "verdict": "FLAG",
       "reason": "heartbeat_row_debt"
     },
@@ -38,9 +38,9 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-24 R3380 PRODUCT+ENGINEERING: the fold writer can no longer erase a bare round pointer in silence - a window round named nowhere else now refuses by name (E_ROUND_LOST) instead of landing a fold that leaves no way back to it.",
-  "claims": {"claimed": 38, "captured": 2, "contradicted": 5, "uncaptured": 31, "historic": 5, "rows": 85, "present": true, "census_ts": "2026-11-24T07:21:59+08:00"},
-  "chain": {"present": true, "rows": 85, "broken": 5, "path": "state/qa_replacements.jsonl"},
+  "current": "2026-11-24 R3381 PRODUCT+ENGINEERING: the pre-fold plan can no longer publish a width the writer will refuse on a bare round - it names that round itself, off the same reading the refusal uses.",
+  "claims": {"claimed": 39, "captured": 2, "contradicted": 5, "uncaptured": 32, "historic": 5, "rows": 86, "present": true, "census_ts": "2026-11-24T07:41:25+08:00"},
+  "chain": {"present": true, "rows": 86, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -68,15 +68,15 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-24 R3380 PRODUCT+ENGINEERING: the fold writer can no longer erase a bare round pointer in silence - a window round named nowhere else now refuses by name (E_ROUND_LOST) instead of landing a fold that leaves no way back to it.",
-  "export_ts": "2026-11-24T07:21:59+08:00",
+  "do": "2026-11-24 R3381 PRODUCT+ENGINEERING: the pre-fold plan can no longer publish a width the writer will refuse on a bare round - it names that round itself, off the same reading the refusal uses.",
+  "export_ts": "2026-11-24T07:41:25+08:00",
   "latest_artifact": "preview/platform-live-report.html (8621B) + preview/platform-live-report.json (6228B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-23 commit]; later=html)",
-  "latest_evidence": "qa/round-loss-R3380.log (1165B, 2026-11-24)",
-  "next_milestone": "[R3380] next window (<=48h): (1) `fold --plan-only` 仍不报丢失集（给 `--summary-file` 时可算），若要它同判需先钉 AC 再动代码；另注 `lost_rounds` 只认得 `BARE_ROUND` 的形状（五位数轮号、文件名片段不可见）。 (2) 三条队列仍无合法头：main open=6 claimable=5 gated=1、tech open=5 claimable=4 gated=1、explore open=1 claimable=1，全部 `NO-CRITERIA`——认领=先把判据写进那一行。 (3) 承账不变：`qa_log --ledger-check` rows=85 broken=5（R3371 裁定=诊断不修）；全量 battery 未实跑；Docker 缺位；`BigDomain-OSLoop` LogonType=Interactive；`test_face_sweep` 54/56（AC-FSWB20/20c）。 (4) 载体：state 58447B／margin 20053，`fold_needed=false`。 (5) 诚实承账：物理件五件仍缺（商户号／服务器／域名／备案+ICP／小程序 appid+secret）——买家仍付不了钱。",
+  "latest_evidence": "qa/battery-shard-rlp-R3381.log (369B, 2026-11-24)",
+  "next_milestone": "[R3381] next window (<=48h): (1) MAIN 头号——`fold --plan-only` 的 `round_loss_exact=false` 分支只是**上界**：若要它也对「调用者会用一段点名轮号的散文」给出精确答案，需要先钉判据（例如 `--summary-sentence` 参与计划面），本窗未动。 (2) 队列卫生：main open=6 claimable=5 gated=1、tech open=5 claimable=4 gated=1、explore open=1 claimable=1，全部 `NO-CRITERIA`——认领=先把判据写进那一行，禁为凑满队列空写判据。 (3) 承账不变：`qa_log --ledger-check` rows=85 broken=5（R3371 裁定=诊断不修）；全量 battery 未实跑；Docker 缺位；`BigDomain-OSLoop` LogonType=Interactive；`test_face_sweep` 54/56（AC-FSWB20/20c）。 (4) 载体：state 63215B／gate 78500／target 75500，`fold_needed=false`（余量 12285B）。 (5) 诚实承账：物理件五件仍缺（商户号／服务器／域名／备案+ICP／小程序 appid+secret）——买家仍付不了钱。",
   "outs": [
+    "preview/platform-live-report.html (8621B) + preview/platform-live-report.json (6228B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-23 commit]; later=html)",
     "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-23 commit]; later=html)",
     "preview/ledger-reconcile-face.html (8656B) + preview/ledger-reconcile-face.json (6151B) [2026-11-24 commit]",
-    "preview/platform-live-report.html (8621B) + preview/platform-live-report.json (6228B) [2026-11-23 mtime]",
     "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-23 mtime] (halves differ: html [2026-11-23 mtime] + json [2026-11-16 commit]; later=html)",
     "preview/apimarket-report-slowanswer.html (13022B) + preview/apimarket-report-slowanswer.json (18381B) [2026-11-22 mtime] (halves differ: html [2026-11-22 mtime] + json [2026-10-25 commit]; later=html)",
     "preview/start-here.html (41366B) + preview/start-here.json (3298B) [2026-11-22 mtime]",
@@ -145,7 +145,7 @@
       "2026-11-04 R2431 verification window on the item the debt gate named first=yes (reconcile-battery-R2431, carried from R2430): zero product code changed, the R2168 mixed-tree rule honoured. Leg 1 read 542/543 suites with the criteria total 4234 exactly as pre-registered and the only red was reconcile-daily-census at cd7 exit=2 DRIFT-FLAG; the census named the file (qa/battery-R2431-stdout.log, class=cmd-raw) because this window launched the battery with a Start-Process redirect pointed INTO the evidence directory. Repaired at the birth site, never by widening the baseline: the two launcher captures moved to the gitignored logs/ face, after which the census read flags=0 DRIFT-CLEAN with the 529-entry baseline untouched. Retry leg on the repaired tree: RUNNER PASS 543/543 suites plus controls 7/7 in 956.2s at criteria 4234, TMP RECLAIM 932/932. Four follow-up sections: matrix FAILED first on the stale doc without rewriting it, was regenerated stamp-aligned to 52317B, and the re-run read VERDICT R2431 PASS failing=none (fingerprint CLEAN 5 domains, profile byte-identical, census DRIFT-CLEAN). Debt: reconcile-battery-R2431 closed and product-face-R2432 opened first=yes through the shipped CLIs. Zero product points claimed."
     ],
     [
-      "3380",
+      "3381",
       "OSLoop 执行 tick",
       "a failed fold state write takes the appended archive block back and removes the backup"
     ]
@@ -159,22 +159,22 @@
   "self_drive": {
     "window": "2026-11-18..2026-11-24",
     "window_days": 7,
-    "log_lines_in_window": 129,
+    "log_lines_in_window": 140,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 18,
+    "substantive_non_idle_mention_lines": 19,
     "proposals_total": 11,
     "proposals_open": 9,
     "queue_main_open": 6,
     "queue_tech_open": 5,
     "queue_explore_open": 1
   },
-  "state_bytes": 58447,
-  "next_milestone_due": "2026-11-26T07:21:59+08:00",
+  "state_bytes": 63215,
+  "next_milestone_due": "2026-11-26T07:41:25+08:00",
   "heartbeat": {
     "tick": 3365,
-    "state_tick": 3380,
-    "lag": 15,
+    "state_tick": 3381,
+    "lag": 16,
     "verdict": "FLAG",
     "reason": "heartbeat_row_debt"
   },

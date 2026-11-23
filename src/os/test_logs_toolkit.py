@@ -1291,6 +1291,101 @@ def main():
                              r'-[0-9A-Za-z][0-9A-Za-z]*(?:-[0-9A-Za-z]+)*'),
        'no token or round pattern moved for this refusal (AC-RLW6)')
 
+    # ---- plan-only reports the bare-round loss (AC-RLP1..AC-RLP6, R3381) ----
+    # Pinned in src/os/backlog.md R3381 BEFORE this code. The plan published a
+    # width while the writer refuted that same width on a bare round; these arms
+    # make both faces read one loss set and keep the plan a reader.
+    RP_LOGS = ['2026-11-24 filler ' + 'y' * 1500 for _ in range(60)]
+    RP_LOGS[-1] = '2026-11-24 tail item R9101 ' + 'y' * 1500
+    rroot = tempfile.mkdtemp(prefix='bd-foldplan-')
+    rspath = build_ps_state(rroot, RP_LOGS)
+    rplain = os.path.join(rroot, 'plain.txt')
+    open(rplain, 'w', encoding='utf-8').write(
+        '2026-11-24 roll window folded verbatim\n')
+    rnamed = os.path.join(rroot, 'named.txt')
+    open(rnamed, 'w', encoding='utf-8').write(
+        '2026-11-24 roll window R9101 folded verbatim\n')
+    rarc = os.path.join(rroot, 'logs', archive_name())
+    rpre_state = open(rspath, 'rb').read()
+    rstat = os.stat(rspath)
+    rpre_arc = open(rarc, 'rb').read()
+    rentries = sorted(os.listdir(os.path.join(rroot, 'logs')))
+
+    rc, out, err = run(rroot, 'fold', '--plan-only', '--summary-file', rplain)
+    pr = json.loads(out)
+    RW = pr['minimal_window_lines']
+    ok(rc == 2 and pr['round_pointer_lost'] == ['R9101']
+       and pr['round_loss_exact'] is True
+       and pr['round_loss_declared'] is False
+       and pr['would_fail'] == ['round-lost'],
+       'plan names the bare round its window would erase and refutes the width '
+       '(AC-RLP1/AC-RLP2)')
+
+    # the two faces must answer with ONE arithmetic, not two implementations
+    rc, out, err = run(rroot, 'rounds', '--window-tail', str(RW),
+                       '--file', rplain)
+    rr = json.loads(out)
+    ok(rr['lost'] == 1
+       and [x['round'] for x in rr['rounds'] if x['lost']]
+       == pr['round_pointer_lost'],
+       'plan loss set equals the shipped rounds face on the same window (AC-RLP1)')
+
+    rc, out, err = run(rroot, 'fold', '--plan-only', '--summary-file', rplain,
+                       '--allow-round-loss')
+    pdl = json.loads(out)
+    ok(rc == 0 and pdl['round_loss_declared'] is True
+       and pdl['round_pointer_lost'] == ['R9101']
+       and pdl['would_fail'] == [],
+       'declaring the loss clears the reason and keeps the named round (AC-RLP2)')
+
+    rc, out, err = run(rroot, 'fold', '--plan-only', '--summary-file', rnamed)
+    pnm = json.loads(out)
+    ok(rc == 0 and pnm['round_pointer_lost'] == []
+       and pnm['round_loss_exact'] is True and pnm['would_fail'] == [],
+       'a summary that names the round has nothing to lose (AC-RLP2)')
+
+    # a plan that cannot read the caller's prose must not predict a refusal
+    rc, out, err = run(rroot, 'fold', '--plan-only')
+    pasm = json.loads(out)
+    ok(rc == 0 and pasm['summary_source'] == 'assumed'
+       and pasm['round_loss_exact'] is False
+       and pasm['round_pointer_lost'] == ['R9101']
+       and pasm['would_fail'] == [],
+       'an assumed summary reports the loss as an upper bound and predicts no '
+       'refusal (AC-RLP3)')
+
+    # cross-face: the writer refuses exactly what the plan named, before writing
+    rc, out, err = run(rroot, 'fold', '--round', 'R9102', '--fold-no', '911',
+                       '--desc', 'plan round loss arm', '--window-tail', str(RW),
+                       '--summary-file', rplain)
+    ex = json.loads(out)
+    ok(rc == 2 and ex['round_pointer_lost'] == pr['round_pointer_lost']
+       and ex['round_loss_declared'] is False
+       and 'E_ROUND_LOST' in err and 'R9101' in err,
+       'the writer refuses exactly the rounds the plan named (AC-RLP1)')
+
+    ok(open(rspath, 'rb').read() == rpre_state
+       and os.stat(rspath).st_mtime_ns == rstat.st_mtime_ns
+       and open(rarc, 'rb').read() == rpre_arc
+       and sorted(os.listdir(os.path.join(rroot, 'logs'))) == rentries,
+       'the plan stays a reader: state, archive and logs dir hold across every '
+       'arm (AC-RLP4)')
+
+    ok(list(pr.keys()) == [
+        'mode', 'state_path', 'pre_bytes', 'gate', 'reserve_bytes',
+        'target_bytes', 'log_lines', 'summary_source', 'summary_item_bytes',
+        'minimal_window_lines', 'minimal_window_start', 'window_content_bytes',
+        'window_token_count', 'window_tokens', 'round_pointer_lost',
+        'round_loss_declared', 'round_loss_exact', 'predicted_post_bytes',
+        'width_below_minimal_bytes', 'width_below_minimal_clears_gate',
+        'max_fold_post_bytes', 'archive_file', 'would_fail', 'writes_nothing'],
+       'the plan document keeps one pinned key order with the loss keys in '
+       'place (AC-RLP5)')
+    ok(T.BARE_ROUND.pattern == r'(?<![0-9A-Za-z-])R\d{3,5}(?![0-9A-Za-z-])'
+       and T.PAT.pattern == (r'(?:AC|BD|C|D|O|P|T|XL|OH|R)'
+                             r'-[0-9A-Za-z][0-9A-Za-z]*(?:-[0-9A-Za-z]+)*'),
+       'no token or round pattern moved for the plan face (AC-RLP5)')
+
     # ---- weights per-item face (AC-LTW1..AC-LTW6, R3377 slice) ----
     # Pinned in state/queue/explore.md R3176 b before this code. The face is
     # read-only and its conservation is measured against the SHIPPED gauge

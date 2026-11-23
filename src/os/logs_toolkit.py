@@ -1026,13 +1026,29 @@ def cmd_fold_plan(args):
     tokens = set()
     for line in window:
         tokens |= set(PAT.findall(line))
+    # AC-RLP1: the plan answers the writer's own round-loss law on the very
+    # window it publishes, read off the shipped rounds face (lost_rounds) so a
+    # plan and a refusal can never disagree - there is no second arithmetic.
+    # With a placeholder summary the list is an upper bound (the placeholder
+    # names no round); AC-RLP3 then keeps it out of would_fail.
+    if minimal:
+        lost = lost_rounds(st, log_len - minimal + 1, log_len, summary)
+    else:
+        lost = []
+    round_loss_declared = bool(getattr(args, 'allow_round_loss', False))
+    round_loss_exact = summary_source == 'file'
 
     archive = args.archive_file or os.path.join(
         args.root, 'logs', 'state-log-archive-%s.md' % datetime.now(CST).strftime('%Y-%m'))
     would_fail = []
     if minimal is None:
         would_fail.append('gate-unreachable')
-    elif minimal and not os.path.exists(archive) and not args.allow_create:
+    if round_loss_exact and lost and not round_loss_declared:
+        # the execute path refuses on this list (E_ROUND_LOST); the plan names
+        # the same reason, but only when it could read the real summary
+        # (AC-RLP2) - an assumed summary never predicts a refusal (AC-RLP3)
+        would_fail.append('round-lost')
+    if minimal and not os.path.exists(archive) and not args.allow_create:
         # the execute path would refuse here; the plan says so instead of
         # creating an archive to make its own answer true
         would_fail.append('archive-missing')
@@ -1052,6 +1068,9 @@ def cmd_fold_plan(args):
         'window_content_bytes': sum(len(x.encode('utf-8')) for x in window),
         'window_token_count': len(tokens),
         'window_tokens': sorted(tokens),
+        'round_pointer_lost': lost,
+        'round_loss_declared': round_loss_declared,
+        'round_loss_exact': round_loss_exact,
         'predicted_post_bytes': predicted,
         'width_below_minimal_bytes': below,
         'width_below_minimal_clears_gate': (None if below is None
