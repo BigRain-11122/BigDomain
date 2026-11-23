@@ -1,0 +1,8 @@
+SHARD scope=SHARD registry_suites=764 registry_criteria=6403 selected=6 selected_criteria=36 cap=600s leg_cap=0s overrides=1 exact=0 state=COMPLETE
+SHARD row os-probe-seam-name-binding-arm-mixed-residual-naming rc=0 pass=54 fail=0 detail=yes suite=PASS 6/6 crit=6 0.2s
+SHARD row os-probe-seam-name-binding-arm-mixed-residual-alias-chain rc=0 pass=31 fail=0 detail=yes suite=PASS 6/6 crit=6 0.2s
+SHARD row os-probe-seam-name-binding-arm-mixed-residual-alias-position rc=0 pass=31 fail=0 detail=yes suite=PASS 6/6 crit=6 0.3s
+SHARD row os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-base rc=0 pass=29 fail=0 detail=yes suite=PASS 6/6 crit=6 0.2s
+SHARD row os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-predicate rc=0 pass=30 fail=0 detail=yes suite=PASS 6/6 crit=6 0.2s
+SHARD row os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope rc=0 pass=33 fail=0 detail=yes suite=PASS 6/6 crit=6 0.2s
+SHARD rc=0 scope=SHARD selected=6 executed=6 green=6 criteria=36 crit_mismatch=0 elapsed=1.3s crit_checked=6 crit_unchecked=0

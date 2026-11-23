@@ -1,0 +1,5 @@
+SHARD scope=SHARD registry_suites=764 registry_criteria=6403 selected=3 selected_criteria=18 cap=600s leg_cap=0s overrides=1 exact=0 state=COMPLETE
+SHARD row os-probe-seam-name-binding-control-flow-scope rc=0 pass=33 fail=0 detail=yes suite=PASS 6/6 crit=6 0.2s
+SHARD row os-probe-seam-name-binding-control-flow-guard-scope rc=0 pass=41 fail=0 detail=yes suite=PASS 6/6 crit=6 0.2s
+SHARD row os-probe-seam-name-binding-control-flow-guard-exhaustive rc=0 pass=55 fail=0 detail=yes suite=PASS 6/6 crit=6 0.2s
+SHARD rc=0 scope=SHARD selected=3 executed=3 green=3 criteria=18 crit_mismatch=0 elapsed=0.5s crit_checked=3 crit_unchecked=0

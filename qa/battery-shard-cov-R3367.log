@@ -1,0 +1,7 @@
+SHARD scope=SHARD registry_suites=764 registry_criteria=6403 selected=5 selected_criteria=30 cap=600s leg_cap=0s overrides=1 exact=0 state=COMPLETE
+SHARD row os-probe-seam-dialect-tag-guard-scope rc=0 pass=102 fail=0 detail=yes suite=PASS 6/6 crit=6 32.8s
+SHARD row os-probe-seam-dialect-shape-guard-scope rc=0 pass=172 fail=0 detail=yes suite=PASS 6/6 crit=6 38.4s
+SHARD row os-probe-seam-dialect-canonical-guard-scope rc=0 pass=149 fail=0 detail=yes suite=PASS 6/6 crit=6 48.8s
+SHARD row os-probe-seam-dialect-escape-guard-scope rc=0 pass=131 fail=0 detail=yes suite=PASS 6/6 crit=6 59.5s
+SHARD row os-probe-seam-dialect-marker-escape-guard-scope rc=0 pass=111 fail=0 detail=yes suite=PASS 6/6 crit=6 57.0s
+SHARD rc=0 scope=SHARD selected=5 executed=5 green=5 criteria=30 crit_mismatch=0 elapsed=236.6s crit_checked=5 crit_unchecked=0

@@ -3,21 +3,21 @@
     "board_pages_skipped": [
       "preview/battery-shard-report.html (16424B)"
     ],
-    "current": "2026-11-24 R3366 ENGINEERING: the last red on the ledger reconcile face was two shipped laws colliding - AC-LRC5 demanded the landed html be a pure function of the json while the shipped post-render channel (tools/face_backhop.py) appends a back-hop block and, by its own AC-FBH5, rewrites the sibling json sizes to the post-injection byte count, so no pair could ever be a fixed point after that channel ran.",
+    "current": "2026-11-24 R3368 PRODUCT+ENGINEERING: the coverage face moved from 33 uncovered suites / 198 criteria to 9 / 54 in one window through six shipped evidence legs, with red staying at 0 the whole way.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
     "last_artifact": "preview/ledger-reconcile-face.html (8656B) + preview/ledger-reconcile-face.json (6151B) [2026-11-24 commit]",
     "latest_artifact": "preview/ledger-reconcile-face.html (8656B) + preview/ledger-reconcile-face.json (6151B) [2026-11-24 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ledger-reconcile-face.html",
-    "latest_artifact_note": "",
-    "latest_evidence": "qa/negctl-R3366.log (164B, 2026-11-24)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/battery-shard-cov6-R3368.log (1570B, 2026-11-24)",
+    "latest_evidence": "qa/battery-shard-cov6-R3368.log (1570B, 2026-11-24)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3366] next window (<=48h): (1) CEO 分片页本轮末已用出厂六族腿重生（`logs/bsr-R3366.log`），页上若仍有红，下窗按族逐条定罪、只在出生地修。 (2) 覆盖欠账余 **41 支未覆盖套件 / 415 判据**（`shard_coverage` 读数），按 `--exact --evidence` 小片继续，出红只在出生地修。 (3) 队列卫生：三线仍无合法队头（tech `NO-HEAD open=8 claimable=7 gated=1`、explore `open=4`、main `open=6`），认领时行内先立 AC，禁为凑满队列空写判据。 (4) 孤儿普查跨轮真形状（R3342 起第二十二轮搬运）：需不握端口的子进程世界，判据=硬杀前后两次起树判词并列。 (5) 载体：`state.json` 本窗收账后 66363B，下窗按 `state_fold_run --check` 读数决定是否折。 (6) 诚实承账：全量 battery 未实跑；`tools/face_sweep.py` 判 `VERDICT FAIL red=sweep`（`test_face_sweep` 54/56，AC-FSWB20/20c）；`BigDomain-OSLoop` LogonType=Interactive；物理件五件仍缺（商户号／服务器／域名／备案+ICP／小程序 appid+secret）——买家仍付不了钱。",
-    "next_milestone_due": "2026-11-26T01:38:00+08:00",
-    "updated_at": "2026-11-24T01:38:00+08:00",
+    "next_milestone": "[R3368] next window (<=48h): (1) **CEO 分片页重生成**（本窗未做，页仍 R3367）：注册表未变但覆盖面已从 8.0% 上移，用后台分离进程 + `logs/bsr-R3368.log` 落盘跑六族腿，出红只在出生地修，禁手改数字。(2) 覆盖余 **9 支 / 54 判据**（全是 `os-probe-seam-*` 深链族，单支可到 194s）：按 `--match` 小片继续，建议 `--limit 2` 并后台化。(3) **载体新问题**：`src/os/backlog.md` 已 5,045,744B——需要与 `state_fold` 同形的折叠口径（归档 + 指针行），判据=折叠后旧行仍可检索、顶部板头可读、`closeout_gate` 不红；先量后折，禁盲折。(4) 队列卫生：三线仍无合法队头（tech open=8 claimable=7 gated=1、explore open=4、main open=6）。(5) 孤儿普查跨轮真形状（需不握端口的子进程世界，判据=硬杀前后两次起树判词并列）。(6) 诚实承账：全量 battery 未实跑；`tools/face_sweep.py` 判 `VERDICT FAIL red=sweep`（`test_face_sweep` 54/56，AC-FSWB20/20c）；`BigDomain-OSLoop` LogonType=Interactive；物理件五件仍缺（商户号／服务器／域名／备案+ICP／小程序 appid+secret）——买家仍付不了钱。",
+    "next_milestone_due": "2026-11-26T02:32:50+08:00",
+    "updated_at": "2026-11-24T02:32:50+08:00",
     "heartbeat": {
       "tick": 3365,
-      "state_tick": 3366,
-      "lag": 1,
+      "state_tick": 3368,
+      "lag": 3,
       "verdict": "FLAG",
       "reason": "heartbeat_row_debt"
     },
@@ -29,7 +29,7 @@
       "over7": 0,
       "dup_rows": 0,
       "distinct": 9,
-      "collapsed": 1,
+      "collapsed": 0,
       "labels_refreshed": 0,
       "notes_stale": 0,
       "note_claims": 0,
@@ -37,9 +37,9 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-24 R3366 ENGINEERING: the last red on the ledger reconcile face was two shipped laws colliding - AC-LRC5 demanded the landed html be a pure function of the json while the shipped post-render channel (tools/face_backhop.py) appends a back-hop block and, by its own AC-FBH5, rewrites the sibling json sizes to the post-injection byte count, so no pair could ever be a fixed point after that channel ran.",
-  "claims": {"claimed": 188, "captured": 57, "contradicted": 11, "uncaptured": 120, "historic": 8, "rows": 58, "present": true, "census_ts": "2026-11-24T01:38:00+08:00"},
-  "chain": {"present": true, "rows": 58, "broken": 5, "path": "state/qa_replacements.jsonl"},
+  "current": "2026-11-24 R3368 PRODUCT+ENGINEERING: the coverage face moved from 33 uncovered suites / 198 criteria to 9 / 54 in one window through six shipped evidence legs, with red staying at 0 the whole way.",
+  "claims": {"claimed": 188, "captured": 57, "contradicted": 11, "uncaptured": 120, "historic": 8, "rows": 66, "present": true, "census_ts": "2026-11-24T02:32:50+08:00"},
+  "chain": {"present": true, "rows": 66, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -67,11 +67,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-24 R3366 ENGINEERING: the last red on the ledger reconcile face was two shipped laws colliding - AC-LRC5 demanded the landed html be a pure function of the json while the shipped post-render channel (tools/face_backhop.py) appends a back-hop block and, by its own AC-FBH5, rewrites the sibling json sizes to the post-injection byte count, so no pair could ever be a fixed point after that channel ran.",
-  "export_ts": "2026-11-24T01:38:00+08:00",
+  "do": "2026-11-24 R3368 PRODUCT+ENGINEERING: the coverage face moved from 33 uncovered suites / 198 criteria to 9 / 54 in one window through six shipped evidence legs, with red staying at 0 the whole way.",
+  "export_ts": "2026-11-24T02:32:50+08:00",
   "latest_artifact": "preview/ledger-reconcile-face.html (8656B) + preview/ledger-reconcile-face.json (6151B) [2026-11-24 commit]",
-  "latest_evidence": "qa/negctl-R3366.log (164B, 2026-11-24)",
-  "next_milestone": "[R3366] next window (<=48h): (1) CEO 分片页本轮末已用出厂六族腿重生（`logs/bsr-R3366.log`），页上若仍有红，下窗按族逐条定罪、只在出生地修。 (2) 覆盖欠账余 **41 支未覆盖套件 / 415 判据**（`shard_coverage` 读数），按 `--exact --evidence` 小片继续，出红只在出生地修。 (3) 队列卫生：三线仍无合法队头（tech `NO-HEAD open=8 claimable=7 gated=1`、explore `open=4`、main `open=6`），认领时行内先立 AC，禁为凑满队列空写判据。 (4) 孤儿普查跨轮真形状（R3342 起第二十二轮搬运）：需不握端口的子进程世界，判据=硬杀前后两次起树判词并列。 (5) 载体：`state.json` 本窗收账后 66363B，下窗按 `state_fold_run --check` 读数决定是否折。 (6) 诚实承账：全量 battery 未实跑；`tools/face_sweep.py` 判 `VERDICT FAIL red=sweep`（`test_face_sweep` 54/56，AC-FSWB20/20c）；`BigDomain-OSLoop` LogonType=Interactive；物理件五件仍缺（商户号／服务器／域名／备案+ICP／小程序 appid+secret）——买家仍付不了钱。",
+  "latest_evidence": "qa/battery-shard-cov6-R3368.log (1570B, 2026-11-24)",
+  "next_milestone": "[R3368] next window (<=48h): (1) **CEO 分片页重生成**（本窗未做，页仍 R3367）：注册表未变但覆盖面已从 8.0% 上移，用后台分离进程 + `logs/bsr-R3368.log` 落盘跑六族腿，出红只在出生地修，禁手改数字。(2) 覆盖余 **9 支 / 54 判据**（全是 `os-probe-seam-*` 深链族，单支可到 194s）：按 `--match` 小片继续，建议 `--limit 2` 并后台化。(3) **载体新问题**：`src/os/backlog.md` 已 5,045,744B——需要与 `state_fold` 同形的折叠口径（归档 + 指针行），判据=折叠后旧行仍可检索、顶部板头可读、`closeout_gate` 不红；先量后折，禁盲折。(4) 队列卫生：三线仍无合法队头（tech open=8 claimable=7 gated=1、explore open=4、main open=6）。(5) 孤儿普查跨轮真形状（需不握端口的子进程世界，判据=硬杀前后两次起树判词并列）。(6) 诚实承账：全量 battery 未实跑；`tools/face_sweep.py` 判 `VERDICT FAIL red=sweep`（`test_face_sweep` 54/56，AC-FSWB20/20c）；`BigDomain-OSLoop` LogonType=Interactive；物理件五件仍缺（商户号／服务器／域名／备案+ICP／小程序 appid+secret）——买家仍付不了钱。",
   "outs": [
     "preview/ledger-reconcile-face.html (8656B) + preview/ledger-reconcile-face.json (6151B) [2026-11-24 commit]",
     "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-23 mtime] (halves differ: html [2026-11-23 mtime] + json [2026-11-23 commit]; later=html)",
@@ -144,7 +144,7 @@
       "2026-11-04 R2431 verification window on the item the debt gate named first=yes (reconcile-battery-R2431, carried from R2430): zero product code changed, the R2168 mixed-tree rule honoured. Leg 1 read 542/543 suites with the criteria total 4234 exactly as pre-registered and the only red was reconcile-daily-census at cd7 exit=2 DRIFT-FLAG; the census named the file (qa/battery-R2431-stdout.log, class=cmd-raw) because this window launched the battery with a Start-Process redirect pointed INTO the evidence directory. Repaired at the birth site, never by widening the baseline: the two launcher captures moved to the gitignored logs/ face, after which the census read flags=0 DRIFT-CLEAN with the 529-entry baseline untouched. Retry leg on the repaired tree: RUNNER PASS 543/543 suites plus controls 7/7 in 956.2s at criteria 4234, TMP RECLAIM 932/932. Four follow-up sections: matrix FAILED first on the stale doc without rewriting it, was regenerated stamp-aligned to 52317B, and the re-run read VERDICT R2431 PASS failing=none (fingerprint CLEAN 5 domains, profile byte-identical, census DRIFT-CLEAN). Debt: reconcile-battery-R2431 closed and product-face-R2432 opened first=yes through the shipped CLIs. Zero product points claimed."
     ],
     [
-      "3366",
+      "3368",
       "OSLoop 执行 tick",
       "a failed fold state write takes the appended archive block back and removes the backup"
     ]
@@ -158,22 +158,22 @@
   "self_drive": {
     "window": "2026-11-18..2026-11-24",
     "window_days": 7,
-    "log_lines_in_window": 132,
+    "log_lines_in_window": 150,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 14,
+    "substantive_non_idle_mention_lines": 16,
     "proposals_total": 11,
     "proposals_open": 9,
     "queue_main_open": 6,
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 67043,
-  "next_milestone_due": "2026-11-26T01:38:00+08:00",
+  "state_bytes": 75645,
+  "next_milestone_due": "2026-11-26T02:32:50+08:00",
   "heartbeat": {
     "tick": 3365,
-    "state_tick": 3366,
-    "lag": 1,
+    "state_tick": 3368,
+    "lag": 3,
     "verdict": "FLAG",
     "reason": "heartbeat_row_debt"
   },
@@ -185,7 +185,7 @@
     "over7": 0,
     "dup_rows": 0,
     "distinct": 9,
-    "collapsed": 1,
+    "collapsed": 0,
     "labels_refreshed": 0,
     "notes_stale": 0,
     "note_claims": 0,

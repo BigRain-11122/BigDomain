@@ -1,0 +1,8 @@
+SHARD scope=SHARD registry_suites=764 registry_criteria=6403 selected=6 selected_criteria=36 cap=600s leg_cap=0s overrides=1 exact=0 state=COMPLETE
+SHARD row os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-scope rc=0 pass=28 fail=0 detail=yes suite=PASS 6/6 crit=6 0.6s
+SHARD row os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-walrus-relative-scope rc=0 pass=21 fail=0 detail=yes suite=PASS 6/6 crit=6 110.3s
+SHARD row os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-walrus-relative-branch-scope rc=0 pass=21 fail=0 detail=yes suite=PASS 6/6 crit=6 188.4s
+SHARD row os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-walrus-relative-branch-elif-with-scope rc=0 pass=28 fail=0 detail=yes suite=PASS 6/6 crit=6 134.3s
+SHARD row os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-walrus-relative-branch-elif-with-while-match-scope rc=0 pass=32 fail=0 detail=yes suite=PASS 6/6 crit=6 194.0s
+SHARD row os-probe-seam-name-binding-arm-mixed-residual-alias-attribute-import-alias-scope-module-alias-attribute-alias-walrus-relative-branch-elif-with-while-match-while-else-nested-scope rc=0 pass=37 fail=0 detail=yes suite=PASS 6/6 crit=6 133.2s
+SHARD rc=0 scope=SHARD selected=6 executed=6 green=6 criteria=36 crit_mismatch=0 elapsed=760.7s crit_checked=6 crit_unchecked=0
