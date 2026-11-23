@@ -1137,7 +1137,14 @@ def cmd_census(args):
                  and hstats['body_header_lines'] == 0
                  and not hstats['unlabeled_sections']),
     }
-    print(json.dumps(out, ensure_ascii=False, indent=2))
+    # R3372 (AC-LTC1..4): --json buys a parser a CONTRACT, not different bytes -
+    # the tool already printed one JSON document, but nothing promised that, so
+    # a reader had to re-discover the shape every window. Both modes now go
+    # through this single write: one document, keys in emitted order, exactly
+    # one trailing newline, and the verdict exit code unchanged.
+    body = json.dumps(out, ensure_ascii=False, indent=2)
+    sys.stdout.write(body + '\n')
+    sys.stdout.flush()
     return 0 if out['pass'] else 2
 
 
@@ -1166,6 +1173,11 @@ def main(argv=None):
     cn = sub.add_parser('census', help='archive reverse reconciliation census (read-only)')
     cn.add_argument('--known-file', help='adjudicated known-findings data file '
                     '(default: census_known_findings.json alongside this tool)')
+    cn.add_argument('--json', action='store_true',
+                    help='machine mode (contract, not a second renderer): stdout is '
+                         'exactly one JSON document with the same keys in the same '
+                         'order as the default block and one trailing newline; '
+                         'writes nothing, verdict exit code unchanged')
     pe = sub.add_parser('eol', help='state.json closeout EOL repair (bare-LF report + CRLF surgery)')
     pe.add_argument('--file', default=None, help='target file (default: src/os/state.json)')
     pe.add_argument('--fix', action='store_true', help='perform CRLF surgery (default: read-only check)')

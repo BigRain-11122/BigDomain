@@ -632,6 +632,45 @@ def main():
        and cen4['pointer_lines'][0]['not_embedded'] == {'R10': ['C-3']},
        'census not_embedded informational (listed, still exit 0)')
 
+    # ---- census --json (AC-LTC1..AC-LTC4, R3372) ----
+    # The flag buys a reader a CONTRACT: one document, keys in the emitted
+    # order, one trailing newline, verdict exit code unchanged, zero writes.
+    # Measured on the fixture so the arms do not depend on today's live tree.
+    rc_off, out_off, _ = run(cf1, 'census')
+    rc_on, out_on, _ = run(cf1, 'census', '--json')
+    rc_on2, out_on2, _ = run(cf1, 'census', '--json')
+    try:
+        doc_on = json.loads(out_on)
+    except ValueError:
+        doc_on = None
+    ok(doc_on is not None and isinstance(doc_on, dict) and rc_on == rc_off,
+       'census --json exits like the default mode and emits one document AC-LTC1')
+    ok(list(doc_on or {}) == list(json.loads(out_off)),
+       'census --json key ORDER equals the default block AC-LTC1')
+    ok(out_on == out_off and out_on2 == out_on,
+       'census --json byte-identical to default and repeatable AC-LTC2')
+    def tree_state(root):
+        rows = []
+        for dirpath, _dirnames, filenames in os.walk(root):
+            for name in filenames:
+                p = os.path.join(dirpath, name)
+                rows.append((os.path.relpath(p, root), open(p, 'rb').read(),
+                             os.stat(p).st_mtime_ns))
+        return sorted(rows)
+
+    pre_tree = tree_state(cf1)
+    rc_bad, out_bad, _ = run(cf1, 'census', '--bogus-flag')
+    post_tree = tree_state(cf1)
+    ok(pre_tree == post_tree and rc_bad == 2 and out_bad == '',
+       'census --json writes nothing and an unknown flag fails closed AC-LTC3')
+    ok(rc_on == (0 if (doc_on or {}).get('pass') else 2)
+       and rc_off == (0 if json.loads(out_off).get('pass') else 2),
+       'census verdict exit code mirrors pass in BOTH modes AC-LTC4')
+    rc_fj, out_fj, _ = run(cf2, 'census', '--json')
+    rc_fd, out_fd, _ = run(cf2, 'census')
+    ok(rc_fj == 2 == rc_fd and out_fj == out_fd,
+       'census --json keeps exit 2 and identical bytes on a failing tree AC-LTC4')
+
     # (vii) known-findings adjudication: visible but not failing (AC-LT15 amend)
     KNOWN = {'section_line_mismatches': [
                  {'round': 'R10', 'reason': 'adjudicated fixture', 'adjudicated': 'x'}],
