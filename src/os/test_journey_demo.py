@@ -55,9 +55,21 @@ def sig(path):
 
 
 def load_tool():
-    spec = importlib.util.spec_from_file_location("journey_demo_probe", TOOL)
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
+    # The tool imports its sibling buyer_route by bare name, which works when it
+    # is launched as a script (its own directory leads sys.path). Loading it
+    # through a spec from another cwd does not, so the harness supplies the same
+    # search path the launch mode gives it instead of renaming the import.
+    tool_dir = os.path.dirname(TOOL)
+    added = tool_dir not in sys.path
+    if added:
+        sys.path.insert(0, tool_dir)
+    try:
+        spec = importlib.util.spec_from_file_location("journey_demo_probe", TOOL)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+    finally:
+        if added:
+            sys.path.remove(tool_dir)
     return module
 
 

@@ -1,0 +1,47 @@
+SHARD scope=SHARD registry_suites=764 registry_criteria=6401 selected=3 selected_criteria=187 cap=600s leg_cap=0s overrides=1 exact=3 state=COMPLETE
+SHARD row os-logs-toolkit rc=1 pass=136 fail=0 detail=yes suite=none crit=179 7.8s
+SHARD detail os-logs-toolkit PASS unknown subcommand exit 2
+SHARD detail os-logs-toolkit PASS gauge exit 0
+SHARD detail os-logs-toolkit PASS gauge disk bytes exact
+SHARD detail os-logs-toolkit PASS gauge log count/tick
+SHARD detail os-logs-toolkit PASS gauge content byte sum
+SHARD detail os-logs-toolkit PASS gauge verdict under gate
+SHARD detail os-logs-toolkit PASS inventory exit 0
+SHARD detail os-logs-toolkit PASS inventory archive-md protected (md glob)
+SHARD detail os-logs-toolkit PASS inventory lock protected
+SHARD detail os-logs-toolkit PASS inventory preop count/prunable
+SHARD detail os-logs-toolkit PASS inventory tmp count 81 (md-named tmp counted protected)
+SHARD detail os-logs-toolkit PASS inventory transcript count (320 round_*.out + 40 run_*.log)
+SHARD detail os-logs-toolkit PASS inventory other protected
+SHARD detail os-logs-toolkit PASS tail 3 rows
+SHARD detail os-logs-toolkit PASS tail classification main/tokens/declaration
+SHARD detail os-logs-toolkit PASS prune dry-run exit 0
+SHARD detail os-logs-toolkit PASS prune dry-run default no-delete
+SHARD detail os-logs-toolkit PASS prune dry-run predicted counts (keep 12/300/60; fresh floor-skipped out of bucket)
+SHARD detail os-logs-toolkit PASS prune class-level protection handles md/lock before plan guard (0 in-plan skips)
+SHARD detail os-logs-toolkit PASS dry-run deleted nothing (file count unchanged)
+SHARD detail os-logs-toolkit PASS prune execute exit 0
+SHARD detail os-logs-toolkit PASS prune predicted==actual 88
+SHARD detail os-logs-toolkit PASS prune per-class deleted counts
+SHARD detail os-logs-toolkit PASS protected archive survived
+SHARD detail os-logs-toolkit PASS protected lock survived
+SHARD detail os-logs-toolkit PASS protected md-named tmp survived
+SHARD detail os-logs-toolkit PASS other class untouched
+SHARD detail os-logs-toolkit PASS mtime floor protected in-flight file
+SHARD detail os-logs-toolkit PASS preop keep-newest 12
+SHARD detail os-logs-toolkit PASS tmp remaining 60+fresh
+SHARD detail os-logs-toolkit PASS transcript keep-newest 300
+SHARD detail os-logs-toolkit PASS prune second execute 0 further deletes
+SHARD detail os-logs-toolkit PASS catalog zero-loss pass exit 0
+SHARD detail os-logs-toolkit PASS catalog token count {P-2026-09-25-18,AC-R4541,AC-R4546} == 3 (PAT is dash-form only, bare R1685/R454 out)
+SHARD detail os-logs-toolkit PASS catalog missing-token fail exit 2
+SHARD detail os-logs-toolkit PASS catalog --tail mode window extraction (AC-R9 + D-20260930-19 missing)
+SHARD detail os-logs-toolkit PASS fold dry-run exit 0
+SHARD detail os-logs-toolkit PASS fold plan window/new-log count
+SHARD detail os-logs-toolkit PASS fold plan verdicts green
+SHARD detail os-logs-toolkit PASS fold plan preop sha16 exact
+SHARD row os-corpus-rewrite-audit rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=1 5.8s
+SHARD row os-corpus-supply-chain rc=0 pass=0 fail=0 detail=none suite=PASS 34/34 crit=7 13.9s
+SHARD rc=2 scope=SHARD selected=3 executed=3 green=2 criteria=187 crit_mismatch=0 elapsed=27.4s crit_checked=2 crit_unchecked=1
+SHARD disclosure crit_unchecked=os-logs-toolkit
+SHARD red os-logs-toolkit:rc=1

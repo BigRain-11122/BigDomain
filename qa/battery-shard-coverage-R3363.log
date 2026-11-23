@@ -1,0 +1,11 @@
+SHARD scope=SHARD registry_suites=764 registry_criteria=6401 selected=9 selected_criteria=80 cap=600s leg_cap=0s overrides=1 exact=9 state=COMPLETE
+SHARD row os-sandbox-open rc=0 pass=10 fail=0 detail=yes suite=PASS 10/10 crit=10 24.8s
+SHARD row os-shard-coverage rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 0.2s
+SHARD row os-snapshot-pin-census rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 10.6s
+SHARD row os-runner-registry-face rc=0 pass=28 fail=0 detail=yes suite=PASS 28/28 crit=28 2.6s
+SHARD row os-evidence-utf8-capture rc=0 pass=47 fail=0 detail=yes suite=PASS 6/6 crit=6 0.1s
+SHARD row os-evidence-utf8-capture-bom-guard rc=0 pass=51 fail=0 detail=yes suite=PASS 6/6 crit=6 0.1s
+SHARD row os-evidence-capture-tail-guard rc=0 pass=50 fail=0 detail=yes suite=PASS 6/6 crit=6 0.1s
+SHARD row os-tree-snapshot rc=0 pass=9 fail=0 detail=yes suite=PASS 6/6 crit=6 0.1s
+SHARD row os-evidence-read rc=0 pass=17 fail=0 detail=yes suite=PASS 17/17 crit=5 0.3s
+SHARD rc=0 scope=SHARD selected=9 executed=9 green=9 criteria=80 crit_mismatch=0 elapsed=39.0s crit_checked=9 crit_unchecked=0

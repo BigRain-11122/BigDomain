@@ -1,0 +1,32 @@
+SHARD scope=SHARD registry_suites=764 registry_criteria=6401 selected=14 selected_criteria=162 cap=600s leg_cap=0s overrides=1 exact=14 state=COMPLETE
+SHARD row os-crawl-record rc=0 pass=10 fail=0 detail=yes suite=PASS 10/10 crit=4 0.1s
+SHARD row os-crawl-runner rc=0 pass=585 fail=0 detail=yes suite=PASS 585/585 crit=83 7.6s
+SHARD row os-archive-provenance rc=0 pass=0 fail=0 detail=none suite=PASS 6/6 crit=6 0.2s
+SHARD row os-probe-seam-constant-binding-scope rc=0 pass=34 fail=0 detail=yes suite=PASS 6/6 crit=6 0.2s
+SHARD row os-probe-seam-annotated-constant-scope rc=0 pass=43 fail=0 detail=yes suite=PASS 6/6 crit=6 0.2s
+SHARD row os-probe-seam-constant-alias-scope rc=0 pass=39 fail=0 detail=yes suite=PASS 6/6 crit=6 0.2s
+SHARD row os-probe-seam-alias-expression-scope rc=0 pass=40 fail=0 detail=yes suite=PASS 6/6 crit=6 45.6s
+SHARD row os-probe-seam-for-container-name rc=0 pass=36 fail=0 detail=yes suite=PASS 6/6 crit=6 0.1s
+SHARD row os-probe-seam-subscript-container-scope rc=0 pass=38 fail=0 detail=yes suite=PASS 6/6 crit=6 0.2s
+SHARD row os-probe-seam-nested-key-binding-scope rc=0 pass=36 fail=0 detail=yes suite=PASS 6/6 crit=6 0.2s
+SHARD row os-export-parity-difference-order-field rc=0 pass=55 fail=0 detail=yes suite=PASS 6/6 crit=6 0.4s
+SHARD row os-carrier-dialect-pin rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 6.9s
+SHARD row os-journey-demo-face rc=1 pass=0 fail=0 detail=none suite=none crit=6 0.1s
+SHARD detail os-journey-demo-face Traceback (most recent call last):
+SHARD detail os-journey-demo-face   File "C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\sandbox\..\os\test_journey_demo.py", line 261, in <module>
+SHARD detail os-journey-demo-face     sys.exit(main())
+SHARD detail os-journey-demo-face              ~~~~^^
+SHARD detail os-journey-demo-face   File "C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\sandbox\..\os\test_journey_demo.py", line 95, in main
+SHARD detail os-journey-demo-face     jd = load_tool()
+SHARD detail os-journey-demo-face   File "C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\sandbox\..\os\test_journey_demo.py", line 60, in load_tool
+SHARD detail os-journey-demo-face     spec.loader.exec_module(module)
+SHARD detail os-journey-demo-face     ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+SHARD detail os-journey-demo-face   File "<frozen importlib._bootstrap_external>", line 763, in exec_module
+SHARD detail os-journey-demo-face   File "<frozen importlib._bootstrap>", line 491, in _call_with_frames_removed
+SHARD detail os-journey-demo-face   File "C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\journey_demo.py", line 25, in <module>
+SHARD detail os-journey-demo-face     import buyer_route
+SHARD detail os-journey-demo-face ModuleNotFoundError: No module named 'buyer_route'
+SHARD row os-city-face-report rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 3.8s
+SHARD rc=2 scope=SHARD selected=14 executed=14 green=13 criteria=162 crit_mismatch=0 elapsed=65.8s crit_checked=13 crit_unchecked=1
+SHARD disclosure crit_unchecked=os-journey-demo-face
+SHARD red os-journey-demo-face:rc=1

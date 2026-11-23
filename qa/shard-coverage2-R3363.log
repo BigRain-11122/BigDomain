@@ -1,0 +1,19 @@
+SHARD scope=SHARD registry_suites=764 registry_criteria=6401 selected=7 selected_criteria=61 cap=600s leg_cap=0s overrides=1 exact=7 state=COMPLETE
+SHARD row os-closeout-carrier rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 4.0s
+SHARD row os-debt-stale-open rc=0 pass=7 fail=0 detail=yes suite=PASS 7/7 crit=7 1.5s
+SHARD row os-queue-floor-export-face rc=1 pass=5 fail=1 detail=yes suite=FAIL 5/6 crit=6 0.4s
+SHARD detail os-queue-floor-export-face SUITE queue_floor_export_face (R2374) criteria=6
+SHARD detail os-queue-floor-export-face PASS AC-QFE1 the section IS queue_floor_reading_wire.published (patching its reading moves the export)
+SHARD detail os-queue-floor-export-face PASS AC-QFE2 publishes the discounted claimable plus every discounted row (line+prefix), never the gross alone
+SHARD detail os-queue-floor-export-face   measured: pass=21 fail=1 declared=22 second=False
+SHARD detail os-queue-floor-export-face FAIL AC-QFE3 check_export_consistency reads 22/22 (its declared base) with the new field, and the field is not a second derivation
+SHARD detail os-queue-floor-export-face PASS AC-QFE4 one stable key order plus one trailing LF, byte-stable across two runs
+SHARD detail os-queue-floor-export-face PASS AC-QFE5 the value is derived at write time (a changed queue moves it, no canned copy)
+SHARD detail os-queue-floor-export-face PASS AC-QFE6 pure ASCII, stdlib only, no clock, no network, one runner entry at 6 criteria
+SHARD detail os-queue-floor-export-face SUITE FAIL 5/6
+SHARD row os-face-walk-static rc=0 pass=12 fail=0 detail=yes suite=PASS 12/12 crit=5 0.1s
+SHARD row os-closeout-gate rc=0 pass=62 fail=0 detail=yes suite=PASS 62/62 crit=16 19.3s
+SHARD row os-live-proof rc=0 pass=55 fail=0 detail=yes suite=PASS 55/55 crit=13 0.3s
+SHARD row os-platform-live-report rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=8 4.8s
+SHARD rc=2 scope=SHARD selected=7 executed=7 green=6 criteria=61 crit_mismatch=0 elapsed=30.6s crit_checked=7 crit_unchecked=0
+SHARD red os-queue-floor-export-face:rc=1
