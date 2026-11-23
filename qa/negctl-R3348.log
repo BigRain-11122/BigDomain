@@ -1,0 +1,5 @@
+SHIPPED pins=28 ambient=6 foreign=9 unknown=0 private=13
+M1 any-int-compare pins=304 RED=True
+M2 name-only ambient=0 private=28 RED=True
+M3 depth4 unknown=4 RED=True
+M4 _open( ambient=12 RED=True

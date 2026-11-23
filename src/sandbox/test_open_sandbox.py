@@ -23,9 +23,13 @@ OS itself can name the owner instead of the report):
   AC-OSB4  there is ONE evidence writer: the module routes through
            tools/qa_log.py (measured by asking that writer to refuse a bad name
            through the same import the launcher uses) and it contains no second
-           open()/write path into qa/.
+           open()/write path into qa/. R3349 re-pinned the reading from a count
+           of do_write() sites (a shape of the tree) to the LIST of offending
+           open() calls, proven on a mutant that adds a bypass writer.
   AC-OSB5  the battery registry carries this suite exactly once and declares the
-           same criterion count this file reports.
+           same criterion count this file reports. R3349 re-pinned the reading
+           from len(rows)==1 to the declaration list, proven on a private copy
+           whose duplicate and stale counts must both show up.
   AC-OSB6  the previous run's port table is read before it is deleted: the
            union of ports/face_ports names each number once, a REAL listener on
            a recorded port is seen and cleared when it closes, and the same
@@ -81,6 +85,7 @@ three launcher runs - two refuse or clear before any face is started, one runs
 the full tree - about 8s on this machine.
 """
 
+import ast
 import importlib.util
 import json
 import os
@@ -109,6 +114,32 @@ def load_module():
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
+
+
+def direct_qa_writers(source):
+    """Name every open() call in `source` that addresses the qa dir itself.
+
+    A second call through the SAME shipped writer is not a defect, so the law
+    cannot be a count of do_write() sites - that is a shape of the tree. What
+    is a defect is a second writer: any open() call whose own source names qa.
+    """
+    offenders = []
+    for node in ast.walk(ast.parse(source)):
+        if not isinstance(node, ast.Call):
+            continue
+        func = node.func
+        if getattr(func, "id", None) != "open" and getattr(func, "attr", None) != "open":
+            continue
+        segment = " ".join((ast.get_source_segment(source, node) or "").split())
+        if "qa" in segment:
+            offenders.append(segment[:60])
+    return offenders
+
+
+def registry_declarations(text, label):
+    """Every declared criteria count for `label`, in file order."""
+    pattern = r'\("%s",\s*[^,]+,\s*(\d+)\)' % re.escape(label)
+    return [int(count) for count in re.findall(pattern, text)]
 
 
 def run_launcher(args, timeout=180):
@@ -220,11 +251,15 @@ def main():
         with open(MODULE, encoding="utf-8") as fh:
             source = fh.read()
         assert "load_qa_log().do_write(" in source, "the module does not call the writer"
-        assert source.count("do_write(") == 1, "more than one write call site"
         assert 'os.path.join(ROOT, "qa")' in source, "the default destination is not named"
-        direct = [line for line in source.splitlines()
-                  if re.search(r"open\([^)]*qa", line)]
-        assert not direct, "a second write path into qa/ exists: %r" % direct
+        direct = direct_qa_writers(source)
+        assert direct == [], "a second write path into qa/ exists: %r" % (direct,)
+        mutant = source + (
+            "\n\ndef _own_writer(name, data):\n"
+            "    with open(os.path.join(ROOT, \"qa\", name), \"wb\") as fh:\n"
+            "        fh.write(data)\n")
+        bitten = direct_qa_writers(mutant)
+        assert bitten, "the qa-writer scan stayed silent on a bypass writer"
         spec = importlib.util.spec_from_file_location("bd_qa_log_probe", WRITER)
         writer = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(writer)
@@ -234,7 +269,8 @@ def main():
         except ValueError as exc:
             refused = str(exc)[:40]
         assert refused, "the writer accepted a name it must refuse"
-        print("PASS AC-OSB4 one_writer=True direct_qa_writes=0 refused=%r" % refused)
+        print("PASS AC-OSB4 shipped_writer=True direct_qa_writers=0 bypass_bitten=%d refused=%r"
+              % (len(bitten), refused))
     except (AssertionError, OSError, AttributeError) as exc:
         failed += 1
         print("FAIL AC-OSB4 :: %s" % exc)
@@ -243,11 +279,17 @@ def main():
     try:
         with open(REGISTRY, encoding="utf-8") as fh:
             registry = fh.read()
-        rows = re.findall(r'\("os-sandbox-open",\s*[^,]+,\s*(\d+)\)', registry)
-        assert len(rows) == 1, "registry carries %d rows for this suite" % len(rows)
-        assert int(rows[0]) == TOTAL, "registry declares %s criteria, suite reports %d" % (
-            rows[0], TOTAL)
-        print("PASS AC-OSB5 rows=1 declared=%s reported=%d" % (rows[0], TOTAL))
+        rows = registry_declarations(registry, "os-sandbox-open")
+        assert rows == [TOTAL], (
+            "registry declares %r for this suite, suite reports %d" % (rows, TOTAL))
+        doubled = registry_declarations(
+            ('("os-sandbox-open", "test_open_sandbox.py", %d),\n' % TOTAL) * 2
+            + ('("os-sandbox-open", "copy.py", %d),\n' % (TOTAL + 1)),
+            "os-sandbox-open")
+        assert doubled == [TOTAL, TOTAL, TOTAL + 1], (
+            "the declaration reader missed a duplicate or a stale count: %r" % (doubled,))
+        print("PASS AC-OSB5 declared=%r duplicate_bitten=%d reported=%d"
+              % (rows, len(doubled), TOTAL))
     except AssertionError as exc:
         failed += 1
         print("FAIL AC-OSB5 :: %s" % exc)

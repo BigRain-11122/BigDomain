@@ -47,7 +47,9 @@ before their code landed):
            list issued BEFORE the probing one, and the refresh control wired to
            the same probe; measured, the unprobed list carries no live key and
            answers inside half a second, while the probing read carries one
-           entry per published face.
+           entry per published face. R3349 re-pinned the boot-trigger reading
+           from a count of the literal to the LIST of statement-level calls,
+           proven on a page copy with a second call appended.
   AC-HUB10 the dead-face cost is the connect budget, not the HTTP budget
            (R3338 measured a closed loopback port hanging to its timeout
            instead of refusing - 363ms at 0.35s, 155ms at 0.15s, stable over
@@ -131,6 +133,16 @@ def free_port():
     port = sock.getsockname()[1]
     sock.close()
     return port
+
+
+def boot_triggers(page):
+    """Every statement-level probe() trigger in `page`, in file order.
+
+    The law is "the boot path triggers the probing read once"; a count of the
+    literal cannot say WHICH call appeared, and a bare count reddens on any
+    edit without naming what changed. The list does both.
+    """
+    return re.findall(r"^[ \t]*(probe\(\);)[ \t]*$", page, re.M)
 
 
 def page_cover(text, faces):
@@ -575,8 +587,13 @@ def main():
             fetches = page.count("fetch(")
             assert fetches == 2, "page issues %d fetch calls, expected 2" % fetches
             plain_at = page.index("\n  fetch('/hub/api/faces'")
-            assert page.count("probe();") == 1, (
-                "the probing read is not triggered exactly once in the boot path")
+            triggers = boot_triggers(page)
+            assert triggers == ["probe();"], (
+                "the boot path triggers the probing read %d times (%r)"
+                % (len(triggers), triggers))
+            doubled = boot_triggers(page + "\n  probe();\n")
+            assert doubled == ["probe();", "probe();"], (
+                "the trigger reader missed a second boot call: %r" % (doubled,))
             assert plain_at < page.index("probe();"), (
                 "the boot path triggers the probing read before the plain answer")
             assert 'id="refresh"' in page, "page carries no refresh control"
@@ -597,8 +614,9 @@ def main():
             assert set(probed.get("live") or {}) == set(ports), (
                 "probing read covers %r against published %r"
                 % (sorted(probed.get("live") or {}), sorted(ports)))
-            print("PASS AC-HUB9 timers=0 fetches=2 plain_first=True refresh_wired=True "
-                  "plain_ms=%.0f live_entries=%d" % (plain_ms, len(ports)))
+            print("PASS AC-HUB9 timers=0 fetches=2 triggers=%d plain_first=True "
+                  "refresh_wired=True plain_ms=%.0f live_entries=%d"
+                  % (len(triggers), plain_ms, len(ports)))
         except AssertionError as exc:
             failed += 1
             print("FAIL AC-HUB9 :: %s" % exc)

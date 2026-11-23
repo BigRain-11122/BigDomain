@@ -514,6 +514,17 @@ SUITES = [
     # and orphan labels are named without ever counting as covered.
     ("os-shard-coverage",
      os.path.join("..", "os", "test_shard_coverage.py"), 6),
+    # snapshot pin census (R3348): R3347 cleared two reds that were not product
+    # defects but assertions writing the current shape of the tree into a number.
+    # The corpus is every test_*.py (a UTF-8 BOM is its own dialect reading and
+    # an unparsable file is named but never counted), a pin is a single-operator
+    # int comparison against a counting expression, each pin is traced to
+    # ambient / foreign / private / unknown with its basis, and --max-ambient is
+    # a ratchet that is off unless asked for. (AC-SPC1..AC-SPC7 were
+    # pre-registered in src/os/backlog.md at R3348 BEFORE this suite and the
+    # tool existed.)
+    ("os-snapshot-pin-census",
+     os.path.join("..", "os", "test_snapshot_pin_census.py"), 7),
     # lobby room picker and event ledger (R2464): GET /lobby/api/rooms answers
     # the server OWN configured rooms (never a literal in the module or page),
     # the page gains a selector that subscribes the new room and releases the

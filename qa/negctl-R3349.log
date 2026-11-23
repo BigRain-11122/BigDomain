@@ -1,0 +1,4 @@
+R3349 NEGCTL P1 bypass writer -> red (offenders=1) while the shipped module reads 0
+R3349 NEGCTL P2 duplicate declarations -> red ([10, 10, 11] != [10])
+R3349 NEGCTL P3 second boot trigger -> red (2 != 1)
+R3349 NEGCTL honest: every mutant is a private text copy held in memory, never written to disk

@@ -658,6 +658,7 @@
     "os-shard-coverage",
     "os-ship-checklist",
     "os-single-append-status-face",
+    "os-snapshot-pin-census",
     "os-source-bom",
     "os-stage-residue",
     "os-stamp-exempt-append",

@@ -1,0 +1,9 @@
+R3349 REPIN-1 src/sandbox/test_open_sandbox.py:223 old=source.count("do_write(")==1 new=direct_qa_writers(source)==[] real=[] module_bytes=35669
+R3349 REPIN-1 bypass mutant adds open(os.path.join(ROOT,"qa",name),"wb") -> offenders=1 ['open(os.path.join(ROOT, "qa", name), "wb")']
+R3349 REPIN-2 src/sandbox/test_open_sandbox.py:247 old=len(rows)==1 new=registry_declarations(text,"os-sandbox-open")==[TOTAL] real=[10] TOTAL=10
+R3349 REPIN-2 private copy duplicate+stale -> [10, 10, 11] (a duplicate and a stale count are both named)
+R3349 REPIN-3 src/sandbox/lobby/test_hub_page.py:578 old=page.count("probe();")==1 new=boot_triggers(page)==["probe();"] real=['probe();'] page_bytes=11191
+R3349 REPIN-3 page copy with a second call appended -> ['probe();', 'probe();']
+R3349 CENSUS before pins=28 ambient=6 foreign=9 private=13 unknown=0 ; after pins=25 ambient=3 foreign=9 private=13 unknown=0 files=766 bom=1 unreadable=0
+R3349 CENSUS note: fewer labelled pins is not a quality gain - the three left the pin class because their law now names the offending sites instead of counting the tree
+R3349 SUITE measured in this same window: test_open_sandbox rc=0 SUITE PASS 10/10 ; test_hub_page rc=0 SUITE PASS 13/13

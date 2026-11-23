@@ -1,0 +1,46 @@
+PIN CENSUS files=766 pins=28 ambient=6 foreign=9 unknown=0 private=13 bom=1 unreadable=0
+FAMILY sandbox pins=28 ambient=6 foreign=9 unknown=0 private=13
+PIN src/sandbox/test_open_sandbox.py:223 label=ambient expr=source.count("do_write(") because=ambient
+PIN src/sandbox/test_open_sandbox.py:247 label=ambient expr=len(rows) because=ambient,foreign
+PIN src/sandbox/funnel/test_funnel_evidence_rotate.py:118 label=foreign expr=second.count(b"FUNNEL-DAILY day=") because=foreign,private
+PIN src/sandbox/funnel/test_funnel_rescan.py:230 label=private expr=len(rows_after) because=private
+PIN src/sandbox/funnel/test_funnel_route.py:237 label=private expr=len(rows_after) because=private
+PIN src/sandbox/funnel/test_funnel_route_persist.py:183 label=private expr=len(world["rows_anchor"]) because=private
+PIN src/sandbox/funnel/test_funnel_route_persist.py:245 label=foreign expr=len(rows) because=foreign,private,unknown
+PIN src/sandbox/funnel/test_funnel_route_persist.py:246 label=foreign expr=sum(json.loads(world["snapshot"]["lifetime"]).values()) because=foreign,private,unknown
+PIN src/sandbox/funnel/test_funnel_route_persist.py:248 label=foreign expr=sum(faces["lifetime"].values()) because=foreign,private,unknown
+PIN src/sandbox/funnel/test_funnel_route_persist.py:293 label=private expr=len(rows) because=private
+PIN src/sandbox/funnel/test_funnel_sku_persist.py:170 label=foreign expr=sum(b["orders"] for b in life.values()) because=foreign,private
+PIN src/sandbox/funnel/test_funnel_sku_persist.py:189 label=foreign expr=len(SNAP["fsp1_rows"]) because=foreign,private
+PIN src/sandbox/funnel/test_funnel_sku_persist.py:312 label=foreign expr=sum(b["orders"] for b in pre["lifetime"].values()) because=foreign,private
+PIN src/sandbox/funnel/test_funnel_sku_persist.py:313 label=foreign expr=sum(b["orders"] for b in post["lifetime"].values()) because=foreign,private
+PIN src/sandbox/funnel/test_funnel_sku_top.py:225 label=private expr=len(full) because=private
+PIN src/sandbox/funnel/test_funnel_sku_top.py:231 label=private expr=len(three) because=private
+PIN src/sandbox/funnel/test_funnel_sku_top.py:245 label=private expr=len(blank) because=private
+PIN src/sandbox/funnel/test_funnel_sku_top.py:250 label=private expr=[row["sku"] for row in day2].count("") because=private
+PIN src/sandbox/funnel/test_funnel_sku_top_rank.py:196 label=private expr=len(zeros) because=private
+PIN src/sandbox/funnel/test_funnel_sku_top_rank.py:256 label=private expr=len(board) because=private
+PIN src/sandbox/lobby/test_chatmute_idem.py:301 label=private expr=len(set(ev["evt_ids"])) because=private
+PIN src/sandbox/lobby/test_gate_console.py:241 label=private expr=len(resp.get("trace_id") or "") because=private
+PIN src/sandbox/lobby/test_hub_page.py:578 label=ambient expr=page.count("probe();") because=ambient
+PIN src/sandbox/lobby/test_hub_page.py:774 label=foreign expr=len(published) because=foreign,private
+PIN src/sandbox/lobby/test_hub_page.py:799 label=ambient expr=page_text.count("fetch(") because=ambient
+PIN src/sandbox/lobby/test_hub_page.py:847 label=ambient expr=moved.count("show_probing") because=ambient
+PIN src/sandbox/lobby/test_hub_page.py:854 label=ambient expr=page_text13.count("fetch(") because=ambient
+PIN src/sandbox/ugc/test_ugc_console.py:212 label=private expr=len(review) because=private
+BOM src/os/test_ugc_gate_report.py parses only with utf-8-sig
+REPIN 1 src/sandbox/test_open_sandbox.py:223 label=ambient
+REPIN 2 src/sandbox/test_open_sandbox.py:247 label=ambient
+REPIN 3 src/sandbox/funnel/test_funnel_evidence_rotate.py:118 label=foreign
+REPIN 4 src/sandbox/funnel/test_funnel_route_persist.py:245 label=foreign
+REPIN 5 src/sandbox/funnel/test_funnel_route_persist.py:246 label=foreign
+REPIN 6 src/sandbox/funnel/test_funnel_route_persist.py:248 label=foreign
+REPIN 7 src/sandbox/funnel/test_funnel_sku_persist.py:170 label=foreign
+REPIN 8 src/sandbox/funnel/test_funnel_sku_persist.py:189 label=foreign
+REPIN 9 src/sandbox/funnel/test_funnel_sku_persist.py:312 label=foreign
+REPIN 10 src/sandbox/funnel/test_funnel_sku_persist.py:313 label=foreign
+REPIN 11 src/sandbox/lobby/test_hub_page.py:578 label=ambient
+REPIN 12 src/sandbox/lobby/test_hub_page.py:774 label=foreign
+REPIN 13 src/sandbox/lobby/test_hub_page.py:799 label=ambient
+REPIN 14 src/sandbox/lobby/test_hub_page.py:847 label=ambient
+REPIN 15 src/sandbox/lobby/test_hub_page.py:854 label=ambient
