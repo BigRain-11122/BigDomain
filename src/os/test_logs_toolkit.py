@@ -1128,6 +1128,83 @@ def main():
     ok(rc == 0 and fin2['written'] is False and fin2['repaired_lines'] == 0,
        'fix-indent healthy state no-op zero write (AC-FI2)')
 
+    # ---- weights per-item face (AC-LTW1..AC-LTW6, R3377 slice) ----
+    # Pinned in state/queue/explore.md R3176 b before this code. The face is
+    # read-only and its conservation is measured against the SHIPPED gauge
+    # face on the same tree, not against its own arithmetic.
+    def build_weight_state(items):
+        wf = tempfile.mkdtemp(prefix='bd-weights-')
+        os.makedirs(os.path.join(wf, 'src', 'os'))
+        os.makedirs(os.path.join(wf, 'logs'))
+        wp = os.path.join(wf, 'src', 'os', 'state.json')
+        with open(wp, 'wb') as f:
+            f.write((json.dumps({'tick': 9, 'log': items},
+                                ensure_ascii=False, indent=2) + '\n').encode('utf-8'))
+        return wf, wp
+
+    witems = [
+        '2026-10-09 R1041 short line D-20260930-19',
+        'unlabeled line with no round marker at all',
+        '2026-10-10 R1042 ' + 'y' * 400,
+        '2026-10-11 R1043 ' + 'z' * 200,
+    ]
+    wroot, wpath = build_weight_state(witems)
+    wrc, wout, _ = run(wroot, 'weights', '--top', '3')
+    wdoc = json.loads(wout)
+    ok(wrc == 0 and list(wdoc.keys()) == [
+        'state_path', 'item_count', 'gate', 'log_content_bytes',
+        'sum_item_bytes', 'residual_bytes', 'shares_sum', 'top_n', 'top'],
+       'weights document keys are pinned in order (AC-LTW1)')
+    ok(all(list(r.keys()) == ['index', 'round', 'bytes',
+                              'share_of_log', 'share_of_gate']
+           for r in wdoc['top']),
+       'every top row carries the pinned five keys (AC-LTW1)')
+    g_rc, g_out, _ = run(wroot, 'gauge')
+    gdoc = json.loads(g_out)
+    ok(g_rc == 0
+       and wdoc['log_content_bytes'] == gdoc['log_content_bytes']
+       and wdoc['sum_item_bytes'] == gdoc['log_content_bytes']
+       and wdoc['residual_bytes'] == 0
+       and abs(wdoc['shares_sum'] - 1.0) < 1e-9,
+       'weights and gauge agree on log_content_bytes; shares sum to 1 (AC-LTW2)')
+    ok(wdoc['top'][0]['index'] == 2 and wdoc['top'][1]['index'] == 3
+       and len(wdoc['top']) == 3
+       and wdoc['top'][0]['bytes'] > wdoc['top'][1]['bytes'] > wdoc['top'][2]['bytes'],
+       'top face reads heaviest first and stops at --top (AC-LTW3)')
+    ok(wdoc['top'][0]['share_of_gate'] == float(wdoc['top'][0]['bytes']) / wdoc['gate'],
+       'share_of_gate is the item over the published gate (AC-LTW1)')
+    zero_rc, zero_out, _ = run(wroot, 'weights', '--top', '0')
+    zdoc = json.loads(zero_out)
+    ok(zero_rc == 0 and zdoc['top'] == [] and zdoc['item_count'] == wdoc['item_count']
+       and zdoc['sum_item_bytes'] == wdoc['sum_item_bytes'],
+       '--top 0 empties only the top list and moves no total (AC-LTW3)')
+    tie_root, _tie_path = build_weight_state(['R1 aaa', 'R2 bbb'])
+    t_rc, t_out, _ = run(tie_root, 'weights', '--top', '2')
+    tdoc = json.loads(t_out)
+    ok(t_rc == 0 and [r['index'] for r in tdoc['top']] == [0, 1],
+       'equal weights break by array index, not by label (AC-LTW3)')
+    empty_root, _empty_path = build_weight_state([])
+    e_rc, e_out, _ = run(empty_root, 'weights')
+    edoc = json.loads(e_out)
+    ok(e_rc == 0 and edoc['item_count'] == 0 and edoc['top'] == []
+       and edoc['shares_sum'] == 0.0 and edoc['residual_bytes'] == 0,
+       'an empty log reads honestly empty, nothing fabricated (AC-LTW4)')
+    before = os.stat(wpath)
+    listing = sorted(os.listdir(os.path.dirname(wpath)))
+    run(wroot, 'weights')
+    run(wroot, 'weights', '--top', '99')
+    after = os.stat(wpath)
+    ok((before.st_size, before.st_mtime_ns) == (after.st_size, after.st_mtime_ns)
+       and sorted(os.listdir(os.path.dirname(wpath))) == listing,
+       'two runs write nothing and bless no new file (AC-LTW5)')
+    b_rc, b_out, _ = run(wroot, 'weights', '--top', '-1')
+    ok(b_rc == 2 and b_out.strip() == '',
+       '--top -1 fails closed with nothing on stdout (AC-LTW6)')
+    lab = {r['index']: r['round']
+           for r in json.loads(run(wroot, 'weights', '--top', '9')[1])['top']}
+    ok(lab.get(0) == 'R1041' and lab.get(2) == 'R1042' and lab.get(1) is None,
+       'round label is the first bare round token, null when absent (AC-LTW6)')
+
     # AC-QREG7..AC-QREG9 (pinned in src/os/backlog.md R2917 BEFORE this edit):
     # the registry row is the ONE typed count and this suite is what refutes it,
     # so a registry edit that forgets this suite reddens HERE rather than being

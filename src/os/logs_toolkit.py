@@ -17,6 +17,9 @@ Calibers (R1580 fold precedent):
 
 Subcommands (all accept --root, default = repo root two levels up):
   gauge                  water report for src/os/state.json
+  weights [--top N]      per-item log weight: bytes, bare round label, share
+                         of the log and of the fold gate, heaviest first
+                         (read-only; totals always cover every item)
   inventory              logs/ class breakdown (counts + MB)
   tail [-n N]            state.json log tail inventory (class + bytes)
   prune [--execute]      retention enforcement (dry-run default)
@@ -201,6 +204,58 @@ def cmd_gauge(args):
         'tick': st.get('tick'),
     }
     print(json.dumps(out, ensure_ascii=False, indent=2))
+    return 0
+
+
+ROUND_TAG = re.compile(r'\bR\d{3,5}\b')
+
+
+def round_tag(item):
+    """First bare round label in one log item (AC-LTW6).
+
+    A bare round number is not a PAT token: PAT requires a hyphen after the
+    family name, so `R1238` never matches it (R3176 a measurement). This is
+    the separate extractor for that shape, not a second token law.
+    """
+    m = ROUND_TAG.search(item)
+    return m.group(0) if m else None
+
+
+def weight_report(state_path, st, top_n):
+    """Per-item log weight, share of the log and share of the fold gate.
+
+    Read-only: the weights are derived from the parsed log the gauge face
+    already reads, so two faces cannot disagree about `log_content_bytes`.
+    """
+    log = st.get('log') or []
+    rows = []
+    for i, item in enumerate(log):
+        rows.append({'index': i, 'round': round_tag(item),
+                     'bytes': len(item.encode('utf-8'))})
+    total = sum(r['bytes'] for r in rows)
+    for r in rows:
+        r['share_of_log'] = (r['bytes'] / total) if total else 0.0
+        r['share_of_gate'] = r['bytes'] / GATE
+    ordered = sorted(rows, key=lambda r: (-r['bytes'], r['index']))
+    return {
+        'state_path': state_path,
+        'item_count': len(rows),
+        'gate': GATE,
+        'log_content_bytes': total,
+        'sum_item_bytes': sum(r['bytes'] for r in rows),
+        'residual_bytes': total - sum(r['bytes'] for r in rows),
+        'shares_sum': sum(r['share_of_log'] for r in rows),
+        'top_n': top_n,
+        'top': ordered[:top_n],
+    }
+
+
+def cmd_weights(args):
+    path, raw, st = load_state(args.root)
+    if args.top < 0:
+        print('error: --top must be >= 0', file=sys.stderr)
+        return 2
+    print(json.dumps(weight_report(path, st, args.top), ensure_ascii=False, indent=2))
     return 0
 
 
@@ -1281,6 +1336,9 @@ def main(argv=None):
     sub = p.add_subparsers(dest='cmd', required=True)
 
     sub.add_parser('gauge', help='water report for src/os/state.json')
+    pw = sub.add_parser('weights', help='per-item log weight + share of log and gate (read-only)')
+    pw.add_argument('--top', type=int, default=10,
+                    help='rows on the top face (default 10; totals always cover every item)')
     pi = sub.add_parser('inventory', help='logs/ class breakdown')
     pi.add_argument('--with-qa', action='store_true',
                     help='also inventory qa/ evidence (qa-evidence / evidence-other)')
@@ -1330,7 +1388,8 @@ def main(argv=None):
     pf.add_argument('--execute', action='store_true', help='perform surgery (default: dry-run, zero mutation)')
 
     args = p.parse_args(argv)
-    handlers = {'gauge': cmd_gauge, 'inventory': cmd_inventory, 'tail': cmd_tail,
+    handlers = {'gauge': cmd_gauge, 'weights': cmd_weights,
+                'inventory': cmd_inventory, 'tail': cmd_tail,
                 'prune': cmd_prune, 'catalog': cmd_catalog, 'fold': cmd_fold,
                 'census': cmd_census, 'eol': cmd_eol}
     if args.cmd not in handlers:
