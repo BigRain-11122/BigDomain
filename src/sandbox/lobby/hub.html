@@ -177,6 +177,17 @@
     }
   }
 
+  // A probing request costs a down face its whole read budget, so the previous
+  // verdict must not stay on screen as if it were current: every card goes back
+  // to "检测中" before the request leaves, and paint() decides after it returns.
+  function show_probing() {
+    var marks = document.querySelectorAll('[data-face]');
+    for (var i = 0; i < marks.length; i += 1) {
+      marks[i].textContent = '检测中';
+      marks[i].className = 'tag';
+    }
+  }
+
   function wire(data) {
     text(state, '已连接');
     text(wsOut, data.ws || '—');
@@ -211,6 +222,7 @@
   function probe() {
     if (!refresh || refresh.disabled) { return; }
     refresh.disabled = true;
+    show_probing();
     fetch('/hub/api/faces?probe=1', { cache: 'no-store' })
       .then(function (resp) {
         if (!resp.ok) { throw new Error('faces ' + resp.status); }

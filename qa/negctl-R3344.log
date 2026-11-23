@@ -1,0 +1,6 @@
+R3344 negative control
+M1 dropped: inside-probe=red literal=GREEN presence=red shipped-ordered=red
+M2 moved: inside-probe=GREEN literal=GREEN presence=GREEN shipped-ordered=red
+M3 defined-not-called: inside-probe=red literal=GREEN presence=red shipped-ordered=red
+naive checks giving a false green on at least one mutation=3/3
+NEGCTL verdict=PASS

@@ -81,6 +81,17 @@ before their code landed):
            covered=7/8 naming gate - so the reading decides, not a constant.
            The standing page laws are re-read in the same arm (no autotimer,
            exactly two fetch calls) so this card cannot cost AC-HUB9.
+  AC-HUB13 the page never shows a previous verdict as current (R3344 read the
+           page's probe path: the cards start on "检测中", but probe() only
+           repainted them in the success callback, so a re-check left the old
+           verdicts on screen for the whole probe - a silent face costs about
+           1.0-1.5s, which is long enough to read a face that just died as
+           live): show_probing() puts every card back to "检测中" and must be
+           called INSIDE probe() and BEFORE the probing request; the silent
+           face is still dead and still costs its read budget (the refused
+           short header budget is not reintroduced); and the same reading over
+           a copy with the call dropped or moved after the request reddens, so
+           the order law is load-bearing.
 """
 
 import hashlib
@@ -144,6 +155,32 @@ def page_cover(text, faces):
         if not has_wire:
             unwired.append(face)
     return covered, missing, unlinked, unwired
+
+
+def probe_order(text, call="show_probing();",
+                request="fetch('/hub/api/faces?probe=1'"):
+    """(True, "") when the label call is inside probe() and before the request.
+
+    AC-HUB13 needs the ORDER, not just the presence: a call after the request
+    (or outside probe()) leaves the previous verdict on screen while a re-check
+    is in flight, which is exactly the stale reading this card forbids.
+    """
+    fn = text.find("function probe()")
+    if fn < 0:
+        return False, "no probe()"
+    idx = text.find(call)
+    if idx < 0:
+        return False, "no %s" % call.strip()
+    if text.find(call, idx + 1) >= 0:
+        return False, "%s appears more than once" % call.strip()
+    req = text.find(request)
+    if req < 0:
+        return False, "no probing request"
+    if idx < fn:
+        return False, "%s sits before probe()" % call.strip()
+    if idx > req:
+        return False, "%s sits after the probing request" % call.strip()
+    return True, ""
 
 
 def http_get(url, timeout=6.0):
@@ -771,7 +808,64 @@ def main():
         failed += 1
         print("FAIL AC-HUB12 :: %s" % exc)
 
-    total = 12
+    # ---------------- AC-HUB13 ----------------
+    try:
+        # (a) the label call is inside probe() and BEFORE the probing fetch, so
+        # no stale verdict can stay on screen while a re-check is in flight.
+        labelled, why = probe_order(disk_bytes.decode("utf-8"))
+        assert labelled, "the probing label is not ordered before the request: %s" % why
+
+        # (b) the cost is not traded away: a silent face is still dead and
+        # still costs its read budget, printed next to the stale windows.
+        silent3_srv, silent3_url, silent3_port = serve_slow(3.0)
+        try:
+            faces = {"silent": silent3_url, "face_ports": {"silent": silent3_port}}
+            started = time.perf_counter()
+            live = hub_page.live_map(faces, "127.0.0.1")
+            silent3_ms = (time.perf_counter() - started) * 1000.0
+            assert live.get("silent") is False, (
+                "a silent face was read as live by live_map: %r" % (live,))
+            assert silent3_ms >= 1000.0, (
+                "a silent face cost %.0fms, so a header budget was introduced"
+                % silent3_ms)
+        finally:
+            silent3_srv.shutdown()
+            silent3_srv.server_close()
+
+        # (c) load-bearing: removing the call, or moving it after the request,
+        # must redden the same reading - the order law is not a constant.
+        page_text13 = disk_bytes.decode("utf-8")
+        dropped = page_text13.replace("    show_probing();\n", "", 1)
+        moved = dropped.replace(
+            "fetch('/hub/api/faces?probe=1', { cache: 'no-store' })",
+            "fetch('/hub/api/faces?probe=1', { cache: 'no-store' });"
+            " show_probing();", 1)
+        dropped_ok, dropped_why = probe_order(dropped)
+        moved_ok, moved_why = probe_order(moved)
+        assert dropped_ok is False, "a page with no label call still read ordered"
+        assert moved_ok is False, "a page with the label after the request still read ordered"
+        assert moved.count("show_probing") == 2, (
+            "the moved copy did not keep one definition and one call: %d"
+            % moved.count("show_probing"))
+
+        # (d) the standing page laws stay intact
+        assert not re.search(r"setInterval|setTimeout|requestAnimationFrame",
+                             page_text13), "an autotimer appeared on the page"
+        assert page_text13.count("fetch(") == 2, (
+            "fetch count=%d, expected the list read and the probe read"
+            % page_text13.count("fetch("))
+        assert "marks[i].textContent = '检测中'" in page_text13, (
+            "show_probing() does not put the cards back to their probing label")
+
+        print("PASS AC-HUB13 ordered=True calls=1 silent=dead/%.0fms "
+              "stale_before=%.0fms stale_after=0ms dropped=%s moved=%s "
+              "timers=0 fetch=2"
+              % (silent3_ms, silent3_ms, dropped_why or "red", moved_why or "red"))
+    except AssertionError as exc:
+        failed += 1
+        print("FAIL AC-HUB13 :: %s" % exc)
+
+    total = 13
     if failed:
         print("SUITE FAIL %d/%d" % (total - failed, total))
         return 1

@@ -1,0 +1,9 @@
+R3344 probe (read-only, loopback only)
+world silent: live=False cost=1514ms
+world both:   live={'live': True, 'silent': False} cost=1519ms (probes run concurrently)
+page shipped: ordered=True reason=''
+page dropped: ordered=False reason='no call'
+page moved:   ordered=False reason='call after the probing request'
+stale window before=1514ms (previous verdict stays on screen while the re-check is in flight)
+stale window after=0ms (show_probing() runs synchronously before the request leaves)
+fetches=2 timers=0
