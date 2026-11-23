@@ -1,0 +1,173 @@
+$ python src/os/logs_toolkit.py rounds --window-tail 3
+{
+  "state_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+  "window": {
+    "mode": "tail",
+    "start": 118,
+    "end": 120,
+    "items": 3
+  },
+  "summary_file": null,
+  "total": 1,
+  "covered_by_summary": 0,
+  "covered_by_live": 1,
+  "lost": 0,
+  "rounds": [
+    {
+      "round": "R3379",
+      "in_summary": false,
+      "in_live": true,
+      "lost": false
+    }
+  ]
+}
+$ python src/os/logs_toolkit.py rounds --window-slice 1:120 --strict
+{
+  "state_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json",
+  "window": {
+    "mode": "slice",
+    "start": 1,
+    "end": 120,
+    "items": 120
+  },
+  "summary_file": null,
+  "total": 22,
+  "covered_by_summary": 0,
+  "covered_by_live": 0,
+  "lost": 22,
+  "rounds": [
+    {
+      "round": "R2405",
+      "in_summary": false,
+      "in_live": false,
+      "lost": true
+    },
+    {
+      "round": "R2907",
+      "in_summary": false,
+      "in_live": false,
+      "lost": true
+    },
+    {
+      "round": "R3074",
+      "in_summary": false,
+      "in_live": false,
+      "lost": true
+    },
+    {
+      "round": "R3176",
+      "in_summary": false,
+      "in_live": false,
+      "lost": true
+    },
+    {
+      "round": "R3211",
+      "in_summary": false,
+      "in_live": false,
+      "lost": true
+    },
+    {
+      "round": "R3212",
+      "in_summary": false,
+      "in_live": false,
+      "lost": true
+    },
+    {
+      "round": "R3250",
+      "in_summary": false,
+      "in_live": false,
+      "lost": true
+    },
+    {
+      "round": "R3296",
+      "in_summary": false,
+      "in_live": false,
+      "lost": true
+    },
+    {
+      "round": "R3354",
+      "in_summary": false,
+      "in_live": false,
+      "lost": true
+    },
+    {
+      "round": "R3367",
+      "in_summary": false,
+      "in_live": false,
+      "lost": true
+    },
+    {
+      "round": "R3368",
+      "in_summary": false,
+      "in_live": false,
+      "lost": true
+    },
+    {
+      "round": "R3369",
+      "in_summary": false,
+      "in_live": false,
+      "lost": true
+    },
+    {
+      "round": "R3370",
+      "in_summary": false,
+      "in_live": false,
+      "lost": true
+    },
+    {
+      "round": "R3371",
+      "in_summary": false,
+      "in_live": false,
+      "lost": true
+    },
+    {
+      "round": "R3372",
+      "in_summary": false,
+      "in_live": false,
+      "lost": true
+    },
+    {
+      "round": "R3373",
+      "in_summary": false,
+      "in_live": false,
+      "lost": true
+    },
+    {
+      "round": "R3374",
+      "in_summary": false,
+      "in_live": false,
+      "lost": true
+    },
+    {
+      "round": "R3375",
+      "in_summary": false,
+      "in_live": false,
+      "lost": true
+    },
+    {
+      "round": "R3376",
+      "in_summary": false,
+      "in_live": false,
+      "lost": true
+    },
+    {
+      "round": "R3377",
+      "in_summary": false,
+      "in_live": false,
+      "lost": true
+    },
+    {
+      "round": "R3378",
+      "in_summary": false,
+      "in_live": false,
+      "lost": true
+    },
+    {
+      "round": "R3379",
+      "in_summary": false,
+      "in_live": false,
+      "lost": true
+    }
+  ]
+}
+rc=4 (4 expected: a whole-log fold erases every bare round pointer)

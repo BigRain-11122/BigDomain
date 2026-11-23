@@ -266,6 +266,85 @@ def cmd_weights(args):
     return 0
 
 
+# R3379 (AC-BRC1..AC-BRC6): a bare round label is not a PAT token - PAT needs a
+# hyphen right after the family name - so a fold whose only record of a round is
+# that bare number leaves the live block no way to find it. This face answers the
+# pre-fold question "which bare rounds in this window would become unfindable"
+# without widening the token law: the separators below refuse a round that sits
+# inside a PAT token (AC-R3379) on either side.
+BARE_ROUND = re.compile(r'(?<![0-9A-Za-z-])R\d{3,5}(?![0-9A-Za-z-])')
+
+
+def rounds_report(state_path, st, mode, start, end, summary_text):
+    """Which bare round labels in log[start:end] (1-based) survive a fold.
+
+    A round survives if the replacement summary names it, or if a log item
+    outside the window still carries it. Read-only and clock-free: the summary
+    text is the only input beyond state.json.
+    """
+    log = st.get('log') or []
+    window = log[start - 1:end]
+    outside = log[:start - 1] + log[end:]
+    summary_rounds = set(BARE_ROUND.findall(summary_text or ''))
+    live_rounds = set()
+    for item in outside:
+        live_rounds |= set(BARE_ROUND.findall(item))
+    labels = sorted({m for item in window for m in BARE_ROUND.findall(item)})
+    rows = []
+    for label in labels:
+        in_summary = label in summary_rounds
+        in_live = label in live_rounds
+        rows.append({'round': label, 'in_summary': in_summary,
+                     'in_live': in_live, 'lost': not (in_summary or in_live)})
+    return {
+        'state_path': state_path,
+        'window': {'mode': mode, 'start': start, 'end': end,
+                   'items': len(window)},
+        'summary_file': None,
+        'total': len(rows),
+        'covered_by_summary': sum(1 for r in rows if r['in_summary']),
+        'covered_by_live': sum(1 for r in rows if r['in_live']),
+        'lost': sum(1 for r in rows if r['lost']),
+        'rounds': rows,
+    }
+
+
+def cmd_rounds(args):
+    """Pre-fold bare-round pointer reading (AC-BRC1). Writes nothing."""
+    path, raw, st = load_state(args.root)
+    n = len(st.get('log') or [])
+    if args.window_slice:
+        try:
+            start, end = [int(x) for x in args.window_slice.split(':')]
+        except ValueError:
+            print('error: --window-slice expects START:END', file=sys.stderr)
+            return 2
+        if start < 1 or end < start or end > n:
+            print('error: E_WINDOW_RANGE: --window-slice out of log bounds',
+                  file=sys.stderr)
+            return 2
+        mode = 'slice'
+    elif args.window_tail:
+        if args.window_tail < 1 or args.window_tail > n:
+            print('error: --window-tail exceeds log length', file=sys.stderr)
+            return 2
+        mode, start, end = 'tail', n - args.window_tail + 1, n
+    else:
+        mode, start, end = 'all', 1, n
+    summary_text = ''
+    if args.file:
+        summary_text, err = one_summary_line(args.file)
+        if err:
+            print('error: ' + err, file=sys.stderr)
+            return 2
+    out = rounds_report(path, st, mode, start, end, summary_text)
+    out['summary_file'] = args.file
+    print(json.dumps(out, ensure_ascii=False, indent=2))
+    if args.strict and out['lost']:
+        return 4
+    return 0
+
+
 def inventory_roots(args):
     """Resolve the inventory roots for one CLI call.
 
@@ -1521,12 +1600,23 @@ def main(argv=None):
                     help='summary file holding exactly one non-empty line')
     ps.add_argument('--budget', type=int, default=SUMMARY_BUDGET,
                     help='byte ceiling (default %d)' % SUMMARY_BUDGET)
+    pr = sub.add_parser('rounds',
+                        help='pre-fold bare-round pointer reading (read-only)')
+    pr.add_argument('--window-tail', type=int, default=0,
+                    help='window = last N log lines (default: the whole log)')
+    pr.add_argument('--window-slice', default=None,
+                    help='window = log lines START:END (1-based inclusive)')
+    pr.add_argument('--file', default=None,
+                    help='summary file whose text may name the window rounds')
+    pr.add_argument('--strict', action='store_true',
+                    help='exit 4 when any window round would be lost')
 
     args = p.parse_args(argv)
     handlers = {'gauge': cmd_gauge, 'weights': cmd_weights,
                 'inventory': cmd_inventory, 'tail': cmd_tail,
                 'prune': cmd_prune, 'catalog': cmd_catalog, 'fold': cmd_fold,
-                'census': cmd_census, 'eol': cmd_eol, 'summary': cmd_summary}
+                'census': cmd_census, 'eol': cmd_eol, 'summary': cmd_summary,
+                'rounds': cmd_rounds}
     if args.cmd not in handlers:
         return 2
     try:

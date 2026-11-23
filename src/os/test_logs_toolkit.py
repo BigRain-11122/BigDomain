@@ -1128,6 +1128,76 @@ def main():
     ok(rc == 0 and fin2['written'] is False and fin2['repaired_lines'] == 0,
        'fix-indent healthy state no-op zero write (AC-FI2)')
 
+    # ---- pre-fold bare-round pointer reading (AC-BRC1..AC-BRC6, R3379 slice) ----
+    # Pinned in state/queue/explore.md R3176 a before this code. A bare round
+    # number is not a PAT token, so this face measures what a fold would lose
+    # instead of widening the token law.
+    def build_round_state(items):
+        rf = tempfile.mkdtemp(prefix='bd-rounds-')
+        os.makedirs(os.path.join(rf, 'src', 'os'))
+        os.makedirs(os.path.join(rf, 'logs'))
+        rp = os.path.join(rf, 'src', 'os', 'state.json')
+        with open(rp, 'wb') as f:
+            f.write((json.dumps({'tick': 3, 'log': items},
+                                ensure_ascii=False, indent=2) + '\n').encode('utf-8'))
+        return rf, rp
+
+    R_LOGS = ['2026-11-20 R8001 first item AC-R8001 sits inside a token',
+              '2026-11-21 R8002 second item',
+              '2026-11-22 R8003 third item']
+    rroot, rpath = build_round_state(R_LOGS)
+    rsumm = os.path.join(rroot, 'logs', 'sum-R3379.txt')
+    open(rsumm, 'wb').write(b'one sentence naming R8002 only\n')
+    rrc, rout, _ = run(rroot, 'rounds', '--window-tail', '2', '--file', rsumm)
+    rdoc = json.loads(rout)
+    ok(rrc == 0 and list(rdoc.keys()) == [
+        'state_path', 'window', 'summary_file', 'total', 'covered_by_summary',
+        'covered_by_live', 'lost', 'rounds'],
+       'rounds document keys are pinned in order (AC-BRC1)')
+    ok(list(rdoc['window'].keys()) == ['mode', 'start', 'end', 'items']
+       and all(list(r.keys()) == ['round', 'in_summary', 'in_live', 'lost']
+               for r in rdoc['rounds']),
+       'window and every row carry the pinned keys (AC-BRC1)')
+    ok([r['round'] for r in rdoc['rounds']] == ['R8002', 'R8003']
+       and rdoc['window'] == {'mode': 'tail', 'start': 2, 'end': 3, 'items': 2},
+       'the tail window lists exactly its own rounds and reaches no further (AC-BRC4)')
+    cov = {r['round']: r for r in rdoc['rounds']}
+    ok(cov['R8002']['in_summary'] and not cov['R8002']['lost']
+       and rdoc['covered_by_summary'] == 1,
+       'a round named in the summary is covered (AC-BRC2)')
+    ok(not cov['R8003']['in_summary'] and not cov['R8003']['in_live']
+       and cov['R8003']['lost'] and rdoc['lost'] == 1,
+       'a round named nowhere reads lost, and the face says so (AC-BRC3)')
+    arc, aout, _ = run(rroot, 'rounds', '--window-slice', '1:1')
+    adoc = json.loads(aout)
+    ok([r['round'] for r in adoc['rounds']] == ['R8001']
+       and adoc['rounds'][0]['in_live'] is False,
+       'the bare R8001 is listed while AC-R8001 inside a PAT token is not (AC-BRC1)')
+    s4, s4out, _ = run(rroot, 'rounds', '--window-tail', '2', '--file', rsumm,
+                       '--strict')
+    ok(s4 == 4 and json.loads(s4out)['lost'] == 1,
+       '--strict reddens on a lost round while the default stays rc=0 (AC-BRC3)')
+    b_rc, b_out, b_err = run(rroot, 'rounds', '--window-slice', '2:9')
+    ok(b_rc == 2 and b_out.strip() == '' and 'E_WINDOW_RANGE' in b_err,
+       'an out-of-range slice is refused by name with empty stdout (AC-BRC4)')
+    tw_rc, tw_out, _ = run(rroot, 'rounds', '--window-tail', '99')
+    ok(tw_rc == 2 and tw_out.strip() == '',
+       'a tail wider than the log is refused with empty stdout (AC-BRC4)')
+    before_r = os.stat(rpath)
+    listing_r = sorted(os.listdir(os.path.dirname(rpath)))
+    first_r = run(rroot, 'rounds', '--window-tail', '2', '--file', rsumm)[1]
+    second_r = run(rroot, 'rounds', '--window-tail', '2', '--file', rsumm)[1]
+    after_r = os.stat(rpath)
+    ok(first_r == second_r
+       and (before_r.st_size, before_r.st_mtime_ns)
+       == (after_r.st_size, after_r.st_mtime_ns)
+       and sorted(os.listdir(os.path.dirname(rpath))) == listing_r,
+       'two runs are byte-identical and write nothing (AC-BRC5)')
+    ok(T.PAT.pattern == (r'(?:AC|BD|C|D|O|P|T|XL|OH|R)'
+                         r'-[0-9A-Za-z][0-9A-Za-z]*(?:-[0-9A-Za-z]+)*')
+       and T.ROUND_TAG.pattern == r'\bR\d{3,5}\b',
+       'no token law moved: PAT and round_tag keep their patterns (AC-BRC6)')
+
     # ---- weights per-item face (AC-LTW1..AC-LTW6, R3377 slice) ----
     # Pinned in state/queue/explore.md R3176 b before this code. The face is
     # read-only and its conservation is measured against the SHIPPED gauge

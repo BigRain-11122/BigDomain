@@ -1,0 +1,7 @@
+CLOSEOUT-GATE PASS files=4910 flags=0 reader_refused=0 gating=flags round_main=OK census=PASS matrix=DOC-CURRENT
+CARRIER bytes=53428 gate=78500 margin=25072 fold_needed=false layout_ok=true crlf=130 bare_lf=0 indent_anomaly=0 log_items=120 newline_items=0
+LEDGER OK rows=84 names=74 bad=0 stale=0 missing=0 broken=5 path=state/qa_replacements.jsonl
+CENSUS-BASELINE name=qa/writer-census-baseline.json bytes=14484 rows=499 sha256=2fe1299ceb9f written=2026-11-21T07:42:42
+CLAIMS captured=2 uncaptured=28 contradicted=5 historic=5 rows=84 present=true
+ENTRY-PAGES faces=2 fail=0 entry-index=rc0 first-yuan-chain=rc0
+VERDICT PASS 13/13 fingerprint=f436b953c8191beb
