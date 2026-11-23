@@ -1,0 +1,15 @@
+R3375 closeout gate learns the CEO front door (AC-CGEF1..6)
+face: tools/closeout_gate.py check_entry_pages asks each writer its OWN --check
+world: deliverable_index.py --check rc=0 (PASS 23/23) | first_yuan_chain.py --check rc=0 (PASS legs=2 entries=2 tx=1)
+live : CLOSEOUT-GATE PASS files=4902 flags=0 reader_refused=0 gating=flags round_main=OK census=PASS matrix=DOC-CURRENT
+live : ENTRY-PAGES faces=2 fail=0 entry-index=rc0 first-yuan-chain=rc0
+red  : injected rc=2 -> CLOSEOUT-GATE REFUSED reason=E_CLG_ENTRY_PAGES, no PASS line, refusing face named
+red  : unanswerable world (no tools/) -> ENTRY-PAGES FAIL faces=2 fail=2 rc127 E_PAGE_TOOL_MISSING (no injection)
+absent: a world with no preview/ -> ENTRY-PAGES absent=no-preview (named, never skipped)
+read-only: preview/index.html 42871B and preview/first-yuan-chain.html 4403B size+mtime unchanged
+suite: src/os/test_closeout_gate.py SUITE PASS 68/68 assertions over 22 criteria (was 62/16)
+shard: os-closeout-gate rc=0 green=1 criteria=22 crit_mismatch=0 elapsed=33.3s
+matrix: docs/sandbox-suite-matrix.md 79381B 766 rows DOC-CURRENT
+census: rows=766 readable=766 unparsed=0 silent=0
+cover : SHARD-COVERAGE measured=768 covered=766 green=766 red=0 uncovered=0 verdict=COVERED-ALL
+honest: a gate that never opens the front door cannot see it rot; this adds no product capability

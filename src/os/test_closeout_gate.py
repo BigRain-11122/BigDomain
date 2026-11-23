@@ -28,6 +28,13 @@ This suite grades both questions on fixture worlds:
            token shape stays byte-identical, the closeout carrier passes the
            values through, and publishing writes nothing
 
+  AC-CGEF1..6  the CEO front door (R3375): the two pages a reader opens are
+           asked at closeout by each writer's OWN `--check`, a non-zero from
+           either REFUSES by name E_CLG_ENTRY_PAGES quoting that writer's last
+           line, the face writes no page byte, it repeats the writer's rc
+           rather than a second rule, and a world with no `preview/` says
+           `absent=no-preview` instead of being skipped
+
 Honest boundary: `flags` sees a new file or a class change; a rewrite that
 stays inside the same class is invisible to both faces (the census keeps no
 hashes), and that is why the gate is a precondition, not a jail.
@@ -42,6 +49,7 @@ import json
 import os
 import re
 import shutil
+import subprocess
 import sys
 import tempfile
 
@@ -376,11 +384,11 @@ def main():
     ok("AC-CLG8 arm a - the default face carries no timing key",
        "face_ms" not in verdict, "keys=%s" % sorted(verdict))
     ms8 = deep_v.get("face_ms") or {}
-    ok("AC-CLG8 arm b - root=ROOT publishes seven named readings (R3177 added "
-       "the carrier face, R3219 the ledger face, R3225 the claims face) and "
-       "the PASS line is byte-identical",
+    ok("AC-CLG8 arm b - root=ROOT publishes eight named readings (R3177 added "
+       "the carrier face, R3219 the ledger face, R3225 the claims face, R3375 "
+       "the front-door face) and the PASS line is byte-identical",
        sorted(ms8) == ["carrier", "census", "claims", "flags", "ledger",
-                       "matrix", "round_main"]
+                       "matrix", "pages", "round_main"]
        and all(isinstance(v, float) and v >= 0.0 for v in ms8.values())
        and deep[0] == ("CLOSEOUT-GATE PASS files=%d flags=0 reader_refused=0 "
                        "gating=flags round_main=OK census=PASS "
@@ -845,6 +853,84 @@ def main():
            "word=%s rows=%r broken=%r row=%s"
            % (word, tree_v.get("ledger_rows"), tree_v.get("ledger_broken"),
               tree_row))
+
+    # AC-CGEF1..6 (R3375): the two pages a reader actually opens are asked at
+    # closeout, by each writer's own `--check`, and a non-zero from either
+    # refuses. WHY (measured at R3374): the entry page sat one generation
+    # stale while every closeout read PASS.
+    with tempfile.TemporaryDirectory() as tmp_pg:
+        pg_lines, pg_rc, pg_v = CG.evaluate(live, live_base, root=ROOT)
+        pgrow = [ln for ln in pg_lines if ln.startswith("ENTRY-PAGES")]
+        ok("AC-CGEF1 the live closeout publishes the front-door reading",
+           pg_rc == 0 and pg_v.get("entry_pages") == "OK" and len(pgrow) == 1
+           and pgrow[0].startswith("ENTRY-PAGES faces=2 fail=0")
+           and "entry-index=rc0" in pgrow[0]
+           and "first-yuan-chain=rc0" in pgrow[0]
+           and pg_lines[0].startswith("CLOSEOUT-GATE PASS"),
+           "row=%s entry_pages=%s" % (pgrow[0] if pgrow else "",
+                                      pg_v.get("entry_pages")))
+
+        def _page_runner(script):
+            if script == "first_yuan_chain.py":
+                return 2, "VERDICT FAIL E_STALE html=0B json=0B"
+            return 0, "VERDICT PASS 23/23"
+
+        r_lines, r_rc, r_v = CG.evaluate(live, live_base, root=ROOT,
+                                         pages_runner=_page_runner)
+        ok("AC-CGEF2 a refusing writer REFUSES the closeout by name",
+           r_rc == 2 and r_v.get("reason") == "E_CLG_ENTRY_PAGES"
+           and r_v.get("entry_pages") == "FAIL"
+           and r_lines[0].startswith("CLOSEOUT-GATE REFUSED "
+                                    "reason=E_CLG_ENTRY_PAGES")
+           and not any(ln.startswith("CLOSEOUT-GATE PASS") for ln in r_lines)
+           and any("face=first-yuan-chain rc=2" in ln and "E_STALE" in ln
+                   for ln in r_lines),
+           "rc=%s reason=%s" % (r_rc, r_v.get("reason")))
+
+        naked = os.path.join(tmp_pg, "naked")
+        os.makedirs(os.path.join(naked, "preview"))
+        nk_ok, nk_lines = CG.check_entry_pages(naked)
+        ok("AC-CGEF3 an unanswerable world reddens on the writers' own rc "
+           "(no injection)",
+           nk_ok is False and nk_lines[0].startswith("ENTRY-PAGES FAIL")
+           and "fail=2" in nk_lines[0]
+           and "entry-index=rc127" in nk_lines[0]
+           and any("E_PAGE_TOOL_MISSING" in ln for ln in nk_lines[1:]),
+           "row=%s detail=%s" % (nk_lines[0], nk_lines[1:]))
+
+        page_files = [os.path.join(ROOT, "preview", "index.html"),
+                      os.path.join(ROOT, "preview", "first-yuan-chain.html")]
+
+        def _stat_of(p):
+            info = os.stat(p)
+            return (info.st_size, info.st_mtime_ns)
+
+        before_pg = [_stat_of(p) for p in page_files]
+        CG.check_entry_pages(ROOT)
+        after_pg = [_stat_of(p) for p in page_files]
+        ok("AC-CGEF4 asking the face writes no page byte",
+           before_pg == after_pg, "before=%s after=%s"
+           % (before_pg, after_pg))
+
+        direct = {}
+        for face, script in CG.ENTRY_PAGES:
+            proc = subprocess.run(
+                [sys.executable, os.path.join(ROOT, "tools", script),
+                 "--check"], cwd=ROOT, stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL)
+            direct[face] = proc.returncode
+        ok("AC-CGEF5 the row repeats each writer's own --check rc "
+           "(no second rule)",
+           all(("%s=rc%d" % (face, rc)) in pgrow[0]
+               for face, rc in direct.items()),
+           "direct=%s row=%s" % (direct, pgrow[0] if pgrow else ""))
+
+        bare = os.path.join(tmp_pg, "bare")
+        os.makedirs(bare)
+        ab_ok, ab_lines = CG.check_entry_pages(bare)
+        ok("AC-CGEF6 a world with no front door is NAMED, never skipped",
+           ab_ok is True and ab_lines[0] == "ENTRY-PAGES absent=no-preview",
+           "row=%s" % ab_lines[0])
 
     total = len(CHECKS)
     acs = set()

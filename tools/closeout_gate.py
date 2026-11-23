@@ -132,6 +132,7 @@ import hashlib
 import io
 import json
 import os
+import subprocess
 import sys
 import time
 
@@ -162,6 +163,12 @@ E_CLG_CARRIER_NEWLINE = "E_CLG_CARRIER_NEWLINE"
 # whose new_sha16 no longer matches the file on disk). Named so a reader can
 # act; an absent ledger is rows=0 and never a refusal.
 E_CLG_LEDGER = "E_CLG_LEDGER"
+# R3375: the two pages a CEO actually opens. Measured at R3374: the entry page
+# sat one generation stale while every closeout read PASS, because no face
+# asked them - a gate that never opens the front door cannot see it rot.
+E_CLG_ENTRY_PAGES = "E_CLG_ENTRY_PAGES"
+ENTRY_PAGES = (("entry-index", "deliverable_index.py"),
+               ("first-yuan-chain", "first_yuan_chain.py"))
 INFORMATIONAL_FACES = ("reader_refused", "plain_unusable",
                        "reader_rescued", "flags", "claims")
 
@@ -392,6 +399,65 @@ def check_claims(root, reading=None):
     return True, CC.census_row(result)
 
 
+def _page_check(root, script, runner=None):
+    """Ask ONE front-door tool its own `--check`. Returns (rc, last_line).
+
+    `runner` exists only so a control arm can hand in a verdict without a
+    world; the live path always executes the shipped tool.
+    """
+    if runner is not None:
+        return runner(script)
+    path = os.path.join(root, "tools", script)
+    if not os.path.isfile(path):
+        return 127, "E_PAGE_TOOL_MISSING %s" % script
+    try:
+        proc = subprocess.run([sys.executable, path, "--check"],
+                              cwd=root, stdout=subprocess.PIPE,
+                              stderr=subprocess.STDOUT,
+                              universal_newlines=True, timeout=900)
+    except (OSError, subprocess.SubprocessError) as exc:
+        return 126, "E_PAGE_CHECK_UNREADABLE %s %s" % (type(exc).__name__, exc)
+    last = ""
+    for line in (proc.stdout or "").splitlines():
+        if line.strip():
+            last = line.strip()
+    return proc.returncode, last[:200]
+
+
+def check_entry_pages(root, runner=None):
+    """Ask whether the CEO front-door pages are current (R3375, AC-CGEF1..6).
+
+    WHY (measured at R3374): the entry-index page went a generation stale and
+    every closeout still read PASS - the gate asked the carrier, the round
+    shape, the census, the matrix, the ledger and the prose, but never the two
+    pages a reader actually opens, so yesterday's front door could ship green.
+
+    The judgement is each writer's OWN `--check` (deliverable_index and
+    first_yuan_chain); this face decides only the verdict and adds no second
+    definition of freshness. Non-zero from either tool refuses by name and
+    quotes that tool's own last line. A world with no `preview/` directory has
+    no front door and says `absent=no-preview` - named, never a silent skip.
+
+    Read-only. Returns (ok, lines) where lines[0] is the ENTRY-PAGES row.
+    """
+    if not os.path.isdir(os.path.join(root, "preview")):
+        return True, ["ENTRY-PAGES absent=no-preview"]
+    parts = []
+    details = []
+    bad = 0
+    for face, script in ENTRY_PAGES:
+        rc, last = _page_check(root, script, runner=runner)
+        parts.append("%s=rc%d" % (face, rc))
+        if rc != 0:
+            bad += 1
+            details.append("ENTRY-PAGES FAIL face=%s rc=%d detail=%s"
+                           % (face, rc, last))
+    head = ("ENTRY-PAGES%s faces=%d fail=%d %s"
+            % (" FAIL" if bad else "", len(ENTRY_PAGES), bad,
+               " ".join(parts)))
+    return bad == 0, [head] + details
+
+
 def check_census(root, registry=None, pin=None):
     """Ask the registry counter census against its own pin. (ok, line).
 
@@ -533,7 +599,7 @@ def _ledger_values(verdict, reading):
 
 
 def evaluate(target, baseline, root=None, registry=None, census_pin=None,
-             matrix=None, ledger=None):
+             matrix=None, ledger=None, pages_runner=None):
     """Run the census check and return (lines, exit_code, verdict dict).
 
     `root=None` -> the pre-R3093 question, byte for byte.
@@ -738,6 +804,33 @@ def evaluate(target, baseline, root=None, registry=None, census_pin=None,
                 claims_row = "E_CLG_CLAIMS %s" % exc
             if claims_reading:
                 verdict["claims"] = dict(claims_reading)
+            # R3375: the front door is asked LAST, because the pages are the
+            # last writer of every window (R3370 measured a page leg launched
+            # before the export refresh reddening on its own export rows).
+            try:
+                pg_ok, page_lines = _timed(face_ms, "pages",
+                                           check_entry_pages, root,
+                                           runner=pages_runner)
+            except (IOError, OSError, ValueError,
+                    UnicodeDecodeError) as exc:
+                pg_ok = False
+                page_lines = ["ENTRY-PAGES FAIL faces=? fail=? %s %s"
+                              % (type(exc).__name__, exc)]
+                face_ms.setdefault("pages", 0.0)
+            if not pg_ok:
+                out.append("CLOSEOUT-GATE REFUSED reason=E_CLG_ENTRY_PAGES "
+                           "files=%d flags=%d round_main=OK census=PASS "
+                           "entry_pages=FAIL" % (count, flags))
+                out.extend(page_lines)
+                verdict = {"verdict": "REFUSED",
+                           "reason": E_CLG_ENTRY_PAGES,
+                           "files": count, "flags": flags,
+                           "round_main": "OK", "census": "PASS",
+                           "entry_pages": "FAIL"}
+                return out, 2, _pub(verdict)
+            verdict["entry_pages"] = ("ABSENT" if page_lines[0]
+                                      .startswith("ENTRY-PAGES absent")
+                                      else "OK")
             verdict["round_main"] = "OK"
             verdict["census"] = "PASS"
             verdict["carrier"] = "OK"
@@ -765,6 +858,11 @@ def evaluate(target, baseline, root=None, registry=None, census_pin=None,
             # earlier rows keep the positions readers already index by.
             if claims_row:
                 out.append(claims_row)
+            # R3375: the front-door row rides after every other reading for
+            # the same ordering reason - and an absent front door is printed
+            # too, so a reader sees the face was asked and had nothing to ask.
+            for page_line in page_lines:
+                out.append(page_line)
         # The informational debt is never silent: a baselined file no family
         # decodes is still named on every closeout, it just does not refuse.
         out.extend(line for line in census_lines

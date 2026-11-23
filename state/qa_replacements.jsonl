@@ -77,3 +77,4 @@
 {"event": "REPLACED", "name": "qa-logs-toolkit-R3373.log", "new_bytes": 10709, "new_sha16": "0106dd1da0697426", "old_bytes": 10909, "old_sha16": "96893fcd8e59d4a2", "prev_kind": "evidence", "ts": "2026-11-23T21:01:37Z"}
 {"event": "REPLACED", "name": "battery-shard-fyc-R3374.log", "new_bytes": 1795, "new_sha16": "b58626d4cb27dbc3", "old_bytes": 270, "old_sha16": "2167d619ab3346fe", "prev_kind": "progress", "ts": "2026-11-23T21:30:45Z"}
 {"event": "REPLACED", "name": "battery-shard-fyc2-R3374.log", "new_bytes": 365, "new_sha16": "8a8a0311e6ccd985", "old_bytes": 276, "old_sha16": "46f259b93c4c7b9e", "prev_kind": "progress", "ts": "2026-11-23T21:32:05Z"}
+{"event": "REPLACED", "name": "battery-shard-cgef-R3375.log", "new_bytes": 364, "new_sha16": "0f425da7f9775de6", "old_bytes": 274, "old_sha16": "4cbe1c02c52b078c", "prev_kind": "progress", "ts": "2026-11-23T21:45:04Z"}
