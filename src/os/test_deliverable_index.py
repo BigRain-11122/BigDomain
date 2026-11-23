@@ -22,6 +22,7 @@ import importlib.util
 import io
 import json
 import os
+import re
 import shutil
 import sys
 import tempfile
@@ -33,6 +34,22 @@ N = 23  # AC-DIX1..14, the two R2804 snapshot controls, the R2883 html-only cont
 
 FAILS = []
 CHECKS = []
+# R3353: the arms and the criteria are two units. The registry row counts the
+# AC ids the run grades; this suite runs 23 arms over them, and the closing
+# SUITE row states both so no reader has to guess which number is which.
+GATE_IDS = []
+ID_RE = re.compile(r"^(AC-(?:DIX|CVL|IDX|COO)\d+)[a-z]?$")
+
+
+def arm_ids(names):
+    """The distinct AC criteria these arm names grade, suffix arms collapsed."""
+    out = []
+    for name in names:
+        token = name.split()[0] if name.split() else ""
+        match = ID_RE.match(token)
+        if match and match.group(1) not in out:
+            out.append(match.group(1))
+    return out
 
 FACE = "alpha-report"
 BLOCKER = "blocked on the merchant id"
@@ -494,6 +511,12 @@ def main():
            "stale=%s rendered=%s"
            % (rows_c3.get("AC-CVL2"), rows_c4.get("AC-CVL2")))
 
+        # R3353: the unit law. The gate rows are the criteria the registry
+        # counts, so they are read from the last clean render rather than
+        # spelled as a literal; an arm that names an id the gate never reports
+        # is a red here instead of a silent undercount in the SUITE row.
+        GATE_IDS[:] = sorted(rows_of(out_c4))
+
         # suite hygiene, scored inside AC-DIX3..AC-CVL2 by design: none of the
         # criteria above may import network or shell, and this file
         # itself must stay ASCII (the parser reads it back below).
@@ -506,11 +529,17 @@ def main():
                 shutil.rmtree(d, ignore_errors=True)
 
     total = N
-    if len(CHECKS) != total:
-        print("SUITE FAIL %d/%d announced=%d" % (len(CHECKS) - len(FAILS), total, len(CHECKS)))
+    criteria = len(set(GATE_IDS) | set(arm_ids(CHECKS)))
+    stray = [name.split()[0] for name in CHECKS
+             if name.split() and not ID_RE.match(name.split()[0])]
+    if len(CHECKS) != total or stray or not GATE_IDS:
+        print("SUITE FAIL %d/%d announced=%d arms=%d gate=%d graded=%d stray=%s"
+              % (len(CHECKS) - len(FAILS), total, len(CHECKS), total,
+                 len(GATE_IDS), criteria, stray or ("no gate rows" if not GATE_IDS else [])))
         return 1
-    print("SUITE %s %d/%d announced=%d"
-          % ("PASS" if not FAILS else "FAIL", total - len(FAILS), total, len(CHECKS)))
+    print("SUITE %s %d/%d announced=%d arms=%d gate=%d graded=%d"
+          % ("PASS" if not FAILS else "FAIL", total - len(FAILS), total,
+             len(CHECKS), len(CHECKS), len(GATE_IDS), criteria))
     if FAILS:
         print("failed=%s" % FAILS)
         return 1

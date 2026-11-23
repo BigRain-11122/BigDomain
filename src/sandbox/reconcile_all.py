@@ -7769,8 +7769,16 @@ SUITES = [
     # moment) and its negative control (an --apply the page never followed must
     # redden the gate) joined when tools/deliverable_index.py gained the derived
     # claims band. Counted from the suite's own announcement.
+    # R3353: 20 -> 23. The announcement was never re-read after the suite gained
+    # a third AC-DIX3 arm, a second AC-DIX19 arm, a second AC-CVL1 arm and the
+    # AC-CVL2 arm, so a green row read as an undeclared unit disagreement
+    # (SHARD red-unit undeclared=os-deliverable-index:23!=20). Measured now: 23
+    # arms over 21 gate rows, 23 distinct graded ids. The suite's closing row
+    # also names its unit (arms=<n> gate=<n> graded=<n>), so the pair can no
+    # longer be read as either unit by accident. Convention unchanged from the
+    # rows above: the number is the suite's own announcement total.
     ("os-deliverable-index",
-     os.path.join("..", "os", "test_deliverable_index.py"), 20),
+     os.path.join("..", "os", "test_deliverable_index.py"), 23),
     # R2798. tools/battery_shard.py decides whether a FAMILY of suites is green
     # and carried no battery row, so a tool that grades suites was graded only
     # by the run that graded them. AC-BSH1..AC-BSH8 pinned in src/os/backlog.md
