@@ -99,6 +99,7 @@ START_ALL = os.path.join(HERE, "start_all.py")
 NO_WINDOW = getattr(subprocess, "CREATE_NO_WINDOW", 0)
 
 TH32CS_SNAPPROCESS = 0x00000002
+PROCESS_QUERY_LIMITED_INFORMATION = 0x1000
 
 AF_INET = 2
 TCP_TABLE_OWNER_PID_LISTENER = 3
@@ -215,6 +216,67 @@ def descendants(root_pid, table=None):
         seen.append(pid)
         stack.extend(children.get(pid, []))
     return seen
+
+
+def process_start(pid):
+    """Creation time of pid as one integer, or None when refused.
+
+    R3340 (measured): the teardown test used to ask only "is this number still
+    in the process table", so a recycled pid read as a leftover and the launcher
+    then killed whatever had taken the number. The creation time is the OS's own
+    answer to "is this the same process I recorded", so it is read here and
+    compared before anything is called a leftover or reaped.
+    """
+    if not hasattr(ctypes, "WinDLL"):
+        return None
+    try:
+        kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
+        kernel32.OpenProcess.restype = ctypes.c_void_p
+        handle = kernel32.OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION,
+                                      False, int(pid))
+        if not handle:
+            return None
+        try:
+            bits = [wintypes.FILETIME() for _ in range(4)]
+            ok = kernel32.GetProcessTimes(ctypes.c_void_p(handle),
+                                         *(ctypes.byref(b) for b in bits))
+            if not ok:
+                return None
+            made = bits[0]
+            return (made.dwHighDateTime << 32) | made.dwLowDateTime
+        finally:
+            kernel32.CloseHandle(ctypes.c_void_p(handle))
+    except (OSError, AttributeError, ValueError):
+        return None
+
+
+def leftovers(started, table, births=None):
+    """Split (pid, exe, birth) records into (left, reused, gone).
+
+    left   the recorded pid is still the SAME process: same image name and, when
+           the creation time is readable, the same creation time;
+    reused the pid is answering but the process behind it is not the one this
+           run started (image changed, or creation time changed) - named and
+           never reaped, because killing it would kill a stranger;
+    gone   the pid is absent from the snapshot.
+    """
+    left, reused, gone = [], [], []
+    for pid, exe, birth in started:
+        row = table.get(pid)
+        if row is None:
+            gone.append(pid)
+            continue
+        actual = row[1]
+        if actual.casefold() != str(exe).casefold():
+            reused.append((pid, exe, actual, "image"))
+            continue
+        if birth is not None and births is not None:
+            now_birth = births.get(pid)
+            if now_birth is not None and now_birth != birth:
+                reused.append((pid, exe, actual, "creation-time"))
+                continue
+        left.append(pid)
+    return left, reused, gone
 
 
 def python_count(table):
@@ -552,7 +614,8 @@ def main(argv=None):
     # separately and never gated - measured at R3333: a clean run flagged one
     # conhost.exe as a leftover, and the same run without it read 14/14.
     now = process_table()
-    started = [(pid, now[pid][1]) for pid in descendants(os.getpid(), now)
+    started = [(pid, now[pid][1], process_start(pid))
+               for pid in descendants(os.getpid(), now)
                if not now[pid][1].lower().startswith("conhost")]
     hosts_seen = sum(1 for pid in descendants(os.getpid(), now)
                      if now[pid][1].lower().startswith("conhost"))
@@ -580,18 +643,32 @@ def main(argv=None):
     # the first version flagged one conhost.exe as a leftover on a clean run.
     settle_end = time.time() + args.settle
     table = process_table()
-    left = [pid for pid, _exe in started if pid in table] if table else []
+    births = {pid: process_start(pid) for pid, _e, _b in started
+              if pid in table} if table else {}
+    left, reused, _gone = leftovers(started, table, births)
     while left and time.time() < settle_end:
         time.sleep(0.25)
         table = process_table()
-        left = [pid for pid, _exe in started if pid in table] if table else []
+        births = {pid: process_start(pid) for pid, _e, _b in started
+                  if pid in table} if table else {}
+        left, reused, _gone = leftovers(started, table, births)
     settled = round(args.settle - max(0.0, settle_end - time.time()), 2)
     if table:
         named = ", ".join("%d:%s" % (pid, table[pid][1]) for pid in left) or "none"
         say("descendants=%d gone=%d/%d leftovers=%s console_hosts=%d"
             " python_now=%d settled=%.2fs"
-            % (len(started), len(started) - len(left), len(started), named,
+            % (len(started), len(started) - len(left) - len(reused),
+               len(started), named,
                hosts_seen, python_count(table), settled))
+        if reused:
+            # The pid answers but is not the process this run started (image or
+            # creation time changed). R3339 saw a survivor named ssh.exe in an
+            # arm whose only child was python, which is exactly this shape: a
+            # number that came back as somebody else. Named, never reaped.
+            say("reused=%d not_reaped=%s"
+                % (len(reused),
+                   ", ".join("%d:%s->%s(%s)" % (pid, was, now_exe, why)
+                             for pid, was, now_exe, why in reused)))
         clean = not left
         reaped = []
         for pid in left:

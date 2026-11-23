@@ -505,7 +505,7 @@ SUITES = [
     # process reads foreign:sock-pid-other - the same socket answering both ways
     # depending only on the report, which is what makes the OS reading carry the
     # verdict instead of the report's self-description.
-    ("os-sandbox-open", "test_open_sandbox.py", 8),
+    ("os-sandbox-open", "test_open_sandbox.py", 9),
     # lobby room picker and event ledger (R2464): GET /lobby/api/rooms answers
     # the server OWN configured rooms (never a literal in the module or page),
     # the page gains a selector that subscribes the new room and releases the

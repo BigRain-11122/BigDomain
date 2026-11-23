@@ -1,0 +1,20 @@
+R3340 probe (read-only, loopback only, no network) - teardown identity
+probe pid=20392
+children alive=20708,61260 exited_pid=60656 rc=0
+descendants=5
+  pid=61260 ppid=20392 parent_exe=python.exe exe=python.exe
+  pid=60088 ppid=61260 parent_exe=python.exe exe=conhost.exe
+  pid=20708 ppid=20392 parent_exe=python.exe exe=python.exe
+  pid=61200 ppid=20708 parent_exe=python.exe exe=conhost.exe
+  pid=60236 ppid=20392 parent_exe=python.exe exe=conhost.exe
+exited_pid_in_table=False
+shipped_form_left=[20708, 61260] (a pid whose exe changed is still counted)
+
+R3340 shipped launcher after the fix (real run, empty prev table):
+preoccupied=none
+sandbox up: hub=http://127.0.0.1:51475/hub/ faces=8/8
+descendants=7 gone=7/7 leftovers=none console_hosts=7 python_now=3 settled=0.02s
+VERDICT PASS hub=http://127.0.0.1:51475/hub/ faces=8/8 clean=True
+
+R3340 AC-OSB9 (five injected readings, run in the shipped suite):
+PASS AC-OSB9 same=left image=reused birth=reused absent=gone notime=left old_form_kills=True

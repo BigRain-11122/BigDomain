@@ -1,0 +1,5 @@
+R3340 negative control - one injected table, two readers
+old form (pid in table) on {4242: (1, 'ssh.exe')} -> left=[4242] : would reap a stranger
+shipped leftovers() on the same table -> left=[] reused=[(4242, 'python.exe', 'ssh.exe', 'image')]
+shipped leftovers() same image, new creation time -> left=[] reused=[(4242, 'python.exe', 'python.exe', 'creation-time')]
+shipped leftovers() without creation time -> left=[4242] reused=[] (image test only)

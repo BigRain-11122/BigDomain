@@ -54,6 +54,15 @@ OS itself can name the owner instead of the report):
            unrecorded pid reads foreign:sock-pid-unrecorded; and a refused
            table (listen_owners answering {}) falls back instead of inventing an
            owner.
+  AC-OSB9  a recorded pid that came back as a DIFFERENT process is not called a
+           leftover and never reaped (R3339 measured a survivor named ssh.exe
+           in an arm whose only child was python: a number recycled by the OS).
+           Five injected readings: same image and same creation time reads
+           left; a changed image reads reused(image); the same image with a new
+           creation time reads reused(creation-time); an absent pid reads gone;
+           a host whose creation time cannot be read keeps the image test and
+           says so. The old "pid in table" form is reproduced in the same arm
+           as the decoy, so the arm shows what it is protecting against.
 
 Cost measured at R3333: the two sandbox runs are about 3.6s each (the faces come
 up and are torn down for real); the collector arm and the socket arms are under
@@ -77,7 +86,7 @@ MODULE = os.path.join(HERE, "open_sandbox.py")
 WRITER = os.path.join(ROOT, "tools", "qa_log.py")
 REGISTRY = os.path.join(HERE, "reconcile_all.py")
 NO_WINDOW = getattr(subprocess, "CREATE_NO_WINDOW", 0)
-TOTAL = 8
+TOTAL = 9
 
 
 class _TableAbsent(Exception):
@@ -515,6 +524,51 @@ def main():
                     item.close()
                 except OSError:
                     pass
+
+    # ---------------- AC-OSB9 ----------------
+    try:
+        # Five injected readings - no OS permission needed. The question is
+        # whether a number that came back as SOMEBODY ELSE is called a leftover
+        # (and then killed) or named as reused.
+        mine = (4242, "python.exe", 111)
+
+        left, reused, gone = module.leftovers([mine], {4242: (1, "python.exe")},
+                                              {4242: 111})
+        assert (left, reused, gone) == ([4242], [], []), (
+            "the same process read %r" % ((left, reused, gone),))
+
+        left, reused, gone = module.leftovers([mine], {4242: (1, "ssh.exe")},
+                                              {4242: 999})
+        assert left == [], "a pid whose image changed was called a leftover"
+        assert reused and reused[0][3] == "image", (
+            "an image change read %r" % (reused,))
+
+        left, reused, gone = module.leftovers([mine], {4242: (1, "python.exe")},
+                                              {4242: 999})
+        assert left == [], (
+            "a recycled pid with a new creation time was called a leftover")
+        assert reused and reused[0][3] == "creation-time", (
+            "a creation-time change read %r" % (reused,))
+
+        left, reused, gone = module.leftovers([mine], {}, {})
+        assert (left, reused, gone) == ([], [], [4242]), (
+            "an absent pid read %r" % ((left, reused, gone),))
+
+        # Boundary: a host whose creation time cannot be read keeps the image
+        # test and says so, instead of inventing a decision.
+        left, reused, gone = module.leftovers([mine], {4242: (1, "python.exe")},
+                                              None)
+        assert left == [4242] and reused == [], (
+            "a host without creation time read %r" % ((left, reused, gone),))
+
+        # Load-bearing: the SHIPPED form of R3339 was "pid in table".
+        old = [pid for pid, _e, _b in [mine] if pid in {4242: (1, "ssh.exe")}]
+        assert old == [4242], "the decoy does not reproduce the old shape"
+        print("PASS AC-OSB9 same=left image=reused birth=reused absent=gone"
+              " notime=left old_form_kills=True")
+    except (AssertionError, AttributeError) as exc:
+        failed += 1
+        print("FAIL AC-OSB9 :: %s" % exc)
 
     if failed:
         print("SUITE FAIL %d/%d" % (TOTAL - failed, TOTAL))
