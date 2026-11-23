@@ -1,0 +1,9 @@
+PROBE R3350 fold and re-pin readings (local, zero network)
+FOLD before: bytes=85050 gate=78500 margin=-6550 verdict=FOLD-DUE log_lines=155
+STATE FOLD bytes=74615 gate=78500 margin=3885 log_lines=134 verdict=FOLD-CLEAR archive=present
+{"state_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\src\\os\\state.json", "archive_path": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\logs\\state-log-archive-2026-11.md", "bytes": 74615, "log_lines": 134, "gate": 78500, "margin": 3885, "fold_needed": false, "verdict": "FOLD-CLEAR", "archive_present": true}
+CENSUS before: pins=25 ambient=3 foreign=9 private=13
+PIN CENSUS files=766 pins=21 ambient=3 foreign=5 unknown=0 private=13 bom=1 unreadable=0
+FAMILY sandbox pins=21 ambient=3 foreign=5 unknown=0 private=13
+SUITE PASS 8/8
+SUITE PASS 8/8

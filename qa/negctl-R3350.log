@@ -1,0 +1,4 @@
+NEGCTL clean                old=True new=True days=['2026-10-24']
+NEGCTL same-day-two-rows    old=False new=True days=['2026-10-24', '2026-10-24']
+NEGCTL appended-other-day   old=False new=False days=['2026-10-24', '2026-10-23']
+NEGCTL VERDICT old reds on same-day growth (false red) while new stays green, and both red on an appended other day

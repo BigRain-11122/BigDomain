@@ -25,6 +25,7 @@ import contextlib
 import io
 import json
 import os
+import re
 import sys
 import tempfile
 
@@ -35,6 +36,17 @@ import funnel_daily as fd  # noqa: E402
 
 DAY_A = "2026-10-23"
 DAY_B = "2026-10-24"
+
+# R3350 REPIN (R3349 board head item 2): the old AC-FCR1 arm counted the
+# payload marker (second.count(...) == 1), which pinned the SHAPE of one
+# day's stdout in a number. The law is "no earlier day's payload survives",
+# so the reading now NAMES the days that survive instead of counting them.
+DAY_RE = re.compile(rb"FUNNEL-DAILY day=(\d{4}-\d{2}-\d{2})")
+
+
+def payload_days(blob):
+    """The days named by the run payloads still in `blob`, in file order."""
+    return [day.decode("ascii") for day in DAY_RE.findall(blob)]
 
 
 def _world(root):
@@ -115,8 +127,16 @@ def case_fcr1(tmp):
         "AC-FCR1 same path must hold the second run's bytes")
     assert ("day=%s" % DAY_A).encode() not in second, (
         "AC-FCR1 day-A marker must be gone (overwrite, not append)")
-    assert second.count(b"FUNNEL-DAILY day=") == 1, (
-        "AC-FCR1 exactly one run payload may remain")
+    survivors = payload_days(second)
+    assert set(survivors) == {DAY_B}, (
+        "AC-FCR1 only the second run's payload may remain (named days=%r)"
+        % (survivors,))
+    # Load-bearing: an appended day must be impossible to read as clean, so
+    # this judgment is not a rename of a count that always answers one.
+    appended = second + b"FUNNEL-DAILY day=" + DAY_A.encode() + b" rows=3\n"
+    assert set(payload_days(appended)) != {DAY_B}, (
+        "AC-FCR1 the reading must bite on an appended day (%r)"
+        % (payload_days(appended),))
     assert second.endswith(b"\n") and not second.endswith(b"\n\n"), (
         "AC-FCR1 exactly one trailing newline")
 

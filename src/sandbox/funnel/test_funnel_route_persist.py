@@ -106,6 +106,15 @@ def _dispatch_rows(db_path):
     return [tuple(r) for r in rows]
 
 
+def _dispatch_lead_ids(db_path):
+    con = sqlite3.connect(db_path)
+    try:
+        return [row[0] for row in con.execute(
+            "SELECT lead_id FROM dispatches ORDER BY lead_id").fetchall()]
+    finally:
+        con.close()
+
+
 def _schema(db_path):
     con = sqlite3.connect(db_path)
     try:
@@ -236,16 +245,26 @@ def _frtp4(world, tmp):
 
 
 def _frtp5(world, tmp):
+    # R3350 REPIN (R3349 board head item 2): the three arms below used to pin
+    # ambient counts (rows == 11, lifetime sum == 9, lifetime sum == 11). The
+    # laws are "every seeded lead is dispatched open" and "the lifetime face
+    # accounts for every seeded lead", so both sides now come from the fixture
+    # itself and the reading names the leads rather than counting the tree.
+    anchor_leads = [row["lead_id"] for row in D1_LEADS + D2_LEADS + D3_LEADS]
+    live_leads = anchor_leads + [row["lead_id"] for row in D3_LEADS_BATCH2]
     face = fd.FunnelDaily(world["db"])
     try:
         faces = _faces(face)
-        rows = _dispatch_rows(world["db"])
+        lead_ids = _dispatch_lead_ids(world["db"])
     finally:
         face.close()
-    assert len(rows) == 11, "AC-FRTP5 rows %d" % len(rows)
-    assert sum(json.loads(world["snapshot"]["lifetime"]).values()) == 9, \
-        "AC-FRTP5 anchor lifetime sum"
-    assert sum(faces["lifetime"].values()) == 11, \
+    assert lead_ids == sorted(live_leads), \
+        "AC-FRTP5 dispatched leads %r" % (lead_ids,)
+    anchor_faces = json.loads(world["snapshot"]["lifetime"])
+    assert sum(anchor_faces.values()) == len(anchor_leads), \
+        "AC-FRTP5 anchor lifetime must account for every anchor lead %r" \
+        % (anchor_faces,)
+    assert sum(faces["lifetime"].values()) == len(live_leads), \
         "AC-FRTP5 lifetime sum %r" % faces["lifetime"]
     assert faces["d1"] == ANCHOR_D1, "AC-FRTP5 d1 drifted"
     assert faces["d2"] == ANCHOR_D2, "AC-FRTP5 d2 drifted"
