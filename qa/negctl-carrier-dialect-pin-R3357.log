@@ -1,0 +1,35 @@
+=== ARM A: law line for docs/status-export.json withdrawn ===
+  | PASS AC-CDPIN1 the carrier dialect is pinned in .gitattributes rc=0 los=src/os/state.json: text: set;src/os/state.json: eol: crlf pins=1
+  | PASS AC-CDPIN2 an unpinned carrier lands bare LF, the pinned one cannot free=(42665, 0, 94) pinned=(42759, 94, 0) pinned2=(42759, 94, 0) blob_free_crlf=0
+  | PASS AC-CDPIN3 the fold names an LF carrier instead of carrying it code=E_SF_EOL hint=True control=CRLF toolkit_lf=refused
+  | PASS AC-CDPIN4 the live carrier needs no repair and the refusal is single live=(42759, 94, 0) e_sf_eol_sites=2
+  | FAIL AC-CDPIN5 every hard-reader carrier is pinned and no tolerant one is missing=['docs/status-export.json(docs/status-export.json: text: unspecifi)'] decorated=none law_lines=7
+  | PASS AC-CDPIN6 the tolerant readers give one answer for both dialects tick_lf=7 tick_crlf=7 export_eq=True baseline_eq=True
+  | PASS AC-CDPIN7 the same pin law works on a carrier that needs no pin free=(36792, 195, 0) pinned=[(36597, 0, 195), (36597, 0, 195), (36597, 0, 195)]
+  | FAIL AC-CDPIN8 the hand-written table and the law lines cannot drift apart law_unrepresented=none strict_unpinned=['docs/status-export.json'] scan_unplaced=none blind=['qa_log.py', 'state.json', 'tech.md']
+suite: 8 assertions over 8 criteria
+SUITE FAIL 6/8 failed=['AC-CDPIN5 every hard-reader carrier is pinned and no tolerant one is', 'AC-CDPIN8 the hand-written table and the law lines cannot drift apart']
+
+=== ARM B: tolerant carrier heartbeat.txt pinned ===
+  | PASS AC-CDPIN1 the carrier dialect is pinned in .gitattributes rc=0 los=src/os/state.json: text: set;src/os/state.json: eol: crlf pins=1
+  | PASS AC-CDPIN2 an unpinned carrier lands bare LF, the pinned one cannot free=(42665, 0, 94) pinned=(42759, 94, 0) pinned2=(42759, 94, 0) blob_free_crlf=0
+  | PASS AC-CDPIN3 the fold names an LF carrier instead of carrying it code=E_SF_EOL hint=True control=CRLF toolkit_lf=refused
+  | PASS AC-CDPIN4 the live carrier needs no repair and the refusal is single live=(42759, 94, 0) e_sf_eol_sites=2
+  | FAIL AC-CDPIN5 every hard-reader carrier is pinned and no tolerant one is missing=none decorated=['heartbeat.txt'] law_lines=9
+  | PASS AC-CDPIN6 the tolerant readers give one answer for both dialects tick_lf=7 tick_crlf=7 export_eq=True baseline_eq=True
+  | PASS AC-CDPIN7 the same pin law works on a carrier that needs no pin free=(36792, 195, 0) pinned=[(36597, 0, 195), (36597, 0, 195), (36597, 0, 195)]
+  | FAIL AC-CDPIN8 the hand-written table and the law lines cannot drift apart law_unrepresented=['heartbeat.txt'] strict_unpinned=none scan_unplaced=none blind=['qa_log.py', 'state.json', 'tech.md']
+suite: 8 assertions over 8 criteria
+SUITE FAIL 6/8 failed=['AC-CDPIN5 every hard-reader carrier is pinned and no tolerant one is', 'AC-CDPIN8 the hand-written table and the law lines cannot drift apart']
+
+=== ARM C: qa_log.py stripped from BLIND_NAMES ===
+  | PASS AC-CDPIN1 the carrier dialect is pinned in .gitattributes rc=0 los=src/os/state.json: text: set;src/os/state.json: eol: crlf pins=1
+  | PASS AC-CDPIN2 an unpinned carrier lands bare LF, the pinned one cannot free=(42665, 0, 94) pinned=(42759, 94, 0) pinned2=(42759, 94, 0) blob_free_crlf=0
+  | PASS AC-CDPIN3 the fold names an LF carrier instead of carrying it code=E_SF_EOL hint=True control=CRLF toolkit_lf=refused
+  | PASS AC-CDPIN4 the live carrier needs no repair and the refusal is single live=(42759, 94, 0) e_sf_eol_sites=2
+  | PASS AC-CDPIN5 every hard-reader carrier is pinned and no tolerant one is missing=none decorated=none law_lines=8
+  | PASS AC-CDPIN6 the tolerant readers give one answer for both dialects tick_lf=7 tick_crlf=7 export_eq=True baseline_eq=True
+  | PASS AC-CDPIN7 the same pin law works on a carrier that needs no pin free=(36792, 195, 0) pinned=[(36597, 0, 195), (36597, 0, 195), (36597, 0, 195)]
+  | FAIL AC-CDPIN8 the hand-written table and the law lines cannot drift apart law_unrepresented=none strict_unpinned=none scan_unplaced=none blind=['qa_log.py', 'state.json', 'tech.md']
+suite: 8 assertions over 8 criteria
+SUITE FAIL 7/8 failed=['AC-CDPIN8 the hand-written table and the law lines cannot drift apart']

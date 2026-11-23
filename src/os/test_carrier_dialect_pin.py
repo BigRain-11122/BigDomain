@@ -41,6 +41,15 @@ carrier list and the "which readers are hard" judgement behind it - can be
 derived from shipped code, and whether the mixed-dialect archives cost a
 reader anything (tmp/probe_R3210.py).
 
+R3357 completed the table instead of withdrawing a law line: three law lines
+already in .gitattributes had no STRICT row, so AC-CDPIN8 named them
+law_unrepresented. Each was measured against its shipped dialect-hard
+consumer before the row was added - docs/status-export.json is owed by its
+line-anchored writer (R3303, AC-SXF34 grades the raw \r count), and
+preview/apimarket-report.{html,json} by check_sizes()' byte comparison
+against os.path.getsize (R3292). .gitattributes is not touched by this
+window; the table follows the law it already had.
+
 Derivation measured NOT VIABLE: scanning the refusal codes (E_STATE_LAYOUT,
 E_SF_EOL, E_CLG_CARRIER_LAYOUT, E_CLG_MATRIX, evidence_dialect, lf_only) and
 the path literals beside them reaches 2 of the 5 STRICT rows and, of the 10
@@ -193,9 +202,23 @@ STRICT = [
     ('docs/sandbox-suite-matrix.md', 'text: set', 'eol: lf'),
     ('tools/hooks/pre-commit', 'text: set', 'eol: lf'),
     ('qa/probe-R3208.log', 'text: unset', 'eol: unspecified'),
+    # R3357: three law lines added by earlier windows had no row here, so
+    # AC-CDPIN8 read them as law_unrepresented. Both are dialect-hard, each
+    # measured before the row was added, and the law line stays.
+    # docs/status-export.json is owed by its WRITER: tools/status_export_fresh.py
+    # anchors every edit on ^<indent>"key": ...(,?)$ and $ does not match
+    # before a CR (R3303, graded there as AC-SXF34 via the raw \r count).
+    # preview/apimarket-report.{html,json} are owed by a byte-counting READER:
+    # src/sandbox/ledger/apimarket_report.py check_sizes() compares the sizes
+    # block against os.path.getsize (R3292: 59515 vs 61720 bytes on a flip).
+    ('docs/status-export.json', 'text: set', 'eol: lf'),
+    ('preview/apimarket-report.html', 'text: set', 'eol: lf'),
+    ('preview/apimarket-report.json', 'text: set', 'eol: lf'),
 ]
 TOLERANT = [
-    'docs/status-export.json',
+    # R3357: docs/status-export.json left this list because R3303 corrected its
+    # measurement - the reader tolerates CRLF but the writer refuses it - and
+    # the pin it already carries is owed, not decoration.
     'heartbeat.txt',
     'qa/writer-census-baseline.json',
     'logs/state-log-archive-2026-11.md',
@@ -216,7 +239,12 @@ NON_CARRIER = ['src/os/backlog.md', 'src/os/closeout.py',
                'src/os/suite_matrix_reconcile.py']
 CODE_TOKENS = ['E_STATE_LAYOUT', 'E_SF_EOL', 'E_CLG_CARRIER_LAYOUT',
                'E_CLG_MATRIX', 'evidence_dialect', 'lf_only']
-BLIND_NAMES = ['state.json', 'tech.md']
+# R3357 measured a third blind name: tools/closeout_gate.py:96 and :294 write
+# the shipped tool as the bare `qa_log.py`, the same shape as state.json
+# (src/os/state.json) and tech.md (state/queue/tech.md) - prose shorthand that
+# a law glob cannot resolve and that is not a carrier. Named here rather than
+# repaired in the prose it comes from.
+BLIND_NAMES = ['qa_log.py', 'state.json', 'tech.md']
 
 
 def main():
