@@ -43,7 +43,22 @@ PREVIEW = os.path.join(ROOT, "preview")
 OUT_JSON = os.path.join(PREVIEW, "battery-shard-report.json")
 OUT_HTML = os.path.join(PREVIEW, "battery-shard-report.html")
 SHARD = os.path.join(HERE, "battery_shard.py")
-ROUND = "R3082"
+STATE = os.path.join(ROOT, "src", "os", "state.json")
+
+
+def live_round():
+    """The round this page is rendered in, read from the state tick (R3355).
+
+    The page printed the literal R3082 for 250+ rounds while being regenerated
+    daily - a CEO-visible face naming a round that no longer existed. The tick
+    is the only number that moves with the tree; a missing or unreadable state
+    file reads R? instead of inventing one.
+    """
+    try:
+        with io.open(STATE, encoding="utf-8") as handle:
+            return "R%d" % int(json.load(handle)["tick"])
+    except (OSError, ValueError, KeyError, TypeError):
+        return "R?"
 
 # label prefix, family key, what the family guards.  These are the REQUEST;
 # every number that comes back is measured.
@@ -189,7 +204,7 @@ def measure():
     red = [f["key"] for f in fams if f["rc"] != 0 or f["parse"] != "ok"]
     verdict = "PASS" if not red else "RED"
     payload = {
-        "round": ROUND,
+        "round": live_round(),
         "registry": {"suites": suites, "criteria": crit},
         "families": fams,
         "totals": {

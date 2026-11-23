@@ -102,12 +102,12 @@
       {
         "step": "mint_to_pool 100",
         "ok": true,
-        "out": "7f6b4c3a4c5eb4a0"
+        "out": "ba2a0699456e3082"
       },
       {
         "step": "grant_reward cocreate",
         "ok": true,
-        "out": "e8328738a5a63023"
+        "out": "f6f6ab974e1c688c"
       },
       {
         "step": "balance",
@@ -191,7 +191,7 @@
     "operation": {
       "applied": true,
       "reason": "one entry removed from a multi-entry tx",
-      "tx_id": "7f6b4c3a4c5eb4a0",
+      "tx_id": "ba2a0699456e3082",
       "entry_id": 1,
       "entries_before": 2,
       "entries_after": 1
@@ -276,7 +276,7 @@
     "real_empty": true
   },
   "sizes": {
-    "html": 8656,
-    "json": 6433
+    "html": 7963,
+    "json": 6151
   }
 }

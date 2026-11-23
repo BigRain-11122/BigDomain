@@ -1,0 +1,8 @@
+R3355 probe, read-only, zero network, zero socket beyond loopback stubs:
+1) report page red list re-read: 6 suites (lobby-hub-ledger/ugc/panel/member, os-ledger-archive, os-ledger-reconcile-face)
+2) four lobby suites all printed the same failing line: AC-*2 listener not seen: {'checkout': False, 'ledger': False, 'member': False, 'panel': False, 'ugc': False}
+3) hub_page.face_serves has required 200 + text/html since R3332, so a bare TCP listener is now DEAD by law, not a bug
+4) bare listener on the member port reads dead; a 200 text/html stub on the same port reads live; closing reads dead
+5) tools/ledger_reconcile_face.py --check printed VERDICT FAIL 1 / AC-LRC5 landed html is not a function of the landed json
+6) audit_fold_carry(real archives) printed FOLD-CARRY FAIL E_LFC_CARRY since=2914 windows=83 gaps=R3112(w3135@state-log-archive-2026-11.md:241:5790)
+7) R3112 tokens line present in archives=False in live log=False; the R3112 narrative says the tick moved 3111 -> 3112 on an alignment round

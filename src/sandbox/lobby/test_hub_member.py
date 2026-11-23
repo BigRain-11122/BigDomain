@@ -15,11 +15,13 @@ Usage: python test_hub_member.py
 Exit: 0 = SUITE PASS 6/6, 2 = FAIL.
 """
 
+import http.server as http_server
 import json
 import os
 import socket
 import subprocess
 import sys
+import threading
 import urllib.error
 import urllib.request
 
@@ -66,12 +68,38 @@ def free_port():
 
 
 def listener(port):
-    """A real listening socket that accepts nothing: enough for a TCP probe."""
+    """A real listening socket that accepts nothing.
+
+    R3355: the law this arm measures moved at R3332 - a face is live only when
+    its published root answers 200 text/html, so a bare listener must read
+    DEAD. It stays as the negative arm that proves the probe is not a connect
+    test wearing a live map's clothes.
+    """
     sock = socket.socket()
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     sock.bind(("127.0.0.1", port))
     sock.listen(8)
     return sock
+
+
+def serving(port):
+    """A stub face that answers 200 text/html on any path (R3355)."""
+    class Handler(http_server.BaseHTTPRequestHandler):
+        def do_GET(self):
+            body = b"<html><body>stub</body></html>"
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+
+        def log_message(self, *args):
+            pass
+
+    httpd = http_server.ThreadingHTTPServer(("127.0.0.1", port), Handler)
+    thread = threading.Thread(target=httpd.serve_forever, daemon=True)
+    thread.start()
+    return httpd
 
 
 def ac_hmb1():
@@ -177,18 +205,28 @@ def ac_hmb2():
         if live.get("member") is not False:
             bad += 1
             print("  AC-HMB2 dead member face read alive: %r" % (live,))
-        held = listener(faces["face_ports"]["member"])
+        bare = listener(faces["face_ports"]["member"])
+        try:
+            code, raw = http(url)
+            live = json.loads(raw.decode("utf-8")).get("live") or {}
+            if live.get("member") is not False:
+                bad += 1
+                print("  AC-HMB2 bare listener read alive: %r" % (live,))
+        finally:
+            bare.close()
+        held = serving(faces["face_ports"]["member"])
         try:
             code, raw = http(url)
             live = json.loads(raw.decode("utf-8")).get("live") or {}
             if live.get("member") is not True:
                 bad += 1
-                print("  AC-HMB2 listener not seen: %r" % (live,))
+                print("  AC-HMB2 serving face not seen: %r" % (live,))
             if live.get("ugc") is not False or live.get("panel") is not False:
                 bad += 1
                 print("  AC-HMB2 unrelated face flipped: %r" % (live,))
         finally:
-            held.close()
+            held.shutdown()
+            held.server_close()
         code, raw = http(url)
         live = json.loads(raw.decode("utf-8")).get("live") or {}
         if live.get("member") is not False:
