@@ -7757,7 +7757,7 @@ SUITES = [
     # BEFORE this suite.) The suite drives the real gate twice - clean, then
     # with module paths pointed at a tampered private copy.
     ("os-ledger-reconcile-face",
-     os.path.join("..", "os", "test_ledger_reconcile_face.py"), 8),
+     os.path.join("..", "os", "test_ledger_reconcile_face.py"), 9),
     # R2796. tools/deliverable_index.py gates the CEO ENTRY PAGE with
     # AC-DIX1..AC-DIX14 and had no battery row, so the one page every window
     # re-renders was guarded only by the run that rendered it. AC-DIX1..14

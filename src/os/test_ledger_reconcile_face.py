@@ -192,9 +192,45 @@ def main():
         r'\("' + re.escape(NAME) + r'",\s*os\.path\.join\([^)]*\),\s*(\d+)\)',
         registry)
     ok("AC-LRB8", ascii_only(TOOL) and ascii_only(os.path.abspath(__file__))
-       and row == ["8"],
+       and row == ["9"],
        "tool_ascii=%s suite_ascii=%s rows=%s"
        % (ascii_only(TOOL), ascii_only(os.path.abspath(__file__)), row))
+
+    # AC-LRB9 - the composed post-render channel is load-bearing: a pair whose
+    # html is missing the shipped block, or whose block drifted by one control,
+    # reddens AC-LRC5 on a private copy and leaves the repo pair untouched.
+    arms = []
+    for arm in ("no-block", "block-drift"):
+        world = tempfile.mkdtemp(prefix="lrb9-")
+        temp_html = os.path.join(world, "face.html")
+        temp_json = os.path.join(world, "face.json")
+        try:
+            text = html_text
+            if arm == "no-block":
+                text = tool.face_backhop.BLOCK_RE.sub("", text, count=1)
+            else:
+                hit = re.search(r'data-back-controls="(\d+)"', text)
+                if hit:
+                    text = (text[:hit.start(1)] + str(int(hit.group(1)) + 1)
+                            + text[hit.end(1):])
+            with open(temp_html, "wb") as handle:
+                handle.write(text.encode("utf-8"))
+            with open(temp_json, "wb") as handle:
+                handle.write(json.dumps(doc, ensure_ascii=False,
+                                        indent=2).encode("utf-8"))
+            keep = (tool.HTML, tool.JSON)
+            tool.HTML, tool.JSON = temp_html, temp_json
+            try:
+                findings = tool.check()
+            finally:
+                tool.HTML, tool.JSON = keep
+            named = any(f.startswith("AC-LRC5") for f in findings)
+            pair_same = (stat_sig(OUT_HTML) == before["html"]
+                         and stat_sig(OUT_JSON) == before["json"])
+            arms.append(named and pair_same)
+        finally:
+            shutil.rmtree(world, ignore_errors=True)
+    ok("AC-LRB9", bool(arms) and all(arms), "arms=%s" % arms)
 
     total = len(CHECKS)
     passed = total - len(FAILS)

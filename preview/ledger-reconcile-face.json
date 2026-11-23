@@ -102,12 +102,12 @@
       {
         "step": "mint_to_pool 100",
         "ok": true,
-        "out": "036213e3f78b25ac"
+        "out": "fd49578b6e6f1a09"
       },
       {
         "step": "grant_reward cocreate",
         "ok": true,
-        "out": "a9b12786e84cb4c9"
+        "out": "a9d7db1400a72421"
       },
       {
         "step": "balance",
@@ -191,8 +191,8 @@
     "operation": {
       "applied": true,
       "reason": "one entry removed from a multi-entry tx",
-      "tx_id": "036213e3f78b25ac",
-      "entry_id": 1,
+      "tx_id": "a9d7db1400a72421",
+      "entry_id": 3,
       "entries_before": 2,
       "entries_after": 1
     },

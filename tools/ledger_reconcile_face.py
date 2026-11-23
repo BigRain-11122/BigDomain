@@ -43,6 +43,11 @@ import sys
 import tempfile
 
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+_TOOLS = os.path.join(HERE, "tools")
+if _TOOLS not in sys.path:
+    sys.path.insert(0, _TOOLS)
+import face_backhop  # noqa: E402  (the shipped post-render channel, one definition)
+
 LDIR = os.path.join(HERE, "src", "sandbox", "ledger")
 SCRIPT = os.path.join(LDIR, "reconcile.py")
 CONFIG = os.path.join(LDIR, "config.json")
@@ -50,6 +55,7 @@ LIVE_DB = os.path.join(LDIR, "ledger.db")
 PREVIEW = os.path.join(HERE, "preview")
 HTML = os.path.join(PREVIEW, "ledger-reconcile-face.html")
 JSON = os.path.join(PREVIEW, "ledger-reconcile-face.json")
+FACE = "ledger-reconcile-face.html"
 
 CHECK_RE = re.compile(r"^(\d+)\s+([a-z0-9][a-z0-9\-]*)\s+(PASS|FAIL)(?:\s+n=(\d+)\s*(.*))?$")
 DETAIL_RE = re.compile(r"^\s{2,}([a-z][a-z0-9\-]*):\s*(.*)$")
@@ -415,12 +421,24 @@ def render_html(doc):
     return "\n".join(out) + "\n"
 
 
+def compose(html):
+    """The shipped post-render channel is part of this face, not an outside edit.
+
+    face_backhop appends a visible way back and, by its AC-FBH5, records the
+    post-injection byte count in the sibling json. A pair whose html lacks that
+    block is a pair the channel has not finished, so composing it here from the
+    channel's own function keeps AC-LRC5 a fixed point of the whole chain
+    instead of a law the chain cannot satisfy by construction.
+    """
+    return face_backhop.inject_text(html, FACE)[0]
+
+
 def render(write=True):
     doc = build_doc()
     html = ""
     text = ""
-    for _ in range(6):
-        html = render_html(doc)
+    for _ in range(8):
+        html = compose(render_html(doc))
         text = json.dumps(doc, ensure_ascii=False, indent=2) + "\n"
         hb = len(html.encode("utf-8"))
         jb = len(text.encode("utf-8"))
@@ -488,8 +506,11 @@ def check():
         fails.append("AC-LRC5 recorded html bytes != disk")
     if landed["sizes"]["json"] != os.path.getsize(JSON):
         fails.append("AC-LRC5 recorded json bytes != disk")
-    if landed_html != render_html(landed):
-        fails.append("AC-LRC5 landed html is not a function of the landed json")
+    if landed_html != compose(render_html(landed)):
+        fails.append(
+            "AC-LRC5 landed html is not a function of the landed json through the"
+            " shipped post-render channel"
+        )
 
     # AC-LRC6 offline
     for bad in FORBIDDEN:
