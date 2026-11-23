@@ -1205,6 +1205,115 @@ def main():
     ok(lab.get(0) == 'R1041' and lab.get(2) == 'R1042' and lab.get(1) is None,
        'round label is the first bare round token, null when absent (AC-LTW6)')
 
+    # ---- two-part fold summary (AC-2PS1..AC-2PS6, R3378 slice) ----
+    # The old contract was "one free-text line": a machine could not verify it
+    # and a reader could not read the 70-token form. These arms pin the one
+    # composer and the one reading against the writer that has to obey them.
+    S2_LOGS = ['2026-11-24 R9101 alpha AC-A1 ' + 'z' * 80,
+               '2026-11-24 R9102 beta AC-B2',
+               '2026-11-24 R9103 gamma']
+    sw = tempfile.mkdtemp(prefix='bd-2ps-')
+    s2path = build_ps_state(sw, S2_LOGS)
+
+    composed, cerr = T.compose_summary('one human sentence',
+                                       ['AC-B2', 'AC-A1', 'AC-B2'])
+    ok(cerr is None and composed == 'one human sentence | tokens: AC-A1,AC-B2',
+       'composer dedupes and sorts the token part (AC-2PS1)')
+    ok(composed.count(T.SUMMARY_SEP) == 1,
+       'composer emits exactly one separator (AC-2PS1)')
+    ok(T.compose_summary('s', ['not a token'])[1] is not None,
+       'composer refuses a non-PAT token (AC-2PS1)')
+
+    rc, out, err = run(sw, 'fold', '--round', 'R9101', '--fold-no', '911',
+                       '--desc', 'two-part dry', '--window-tail', '3',
+                       '--summary-sentence', 'two part dry run')
+    pl2 = json.loads(out)
+    ok(rc == 0 and pl2['summary_source'] == 'sentence'
+       and pl2['summary_two_part'] is True,
+       'fold --summary-sentence composes a two-part summary (AC-2PS1)')
+    ok(pl2['token_missing'] == [] and pl2['token_ok'] is True,
+       'the token part is the folded window own PAT set (AC-2PS2)')
+    ok(pl2['summary_head'].endswith('tokens: AC-A1,AC-B2'),
+       'dry-run names every window token in the summary (AC-2PS2)')
+
+    rc, out, err = run(sw, 'fold', '--round', 'R9102', '--fold-no', '912',
+                       '--desc', 'tokenless', '--window-tail', '1',
+                       '--summary-sentence', 'tokenless window')
+    pl3 = json.loads(out)
+    ok(rc == 0 and pl3['summary_head'].endswith('tokens: none')
+       and pl3['token_ok'] is True,
+       'a token-free window composes tokens: none (AC-2PS2)')
+
+    pre_bytes = open(s2path, 'rb').read()
+    pre_mtime = os.stat(s2path).st_mtime_ns
+    parc_path = os.path.join(sw, 'logs', archive_name())
+    pre_arc = open(parc_path, 'rb').read()
+    pre_tree = sorted(os.listdir(os.path.join(sw, 'logs')))
+    rc, out, err = run(sw, 'fold', '--round', 'R9103', '--fold-no', '913',
+                       '--desc', 'budget', '--window-tail', '2',
+                       '--summary-sentence', 'budget arm',
+                       '--summary-budget', '20')
+    ok(rc == 2 and 'E_SUMMARY_BUDGET' in err and out.strip() == '',
+       'an over-budget summary refuses by name before any write (AC-2PS3)')
+    ok(open(s2path, 'rb').read() == pre_bytes
+       and os.stat(s2path).st_mtime_ns == pre_mtime
+       and open(parc_path, 'rb').read() == pre_arc
+       and sorted(os.listdir(os.path.join(sw, 'logs'))) == pre_tree,
+       'a refused fold moves no state, archive or backup byte (AC-2PS3)')
+    rc, out, err = run(sw, 'fold', '--round', 'R9104', '--fold-no', '914',
+                       '--desc', 'empty', '--window-tail', '1',
+                       '--summary-sentence', '   ')
+    ok(rc == 2 and 'E_SUMMARY_SENTENCE' in err,
+       'an empty sentence refuses by name (AC-2PS3)')
+    sfile = os.path.join(sw, 'one.txt')
+    open(sfile, 'w', encoding='utf-8').write('one part prose\n')
+    rc, out, err = run(sw, 'fold', '--round', 'R9105', '--fold-no', '915',
+                       '--desc', 'both', '--window-tail', '1',
+                       '--summary-sentence', 'both', '--summary-file', sfile)
+    ok(rc == 2 and 'E_SUMMARY_MODE' in err,
+       'both summary flags refuse by name (AC-2PS3)')
+    rc, out, err = run(sw, 'fold', '--round', 'R9106', '--fold-no', '916',
+                       '--desc', 'neither', '--window-tail', '1')
+    ok(rc == 2 and '--summary-file is required' in err,
+       'no summary flag still reports the required error (AC-2PS3)')
+
+    two = os.path.join(sw, 'two.txt')
+    open(two, 'w', encoding='utf-8').write(
+        'human sentence | tokens: AC-A1,AC-B2\n')
+    pre_two = (os.path.getsize(two), os.stat(two).st_mtime_ns)
+    rc, out, err = run(sw, 'summary', '--file', two)
+    ok(rc == 0 and out.startswith('SUMMARY-CHECK PASS')
+       and 'sentence_ok=True' in out and 'tokens_ok=True' in out,
+       'the reading passes a summary that carries both parts (AC-2PS4)')
+    ok((os.path.getsize(two), os.stat(two).st_mtime_ns) == pre_two,
+       'the reading writes nothing to the file it read (AC-2PS4)')
+    rc, out, err = run(sw, 'summary', '--file', sfile)
+    ok(rc == 2 and 'E_SUMMARY_SHAPE' in out,
+       'a one-part legacy summary is refused by name (AC-2PS4)')
+    nonef = os.path.join(sw, 'none.txt')
+    open(nonef, 'w', encoding='utf-8').write('no tokens here | tokens: none\n')
+    rc, out, err = run(sw, 'summary', '--file', nonef)
+    ok(rc == 0 and 'tokens=0 tokens_ok=True' in out,
+       'the literal tokens: none reads as a valid second part (AC-2PS4)')
+
+    # execute parity: the composer's line is the line the fold lands
+    rc, out, err = run(sw, 'fold', '--round', 'R9107', '--fold-no', '917',
+                       '--desc', 'parity dry', '--window-tail', '2',
+                       '--summary-sentence', 'parity arm')
+    p_dry = json.loads(out)
+    rc, out, err = run(sw, 'fold', '--round', 'R9107', '--fold-no', '917',
+                       '--desc', 'parity exec', '--window-tail', '2',
+                       '--summary-sentence', 'parity arm', '--execute')
+    p_exec = json.loads(out)
+    ok(p_exec['post_bytes'] == p_dry['predicted_bytes']
+       and p_exec['predicted_eq_actual'] is True,
+       'sentence mode predicted bytes equals the landed size (AC-2PS5)')
+    stp = json.load(open(s2path, encoding='utf-8'))
+    landed = stp['log'][len(stp['log']) - 1]
+    want, werr = T.compose_summary('parity arm', ['AC-B2'])
+    ok(werr is None and landed == want,
+       'the landed item is byte-identical to the composer output (AC-2PS1)')
+
     # AC-QREG7..AC-QREG9 (pinned in src/os/backlog.md R2917 BEFORE this edit):
     # the registry row is the ONE typed count and this suite is what refutes it,
     # so a registry edit that forgets this suite reddens HERE rather than being

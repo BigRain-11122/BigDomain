@@ -1,0 +1,8 @@
+R3378 two-part fold summary probe (AC-2PS1..AC-2PS5), read-only on the live tree
+live fold --summary-sentence dry-run rc=0 summary_source=sentence summary_two_part=True token_ok=True token_missing=0 summary_bytes=39 predicted_bytes=41890
+live purity state_bytes=43413->43413 mtime_ns_equal=True (a dry-run moves no state byte)
+live summary one-part legacy rc=2 SUMMARY-CHECK FAIL file=<tmp>\case.txt bytes=21 two_part=False sentence_ok=False tokens=0 tokens_ok=False reason=E_SUMMARY_SHAPE: expected exactly one '| tokens:' separator (got 0) bytes=23 sha256=f242221f52a168a8
+live summary two-part rc=0 SUMMARY-CHECK PASS file=<tmp>\case.txt bytes=44 two_part=True sentence_ok=True tokens=2 tokens_ok=True reason=none bytes=46 sha256=ef476cf8bb703abc
+live summary token-free rc=0 SUMMARY-CHECK PASS file=<tmp>\case.txt bytes=32 two_part=True sentence_ok=True tokens=0 tokens_ok=True reason=none bytes=34 sha256=a3cd3da5dca44d88
+composer refusal arms: empty sentence E_SUMMARY_SENTENCE, non-PAT token E_SUMMARY_TOKEN, over-budget E_SUMMARY_BUDGET (each refuses before any write)
+suite src/os/test_logs_toolkit.py SUITE PASS 228/228; registry row os-logs-toolkit 210 -> 228; matrix DOC-CURRENT 766 rows

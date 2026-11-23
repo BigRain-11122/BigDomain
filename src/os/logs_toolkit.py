@@ -62,6 +62,13 @@ GATE = 78500
 # never the minimality reading (a wider summary cannot make a smaller window fit).
 PLAN_SUMMARY_ITEM_BYTES = 200
 PAT = re.compile(r'(?:AC|BD|C|D|O|P|T|XL|OH|R)-[0-9A-Za-z][0-9A-Za-z]*(?:-[0-9A-Za-z]+)*')
+# R3378 (AC-2PS1..AC-2PS6): the fold summary has two parts - one human sentence
+# and the token list - and both are written by ONE composer, so a fold cannot
+# trade readability for verifiability. The token set comes from the folded
+# window's own PAT matches, never from the caller's prose.
+SUMMARY_SEP = ' | tokens: '
+SUMMARY_NONE = 'none'
+SUMMARY_BUDGET = 1200
 
 # prune classes -> keep-newest counts (retention policy, R1686 AC-LT4)
 PRUNE_KEEP = {'tmp-script': 60, 'preop-bak': 12, 'round-transcript': 300}
@@ -746,6 +753,96 @@ def split_ps_layout(text, log_len):
     return lines, log_start, items, close_idx, caliber
 
 
+def compose_summary(sentence, tokens, budget=SUMMARY_BUDGET):
+    """Compose the two-part fold summary: (line, error). One composer, one site.
+
+    Part 1 is the human sentence, part 2 is the token list derived from the
+    folded window (AC-2PS1/AC-2PS2). Refuses an empty sentence, a token that is
+    not a PAT match, or a composed line over the byte budget - all BEFORE any
+    write, so a summary that cannot be read or verified is never landed.
+    """
+    text = (sentence or '').strip()
+    if not text:
+        return None, 'E_SUMMARY_SENTENCE: the human sentence is empty (refusing)'
+    seen = []
+    for tok in tokens or []:
+        if not PAT.fullmatch(str(tok)):
+            return None, ('E_SUMMARY_TOKEN: %r is not a PAT token (refusing)'
+                          % (tok,))
+        if tok not in seen:
+            seen.append(tok)
+    part2 = ','.join(sorted(seen)) if seen else SUMMARY_NONE
+    line = text + SUMMARY_SEP + part2
+    if len(line.encode('utf-8')) > budget:
+        return None, ('E_SUMMARY_BUDGET: %d bytes over the %d-byte summary budget'
+                      ' (refusing)' % (len(line.encode('utf-8')), budget))
+    return line, None
+
+
+def summary_parts(line):
+    """Split a summary line into its two parts, or name what is missing.
+
+    Read-only and clock-free (AC-2PS4): the verdict reports whether the human
+    sentence is non-empty AND the token part parses, which is what a reader and
+    a machine each need.
+    """
+    text = (line or '').lstrip('\ufeff').strip()
+    out = {'sentence': '', 'tokens': [], 'token_text': '',
+           'two_part': False, 'sentence_ok': False, 'tokens_ok': False,
+           'bytes': len((line or '').encode('utf-8')), 'error': None}
+    if text.count(SUMMARY_SEP) != 1:
+        out['error'] = ('E_SUMMARY_SHAPE: expected exactly one %r separator '
+                        '(got %d)' % (SUMMARY_SEP.strip(), text.count(SUMMARY_SEP)))
+        return out
+    sentence, token_text = text.split(SUMMARY_SEP)
+    out['two_part'] = True
+    out['sentence'] = sentence.strip()
+    out['token_text'] = token_text.strip()
+    out['sentence_ok'] = bool(out['sentence'])
+    if out['token_text'] == SUMMARY_NONE:
+        out['tokens'], out['tokens_ok'] = [], True
+    else:
+        toks = [t.strip() for t in out['token_text'].split(',') if t.strip()]
+        out['tokens'] = sorted(set(toks))
+        out['tokens_ok'] = bool(toks) and all(PAT.fullmatch(t) for t in toks)
+    if not out['sentence_ok']:
+        out['error'] = 'E_SUMMARY_SENTENCE: the human sentence is empty'
+    elif not out['tokens_ok']:
+        out['error'] = ('E_SUMMARY_TOKEN: the token part parses to nothing or '
+                        'carries a non-PAT token')
+    return out
+
+
+def cmd_summary(args):
+    """Read-only two-part summary reading (AC-2PS4). Writes nothing."""
+    try:
+        with open(args.file, encoding='utf-8-sig') as f:
+            slines = [l for l in (x.rstrip('\n').rstrip('\r') for x in f)
+                      if l.strip()]
+    except OSError as e:
+        print('error: %s' % e, file=sys.stderr)
+        return 3
+    if len(slines) != 1:
+        print('SUMMARY-CHECK FAIL file=%s reason=E_SUMMARY_LINES lines=%d'
+              % (args.file, len(slines)))
+        return 2
+    parts = summary_parts(slines[0])
+    over = parts['bytes'] > args.budget
+    verdict = 'PASS' if (not parts['error'] and not over) else 'FAIL'
+    reason = parts['error']
+    if reason is None and over:
+        reason = ('E_SUMMARY_BUDGET: %d bytes over the %d-byte budget'
+                  % (parts['bytes'], args.budget))
+    print('SUMMARY-CHECK %s file=%s bytes=%d two_part=%s sentence_ok=%s '
+          'tokens=%d tokens_ok=%s reason=%s'
+          % (verdict, args.file, parts['bytes'], parts['two_part'],
+             parts['sentence_ok'], len(parts['tokens']), parts['tokens_ok'],
+             reason or 'none'))
+    if parts['sentence']:
+        print('SUMMARY-SENTENCE %s' % parts['sentence'])
+    return 0 if verdict == 'PASS' else 2
+
+
 def one_summary_line(path):
     """Read the fold summary file: (summary, error). One rule, one site."""
     with open(path, encoding='utf-8') as f:
@@ -909,20 +1006,35 @@ def cmd_fold(args):
                   file=sys.stderr)
             return 2
     for req, val in (('--round', args.round), ('--fold-no', args.fold_no),
-                     ('--desc', args.desc), ('--summary-file', args.summary_file)):
+                     ('--desc', args.desc)):
         if not val:
             print('error: %s is required' % req, file=sys.stderr)
             return 2
+    has_summary_file = bool(args.summary_file)
+    has_summary_sentence = args.summary_sentence is not None
+    if has_summary_file and has_summary_sentence:
+        print('error: E_SUMMARY_MODE: --summary-file and --summary-sentence are '
+              'mutually exclusive (refusing)', file=sys.stderr)
+        return 2
+    if not has_summary_file and not has_summary_sentence:
+        print('error: --summary-file is required', file=sys.stderr)
+        return 2
+    if has_summary_sentence and not (args.summary_sentence or '').strip():
+        print('error: E_SUMMARY_SENTENCE: --summary-sentence is empty (refusing)',
+              file=sys.stderr)
+        return 2
     # strict --round form gate (AC-LT25, pre-registered in tech.md R1968
     # next-slice registry): fail-closed on any non-RNNNN form
     if not re.fullmatch(r'R\d{4,}', str(args.round)):
         print('error: --round must match R + 4+ digits like R1968 (got %r)'
               % (args.round,), file=sys.stderr)
         return 2
-    summary, err = one_summary_line(args.summary_file)
-    if err:
-        print('error: ' + err, file=sys.stderr)
-        return 2
+    summary, err = None, None
+    if has_summary_file:
+        summary, err = one_summary_line(args.summary_file)
+        if err:
+            print('error: ' + err, file=sys.stderr)
+            return 2
 
     got = fold_layout_or_none(args.root)
     if got is None:
@@ -943,12 +1055,20 @@ def cmd_fold(args):
 
     n = w_end - w_start + 1
     window = st['log'][w_start - 1:w_end]
-    new_log = st['log'][:w_start - 1] + [summary] + st['log'][w_end:]
-
-    # verifications (all BEFORE any write; R1157 write-before-verify lesson)
     toks = set()
     for line in window:
         toks |= set(PAT.findall(line))
+    if has_summary_sentence:
+        # AC-2PS2: the token part is the folded window's own PAT set, so token
+        # completeness is structural - no summary prose can drop a pointer.
+        summary, err = compose_summary(args.summary_sentence, sorted(toks),
+                                       args.summary_budget)
+        if err:
+            print('error: ' + err, file=sys.stderr)
+            return 2
+    new_log = st['log'][:w_start - 1] + [summary] + st['log'][w_end:]
+
+    # verifications (all BEFORE any write; R1157 write-before-verify lesson)
     missing = sorted(t for t in toks if t not in summary)
 
     new_lines, predicted = fold_rewrite(lines, log_start, w_start, n,
@@ -995,6 +1115,9 @@ def cmd_fold(args):
         'window_lines': len(window),
         'window_content_bytes': sum(len(x.encode('utf-8')) for x in window),
         'summary_head': summary[:60],
+        'summary_source': ('sentence' if has_summary_sentence else 'file'),
+        'summary_bytes': len(summary.encode('utf-8')),
+        'summary_two_part': summary_parts(summary)['two_part'],
         'preop_sha16': sha16,
         'backup_path': backup_path,
         'archive_file': archive,
@@ -1378,6 +1501,13 @@ def main(argv=None):
     pf.add_argument('--window-slice', default=None,
                     help='window = log lines START:END (1-based inclusive, mid-array)')
     pf.add_argument('--summary-file', help='file holding exactly one non-empty summary line')
+    pf.add_argument('--summary-sentence',
+                    help='two-part summary: the human sentence; the token list is '
+                         'derived from the folded window (mutually exclusive with '
+                         '--summary-file)')
+    pf.add_argument('--summary-budget', type=int, default=SUMMARY_BUDGET,
+                    help='byte ceiling for a composed two-part summary '
+                         '(default %d)' % SUMMARY_BUDGET)
     pf.add_argument('--reserve-bytes', type=int, default=3000)
     pf.add_argument('--plan-only', action='store_true',
                     help='read-only: report the MINIMAL window width that clears '
@@ -1386,12 +1516,17 @@ def main(argv=None):
     pf.add_argument('--archive-file', help='override archive path (default: logs/state-log-archive-<month>.md)')
     pf.add_argument('--allow-create', action='store_true', help='create archive if missing (else fail-closed)')
     pf.add_argument('--execute', action='store_true', help='perform surgery (default: dry-run, zero mutation)')
+    ps = sub.add_parser('summary', help='two-part fold summary reading (read-only)')
+    ps.add_argument('--file', required=True,
+                    help='summary file holding exactly one non-empty line')
+    ps.add_argument('--budget', type=int, default=SUMMARY_BUDGET,
+                    help='byte ceiling (default %d)' % SUMMARY_BUDGET)
 
     args = p.parse_args(argv)
     handlers = {'gauge': cmd_gauge, 'weights': cmd_weights,
                 'inventory': cmd_inventory, 'tail': cmd_tail,
                 'prune': cmd_prune, 'catalog': cmd_catalog, 'fold': cmd_fold,
-                'census': cmd_census, 'eol': cmd_eol}
+                'census': cmd_census, 'eol': cmd_eol, 'summary': cmd_summary}
     if args.cmd not in handlers:
         return 2
     try:

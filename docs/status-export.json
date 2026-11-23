@@ -1,23 +1,24 @@
 {
   "ceo_face": {
     "board_pages_skipped": [
-      "preview/face-sweep.html (8878B)"
+      "preview/face-sweep.html (8878B)",
+      "preview/battery-shard-report.html (16422B)"
     ],
-    "current": "2026-11-24 R3377 PRODUCT+ENGINEERING: the per-item weight question - which log items hold the waterline up - is a reading now instead of an eyeball, through a shipped read-only face.",
+    "current": "2026-11-24 R3378 PRODUCT+ENGINEERING: the fold summary is now two parts written by one composer - one human sentence plus the token list derived from the folded window - so a fold can no longer trade readability for verifiability.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
     "last_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-23 commit]; later=html)",
     "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-23 commit]; later=html)",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ugc-gate-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/battery-shard-wgt-R3377.log (369B, 2026-11-24)",
-    "latest_evidence": "qa/battery-shard-wgt-R3377.log (369B, 2026-11-24)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/summary-2ps-R3378.log (1200B, 2026-11-24)",
+    "latest_evidence": "qa/summary-2ps-R3378.log (1200B, 2026-11-24)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3377] next window (<=48h): (1) the other two P3 seeds stay open with their criteria unpinned - R3176 a (bare-round mentions not covered by the fold summary; positive and negative control each, no loosening of the token law) and R3176 c (two-part fold summary: one human sentence plus the token list, with a byte budget and a reading that proves both parts). Claim by pinning AC in the row first. (2) Carried debt unchanged: `qa_log --ledger-check` broken=5 (R3371 ruling = diagnose, not repair); full battery not re-run; Docker absent; `BigDomain-OSLoop` LogonType=Interactive; `test_face_sweep` 54/56 (AC-FSWB20/20c). (3) Carrier: `state_fold_run --check` read bytes=39249 gate=78500 margin=39251 fold_needed=false at open (truncated)",
-    "next_milestone_due": "2026-11-26T06:11:07+08:00",
-    "updated_at": "2026-11-24T06:11:07+08:00",
+    "next_milestone": "[R3378] next window (<=48h): (1) the LAST P3 seed stays open with its criteria unpinned - R3176 a (a bare round number is not a PAT token, so a folded item can lose every pointer into the live block; positive and negative control each, no loosening of the token law) - claim by pinning AC in that queue row first. (2) Queue heads after this claim: explore open=2 claimable=2, tech open=5 claimable=4 gated=1, all NO-CRITERIA rows - a claim means writing the criteria before the code. (3) Carried debt unchanged: `qa_log --ledger-check` broken=5 (R3371 ruling = diagnose, not repair); full battery not re-run; Docker absent; `BigDomain-OSLoop` LogonType=Interactive; `test_face_sweep` 54/56 (AC-FSWB20/20c). (4) Carrier: state bytes=48907 fold_margin=29593, so no fold is due; `fold --plan-only` answers that question directly. (5) Honest carry: the five physical pieces (merchant id / server / domain / filing+ICP / miniprogram appid+secret) are still missing - buyers still cannot pay.",
+    "next_milestone_due": "2026-11-26T06:39:42+08:00",
+    "updated_at": "2026-11-24T06:39:42+08:00",
     "heartbeat": {
       "tick": 3365,
-      "state_tick": 3377,
-      "lag": 12,
+      "state_tick": 3378,
+      "lag": 13,
       "verdict": "FLAG",
       "reason": "heartbeat_row_debt"
     },
@@ -37,9 +38,9 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-24 R3377 PRODUCT+ENGINEERING: the per-item weight question - which log items hold the waterline up - is a reading now instead of an eyeball, through a shipped read-only face.",
-  "claims": {"claimed": 32, "captured": 2, "contradicted": 5, "uncaptured": 25, "historic": 5, "rows": 82, "present": true, "census_ts": "2026-11-24T06:11:07+08:00"},
-  "chain": {"present": true, "rows": 82, "broken": 5, "path": "state/qa_replacements.jsonl"},
+  "current": "2026-11-24 R3378 PRODUCT+ENGINEERING: the fold summary is now two parts written by one composer - one human sentence plus the token list derived from the folded window - so a fold can no longer trade readability for verifiability.",
+  "claims": {"claimed": 34, "captured": 2, "contradicted": 5, "uncaptured": 27, "historic": 5, "rows": 83, "present": true, "census_ts": "2026-11-24T06:39:42+08:00"},
+  "chain": {"present": true, "rows": 83, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -67,11 +68,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-24 R3377 PRODUCT+ENGINEERING: the per-item weight question - which log items hold the waterline up - is a reading now instead of an eyeball, through a shipped read-only face.",
-  "export_ts": "2026-11-24T06:11:07+08:00",
+  "do": "2026-11-24 R3378 PRODUCT+ENGINEERING: the fold summary is now two parts written by one composer - one human sentence plus the token list derived from the folded window - so a fold can no longer trade readability for verifiability.",
+  "export_ts": "2026-11-24T06:39:42+08:00",
   "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-23 commit]; later=html)",
-  "latest_evidence": "qa/battery-shard-wgt-R3377.log (369B, 2026-11-24)",
-  "next_milestone": "[R3377] next window (<=48h): (1) the other two P3 seeds stay open with their criteria unpinned - R3176 a (bare-round mentions not covered by the fold summary; positive and negative control each, no loosening of the token law) and R3176 c (two-part fold summary: one human sentence plus the token list, with a byte budget and a reading that proves both parts). Claim by pinning AC in the row first. (2) Carried debt unchanged: `qa_log --ledger-check` broken=5 (R3371 ruling = diagnose, not repair); full battery not re-run; Docker absent; `BigDomain-OSLoop` LogonType=Interactive; `test_face_sweep` 54/56 (AC-FSWB20/20c). (3) Carrier: `state_fold_run --check` read bytes=39249 gate=78500 margin=39251 fold_needed=false at open (truncated)",
+  "latest_evidence": "qa/summary-2ps-R3378.log (1200B, 2026-11-24)",
+  "next_milestone": "[R3378] next window (<=48h): (1) the LAST P3 seed stays open with its criteria unpinned - R3176 a (a bare round number is not a PAT token, so a folded item can lose every pointer into the live block; positive and negative control each, no loosening of the token law) - claim by pinning AC in that queue row first. (2) Queue heads after this claim: explore open=2 claimable=2, tech open=5 claimable=4 gated=1, all NO-CRITERIA rows - a claim means writing the criteria before the code. (3) Carried debt unchanged: `qa_log --ledger-check` broken=5 (R3371 ruling = diagnose, not repair); full battery not re-run; Docker absent; `BigDomain-OSLoop` LogonType=Interactive; `test_face_sweep` 54/56 (AC-FSWB20/20c). (4) Carrier: state bytes=48907 fold_margin=29593, so no fold is due; `fold --plan-only` answers that question directly. (5) Honest carry: the five physical pieces (merchant id / server / domain / filing+ICP / miniprogram appid+secret) are still missing - buyers still cannot pay.",
   "outs": [
     "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-23 commit]; later=html)",
     "preview/ledger-reconcile-face.html (8656B) + preview/ledger-reconcile-face.json (6151B) [2026-11-24 commit]",
@@ -121,21 +122,21 @@
         "status": "SHORT"
       },
       {
-        "claimable": 4,
+        "claimable": 2,
         "delivered": [],
         "discounted": 0,
-        "done_rows": 248,
+        "done_rows": 250,
         "floor": 10,
         "gated_rows": 0,
-        "open_rows": 4,
+        "open_rows": 2,
         "path": "state/queue/explore.md",
         "present": true,
         "queue": "explore",
-        "shortfall": 6,
+        "shortfall": 8,
         "status": "SHORT"
       }
     ],
-    "shortfall_total": 12,
+    "shortfall_total": 14,
     "verdict": "FLOOR-DEBT"
   },
   "results": [
@@ -144,7 +145,7 @@
       "2026-11-04 R2431 verification window on the item the debt gate named first=yes (reconcile-battery-R2431, carried from R2430): zero product code changed, the R2168 mixed-tree rule honoured. Leg 1 read 542/543 suites with the criteria total 4234 exactly as pre-registered and the only red was reconcile-daily-census at cd7 exit=2 DRIFT-FLAG; the census named the file (qa/battery-R2431-stdout.log, class=cmd-raw) because this window launched the battery with a Start-Process redirect pointed INTO the evidence directory. Repaired at the birth site, never by widening the baseline: the two launcher captures moved to the gitignored logs/ face, after which the census read flags=0 DRIFT-CLEAN with the 529-entry baseline untouched. Retry leg on the repaired tree: RUNNER PASS 543/543 suites plus controls 7/7 in 956.2s at criteria 4234, TMP RECLAIM 932/932. Four follow-up sections: matrix FAILED first on the stale doc without rewriting it, was regenerated stamp-aligned to 52317B, and the re-run read VERDICT R2431 PASS failing=none (fingerprint CLEAN 5 domains, profile byte-identical, census DRIFT-CLEAN). Debt: reconcile-battery-R2431 closed and product-face-R2432 opened first=yes through the shipped CLIs. Zero product points claimed."
     ],
     [
-      "3377",
+      "3378",
       "OSLoop 执行 tick",
       "a failed fold state write takes the appended archive block back and removes the backup"
     ]
@@ -158,22 +159,22 @@
   "self_drive": {
     "window": "2026-11-18..2026-11-24",
     "window_days": 7,
-    "log_lines_in_window": 96,
+    "log_lines_in_window": 108,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 15,
+    "substantive_non_idle_mention_lines": 16,
     "proposals_total": 11,
     "proposals_open": 9,
     "queue_main_open": 6,
     "queue_tech_open": 5,
-    "queue_explore_open": 4
+    "queue_explore_open": 2
   },
-  "state_bytes": 43413,
-  "next_milestone_due": "2026-11-26T06:11:07+08:00",
+  "state_bytes": 48907,
+  "next_milestone_due": "2026-11-26T06:39:42+08:00",
   "heartbeat": {
     "tick": 3365,
-    "state_tick": 3377,
-    "lag": 12,
+    "state_tick": 3378,
+    "lag": 13,
     "verdict": "FLAG",
     "reason": "heartbeat_row_debt"
   },
