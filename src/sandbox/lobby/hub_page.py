@@ -18,6 +18,7 @@ saying so, because claiming liveness for a port nobody is listening on would be
 a lie a reader can disprove in one click.
 """
 
+import concurrent.futures
 import json
 import os
 import socket
@@ -96,6 +97,40 @@ def face_serves(url, timeout=1.5):
         return False
 
 
+def live_map(faces, host, workers=None):
+    """Read every published face once, concurrently.
+
+    R3336 (measured): the eight faces answer their published paths directly
+    (200 html, no redirect, and the port root answers 404), so the URL is used
+    as published and no route is guessed. The cost that did show up was the
+    SUM: the probes ran one after another, so a single face hanging to its
+    1.5s timeout added 1.5s to the hub poll and eight hanging faces added 12s.
+    Each face keeps exactly the same reading; only the wall time is bounded by
+    the slowest face instead of the total. ``workers=1`` keeps the old serial
+    path and exists so a suite can measure both.
+    """
+    ports = faces.get("face_ports") or {}
+    items = sorted(ports.items())
+    if not items:
+        return {}
+
+    def one(item):
+        face_id, port = item
+        url = faces.get(face_id)
+        if isinstance(url, str) and url.startswith("http://"):
+            return face_id, face_serves(url)
+        return face_id, face_live(host, port)
+
+    count = len(items)
+    if workers is None:
+        workers = count
+    workers = max(1, min(int(workers), count))
+    if workers == 1:
+        return dict(one(item) for item in items)
+    with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as pool:
+        return dict(pool.map(one, items))
+
+
 class HubPageHandler(BaseHTTPRequestHandler):
     """Read-only HTTP face for the sandbox entry page."""
 
@@ -111,19 +146,9 @@ class HubPageHandler(BaseHTTPRequestHandler):
         """
         payload = dict(self.faces)
         if probe:
-            ports = payload.get("face_ports") or {}
-            # R3332: the map answers "does this face serve its page", not just
-            # "is a socket listening". A face whose root is published is asked
-            # for that root; a face without a published URL falls back to the
-            # connect test and is named by its port.
-            live = {}
-            for face_id, port in sorted(ports.items()):
-                url = payload.get(face_id)
-                if isinstance(url, str) and url.startswith("http://"):
-                    live[face_id] = face_serves(url)
-                else:
-                    live[face_id] = face_live(self.probe_host, port)
-            payload["live"] = live
+            # R3336: each face keeps its own reading (published URL first,
+            # connect test as the fallback) and only the probing is parallel.
+            payload["live"] = live_map(payload, self.probe_host)
         return payload
 
     def _send_page(self):

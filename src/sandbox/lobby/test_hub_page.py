@@ -1,9 +1,10 @@
 """Suite for the sandbox entry face (hub_page.py + hub.html).
 
-Seven criteria, each read off a REAL server process and the ports it actually
-bound (AC-HUB1..AC-HUB6 were pre-registered in src/os/backlog.md at R2462
-BEFORE this module, the page and this suite existed; AC-HUB7 was pre-registered
-in the R3332 backlog row before the probe upgrade landed):
+Seven criteria plus AC-HUB8, each read off a REAL server process and the ports
+it actually bound (AC-HUB1..AC-HUB6 were pre-registered in src/os/backlog.md at
+R2462 BEFORE this module, the page and this suite existed; AC-HUB7 was
+pre-registered in the R3332 backlog row and AC-HUB8 in the R3336 row, both
+before their code landed):
 
   AC-HUB1  GET /hub/ answers 200 text/html with bytes identical to the page on
            disk, bigger than 2000 bytes, and the page makes no external
@@ -29,6 +30,13 @@ in the R3332 backlog row before the probe upgrade landed):
            face_serves and face_live, and the old connect-only reading is
            printed beside the new one so the difference is a reading, not a
            claim.
+  AC-HUB8  the eight published faces are read CONCURRENTLY (R3336 measured the
+           published paths answer 200 directly while each port root answers 404,
+           so the URL is used as published and no route is guessed): three real
+           faces that sleep 0.6s each read alive, the same world with
+           workers=1 costs at least 1.5s of wall time, the shipped default
+           costs under 1.2s, and 200/503/closed/non-root verdicts are
+           unchanged.
 """
 
 import hashlib
@@ -102,6 +110,50 @@ def serve_face(code):
     threading.Thread(target=httpd.serve_forever, daemon=True).start()
     port = httpd.server_address[1]
     return httpd, "http://127.0.0.1:%d/" % port, port
+
+
+class _SlowFace(_Face):
+    """A face that takes its time before it answers (a hanging face)."""
+
+    delay = 0.6
+
+    def do_GET(self):
+        time.sleep(self.delay)
+        _Face.do_GET(self)
+
+
+def serve_slow(delay=0.6):
+    handler = type("SlowFace%s" % str(delay).replace(".", "_"), (_SlowFace,),
+                   {"delay": delay})
+    httpd = ThreadingHTTPServer(("127.0.0.1", 0), handler)
+    threading.Thread(target=httpd.serve_forever, daemon=True).start()
+    port = httpd.server_address[1]
+    return httpd, "http://127.0.0.1:%d/" % port, port
+
+
+class _DeepFace(_Face):
+    """A face whose page lives on a non-root route and whose root is 404."""
+
+    route = "/deep/"
+
+    def do_GET(self):
+        if self.path == type(self).route:
+            _Face.do_GET(self)
+            return
+        self.send_response(404)
+        self.send_header("Content-Length", "0")
+        self.end_headers()
+
+    def log_message(self, *args):
+        pass
+
+
+def serve_deep(route="/deep/"):
+    handler = type("DeepFace", (_DeepFace,), {"route": route})
+    httpd = ThreadingHTTPServer(("127.0.0.1", 0), handler)
+    threading.Thread(target=httpd.serve_forever, daemon=True).start()
+    port = httpd.server_address[1]
+    return httpd, "http://127.0.0.1:%d%s" % (port, route), port
 
 
 def http_post(url, payload=b"{}", timeout=6.0):
@@ -318,11 +370,71 @@ def main():
                     srv.shutdown()
                     srv.server_close()
 
+        # ---------------- AC-HUB8 ----------------
+        slow_servers = []
+        try:
+            slow_servers = [serve_slow(0.6) for _ in range(3)]
+            faces = {"face_ports": {}}
+            for idx, (_, url, port) in enumerate(slow_servers):
+                faces["face%d" % idx] = url
+                faces["face_ports"]["face%d" % idx] = port
+            started = time.time()
+            parallel = hub_page.live_map(faces, "127.0.0.1")
+            parallel_s = round(time.time() - started, 3)
+            started = time.time()
+            serial = hub_page.live_map(faces, "127.0.0.1", workers=1)
+            serial_s = round(time.time() - started, 3)
+
+            assert parallel == {"face0": True, "face1": True, "face2": True}, (
+                "parallel readings=%r" % (parallel,))
+            assert serial == parallel, "serial readings differ: %r" % (serial,)
+            assert parallel_s < 1.2, "parallel wall time %.3fs >= 1.2s" % parallel_s
+            assert serial_s >= 1.5, "serial wall time %.3fs < 1.5s" % serial_s
+
+            # verdicts are unchanged by the concurrency: 200 / 503 / closed /
+            # non-root route (published path used, port root is 404).
+            ok200b, url200b, port200b = serve_face(200)
+            bad503b, url503b, port503b = serve_face(503)
+            closed_port = free_port()
+            deep, deep_url, deep_port = serve_deep("/deep/")
+            wrote = {
+                "ok": url200b, "bad": url503b,
+                "closed": "http://127.0.0.1:%d/" % closed_port,
+                "deep": deep_url,
+            }
+            ports = {"ok": port200b, "bad": port503b, "closed": closed_port,
+                     "deep": deep_port}
+            verdicts = hub_page.live_map(
+                {"face_ports": ports, "ok": wrote["ok"], "bad": wrote["bad"],
+                 "closed": wrote["closed"], "deep": wrote["deep"]},
+                "127.0.0.1")
+            root_status = http_get("http://127.0.0.1:%d/" % deep_port)[0]
+            assert verdicts == {"ok": True, "bad": False, "closed": False,
+                                "deep": True}, "verdicts=%r" % (verdicts,)
+            assert root_status == 404, "deep face port root answered %s" % root_status
+            print("PASS AC-HUB8 parallel_ms=%.0f serial_ms=%.0f slow=3x0.6s "
+                  "verdicts=ok:True bad:False closed:False deep:True "
+                  "deep_root=404" % (parallel_s * 1000.0, serial_s * 1000.0))
+        except AssertionError as exc:
+            failed += 1
+            print("FAIL AC-HUB8 :: %s" % exc)
+        finally:
+            for srv in slow_servers:
+                srv[0].shutdown()
+                srv[0].server_close()
+            # serve_face/serve_deep unpack to (server, url, port), so these
+            # names hold the SERVERS themselves.
+            for srv in (locals().get("ok200b"), locals().get("bad503b"),
+                        locals().get("deep")):
+                if srv is not None:
+                    srv.shutdown()
+                    srv.server_close()
+
     finally:
         if leg is not None:
             leg.close()
 
-    total = 7
+    total = 8
     if failed:
         print("SUITE FAIL %d/%d" % (total - failed, total))
         return 1

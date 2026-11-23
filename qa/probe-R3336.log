@@ -1,0 +1,17 @@
+R3336 probe: eight published face paths asked with redirects DISABLED, one real launcher run each
+BEFORE (same command, pre-change code):
+HUB probe=0 status=200 ctype=application/json; charset=utf-8 bytes=1879 ms=[33.8, 32.0, 17.1]
+HUB probe=1 status=200 ctype=application/json; charset=utf-8 bytes=2010 ms=[78.4, 64.3, 107.7]
+AFTER (shipped code, parallel live_map):
+FACE checkout port=54342 path=/checkout/ status=200 location=- ctype=text/html; charset=utf-8 bytes=9988 portroot=404
+FACE city port=54338 path=/city/ status=200 location=- ctype=text/html; charset=utf-8 bytes=6653 portroot=404
+FACE gate port=54339 path=/gate/ status=200 location=- ctype=text/html; charset=utf-8 bytes=7157 portroot=404
+FACE ledger port=54343 path=/ledger/ status=200 location=- ctype=text/html; charset=utf-8 bytes=7977 portroot=404
+FACE lobby port=54340 path=/lobby/ status=200 location=- ctype=text/html; charset=utf-8 bytes=10077 portroot=404
+FACE member port=54346 path=/member/ status=200 location=- ctype=text/html; charset=utf-8 bytes=8752 portroot=404
+FACE panel port=54345 path=/panel/ status=200 location=- ctype=text/html; charset=utf-8 bytes=8462 portroot=404
+FACE ugc port=54344 path=/ugc/ status=200 location=- ctype=text/html; charset=utf-8 bytes=8816 portroot=404
+HUB probe=0 status=200 ctype=application/json; charset=utf-8 bytes=1879 ms=[18.3, 17.8, 16.9]
+HUB probe=1 status=200 ctype=application/json; charset=utf-8 bytes=2010 ms=[25.1, 24.0, 44.8]
+NEGCTL (AC-HUB8 in test_hub_page: same three slow faces, serial vs shipped default):
+PASS AC-HUB8 parallel_ms=607 serial_ms=1807 slow=3x0.6s verdicts=ok:True bad:False closed:False deep:True deep_root=404
