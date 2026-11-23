@@ -1147,6 +1147,85 @@ def run(root):
            % (bool(row), declared, matrix_declared))
 
 
+def wire_arms():
+    """AC-SXFB38 (AC-SXF36, R3360): the three rows this face could not see.
+
+    Driven with the module globals back on the REAL tree, because the comparison
+    keys on the state path (the shipped writer's own boundary): a private world
+    must announce itself, the live pair must read green, and the same pair with
+    one count moved by one must name the field. The real face is cloned to a temp
+    path for the tamper arm and read back afterwards, so nothing lands on it.
+    """
+    derived = {"log_lines_in_window": 12,
+               "substantive_non_idle_mention_lines": 3}
+    label = sx._cec_module()._load_patterns()["tick_row_label"]
+    tick_rows = [["7", label, "fixture"]]
+
+    def codes(said):
+        return [code for code, _ in said]
+
+    arm_base = sx.self_drive_problems(dict(derived), derived, 7, tick_rows, label) == []
+    arm_win = codes(sx.self_drive_problems(
+        dict(derived, log_lines_in_window=11), derived, 7, tick_rows, label))
+    arm_sub = codes(sx.self_drive_problems(
+        dict(derived, substantive_non_idle_mention_lines=2), derived, 7,
+        tick_rows, label))
+    arm_gone = codes(sx.self_drive_problems(
+        {"log_lines_in_window": 12}, derived, 7, tick_rows, label))
+    arm_none = codes(sx.self_drive_problems(None, derived, 7, tick_rows, label))
+    arm_zero = codes(sx.self_drive_problems(
+        dict(derived), derived, 7, [], label))
+    arm_two = codes(sx.self_drive_problems(
+        dict(derived), derived, 7, tick_rows + [["7", label, "dup"]], label))
+    arm_tick = codes(sx.self_drive_problems(
+        dict(derived), derived, 8, tick_rows, label))
+    pure_ok = (arm_base
+               and arm_win == ["E_SXF_SELF_DRIVE_STALE"]
+               and arm_sub == ["E_SXF_SELF_DRIVE_STALE"]
+               and arm_gone == ["E_SXF_SELF_DRIVE_STALE"]
+               and arm_none == ["E_SXF_SELF_DRIVE_MISSING"]
+               and arm_zero == ["E_SXF_TICK_ROW_SHAPE"]
+               and arm_two == ["E_SXF_TICK_ROW_SHAPE"]
+               and arm_tick == ["E_SXF_TICK_ROW_STALE"])
+
+    before = snapshot(REAL_EXPORT)
+    world = tempfile.mkdtemp(prefix="sxf-wire-R3360-")
+    try:
+        live_buffer = io.StringIO()
+        with contextlib.redirect_stdout(live_buffer):
+            rc_live = sx.check(REAL_EXPORT, REAL_STATE)
+        clone = json.loads(sx.read_text(REAL_EXPORT))
+        block = clone.get("self_drive") or {}
+        block["log_lines_in_window"] = int(block.get("log_lines_in_window") or 0) + 1
+        clone["self_drive"] = block
+        stamp = os.path.join(world, "status-export.json")
+        write_json(stamp, clone)
+        wire_buffer = io.StringIO()
+        with contextlib.redirect_stdout(wire_buffer):
+            rc_wire = sx.check(stamp, REAL_STATE)
+        wire_said = wire_buffer.getvalue()
+        other_state = os.path.join(world, "state.json")
+        shutil.copyfile(REAL_STATE, other_state)
+        skip_buffer = io.StringIO()
+        with contextlib.redirect_stdout(skip_buffer):
+            rc_skip = sx.check(REAL_EXPORT, other_state)
+        skip_said = skip_buffer.getvalue()
+    finally:
+        shutil.rmtree(world, ignore_errors=True)
+    after = snapshot(REAL_EXPORT)
+    touched = before != after
+    named = "E_SXF_SELF_DRIVE_STALE" in wire_said
+    skipped = "self_drive graded=0 skipped=private-world" in skip_said
+    record("AC-SXFB38",
+           pure_ok and rc_live == 0 and rc_wire == 2 and named
+           and skipped and rc_skip == 0 and not touched,
+           "pure=%s live=%d wire=%d named=%s skip_line=%s skip_rc=%d "
+           "real_face_untouched=%s"
+           % (pure_ok, rc_live, rc_wire, named, skipped, rc_skip,
+              not touched))
+    return not touched
+
+
 def main():
     real_before = (snapshot(REAL_EXPORT), snapshot(REAL_STATE))
     root = tempfile.mkdtemp(prefix="sxf-R2821-")
@@ -1156,6 +1235,7 @@ def main():
     finally:
         restore(saved)
         shutil.rmtree(root, ignore_errors=True)
+    wire_arms()
     real_after = (snapshot(REAL_EXPORT), snapshot(REAL_STATE))
     record("ISOLATION", real_before == real_after, "real export+state untouched")
     bad = [name for name, ok, _ in results if not ok]

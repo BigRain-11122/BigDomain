@@ -1,0 +1,13 @@
+SHARD scope=SHARD registry_suites=764 registry_criteria=6400 selected=1 selected_criteria=6 cap=600s leg_cap=0s overrides=1 exact=0 state=COMPLETE
+SHARD row os-queue-floor-export-face rc=1 pass=5 fail=1 detail=yes suite=FAIL 5/6 crit=6 0.4s
+SHARD detail os-queue-floor-export-face SUITE queue_floor_export_face (R2374) criteria=6
+SHARD detail os-queue-floor-export-face PASS AC-QFE1 the section IS queue_floor_reading_wire.published (patching its reading moves the export)
+SHARD detail os-queue-floor-export-face PASS AC-QFE2 publishes the discounted claimable plus every discounted row (line+prefix), never the gross alone
+SHARD detail os-queue-floor-export-face   measured: pass=21 fail=1 declared=22 second=False
+SHARD detail os-queue-floor-export-face FAIL AC-QFE3 check_export_consistency reads 22/22 (its declared base) with the new field, and the field is not a second derivation
+SHARD detail os-queue-floor-export-face PASS AC-QFE4 one stable key order plus one trailing LF, byte-stable across two runs
+SHARD detail os-queue-floor-export-face PASS AC-QFE5 the value is derived at write time (a changed queue moves it, no canned copy)
+SHARD detail os-queue-floor-export-face PASS AC-QFE6 pure ASCII, stdlib only, no clock, no network, one runner entry at 6 criteria
+SHARD detail os-queue-floor-export-face SUITE FAIL 5/6
+SHARD rc=2 scope=SHARD selected=1 executed=1 green=0 criteria=6 crit_mismatch=0 elapsed=0.4s crit_checked=1 crit_unchecked=0
+SHARD red os-queue-floor-export-face:rc=1

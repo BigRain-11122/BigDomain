@@ -28,6 +28,7 @@ REPO = os.path.dirname(SRC)
 sys.path.insert(0, BASE)
 
 import check_export_consistency as CEC  # noqa: E402
+import export_consistency_queue_face as ECQF  # noqa: E402
 import queue_floor_export_face as QFE  # noqa: E402
 import queue_floor_reading_wire as QFRW  # noqa: E402
 
@@ -152,7 +153,15 @@ def ac_qfe2():
 
 
 def ac_qfe3():
-    """AC-QFE3: the consistency checker still reads 21/21 with the field."""
+    """AC-QFE3: the consistency checker still reads its declared base count.
+
+    R3360: this arm pinned the literal 21, and R3359 had already moved the
+    shipped declaration to 22 (a claims row), so the arm read FAIL on a checker
+    that was green at 22/22. The expectation is now READ from
+    export_consistency_queue_face.BASE_CHECKS rather than retyped, which is the
+    same repair class as the rest of this window: a number that states the
+    tree's current shape belongs in the shipped declaration, not in a copy.
+    """
     directory = tempfile.mkdtemp(prefix="qfe3-")
     saved = CEC.P_EXPORT
     try:
@@ -163,12 +172,15 @@ def ac_qfe3():
         source = read(MODULE)
         no_second_reading = ("open_rows\"] = " not in source
                              and "re.compile" not in source)
-        ok = (n_pass == 21 and n_fail == 0 and no_second_reading)
+        declared = ECQF.BASE_CHECKS
+        ok = (n_pass == declared and n_fail == 0 and no_second_reading)
         if not ok:
-            print("  measured: pass=%d fail=%d second=%r"
-                  % (n_pass, n_fail, not no_second_reading), flush=True)
-        check(ok, "AC-QFE3 check_export_consistency reads 21/21 with the new "
-                  "field, and the field is not a second derivation")
+            print("  measured: pass=%d fail=%d declared=%d second=%r"
+                  % (n_pass, n_fail, declared, not no_second_reading),
+                  flush=True)
+        check(ok, "AC-QFE3 check_export_consistency reads %d/%d (its declared "
+                  "base) with the new field, and the field is not a second "
+                  "derivation" % (declared, declared))
     finally:
         CEC.P_EXPORT = saved
         shutil.rmtree(directory, ignore_errors=True)

@@ -190,6 +190,73 @@ def _ledger_lines_module():
     return _LEDGER_MODULE
 
 
+_CEC_MODULE = None
+
+
+def _cec_module():
+    """The shipped consistency checker, loaded once (AC-SXF36).
+
+    R3360 measured that this face graded neither the self_drive counts nor the
+    tick row, so the staleness R3358 had to chase live was visible to
+    check_export_consistency alone. The DERIVATION stays single-sourced: this
+    loads that module from the real tree and asks its recompute() instead of
+    recounting the log here a second time.
+    """
+    global _CEC_MODULE
+    if _CEC_MODULE is None:
+        import importlib.util
+
+        path = os.path.join(REAL_ROOT, "src", "os",
+                            "check_export_consistency.py")
+        spec = importlib.util.spec_from_file_location("cec_shared", path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        _CEC_MODULE = module
+    return _CEC_MODULE
+
+
+# The two counts R3358 watched go stale on the live face. The window bounds are
+# already graded through the chain/claims blocks, so only the live counts are
+# borrowed here rather than the whole derived dict.
+SELF_DRIVE_ROWS = ("log_lines_in_window", "substantive_non_idle_mention_lines")
+
+
+def self_drive_problems(landed_sd, derived, tick, results, label):
+    """The three rows this face used to leave ungraded (AC-SXF36, R3360).
+
+    Pure on purpose: every argument is handed in, so each arm can be driven
+    without touching the live tree. `derived` is the shipped checker's own
+    recount - one derivation, two readers - and is never recomputed here.
+    """
+    problems = []
+    derived = derived or {}
+    if not isinstance(landed_sd, dict):
+        problems.append(("E_SXF_SELF_DRIVE_MISSING",
+                         "self_drive is not an object, so its counts cannot be "
+                         "compared with the shipped recount"))
+    else:
+        for key in SELF_DRIVE_ROWS:
+            got = landed_sd.get(key, "<missing>")
+            want = derived.get(key)
+            if got != want:
+                problems.append(("E_SXF_SELF_DRIVE_STALE",
+                                 "self_drive.%s stored=%r recomputed=%r"
+                                 % (key, got, want)))
+    rows = results if isinstance(results, list) else []
+    stamped = [row for row in rows
+               if isinstance(row, list) and len(row) >= 2 and label
+               and row[1] == label]
+    if len(stamped) != 1:
+        problems.append(("E_SXF_TICK_ROW_SHAPE",
+                         "results carries %d row(s) labelled %r, expected exactly 1"
+                         % (len(stamped), label)))
+    elif str(stamped[0][0]) != str(tick):
+        problems.append(("E_SXF_TICK_ROW_STALE",
+                         "results tick row stored=%r tick=%r"
+                         % (stamped[0][0], tick)))
+    return problems
+
+
 def _round_label_src():
     """The UPPERCASE-label shape, borrowed from the shipped write gate (R2874).
 
@@ -638,6 +705,28 @@ def check(export_path, state_path):
                                      "face were not written by one apply"
                                      % (CLAIMS_TS_KEY, stamp,
                                         doc.get("export_ts"))))
+    # AC-SXF36 (R3360): three rows this face could not see. R3358 chased a
+    # self_drive block whose two counts and tick row were stale while --check
+    # read PASS, because only check_export_consistency compared them. The
+    # boundary is the shipped writer's own (src/os/export_round.py refreshes
+    # self_drive for the real tree only), so a private world prints a NAMED
+    # skip line rather than passing silently.
+    cec = _cec_module()
+    if os.path.abspath(state_path) != os.path.abspath(cec.P_STATE):
+        print("self_drive graded=0 skipped=private-world: %s is not the real "
+              "tree state, so the shipped recount does not describe it"
+              % state_path)
+    else:
+        try:
+            derived_sd, cec_state, _cec_export, cec_pat = cec.recompute()
+        except (ValueError, KeyError, OSError) as exc:
+            problems.append(("E_SXF_SELF_DRIVE_UNREADABLE",
+                             "the shipped recount refused the live tree: %s: %s"
+                             % (type(exc).__name__, exc)))
+        else:
+            problems.extend(self_drive_problems(
+                doc.get("self_drive"), derived_sd, cec_state.get("tick"),
+                doc.get(LEGACY_KEY), cec_pat.get("tick_row_label")))
     if problems:
         print("VERDICT %s FAIL" % tag)
         for code, problem in problems:

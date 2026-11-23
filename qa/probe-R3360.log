@@ -1,0 +1,6 @@
+CEC live: pass=22 fail=0 SUMMARY pass=22 fail=0 state_tick=3360 window=2026-11-17..2026-11-23 W=117 idle=0 nop=0 sub=20 proposals=11/9 queues=6/8/4
+SXF live: rc=0 VERDICT R3360 PASS: do, ceo_face.current and current all name R3360
+SXF live graded_self_drive=True tick_row=True
+SXF clone moved one count: rc=2 VERDICT R3360 FAIL | E_SXF_SELF_DRIVE_STALE: self_drive.log_lines_in_window stored=118 recomputed=117
+SXF outside-real state: rc=0 skip_line=True
+probe VERDICT CONFIRMED

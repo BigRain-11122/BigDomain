@@ -1,0 +1,12 @@
+arm base green -> ['green']
+arm one window count high -> ['E_SXF_SELF_DRIVE_STALE']
+arm substantive low -> ['E_SXF_SELF_DRIVE_STALE']
+arm key missing -> ['E_SXF_SELF_DRIVE_STALE']
+arm block not an object -> ['E_SXF_SELF_DRIVE_MISSING']
+arm no tick rows -> ['E_SXF_TICK_ROW_SHAPE']
+arm two tick rows -> ['E_SXF_TICK_ROW_SHAPE']
+arm tick moved -> ['E_SXF_TICK_ROW_STALE']
+arm results not a list -> ['E_SXF_TICK_ROW_SHAPE']
+arm label None -> ['E_SXF_TICK_ROW_SHAPE']
+negctl SUMMARY red_arms=9 green_arms=1
+negctl VERDICT CONFIRMED

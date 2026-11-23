@@ -6402,8 +6402,11 @@ SUITES = [
     # captured and uncaptured beside the three it already published - so the
     # face carries the denominator and the conservation a reader can check
     # (29 -> 32).
+    # R3360: AC-SXFB38 gives this face the three rows it never graded - the two
+    # self_drive counts and the results tick row - through one pure reader wired
+    # to the shipped recount (38 -> 39).
     ("os-status-export-fresh",
-     os.path.join("..", "os", "test_status_export_fresh.py"), 38),
+     os.path.join("..", "os", "test_status_export_fresh.py"), 39),
     # R2450: three writers land the CEO-visible export and none of them asked
     # the shared payload derivation, so the document was rewritten in whichever
     # transport the running writer felt like. Every writer the audit derives

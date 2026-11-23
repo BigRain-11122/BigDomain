@@ -41,3 +41,7 @@
 {"event": "REPLACED", "name": "battery-shard-dix-R3353.log", "new_bytes": 368, "new_sha16": "8d0abef917d2b024", "old_bytes": 240, "old_sha16": "bf13e7e3b4be3d23", "ts": "2026-11-23T11:22:55Z"}
 {"event": "REPLACED", "name": "battery-shard-qhd-R3354.log", "new_bytes": 353, "new_sha16": "1f12fb8f6395abc9", "old_bytes": 227, "old_sha16": "7e7552287d433728", "ts": "2026-11-23T12:00:45Z"}
 {"event": "REPLACED", "name": "battery-shard-lga-R3356.log", "new_bytes": 363, "new_sha16": "c79529b305dde6f5", "old_bytes": 236, "old_sha16": "ca95896a7acfd421", "ts": "2026-11-23T13:19:17Z"}
+{"event": "REPLACED", "name": "battery-shard-sxf-R3360.log", "new_bytes": 485, "new_sha16": "426b3ddef642dfbd", "old_bytes": 241, "old_sha16": "0d767b5631ee5943", "ts": "2026-11-23T15:04:53Z"}
+{"event": "REPLACED", "name": "battery-shard-qfe-R3360.log", "new_bytes": 1495, "new_sha16": "2b5c59b0591a8fba", "old_bytes": 240, "old_sha16": "7706ea0695695eb3", "ts": "2026-11-23T15:04:54Z"}
+{"event": "REPLACED", "name": "battery-shard-sxf-R3360.log", "new_bytes": 485, "new_sha16": "b704011c098e14cf", "old_bytes": 241, "old_sha16": "2f2448f6994cc247", "ts": "2026-11-23T15:05:40Z"}
+{"event": "REPLACED", "name": "battery-shard-qfe-R3360.log", "new_bytes": 1495, "new_sha16": "71aa723a4770ebde", "old_bytes": 240, "old_sha16": "7706ea0695695eb3", "ts": "2026-11-23T15:05:41Z"}
