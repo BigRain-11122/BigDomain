@@ -65,3 +65,10 @@
 {"event": "REPLACED", "name": "battery-shard-cov5-R3368.log", "new_bytes": 1601, "new_sha16": "7d167c5534409fb3", "old_bytes": 1474, "old_sha16": "9116cd48b664a3dc", "ts": "2026-11-23T18:18:09Z"}
 {"event": "REPLACED", "name": "battery-shard-cov6-R3368.log", "new_bytes": 1570, "new_sha16": "b8a1eb9b70d0e025", "old_bytes": 1441, "old_sha16": "f5e907a4db619356", "ts": "2026-11-23T18:30:56Z"}
 {"event": "REPLACED", "name": "battery-shard-bfold-R3369.log", "new_bytes": 356, "new_sha16": "195f0b2f4e1c53a9", "old_bytes": 230, "old_sha16": "fc8f6c53e41063a2", "ts": "2026-11-23T18:45:31Z"}
+{"event": "REPLACED", "name": "battery-shard-cov1-R3370.log", "new_bytes": 375, "new_sha16": "b7b033434012ccec", "old_bytes": 249, "old_sha16": "2dd929e4332b16d9", "ts": "2026-11-23T18:56:07Z"}
+{"event": "REPLACED", "name": "battery-shard-cov2-R3370.log", "new_bytes": 382, "new_sha16": "22da7dcca9d288d4", "old_bytes": 256, "old_sha16": "772da6f5363f1507", "ts": "2026-11-23T18:56:07Z"}
+{"event": "REPLACED", "name": "battery-shard-cov3-R3370.log", "new_bytes": 383, "new_sha16": "1a17c385cc8b563e", "old_bytes": 257, "old_sha16": "765e1a6770b8e96e", "ts": "2026-11-23T18:56:59Z"}
+{"event": "REPLACED", "name": "battery-shard-cov4-R3370.log", "new_bytes": 377, "new_sha16": "4e92669fb715ce2c", "old_bytes": 251, "old_sha16": "a7725397e37d96ce", "ts": "2026-11-23T18:56:59Z"}
+{"event": "REPLACED", "name": "battery-shard-cov5-R3370.log", "new_bytes": 650, "new_sha16": "735b37a7c2693f2d", "old_bytes": 523, "old_sha16": "aac8f461dae6db48", "ts": "2026-11-23T18:57:08Z"}
+{"event": "REPLACED", "name": "battery-shard-cov6-R3370.log", "new_bytes": 925, "new_sha16": "be1907aa700bc50e", "old_bytes": 798, "old_sha16": "3c2e39f6cda723fd", "ts": "2026-11-23T18:57:17Z"}
+{"event": "REPLACED", "name": "battery-shard-cov7-R3370.log", "new_bytes": 1708, "new_sha16": "63d5a41cddb5ad13", "old_bytes": 1579, "old_sha16": "fb5d7871151310e4", "ts": "2026-11-23T19:01:37Z"}
