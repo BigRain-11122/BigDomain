@@ -197,13 +197,46 @@ def ledger_path(directory):
     return os.path.join(directory, LEDGER_NAME)
 
 
-def record_replacement(directory, name, previous, proof):
+# R3371 (AC-QCH1/AC-QCH2): the ledger has never been the only writer on
+# qa/*.log. tools/battery_shard.py stream_evidence publishes a RUNNING partial
+# IN PLACE while a leg is still running, and that partial is legitimately
+# unrecorded - it is a placeholder, not evidence. A same-window re-run then
+# replaces its own partial, so the later row's `old` identity is a transient
+# that never lands anywhere. Measured at R3371: five such rows read as chain
+# breaks (battery-shard-{ledger,smallfamilies,os,sxf,qfe}-*.log) and each
+# intermediate blob exists in no commit. The partial now declares itself with
+# this sentinel as its first line, and the row records what was replaced.
+PROGRESS_SENTINEL = "# --- PROGRESS PARTIAL (not evidence)"
+PREV_KIND_EVIDENCE = "evidence"
+PREV_KIND_PROGRESS = "progress"
+PREV_KINDS = (PREV_KIND_EVIDENCE, PREV_KIND_PROGRESS)
+
+
+def previous_kind(raw):
+    """AC-QCH1: what the bytes being replaced were, read from the bytes.
+
+    A progress partial is recognised by its own first line, never by a size, a
+    name or a guess: the sentinel is written by the shipped streamer, and a
+    file without it is evidence whatever it is called. CRLF is tolerated
+    because the sentinel is compared after the line break is stripped.
+    """
+    first = raw.split(b"\n", 1)[0]
+    if first.rstrip(b"\r") == PROGRESS_SENTINEL.encode("ascii"):
+        return PREV_KIND_PROGRESS
+    return PREV_KIND_EVIDENCE
+
+
+def record_replacement(directory, name, previous, proof,
+                       prev_kind=PREV_KIND_EVIDENCE):
     """R3217 (AC-QALB27): the replacement record survives the process.
 
     One JSON line per rewrite, appended with a flush and an fsync, so the old
     identity is readable by a machine after the window that replaced it is gone.
     The ledger is not evidence: it is a different file with a different name,
     and the evidence bytes it describes are not touched here.
+
+    R3371 (AC-QCH2): the row also says WHAT it replaced. Rows written before
+    this field existed carry no declaration and are never excused by it.
     """
     path = ledger_path(directory)
     parent = os.path.dirname(path)
@@ -219,6 +252,7 @@ def record_replacement(directory, name, previous, proof):
         "old_sha16": previous[1],
         "new_bytes": proof["bytes"],
         "new_sha16": proof["sha256"],
+        "prev_kind": prev_kind,
     }
     line = json.dumps(record, sort_keys=True, ensure_ascii=True) + "\n"
     with io.open(path, "a", encoding="utf-8", newline="\n") as handle:
@@ -248,6 +282,11 @@ def ledger_row_problem(obj):
             return key
         if any(ch not in "0123456789abcdef" for ch in value):
             return key
+    # R3371 (AC-QCH4): an optional declaration, but a row that carries one
+    # must carry a lawful one - a typo would otherwise excuse or accuse
+    # silently. Absent is legal: every row written before R3371 lacks it.
+    if "prev_kind" in obj and obj["prev_kind"] not in PREV_KINDS:
+        return "prev_kind"
     return None
 
 
@@ -324,16 +363,26 @@ def ledger_report(path=None, evidence_dir=None):
     latest = {}
     previous = {}
     broken = []
+    excused = []
     for number, record in located:
         name = record["name"]
         prev = previous.get(name)
         if prev is not None:
             prev_number, prev_record = prev
-            if (record["old_sha16"] != prev_record["new_sha16"]
-                    or record["old_bytes"] != prev_record["new_bytes"]):
-                broken.append((name, prev_number, number,
-                               prev_record["new_sha16"],
-                               record["old_sha16"]))
+            linked = (record["old_sha16"] == prev_record["new_sha16"]
+                      and record["old_bytes"] == prev_record["new_bytes"])
+            if not linked:
+                # R3371 (AC-QCH3): a break is excused ONLY on the later row's
+                # own declaration that what it replaced was a progress partial.
+                # Rows that predate the field carry no declaration and stay
+                # broken - absence is not a claim, and this ledger never
+                # guesses one.
+                if record.get("prev_kind") == PREV_KIND_PROGRESS:
+                    excused.append((name, prev_number, number))
+                else:
+                    broken.append((name, prev_number, number,
+                                   prev_record["new_sha16"],
+                                   record["old_sha16"]))
         previous[name] = (number, record)
         latest[name] = record
     if evidence_dir is None:
@@ -357,7 +406,7 @@ def ledger_report(path=None, evidence_dir=None):
             "path": path, "present": os.path.isfile(path),
             "rows": len(located), "names": len(latest),
             "bad": bad, "stale": stale, "missing": missing,
-            "broken": broken}
+            "broken": broken, "excused": excused}
 
 
 def do_ledger_check(path=None):
@@ -372,11 +421,11 @@ def do_ledger_check(path=None):
     """
     report = ledger_report(path)
     sys.stdout.write("QA-LEDGER %s path=%s rows=%d names=%d bad=%d stale=%d "
-                     "missing=%d broken=%d\n"
+                     "missing=%d broken=%d excused=%d\n"
                      % (report["verdict"], report["path"], report["rows"],
                         report["names"], len(report["bad"]),
                         len(report["stale"]), len(report["missing"]),
-                        len(report["broken"])))
+                        len(report["broken"]), len(report["excused"])))
     for number, reason in report["bad"]:
         sys.stdout.write("QA-LEDGER detail bad line=%d reason=%s\n"
                          % (number, reason))
@@ -389,6 +438,10 @@ def do_ledger_check(path=None):
         sys.stdout.write("QA-LEDGER detail chain name=%s prev_line=%d "
                          "line=%d prev_new_sha16=%s old_sha16=%s\n"
                          % (name, prev_line, line, prev_sha, old_sha))
+    for name, prev_line, line in report["excused"]:
+        sys.stdout.write("QA-LEDGER detail excused name=%s prev_line=%d "
+                         "line=%d prev_kind=%s\n"
+                         % (name, prev_line, line, PREV_KIND_PROGRESS))
     return 0 if report["verdict"] == "OK" else 2
 
 
@@ -661,11 +714,13 @@ def do_write(name, source_bytes, directory=None):
     # identity is read here, before the replace, and announced below because
     # a refusal would have blocked that entire re-land workflow.
     previous = None
+    prev_kind = PREV_KIND_EVIDENCE
     final = os.path.join(directory, name)
     if os.path.isfile(final):
         try:
             raw_prev = io.open(final, "rb").read()
             previous = (len(raw_prev), hashlib.sha256(raw_prev).hexdigest()[:16])
+            prev_kind = previous_kind(raw_prev)
         except OSError:
             previous = None
     path = write_atomic(directory, name, text)
@@ -690,7 +745,7 @@ def do_write(name, source_bytes, directory=None):
         # cannot be written still leaves the evidence on disk, but the round
         # must not read as clean: the failure is named and the rc is 2.
         try:
-            record_replacement(directory, name, previous, proof)
+            record_replacement(directory, name, previous, proof, prev_kind)
         except (OSError, ValueError) as exc:
             sys.stdout.write(
                 "QA-LOG REPLACEMENT-RECORD-FAILED name=%s reason=%s "

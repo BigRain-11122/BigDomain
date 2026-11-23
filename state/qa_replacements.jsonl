@@ -72,3 +72,5 @@
 {"event": "REPLACED", "name": "battery-shard-cov5-R3370.log", "new_bytes": 650, "new_sha16": "735b37a7c2693f2d", "old_bytes": 523, "old_sha16": "aac8f461dae6db48", "ts": "2026-11-23T18:57:08Z"}
 {"event": "REPLACED", "name": "battery-shard-cov6-R3370.log", "new_bytes": 925, "new_sha16": "be1907aa700bc50e", "old_bytes": 798, "old_sha16": "3c2e39f6cda723fd", "ts": "2026-11-23T18:57:17Z"}
 {"event": "REPLACED", "name": "battery-shard-cov7-R3370.log", "new_bytes": 1708, "new_sha16": "63d5a41cddb5ad13", "old_bytes": 1579, "old_sha16": "fb5d7871151310e4", "ts": "2026-11-23T19:01:37Z"}
+{"event": "REPLACED", "name": "battery-shard-qch-R3371.log", "new_bytes": 352, "new_sha16": "87914b6e4b4532da", "old_bytes": 264, "old_sha16": "b8f492442cb712c8", "prev_kind": "progress", "ts": "2026-11-23T19:42:27Z"}
+{"event": "REPLACED", "name": "battery-shard-qch-R3371.log", "new_bytes": 351, "new_sha16": "25a414dc0fbd7ed6", "old_bytes": 263, "old_sha16": "7f555b0ed748524f", "prev_kind": "progress", "ts": "2026-11-23T19:43:57Z"}

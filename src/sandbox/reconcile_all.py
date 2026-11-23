@@ -5108,6 +5108,13 @@ SUITES = [
     # append, and refuses before any write.
     ("os-backlog-fold",
      os.path.join("..", "os", "test_backlog_fold.py"), 6),
+    # R3371: the replacement ledger has never had one writer - the shard runner
+    # publishes a RUNNING partial in place while a leg runs, so a same-window
+    # re-run replaces its own transient and five rows read as chain breaks. The
+    # partial now declares itself, the row records what it replaced, and the
+    # diagnosis classifies each break on shipped facts only.
+    ("os-qa-chain",
+     os.path.join("..", "os", "test_qa_chain.py"), 6),
     # R2567: the fold FACE state_fold.py never shipped (AC-SFOLD1..AC-SFOLD6
     # pinned at R2548): shipped predicate reused, archive copy proved byte-equal,
     # ledger coverage read THROUGH the archive, layout writer/reader agreement,

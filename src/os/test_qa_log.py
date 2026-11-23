@@ -575,11 +575,16 @@ def main():
             'complete.log': (stream_header + 'COMPLETE\n' + stream_row + '\n'
                              + stream_closing + '\n'),
         }
+        # R3371: the partial now DECLARES what it is, so the body lands
+        # unchanged behind one sentinel line - the bytes after that line are
+        # the caller's body, still not marked by anything but the marking law.
+        partial_prefix = mod.PROGRESS_SENTINEL + '\n'
         shape_same = {}
         for sname, sbody in stream_shapes.items():
             starget = os.path.join(stream_dir, sname)
             shard.stream_evidence(starget, sbody)
-            shape_same[sname] = read_bytes(starget) == sbody.encode('utf-8')
+            shape_same[sname] = (read_bytes(starget)
+                                 == (partial_prefix + sbody).encode('utf-8'))
         bare_body = (stream_header + 'RUNNING\n' + proof_a + '\n'
                      + stream_row + '\n')
         bare_target = os.path.join(stream_dir, 'bare.log')
@@ -601,9 +606,9 @@ def main():
            and mod.count_bare_proofs(bare_disk) == 0
            and mod.count_carried_proofs(bare_disk) == 1
            and len(bare_disk.encode('utf-8'))
-           == len(bare_body.encode('utf-8')) + 8
+           == len(bare_body.encode('utf-8')) + 8 + len(partial_prefix)
            and all(shape_same.values())
-           and twice_disk == twice_body
+           and twice_disk == partial_prefix + twice_body
            and killed_disk.endswith(b'\n')
            and len([ln for ln in killed_text.splitlines()
                     if ln.startswith('SHARD row ')]) == 1
@@ -620,8 +625,9 @@ def main():
               mod.count_bare_proofs(bare_disk),
               mod.count_carried_proofs(bare_disk),
               len(bare_disk.encode('utf-8'))
-              == len(bare_body.encode('utf-8')) + 8,
-              all(shape_same.values()), twice_disk == twice_body,
+              == len(bare_body.encode('utf-8')) + 8 + len(partial_prefix),
+              all(shape_same.values()),
+               twice_disk == partial_prefix + twice_body,
               len([ln for ln in killed_text.splitlines()
                    if ln.startswith('SHARD row ')]),
               killed_disk.endswith(b'\n'),
@@ -754,7 +760,8 @@ def main():
         shard.stream_evidence(os.path.join(door_dir, 'control.log'),
                               stream_shapes['initial.log'])
         control_ok = (read_bytes(os.path.join(door_dir, 'control.log'))
-                      == stream_shapes['initial.log'].encode('utf-8'))
+                      == (partial_prefix
+                          + stream_shapes['initial.log']).encode('utf-8'))
         shard.QA_DIR = saved_shard_qa
         verdict = dict(door_verdicts)
         ok('AC-QALB18 the in-place door refuses a suffixless name and a path '

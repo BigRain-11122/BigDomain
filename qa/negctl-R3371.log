@@ -1,0 +1,21 @@
+QA-LOG WROTE name=ordinary.log bytes=6 lines=1 sha256=b640e840b19d3786 dialect=utf-8/lf VERDICT PASS
+QA-LOG REPLACED name=ordinary.log old_bytes=6 old_sha16=b640e840b19d3786 new_bytes=7 new_sha16=480c2336b410f1ad
+QA-LOG WROTE name=ordinary.log bytes=7 lines=1 sha256=480c2336b410f1ad dialect=utf-8/lf VERDICT PASS
+QA-LOG REPLACED name=ordinary.log old_bytes=14 old_sha16=283deef7cf04bdd1 new_bytes=6 new_sha16=5eef8098ed6ec0a1
+QA-LOG WROTE name=ordinary.log bytes=6 lines=1 sha256=5eef8098ed6ec0a1 dialect=utf-8/lf VERDICT PASS
+NEGCTL arm-a unnamed carrier name=ordinary.log verdict=RED breaks=1 unexplained=1
+NEGCTL break kind=unexplained old_bytes=14 new_bytes=6 why=the row declares prev_kind=evidence and an unlinked evidence row is a lost record
+QA-LOG WROTE name=battery-shard-x.log bytes=6 lines=1 sha256=b640e840b19d3786 dialect=utf-8/lf VERDICT PASS
+QA-LOG REPLACED name=battery-shard-x.log old_bytes=6 old_sha16=b640e840b19d3786 new_bytes=7 new_sha16=480c2336b410f1ad
+QA-LOG WROTE name=battery-shard-x.log bytes=7 lines=1 sha256=480c2336b410f1ad dialect=utf-8/lf VERDICT PASS
+QA-LOG REPLACED name=battery-shard-x.log old_bytes=46 old_sha16=23c0f9d9ee5c2bf3 new_bytes=6 new_sha16=5eef8098ed6ec0a1
+QA-LOG WROTE name=battery-shard-x.log bytes=6 lines=1 sha256=5eef8098ed6ec0a1 dialect=utf-8/lf VERDICT PASS
+NEGCTL arm-b declared partial name=battery-shard-x.log verdict=OK breaks=1 unexplained=0
+NEGCTL break kind=progress-declared old_bytes=46 new_bytes=6 why=the row declares it replaced a progress partial
+QA-LOG WROTE name=battery-shard-y.log bytes=6 lines=1 sha256=b640e840b19d3786 dialect=utf-8/lf VERDICT PASS
+QA-LOG REPLACED name=battery-shard-y.log old_bytes=6 old_sha16=b640e840b19d3786 new_bytes=7 new_sha16=480c2336b410f1ad
+QA-LOG WROTE name=battery-shard-y.log bytes=7 lines=1 sha256=480c2336b410f1ad dialect=utf-8/lf VERDICT PASS
+QA-LOG REPLACED name=battery-shard-y.log old_bytes=14 old_sha16=283deef7cf04bdd1 new_bytes=6 new_sha16=5eef8098ed6ec0a1
+QA-LOG WROTE name=battery-shard-y.log bytes=6 lines=1 sha256=5eef8098ed6ec0a1 dialect=utf-8/lf VERDICT PASS
+NEGCTL arm-c shard name, no declaration name=battery-shard-y.log verdict=RED breaks=1 unexplained=1
+NEGCTL break kind=unexplained old_bytes=14 new_bytes=6 why=the row declares prev_kind=evidence and an unlinked evidence row is a lost record

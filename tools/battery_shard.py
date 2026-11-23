@@ -359,7 +359,13 @@ def stream_evidence(path, text):
     """
     _progress_name(path)
     text, _carried = qa_log_module().mark_carried_proofs(text)
+    # R3371 (AC-QCH1): the partial declares what it is, so the replacement row
+    # it later causes can say prev_kind=progress instead of reading as a lost
+    # record. The sentinel line is never part of the final artifact - that one
+    # still goes through write_evidence and the qa_log birth site.
+    sentinel = qa_log_module().PROGRESS_SENTINEL
     with open(path, "w", encoding="utf-8", newline="\n") as handle:
+        handle.write(sentinel + "\n")
         handle.write(text)
         handle.flush()
         os.fsync(handle.fileno())
