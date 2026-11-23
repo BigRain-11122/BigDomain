@@ -22,6 +22,7 @@ import os
 import re
 import shutil
 import sqlite3
+import sys
 import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -60,9 +61,23 @@ def read_bytes(path):
 
 
 def load_tool():
-    spec = importlib.util.spec_from_file_location("fyc_under_test", TOOL)
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
+    # R3374 (AC-FYCP1..AC-FYCP3): the tool imports its sibling module
+    # `face_backhop` at module level (since R3296), so a spec load from any
+    # other cwd raised ModuleNotFoundError before a single criterion ran -
+    # the battery row had been red at import time since that wiring and no
+    # leg had re-run it. The search path is widened for this one load and
+    # removed again, so the suite leaves no global residue.
+    tools_dir = os.path.dirname(TOOL)
+    added = tools_dir not in sys.path
+    if added:
+        sys.path.insert(0, tools_dir)
+    try:
+        spec = importlib.util.spec_from_file_location("fyc_under_test", TOOL)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+    finally:
+        if added:
+            sys.path.remove(tools_dir)
     return mod
 
 

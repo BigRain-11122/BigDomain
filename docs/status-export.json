@@ -1,23 +1,23 @@
 {
   "ceo_face": {
     "board_pages_skipped": [
-      "preview/battery-shard-report.html (16424B)"
+      "preview/face-sweep.html (8878B)"
     ],
-    "current": "2026-11-24 R3373 PRODUCT+ENGINEERING: `fold --plan-only` answers the width question the execute path left to hand arithmetic - how many log lines must be folded to clear the gate at a given reserve - and it writes nothing.",
+    "current": "2026-11-24 R3374 PRODUCT: the CEO front door was one generation behind - preview/index.html still quoted the shard page's predecessor and the first-yuan chain page read E_STALE - and the whole face family now reads 13/13 PASS.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
-    "last_artifact": "preview/ledger-reconcile-face.html (8656B) + preview/ledger-reconcile-face.json (6151B) [2026-11-24 commit]",
-    "latest_artifact": "preview/ledger-reconcile-face.html (8656B) + preview/ledger-reconcile-face.json (6151B) [2026-11-24 commit]",
-    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ledger-reconcile-face.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/qa-logs-toolkit-R3373.log (10709B, 2026-11-24)",
-    "latest_evidence": "qa/qa-logs-toolkit-R3373.log (10709B, 2026-11-24)",
+    "last_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-23 commit]; later=html)",
+    "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-23 commit]; later=html)",
+    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ugc-gate-report.html",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/first-yuan-chain-suite-R3374.log (2016B, 2026-11-24)",
+    "latest_evidence": "qa/first-yuan-chain-suite-R3374.log (2016B, 2026-11-24)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3373] next window (<=48h): (1) CEO shard page `--check` reads `RED E_REGISTRY_DRIFT` right now because this window's registry row moved 185 -> 199 criteria (6409 -> 6423); the six-family leg is launched detached after every other write in this window and its `--check` is the only acceptance - never hand-edit a page number. (2) P2 tech seeds from R3176 are now exhausted (a closed by R3211/R3212, b by R3372, c by this window) - pull the next tech head and pin AC in the row before claiming; `queue_head --head tech` still answers `NO-HEAD open=7 claimable=6 gated=1` with six NO-CRITERIA rows, so claiming one means writing its criteria first. (3) `qa_log --ledger-check` reads rows=77 broken=5: the five historical battery-shard breaks stay broken by R3371's ruling (diagnosis, not repair). (4) Orphan census across rounds still needs a child-process world that holds no ports. (5) Carrier: `state_append` reports fold_margin=51840 after this append, so no fold is due; `fold --plan-only` now answers that question directly instead of by hand. Honest carry: full battery not re-run; Docker absent; BigDomain-OSLoop LogonType=Interactive; `test_face_sweep` 54/56 (AC-FSWB20/20c) (truncated)",
-    "next_milestone_due": "2026-11-26T05:04:18+08:00",
-    "updated_at": "2026-11-24T05:04:18+08:00",
+    "next_milestone": "[R3374] next window (<=48h): (1) **出生地预防**：入口页族本窗靠人手按收轮链顺序补跑才转绿，没有任何闸阻止下一窗再陈旧——为 `tools/closeout_gate.py` 增一条「CEO 入口页新鲜」判据（entry-index 与 first-yuan-chain 两个 `--check` 皆 rc=0），先在本板钉 AC 再动代码；判据=陈旧时收口闸变红且不写任何页。 (2) 承账不变：`qa_log --ledger-check` rows=77 broken=5（R3371 裁定=诊断不修）；全量 battery 未实跑；Docker 缺位；`BigDomain-OSLoop` LogonType=Interactive；`test_face_sweep` 54/56（AC-FSWB20/20c）。 (3) 载体：按 `fold --plan-only` 读数决定是否折。 (4) 诚实承账：物理件五件仍缺（商户号／服务器／域名／备案+ICP／小程序 appid+secret）——买家仍付不了钱。",
+    "next_milestone_due": "2026-11-26T05:33:32+08:00",
+    "updated_at": "2026-11-24T05:33:32+08:00",
     "heartbeat": {
       "tick": 3365,
-      "state_tick": 3373,
-      "lag": 8,
+      "state_tick": 3374,
+      "lag": 9,
       "verdict": "FLAG",
       "reason": "heartbeat_row_debt"
     },
@@ -37,9 +37,9 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-24 R3373 PRODUCT+ENGINEERING: `fold --plan-only` answers the width question the execute path left to hand arithmetic - how many log lines must be folded to clear the gate at a given reserve - and it writes nothing.",
-  "claims": {"claimed": 25, "captured": 2, "contradicted": 5, "uncaptured": 18, "historic": 5, "rows": 77, "present": true, "census_ts": "2026-11-24T05:04:18+08:00"},
-  "chain": {"present": true, "rows": 77, "broken": 5, "path": "state/qa_replacements.jsonl"},
+  "current": "2026-11-24 R3374 PRODUCT: the CEO front door was one generation behind - preview/index.html still quoted the shard page's predecessor and the first-yuan chain page read E_STALE - and the whole face family now reads 13/13 PASS.",
+  "claims": {"claimed": 27, "captured": 2, "contradicted": 5, "uncaptured": 20, "historic": 5, "rows": 79, "present": true, "census_ts": "2026-11-24T05:33:32+08:00"},
+  "chain": {"present": true, "rows": 79, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -67,14 +67,14 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-24 R3373 PRODUCT+ENGINEERING: `fold --plan-only` answers the width question the execute path left to hand arithmetic - how many log lines must be folded to clear the gate at a given reserve - and it writes nothing.",
-  "export_ts": "2026-11-24T05:04:18+08:00",
-  "latest_artifact": "preview/ledger-reconcile-face.html (8656B) + preview/ledger-reconcile-face.json (6151B) [2026-11-24 commit]",
-  "latest_evidence": "qa/qa-logs-toolkit-R3373.log (10709B, 2026-11-24)",
-  "next_milestone": "[R3373] next window (<=48h): (1) CEO shard page `--check` reads `RED E_REGISTRY_DRIFT` right now because this window's registry row moved 185 -> 199 criteria (6409 -> 6423); the six-family leg is launched detached after every other write in this window and its `--check` is the only acceptance - never hand-edit a page number. (2) P2 tech seeds from R3176 are now exhausted (a closed by R3211/R3212, b by R3372, c by this window) - pull the next tech head and pin AC in the row before claiming; `queue_head --head tech` still answers `NO-HEAD open=7 claimable=6 gated=1` with six NO-CRITERIA rows, so claiming one means writing its criteria first. (3) `qa_log --ledger-check` reads rows=77 broken=5: the five historical battery-shard breaks stay broken by R3371's ruling (diagnosis, not repair). (4) Orphan census across rounds still needs a child-process world that holds no ports. (5) Carrier: `state_append` reports fold_margin=51840 after this append, so no fold is due; `fold --plan-only` now answers that question directly instead of by hand. Honest carry: full battery not re-run; Docker absent; BigDomain-OSLoop LogonType=Interactive; `test_face_sweep` 54/56 (AC-FSWB20/20c) (truncated)",
+  "do": "2026-11-24 R3374 PRODUCT: the CEO front door was one generation behind - preview/index.html still quoted the shard page's predecessor and the first-yuan chain page read E_STALE - and the whole face family now reads 13/13 PASS.",
+  "export_ts": "2026-11-24T05:33:32+08:00",
+  "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-23 commit]; later=html)",
+  "latest_evidence": "qa/first-yuan-chain-suite-R3374.log (2016B, 2026-11-24)",
+  "next_milestone": "[R3374] next window (<=48h): (1) **出生地预防**：入口页族本窗靠人手按收轮链顺序补跑才转绿，没有任何闸阻止下一窗再陈旧——为 `tools/closeout_gate.py` 增一条「CEO 入口页新鲜」判据（entry-index 与 first-yuan-chain 两个 `--check` 皆 rc=0），先在本板钉 AC 再动代码；判据=陈旧时收口闸变红且不写任何页。 (2) 承账不变：`qa_log --ledger-check` rows=77 broken=5（R3371 裁定=诊断不修）；全量 battery 未实跑；Docker 缺位；`BigDomain-OSLoop` LogonType=Interactive；`test_face_sweep` 54/56（AC-FSWB20/20c）。 (3) 载体：按 `fold --plan-only` 读数决定是否折。 (4) 诚实承账：物理件五件仍缺（商户号／服务器／域名／备案+ICP／小程序 appid+secret）——买家仍付不了钱。",
   "outs": [
+    "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-23 commit]; later=html)",
     "preview/ledger-reconcile-face.html (8656B) + preview/ledger-reconcile-face.json (6151B) [2026-11-24 commit]",
-    "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-23 mtime] (halves differ: html [2026-11-23 mtime] + json [2026-11-23 commit]; later=html)",
     "preview/platform-live-report.html (8621B) + preview/platform-live-report.json (6228B) [2026-11-23 mtime]",
     "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-23 mtime] (halves differ: html [2026-11-23 mtime] + json [2026-11-16 commit]; later=html)",
     "preview/apimarket-report-slowanswer.html (13022B) + preview/apimarket-report-slowanswer.json (18381B) [2026-11-22 mtime] (halves differ: html [2026-11-22 mtime] + json [2026-10-25 commit]; later=html)",
@@ -107,17 +107,17 @@
         "status": "MET"
       },
       {
-        "claimable": 6,
+        "claimable": 4,
         "delivered": [],
         "discounted": 0,
-        "done_rows": 526,
+        "done_rows": 528,
         "floor": 10,
         "gated_rows": 1,
-        "open_rows": 7,
+        "open_rows": 5,
         "path": "state/queue/tech.md",
         "present": true,
         "queue": "tech",
-        "shortfall": 4,
+        "shortfall": 6,
         "status": "SHORT"
       },
       {
@@ -135,7 +135,7 @@
         "status": "SHORT"
       }
     ],
-    "shortfall_total": 10,
+    "shortfall_total": 12,
     "verdict": "FLOOR-DEBT"
   },
   "results": [
@@ -144,7 +144,7 @@
       "2026-11-04 R2431 verification window on the item the debt gate named first=yes (reconcile-battery-R2431, carried from R2430): zero product code changed, the R2168 mixed-tree rule honoured. Leg 1 read 542/543 suites with the criteria total 4234 exactly as pre-registered and the only red was reconcile-daily-census at cd7 exit=2 DRIFT-FLAG; the census named the file (qa/battery-R2431-stdout.log, class=cmd-raw) because this window launched the battery with a Start-Process redirect pointed INTO the evidence directory. Repaired at the birth site, never by widening the baseline: the two launcher captures moved to the gitignored logs/ face, after which the census read flags=0 DRIFT-CLEAN with the 529-entry baseline untouched. Retry leg on the repaired tree: RUNNER PASS 543/543 suites plus controls 7/7 in 956.2s at criteria 4234, TMP RECLAIM 932/932. Four follow-up sections: matrix FAILED first on the stale doc without rewriting it, was regenerated stamp-aligned to 52317B, and the re-run read VERDICT R2431 PASS failing=none (fingerprint CLEAN 5 domains, profile byte-identical, census DRIFT-CLEAN). Debt: reconcile-battery-R2431 closed and product-face-R2432 opened first=yes through the shipped CLIs. Zero product points claimed."
     ],
     [
-      "3373",
+      "3374",
       "OSLoop 执行 tick",
       "a failed fold state write takes the appended archive block back and removes the backup"
     ]
@@ -158,22 +158,22 @@
   "self_drive": {
     "window": "2026-11-18..2026-11-24",
     "window_days": 7,
-    "log_lines_in_window": 55,
+    "log_lines_in_window": 68,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 11,
+    "substantive_non_idle_mention_lines": 12,
     "proposals_total": 11,
     "proposals_open": 9,
     "queue_main_open": 6,
-    "queue_tech_open": 7,
+    "queue_tech_open": 5,
     "queue_explore_open": 4
   },
-  "state_bytes": 26660,
-  "next_milestone_due": "2026-11-26T05:04:18+08:00",
+  "state_bytes": 32190,
+  "next_milestone_due": "2026-11-26T05:33:32+08:00",
   "heartbeat": {
     "tick": 3365,
-    "state_tick": 3373,
-    "lag": 8,
+    "state_tick": 3374,
+    "lag": 9,
     "verdict": "FLAG",
     "reason": "heartbeat_row_debt"
   },

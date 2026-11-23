@@ -1,0 +1,19 @@
+SHARD scope=SHARD registry_suites=766 registry_criteria=6435 selected=1 selected_criteria=13 cap=600s leg_cap=0s overrides=1 exact=1 state=COMPLETE
+SHARD row os-first-yuan-chain rc=1 pass=0 fail=0 detail=none suite=none crit=13 0.1s
+SHARD detail os-first-yuan-chain Traceback (most recent call last):
+SHARD detail os-first-yuan-chain   File "C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\sandbox\..\os\test_first_yuan_chain.py", line 340, in <module>
+SHARD detail os-first-yuan-chain     raise SystemExit(main())
+SHARD detail os-first-yuan-chain                      ~~~~^^
+SHARD detail os-first-yuan-chain   File "C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\sandbox\..\os\test_first_yuan_chain.py", line 79, in main
+SHARD detail os-first-yuan-chain     tool = load_tool()
+SHARD detail os-first-yuan-chain   File "C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\sandbox\..\os\test_first_yuan_chain.py", line 65, in load_tool
+SHARD detail os-first-yuan-chain     spec.loader.exec_module(mod)
+SHARD detail os-first-yuan-chain     ~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+SHARD detail os-first-yuan-chain   File "<frozen importlib._bootstrap_external>", line 763, in exec_module
+SHARD detail os-first-yuan-chain   File "<frozen importlib._bootstrap>", line 491, in _call_with_frames_removed
+SHARD detail os-first-yuan-chain   File "C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\first_yuan_chain.py", line 39, in <module>
+SHARD detail os-first-yuan-chain     import face_backhop
+SHARD detail os-first-yuan-chain ModuleNotFoundError: No module named 'face_backhop'
+SHARD rc=2 scope=SHARD selected=1 executed=1 green=0 criteria=13 crit_mismatch=0 elapsed=0.1s crit_checked=0 crit_unchecked=1
+SHARD disclosure crit_unchecked=os-first-yuan-chain
+SHARD red os-first-yuan-chain:rc=1
