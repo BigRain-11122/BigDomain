@@ -3,20 +3,20 @@
     "board_pages_skipped": [
       "preview/face-sweep.html (8878B)"
     ],
-    "current": "2026-11-23 R3351 PRODUCT+ENGINEERING: the last eight re-pin assertions no longer write the tree current shape into a number - the funnel suite derives both lifetime totals from its own lead lists and judges the order id set, the hub page law judges the published face SET plus a drop-one growth arm instead of eight, and the read and label readings name their sites.",
+    "current": "2026-11-23 R3352 PRODUCT+ENGINEERING: the CEO-visible shard report page was two registry generations stale (733 suites / 5972 criteria against 764 / 6394) and its own --check read E_REGISTRY_DRIFT; it is now regenerated from the shipped six families and reads RED with seven suites named, which is the honest reading rather than a stale PASS.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
-    "last_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-23 commit]",
-    "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-23 commit]",
+    "last_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-23 mtime] (halves differ: html [2026-11-23 mtime] + json [2026-11-23 commit]; later=html)",
+    "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-23 mtime] (halves differ: html [2026-11-23 mtime] + json [2026-11-23 commit]; later=html)",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ugc-gate-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/negctl-R3351.log (361B, 2026-11-23)",
-    "latest_evidence": "qa/negctl-R3351.log (361B, 2026-11-23)",
+    "latest_artifact_note": "",
+    "latest_evidence": "qa/battery-shard-os-R3352.log (624B, 2026-11-23)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3350] next window (<=48h): (1) 继续 REPIN 序（现序头 `test_funnel_sku_persist.py:170`）：剩 foreign 5 + ambient 3 共 8 条，判据同 R3350=改成点名、证明承重、不随树长大假红。 (2) 继续按族消耗覆盖：`os` 族 73 支 / 729 判据未覆盖（R3347 读数），先只读量「其中多少是 R3300 后新增」再按小片跑（`os-probe-seam-*` 跑前先取单支耗时）。 (3) `ugc-msgsec-face` 行读数 `pass=0 fail=0 detail=none` 而它自己印 `PASS 55/55`——先只读量它打印什么，再决定补解析还是补打印（R3346 起搬运）。 (4) 孤儿普查的**跨轮真形状**仍未实跑（R3342 起第九轮搬运）：需一个不握端口的子进程世界，判据=硬杀前后两次起树的判词并列。承（未变）：全量 **764** 行 battery 未实跑；`test_face_sweep` 54/56（AC-FSWB20/20c）；`BigDomain-OSLoop` LogonType=Interactive；产品真缺口仍是物理件｛商户号／服务器／域名／备案+ICP／小程序 appid+secret｝——买家仍付不了钱。",
-    "next_milestone_due": "2026-11-25T18:08:02+08:00",
-    "updated_at": "2026-11-23T18:08:02+08:00",
+    "next_milestone": "[R3352] next window (<=48h): (1) **报告页现已 RED，7 条红要逐条定罪**（本窗只诊断 2 条）：`os-queue-head` AC-QHD6 是环境快照律（tech 队列 8 开项 / 0 可认领头，行全是 NO-CRITERIA 或 GATED）——先判「该给队列行补 AC 前缀」还是「该律应改判」，禁盲改；`os-queue-floor-export-face` AC-QFE3 与 `os-export-consistency-queue-face` 同报两条折后窗口计数（`self_drive.log_lines_in_window` 存 152 重算 30、`substantive_non_idle_mention_lines` 存 18 重算 3）——先量导出 owner 是否把 `logs/state-log-archive-2026-11.md` 计入窗口，再决定补读归档还是改存储口径；其余 `lobby-hub-{ledger,ugc,panel,member}` 4 条与 `os-ledger-archive`（9/14）、`os-ledger-reconcile-face`（7/8）未诊断。 (2) 继续按族消耗覆盖：剩 70 支未覆盖，其中 48 支是 `os-probe-seam-*`（历史 rc=124），跑前先取单支耗时，按小片 `--exact --evidence` 推进。 (3) 孤儿普查的**跨轮真形状**仍未实跑（R3342 起第十一轮搬运）：需一个不握端口的子进程世界，判据=硬杀前后两次起树的判词并列。 (4) 载体现值 20768B / margin +57732，下窗不必折；若 `--check` 报 FOLD-NEEDED 再折。承（未变）：全量 battery 未实跑；`test_face_sweep` 54/56（AC-FSWB20/20c）；`BigDomain-OSLoop` LogonType=Interactive；产品真缺口仍是物理件｛商户号／服务器／域名／备案+ICP／小程序 appid+secret｝——买家仍付不了钱。",
+    "next_milestone_due": "2026-11-25T19:00:15+08:00",
+    "updated_at": "2026-11-23T19:00:15+08:00",
     "heartbeat": {
-      "tick": 3351,
-      "state_tick": 3351,
+      "tick": 3352,
+      "state_tick": 3352,
       "lag": 0,
       "verdict": "PASS",
       "reason": "fresh"
@@ -29,23 +29,17 @@
       "over7": 0,
       "dup_rows": 0,
       "distinct": 8,
-      "collapsed": 0,
+      "collapsed": 1,
       "labels_refreshed": 0,
       "notes_stale": 0,
       "note_claims": 0,
       "criteria_stale": 0,
       "criteria_claims": 0
-    },
-    "corpus": {
-      "files": 4849,
-      "bytes": 511616912,
-      "mb": 511.6,
-      "readable": 4849
     }
   },
-  "current": "2026-11-23 R3351 PRODUCT+ENGINEERING: the last eight re-pin assertions no longer write the tree current shape into a number - the funnel suite derives both lifetime totals from its own lead lists and judges the order id set, the hub page law judges the published face SET plus a drop-one growth arm instead of eight, and the read and label readings name their sites.",
-  "claims": {"claimed": 321, "captured": 95, "contradicted": 10, "uncaptured": 216, "historic": 7, "rows": 38, "present": true, "census_ts": "2026-11-23T18:08:02+08:00"},
-  "chain": {"present": true, "rows": 38, "broken": 2, "path": "state/qa_replacements.jsonl"},
+  "current": "2026-11-23 R3352 PRODUCT+ENGINEERING: the CEO-visible shard report page was two registry generations stale (733 suites / 5972 criteria against 764 / 6394) and its own --check read E_REGISTRY_DRIFT; it is now regenerated from the shipped six families and reads RED with seven suites named, which is the honest reading rather than a stale PASS.",
+  "claims": {"claimed": 315, "captured": 95, "contradicted": 10, "uncaptured": 210, "historic": 7, "rows": 40, "present": true, "census_ts": "2026-11-23T19:00:15+08:00"},
+  "chain": {"present": true, "rows": 40, "broken": 3, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -73,13 +67,13 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-23 R3351 PRODUCT+ENGINEERING: the last eight re-pin assertions no longer write the tree current shape into a number - the funnel suite derives both lifetime totals from its own lead lists and judges the order id set, the hub page law judges the published face SET plus a drop-one growth arm instead of eight, and the read and label readings name their sites.",
-  "export_ts": "2026-11-23T18:08:02+08:00",
-  "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-23 commit]",
-  "latest_evidence": "qa/negctl-R3351.log (361B, 2026-11-23)",
-  "next_milestone": "[R3350] next window (<=48h): (1) 继续 REPIN 序（现序头 `test_funnel_sku_persist.py:170`）：剩 foreign 5 + ambient 3 共 8 条，判据同 R3350=改成点名、证明承重、不随树长大假红。 (2) 继续按族消耗覆盖：`os` 族 73 支 / 729 判据未覆盖（R3347 读数），先只读量「其中多少是 R3300 后新增」再按小片跑（`os-probe-seam-*` 跑前先取单支耗时）。 (3) `ugc-msgsec-face` 行读数 `pass=0 fail=0 detail=none` 而它自己印 `PASS 55/55`——先只读量它打印什么，再决定补解析还是补打印（R3346 起搬运）。 (4) 孤儿普查的**跨轮真形状**仍未实跑（R3342 起第九轮搬运）：需一个不握端口的子进程世界，判据=硬杀前后两次起树的判词并列。承（未变）：全量 **764** 行 battery 未实跑；`test_face_sweep` 54/56（AC-FSWB20/20c）；`BigDomain-OSLoop` LogonType=Interactive；产品真缺口仍是物理件｛商户号／服务器／域名／备案+ICP／小程序 appid+secret｝——买家仍付不了钱。",
+  "do": "2026-11-23 R3352 PRODUCT+ENGINEERING: the CEO-visible shard report page was two registry generations stale (733 suites / 5972 criteria against 764 / 6394) and its own --check read E_REGISTRY_DRIFT; it is now regenerated from the shipped six families and reads RED with seven suites named, which is the honest reading rather than a stale PASS.",
+  "export_ts": "2026-11-23T19:00:15+08:00",
+  "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-23 mtime] (halves differ: html [2026-11-23 mtime] + json [2026-11-23 commit]; later=html)",
+  "latest_evidence": "qa/battery-shard-os-R3352.log (624B, 2026-11-23)",
+  "next_milestone": "[R3352] next window (<=48h): (1) **报告页现已 RED，7 条红要逐条定罪**（本窗只诊断 2 条）：`os-queue-head` AC-QHD6 是环境快照律（tech 队列 8 开项 / 0 可认领头，行全是 NO-CRITERIA 或 GATED）——先判「该给队列行补 AC 前缀」还是「该律应改判」，禁盲改；`os-queue-floor-export-face` AC-QFE3 与 `os-export-consistency-queue-face` 同报两条折后窗口计数（`self_drive.log_lines_in_window` 存 152 重算 30、`substantive_non_idle_mention_lines` 存 18 重算 3）——先量导出 owner 是否把 `logs/state-log-archive-2026-11.md` 计入窗口，再决定补读归档还是改存储口径；其余 `lobby-hub-{ledger,ugc,panel,member}` 4 条与 `os-ledger-archive`（9/14）、`os-ledger-reconcile-face`（7/8）未诊断。 (2) 继续按族消耗覆盖：剩 70 支未覆盖，其中 48 支是 `os-probe-seam-*`（历史 rc=124），跑前先取单支耗时，按小片 `--exact --evidence` 推进。 (3) 孤儿普查的**跨轮真形状**仍未实跑（R3342 起第十一轮搬运）：需一个不握端口的子进程世界，判据=硬杀前后两次起树的判词并列。 (4) 载体现值 20768B / margin +57732，下窗不必折；若 `--check` 报 FOLD-NEEDED 再折。承（未变）：全量 battery 未实跑；`test_face_sweep` 54/56（AC-FSWB20/20c）；`BigDomain-OSLoop` LogonType=Interactive；产品真缺口仍是物理件｛商户号／服务器／域名／备案+ICP／小程序 appid+secret｝——买家仍付不了钱。",
   "outs": [
-    "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-23 commit]",
+    "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-23 mtime] (halves differ: html [2026-11-23 mtime] + json [2026-11-23 commit]; later=html)",
     "preview/platform-live-report.html (8621B) + preview/platform-live-report.json (6228B) [2026-11-23 mtime]",
     "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-23 mtime] (halves differ: html [2026-11-23 mtime] + json [2026-11-16 commit]; later=html)",
     "preview/apimarket-report-slowanswer.html (13022B) + preview/apimarket-report-slowanswer.json (18381B) [2026-11-22 mtime] (halves differ: html [2026-11-22 mtime] + json [2026-10-25 commit]; later=html)",
@@ -149,7 +143,7 @@
       "2026-11-04 R2431 verification window on the item the debt gate named first=yes (reconcile-battery-R2431, carried from R2430): zero product code changed, the R2168 mixed-tree rule honoured. Leg 1 read 542/543 suites with the criteria total 4234 exactly as pre-registered and the only red was reconcile-daily-census at cd7 exit=2 DRIFT-FLAG; the census named the file (qa/battery-R2431-stdout.log, class=cmd-raw) because this window launched the battery with a Start-Process redirect pointed INTO the evidence directory. Repaired at the birth site, never by widening the baseline: the two launcher captures moved to the gitignored logs/ face, after which the census read flags=0 DRIFT-CLEAN with the 529-entry baseline untouched. Retry leg on the repaired tree: RUNNER PASS 543/543 suites plus controls 7/7 in 956.2s at criteria 4234, TMP RECLAIM 932/932. Four follow-up sections: matrix FAILED first on the stale doc without rewriting it, was regenerated stamp-aligned to 52317B, and the re-run read VERDICT R2431 PASS failing=none (fingerprint CLEAN 5 domains, profile byte-identical, census DRIFT-CLEAN). Debt: reconcile-battery-R2431 closed and product-face-R2432 opened first=yes through the shipped CLIs. Zero product points claimed."
     ],
     [
-      "3351",
+      "3352",
       "OSLoop 执行 tick",
       "a failed fold state write takes the appended archive block back and removes the backup"
     ]
@@ -163,21 +157,21 @@
   "self_drive": {
     "window": "2026-11-17..2026-11-23",
     "window_days": 7,
-    "log_lines_in_window": 152,
+    "log_lines_in_window": 39,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 18,
+    "substantive_non_idle_mention_lines": 11,
     "proposals_total": 11,
     "proposals_open": 9,
     "queue_main_open": 6,
     "queue_tech_open": 8,
     "queue_explore_open": 4
   },
-  "state_bytes": 82748,
-  "next_milestone_due": "2026-11-25T18:08:02+08:00",
+  "state_bytes": 21537,
+  "next_milestone_due": "2026-11-25T19:00:15+08:00",
   "heartbeat": {
-    "tick": 3351,
-    "state_tick": 3351,
+    "tick": 3352,
+    "state_tick": 3352,
     "lag": 0,
     "verdict": "PASS",
     "reason": "fresh"
@@ -190,17 +184,11 @@
     "over7": 0,
     "dup_rows": 0,
     "distinct": 8,
-    "collapsed": 0,
+    "collapsed": 1,
     "labels_refreshed": 0,
     "notes_stale": 0,
     "note_claims": 0,
     "criteria_stale": 0,
     "criteria_claims": 0
-  },
-  "corpus": {
-    "files": 4849,
-    "bytes": 511616912,
-    "mb": 511.6,
-    "readable": 4849
   }
 }

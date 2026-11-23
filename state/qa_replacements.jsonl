@@ -36,3 +36,5 @@
 {"event": "REPLACED", "name": "battery-shard-smallfamilies-R3347.log", "new_bytes": 2296, "new_sha16": "85af41f01ba5a93f", "old_bytes": 816, "old_sha16": "3aa1f13145211a23", "ts": "2026-11-23T08:20:21Z"}
 {"event": "REPLACED", "name": "battery-shard-smallfamilies-R3347.log", "new_bytes": 946, "new_sha16": "587b9d41fd580068", "old_bytes": 817, "old_sha16": "4aae18b4670c6bb0", "ts": "2026-11-23T08:27:18Z"}
 {"event": "REPLACED", "name": "battery-shard-export-round-R3347.log", "new_bytes": 366, "new_sha16": "c14cdb62a631bb5a", "old_bytes": 238, "old_sha16": "e2d6d53a8e114475", "ts": "2026-11-23T08:28:04Z"}
+{"event": "REPLACED", "name": "battery-shard-os-R3352.log", "new_bytes": 1928, "new_sha16": "e3b5f3e50858fec8", "old_bytes": 496, "old_sha16": "930f2c486ea109d4", "ts": "2026-11-23T10:21:31Z"}
+{"event": "REPLACED", "name": "battery-shard-os-R3352.log", "new_bytes": 624, "new_sha16": "e2b39d7e4ba5721c", "old_bytes": 496, "old_sha16": "66a6e1a14b7ad994", "ts": "2026-11-23T10:25:10Z"}

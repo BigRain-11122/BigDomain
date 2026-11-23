@@ -1,4 +1,4 @@
-"""Battery suite for tools/battery_shard_report.py - AC-BSRB1..AC-BSRB11.
+"""Battery suite for tools/battery_shard_report.py - AC-BSRB1..AC-BSRB12.
 
 The eight criteria of the tool (AC-BSR1..AC-BSR8) were pinned in
 src/os/backlog.md at R2799/R2800, BEFORE the tool existed.  The tool shipped
@@ -410,6 +410,49 @@ def main():
            % (tot_ok, page_ok, seen0_ok, nz_ok,
               has(page_tamper, "E_PAGE_UNCHECKED"),
               has(totals_tamper, "E_TOTALS_UNCHECKED")))
+
+        # AC-BSRB12 (R3352): pass/fail count rows that START with PASS/FAIL,
+        # so a suite that prints ONE summary row has no such rows at all - its
+        # zero is emptiness, not a measurement, and a bare 0 beside
+        # `suite=PASS 55/55` reads as a contradiction. detail=none prints the
+        # word, detail=yes keeps its numbers, and a payload written BEFORE the
+        # field existed keeps its numbers too (never re-read retroactively).
+        bare_text = ("SHARD scope=SHARD registry_suites=1 registry_criteria=2 "
+                     "selected=2 selected_criteria=2\n"
+                     "SHARD row probe-bare rc=0 pass=0 fail=0 detail=none "
+                     "suite=PASS 55/55 crit=6 0.4s\n"
+                     "SHARD row probe-full rc=0 pass=1 fail=0 detail=yes "
+                     "suite=PASS 1/1 crit=1 0.1s\n"
+                     "SHARD rc=0 scope=SHARD selected=2 executed=2 green=2 "
+                     "criteria=2 crit_mismatch=0 elapsed=0.5s "
+                     "crit_checked=2 crit_unchecked=0\n")
+        bare_fam = bsr.parse_family("probe", "probe-", "g", 0, bare_text)
+        det_ok = [(r.get("label"), r.get("detail"))
+                  for r in bare_fam.get("suites", [])] == [
+                      ("probe-bare", "none"), ("probe-full", "yes")]
+        det_payload = copy.deepcopy(payload)
+        det_payload["families"][0]["suites"] = bare_fam.get("suites", [])
+        det_html = bsr.render_html(det_payload)
+        bare_row = [chunk for chunk in det_html.split("<tr>")
+                    if "probe-bare" in chunk]
+        full_row = [chunk for chunk in det_html.split("<tr>")
+                    if "probe-full" in chunk]
+        bare_ok = (len(bare_row) == 1
+                   and ("<td class=\"n\">\u672a\u7533\u62a5</td>"
+                        "<td class=\"n\">\u672a\u7533\u62a5</td>")
+                   in bare_row[0])
+        full_ok = (len(full_row) == 1
+                   and "<td class=\"n\">1</td><td class=\"n\">0</td>"
+                   in full_row[0])
+        pre_field = copy.deepcopy(det_payload)
+        pre_field["families"][0]["suites"] = [
+            {"label": "probe-old", "rc": 0, "pass": 0, "fail": 0,
+             "suite": "PASS 55/55", "crit": 6, "elapsed_s": 0.4}]
+        legacy_num_ok = ("<td class=\"n\">0</td><td class=\"n\">0</td>"
+                         in bsr.render_html(pre_field))
+        ok("AC-BSRB12", det_ok and bare_ok and full_ok and legacy_num_ok,
+           "detail=%s bare=%s full=%s prefield_number=%s"
+           % (det_ok, bare_ok, full_ok, legacy_num_ok))
     finally:
         bsr.FAMILIES, bsr.run_family, bsr.PREVIEW, bsr.OUT_JSON, bsr.OUT_HTML = keep
         shutil.rmtree(world, ignore_errors=True)

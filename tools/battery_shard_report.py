@@ -62,7 +62,8 @@ SCOPE_RE = re.compile(
     r"^SHARD scope=SHARD registry_suites=(\d+) registry_criteria=(\d+) "
     r"selected=(\d+) selected_criteria=(\d+)", re.M)
 ROW_RE = re.compile(
-    r"^SHARD row (\S+) rc=(\d+) pass=(\d+) fail=(\d+)(?: detail=\S+)? "
+    r"^SHARD row (\S+) rc=(\d+) pass=(\d+) fail=(\d+)"
+    r"(?: detail=(\S+))? "
     r"suite=(.*) crit=(\d+) ([\d.]+)s(?: timeout=yes)?$", re.M)
 # AC-BSRB10 (R3081): this regex used to end at "elapsed=Ns$", which was true
 # until R2919 appended crit_checked and R3081 appended crit_unchecked. Measured
@@ -130,8 +131,9 @@ def parse_family(key, prefix, guards, rc, out):
     for m in ROW_RE.finditer(out):
         row = {"label": m.group(1), "rc": int(m.group(2)),
                "pass": int(m.group(3)), "fail": int(m.group(4)),
-               "suite": m.group(5).strip(), "crit": int(m.group(6)),
-               "elapsed_s": float(m.group(7))}
+               "detail": (m.group(5) or ""),
+               "suite": m.group(6).strip(), "crit": int(m.group(7)),
+               "elapsed_s": float(m.group(8))}
         resp["suites"].append(row)
         if row["rc"] != 0:
             resp["red"].append(row["label"])
@@ -147,6 +149,23 @@ def unchecked_cell(fam):
     if fam.get("crit_unchecked_seen"):
         return "%d" % fam.get("crit_unchecked", 0)
     return "\u672a\u7533\u62a5"
+
+
+def count_cell(row, field):
+    """AC-BSRB12 (R3352): a pass/fail cell whose zero may be mere emptiness.
+
+    The runner's pass=/fail= count lines that START with PASS/FAIL inside the
+    suite body. A suite that prints ONE summary row (e.g. `SUITE PASS 55/55`
+    and nothing else) yields no such line, so its 0 means "nothing was
+    counted", not "nothing passed" -- printing a bare 0 beside `suite=PASS
+    55/55` reads as a contradiction. detail=yes keeps its numbers; detail=none
+    prints the same word unchecked_cell uses. A payload written before this
+    field existed cannot say which case it is, so it keeps its number: the
+    page is never retroactively re-read.
+    """
+    if row.get("detail") == "none":
+        return "\u672a\u7533\u62a5"
+    return "%d" % row.get(field, 0)
 
 
 def measure():
@@ -254,9 +273,10 @@ def render_html(p):
           "<th>\u5957\u4ef6\u81ea\u62a5</th><th>\u5224\u636e</th><th>\u79d2</th></tr>")
         for r in f["suites"]:
             a("<tr><td><code>%s</code></td><td class=\"n\">%d</td>"
-              "<td class=\"n\">%d</td><td class=\"n\">%d</td><td>%s</td>"
+              "<td class=\"n\">%s</td><td class=\"n\">%s</td><td>%s</td>"
               "<td class=\"n\">%d</td><td class=\"n\">%.1f</td></tr>"
-              % (r["label"], r["rc"], r["pass"], r["fail"], r["suite"],
+              % (r["label"], r["rc"], count_cell(r, "pass"),
+                 count_cell(r, "fail"), r["suite"],
                  r["crit"], r["elapsed_s"]))
         a("</table>")
     a("<h2>\u8bda\u5b9e\u6ce8</h2><ul>")

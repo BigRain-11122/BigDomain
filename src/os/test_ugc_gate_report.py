@@ -1,4 +1,4 @@
-﻿"""Battery suite for tools/ugc_gate_report.py - criteria AC-UGRB0..AC-UGRB46.
+"""Battery suite for tools/ugc_gate_report.py - criteria AC-UGRB0..AC-UGRB46.
 
 WHY THIS SUITE EXISTS (measured at R2814, not hypothesised):
 tools/ugc_gate_report.py renders preview/ugc-gate-report.html + .json, the face

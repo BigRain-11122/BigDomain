@@ -1,0 +1,6 @@
+SHARD scope=SHARD registry_suites=764 registry_criteria=6393 selected=4 selected_criteria=24 cap=600s leg_cap=60s overrides=1 exact=4 state=COMPLETE
+SHARD row os-source-bom rc=0 pass=6 fail=0 detail=yes suite=PASS 6/6 crit=6 4.2s
+SHARD row os-registry-counter-census rc=0 pass=55 fail=0 detail=yes suite=PASS 55/55 crit=13 33.7s
+SHARD row os-heartbeat rc=0 pass=8 fail=0 detail=yes suite=PASS 8/8 crit=1 0.5s
+SHARD row os-stage-residue rc=0 pass=22 fail=0 detail=yes suite=PASS 22/22 crit=4 16.3s
+SHARD rc=0 scope=SHARD selected=4 executed=4 green=4 criteria=24 crit_mismatch=0 elapsed=54.7s crit_checked=4 crit_unchecked=0
