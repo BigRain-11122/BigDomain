@@ -5100,6 +5100,14 @@ SUITES = [
     # shared by 5 post-pin windows, 2 of them the R3085 repair folds).
     ("os-state-fold",
      os.path.join("..", "os", "test_state_fold.py"), 8),
+    # R3369: the BOARD carrier fold (AC-BLF1..AC-BLF6 pinned in
+    # src/os/backlog.md before tools/backlog_fold.py existed) - the board every
+    # window opens had grown to 5,049,109 B over 761 round blocks, so the
+    # carrier rather than the work limited each read. The fold keeps the newest
+    # round labels live, moves the rest verbatim into a byte-verified archive
+    # append, and refuses before any write.
+    ("os-backlog-fold",
+     os.path.join("..", "os", "test_backlog_fold.py"), 6),
     # R2567: the fold FACE state_fold.py never shipped (AC-SFOLD1..AC-SFOLD6
     # pinned at R2548): shipped predicate reused, archive copy proved byte-equal,
     # ledger coverage read THROUGH the archive, layout writer/reader agreement,

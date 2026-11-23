@@ -56,3 +56,12 @@
 {"event": "REPLACED", "name": "battery-shard-cov3-R3364.log", "new_bytes": 3366, "new_sha16": "ee23da45b1815f3e", "old_bytes": 416, "old_sha16": "747ea87399046759", "ts": "2026-11-23T16:43:58Z"}
 {"event": "REPLACED", "name": "probe-R3365.log", "new_bytes": 692, "new_sha16": "bd12d7ae480bb9e6", "old_bytes": 692, "old_sha16": "346ebae2c436d56d", "ts": "2026-11-23T17:10:43Z"}
 {"event": "REPLACED", "name": "negctl-R3365.log", "new_bytes": 166, "new_sha16": "5702dc2e60487b79", "old_bytes": 166, "old_sha16": "5702dc2e60487b79", "ts": "2026-11-23T17:10:44Z"}
+{"event": "REPLACED", "name": "battery-shard-logs-R3367.log", "new_bytes": 369, "new_sha16": "23c3667ea70ce9fd", "old_bytes": 240, "old_sha16": "c2b12662e1d6f1a3", "ts": "2026-11-23T17:45:58Z"}
+{"event": "REPLACED", "name": "battery-shard-cov-R3367.log", "new_bytes": 837, "new_sha16": "2fd95b742918eee9", "old_bytes": 708, "old_sha16": "ac4fecbeb314f312", "ts": "2026-11-23T17:50:13Z"}
+{"event": "REPLACED", "name": "battery-shard-cov-R3368.log", "new_bytes": 633, "new_sha16": "99543d9199dc6200", "old_bytes": 506, "old_sha16": "48d9ff71f4498c70", "ts": "2026-11-23T18:16:05Z"}
+{"event": "REPLACED", "name": "battery-shard-cov2-R3368.log", "new_bytes": 511, "new_sha16": "dbfe717a65329e60", "old_bytes": 383, "old_sha16": "54746c97f53bcc01", "ts": "2026-11-23T18:17:40Z"}
+{"event": "REPLACED", "name": "battery-shard-cov3-R3368.log", "new_bytes": 1074, "new_sha16": "25fa8b583db70c9a", "old_bytes": 947, "old_sha16": "7492b16794a6e66b", "ts": "2026-11-23T18:17:46Z"}
+{"event": "REPLACED", "name": "battery-shard-cov4-R3368.log", "new_bytes": 510, "new_sha16": "5ede856422420e2d", "old_bytes": 383, "old_sha16": "58feede03738174c", "ts": "2026-11-23T18:17:56Z"}
+{"event": "REPLACED", "name": "battery-shard-cov5-R3368.log", "new_bytes": 1601, "new_sha16": "7d167c5534409fb3", "old_bytes": 1474, "old_sha16": "9116cd48b664a3dc", "ts": "2026-11-23T18:18:09Z"}
+{"event": "REPLACED", "name": "battery-shard-cov6-R3368.log", "new_bytes": 1570, "new_sha16": "b8a1eb9b70d0e025", "old_bytes": 1441, "old_sha16": "f5e907a4db619356", "ts": "2026-11-23T18:30:56Z"}
+{"event": "REPLACED", "name": "battery-shard-bfold-R3369.log", "new_bytes": 356, "new_sha16": "195f0b2f4e1c53a9", "old_bytes": 230, "old_sha16": "fc8f6c53e41063a2", "ts": "2026-11-23T18:45:31Z"}

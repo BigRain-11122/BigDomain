@@ -384,6 +384,7 @@
     "os-append-check-status-precedence",
     "os-archive-provenance",
     "os-artifact-disk-text-readability",
+    "os-backlog-fold",
     "os-bare-evidence-deep-pile",
     "os-bare-evidence-pile-refusal",
     "os-battery-followup",
