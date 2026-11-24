@@ -5,15 +5,15 @@
     ],
     "current": "2026-11-24 R3419 PRODUCT: the per-buyer refund propensity question now has a door - api_buyer_refund_propensity (live with AC-RFP1..8 and its own suite) had zero readers across tools/ and preview/, so 'how heavy is my refund behaviour per purchase, and how does it compare with the market' could only be read by calling the sandbox from a shell.",
     "do": "R3409: folded the state carrier first as the board ordered (71749B->19227B, slice 3:103=R3396..R3406, token_ok=true, round_pointer_lost=[]), then gave api_seller_concentration its first openable page - eleven KPI cards, a 0..10000 Herfindahl scale with this reading's marker, a per-buyer net-revenue ladder with share bars and cumulative share, the Pareto and largest-buyer callout, seven law sentences; AC-BCB1..6 SUITE 6/6, two measured controls, matrix 778 rows DOC-CURRENT, census pinned=778, entry index 23/23, chain read_only=True, face sweep 13/13, closeout PASS files=4947.",
-    "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
-    "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
+    "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-16 commit]; later=html)",
+    "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-16 commit]; later=html)",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
     "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/seller-revenue-board-R3410.log (2083B, 2026-11-24)",
     "latest_evidence": "qa/seller-revenue-board-R3410.log (2083B, 2026-11-24)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3418] next window (<=48h): (1) 载体折载本窗已执行：`post_bytes=59719`／闸 78500（余量 18781B ≈ 3-4 轮，`predicted_eq_actual=true`、`round_pointer_lost=[]`），下窗仍**先**跑 `logs_toolkit fold --plan-only` 再决定，**禁手改 state 文件**。(2) S4U 落地仍欠一次提权运行（本窗实测 `LogonType=Interactive`，本窗未提权）。(3) 队列卫生：explore 仍仅余一条门控项（商户号），main 队头全门控（bootstrap 需物理件五件）——需补种；本窗未补，如实承账。(4) 同族余量（本窗只开 `api_purchase_dossier` 一门，下窗**重测不假设**）：该面四笔全部已有读者，故下窗按 R3415 的 123 面普查重挑零读者面；实测空勿取（R3389 判例）：`api_buyer_todo`、`api_buyer_claim_todo`、`api_market_backlog_months`／`api_price_volatility`／`api_relist_gap`／`api_price_step_distribution`。(5) **导出「最近实物」槽位仍被 mtime 排序牵动**（承 R3400..R3417）——结构性缺陷：产品 pair 重渲→入口页→链，链必然最后写盘；修法须先立判据（建议=「本轮 PRODUCT 行点名的 pair 优先、链／入口页降级」，判据三条：pair 在盘、该 pair 有 producer 行、输出字段含原始来源标记）。(6) 写序事实再记：入口页与首元链互引字节，本窗用「链 → 入口页 → 链」三步收敛（首跑链 `E_STALE` 两次）。(7) 新页面须在 `tools/deliverable_index.py` 的 `PAIR_PRODUCERS` 记一行 producer；注册表新行使 census 786→787、矩阵 787 行，正法=`suite_matrix_reconcile.py --write` 与 `registry_counter_census.py --write-pin --no-cache` 后各自读 PASS。(8) 承账不变：`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`test_face_sweep` 54/56（AC-FSWB20/20c）。(9) 提案面 BD-PROP-011 open（窗 11-22~11-28）在册，本窗配额已清。(10) (truncated)",
-    "next_milestone_due": "2026-11-26T20:19:20+08:00",
-    "updated_at": "2026-11-24T20:19:20+08:00",
+    "next_milestone": "[R3419] next window (<=48h): (1) 载体 state 附加区 66425B／闸 78500（余量 12075B ≈ 2-3 轮，closeout 读 fold_needed=false）；下窗**先**跑 `python src/os/logs_toolkit.py fold --plan-only` 再决定，**禁手改 state 文件**。(2) S4U 落地仍欠一次提权运行（本窗实测 BigDomain-OSLoop=LogonType Interactive）。(3) 已交付读数零读者仍剩 ~80 面（本窗实测 `api_*` 共 124 面、未提交前 81 面零读者；其中 `api_buyer_claim_todo`／`api_seller_claim_months` 在出厂世界读空，按 R3389 空节律判不可作产品增量）——下窗继续按此律挑「有数」的一面。(4) 48h 窗至 2026-11-26。",
+    "next_milestone_due": "2026-11-26T20:23:55+08:00",
+    "updated_at": "2026-11-24T20:23:55+08:00",
     "heartbeat": {
       "tick": 3410,
       "state_tick": 3410,
@@ -44,22 +44,8 @@
     }
   },
   "current": "2026-11-24 R3419 PRODUCT: the per-buyer refund propensity question now has a door - api_buyer_refund_propensity (live with AC-RFP1..8 and its own suite) had zero readers across tools/ and preview/, so 'how heavy is my refund behaviour per purchase, and how does it compare with the market' could only be read by calling the sandbox from a shell.",
-  "claims": {
-    "claimed": 15,
-    "captured": 7,
-    "contradicted": 0,
-    "uncaptured": 8,
-    "historic": 0,
-    "rows": 96,
-    "present": true,
-    "census_ts": "2026-11-24T20:19:20+08:00"
-  },
-  "chain": {
-    "present": true,
-    "rows": 96,
-    "broken": 5,
-    "path": "state/qa_replacements.jsonl"
-  },
+  "claims": {"claimed": 15, "captured": 7, "contradicted": 0, "uncaptured": 8, "historic": 0, "rows": 96, "present": true, "census_ts": "2026-11-24T20:23:55+08:00"},
+  "chain": {"present": true, "rows": 96, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -88,10 +74,10 @@
     }
   ],
   "do": "2026-11-24 R3419 PRODUCT: the per-buyer refund propensity question now has a door - api_buyer_refund_propensity (live with AC-RFP1..8 and its own suite) had zero readers across tools/ and preview/, so 'how heavy is my refund behaviour per purchase, and how does it compare with the market' could only be read by calling the sandbox from a shell.",
-  "export_ts": "2026-11-24T20:19:20+08:00",
-  "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
+  "export_ts": "2026-11-24T20:23:55+08:00",
+  "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-16 commit]; later=html)",
   "latest_evidence": "qa/seller-revenue-board-R3410.log (2083B, 2026-11-24)",
-  "next_milestone": "[R3418] next window (<=48h): (1) 载体折载本窗已执行：`post_bytes=59719`／闸 78500（余量 18781B ≈ 3-4 轮，`predicted_eq_actual=true`、`round_pointer_lost=[]`），下窗仍**先**跑 `logs_toolkit fold --plan-only` 再决定，**禁手改 state 文件**。(2) S4U 落地仍欠一次提权运行（本窗实测 `LogonType=Interactive`，本窗未提权）。(3) 队列卫生：explore 仍仅余一条门控项（商户号），main 队头全门控（bootstrap 需物理件五件）——需补种；本窗未补，如实承账。(4) 同族余量（本窗只开 `api_purchase_dossier` 一门，下窗**重测不假设**）：该面四笔全部已有读者，故下窗按 R3415 的 123 面普查重挑零读者面；实测空勿取（R3389 判例）：`api_buyer_todo`、`api_buyer_claim_todo`、`api_market_backlog_months`／`api_price_volatility`／`api_relist_gap`／`api_price_step_distribution`。(5) **导出「最近实物」槽位仍被 mtime 排序牵动**（承 R3400..R3417）——结构性缺陷：产品 pair 重渲→入口页→链，链必然最后写盘；修法须先立判据（建议=「本轮 PRODUCT 行点名的 pair 优先、链／入口页降级」，判据三条：pair 在盘、该 pair 有 producer 行、输出字段含原始来源标记）。(6) 写序事实再记：入口页与首元链互引字节，本窗用「链 → 入口页 → 链」三步收敛（首跑链 `E_STALE` 两次）。(7) 新页面须在 `tools/deliverable_index.py` 的 `PAIR_PRODUCERS` 记一行 producer；注册表新行使 census 786→787、矩阵 787 行，正法=`suite_matrix_reconcile.py --write` 与 `registry_counter_census.py --write-pin --no-cache` 后各自读 PASS。(8) 承账不变：`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`test_face_sweep` 54/56（AC-FSWB20/20c）。(9) 提案面 BD-PROP-011 open（窗 11-22~11-28）在册，本窗配额已清。(10) (truncated)",
+  "next_milestone": "[R3419] next window (<=48h): (1) 载体 state 附加区 66425B／闸 78500（余量 12075B ≈ 2-3 轮，closeout 读 fold_needed=false）；下窗**先**跑 `python src/os/logs_toolkit.py fold --plan-only` 再决定，**禁手改 state 文件**。(2) S4U 落地仍欠一次提权运行（本窗实测 BigDomain-OSLoop=LogonType Interactive）。(3) 已交付读数零读者仍剩 ~80 面（本窗实测 `api_*` 共 124 面、未提交前 81 面零读者；其中 `api_buyer_claim_todo`／`api_seller_claim_months` 在出厂世界读空，按 R3389 空节律判不可作产品增量）——下窗继续按此律挑「有数」的一面。(4) 48h 窗至 2026-11-26。",
   "outs": [
     "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
     "refund-reasons-R3407.log (2274B)",
@@ -184,7 +170,7 @@
     "queue_explore_open": 1
   },
   "state_bytes": 66425,
-  "next_milestone_due": "2026-11-26T20:19:20+08:00",
+  "next_milestone_due": "2026-11-26T20:23:55+08:00",
   "heartbeat": {
     "tick": 3410,
     "state_tick": 3410,
