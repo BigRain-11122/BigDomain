@@ -8261,6 +8261,15 @@ SUITES = [
     # month, the explicit zero-returning sentence and the empty probe.
     ("os-seller-cohort-board",
      os.path.join("..", "os", "test_seller_cohort_board.py"), 6),
+    # R3415: tools/buyer_ledger_board.py renders one wallet statement per
+    # buyer. api_buyer_ledger shipped with AC-AMLGB1..8 but had zero
+    # readers under tools/ and preview/, so the page prints the shipped
+    # envelope verbatim and the suite re-reads the face over its own
+    # throwaway demo world, pinning entry count, credit and debit totals,
+    # the net and balance seam, newest-first order, explicit empty memos,
+    # marked refund credits, the explicit empty statement and the probe.
+    ("os-buyer-ledger-board",
+     os.path.join("..", "os", "test_buyer_ledger_board.py"), 6),
     # R3073: tools/city_face_report.py renders the P-47 item-1 city face and
     # carries its own --check (AC-CFY1..8), but this registry had no row naming
     # it, so the face was graded only by the fail-soft [GATES] sweep - the

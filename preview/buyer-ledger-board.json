@@ -1,0 +1,168 @@
+{
+ "generated_utc": "2026-11-24 10:46:09Z",
+ "face": "api_buyer_ledger",
+ "board_face": "api_board",
+ "source_face": "api_sales",
+ "buyer_count": 3,
+ "buyers": [
+  {
+   "buyer_id": "usr:bob",
+   "balance": 297,
+   "balance_known": true,
+   "entry_count": 4,
+   "credit_total": 310,
+   "debit_total": 13,
+   "net": 297,
+   "limit": 50,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "entries": [
+    {
+     "tx_id": "8ba56b903aeae03a",
+     "ts_utc": "2026-10-02T00:00:00Z",
+     "type": "adjust",
+     "action": "adjust",
+     "ref": "apimarket:refund:1",
+     "ref_type": "order",
+     "direction": "credit",
+     "amount": 10,
+     "memo": "apimarket refund purchase=1 listing=1 buyer=usr:bob reason=month-crossing refund",
+     "source_ai": false
+    },
+    {
+     "tx_id": "2a9aa506ccfe848f",
+     "ts_utc": "2026-09-15T12:00:00Z",
+     "type": "spend",
+     "action": "spend",
+     "ref": "ref-bob-d2",
+     "ref_type": "order",
+     "direction": "debit",
+     "amount": 3,
+     "memo": null,
+     "source_ai": false
+    },
+    {
+     "tx_id": "3a5d1beb704e2cea",
+     "ts_utc": "2026-08-31T23:59:59Z",
+     "type": "spend",
+     "action": "spend",
+     "ref": "ref-bob-d1",
+     "ref_type": "order",
+     "direction": "debit",
+     "amount": 10,
+     "memo": null,
+     "source_ai": false
+    },
+    {
+     "tx_id": "b2bd0eae51ba4277",
+     "ts_utc": "2026-08-31T23:59:59Z",
+     "type": "adjust",
+     "action": "adjust",
+     "ref": "manual:fund-bob",
+     "ref_type": "manual",
+     "direction": "credit",
+     "amount": 300,
+     "memo": "report demo funding bob",
+     "source_ai": false
+    }
+   ]
+  },
+  {
+   "buyer_id": "usr:carol",
+   "balance": 290,
+   "balance_known": true,
+   "entry_count": 2,
+   "credit_total": 300,
+   "debit_total": 10,
+   "net": 290,
+   "limit": 50,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "entries": [
+    {
+     "tx_id": "07d07667b924742a",
+     "ts_utc": "2026-09-01T00:00:00Z",
+     "type": "spend",
+     "action": "spend",
+     "ref": "ref-carol-d1",
+     "ref_type": "order",
+     "direction": "debit",
+     "amount": 10,
+     "memo": null,
+     "source_ai": false
+    },
+    {
+     "tx_id": "a44806ae16402de0",
+     "ts_utc": "2026-08-31T23:59:59Z",
+     "type": "adjust",
+     "action": "adjust",
+     "ref": "manual:fund-carol",
+     "ref_type": "manual",
+     "direction": "credit",
+     "amount": 300,
+     "memo": "report demo funding carol",
+     "source_ai": false
+    }
+   ]
+  },
+  {
+   "buyer_id": "usr:erin",
+   "balance": 300,
+   "balance_known": true,
+   "entry_count": 3,
+   "credit_total": 305,
+   "debit_total": 5,
+   "net": 300,
+   "limit": 50,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "entries": [
+    {
+     "tx_id": "f07f78205bfae33b",
+     "ts_utc": "2026-10-03T00:00:00Z",
+     "type": "adjust",
+     "action": "adjust",
+     "ref": "apimarket:refund:4",
+     "ref_type": "order",
+     "direction": "credit",
+     "amount": 5,
+     "memo": "apimarket refund purchase=4 listing=3 buyer=usr:erin reason=demo refund same month",
+     "source_ai": false
+    },
+    {
+     "tx_id": "078369a01cb80be7",
+     "ts_utc": "2026-09-20T08:30:00Z",
+     "type": "spend",
+     "action": "spend",
+     "ref": "ref-erin-d3",
+     "ref_type": "order",
+     "direction": "debit",
+     "amount": 5,
+     "memo": null,
+     "source_ai": false
+    },
+    {
+     "tx_id": "573c473b200c2d27",
+     "ts_utc": "2026-08-31T23:59:59Z",
+     "type": "adjust",
+     "action": "adjust",
+     "ref": "manual:fund-erin",
+     "ref_type": "manual",
+     "direction": "credit",
+     "amount": 300,
+     "memo": "report demo funding erin",
+     "source_ai": false
+    }
+   ]
+  }
+ ],
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/buyer-ledger-board.html",
+ "sources": {
+  "driver": "5c9bc9599f61c227",
+  "copy": "19e15a0cec184bf6",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 7734,
+  "json": 4231
+ }
+}

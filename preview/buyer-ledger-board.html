@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>买家钱包对账单（出厂演示世界）</title>
+<style>
+:root{--ink:#1b1f24;--muted:#66707a;--line:#dfe4ea;--bg:#f7f8fa}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:var(--bg);color:var(--ink);
+font:15px/1.65 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+main{max-width:1080px;margin:0 auto}
+h1{font-size:22px;margin:0 0 4px;font-weight:650}
+h2{font-size:16px;margin:22px 0 8px;font-weight:620}
+.meta{color:var(--muted);font-size:13px;margin-bottom:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;
+padding:14px 16px;margin-bottom:14px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600;font-size:12px}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+td.neg{color:#b42318}
+tr.refund td{background:#fdf8ea}
+.tag{display:inline-block;padding:1px 7px;border-radius:999px;
+border:1px solid #e3cf8a;background:#fdf8ea;font-size:11.5px;color:#7a5c00}
+.kpi{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.kpi div{flex:1 1 108px;border:1px solid var(--line);border-radius:8px;
+padding:10px 12px;background:#fff}
+.kpi b{display:block;font-size:19px;font-variant-numeric:tabular-nums}
+.kpi b.neg{color:#b42318}
+.kpi span{color:var(--muted);font-size:12.5px}
+.disclaimer{border-left:3px solid #c9a227;background:#fdf8ea;padding:10px 14px;
+font-size:13px}
+.badge{display:inline-block;margin-right:8px;padding:2px 8px;
+border:1px solid var(--line);border-radius:999px;font-size:12px;
+color:var(--muted)}
+.law{font-size:13px;margin:6px 0}
+.empty{color:var(--muted);font-size:13px}
+footer{color:var(--muted);font-size:12px;margin:20px 0 8px}
+code{font-size:12.5px;background:#f2f4f7;padding:1px 5px;border-radius:4px}
+</style></head><body><main>
+<h1>买家钱包对账单（出厂演示世界）</h1>
+<div class=meta>逐买家一张钱包流水：退款到底有没有回到钱包里，回在哪一笔 &middot; 生成于 2026-11-24 10:46:09Z &middot; <code>api_buyer_ledger</code></div>
+<h2>逐买家对账单</h2>
+<div class=buyer id="buyer-usr:bob"><h2>usr:bob</h2><div class=kpi><div><span>当前余额</span><b>297</b></div><div><span>余额可知</span><b>true</b></div><div><span>分录数</span><b>4</b></div><div><span>贷记合计</span><b>310</b></div><div><span>借记合计</span><b>13</b></div><div><span>净额</span><b>297</b></div><div><span>取数上限</span><b>50</b></div></div><div class=card><table><tr><th>记账时间</th><th>类型</th><th>动作</th><th>方向</th><th class=n>金额</th><th>引用</th><th>摘要</th><th>来源 AI</th><th>交易号</th></tr><tr class="entry refund" data-tx="8ba56b903aeae03a"><td>2026-10-02T00:00:00Z</td><td>adjust</td><td>adjust</td><td>贷（进）</td><td class="n">10</td><td><span class=tag>退款回补</span> apimarket:refund:1</td><td>apimarket refund purchase=1 listing=1 buyer=usr:bob reason=month-crossing refund</td><td></td><td>8ba56b903aeae03a</td></tr><tr class="entry" data-tx="2a9aa506ccfe848f"><td>2026-09-15T12:00:00Z</td><td>spend</td><td>spend</td><td>借（出）</td><td class="n">3</td><td>ref-bob-d2</td><td>—</td><td></td><td>2a9aa506ccfe848f</td></tr><tr class="entry" data-tx="3a5d1beb704e2cea"><td>2026-08-31T23:59:59Z</td><td>spend</td><td>spend</td><td>借（出）</td><td class="n">10</td><td>ref-bob-d1</td><td>—</td><td></td><td>3a5d1beb704e2cea</td></tr><tr class="entry" data-tx="b2bd0eae51ba4277"><td>2026-08-31T23:59:59Z</td><td>adjust</td><td>adjust</td><td>贷（进）</td><td class="n">300</td><td>manual:fund-bob</td><td>report demo funding bob</td><td></td><td>b2bd0eae51ba4277</td></tr></table></div></div><div class=buyer id="buyer-usr:carol"><h2>usr:carol</h2><div class=kpi><div><span>当前余额</span><b>290</b></div><div><span>余额可知</span><b>true</b></div><div><span>分录数</span><b>2</b></div><div><span>贷记合计</span><b>300</b></div><div><span>借记合计</span><b>10</b></div><div><span>净额</span><b>290</b></div><div><span>取数上限</span><b>50</b></div></div><div class=card><table><tr><th>记账时间</th><th>类型</th><th>动作</th><th>方向</th><th class=n>金额</th><th>引用</th><th>摘要</th><th>来源 AI</th><th>交易号</th></tr><tr class="entry" data-tx="07d07667b924742a"><td>2026-09-01T00:00:00Z</td><td>spend</td><td>spend</td><td>借（出）</td><td class="n">10</td><td>ref-carol-d1</td><td>—</td><td></td><td>07d07667b924742a</td></tr><tr class="entry" data-tx="a44806ae16402de0"><td>2026-08-31T23:59:59Z</td><td>adjust</td><td>adjust</td><td>贷（进）</td><td class="n">300</td><td>manual:fund-carol</td><td>report demo funding carol</td><td></td><td>a44806ae16402de0</td></tr></table></div></div><div class=buyer id="buyer-usr:erin"><h2>usr:erin</h2><div class=kpi><div><span>当前余额</span><b>300</b></div><div><span>余额可知</span><b>true</b></div><div><span>分录数</span><b>3</b></div><div><span>贷记合计</span><b>305</b></div><div><span>借记合计</span><b>5</b></div><div><span>净额</span><b>300</b></div><div><span>取数上限</span><b>50</b></div></div><div class=card><table><tr><th>记账时间</th><th>类型</th><th>动作</th><th>方向</th><th class=n>金额</th><th>引用</th><th>摘要</th><th>来源 AI</th><th>交易号</th></tr><tr class="entry refund" data-tx="f07f78205bfae33b"><td>2026-10-03T00:00:00Z</td><td>adjust</td><td>adjust</td><td>贷（进）</td><td class="n">5</td><td><span class=tag>退款回补</span> apimarket:refund:4</td><td>apimarket refund purchase=4 listing=3 buyer=usr:erin reason=demo refund same month</td><td></td><td>f07f78205bfae33b</td></tr><tr class="entry" data-tx="078369a01cb80be7"><td>2026-09-20T08:30:00Z</td><td>spend</td><td>spend</td><td>借（出）</td><td class="n">5</td><td>ref-erin-d3</td><td>—</td><td></td><td>078369a01cb80be7</td></tr><tr class="entry" data-tx="573c473b200c2d27"><td>2026-08-31T23:59:59Z</td><td>adjust</td><td>adjust</td><td>贷（进）</td><td class="n">300</td><td>manual:fund-erin</td><td>report demo funding erin</td><td></td><td>573c473b200c2d27</td></tr></table></div></div>
+<h2>口径法则</h2>
+<div class=card><p class=law>余额 = 贷记合计 − 借记合计；余额不可知时余额按 0 展示且保留「不可知」标记。</p><p class=law>分录数等于本页印出的流水行数，不补位、不省略中间行。</p><p class=law>流水按记账时间新→旧排列；同一时刻的顺序由出厂面给出，本页不重排。</p><p class=law>零分录的买家印显式空对账单，而不是空白表格。</p><p class=law>方向只有「贷」与「借」两种；金额一律为非负，方向决定加还是减。</p><p class=law>带「退款回补」标记的行是出厂面里引用以 apimarket:refund: 开头的贷记行——标记只来自引用前缀，不由金额推断。</p><p class=law>本页是开发者 API 市场的钱包流水面，不是投资建议，也不构成任何收益承诺。</p></div>
+<h2>免责与来源</h2>
+<div class=card><div class=disclaimer>sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice</div>
+<p style="margin-top:10px"><span class=badge>AIGC 生成内容：本页由脚本自数据生成，含 AI 生成标识</span></p></div>
+<h2>复现命令</h2>
+<div class=card><code>python tools/buyer_ledger_board.py</code></div>
+<footer>BigDomain OSLoop &middot; 2026-11-24 10:46:09Z &middot; 本页由 tools/buyer_ledger_board.py 生成，不手改</footer>
+</main></body></html>

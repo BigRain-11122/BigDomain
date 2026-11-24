@@ -1,0 +1,14 @@
+R3415 buyer ledger board evidence (tools/buyer_ledger_board.py)
+render: BUYER-LEDGER preview/buyer-ledger-board.html buyers=3 entries=9
+check: BUYER-LEDGER CHECK PASS fails=0 html=7734B json=4231B
+suite: SUITE PASS 6/6 (AC-BLB1..6) declared=6
+control-a: deleted label key law_notadvice -> rc=3 E_BLB_FACE, page bytes untouched
+control-b: buyers[0].credit_total +7 -> rc=2 red AC-BLB2 AC-BLB3; restored byte_identical=True
+registry: os-buyer-ledger-board(6) wired in src/sandbox/reconcile_all.py
+matrix: WRITTEN docs/sandbox-suite-matrix.md 81122B 784 rows, DOC-CURRENT
+census: rows=784 readable=784 VERDICT PASS pinned=784
+entry-index: VERDICT PASS 23/23 (fingerprint moves with the export and is not restated here)
+chain: VERDICT PASS legs=2 entries=2 tx=1 read_only=True
+face-sweep: VERDICT PASS 13/13 then --check 21/21
+export: check_export_consistency SUMMARY pass=22 fail=0; status_export_fresh VERDICT R3415 PASS
+closeout: CLOSEOUT-GATE PASS files=4954 census=PASS matrix=DOC-CURRENT
