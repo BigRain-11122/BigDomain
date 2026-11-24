@@ -5,15 +5,15 @@
     ],
     "current": "2026-11-24 R3410 PIN - pre-registered before any code of this window; claims R3409 next-window item (4) delivered-readings-without-readers: api_revenue_months (own AC-REVM suite on disk, measured zero readers under tools/ and preview/). Measured on the factory demo world: envelope 9 keys, month row 10 keys, sellers enumerated from the shipped api_board(); usr:dana three months netting 10/13/-10 with lifetime 3 sales / 23 gross / 1 refund / 10 refunded / 13 net; usr:frank two months netting 5/-5 with lifetime 1/5/1/5/0; a refund-only month reads negative and the page keeps the minus sign.",
     "do": "R3409: folded the state carrier first as the board ordered (71749B->19227B, slice 3:103=R3396..R3406, token_ok=true, round_pointer_lost=[]), then gave api_seller_concentration its first openable page - eleven KPI cards, a 0..10000 Herfindahl scale with this reading's marker, a per-buyer net-revenue ladder with share bars and cumulative share, the Pareto and largest-buyer callout, seven law sentences; AC-BCB1..6 SUITE 6/6, two measured controls, matrix 778 rows DOC-CURRENT, census pinned=778, entry index 23/23, chain read_only=True, face sweep 13/13, closeout PASS files=4947.",
-    "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
-    "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
+    "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-16 commit]; later=html)",
+    "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-16 commit]; later=html)",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
     "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/seller-revenue-board-R3410.log (2083B, 2026-11-24)",
     "latest_evidence": "qa/seller-revenue-board-R3410.log (2083B, 2026-11-24)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3409] next window (<=48h): (1) **本窗已按板头第一件做载体折叠**（71749B→19227B，slice 3:103=R3396..R3406，token_ok=true、round_pointer_lost=[]、predicted_eq_actual=true，余量 59273B ≈ 10+ 轮）；仍欠的折叠是 `src/os/backlog.md` 自身（现约 940KB 越 800000 闸，`--fold --dry-run` 读 `E_BLF_NOT_ENOUGH_ROUNDS`）——下窗须读该工具 `--keep` 与轮边界规则后再折，**禁手改文件**。(2) S4U 落地仍欠一次提权运行（本窗实测 `LogonType=Interactive`，本窗未提权）。(3) 队列卫生：explore 仍仅余一条门控项（商户号），main 队头全门控（bootstrap 需物理件五件）——需补种。(4) 同族余量（本窗实测，不假设）：`api_price_volatility`／`api_price_step_distribution`／`api_relist_gap` 在出厂演示世界里分别读 `revision_count=0`／`gap_count=0`——**空小节不算产品增量**（R3389 判例），下窗若要给这三面开门，须先用出厂写面（真实改价／真实重挂调用）把世界驱动出非空读数，否则改挑其它非空面；`api_buyer_concentration(buyer_id)` 需要买家 id，可由出厂 `api_board()` 枚举，未测完。(5) **导出「最近实物」槽位仍被 mtime 排序牵动**（承 R3400..R3408）。(6) 写序事实再记：链与入口页互引字节，正法=「链 → 入口页 → 链」迭代到双方 `--check` rc=0（本窗首跑 `E_STALE`，两轮收敛）。(7) 注册表新行使 `registry_counter_census` 777→778，正法=`--write-pin` 后 `--check` 读 PASS（本窗已做）。(8) 承账不变：`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`test_face_sweep` 54/56（AC-FSWB20/20c）。(9) 提案面 BD-PROP-011 open（窗 11-22~11-28）在册，本窗配额已清。(10) 诚实承账：物理件五件仍缺——买家仍付不了钱。",
-    "next_milestone_due": "2026-11-26T17:10:16+08:00",
-    "updated_at": "2026-11-24T17:10:16+08:00",
+    "next_milestone": "[R3410] next window (<=48h): (1) 载体 28971B／闸 78500（余量 49529B ≈ 12 轮）；仍欠的折叠是 `src/os/backlog.md` 自身（约 940KB 越 800000 闸），下窗须先读 `tools/backlog_fold.py` 的 `--keep` 与轮边界规则再折，**禁手改文件**。(2) S4U 落地仍欠一次提权运行（本窗实测 `LogonType=Interactive`）。(3) 队列卫生：explore 仅余一条门控项（商户号），main 队头全门控（bootstrap 需物理件五件）——需补种。(4) 同族余量（本窗实测 124 面／91 面无读者，不假设）：演示世界非空且可开门的有 `api_seller_ledger`（4 条分录、余额 10、贷 17 借 7）、`api_refund_exposure`（2 行、总负担 10、缺口 0）、`api_market_buyer_cohort`（1 个月行）——**卖家账页最厚**，下窗可开门；实测为空勿取：`api_market_backlog_months`（0 行）、`api_claim_latency`（0 claim）、`api_listing_lifecycle`（history 0）。(5) **导出「最近实物」槽位仍被 mtime 排序牵动**（承 R3400..R3409，本窗仍指 `first-yuan-chain`）。(6) 写序事实再记：入口页与首元链互引字节，本窗用「链 → 入口页 → 链 → 入口页」四步才双 `--check` rc=0（首跑链 `E_STALE`）。(7) 注册表新行使 census 778→779、矩阵 779 行，正法=`--write` 与 `--write-pin` 后各自 `--check` 读 PASS。(8) 承账不变：`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`test_face_sweep` 54/56（AC-FSWB20/20c）。(9) 提案面 BD-PROP-011 open（窗 11-22~11-28）在册，本窗配额已清。(10) 诚实承账：物理件五件仍缺——买家仍付不了钱。",
+    "next_milestone_due": "2026-11-26T17:12:14+08:00",
+    "updated_at": "2026-11-24T17:12:14+08:00",
     "heartbeat": {
       "tick": 3410,
       "state_tick": 3410,
@@ -44,7 +44,7 @@
     }
   },
   "current": "2026-11-24 R3410 PIN - pre-registered before any code of this window; claims R3409 next-window item (4) delivered-readings-without-readers: api_revenue_months (own AC-REVM suite on disk, measured zero readers under tools/ and preview/). Measured on the factory demo world: envelope 9 keys, month row 10 keys, sellers enumerated from the shipped api_board(); usr:dana three months netting 10/13/-10 with lifetime 3 sales / 23 gross / 1 refund / 10 refunded / 13 net; usr:frank two months netting 5/-5 with lifetime 1/5/1/5/0; a refund-only month reads negative and the page keeps the minus sign.",
-  "claims": {"claimed": 39, "captured": 6, "contradicted": 4, "uncaptured": 29, "historic": 4, "rows": 90, "present": true, "census_ts": "2026-11-24T17:10:16+08:00"},
+  "claims": {"claimed": 39, "captured": 6, "contradicted": 4, "uncaptured": 29, "historic": 4, "rows": 90, "present": true, "census_ts": "2026-11-24T17:12:14+08:00"},
   "chain": {"present": true, "rows": 90, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -74,10 +74,10 @@
     }
   ],
   "do": "2026-11-24 R3410 PIN - pre-registered before any code of this window; claims R3409 next-window item (4) delivered-readings-without-readers: api_revenue_months (own AC-REVM suite on disk, measured zero readers under tools/ and preview/). Measured on the factory demo world: envelope 9 keys, month row 10 keys, sellers enumerated from the shipped api_board(); usr:dana three months netting 10/13/-10 with lifetime 3 sales / 23 gross / 1 refund / 10 refunded / 13 net; usr:frank two months netting 5/-5 with lifetime 1/5/1/5/0; a refund-only month reads negative and the page keeps the minus sign.",
-  "export_ts": "2026-11-24T17:10:16+08:00",
-  "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
+  "export_ts": "2026-11-24T17:12:14+08:00",
+  "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-16 commit]; later=html)",
   "latest_evidence": "qa/seller-revenue-board-R3410.log (2083B, 2026-11-24)",
-  "next_milestone": "[R3409] next window (<=48h): (1) **本窗已按板头第一件做载体折叠**（71749B→19227B，slice 3:103=R3396..R3406，token_ok=true、round_pointer_lost=[]、predicted_eq_actual=true，余量 59273B ≈ 10+ 轮）；仍欠的折叠是 `src/os/backlog.md` 自身（现约 940KB 越 800000 闸，`--fold --dry-run` 读 `E_BLF_NOT_ENOUGH_ROUNDS`）——下窗须读该工具 `--keep` 与轮边界规则后再折，**禁手改文件**。(2) S4U 落地仍欠一次提权运行（本窗实测 `LogonType=Interactive`，本窗未提权）。(3) 队列卫生：explore 仍仅余一条门控项（商户号），main 队头全门控（bootstrap 需物理件五件）——需补种。(4) 同族余量（本窗实测，不假设）：`api_price_volatility`／`api_price_step_distribution`／`api_relist_gap` 在出厂演示世界里分别读 `revision_count=0`／`gap_count=0`——**空小节不算产品增量**（R3389 判例），下窗若要给这三面开门，须先用出厂写面（真实改价／真实重挂调用）把世界驱动出非空读数，否则改挑其它非空面；`api_buyer_concentration(buyer_id)` 需要买家 id，可由出厂 `api_board()` 枚举，未测完。(5) **导出「最近实物」槽位仍被 mtime 排序牵动**（承 R3400..R3408）。(6) 写序事实再记：链与入口页互引字节，正法=「链 → 入口页 → 链」迭代到双方 `--check` rc=0（本窗首跑 `E_STALE`，两轮收敛）。(7) 注册表新行使 `registry_counter_census` 777→778，正法=`--write-pin` 后 `--check` 读 PASS（本窗已做）。(8) 承账不变：`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`test_face_sweep` 54/56（AC-FSWB20/20c）。(9) 提案面 BD-PROP-011 open（窗 11-22~11-28）在册，本窗配额已清。(10) 诚实承账：物理件五件仍缺——买家仍付不了钱。",
+  "next_milestone": "[R3410] next window (<=48h): (1) 载体 28971B／闸 78500（余量 49529B ≈ 12 轮）；仍欠的折叠是 `src/os/backlog.md` 自身（约 940KB 越 800000 闸），下窗须先读 `tools/backlog_fold.py` 的 `--keep` 与轮边界规则再折，**禁手改文件**。(2) S4U 落地仍欠一次提权运行（本窗实测 `LogonType=Interactive`）。(3) 队列卫生：explore 仅余一条门控项（商户号），main 队头全门控（bootstrap 需物理件五件）——需补种。(4) 同族余量（本窗实测 124 面／91 面无读者，不假设）：演示世界非空且可开门的有 `api_seller_ledger`（4 条分录、余额 10、贷 17 借 7）、`api_refund_exposure`（2 行、总负担 10、缺口 0）、`api_market_buyer_cohort`（1 个月行）——**卖家账页最厚**，下窗可开门；实测为空勿取：`api_market_backlog_months`（0 行）、`api_claim_latency`（0 claim）、`api_listing_lifecycle`（history 0）。(5) **导出「最近实物」槽位仍被 mtime 排序牵动**（承 R3400..R3409，本窗仍指 `first-yuan-chain`）。(6) 写序事实再记：入口页与首元链互引字节，本窗用「链 → 入口页 → 链 → 入口页」四步才双 `--check` rc=0（首跑链 `E_STALE`）。(7) 注册表新行使 census 778→779、矩阵 779 行，正法=`--write` 与 `--write-pin` 后各自 `--check` 读 PASS。(8) 承账不变：`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`test_face_sweep` 54/56（AC-FSWB20/20c）。(9) 提案面 BD-PROP-011 open（窗 11-22~11-28）在册，本窗配额已清。(10) 诚实承账：物理件五件仍缺——买家仍付不了钱。",
   "outs": [
     "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
     "refund-reasons-R3407.log (2274B)",
@@ -170,7 +170,7 @@
     "queue_explore_open": 1
   },
   "state_bytes": 28971,
-  "next_milestone_due": "2026-11-26T17:10:16+08:00",
+  "next_milestone_due": "2026-11-26T17:12:14+08:00",
   "heartbeat": {
     "tick": 3410,
     "state_tick": 3410,
