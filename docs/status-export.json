@@ -3,15 +3,15 @@
     "board_pages_skipped": [],
     "current": "2026-11-25 R3453 PRODUCT: the market real-name redeclaration question now has a door - api_market_provider_months (live with AC-PIM1..8 and its own suite on disk) answered zero readers across tools/, preview/ and src/os at HEAD, so how often the published shop front is re-declared, which month carried the churn and whether one shop or many were changing could only be read by walking every developer by hand.",
     "do": "2026-11-25 R3449 PRODUCT: the buyer-side answer-wait question now has a door - api_buyer_answer_wait (live with AC-BAW1..8 and its shipped suite on disk) had zero readers across tools/, preview/ and src/os, so how long one resident actually waited for answers month over month, how much of that was an older month's backlog and whether the account is being ignored right now could only be read by calling the sandbox from a shell.",
-    "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 mtime] (halves differ: html [2026-11-25 mtime] + json [2026-11-16 commit]; later=html)",
-    "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 mtime] (halves differ: html [2026-11-25 mtime] + json [2026-11-16 commit]; later=html)",
+    "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 commit] (halves differ: html [2026-11-25 commit] + json [2026-11-16 commit]; later=html)",
+    "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 commit] (halves differ: html [2026-11-25 commit] + json [2026-11-16 commit]; later=html)",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
     "latest_artifact_note": "",
     "latest_evidence": "qa/buyer-answer-wait-board-R3449.log (728B, 2026-11-25)",
     "newest_pair_on_disk_is_board": false,
     "next_milestone": "[R3453] next window (<=48h): (1) 零读者面清单余 4 面（本窗消 `api_market_provider_months`；余 `api_category_history`／`api_answer_history`／`api_provider_identity`／`api_buyer_watch_category_mix`），下窗仍先只读普查点名一位（面自带套件在盘且 tools/＋preview/＋src/os 实测零命中才动手；`api_category_history` 与 `api_answer_history` 在 src/sandbox/ledger 下无同名测试件，若仍零读者须先确认其面自带判据来源；出厂世界为空的面须经出厂写入门建行并显式声明；已开门面不重开）。(2) S4U 落地仍欠一次提权运行（本窗未实测 `BigDomain-OSLoop` LogonType）。(3) export 最新产物槽 writer 修复＋三条判据仍承账（本窗 `status_export_fresh.py --apply` 已把 latest_artifact 指到新页，但该槽长期只读 newest preview 文件，非按面归因；本窗已把导出面缩排修回写入器自带行锚定，剩下两个键 self_drive log_lines_in_window 与 results tick 行仍需每轮手工补值，下窗建议把它们交给同一写入器）。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`（本窗收口后待测）。(6) tick 口径：本窗 3452→3453。(7) 实测补一条：`registry_counter_census.py --check` 在 `--no-cache --write-pin` 之后会打印 `CACHE E_RCC_CACHE_PARTIAL reused=820/821` 但仍 VERDICT PASS，属缓存部分命中不是失败，下窗别误判。",
-    "next_milestone_due": "2026-11-27T07:12:36+08:00",
-    "updated_at": "2026-11-25T07:12:36+08:00",
+    "next_milestone_due": "2026-11-27T07:14:19+08:00",
+    "updated_at": "2026-11-25T07:14:19+08:00",
     "heartbeat": {
       "tick": 3449,
       "state_tick": 3449,
@@ -36,7 +36,7 @@
     }
   },
   "current": "2026-11-25 R3453 PRODUCT: the market real-name redeclaration question now has a door - api_market_provider_months (live with AC-PIM1..8 and its own suite on disk) answered zero readers across tools/, preview/ and src/os at HEAD, so how often the published shop front is re-declared, which month carried the churn and whether one shop or many were changing could only be read by walking every developer by hand.",
-  "claims": {"claimed": 27, "captured": 16, "contradicted": 0, "uncaptured": 11, "historic": 0, "rows": 101, "present": true, "census_ts": "2026-11-25T07:12:36+08:00"},
+  "claims": {"claimed": 27, "captured": 16, "contradicted": 0, "uncaptured": 11, "historic": 0, "rows": 101, "present": true, "census_ts": "2026-11-25T07:14:19+08:00"},
   "chain": {"present": true, "rows": 101, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -66,8 +66,8 @@
     }
   ],
   "do": "2026-11-25 R3453 PRODUCT: the market real-name redeclaration question now has a door - api_market_provider_months (live with AC-PIM1..8 and its own suite on disk) answered zero readers across tools/, preview/ and src/os at HEAD, so how often the published shop front is re-declared, which month carried the churn and whether one shop or many were changing could only be read by walking every developer by hand.",
-  "export_ts": "2026-11-25T07:12:36+08:00",
-  "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 mtime] (halves differ: html [2026-11-25 mtime] + json [2026-11-16 commit]; later=html)",
+  "export_ts": "2026-11-25T07:14:19+08:00",
+  "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 commit] (halves differ: html [2026-11-25 commit] + json [2026-11-16 commit]; later=html)",
   "latest_evidence": "qa/category-question-months-board-R3451.log (2339B, 2026-11-25)",
   "next_milestone": "[R3453] next window (<=48h): (1) 零读者面清单余 4 面（本窗消 `api_market_provider_months`；余 `api_category_history`／`api_answer_history`／`api_provider_identity`／`api_buyer_watch_category_mix`），下窗仍先只读普查点名一位（面自带套件在盘且 tools/＋preview/＋src/os 实测零命中才动手；`api_category_history` 与 `api_answer_history` 在 src/sandbox/ledger 下无同名测试件，若仍零读者须先确认其面自带判据来源；出厂世界为空的面须经出厂写入门建行并显式声明；已开门面不重开）。(2) S4U 落地仍欠一次提权运行（本窗未实测 `BigDomain-OSLoop` LogonType）。(3) export 最新产物槽 writer 修复＋三条判据仍承账（本窗 `status_export_fresh.py --apply` 已把 latest_artifact 指到新页，但该槽长期只读 newest preview 文件，非按面归因；本窗已把导出面缩排修回写入器自带行锚定，剩下两个键 self_drive log_lines_in_window 与 results tick 行仍需每轮手工补值，下窗建议把它们交给同一写入器）。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`（本窗收口后待测）。(6) tick 口径：本窗 3452→3453。(7) 实测补一条：`registry_counter_census.py --check` 在 `--no-cache --write-pin` 之后会打印 `CACHE E_RCC_CACHE_PARTIAL reused=820/821` 但仍 VERDICT PASS，属缓存部分命中不是失败，下窗别误判。",
   "outs": [
@@ -165,7 +165,7 @@
     "queue_explore_open": 1
   },
   "state_bytes": 75595,
-  "next_milestone_due": "2026-11-27T07:12:36+08:00",
+  "next_milestone_due": "2026-11-27T07:14:19+08:00",
   "heartbeat": {
     "tick": 3451,
     "state_tick": 3451,
