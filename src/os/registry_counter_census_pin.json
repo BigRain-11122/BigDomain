@@ -555,6 +555,7 @@
     "os-plain-import-comma-binding",
     "os-platform-live-report",
     "os-pre-commit-gate",
+    "os-price-reaction-board",
     "os-probe-seam-alias-expression-scope",
     "os-probe-seam-annotated-constant-scope",
     "os-probe-seam-constant-alias-scope",

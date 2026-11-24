@@ -8358,6 +8358,15 @@ SUITES = [
     # over its own throwaway demo world.
     ("os-buyer-profile-board",
      os.path.join("..", "os", "test_buyer_profile_board.py"), 6),
+    # R3437: tools/price_reaction_board.py renders the buyer price-reaction
+    # face (api_buyer_price_reaction, AC-BPR1..8) which had zero readers under
+    # tools/, preview/ and the report collector; the page prints one section
+    # per buyer - the three direction buckets with their watch/funnel/convert
+    # counters, the rate, the delta sum and both extremes - plus a market card
+    # that adds those columns and says so, and the suite re-reads the face over
+    # its own throwaway world.
+    ("os-price-reaction-board",
+     os.path.join("..", "os", "test_price_reaction_board.py"), 6),
     # R3436: tools/watch_conversion_board.py renders the watch-to-purchase
     # funnel (api_watch_conversion, AC-WCV1..8) which had zero readers under
     # tools/, preview/ and the report collector; the page prints the market
