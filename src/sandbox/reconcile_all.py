@@ -8294,6 +8294,14 @@ SUITES = [
     # absences, the seven law sentences and the wiring.
     ("os-purchase-dossier-board",
      os.path.join("..", "os", "test_purchase_dossier_board.py"), 6),
+    # R3419: tools/refund_propensity_board.py renders one refund-propensity
+    # reading per buyer beside the market baseline. api_buyer_refund_propensity
+    # shipped with AC-RFP1..8 but had zero readers under tools/ and preview/,
+    # so the page prints the shipped envelope verbatim, marks the bar as a
+    # width with the market marker, and the suite re-reads the face over its
+    # own throwaway demo world.
+    ("os-refund-propensity-board",
+     os.path.join("..", "os", "test_refund_propensity_board.py"), 6),
 
     # R3073: tools/city_face_report.py renders the P-47 item-1 city face and
     # carries its own --check (AC-CFY1..8), but this registry had no row naming

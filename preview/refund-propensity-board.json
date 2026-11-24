@@ -1,0 +1,81 @@
+{
+ "generated_utc": "2026-11-24 12:14:01Z",
+ "face": "api_buyer_refund_propensity",
+ "board_face": "api_board",
+ "source_face": "api_sales",
+ "buyer_count": 3,
+ "buyers": [
+  {
+   "buyer_id": "usr:bob",
+   "purchase_count": 2,
+   "refund_count": 1,
+   "non_refunded_purchase_count": 1,
+   "gross_spent": 13,
+   "refunded_tokens": 10,
+   "net_spent": 3,
+   "refund_rate": 0.5,
+   "refund_amount_rate": 0.7692307692307693,
+   "market_purchase_count": 4,
+   "market_refund_count": 2,
+   "market_refund_rate": 0.5,
+   "refund_rate_delta": 0.0,
+   "smoothing_strength": 10,
+   "smoothed_refund_rate": 0.5,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice"
+  },
+  {
+   "buyer_id": "usr:carol",
+   "purchase_count": 1,
+   "refund_count": 0,
+   "non_refunded_purchase_count": 1,
+   "gross_spent": 10,
+   "refunded_tokens": 0,
+   "net_spent": 10,
+   "refund_rate": 0.0,
+   "refund_amount_rate": 0.0,
+   "market_purchase_count": 4,
+   "market_refund_count": 2,
+   "market_refund_rate": 0.5,
+   "refund_rate_delta": -0.5,
+   "smoothing_strength": 10,
+   "smoothed_refund_rate": 0.45454545454545453,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice"
+  },
+  {
+   "buyer_id": "usr:erin",
+   "purchase_count": 1,
+   "refund_count": 1,
+   "non_refunded_purchase_count": 0,
+   "gross_spent": 5,
+   "refunded_tokens": 5,
+   "net_spent": 0,
+   "refund_rate": 1.0,
+   "refund_amount_rate": 1.0,
+   "market_purchase_count": 4,
+   "market_refund_count": 2,
+   "market_refund_rate": 0.5,
+   "refund_rate_delta": 0.5,
+   "smoothing_strength": 10,
+   "smoothed_refund_rate": 0.5454545454545454,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice"
+  }
+ ],
+ "market": {
+  "purchase_count": 4,
+  "refund_count": 2,
+  "refund_rate": 0.5
+ },
+ "smoothing_strength": 10,
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/refund-propensity-board.html",
+ "sources": {
+  "driver": "1b0ddd6287e6ecb6",
+  "copy": "b0dd3d7873c1afc0",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 6229,
+  "json": 2323
+ }
+}

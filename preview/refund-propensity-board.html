@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>买家退款倾向对账单</title>
+<style>
+:root{--ink:#1b1f24;--muted:#66707a;--line:#dfe4ea;--bg:#f7f8fa}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:var(--bg);color:var(--ink);
+font:15px/1.65 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+main{max-width:1120px;margin:0 auto}
+h1{font-size:22px;margin:0 0 4px;font-weight:650}
+h2{font-size:16px;margin:22px 0 8px;font-weight:620}
+.meta{color:var(--muted);font-size:13px;margin-bottom:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;
+padding:14px 16px;margin-bottom:14px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600;font-size:12px}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+td.neg{color:#b42318}
+tr.above td.delta{color:#b42318}
+tr.below td.delta{color:#067647}
+.kpi{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.kpi div{flex:1 1 118px;border:1px solid var(--line);border-radius:8px;
+padding:10px 12px;background:#fff}
+.kpi b{display:block;font-size:19px;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--muted);font-size:12.5px}
+.bar{position:relative;height:9px;background:#eef1f5;border-radius:999px;
+min-width:120px}
+.bar i{display:block;height:9px;border-radius:999px;background:#7b8fa8}
+.bar u{position:absolute;top:-3px;width:2px;height:15px;background:#c9a227}
+.disclaimer{border-left:3px solid #c9a227;background:#fdf8ea;padding:10px 14px;
+font-size:13px}
+.badge{display:inline-block;margin-right:8px;padding:2px 8px;
+border:1px solid var(--line);border-radius:999px;font-size:12px;
+color:var(--muted)}
+.law{font-size:13px;margin:6px 0}
+.empty{color:var(--muted);font-size:13px}
+footer{color:var(--muted);font-size:12px;margin:20px 0 8px}
+code{font-size:12.5px;background:#f2f4f7;padding:1px 5px;border-radius:4px}
+</style></head><body><main>
+<h1>买家退款倾向对账单</h1>
+<div class=meta>每位居民的退款次数占比、退款金额占比、市场基线与平滑率 &middot; 生成 2026-11-24 12:14:01Z &middot; <code>api_buyer_refund_propensity</code></div>
+<h2>逐买家读数</h2>
+<div class=card><div><span>居民数</span><b>3</b></div><div><span>市场购次</span><b>4</b></div><div><span>市场退款次</span><b>2</b></div><div><span>市场退款率</span><b>50.0%</b></div><div><span>平滑强度 K</span><b>10</b></div></div>
+<div class=card><table><tr><th>居民</th><th class=n>购次</th><th class=n>退款次</th><th class=n>未退款次</th><th class=n>毛花费</th><th class=n>已退</th><th class=n>净花费</th><th class=n>退款率(笔)</th><th class=n>退款率(金额)</th><th class=n>对市场偏离(百分点)</th><th class=n>平滑率</th><th>退款率条</th></tr><tr class="buyer" data-buyer="usr:bob"><td class="">usr:bob</td><td class="n">2</td><td class="n">1</td><td class="n">1</td><td class="n">13</td><td class="n">10</td><td class="n">3</td><td class="n">50.0%</td><td class="n">76.9%</td><td class="n delta">+0.0pp</td><td class="n">50.0%</td><td class=bar-cell><div class=bar><i style="width:50.0%"></i><u style="left:50.0%"></u></div></td></tr><tr class="buyer below" data-buyer="usr:carol"><td class="">usr:carol</td><td class="n">1</td><td class="n">0</td><td class="n">1</td><td class="n">10</td><td class="n">0</td><td class="n">10</td><td class="n">0.0%</td><td class="n">0.0%</td><td class="n delta neg">-50.0pp 低于市场</td><td class="n">45.5%</td><td class=bar-cell><div class=bar><i style="width:0.0%"></i><u style="left:50.0%"></u></div></td></tr><tr class="buyer above" data-buyer="usr:erin"><td class="">usr:erin</td><td class="n">1</td><td class="n">1</td><td class="n">0</td><td class="n">5</td><td class="n">5</td><td class="n">0</td><td class="n">100.0%</td><td class="n">100.0%</td><td class="n delta">+50.0pp 高于市场</td><td class="n">54.5%</td><td class=bar-cell><div class=bar><i style="width:100.0%"></i><u style="left:50.0%"></u></div></td></tr></table></div>
+<h2>市场基线</h2>
+<div class=card><p class=law>市场购次: <b>4</b></p><p class=law>市场退款次: <b>2</b> / <b>4</b> = <b>50.0%</b></p><p class=law>平滑强度 K: <b>10</b></p></div>
+<h2>偏离市场最多的两位</h2>
+<div class=card><p class=law>对市场偏离最大: <b>usr:erin</b> &middot; 100.0% &middot; +50.0pp</p><p class=law>对市场偏离最小: <b>usr:carol</b> &middot; 0.0% &middot; -50.0pp</p></div>
+<h2>本页法则</h2>
+<div class=card><p class=law>退款次数不会超过购次：每条购买最多对应一次退款，所以退款率始终落在 0 到 1 之间。</p><p class=law>未退款次 = 购次 − 退款次，分母包含已退款的购买。</p><p class=law>净花费 = 毛花费 − 已退，负数保留负号。</p><p class=law>退款率(笔) = 退款次 ÷ 购次；退款率(金额) = 已退 ÷ 毛花费；没有分母时印横线，不印 0。</p><p class=law>市场基线取全市场同一口径，本页只印出厂读数，不重算市场规则。</p><p class=law>对市场偏离 = 原始退款率 − 市场退款率，任一侧缺失即印横线，单位是百分点。</p><p class=law>平滑率 = (退款次 + K×市场率) ÷ (购次 + K)：一笔历史不会因为样本小就比长历史更危险，偏离被 n÷(n+K) 缩放。</p><p class=law>条形是相对本页最大退款率的宽度，不是占比。</p><p class=law>本页是服务市集读数，不构成投资建议，也不构成对任何居民的风险评分。</p></div>
+<h2>免责声明</h2>
+<div class=card><div class=disclaimer>sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice</div>
+<p style="margin-top:10px"><span class=badge>AIGC 生成标识：本页由脚本从沙箱面渲染，非人工撰写</span></p></div>
+<h2>复现</h2>
+<div class=card><code>python tools/refund_propensity_board.py</code></div>
+<footer>BigDomain OSLoop &middot; 2026-11-24 12:14:01Z &middot; 本页由 tools/refund_propensity_board.py 生成，不手改</footer>
+</main></body></html>

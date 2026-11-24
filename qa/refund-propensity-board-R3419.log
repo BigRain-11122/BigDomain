@@ -1,0 +1,7 @@
+PASS AC-BRFPB1 landed=True keys=12 missing=[] extra=[] blocks=True market=True sources=True buyers=3 report=True
+PASS AC-BRFPB2 identical=True market_same=True strength=10/10 disclaimer_same=True buyers=3
+PASS AC-BRFPB3 problems=[]
+PASS AC-BRFPB4 rows=3/3 marked=True rates=True deltas=True directions=True bar=True laws=True extremes=True empty_probe=True stand_in_none=False
+PASS AC-BRFPB5 aigc=True disclaimer_on_page=True external_links=0
+PASS AC-BRFPB6 check_rc=0 wrote_nothing=True wired=6/6 face_suite=True
+SUITE PASS 6/6 criteria declared=6
