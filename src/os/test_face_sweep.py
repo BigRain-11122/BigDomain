@@ -74,6 +74,12 @@ FRESH_ANCHORS = {
     'ledger-business': 'E_SOURCE_STALE',
     'entry-index': 'AC-DIX8',
     'membership-face': 'E_STALE html is not the fresh derivation',
+    # R3384: the three apimarket faces below were added to tools/face_sweep.py FACES by a
+    # later window without a freshness anchor here, so AC-FSWB20 has been red since. Each
+    # anchor is the text that face's own --check uses to decide the landed page is stale.
+    'apimarket-freeze': 'html sha256 drifted',
+    'apimarket-schema-banner': 'stale = verdict(declared, current)',
+    'apimarket-current': 'E_ACF5 page differs from (render +',
 }
 
 
@@ -684,8 +690,10 @@ def main():
     rows20 = shipped_face_rows(src20)
     ids20 = [r[0] for r in rows20]
     ok('AC-FSWB20 the shipped table names every face whose gate can prove freshness',
-       len(ids20) == 10 and len(set(ids20)) == 10
-       and 'membership-face' in ids20 and set(ids20) == set(FRESH_ANCHORS),
+       # R3384: the identity check is set equality; the typed "== 10" that also stood here
+       # was redundant and is what reddened this arm when faces were added later.
+       len(ids20) == len(set(ids20)) and 'membership-face' in ids20
+       and set(ids20) == set(FRESH_ANCHORS),
        'rows=%d ids=%s' % (len(ids20), ','.join(ids20)))
 
     sources20 = {}
@@ -706,10 +714,14 @@ def main():
             end20 += 1
         mutant20 = ''.join(lines20[:start20[0]] + lines20[end20 + 1:])
     ids20m = [r[0] for r in shipped_face_rows(mutant20)]
+    # R3384: the expected count is DERIVED from the shipped table, never typed. The typed
+    # literal that stood here (9) is what turned this arm red the moment a later window
+    # added faces, so the guard is the derivation itself rather than a larger constant.
+    expected20m = len(ids20) - 1
     ok('AC-FSWB20c dropping the membership-face row names it missing instead of passing',
-       bool(start20) and len(ids20m) == 9
+       bool(start20) and len(ids20m) == expected20m
        and 'membership-face' in (set(FRESH_ANCHORS) - set(ids20m)),
-       'rows=%d' % len(ids20m))
+       'rows=%d expected=%d' % (len(ids20m), expected20m))
 
     mutant_sources = dict(sources20)
     victim = 'ledger-business'

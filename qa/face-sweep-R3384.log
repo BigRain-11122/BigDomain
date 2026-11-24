@@ -1,0 +1,9 @@
+R3384 face-sweep freshness-anchor repair (read-only reproduction first)
+before: suite SUITE FAIL 54/56 failed=AC-FSWB20,AC-FSWB20c
+root cause: three apimarket faces (freeze, schema-banner, current) were added to tools/face_sweep.py FACES by a later window without a freshness anchor in the suite map, and both failing arms also carried typed counts (== 10 in AC-FSWB20, == 9 in AC-FSWB20c) that redden as soon as the table grows.
+after first edit: suite 55/56 - AC-FSWB20c green with rows=12 expected=12 (count derived from len(ids20)), AC-FSWB20 still red on its own typed 10.
+after second edit: suite SUITE PASS 56/56 in 6.8s - AC-FSWB20 rows=13 and the whole id set equals the 13-key anchor map.
+anchors added: apimarket-freeze 'html sha256 drifted' (E_AMF2 byte/hash drift), apimarket-schema-banner 'stale = verdict(declared, current)' (declared schema vs current REPORT_SCHEMA), apimarket-current 'E_ACF5 page differs from (render +' (page vs fresh render plus back-hop).
+live sweep after the repair: tools/face_sweep.py VERDICT PASS 13/13 fingerprint=42f49a864e78a163.
+unchanged: assertions 56 / criteria 20 so the registry row os-face-sweep stays 20; tools/face_sweep.py untouched; no assertion loosened (set equality is the identity check, the removed literals were redundant).
+honest: a red carried for many windows is now green by its own semantics; this adds no product capability.
