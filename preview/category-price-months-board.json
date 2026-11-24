@@ -1,0 +1,46 @@
+{
+ "generated_utc": "2026-11-24 18:49:45Z",
+ "face": "api_category_price_months",
+ "scope": "market",
+ "month_count": 1,
+ "first_month": "2026-08",
+ "last_month": "2026-08",
+ "listing_count": 3,
+ "category_count": 1,
+ "months": [
+  {
+   "month": "2026-08",
+   "as_of": "2026-08-31T23:59:59Z",
+   "live_listing_count": 3,
+   "category_count": 1,
+   "min_price": 3,
+   "max_price": 10,
+   "p25_price": 4.0,
+   "p50_price": 5.0,
+   "p75_price": 7.5,
+   "mean_price": 6.0,
+   "p50_change": null,
+   "categories": [
+    {
+     "category": null,
+     "live_listing_count": 3,
+     "min_price": 3,
+     "max_price": 10,
+     "p50_price": 5.0
+    }
+   ]
+  }
+ ],
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/category-price-months-board.html",
+ "sources": {
+  "driver": "9ca1cb5995fc7032",
+  "copy": "62781444be4d28f4",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 5548,
+  "json": 1025
+ }
+}

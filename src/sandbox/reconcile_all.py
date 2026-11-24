@@ -8376,6 +8376,14 @@ SUITES = [
     # re-reads the face over its own throwaway world.
     ("os-listing-view-board",
      os.path.join("..", "os", "test_listing_view_board.py"), 6),
+    # R3439: tools/category_price_months_board.py renders the per-category
+    # monthly asking-price band (api_category_price_months, AC-CPM1..8) which
+    # had zero readers under tools/, preview/ and src/os; the page prints one
+    # marked section per UTC month - live count, quartiles, median, its
+    # month-over-month change and one row per category bucket with a position
+    # bar - and the suite re-reads the face over its own throwaway world.
+    ("os-category-price-months-board",
+     os.path.join("..", "os", "test_category_price_months_board.py"), 6),
     # R3436: tools/watch_conversion_board.py renders the watch-to-purchase
     # funnel (api_watch_conversion, AC-WCV1..8) which had zero readers under
     # tools/, preview/ and the report collector; the page prints the market

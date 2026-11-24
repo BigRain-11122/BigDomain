@@ -283,6 +283,8 @@ PAIR_PRODUCERS = {
     # R3438: the shelf detail page is a single-writer product (one render, one
     # json, no back-hop block), so it names its producer.
     "listing-view-board.json": "tools/listing_view_board.py",
+    # R3439: the category price months page is a single-writer product too.
+    "category-price-months-board.json": "tools/category_price_months_board.py",
 }
 # R3392 (AC-DIX21 recipe arm). One pair on this page cannot be reproduced by ONE
 # command, and until now the law had only two answers - name a producer or print
