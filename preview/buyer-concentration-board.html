@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>买家支出集中度对账单</title>
+<style>
+:root{--ink:#1b1f24;--muted:#66707a;--line:#dfe4ea;--bg:#f7f8fa}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:var(--bg);color:var(--ink);
+font:15px/1.65 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+main{max-width:1180px;margin:0 auto}
+h1{font-size:22px;margin:0 0 4px;font-weight:650}
+h2{font-size:16px;margin:22px 0 8px;font-weight:620}
+h3{font-size:14px;margin:16px 0 6px;font-weight:620;color:#3c4653}
+.meta{color:var(--muted);font-size:13px;margin-bottom:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;
+padding:14px 16px;margin-bottom:14px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600;font-size:12px}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.kpi{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.kpi div{flex:1 1 118px;border:1px solid var(--line);border-radius:8px;
+padding:10px 12px;background:#fff}
+.kpi b{display:block;font-size:19px;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--muted);font-size:12.5px}
+.bar{position:relative;height:9px;background:#eef1f5;border-radius:999px;
+min-width:120px}
+.bar i{display:block;height:9px;border-radius:999px;background:#6f8fb0}
+.disclaimer{border-left:3px solid #c9a227;background:#fdf8ea;padding:10px 14px;
+font-size:13px}
+.badge{display:inline-block;margin-right:8px;padding:2px 8px;
+border:1px solid var(--line);border-radius:999px;font-size:12px;
+color:var(--muted)}
+.badge.tight{border-color:#e0b4a8;color:#a4422c}
+.badge.spread{border-color:#a8c4b0;color:#2f6b45}
+.law{font-size:13px;margin:6px 0}
+.empty{color:var(--muted);font-size:13px}
+footer{color:var(--muted);font-size:12px;margin:20px 0 8px}
+code{font-size:12.5px;background:#f2f4f7;padding:1px 5px;border-radius:4px}
+</style></head><body><main>
+<h1>买家支出集中度对账单</h1>
+<div class=meta>我这个买家的钱，是不是压在一家店／一个类目上 &middot; 出厂面只读实调生成，数字由面自带法则校验后才渲染 2026-11-24 15:06:47Z &middot; <code>api_buyer_concentration</code></div>
+<h2>买家一览</h2>
+<div class=card><table><tr><th>买家</th><th class=n>成交</th><th class=n>退款</th><th class=n>毛支出</th><th class=n>已退</th><th class=n>净支出</th><th class=n>卖家数</th><th class=n>类目数</th><th>集中度字样</th></tr><tr class=buyer data-buyer="usr:bob"><td class="">usr:bob</td><td class="n">2</td><td class="n">1</td><td class="n">13</td><td class="n">10</td><td class="n">3</td><td class="n">1</td><td class="n">1</td><td><span class=badge tight>仅一家</span></td></tr><tr class=buyer data-buyer="usr:carol"><td class="">usr:carol</td><td class="n">1</td><td class="n">0</td><td class="n">10</td><td class="n">0</td><td class="n">10</td><td class="n">1</td><td class="n">1</td><td><span class=badge tight>仅一家</span></td></tr><tr class=buyer data-buyer="usr:erin"><td class="">usr:erin</td><td class="n">1</td><td class="n">1</td><td class="n">5</td><td class="n">5</td><td class="n">0</td><td class="n">1</td><td class="n">1</td><td><span class=badge tight>净支出不为正：全额退款后净额为零，占比／累计／指数均无定义，故一律印破折号而不写 0。</span></td></tr></table></div>
+<h2>卖家轴（谁拿走了我的钱） &middot; <code>usr:bob</code></h2>
+<div class=card><div class=kpi><div><span>第一名占比</span><b>100.0%</b></div><div><span>前三名占比</span><b>100.0%</b></div><div><span>集中度指数（HHI）</span><b>10000.0</b></div><div><span>八成集中在前几名</span><b>1</b></div></div><table><tr><th>名次</th><th>对手方 / 类目</th><th class=n>成交</th><th class=n>退款</th><th class=n>净成交</th><th class=n>毛支出</th><th class=n>已退</th><th class=n>净支出</th><th class=n>涉及挂单</th><th class=n>占比</th><th class=n>累计占比</th><th>占比宽度条</th></tr><tr class="sellers" data-axis="sellers" data-rank="1"><td class="n">1</td><td class="">usr:dana</td><td class="n">2</td><td class="n">1</td><td class="n">1</td><td class="n">13</td><td class="n">10</td><td class="n">3</td><td class="n">2</td><td class="n">100.0%</td><td class="n">100.0%</td><td class=bar-cell><div class=bar><i style="width:100.0%"></i></div></td></tr></table></div>
+<div class=card><div class=kpi><div><span>第一名占比</span><b>100.0%</b></div><div><span>前三名占比</span><b>100.0%</b></div><div><span>集中度指数（HHI）</span><b>10000.0</b></div><div><span>八成集中在前几名</span><b>1</b></div></div><table><tr><th>名次</th><th>对手方 / 类目</th><th class=n>成交</th><th class=n>退款</th><th class=n>净成交</th><th class=n>毛支出</th><th class=n>已退</th><th class=n>净支出</th><th class=n>涉及挂单</th><th class=n>占比</th><th class=n>累计占比</th><th>占比宽度条</th></tr><tr class="categories" data-axis="categories" data-rank="1"><td class="n">1</td><td class="">未分类</td><td class="n">2</td><td class="n">1</td><td class="n">1</td><td class="n">13</td><td class="n">10</td><td class="n">3</td><td class="n">2</td><td class="n">100.0%</td><td class="n">100.0%</td><td class=bar-cell><div class=bar><i style="width:100.0%"></i></div></td></tr></table></div>
+<h2>卖家轴（谁拿走了我的钱） &middot; <code>usr:carol</code></h2>
+<div class=card><div class=kpi><div><span>第一名占比</span><b>100.0%</b></div><div><span>前三名占比</span><b>100.0%</b></div><div><span>集中度指数（HHI）</span><b>10000.0</b></div><div><span>八成集中在前几名</span><b>1</b></div></div><table><tr><th>名次</th><th>对手方 / 类目</th><th class=n>成交</th><th class=n>退款</th><th class=n>净成交</th><th class=n>毛支出</th><th class=n>已退</th><th class=n>净支出</th><th class=n>涉及挂单</th><th class=n>占比</th><th class=n>累计占比</th><th>占比宽度条</th></tr><tr class="sellers" data-axis="sellers" data-rank="1"><td class="n">1</td><td class="">usr:dana</td><td class="n">1</td><td class="n">0</td><td class="n">1</td><td class="n">10</td><td class="n">0</td><td class="n">10</td><td class="n">1</td><td class="n">100.0%</td><td class="n">100.0%</td><td class=bar-cell><div class=bar><i style="width:100.0%"></i></div></td></tr></table></div>
+<div class=card><div class=kpi><div><span>第一名占比</span><b>100.0%</b></div><div><span>前三名占比</span><b>100.0%</b></div><div><span>集中度指数（HHI）</span><b>10000.0</b></div><div><span>八成集中在前几名</span><b>1</b></div></div><table><tr><th>名次</th><th>对手方 / 类目</th><th class=n>成交</th><th class=n>退款</th><th class=n>净成交</th><th class=n>毛支出</th><th class=n>已退</th><th class=n>净支出</th><th class=n>涉及挂单</th><th class=n>占比</th><th class=n>累计占比</th><th>占比宽度条</th></tr><tr class="categories" data-axis="categories" data-rank="1"><td class="n">1</td><td class="">未分类</td><td class="n">1</td><td class="n">0</td><td class="n">1</td><td class="n">10</td><td class="n">0</td><td class="n">10</td><td class="n">1</td><td class="n">100.0%</td><td class="n">100.0%</td><td class=bar-cell><div class=bar><i style="width:100.0%"></i></div></td></tr></table></div>
+<h2>卖家轴（谁拿走了我的钱） &middot; <code>usr:erin</code></h2>
+<div class=card><div class=kpi><div><span>第一名占比</span><b>—</b></div><div><span>前三名占比</span><b>—</b></div><div><span>集中度指数（HHI）</span><b>—</b></div><div><span>八成集中在前几名</span><b>—</b></div></div><table><tr><th>名次</th><th>对手方 / 类目</th><th class=n>成交</th><th class=n>退款</th><th class=n>净成交</th><th class=n>毛支出</th><th class=n>已退</th><th class=n>净支出</th><th class=n>涉及挂单</th><th class=n>占比</th><th class=n>累计占比</th><th>占比宽度条</th></tr><tr class="sellers" data-axis="sellers" data-rank="1"><td class="n">1</td><td class="">usr:frank</td><td class="n">1</td><td class="n">1</td><td class="n">0</td><td class="n">5</td><td class="n">5</td><td class="n">0</td><td class="n">1</td><td class="n">—</td><td class="n">—</td><td class=bar-cell><span class=empty>—</span></td></tr></table></div>
+<div class=card><div class=kpi><div><span>第一名占比</span><b>—</b></div><div><span>前三名占比</span><b>—</b></div><div><span>集中度指数（HHI）</span><b>—</b></div><div><span>八成集中在前几名</span><b>—</b></div></div><table><tr><th>名次</th><th>对手方 / 类目</th><th class=n>成交</th><th class=n>退款</th><th class=n>净成交</th><th class=n>毛支出</th><th class=n>已退</th><th class=n>净支出</th><th class=n>涉及挂单</th><th class=n>占比</th><th class=n>累计占比</th><th>占比宽度条</th></tr><tr class="categories" data-axis="categories" data-rank="1"><td class="n">1</td><td class="">未分类</td><td class="n">1</td><td class="n">1</td><td class="n">0</td><td class="n">5</td><td class="n">5</td><td class="n">0</td><td class="n">1</td><td class="n">—</td><td class="n">—</td><td class=bar-cell><span class=empty>—</span></td></tr></table></div>
+<div class=card><p class=empty>净支出不为正：全额退款后净额为零，占比／累计／指数均无定义，故一律印破折号而不写 0。</p></div>
+<h2>口径法则（十一条）</h2>
+<div class=card><p class=law>两条轴的成笔、退款笔、毛支出、已退额与净支出，都等于各自轴上行值之和；净支出＝毛支出－已退额；缺额不补。</p><p class=law>两条轴的行数分别等于卖家数与类目数；已退款卖家数＝卖家轴上退款笔数大于零的行数。</p><p class=law>行序为固定全序：净支出降序、毛支出降序、键名升序；名次自 1 起连续且与行序一致。</p><p class=law>占比以本买家本轴净支出总额为分母，保留六位小数；总额不为正时占比无定义，印破折号而非 0。</p><p class=law>累计占比是按下单行序自 1 名起的累计；总额为正时末行恰为 100%。</p><p class=law>第一名占比取行序首位；前三名占比取前三行之和，不足三行时不补位。</p><p class=law>集中度指数由精确占比平方和乘一万、保留两位小数得到：单一对手方为 10000，n 个等额对手方为 10000/n。</p><p class=law>八成席位＝累计净支出首次达到总额 80% 的最小行数，整数判定，恰落 80% 计入；总额不为正时为无定义。</p><p class=law>行内宽度条只是把该行占比画成宽度，不是份额柱，也不跨行可比；页面不自算任何总数。</p><p class=law>全额退款的对手方保留在名次里、权重记零，不删行也不抬高他人占比；净值不为正时份额一律无定义。</p><p class=law>本页是沙箱读数，不是风险评分、不是信用评价、不是投资建议；不构成对任何居民或店铺的推荐。</p></div>
+<h2>面自带免责</h2>
+<div class=card><div class=disclaimer>sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice</div>
+<p style="margin-top:10px"><span class=badge>AIGC 生成标识：本页由沙箱读数自动生成，非人工撰述</span></p></div>
+<h2>复现命令</h2>
+<div class=card><code>python tools/buyer_concentration_board.py --check</code></div>
+<footer>BigDomain OSLoop &middot; 2026-11-24 15:06:47Z &middot; 本页由 tools/buyer_concentration_board.py 生成，不手改</footer>
+</main></body></html>

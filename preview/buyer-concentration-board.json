@@ -1,0 +1,172 @@
+{
+ "generated_utc": "2026-11-24 15:06:47Z",
+ "face": "api_buyer_concentration",
+ "board_face": "api_board",
+ "sales_face": "api_sales",
+ "ratings_face": "api_ratings",
+ "buyer_count": 3,
+ "buyers": [
+  {
+   "buyer_id": "usr:bob",
+   "purchase_count": 2,
+   "refund_count": 1,
+   "seller_count": 1,
+   "category_count": 1,
+   "refunded_sellers": 1,
+   "gross_spend": 13,
+   "refunded_tokens": 10,
+   "net_spend": 3,
+   "top1_seller_share": 1.0,
+   "top3_seller_share": 1.0,
+   "seller_herfindahl": 10000.0,
+   "pareto_seller_count": 1,
+   "top1_category_share": 1.0,
+   "top3_category_share": 1.0,
+   "category_herfindahl": 10000.0,
+   "pareto_category_count": 1,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "sellers": [
+    {
+     "dev_account": "usr:dana",
+     "purchase_count": 2,
+     "refund_count": 1,
+     "net_purchase_count": 1,
+     "gross_spend": 13,
+     "refunded_tokens": 10,
+     "net_spend": 3,
+     "listing_count": 2,
+     "share": 1.0,
+     "cumulative_share": 1.0,
+     "rank": 1
+    }
+   ],
+   "categories": [
+    {
+     "category": null,
+     "purchase_count": 2,
+     "refund_count": 1,
+     "net_purchase_count": 1,
+     "gross_spend": 13,
+     "refunded_tokens": 10,
+     "net_spend": 3,
+     "listing_count": 2,
+     "share": 1.0,
+     "cumulative_share": 1.0,
+     "rank": 1
+    }
+   ]
+  },
+  {
+   "buyer_id": "usr:carol",
+   "purchase_count": 1,
+   "refund_count": 0,
+   "seller_count": 1,
+   "category_count": 1,
+   "refunded_sellers": 0,
+   "gross_spend": 10,
+   "refunded_tokens": 0,
+   "net_spend": 10,
+   "top1_seller_share": 1.0,
+   "top3_seller_share": 1.0,
+   "seller_herfindahl": 10000.0,
+   "pareto_seller_count": 1,
+   "top1_category_share": 1.0,
+   "top3_category_share": 1.0,
+   "category_herfindahl": 10000.0,
+   "pareto_category_count": 1,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "sellers": [
+    {
+     "dev_account": "usr:dana",
+     "purchase_count": 1,
+     "refund_count": 0,
+     "net_purchase_count": 1,
+     "gross_spend": 10,
+     "refunded_tokens": 0,
+     "net_spend": 10,
+     "listing_count": 1,
+     "share": 1.0,
+     "cumulative_share": 1.0,
+     "rank": 1
+    }
+   ],
+   "categories": [
+    {
+     "category": null,
+     "purchase_count": 1,
+     "refund_count": 0,
+     "net_purchase_count": 1,
+     "gross_spend": 10,
+     "refunded_tokens": 0,
+     "net_spend": 10,
+     "listing_count": 1,
+     "share": 1.0,
+     "cumulative_share": 1.0,
+     "rank": 1
+    }
+   ]
+  },
+  {
+   "buyer_id": "usr:erin",
+   "purchase_count": 1,
+   "refund_count": 1,
+   "seller_count": 1,
+   "category_count": 1,
+   "refunded_sellers": 1,
+   "gross_spend": 5,
+   "refunded_tokens": 5,
+   "net_spend": 0,
+   "top1_seller_share": null,
+   "top3_seller_share": null,
+   "seller_herfindahl": null,
+   "pareto_seller_count": null,
+   "top1_category_share": null,
+   "top3_category_share": null,
+   "category_herfindahl": null,
+   "pareto_category_count": null,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "sellers": [
+    {
+     "dev_account": "usr:frank",
+     "purchase_count": 1,
+     "refund_count": 1,
+     "net_purchase_count": 0,
+     "gross_spend": 5,
+     "refunded_tokens": 5,
+     "net_spend": 0,
+     "listing_count": 1,
+     "share": null,
+     "cumulative_share": null,
+     "rank": 1
+    }
+   ],
+   "categories": [
+    {
+     "category": null,
+     "purchase_count": 1,
+     "refund_count": 1,
+     "net_purchase_count": 0,
+     "gross_spend": 5,
+     "refunded_tokens": 5,
+     "net_spend": 0,
+     "listing_count": 1,
+     "share": null,
+     "cumulative_share": null,
+     "rank": 1
+    }
+   ]
+  }
+ ],
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/buyer-concentration-board.html",
+ "sources": {
+  "driver": "d2511543f3626b91",
+  "copy": "a320063e33df2c12",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 11808,
+  "json": 4182
+ }
+}
