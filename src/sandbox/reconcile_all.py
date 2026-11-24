@@ -8410,6 +8410,16 @@ SUITES = [
     # throwaway world whose repricing rows are made through the shipped doors.
     ("os-seller-price-cadence-board",
      os.path.join("..", "os", "test_seller_price_cadence_board.py"), 6),
+    # R3444: tools/seller_price_demand_board.py renders the monthly repricing
+    # response to demand (api_seller_price_demand_months, AC-SPD1..8) which had
+    # zero readers under tools/, preview/ and src/os; the page joins the
+    # revision, watch, unwatch and question legs on one month grid - the
+    # up/down split, the signed watch delta, the demand and response months,
+    # the response rate and the market benchmark - and the suite re-reads the
+    # face over its own throwaway world whose rows are made through the
+    # shipped doors under its own pinned clock.
+    ("os-seller-price-demand-board",
+     os.path.join("..", "os", "test_seller_price_demand_board.py"), 6),
     # R3443: tools/ticket_size_board.py renders the achieved ticket size
     # (api_market_ticket_size and api_market_ticket_size_months, AC-MTM1..8)
     # which had zero readers under tools/, preview/ and src/os; the page prints

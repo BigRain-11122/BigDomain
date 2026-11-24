@@ -1,0 +1,7 @@
+PASS AC-SPDB1 landed=True payload_missing=[] payload_extra=[] market=True rows=True sellers=True report=True sources=True
+PASS AC-SPDB2 market_same=True sellers_same=True disclaimer_same=True rows=3 sellers=2
+PASS AC-SPDB3 suite_problems=0 driver_problems=0 forged_problems=6
+PASS AC-SPDB4 marked=True badges=True no_bare_none=True caption=True bars=4/4 kpi=True empty=True dash=—
+PASS AC-SPDB5 aigc=True disclaimer_verbatim=True notadvice=True zero_links=True
+PASS AC-SPDB6 readonly=True check_rc=0 registered=True face_suite=True
+SUITE PASS 6/6 declared=6 row=os-seller-price-demand-board

@@ -1,0 +1,196 @@
+{
+ "generated_utc": "2026-11-24 20:14:44Z",
+ "face": "api_seller_price_demand_months",
+ "scope": "market",
+ "market": {
+  "dev_account": null,
+  "scope": "market",
+  "month_count": 3,
+  "active_month_count": 2,
+  "revision_count": 2,
+  "up_count": 1,
+  "down_count": 1,
+  "watch_count": 2,
+  "unwatch_count": 1,
+  "watch_net_count": 1,
+  "question_count": 1,
+  "response_month_count": 1,
+  "demand_month_count": 2,
+  "response_rate": 0.5,
+  "peak_revision_month": "2026-09",
+  "peak_revision_count": 1,
+  "market_response_rate": null,
+  "latest_month_revision_count": 1,
+  "first_month": "2026-09",
+  "last_month": "2026-11",
+  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+  "months": [
+   {
+    "month": "2026-09",
+    "revision_count": 1,
+    "up_count": 1,
+    "down_count": 0,
+    "net_count": 1,
+    "watch_count": 1,
+    "unwatch_count": 0,
+    "watch_net_count": 1,
+    "question_count": 1,
+    "running_revision": 1
+   },
+   {
+    "month": "2026-10",
+    "revision_count": 0,
+    "up_count": 0,
+    "down_count": 0,
+    "net_count": 0,
+    "watch_count": 1,
+    "unwatch_count": 0,
+    "watch_net_count": 1,
+    "question_count": 0,
+    "running_revision": 1
+   },
+   {
+    "month": "2026-11",
+    "revision_count": 1,
+    "up_count": 0,
+    "down_count": 1,
+    "net_count": -1,
+    "watch_count": 0,
+    "unwatch_count": 1,
+    "watch_net_count": -1,
+    "question_count": 0,
+    "running_revision": 2
+   }
+  ]
+ },
+ "sellers": [
+  {
+   "seller": "usr:dana",
+   "envelope": {
+    "dev_account": "usr:dana",
+    "scope": "seller",
+    "month_count": 3,
+    "active_month_count": 1,
+    "revision_count": 1,
+    "up_count": 1,
+    "down_count": 0,
+    "watch_count": 1,
+    "unwatch_count": 1,
+    "watch_net_count": 0,
+    "question_count": 1,
+    "response_month_count": 1,
+    "demand_month_count": 1,
+    "response_rate": 1.0,
+    "peak_revision_month": "2026-09",
+    "peak_revision_count": 1,
+    "market_response_rate": 0.5,
+    "latest_month_revision_count": 0,
+    "first_month": "2026-09",
+    "last_month": "2026-11",
+    "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+    "months": [
+     {
+      "month": "2026-09",
+      "revision_count": 1,
+      "up_count": 1,
+      "down_count": 0,
+      "net_count": 1,
+      "watch_count": 1,
+      "unwatch_count": 0,
+      "watch_net_count": 1,
+      "question_count": 1,
+      "running_revision": 1
+     },
+     {
+      "month": "2026-10",
+      "revision_count": 0,
+      "up_count": 0,
+      "down_count": 0,
+      "net_count": 0,
+      "watch_count": 0,
+      "unwatch_count": 0,
+      "watch_net_count": 0,
+      "question_count": 0,
+      "running_revision": 1
+     },
+     {
+      "month": "2026-11",
+      "revision_count": 0,
+      "up_count": 0,
+      "down_count": 0,
+      "net_count": 0,
+      "watch_count": 0,
+      "unwatch_count": 1,
+      "watch_net_count": -1,
+      "question_count": 0,
+      "running_revision": 1
+     }
+    ]
+   }
+  },
+  {
+   "seller": "usr:frank",
+   "envelope": {
+    "dev_account": "usr:frank",
+    "scope": "seller",
+    "month_count": 2,
+    "active_month_count": 1,
+    "revision_count": 1,
+    "up_count": 0,
+    "down_count": 1,
+    "watch_count": 1,
+    "unwatch_count": 0,
+    "watch_net_count": 1,
+    "question_count": 0,
+    "response_month_count": 0,
+    "demand_month_count": 1,
+    "response_rate": 0.0,
+    "peak_revision_month": "2026-11",
+    "peak_revision_count": 1,
+    "market_response_rate": 0.5,
+    "latest_month_revision_count": 1,
+    "first_month": "2026-10",
+    "last_month": "2026-11",
+    "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+    "months": [
+     {
+      "month": "2026-10",
+      "revision_count": 0,
+      "up_count": 0,
+      "down_count": 0,
+      "net_count": 0,
+      "watch_count": 1,
+      "unwatch_count": 0,
+      "watch_net_count": 1,
+      "question_count": 0,
+      "running_revision": 0
+     },
+     {
+      "month": "2026-11",
+      "revision_count": 1,
+      "up_count": 0,
+      "down_count": 1,
+      "net_count": -1,
+      "watch_count": 0,
+      "unwatch_count": 0,
+      "watch_net_count": 0,
+      "question_count": 0,
+      "running_revision": 1
+     }
+    ]
+   }
+  }
+ ],
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/seller-price-demand-board.html",
+ "sources": {
+  "driver": "d861d79c277f6d64",
+  "copy": "4bd7f3aaa1de4e6e",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 10865,
+  "json": 4733
+ }
+}
