@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>卖家货架库存总账</title>
+<style>
+:root{--ink:#1b1f24;--muted:#66707a;--line:#dfe4ea;--bg:#f7f8fa}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:var(--bg);color:var(--ink);
+font:15px/1.65 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+main{max-width:1180px;margin:0 auto}
+h1{font-size:22px;margin:0 0 4px;font-weight:650}
+h2{font-size:16px;margin:22px 0 8px;font-weight:620}
+h3{font-size:14px;margin:18px 0 6px;font-weight:620;color:#3c4653}
+.meta{color:var(--muted);font-size:13px;margin-bottom:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;
+padding:14px 16px;margin-bottom:14px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600;font-size:12px}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.kpi{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.kpi div{flex:1 1 118px;border:1px solid var(--line);border-radius:8px;
+padding:10px 12px;background:#fff}
+.kpi b{display:block;font-size:19px;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--muted);font-size:12.5px}
+.disclaimer{border-left:3px solid #c9a227;background:#fdf8ea;padding:10px 14px;
+font-size:13px}
+.badge{display:inline-block;margin-right:8px;padding:2px 8px;
+border:1px solid var(--line);border-radius:999px;font-size:12px;
+color:var(--muted)}
+.badge.live{border-color:#a9c6b0;color:#3f6a4c}
+.badge.retired{border-color:#cfcfcf;color:#6b6b6b}
+.badge.tracked{border-color:#b9c6d8;color:#3d5268}
+.badge.unlimited{border-color:#d6ccb6;color:#6f5d33}
+.badge.soldout{border-color:#dcb0b0;color:#8a4242}
+.badge.low{border-color:#e0c898;color:#7a5f28}
+.law{font-size:13px;margin:6px 0}
+.empty{color:var(--muted);font-size:13px}
+.note{color:var(--muted);font-size:12.5px;margin:6px 0 0}
+footer{color:var(--muted);font-size:12px;margin:20px 0 8px}
+code{font-size:12.5px;background:#f2f4f7;padding:1px 5px;border-radius:4px}
+</style></head><body><main>
+<h1>卖家货架库存总账</h1>
+<div class=meta>卖家视角：我的店一共几张货架、几张在架几张下架、几张限量几张不限量、哪些卖空、哪些踩到低库存线、一共还剩几件、卖了几件、补过几次货 &middot; 生成时间(UTC) 2026-11-24 16:28:34Z &middot; <code>api_seller_supply</code></div>
+<h2>卖家</h2>
+<div class=card><table><tr><th>卖家</th><th class=n>货架总数</th><th class=n>在架</th><th class=n>已下架</th><th class=n>限量货架</th><th class=n>不限量货架</th><th class=n>已卖空</th><th class=n>低库存</th><th class=n>限量总量</th><th class=n>已售件数</th><th class=n>剩余件数</th><th class=n>补货件数</th><th class=n>补货次数</th></tr><tr data-seller="usr:dana"><td><code>usr:dana</code></td><td class=n>5</td><td class=n>4</td><td class=n>1</td><td class=n>3</td><td class=n>2</td><td class=n>1</td><td class=n>1</td><td class=n>10</td><td class=n>6</td><td class=n>6</td><td class=n>2</td><td class=n>1</td></tr><tr data-seller="usr:frank"><td><code>usr:frank</code></td><td class=n>1</td><td class=n>1</td><td class=n>0</td><td class=n>0</td><td class=n>1</td><td class=n>0</td><td class=n>0</td><td class=n>—</td><td class=n>0</td><td class=n>—</td><td class=n>0</td><td class=n>0</td></tr></table></div>
+<h2>卖家</h2>
+<div class=card data-seller="usr:dana"><h3>卖家 &middot; <code>usr:dana</code></h3><div class=kpi><div><span>货架总数</span><b>5</b></div><div><span>在架</span><b>4</b></div><div><span>已下架</span><b>1</b></div><div><span>限量货架</span><b>3</b></div><div><span>不限量货架</span><b>2</b></div><div><span>已卖空</span><b>1</b></div><div><span>低库存</span><b>1</b></div><div><span>限量总量</span><b>10</b></div><div><span>已售件数</span><b>6</b></div><div><span>剩余件数</span><b>6</b></div><div><span>补货件数</span><b>2</b></div><div><span>补货次数</span><b>1</b></div><div><span>低库存阈值</span><b>1</b></div></div><table><tr><th>挂单号</th><th>挂单键</th><th>货架状态</th><th>计量方式</th><th class=n>限量</th><th class=n>初始量</th><th class=n>补货件数</th><th class=n>补货次数</th><th class=n>已售</th><th class=n>剩余</th><th>卖空</th><th>低库存</th></tr><tr data-shelf="live" data-track="unlimited" data-listing="1"><td>1</td><td>risk-scan</td><td><span class="badge live">在架</span><span class="badge unlimited">不限量</span></td><td>否</td><td>否</td><td class=n>—</td><td class=n>—</td><td class=n>0</td><td class=n>0</td><td class=n>1</td><td class=n>—</td></tr><tr data-shelf="live" data-track="unlimited" data-listing="2"><td>2</td><td>macro-feed</td><td><span class="badge live">在架</span><span class="badge unlimited">不限量</span></td><td>否</td><td>否</td><td class=n>—</td><td class=n>—</td><td class=n>0</td><td class=n>0</td><td class=n>1</td><td class=n>—</td></tr><tr data-shelf="live" data-track="tracked" data-listing="4"><td>4</td><td>bulk-scan</td><td><span class="badge live">在架</span><span class="badge tracked">限量</span></td><td>否</td><td>否</td><td class=n>4</td><td class=n>4</td><td class=n>0</td><td class=n>0</td><td class=n>1</td><td class=n>3</td></tr><tr data-shelf="live" data-track="tracked" data-listing="5"><td>5</td><td>edge-pack</td><td><span class="badge live">在架</span><span class="badge tracked">限量</span></td><td><span class="badge soldout">是</span></td><td><span class="badge low">是</span></td><td class=n>2</td><td class=n>2</td><td class=n>0</td><td class=n>0</td><td class=n>2</td><td class=n>0</td></tr><tr data-shelf="retired" data-track="tracked" data-listing="6"><td>6</td><td>report-kit</td><td><span class="badge retired">已下架</span><span class="badge tracked">限量</span></td><td>否</td><td>否</td><td class=n>4</td><td class=n>2</td><td class=n>2</td><td class=n>1</td><td class=n>1</td><td class=n>3</td></tr></table></div><div class=card data-seller="usr:frank"><h3>卖家 &middot; <code>usr:frank</code></h3><div class=kpi><div><span>货架总数</span><b>1</b></div><div><span>在架</span><b>1</b></div><div><span>已下架</span><b>0</b></div><div><span>限量货架</span><b>0</b></div><div><span>不限量货架</span><b>1</b></div><div><span>已卖空</span><b>0</b></div><div><span>低库存</span><b>0</b></div><div><span>限量总量</span><b>—</b></div><div><span>已售件数</span><b>0</b></div><div><span>剩余件数</span><b>—</b></div><div><span>补货件数</span><b>0</b></div><div><span>补货次数</span><b>0</b></div><div><span>低库存阈值</span><b>1</b></div></div><table><tr><th>挂单号</th><th>挂单键</th><th>货架状态</th><th>计量方式</th><th class=n>限量</th><th class=n>初始量</th><th class=n>补货件数</th><th class=n>补货次数</th><th class=n>已售</th><th class=n>剩余</th><th>卖空</th><th>低库存</th></tr><tr data-shelf="live" data-track="unlimited" data-listing="3"><td>3</td><td>chart-render</td><td><span class="badge live">在架</span><span class="badge unlimited">不限量</span></td><td>否</td><td>否</td><td class=n>—</td><td class=n>—</td><td class=n>0</td><td class=n>0</td><td class=n>0</td><td class=n>—</td></tr></table></div>
+<h2>口径与法则</h2>
+<div class=card><p class=law>货架总数就是行数：listing_count 等于本页列出的挂单行数，没有第二份账。</p><p class=law>在架＋已下架＝货架总数，限量＋不限量＝货架总数：四条分区各自覆盖且互不重叠。</p><p class=law>限量总量与剩余件数只统计限量货架；不限量货架的销量仍然计入已售件数，因为那笔卖出真的发生了。</p><p class=law>发布时没有写供给量的货架就是不限量：它的限量与剩余为空，永远不算卖空、也不算低库存，本页印破折号而不是 0。</p><p class=law>卖空当且仅当限量货架的剩余为 0；下架不改变任何历史数字，重新上架只翻转下架标记。</p><p class=law>低库存当且仅当限量货架的剩余不高于阈值（默认 1，阈值 0 只数卖空）；不限量货架永不进这个计数。</p><p class=law>补货件数与补货次数是逐行之和：每补一次货，剩余升高、卖空被清掉，同一次调用就能看到。</p><p class=law>行按挂单号升序且不重复，所以同一批数据永远只有一个答案。</p><p class=law>每个卖家只看到自己的货架，另一个卖家的挂单不会漏进来。</p><p class=law>本页是货架与库存的服务清单，不是投资建议，也不是经营评分。</p></div>
+<h2>免责声明</h2>
+<div class=card><div class=disclaimer>sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice</div>
+<p style="margin-top:10px"><span class=badge>AIGC 生成内容标识：本页由 BigDomain 沙箱套件自动生成，数据为演示世界（loopback），不含真实交易</span></p></div>
+<h2>复现命令</h2>
+<div class=card><code>python tools/seller_supply_board.py</code></div>
+<footer>本页是沙箱演示世界的一次只读渲染；五个物理件（商户号／服务器／域名／备案+ICP／小程序 appid+secret）仍未到位，买家仍不能付款。</footer>
+</main></body></html>

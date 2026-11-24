@@ -8366,6 +8366,14 @@ SUITES = [
     # throwaway demo world.
     ("os-seller-reviews-board",
      os.path.join("..", "os", "test_seller_reviews_board.py"), 6),
+    # R3432: tools/seller_supply_board.py renders the shipped seller shelf
+    # rollup envelope (one summary row and one card per seller: live/retired,
+    # tracked/unlimited, sold out, low stock, the two supply totals, sold units
+    # and the restock totals per shelf) which had zero readers under tools/ and
+    # preview/; the page prints the shipped envelope verbatim and the suite
+    # re-reads the face over its own throwaway world.
+    ("os-seller-supply-board",
+     os.path.join("..", "os", "test_seller_supply_board.py"), 6),
     # R3424: tools/seller_refund_reasons_board.py renders the seller-side refund
     # cause envelope (the market scope plus one section per seller) with the
     # market refund rate and this seller's share of the market refunded total as

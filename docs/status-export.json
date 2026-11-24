@@ -1,21 +1,21 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-25 R3431 PRODUCT: api_seller_reviews (AC-AMRC6, zero readers under tools/ and preview/) now has an openable page - which listings wait, which were refused and why, and how many resubmits was shell-only; tools/seller_reviews_board.py renders preview/seller-reviews-board.html (6308B) plus json (1974B) with one summary table, one card per seller (five KPI cards, a nine-column listing table, verdict badges), nine laws, the AIGC label and the face own disclaimer; a dash stands where a reason or stamp does not exist; labels live in preview/seller-reviews-board-copy.json.",
+    "current": "2026-11-25 R3432 PRODUCT: the seller shelf-supply rollup now has a page a human can open - api_seller_supply (AC-SSUP1..8 with its own shipped suite) had zero readers under tools/ and preview/, so how many shelves are live, how many are limited, which are sold out, which sit at the low-stock line, how many units are left, how many sold and how often the shop restocked could only be asked of a shell; tools/seller_supply_board.py renders preview/seller-supply-board.html (9477B) plus json (3301B) with one summary table carrying twelve numeric columns per seller and one card per seller (thirteen KPI cards and an eleven-column shelf table with shelf and metering badges plus sold-out and low-stock flags), ten laws, the AIGC label and the face own disclaimer; Chinese labels live in preview/seller-supply-board-copy.json so the driver stays ASCII.",
     "do": "R3422: gave api_public_listings its first openable page - eight KPI cards, one row per listing carrying both review stamps, the refusal reason, the two shipped flags side by side, the provider name and the unified social credit code, ten law sentences and the cross-face law pending==review_queue.pending; AC-PLB1..6 SUITE 6/6 first run, two measured controls, matrix 791 rows DOC-CURRENT, census pinned=791, entry index 23/23, chain read_only=True, face sweep 56/56, closeout PASS files=4960.",
-    "last_artifact": "preview/seller-reviews-board.html (6308B) + preview/seller-reviews-board.json (1974B) [2026-11-25 mtime]",
-    "latest_artifact": "preview/seller-reviews-board.html (6308B) + preview/seller-reviews-board.json (1974B) [2026-11-25 mtime]",
-    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\seller-reviews-board.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/seller-reviews-board-R3431.log (1308B, 2026-11-25)",
-    "latest_evidence": "qa/seller-reviews-board-R3431.log (1308B, 2026-11-25)",
+    "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 mtime] (halves differ: html [2026-11-25 mtime] + json [2026-11-16 commit]; later=html)",
+    "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 mtime] (halves differ: html [2026-11-25 mtime] + json [2026-11-16 commit]; later=html)",
+    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/seller-supply-board-R3432.log (2944B, 2026-11-25)",
+    "latest_evidence": "qa/seller-supply-board-R3432.log (2944B, 2026-11-25)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R3430] next window (<=48h): (1) 载体 state 75076B／闸 78500（余 3424B，**不足一轮**）；下窗**先**跑 `python src/os/logs_toolkit.py fold --plan-only`，余量不足即按工具报的窗口折叠，**禁手改 state 文件**。(2) S4U 落地仍欠一次提权运行（本窗实测 `BigDomain-OSLoop`=Interactive，本窗未提权）。(3) 导出「最近实物」槽仍按 mtime 排序（修法=写入器改读 deliverable 注册表顺序+三条判据先立，本窗未做）。(4) 零读者面重测不假设：本窗 124 面普查余 **70** 面；`api_buyer_profile` 已开门，下窗**先只读普查点名一位**再动手，实测空或弱勿取（R3389 空节律），已开门面不重开。(5) 基准下次到期 2026-12-01。(6) tick 口径：本窗 3429→3430。(7) 承账不变：`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`backlog.md` 仍超 800000 闸。",
-    "next_milestone_due": "2026-11-27T00:16:23+08:00",
-    "updated_at": "2026-11-25T00:16:23+08:00",
+    "next_milestone": "[R3431] next window (<=48h): (1) ?? state 78292B?? 78500?? **208B**???**???**? `python src/os/logs_toolkit.py fold --plan-only` ????????`--window-tail <N>` ???**??? state ??**??(2) S4U ???????????`BigDomain-OSLoop` ?? Interactive??(3) ??????????????? **66** ????????????`api_seller_supply`?`api_seller_todo`?`api_listing_demand` ???????????????????(4) ??????????? mtime ?????=????? deliverable ?????+????????(5) ?????? 2026-12-01?48h ?? 2026-11-27?(6) tick ????? 3430?3431?(7) ?????`qa_log --ledger-check` broken=5?R3371 ??????????? battery ????Docker ???`backlog.md` ?? 800000 ??",
+    "next_milestone_due": "2026-11-27T00:34:49+08:00",
+    "updated_at": "2026-11-25T00:34:49+08:00",
     "heartbeat": {
       "tick": 3428,
-      "state_tick": 3431,
-      "lag": 3,
+      "state_tick": 3432,
+      "lag": 4,
       "verdict": "FLAG",
       "reason": "heartbeat_row_debt"
     },
@@ -27,7 +27,7 @@
       "over7": 0,
       "dup_rows": 0,
       "distinct": 5,
-      "collapsed": 0,
+      "collapsed": 1,
       "labels_refreshed": 0,
       "notes_stale": 0,
       "note_claims": 0,
@@ -35,8 +35,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-25 R3431 PRODUCT: api_seller_reviews (AC-AMRC6, zero readers under tools/ and preview/) now has an openable page - which listings wait, which were refused and why, and how many resubmits was shell-only; tools/seller_reviews_board.py renders preview/seller-reviews-board.html (6308B) plus json (1974B) with one summary table, one card per seller (five KPI cards, a nine-column listing table, verdict badges), nine laws, the AIGC label and the face own disclaimer; a dash stands where a reason or stamp does not exist; labels live in preview/seller-reviews-board-copy.json.",
-  "claims": {"claimed": 35, "captured": 23, "contradicted": 0, "uncaptured": 12, "historic": 0, "rows": 98, "present": true, "census_ts": "2026-11-25T00:16:23+08:00"},
+  "current": "2026-11-25 R3432 PRODUCT: the seller shelf-supply rollup now has a page a human can open - api_seller_supply (AC-SSUP1..8 with its own shipped suite) had zero readers under tools/ and preview/, so how many shelves are live, how many are limited, which are sold out, which sit at the low-stock line, how many units are left, how many sold and how often the shop restocked could only be asked of a shell; tools/seller_supply_board.py renders preview/seller-supply-board.html (9477B) plus json (3301B) with one summary table carrying twelve numeric columns per seller and one card per seller (thirteen KPI cards and an eleven-column shelf table with shelf and metering badges plus sold-out and low-stock flags), ten laws, the AIGC label and the face own disclaimer; Chinese labels live in preview/seller-supply-board-copy.json so the driver stays ASCII.",
+  "claims": {"claimed": 32, "captured": 20, "contradicted": 0, "uncaptured": 12, "historic": 0, "rows": 98, "present": true, "census_ts": "2026-11-25T00:34:49+08:00"},
   "chain": {"present": true, "rows": 98, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -65,14 +65,14 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-25 R3431 PRODUCT: api_seller_reviews (AC-AMRC6, zero readers under tools/ and preview/) now has an openable page - which listings wait, which were refused and why, and how many resubmits was shell-only; tools/seller_reviews_board.py renders preview/seller-reviews-board.html (6308B) plus json (1974B) with one summary table, one card per seller (five KPI cards, a nine-column listing table, verdict badges), nine laws, the AIGC label and the face own disclaimer; a dash stands where a reason or stamp does not exist; labels live in preview/seller-reviews-board-copy.json.",
-  "export_ts": "2026-11-25T00:16:23+08:00",
-  "latest_artifact": "preview/seller-reviews-board.html (6308B) + preview/seller-reviews-board.json (1974B) [2026-11-25 mtime]",
-  "latest_evidence": "qa/seller-reviews-board-R3431.log (1308B, 2026-11-25)",
-  "next_milestone": "[R3430] next window (<=48h): (1) 载体 state 75076B／闸 78500（余 3424B，**不足一轮**）；下窗**先**跑 `python src/os/logs_toolkit.py fold --plan-only`，余量不足即按工具报的窗口折叠，**禁手改 state 文件**。(2) S4U 落地仍欠一次提权运行（本窗实测 `BigDomain-OSLoop`=Interactive，本窗未提权）。(3) 导出「最近实物」槽仍按 mtime 排序（修法=写入器改读 deliverable 注册表顺序+三条判据先立，本窗未做）。(4) 零读者面重测不假设：本窗 124 面普查余 **70** 面；`api_buyer_profile` 已开门，下窗**先只读普查点名一位**再动手，实测空或弱勿取（R3389 空节律），已开门面不重开。(5) 基准下次到期 2026-12-01。(6) tick 口径：本窗 3429→3430。(7) 承账不变：`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`backlog.md` 仍超 800000 闸。",
+  "do": "2026-11-25 R3432 PRODUCT: the seller shelf-supply rollup now has a page a human can open - api_seller_supply (AC-SSUP1..8 with its own shipped suite) had zero readers under tools/ and preview/, so how many shelves are live, how many are limited, which are sold out, which sit at the low-stock line, how many units are left, how many sold and how often the shop restocked could only be asked of a shell; tools/seller_supply_board.py renders preview/seller-supply-board.html (9477B) plus json (3301B) with one summary table carrying twelve numeric columns per seller and one card per seller (thirteen KPI cards and an eleven-column shelf table with shelf and metering badges plus sold-out and low-stock flags), ten laws, the AIGC label and the face own disclaimer; Chinese labels live in preview/seller-supply-board-copy.json so the driver stays ASCII.",
+  "export_ts": "2026-11-25T00:34:49+08:00",
+  "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 mtime] (halves differ: html [2026-11-25 mtime] + json [2026-11-16 commit]; later=html)",
+  "latest_evidence": "qa/seller-supply-board-R3432.log (2944B, 2026-11-25)",
+  "next_milestone": "[R3431] next window (<=48h): (1) ?? state 78292B?? 78500?? **208B**???**???**? `python src/os/logs_toolkit.py fold --plan-only` ????????`--window-tail <N>` ???**??? state ??**??(2) S4U ???????????`BigDomain-OSLoop` ?? Interactive??(3) ??????????????? **66** ????????????`api_seller_supply`?`api_seller_todo`?`api_listing_demand` ???????????????????(4) ??????????? mtime ?????=????? deliverable ?????+????????(5) ?????? 2026-12-01?48h ?? 2026-11-27?(6) tick ????? 3430?3431?(7) ?????`qa_log --ledger-check` broken=5?R3371 ??????????? battery ????Docker ???`backlog.md` ?? 800000 ??",
   "outs": [
+    "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 mtime] (halves differ: html [2026-11-25 mtime] + json [2026-11-16 commit]; later=html)",
     "preview/seller-reviews-board.html (6308B) + preview/seller-reviews-board.json (1974B) [2026-11-25 mtime]",
-    "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
     "refund-reasons-R3407.log (2274B)",
     "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-24 commit]; later=html)",
     "preview/seller-quality-scorecard.html (4643B) + preview/seller-quality-scorecard.json (1762B) [2026-11-24 mtime]"
@@ -138,7 +138,7 @@
       "2026-11-04 R2431 verification window on the item the debt gate named first=yes (reconcile-battery-R2431, carried from R2430): zero product code changed, the R2168 mixed-tree rule honoured. Leg 1 read 542/543 suites with the criteria total 4234 exactly as pre-registered and the only red was reconcile-daily-census at cd7 exit=2 DRIFT-FLAG; the census named the file (qa/battery-R2431-stdout.log, class=cmd-raw) because this window launched the battery with a Start-Process redirect pointed INTO the evidence directory. Repaired at the birth site, never by widening the baseline: the two launcher captures moved to the gitignored logs/ face, after which the census read flags=0 DRIFT-CLEAN with the 529-entry baseline untouched. Retry leg on the repaired tree: RUNNER PASS 543/543 suites plus controls 7/7 in 956.2s at criteria 4234, TMP RECLAIM 932/932. Four follow-up sections: matrix FAILED first on the stale doc without rewriting it, was regenerated stamp-aligned to 52317B, and the re-run read VERDICT R2431 PASS failing=none (fingerprint CLEAN 5 domains, profile byte-identical, census DRIFT-CLEAN). Debt: reconcile-battery-R2431 closed and product-face-R2432 opened first=yes through the shipped CLIs. Zero product points claimed."
     ],
     [
-      "3431",
+      "3432",
       "OSLoop 执行 tick",
       "对对外货架合规面落盘：api_public_listings 首次开门，AC-PLB1..6 全绿，哪张挂单待审、哪条未披露、哪条没有 AIGC 标识从此可看"
     ]
@@ -152,22 +152,22 @@
   "self_drive": {
     "window": "2026-11-19..2026-11-25",
     "window_days": 7,
-    "log_lines_in_window": 123,
+    "log_lines_in_window": 107,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 14,
+    "substantive_non_idle_mention_lines": 11,
     "proposals_total": 11,
     "proposals_open": 9,
     "queue_main_open": 6,
     "queue_tech_open": 5,
     "queue_explore_open": 1
   },
-  "state_bytes": 78292,
-  "next_milestone_due": "2026-11-27T00:16:23+08:00",
+  "state_bytes": 68043,
+  "next_milestone_due": "2026-11-27T00:34:49+08:00",
   "heartbeat": {
     "tick": 3428,
-    "state_tick": 3431,
-    "lag": 3,
+    "state_tick": 3432,
+    "lag": 4,
     "verdict": "FLAG",
     "reason": "heartbeat_row_debt"
   },
@@ -179,7 +179,7 @@
     "over7": 0,
     "dup_rows": 0,
     "distinct": 5,
-    "collapsed": 0,
+    "collapsed": 1,
     "labels_refreshed": 0,
     "notes_stale": 0,
     "note_claims": 0,

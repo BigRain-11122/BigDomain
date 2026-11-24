@@ -1,0 +1,137 @@
+{
+ "generated_utc": "2026-11-24 16:28:34Z",
+ "face": "api_seller_supply",
+ "board_face": "api_board",
+ "scope": "seller",
+ "seller_count": 2,
+ "sellers": [
+  {
+   "dev_account": "usr:dana",
+   "listing_count": 5,
+   "live_listing_count": 4,
+   "retired_listing_count": 1,
+   "tracked_listing_count": 3,
+   "unlimited_listing_count": 2,
+   "sold_out_listing_count": 1,
+   "low_stock_listing_count": 1,
+   "total_effective_supply": 10,
+   "total_sold": 6,
+   "total_remaining": 6,
+   "total_restocked_units": 2,
+   "total_restock_count": 1,
+   "low_stock_threshold": 1,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "listings": [
+    {
+     "listing_id": 1,
+     "listing_key": "risk-scan",
+     "delisted": false,
+     "supply": null,
+     "base_supply": null,
+     "restocked_units": 0,
+     "restock_count": 0,
+     "sold": 1,
+     "remaining": null,
+     "sold_out": false,
+     "low_stock": false
+    },
+    {
+     "listing_id": 2,
+     "listing_key": "macro-feed",
+     "delisted": false,
+     "supply": null,
+     "base_supply": null,
+     "restocked_units": 0,
+     "restock_count": 0,
+     "sold": 1,
+     "remaining": null,
+     "sold_out": false,
+     "low_stock": false
+    },
+    {
+     "listing_id": 4,
+     "listing_key": "bulk-scan",
+     "delisted": false,
+     "supply": 4,
+     "base_supply": 4,
+     "restocked_units": 0,
+     "restock_count": 0,
+     "sold": 1,
+     "remaining": 3,
+     "sold_out": false,
+     "low_stock": false
+    },
+    {
+     "listing_id": 5,
+     "listing_key": "edge-pack",
+     "delisted": false,
+     "supply": 2,
+     "base_supply": 2,
+     "restocked_units": 0,
+     "restock_count": 0,
+     "sold": 2,
+     "remaining": 0,
+     "sold_out": true,
+     "low_stock": true
+    },
+    {
+     "listing_id": 6,
+     "listing_key": "report-kit",
+     "delisted": true,
+     "supply": 4,
+     "base_supply": 2,
+     "restocked_units": 2,
+     "restock_count": 1,
+     "sold": 1,
+     "remaining": 3,
+     "sold_out": false,
+     "low_stock": false
+    }
+   ]
+  },
+  {
+   "dev_account": "usr:frank",
+   "listing_count": 1,
+   "live_listing_count": 1,
+   "retired_listing_count": 0,
+   "tracked_listing_count": 0,
+   "unlimited_listing_count": 1,
+   "sold_out_listing_count": 0,
+   "low_stock_listing_count": 0,
+   "total_effective_supply": null,
+   "total_sold": 0,
+   "total_remaining": null,
+   "total_restocked_units": 0,
+   "total_restock_count": 0,
+   "low_stock_threshold": 1,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "listings": [
+    {
+     "listing_id": 3,
+     "listing_key": "chart-render",
+     "delisted": false,
+     "supply": null,
+     "base_supply": null,
+     "restocked_units": 0,
+     "restock_count": 0,
+     "sold": 0,
+     "remaining": null,
+     "sold_out": false,
+     "low_stock": false
+    }
+   ]
+  }
+ ],
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/seller-supply-board.html",
+ "sources": {
+  "driver": "cbb7dbdac4615af7",
+  "copy": "7bdbaedf4c0f743d",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 9477,
+  "json": 3301
+ }
+}
