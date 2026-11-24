@@ -1,0 +1,8 @@
+plan rc=0 err=''
+source=sentence exact=True W=10 predicted=74324 target=75500 item_bytes=179
+summary_text='roll window folded verbatim, one sentence that names no round | tokens: AC-Q1061,AC-Q1062,AC-Q1063,AC-Q1064,AC-Q1065,AC-'
+window_tokens=10
+dry W   rc=0 predicted=74324 (plan 74324 equal=True) gate_ok=True
+dry W-1 rc=2 predicted=75550 over_target=True
+composer equal=True err=None
+PROBE DONE root=C:\Users\sjs20\AppData\Local\Temp\bd-rps-probe-w6cwamv9

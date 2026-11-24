@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 766 | 6507 | 675/675 | R2739 |
+| 766 | 6522 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -782,7 +782,7 @@
 | 743 | os-leg-audit | ../os/test_leg_audit.py | 12 | no-evidence | - |
 | 744 | os-leg-watch | ../os/test_leg_watch.py | 6 | no-evidence | - |
 | 745 | os-leg-header-check | ../os/test_leg_header_check.py | 6 | no-evidence | - |
-| 746 | os-logs-toolkit | ../os/test_logs_toolkit.py | 259 | no-evidence | - |
+| 746 | os-logs-toolkit | ../os/test_logs_toolkit.py | 274 | no-evidence | - |
 | 747 | os-registry-counter-census | ../os/test_registry_counter_census.py | 13 | no-evidence | - |
 | 748 | os-evidence-read | ../os/test_evidence_read.py | 5 | no-evidence | - |
 | 749 | os-face-walk-static | ../os/test_face_walk_static.py | 5 | no-evidence | - |
@@ -803,7 +803,7 @@
 | 764 | claim-census | test_claim_census.py | 10 | no-evidence | - |
 | 765 | os-stage-residue | ../os/test_stage_residue.py | 4 | no-evidence | - |
 | 766 | os-corpus-supply-chain | ../os/test_corpus_supply_chain.py | 7 | no-evidence | - |
-|  | 合计 |  | 6507 | green 675 / FAIL 0 / no-evidence 91 |  |
+|  | 合计 |  | 6522 | green 675 / FAIL 0 / no-evidence 91 |  |
 
 ## 证据出处
 

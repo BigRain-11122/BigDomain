@@ -991,37 +991,107 @@ def cmd_fold_plan(args):
     lines, log_start, item_idx, close_idx, caliber = layout
     log_len = len(st['log'])
 
+    has_sentence = getattr(args, 'summary_sentence', None) is not None
+    if args.summary_file and has_sentence:
+        print('error: E_SUMMARY_MODE: --summary-file and --summary-sentence are '
+              'mutually exclusive (refusing)', file=sys.stderr)
+        return 2
+    if has_sentence and not (args.summary_sentence or '').strip():
+        print('error: E_SUMMARY_SENTENCE: --summary-sentence is empty (refusing)',
+              file=sys.stderr)
+        return 2
+
     if args.summary_file:
         summary, err = one_summary_line(args.summary_file)
         if err:
             print('error: ' + err, file=sys.stderr)
             return 2
         summary_source = 'file'
+    elif has_sentence:
+        # AC-RPS1: the execute path composes the line from the human sentence
+        # plus the folded window's own PAT set; the plan asks the SAME composer
+        # at every width instead of pinning one line, because the line grows
+        # with the window and the window is chosen by the line (AC-RPS2).
+        summary = None
+        summary_source = 'sentence'
     else:
         # A declared placeholder, not a guess about the caller's prose: the
         # assumed width of the replacement item line itself (indent + the two
         # quotes ps_escape writes around the literal + the text).
         summary = 'x' * max(1, PLAN_SUMMARY_ITEM_BYTES - caliber - 2)
         summary_source = 'assumed'
-    item_bytes = len(' ' * caliber + ps_escape(summary))
 
     pre = len(raw)
     target = GATE - args.reserve_bytes
+    plan_err = []
+
+    def summary_of(n):
+        """The summary line the execute path would land for a fold of n lines."""
+        if not has_sentence:
+            return summary
+        win = st['log'][log_len - n:] if n else []
+        toks = set()
+        for line in win:
+            toks |= set(PAT.findall(line))
+        text, cerr = compose_summary(args.summary_sentence, sorted(toks),
+                                     args.summary_budget)
+        if cerr:
+            plan_err.append(cerr)
+            return None
+        return text
+
+    def post_for(n, text):
+        return fold_rewrite(lines, log_start, log_len - n + 1, n, log_len,
+                            caliber, text)[1]
 
     def predict(n):
-        return fold_rewrite(lines, log_start, log_len - n + 1, n, log_len,
-                            caliber, summary)[1]
+        return post_for(n, summary_of(n))
 
-    max_post = predict(log_len) if log_len else pre
-    minimal, predicted = 0, pre
+    minimal, predicted, plan_summary, skipped = 0, pre, summary, 0
+    if has_sentence:
+        # the widest fold the byte budget allows: a width whose composition is
+        # over budget is not a fold the writer would accept, so it cannot be
+        # the size this key reports
+        max_post = pre
+        for n in range(log_len, 0, -1):
+            text = summary_of(n)
+            if text is not None:
+                max_post = post_for(n, text)
+                break
+    else:
+        max_post = predict(log_len) if log_len else pre
     if pre > target:
         minimal = None
         for n in range(1, log_len + 1):
-            if predict(n) <= target:
-                minimal, predicted = n, predict(n)
+            text = summary_of(n)
+            if text is None:
+                skipped += 1
+                continue
+            post = post_for(n, text)
+            if post <= target:
+                minimal, predicted, plan_summary = n, post, text
                 break
+    if minimal is None and log_len and skipped == log_len:
+        # every width failed the composer: name the composer's own reason
+        # rather than pretending the gate is unreachable (AC-RPS4)
+        print('error: ' + plan_err[0], file=sys.stderr)
+        return 2
+    if not minimal and has_sentence and log_len:
+        # nothing needs folding: report the line a zero-width window would land
+        # so the item width still answers under the caller's own sentence
+        text0 = summary_of(0)
+        if text0 is None:
+            print('error: ' + (plan_err[0] if plan_err else 'E_SUMMARY_BUDGET'),
+                  file=sys.stderr)
+            return 2
+        plan_summary = text0
 
-    below = predict(minimal - 1) if minimal and minimal >= 2 else None
+    below = None
+    if minimal and minimal >= 2:
+        below_text = summary_of(minimal - 1)
+        if below_text is not None:
+            below = post_for(minimal - 1, below_text)
+    item_bytes = len(' ' * caliber + ps_escape(plan_summary))
     window = st['log'][log_len - minimal:] if minimal else []
     tokens = set()
     for line in window:
@@ -1032,11 +1102,13 @@ def cmd_fold_plan(args):
     # With a placeholder summary the list is an upper bound (the placeholder
     # names no round); AC-RLP3 then keeps it out of would_fail.
     if minimal:
-        lost = lost_rounds(st, log_len - minimal + 1, log_len, summary)
+        lost = lost_rounds(st, log_len - minimal + 1, log_len, plan_summary)
     else:
         lost = []
     round_loss_declared = bool(getattr(args, 'allow_round_loss', False))
-    round_loss_exact = summary_source == 'file'
+    # AC-RPS1: a summary the plan could compose from the caller's own sentence
+    # is exact, exactly like a summary it read from a file
+    round_loss_exact = summary_source in ('file', 'sentence')
 
     archive = args.archive_file or os.path.join(
         args.root, 'logs', 'state-log-archive-%s.md' % datetime.now(CST).strftime('%Y-%m'))
@@ -1063,6 +1135,7 @@ def cmd_fold_plan(args):
         'log_lines': log_len,
         'summary_source': summary_source,
         'summary_item_bytes': item_bytes,
+        'summary_text': plan_summary,
         'minimal_window_lines': minimal,
         'minimal_window_start': (log_len - minimal + 1) if minimal else None,
         'window_content_bytes': sum(len(x.encode('utf-8')) for x in window),

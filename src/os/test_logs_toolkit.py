@@ -1374,17 +1374,152 @@ def main():
     ok(list(pr.keys()) == [
         'mode', 'state_path', 'pre_bytes', 'gate', 'reserve_bytes',
         'target_bytes', 'log_lines', 'summary_source', 'summary_item_bytes',
-        'minimal_window_lines', 'minimal_window_start', 'window_content_bytes',
-        'window_token_count', 'window_tokens', 'round_pointer_lost',
-        'round_loss_declared', 'round_loss_exact', 'predicted_post_bytes',
-        'width_below_minimal_bytes', 'width_below_minimal_clears_gate',
-        'max_fold_post_bytes', 'archive_file', 'would_fail', 'writes_nothing'],
+        'summary_text', 'minimal_window_lines', 'minimal_window_start',
+        'window_content_bytes', 'window_token_count', 'window_tokens',
+        'round_pointer_lost', 'round_loss_declared', 'round_loss_exact',
+        'predicted_post_bytes', 'width_below_minimal_bytes',
+        'width_below_minimal_clears_gate', 'max_fold_post_bytes',
+        'archive_file', 'would_fail', 'writes_nothing'],
        'the plan document keeps one pinned key order with the loss keys in '
-       'place (AC-RLP5)')
+       'place (AC-RLP5; R3382 inserted summary_text after the item width)')
     ok(T.BARE_ROUND.pattern == r'(?<![0-9A-Za-z-])R\d{3,5}(?![0-9A-Za-z-])'
        and T.PAT.pattern == (r'(?:AC|BD|C|D|O|P|T|XL|OH|R)'
                              r'-[0-9A-Za-z][0-9A-Za-z]*(?:-[0-9A-Za-z]+)*'),
        'no token or round pattern moved for the plan face (AC-RLP5)')
+
+    # ---- plan-only composes the caller's own sentence (AC-RPS1..AC-RPS6) ----
+    # Pinned in src/os/backlog.md R3382 BEFORE this code. The plan could read a
+    # summary file and could assume a placeholder, but the execute path also
+    # accepts a human sentence whose token part is derived from the window - so
+    # the plan had no way to answer for the line the writer would really land,
+    # and its loss list was an upper bound. The width and that line are one
+    # fixed point: the composed line grows with the window it replaces.
+    PS_SENT = 'roll window folded verbatim, one sentence that names no round'
+    PS_LOGS = ['2026-11-24 probe item %d AC-Q%04d %s' % (i, 1000 + i, 'y' * 1180)
+               for i in range(1, 71)]
+    proot = tempfile.mkdtemp(prefix='bd-foldplan-')
+    pspath = build_ps_state(proot, PS_LOGS)
+    ppre_state = open(pspath, 'rb').read()
+    pstat = os.stat(pspath)
+    parc = os.path.join(proot, 'logs', archive_name())
+    ppre_arc = open(parc, 'rb').read()
+    pentries = sorted(os.listdir(os.path.join(proot, 'logs')))
+
+    rc, out, err = run(proot, 'fold', '--plan-only', '--summary-sentence', PS_SENT)
+    pn = json.loads(out)
+    PW = pn['minimal_window_lines']
+    pw_sent, pw_err = T.compose_summary(PS_SENT, pn['window_tokens'],
+                                        T.SUMMARY_BUDGET)
+    ok(rc == 0 and pn['summary_source'] == 'sentence'
+       and pn['round_loss_exact'] is True
+       and pn['summary_text'] == pw_sent and pw_err is None
+       and pn['summary_item_bytes'] == len(' ' * 16 + T.ps_escape(pw_sent)),
+       'the plan composes the caller sentence with the window token set and '
+       'reports that very line (AC-RPS1)')
+
+    def ps_dry(n):
+        rc2, out2, err2 = run(proot, 'fold', '--round', 'R9500', '--fold-no',
+                              '950', '--desc', 'rps arm', '--window-tail',
+                              str(n), '--summary-sentence', PS_SENT,
+                              '--allow-create')
+        return json.loads(out2), err2
+
+    dW, _ = ps_dry(PW)
+    ok(dW['predicted_bytes'] == pn['predicted_post_bytes']
+       and dW['gate_ok'] is True and pn['predicted_post_bytes'] <= pn['target_bytes'],
+       'the published width clears the target with the line it publishes, and '
+       'the writer predicts the same size (AC-RPS2)')
+    dB, _ = ps_dry(PW - 1)
+    ok(dB['predicted_bytes'] > pn['target_bytes'] and dB['gate_ok'] is False,
+       'one line narrower is refolded at its OWN width and no longer clears, so '
+       'the width is minimal under the composed line (AC-RPS2)')
+
+    # loss exactness: the sentence is the one thing that can name a bare round
+    RS_LOGS = [x for x in PS_LOGS]
+    RS_LOGS[-1] = RS_LOGS[-1] + ' R9501'
+    RS_SENT = 'roll window folded verbatim, R9501 named in prose'
+    rroot2 = tempfile.mkdtemp(prefix='bd-foldplan-')
+    build_ps_state(rroot2, RS_LOGS)
+    rc, out, err = run(rroot2, 'fold', '--plan-only', '--summary-sentence', RS_SENT)
+    named = json.loads(out)
+    ok(rc == 0 and named['round_pointer_lost'] == []
+       and named['round_loss_exact'] is True and named['would_fail'] == [],
+       'a sentence that names the window bare round has nothing to lose '
+       '(AC-RPS3)')
+    rc, out, err = run(rroot2, 'fold', '--plan-only', '--summary-sentence', PS_SENT)
+    unnamed = json.loads(out)
+    ok(rc == 2 and unnamed['round_pointer_lost'] == ['R9501']
+       and unnamed['would_fail'] == ['round-lost'],
+       'a sentence that names no round refutes the width it would erase '
+       '(AC-RPS3)')
+    psw = os.path.join(rroot2, 'composed.txt')
+    open(psw, 'w', encoding='utf-8').write(unnamed['summary_text'] + '\n')
+    rc, out, err = run(rroot2, 'rounds', '--window-tail',
+                       str(unnamed['minimal_window_lines']), '--file', psw)
+    ok(json.loads(out)['lost'] == 1
+       and [x['round'] for x in json.loads(out)['rounds'] if x['lost']]
+       == unnamed['round_pointer_lost'],
+       'the plan loss set equals the shipped rounds face read on the plan own '
+       'composed line (AC-RPS3)')
+    rc, out, err = run(rroot2, 'fold', '--plan-only', '--summary-sentence', PS_SENT,
+                       '--allow-round-loss')
+    ok(rc == 0 and json.loads(out)['round_loss_declared'] is True
+       and json.loads(out)['would_fail'] == [],
+       'declaring the loss clears the reason in sentence mode too (AC-RPS3)')
+
+    # refusals name themselves, before any write
+    rc, out, err = run(proot, 'fold', '--plan-only', '--summary-sentence', PS_SENT,
+                       '--summary-file', os.path.join(proot, 'none.txt'))
+    ok(rc == 2 and out == '' and 'E_SUMMARY_MODE' in err,
+       'both summary flags refuse by name in the plan face (AC-RPS4)')
+    rc, out, err = run(proot, 'fold', '--plan-only', '--summary-sentence', '   ')
+    ok(rc == 2 and out == '' and 'E_SUMMARY_SENTENCE' in err,
+       'a blank sentence refuses by name in the plan face (AC-RPS4)')
+    rc, out, err = run(proot, 'fold', '--plan-only', '--summary-sentence', PS_SENT,
+                       '--summary-budget', '8')
+    ok(rc == 2 and out == '' and 'E_SUMMARY_BUDGET' in err,
+       'a budget no width can compose under reports the composer reason, never '
+       'a false gate-unreachable (AC-RPS4)')
+
+    # the two existing modes do not move
+    rc, out, err = run(proot, 'fold', '--plan-only')
+    pnm2 = json.loads(out)
+    ok(rc == 0 and pnm2['summary_source'] == 'assumed'
+       and pnm2['round_loss_exact'] is False
+       and 'round-lost' not in pnm2['would_fail']
+       and pnm2['summary_item_bytes'] == T.PLAN_SUMMARY_ITEM_BYTES,
+       'the assumed mode still declares itself and predicts no refusal '
+       '(AC-RPS5)')
+    prfile = os.path.join(proot, 'plain.txt')
+    open(prfile, 'w', encoding='utf-8').write(PS_SENT + '\n')
+    rc, out, err = run(proot, 'fold', '--plan-only', '--summary-file', prfile)
+    pfm = json.loads(out)
+    ok(rc == 0 and pfm['summary_source'] == 'file'
+       and pfm['round_loss_exact'] is True
+       and pfm['summary_text'] == PS_SENT,
+       'the file mode is unchanged and still exact (AC-RPS5)')
+    ok(open(pspath, 'rb').read() == ppre_state
+       and os.stat(pspath).st_mtime_ns == pstat.st_mtime_ns
+       and open(parc, 'rb').read() == ppre_arc
+       and sorted(os.listdir(os.path.join(proot, 'logs'))) == pentries,
+       'every sentence-mode arm stays a reader: state, archive and logs dir hold '
+       '(AC-RPS5)')
+
+    ok(list(pn.keys()) == [
+        'mode', 'state_path', 'pre_bytes', 'gate', 'reserve_bytes',
+        'target_bytes', 'log_lines', 'summary_source', 'summary_item_bytes',
+        'summary_text', 'minimal_window_lines', 'minimal_window_start',
+        'window_content_bytes', 'window_token_count', 'window_tokens',
+        'round_pointer_lost', 'round_loss_declared', 'round_loss_exact',
+        'predicted_post_bytes', 'width_below_minimal_bytes',
+        'width_below_minimal_clears_gate', 'max_fold_post_bytes',
+        'archive_file', 'would_fail', 'writes_nothing'],
+       'the plan document keeps one pinned key order with the composed line '
+       'inserted after the item width (AC-RPS5)')
+    ok(T.BARE_ROUND.pattern == r'(?<![0-9A-Za-z-])R\d{3,5}(?![0-9A-Za-z-])'
+       and T.PAT.pattern == (r'(?:AC|BD|C|D|O|P|T|XL|OH|R)'
+                             r'-[0-9A-Za-z][0-9A-Za-z]*(?:-[0-9A-Za-z]+)*'),
+       'no token or round pattern moved for the sentence face (AC-RPS6)')
 
     # ---- weights per-item face (AC-LTW1..AC-LTW6, R3377 slice) ----
     # Pinned in state/queue/explore.md R3176 b before this code. The face is
