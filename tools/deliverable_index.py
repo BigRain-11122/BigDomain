@@ -198,6 +198,13 @@ PAIR_PRODUCERS = {
 PAIR_RECIPES = {
     "ugc-gate-report.json": ("tools/ugc_gate_report.py",
                              "tools/face_backhop.py", ["--write"]),
+    # R3395: same shape measured on the monthly ledger pair - the renderer
+    # writes 9878B with no back-hop block and tools/face_backhop.py patches
+    # the page afterwards (9878B, different sha16), so one command cannot
+    # reproduce the landed bytes.
+    "apimarket-monthly-faces.json": (
+        "src/sandbox/ledger/monthly_faces_preview.py",
+        "tools/face_backhop.py", ["--write"]),
 }
 RECIPE_CAVEAT = ("\u4e24\u6b65\u914d\u65b9\uff08\u6e32\u67d3+\u56de\u6ce8\uff09"
                  "\uff1a\u5b83\u8bc1\u8fd9\u5bf9\u5b57\u8282\u4ecd\u80fd\u88ab"

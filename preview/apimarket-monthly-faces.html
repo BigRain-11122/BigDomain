@@ -39,7 +39,7 @@
 </head><body>
 <header><div class="wrap">
 <h1>硅基域 · 市场月度台账</h1>
-<div class="sub">八个市场月度读面的第一张可开页：成交、客单价、供给、售后、补货、折扣、评价、事件流</div>
+<div class="sub">九个市场月度读面的第一张可开页：成交、客单价、供给、售后、补货、折扣、评价、事件流、卖家流失</div>
 <div class="badges">
 <span class="badge ai">AIGC 生成内容</span>
 <span class="badge">数据来源：确定性演示世界（两卖家 / 四买家 / 三上架 / 跨三个月成交与一笔跨月退款），不是真实交易。</span>
@@ -90,7 +90,7 @@
 <td>-11</td>
 </tr>
 </tbody></table>
-<p class="kv">month_count=3 · lifetime_sales_count=4 · lifetime_gross=28 · lifetime_refund_count=2 · lifetime_refunded=15 · lifetime_net=13 · lifetime_dev_revenue=10 · lifetime_platform_revenue=3</p>
+<p class="kv">有数据月数=3 · lifetime_sales_count=4 · lifetime_gross=28 · lifetime_refund_count=2 · lifetime_refunded=15 · lifetime_net=13 · lifetime_dev_revenue=10 · lifetime_platform_revenue=3</p>
 </div>
 <div class="card">
 <h2>市场月度成交客单价（均值 / 中位 / p90）</h2>
@@ -123,7 +123,7 @@
 <td>28</td>
 </tr>
 </tbody></table>
-<p class="kv">scope=market · sale_count=4 · 含退款笔数=2 · 成交额（token）=28 · 客单价均值=7 · 客单价中位=7.5 · 客单价 p90=10 · min_ticket=3</p>
+<p class="kv">口径=market · sale_count=4 · 含退款笔数=2 · 成交额（token）=28 · 客单价均值=7 · 客单价中位=7.5 · 客单价 p90=10 · min_ticket=3</p>
 </div>
 <div class="card">
 <h2>市场月度供给（上架 / 在架 / 售罄 / 库存）</h2>
@@ -169,13 +169,13 @@
 <td>3</td>
 </tr>
 </tbody></table>
-<p class="kv">scope=market · month_count=3 · first_month=2026-08 · last_month=2026-10 · 商品数=3 · 卖家数=2 · 评价峰值月=2026-08 · peak_live_listing_count=3</p>
+<p class="kv">口径=market · 有数据月数=3 · first_month=2026-08 · last_month=2026-10 · 商品数=3 · 卖家数=2 · 评价峰值月=2026-08 · peak_live_listing_count=3</p>
 </div>
 <div class="card">
 <h2>市场月度售后压力</h2>
 <div class="src">api_market_claim_months · 信封 13 键 · 月行 0 行</div>
 <div class="empty">演示世界没有售后单（claims 表 0 行），因此本月度售后压力为诚实空态，不合成任何月份。</div>
-<p class="kv">month_count=0 · claim_count=0 · open_count=0 · answered_count=0 · withdrawn_count=0 · refunded_count=0 · claim_amount=0 · refunded_amount=0</p>
+<p class="kv">有数据月数=0 · claim_count=0 · open_count=0 · answered_count=0 · withdrawn_count=0 · refunded_count=0 · claim_amount=0 · refunded_amount=0</p>
 </div>
 <div class="card">
 <h2>市场月度补货压力</h2>
@@ -222,13 +222,13 @@
 </tr>
 </tbody></table>
 <p class="kv">该世界没有补货事件；月网格仍与供给面同源连续，故三行全为零（诚实零行，不是缺失）。</p>
-<p class="kv">scope=market · dev_account=- · month_count=3 · 有评价月数=0 · 补货次数=0 · 入库=0 · 商品数=0 · 卖家数=0</p>
+<p class="kv">口径=market · dev_account=- · 有数据月数=3 · 有评价月数=0 · 补货次数=0 · 入库=0 · 商品数=0 · 卖家数=0</p>
 </div>
 <div class="card">
 <h2>市场月度折扣</h2>
 <div class="src">api_market_discount_months · 信封 25 键 · 月行 0 行</div>
 <div class="empty">演示世界没有改价/折扣事件（price_revisions 表 0 行），因此本月度折扣压力为诚实空态，不合成任何月份。</div>
-<p class="kv">scope=market · include_uncategorized=yes · month_count=0 · 有评价月数=0 · revision_count=0 · discount_count=0 · raise_count=0 · discount_share=-</p>
+<p class="kv">口径=market · include_uncategorized=yes · 有数据月数=0 · 有评价月数=0 · revision_count=0 · discount_count=0 · raise_count=0 · discount_share=-</p>
 </div>
 <div class="card">
 <h2>市场月度评价（评分 / 五星 / 低星 / 评价人数）</h2>
@@ -254,7 +254,7 @@
 <td>2</td>
 </tr>
 </tbody></table>
-<p class="kv">scope=market · dev_account=- · month_count=1 · 有评价月数=1 · 评价数=2 · 买家数=2 · 星级总分=9 · 平均星级=4.5</p>
+<p class="kv">口径=market · dev_account=- · 有数据月数=1 · 有评价月数=1 · 评价数=2 · 买家数=2 · 星级总分=9 · 平均星级=4.5</p>
 </div>
 <div class="card">
 <h2>市场月度事件流（上架 / 成交 / 评价 / 退款 · 事件数 / 活跃类型）</h2>
@@ -280,7 +280,33 @@
 <td>11</td>
 </tr>
 </tbody></table>
-<p class="kv">scope=market · dev_account=- · since_utc=- · until_utc=- · month_count=3 · 有评价月数=3 · event_total=11 · 最多事件类型=purchased</p>
+<p class="kv">口径=market · dev_account=- · since_utc=- · until_utc=- · 有数据月数=3 · 有评价月数=3 · event_total=11 · 最多事件类型=purchased</p>
+</div>
+<div class="card">
+<h2>市场月度卖家流失与留存（新进 / 回归 / 离开 / 净增 · 活跃卖家 / 留存率 / 流失率）</h2>
+<div class="src">api_market_seller_churn_months · 信封 22 键 · 月行 1 行</div>
+<table><thead><tr><th>月份</th>
+<th>活跃卖家</th>
+<th>新进卖家</th>
+<th>全新卖家</th>
+<th>回归卖家</th>
+<th>离开卖家</th>
+<th>离开者平均在营月数</th>
+<th>留存率</th>
+<th>流失率</th>
+</tr></thead><tbody>
+<tr><td>2026-08</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+</tbody></table>
+<p class="kv">口径=market · 有数据月数=1 · 有评价月数=1 · 卖家数=2 · joined_count=2 · 全新卖家=2 · 回归卖家=0 · departed_count=0</p>
 </div>
 </div>
 <footer>

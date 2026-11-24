@@ -1,0 +1,56 @@
+R3395 seller-churn face evidence (monthly ledger page, ninth section)
+=====================================================================
+
+1. Face inventory measured read-only (private database, no repo writes)
+   probe: tmp/probe_faces_R3395.py over apimarket_report.build_stack + seed_demo
+   api_market_question_months        keys=16 months=0
+   api_market_backlog_months         keys=11 months=0
+   api_market_watch_months           keys=12 months=0
+   api_market_relist_months          keys=15 months=0
+   api_market_provider_months        keys=14 months=0
+   api_market_conversion_months      keys=15 months=0
+   api_market_seller_churn_months    keys=22 months=1 first=2026-08 last=2026-08
+   -> only the churn face carries demo data; the other six are honest empties
+      and were NOT moved onto the page (R3389 precedent: an empty section is
+      not a product increment).
+
+2. Churn face row keys (insertion order) and envelope identity
+   row: month, as_of, active_seller_count, joined_seller_count,
+        new_seller_count, returning_seller_count, departed_seller_count,
+        departed_tenure_months_mean, retention_rate, churn_rate,
+        retreating_seller_count, expanding_seller_count, net_change,
+        running_joined_count, running_departed_count
+   pairs that hold: joined 2==2, new 2==2, returning 0==0, departed 0==0,
+                    retreating 0==0, expanding 2==2
+   pair refused:    net_change row sum 2 != envelope net_seller_change 0
+                    (different caliber, so AC-CHF3 keeps it unpaired)
+
+3. Renderer reading
+   python src/sandbox/ledger/monthly_faces_preview.py
+   PASS preview preview/apimarket-monthly-faces.html (9878 bytes
+        sha16=a37b726684510c3c) + preview/apimarket-monthly-faces.json
+        (21540 bytes sha16=6b1d4876276a9eb0)
+
+4. Suite reading (no criterion moved)
+   python src/sandbox/ledger/test_monthly_faces_preview.py
+   SUITE PASS 33/33
+   SUITE-SHA16 9628b269ce6362c4   (byte-identical to the eight-face baseline)
+
+5. Entry page and ring
+   two-writer measurement: bare render sha16 a37b726684510c3c, after
+   tools/face_backhop.py --write sha16 b6d180bf9fd86ebd at 10589 bytes, so one
+   command cannot reproduce the pair; it is declared in PAIR_RECIPES.
+   python tools/deliverable_index.py --check  -> VERDICT PASS 23/23
+   python tools/face_backhop.py --check        -> BACKHOP CHECK PASS fails=0
+   python tools/closeout_order.py --write      -> VERDICT PASS passes=2
+                                                  steps=5 checks=4/4
+
+6. Compliance (BLUEPRINT section 5)
+   AIGC label present, non-advisory disclaimer present, zero external
+   references (no http:// or https:// in the page), loopback only.
+
+7. Honest statement
+   This moves one already-delivered reading onto a page the CEO can open. No
+   new table, no new semantics, no money: the five physical pieces (merchant
+   id, server, domain, filing+ICP, miniprogram appid+secret) are still
+   missing, so a buyer still cannot pay.

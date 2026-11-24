@@ -160,6 +160,7 @@ FACES = [
     "api_market_discount_months",
     "api_market_rating_months",
     "api_market_feed_months",
+    "api_market_seller_churn_months",
 ]
 
 # (row key, envelope key) pairs that must sum to the envelope total.
@@ -196,6 +197,17 @@ IDENTITY = {
     ],
     "api_market_feed_months": [
         ("event_count", "event_total"),
+    ],
+    # R3395 AC-CHF3: net_change is deliberately NOT a pair - the demo
+    # world's row sum is 2 while the envelope reports net_seller_change=0
+    # (different caliber), so pairing it would invent an identity.
+    "api_market_seller_churn_months": [
+        ("joined_seller_count", "joined_count"),
+        ("new_seller_count", "new_seller_count"),
+        ("returning_seller_count", "returning_seller_count"),
+        ("departed_seller_count", "departed_count"),
+        ("retreating_seller_count", "retreating_count"),
+        ("expanding_seller_count", "expanding_count"),
     ],
 }
 
@@ -367,7 +379,7 @@ def load_copy(path=COPY_PATH):
 
 def collect(tmp_root):
     """Build the deterministic demo world in a private dir and read the
-    six market monthly faces. Returns the ordered payload list."""
+    nine market monthly faces. Returns the ordered payload list."""
     db = os.path.join(tmp_root, "monthly-faces.db")
     led = mtr = dk = am = None
     payload = []
