@@ -5,15 +5,15 @@
     ],
     "current": "2026-11-24 R3428 PRODUCT: the buyer spend concentration question now has a door - api_buyer_concentration (live with AC-BC1..8 and its own suite on disk) had zero readers across tools/ and preview/, so 'is my money all on one shop and one category, or is it spread' could only be read by calling the sandbox from a shell.",
     "do": "R3422: gave api_public_listings its first openable page - eight KPI cards, one row per listing carrying both review stamps, the refusal reason, the two shipped flags side by side, the provider name and the unified social credit code, ten law sentences and the cross-face law pending==review_queue.pending; AC-PLB1..6 SUITE 6/6 first run, two measured controls, matrix 791 rows DOC-CURRENT, census pinned=791, entry index 23/23, chain read_only=True, face sweep 56/56, closeout PASS files=4960.",
-    "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
-    "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
+    "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-16 commit]; later=html)",
+    "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-16 commit]; later=html)",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
     "latest_artifact_note": "",
     "latest_evidence": "qa/buyer-concentration-board-R3428.log (3402B, 2026-11-24)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3427] next window (<=48h): (1) 载体 state 附加区本窗已推进至 3427（log_items 103）；下窗**先**跑 `python src/os/logs_toolkit.py fold --plan-only` 再决定，**禁手改 state 文件**（本窗再证：载体为 CRLF，平仅式拼接必须用 `\\r\\n`）。(2) S4U 落地仍欠一次提权运行（本窗未提权）。(3) 导出「最近实物」槽仍按 mtime 排序（本窗未修；修法=写入器改读 deliverable 注册表顺序+三条判据先立）。(4) 零读者面重测不假设：`api_market_rating_months`（市场月轴，与本窗卖家面同族）为首选候选，实测空或弱勿取（R3389 空节律）；同族已开门面不重开。(5) 基准下次到期 2026-12-01。48h 窗至 2026-11-26。(6) tick 口径：本窗 3426→3427。(7) 承账不变：`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`backlog.md` 仍超 800000 闸。",
-    "next_milestone_due": "2026-11-26T23:14:49+08:00",
-    "updated_at": "2026-11-24T23:14:49+08:00",
+    "next_milestone": "[R3428] next window (<=48h): (1) 载体 state 附加区 69150B／闸 78500（余量 9350B ≈ 1-2 轮）；下窗**先**跑 `python src/os/logs_toolkit.py fold --plan-only`，余量不足即按工具报的窗口折叠，**禁手改 state 文件**。(2) S4U 落地仍欠一次提权运行（本窗实测 `BigDomain-OSLoop`=Interactive，本窗未提权）。(3) 导出「最近实物」槽仍按 mtime 排序（本窗再证：扫面板页成为最新对后导出先拒 `AC-EXPW9`；修法=写入器改读 deliverable 注册表顺序+三条判据先立）。(4) 零读者面重测不假设：本窗 124 面普查余 72 面，`api_seller_repeat_months`（1 月／2 买家／回头客 0／repeat_rate 0.0）为首选，`api_buyer_profile`（只在生命周期计数）次之；实测空或弱勿取（R3389 空节律），已开门面不重开。(5) 基准下次到期 2026-12-01。48h 窗至 2026-11-26。(6) tick 口径：本窗 3427→3428。(7) 承账不变：`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`backlog.md` 仍超 800000 闸。",
+    "next_milestone_due": "2026-11-26T23:17:31+08:00",
+    "updated_at": "2026-11-24T23:17:31+08:00",
     "heartbeat": {
       "tick": 3428,
       "state_tick": 3428,
@@ -38,7 +38,7 @@
     }
   },
   "current": "2026-11-24 R3428 PRODUCT: the buyer spend concentration question now has a door - api_buyer_concentration (live with AC-BC1..8 and its own suite on disk) had zero readers across tools/ and preview/, so 'is my money all on one shop and one category, or is it spread' could only be read by calling the sandbox from a shell.",
-  "claims": {"claimed": 26, "captured": 15, "contradicted": 0, "uncaptured": 11, "historic": 0, "rows": 98, "present": true, "census_ts": "2026-11-24T23:14:49+08:00"},
+  "claims": {"claimed": 28, "captured": 17, "contradicted": 0, "uncaptured": 11, "historic": 0, "rows": 98, "present": true, "census_ts": "2026-11-24T23:17:31+08:00"},
   "chain": {"present": true, "rows": 98, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -68,12 +68,12 @@
     }
   ],
   "do": "2026-11-24 R3428 PRODUCT: the buyer spend concentration question now has a door - api_buyer_concentration (live with AC-BC1..8 and its own suite on disk) had zero readers across tools/ and preview/, so 'is my money all on one shop and one category, or is it spread' could only be read by calling the sandbox from a shell.",
-  "export_ts": "2026-11-24T23:14:49+08:00",
-  "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
+  "export_ts": "2026-11-24T23:17:31+08:00",
+  "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-16 commit]; later=html)",
   "latest_evidence": "qa/buyer-concentration-board-R3428.log (3402B, 2026-11-24)",
-  "next_milestone": "[R3427] next window (<=48h): (1) 载体 state 附加区本窗已推进至 3427（log_items 103）；下窗**先**跑 `python src/os/logs_toolkit.py fold --plan-only` 再决定，**禁手改 state 文件**（本窗再证：载体为 CRLF，平仅式拼接必须用 `\\r\\n`）。(2) S4U 落地仍欠一次提权运行（本窗未提权）。(3) 导出「最近实物」槽仍按 mtime 排序（本窗未修；修法=写入器改读 deliverable 注册表顺序+三条判据先立）。(4) 零读者面重测不假设：`api_market_rating_months`（市场月轴，与本窗卖家面同族）为首选候选，实测空或弱勿取（R3389 空节律）；同族已开门面不重开。(5) 基准下次到期 2026-12-01。48h 窗至 2026-11-26。(6) tick 口径：本窗 3426→3427。(7) 承账不变：`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`backlog.md` 仍超 800000 闸。",
+  "next_milestone": "[R3428] next window (<=48h): (1) 载体 state 附加区 69150B／闸 78500（余量 9350B ≈ 1-2 轮）；下窗**先**跑 `python src/os/logs_toolkit.py fold --plan-only`，余量不足即按工具报的窗口折叠，**禁手改 state 文件**。(2) S4U 落地仍欠一次提权运行（本窗实测 `BigDomain-OSLoop`=Interactive，本窗未提权）。(3) 导出「最近实物」槽仍按 mtime 排序（本窗再证：扫面板页成为最新对后导出先拒 `AC-EXPW9`；修法=写入器改读 deliverable 注册表顺序+三条判据先立）。(4) 零读者面重测不假设：本窗 124 面普查余 72 面，`api_seller_repeat_months`（1 月／2 买家／回头客 0／repeat_rate 0.0）为首选，`api_buyer_profile`（只在生命周期计数）次之；实测空或弱勿取（R3389 空节律），已开门面不重开。(5) 基准下次到期 2026-12-01。48h 窗至 2026-11-26。(6) tick 口径：本窗 3427→3428。(7) 承账不变：`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`backlog.md` 仍超 800000 闸。",
   "outs": [
-    "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
+    "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-16 commit]; later=html)",
     "refund-reasons-R3407.log (2274B)",
     "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-24 commit]; later=html)",
     "preview/seller-quality-scorecard.html (4643B) + preview/seller-quality-scorecard.json (1762B) [2026-11-24 mtime]"
@@ -164,7 +164,7 @@
     "queue_explore_open": 1
   },
   "state_bytes": 69150,
-  "next_milestone_due": "2026-11-26T23:14:49+08:00",
+  "next_milestone_due": "2026-11-26T23:17:31+08:00",
   "heartbeat": {
     "tick": 3428,
     "state_tick": 3428,
