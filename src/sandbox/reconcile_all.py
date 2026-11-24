@@ -8480,6 +8480,18 @@ SUITES = [
     # doors under its own pinned clock.
     ("os-category-watch-months-board",
      os.path.join("..", "os", "test_category_watch_months_board.py"), 6),
+    # R3451: tools/category_question_months_board.py renders the market's
+    # pre-sale pressure BY CATEGORY on a monthly axis
+    # (api_category_question_months, AC-CQM1..8) which had zero readers under
+    # tools/, preview/ and src/os; the page prints one marked card per month
+    # with a cell table ordered by category and the uncategorized bucket last,
+    # a market KPI strip and a category total table derived only from the
+    # face's own cells, and the suite re-reads the shipped face over its own
+    # throwaway world whose listings, questions and answers are all made
+    # through the shipped publish, ask and answer doors under its own pinned
+    # clock.
+    ("os-category-question-months-board",
+     os.path.join("..", "os", "test_category_question_months_board.py"), 6),
     # R3443: tools/ticket_size_board.py renders the achieved ticket size
     # (api_market_ticket_size and api_market_ticket_size_months, AC-MTM1..8)
     # which had zero readers under tools/, preview/ and src/os; the page prints

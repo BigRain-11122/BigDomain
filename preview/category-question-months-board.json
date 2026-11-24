@@ -1,0 +1,208 @@
+{
+ "generated_utc": "2026-11-24 22:27:49Z",
+ "face": "api_category_question_months",
+ "scope": "market",
+ "envelope": {
+  "question_count": 9,
+  "answered_count": 6,
+  "unanswered_count": 3,
+  "answer_rate": 0.6667,
+  "buyer_count": 4,
+  "seller_count": 2,
+  "listing_count": 5,
+  "category_count": 3,
+  "month_count": 6,
+  "active_month_count": 5,
+  "peak_month": "2026-06",
+  "peak_question_count": 2,
+  "first_month": "2026-06",
+  "last_month": "2026-11",
+  "latest_month_question_count": 1,
+  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+  "months": [
+   {
+    "month": "2026-06",
+    "question_count": 2,
+    "answered_count": 2,
+    "unanswered_count": 0,
+    "answer_rate": 1.0,
+    "category_count": 1,
+    "buyer_count": 2,
+    "seller_count": 1,
+    "listing_count": 1,
+    "running_question": 2,
+    "categories": [
+     {
+      "category": "data",
+      "question_count": 2,
+      "answered_count": 2,
+      "unanswered_count": 0,
+      "answer_rate": 1.0,
+      "buyer_count": 2,
+      "seller_count": 1,
+      "listing_count": 1,
+      "running_question": 2
+     }
+    ]
+   },
+   {
+    "month": "2026-07",
+    "question_count": 2,
+    "answered_count": 1,
+    "unanswered_count": 1,
+    "answer_rate": 0.5,
+    "category_count": 2,
+    "buyer_count": 2,
+    "seller_count": 2,
+    "listing_count": 2,
+    "running_question": 4,
+    "categories": [
+     {
+      "category": "tools",
+      "question_count": 1,
+      "answered_count": 1,
+      "unanswered_count": 0,
+      "answer_rate": 1.0,
+      "buyer_count": 1,
+      "seller_count": 1,
+      "listing_count": 1,
+      "running_question": 1
+     },
+     {
+      "category": null,
+      "question_count": 1,
+      "answered_count": 0,
+      "unanswered_count": 1,
+      "answer_rate": 0.0,
+      "buyer_count": 1,
+      "seller_count": 1,
+      "listing_count": 1,
+      "running_question": 1
+     }
+    ]
+   },
+   {
+    "month": "2026-08",
+    "question_count": 0,
+    "answered_count": 0,
+    "unanswered_count": 0,
+    "answer_rate": null,
+    "category_count": 0,
+    "buyer_count": 0,
+    "seller_count": 0,
+    "listing_count": 0,
+    "running_question": 4,
+    "categories": []
+   },
+   {
+    "month": "2026-09",
+    "question_count": 2,
+    "answered_count": 2,
+    "unanswered_count": 0,
+    "answer_rate": 1.0,
+    "category_count": 2,
+    "buyer_count": 2,
+    "seller_count": 2,
+    "listing_count": 2,
+    "running_question": 6,
+    "categories": [
+     {
+      "category": "data",
+      "question_count": 1,
+      "answered_count": 1,
+      "unanswered_count": 0,
+      "answer_rate": 1.0,
+      "buyer_count": 1,
+      "seller_count": 1,
+      "listing_count": 1,
+      "running_question": 3
+     },
+     {
+      "category": "tools",
+      "question_count": 1,
+      "answered_count": 1,
+      "unanswered_count": 0,
+      "answer_rate": 1.0,
+      "buyer_count": 1,
+      "seller_count": 1,
+      "listing_count": 1,
+      "running_question": 2
+     }
+    ]
+   },
+   {
+    "month": "2026-10",
+    "question_count": 2,
+    "answered_count": 1,
+    "unanswered_count": 1,
+    "answer_rate": 0.5,
+    "category_count": 2,
+    "buyer_count": 2,
+    "seller_count": 1,
+    "listing_count": 2,
+    "running_question": 8,
+    "categories": [
+     {
+      "category": "data",
+      "question_count": 1,
+      "answered_count": 0,
+      "unanswered_count": 1,
+      "answer_rate": 0.0,
+      "buyer_count": 1,
+      "seller_count": 1,
+      "listing_count": 1,
+      "running_question": 4
+     },
+     {
+      "category": null,
+      "question_count": 1,
+      "answered_count": 1,
+      "unanswered_count": 0,
+      "answer_rate": 1.0,
+      "buyer_count": 1,
+      "seller_count": 1,
+      "listing_count": 1,
+      "running_question": 2
+     }
+    ]
+   },
+   {
+    "month": "2026-11",
+    "question_count": 1,
+    "answered_count": 0,
+    "unanswered_count": 1,
+    "answer_rate": 0.0,
+    "category_count": 1,
+    "buyer_count": 1,
+    "seller_count": 1,
+    "listing_count": 1,
+    "running_question": 9,
+    "categories": [
+     {
+      "category": "tools",
+      "question_count": 1,
+      "answered_count": 0,
+      "unanswered_count": 1,
+      "answer_rate": 0.0,
+      "buyer_count": 1,
+      "seller_count": 1,
+      "listing_count": 1,
+      "running_question": 3
+     }
+    ]
+   }
+  ]
+ },
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/category-question-months-board.html",
+ "sources": {
+  "driver": "8ed33ba34e29e80c",
+  "copy": "e4287fce870aa2e2",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 11545,
+  "json": 4726
+ }
+}
