@@ -366,7 +366,7 @@ def check_ledger(root, reading=None):
     return report["verdict"] == "OK", lines
 
 
-def check_claims(root, reading=None):
+def check_claims(root, reading=None, export_text=None):
     """Ask what the three written faces SAY the ledger holds (R3225). (ok, line)
 
     WHY (measured this window, qa/probe-R3225.log): the board, the state log and
@@ -383,11 +383,15 @@ def check_claims(root, reading=None):
 
     `reading` is filled with the counts so the verdict can carry them as values
     (the same law as the ledger face), never a second parse.
+
+    `export_text` (AC-SXFB39, R3383) passes a CANDIDATE document through to the
+    census, so a writer can ask the reading about the text it is about to land
+    rather than the one still on disk.
     """
     import sys
     sys.path.insert(0, BASE)
     import claim_census as CC
-    result = CC.census(root)
+    result = CC.census(root, export_text=export_text)
     if reading is not None:
         reading.update({"claimed": result["claimed"],
                         "captured": result["captured"],

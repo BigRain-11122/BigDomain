@@ -85,3 +85,5 @@
 {"event": "REPLACED", "name": "battery-shard-rlw-R3380.log", "new_bytes": 369, "new_sha16": "4006cdad94608c44", "old_bytes": 278, "old_sha16": "f6735e1bce886524", "prev_kind": "progress", "ts": "2026-11-23T23:15:05Z"}
 {"event": "REPLACED", "name": "battery-shard-rlp-R3381.log", "new_bytes": 369, "new_sha16": "4c631bcb93ccd542", "old_bytes": 278, "old_sha16": "2a1feac8ca6d0229", "prev_kind": "progress", "ts": "2026-11-23T23:36:16Z"}
 {"event": "REPLACED", "name": "battery-shard-rps-R3382.log", "new_bytes": 369, "new_sha16": "2e2887028589aa87", "old_bytes": 278, "old_sha16": "ba5cbc203b610d36", "prev_kind": "progress", "ts": "2026-11-23T23:50:30Z"}
+{"event": "REPLACED", "name": "battery-shard-fxp-R3383.log", "new_bytes": 368, "new_sha16": "2ecde6298445e224", "old_bytes": 279, "old_sha16": "357aef24aa7580a7", "prev_kind": "progress", "ts": "2026-11-24T00:16:59Z"}
+{"event": "REPLACED", "name": "fixpoint-R3383.log", "new_bytes": 1337, "new_sha16": "b6a807d88bedfc0c", "old_bytes": 1337, "old_sha16": "b6a807d88bedfc0c", "prev_kind": "evidence", "ts": "2026-11-24T00:18:41Z"}

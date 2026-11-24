@@ -1,0 +1,9 @@
+R3383 claims fixed point
+read-only first: export_round landed claimed=40 uncaptured=33 and status_export_fresh --check derived 41/34 from the same document, reddening E_SXF_CLAIMS_STALE on every run
+root cause: claim_census counts census tokens inside the export face's own prose rows (latest_artifact, next_milestone), so a block derived before this apply's prose edits is stale the moment it lands
+landed: claim_census.census(root, export_text=) -> closeout_gate.check_claims(export_text=) -> status_export_fresh.settle_claims() asks the census about the candidate document, rewrites the block, and proves the reading reads back; E_SXF_CLAIMS_FIXPOINT rc=9 with zero writes when a document will not settle
+suite: SUITE PASS 45/45 with AC-SXFB39 fixed point, AC-SXFB40 negative control, AC-SXFB41 read-only plus idempotent, AC-SXFB42 named refusal
+registry row os-status-export-fresh 39 -> 45; matrix DOC-CURRENT at 766 rows; registry_counter_census VERDICT PASS pinned=766
+shard: qa/battery-shard-fxp-R3383.log rc=0 pass=45 fail=0 crit=45 crit_mismatch=0
+live: witness taken after the writer landed claimed=41 uncaptured=34 on the real tree and status_export_fresh --check read rc=0
+honest: this is writer and verifier agreeing on one document (a carrier contract), not a product capability; zero network beyond loopback, zero payment

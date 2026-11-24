@@ -165,12 +165,20 @@ def _named(root, face, lineno, line, reading, live_rows, newest):
             "source": label, "source_rows": src_rows, "why": why}
 
 
-def census(root=None, detail=None):
+def census(root=None, detail=None, export_text=None):
     """Classify every written claim of the three faces. Read-only.
 
     `detail`, when a list is passed, receives one named row per contradicted
     claim. The result dict is unchanged, so a caller that only wants the counts
     (the closeout gate) keeps exactly the shape it had.
+
+    `export_text` (AC-SXFB39, R3383) answers the census over a CANDIDATE
+    document instead of the one on disk. The export face carries `rows=` tokens
+    inside its own prose rows (`latest_artifact`, `next_milestone`), so the
+    writer that edits those rows changes the very number it publishes; the
+    reader must be able to ask about the text that will land, not the text
+    that is there now. Absent, the disk read and every existing caller are
+    untouched.
     """
     root = ROOT if root is None else root
     import sys
@@ -185,6 +193,9 @@ def census(root=None, detail=None):
               "present": bool(report["present"]), "faces": {}}
     faces = []
     for face, rel in FACES:
+        if face == "export" and export_text is not None:
+            faces.append((face, export_text))
+            continue
         path = os.path.join(root, rel)
         text = _read(path) if os.path.isfile(path) else None
         faces.append((face, text))

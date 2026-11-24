@@ -678,8 +678,13 @@ def check(export_path, state_path):
         landed_reading = {key: value for key, value in landed_claims.items()
                           if key != CLAIMS_TS_KEY}
         if landed_reading != derived_claims:
+            # AC-SXFB39/AC-SXFB40 (R3383): the block must be the census of the
+            # DOCUMENT IT IS WRITTEN IN - the prose rows it sits beside carry
+            # `rows=` tokens, so a block derived from an earlier draft reddens
+            # here rather than reading clean by construction.
             problems.append(("E_SXF_CLAIMS_STALE",
-                             "landed=%s derived=%s"
+                             "landed=%s derived=%s (the block must be the census "
+                             "of the document it is written in)"
                              % (json.dumps(landed_reading, sort_keys=True),
                                 json.dumps(derived_claims, sort_keys=True))))
         # AC-SXF33 (R3231): a reading that cannot state its own age is a defect,
@@ -833,7 +838,7 @@ CLAIMS_KEY = "claims"
 CLAIMS_TS_KEY = "census_ts"
 
 
-def claims_face(root):
+def claims_face(root, export_text=None):
     """AC-SXF27 (R3228): the census readings, read by the gate's OWN face.
 
     The values come from `closeout_gate.check_claims(root, reading)`, which fills
@@ -862,7 +867,7 @@ def claims_face(root):
             sys.path.insert(0, path)
     import closeout_gate as CG
     reading = {}
-    CG.check_claims(root, reading)
+    CG.check_claims(root, reading, export_text=export_text)
     return {"claimed": reading.get("claimed", 0),
             "captured": reading.get("captured", 0),
             "contradicted": reading.get("contradicted", 0),
@@ -872,7 +877,7 @@ def claims_face(root):
             "present": reading.get("present")}
 
 
-def claims_block(root, moment):
+def claims_block(root, moment, export_text=None):
     """The published block: the census reading PLUS the moment it was taken.
 
     AC-SXF33 (R3231). `claims_face` stays a pure reading with no clock in it, so
@@ -880,10 +885,53 @@ def claims_block(root, moment):
     beside it and `check` pins it to `export_ts`. The two are written from the
     same `moment` in `apply`, which is what makes "one apply" a fact a machine
     can verify instead of a convention a reader has to trust.
+
+    `export_text` (AC-SXFB39, R3383) asks the census about a CANDIDATE document
+    - the one this apply is about to land - instead of the one on disk.
     """
-    block = claims_face(root)
+    block = claims_face(root, export_text=export_text)
     block[CLAIMS_TS_KEY] = iso(moment)
     return block
+
+
+READING_KEYS = ("claimed", "captured", "contradicted", "uncaptured", "historic",
+                "rows", "present")
+
+
+def _reading(block):
+    """The six readings a block carries, without its own age stamp."""
+    return {key: (block or {}).get(key) for key in READING_KEYS}
+
+
+def settle_claims(text, moment, root=None, limit=3):
+    """Write the census block until the DOCUMENT IT LANDS reads back the same.
+
+    AC-SXFB39 (R3383). Measured at R3382: `export_round` landed claimed=40 /
+    uncaptured=33 and `--check` derived 41/34 from the very document it had just
+    written, reddening `E_SXF_CLAIMS_STALE` on every run. The cause is not
+    arithmetic - the export face carries `rows=` tokens inside its own prose
+    rows (`latest_artifact`, `next_milestone`), so a block derived from the
+    document as it stood BEFORE this apply's prose edits is stale the moment it
+    lands. The writer must ask the census about the text it is about to land.
+
+    Publishing the block itself adds no `rows=` token (it is JSON), so one pass
+    normally settles; the loop proves that rather than assuming it, and refuses
+    by name when the document will not hold still. Returns
+    `(text, block, settled)`; `block` is None only when the document has no
+    line-anchored claims row.
+    """
+    moment_root = ROOT if root is None else root
+    block = None
+    for _pass in range(max(1, limit)):
+        candidate = claims_block(moment_root, moment, export_text=text)
+        new_text, ok = _ensure_block(text, CLAIMS_KEY, candidate, "  ")
+        if not ok:
+            return text, None, False
+        text = new_text
+        block = candidate
+        if _reading(claims_face(moment_root, export_text=text)) == _reading(block):
+            return text, block, True
+    return text, block, False
 
 
 CLAIMS_ARITH_KEYS = ("claimed", "captured", "contradicted", "uncaptured",
@@ -1009,10 +1057,20 @@ def apply(export_path, state_path, backlog_path, preview_dir, dry_run=False):
     # the grader uses. Landing it adds zero `rows=` tokens (JSON shape), so the
     # value it publishes is not moved by publishing it - the second --apply is
     # byte-identical for that reason, not by luck.
-    claims = claims_block(ROOT, moment)
-    text, ok = _ensure_block(text, CLAIMS_KEY, claims, "  ")
-    if not ok:
+    # AC-SXFB39 (R3383): the derivation is asked about THIS document, after every
+    # prose edit above - the milestone and artifact rows carry `rows=` tokens, so
+    # a block taken from the pre-edit text is stale the moment it lands (R3382
+    # measured the writer landing 40/33 while its own verifier derived 41/34).
+    text, claims, settled = settle_claims(text, moment, root=ROOT)
+    if claims is None:
         missing.append(CLAIMS_KEY)
+    elif not settled:
+        print("E_SXF_CLAIMS_FIXPOINT: the census does not settle on the document "
+              "this apply would land (block=%s derived=%s)"
+              % (json.dumps(_reading(claims), sort_keys=True),
+                 json.dumps(_reading(claims_face(ROOT, export_text=text)),
+                            sort_keys=True)))
+        return 9
     # AC-SXF7: the byte count is recomputed from the file, never carried forward.
     text, ok = _set_number(text, "state_bytes", os.path.getsize(state_path), "  ")
     if not ok:

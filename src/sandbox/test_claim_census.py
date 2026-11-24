@@ -262,7 +262,11 @@ def main():
                             "historic", "rows", "present"}:
             bad5.append("gate-keys-%s" % sorted(reading))
         gate_text = io.open(GATE, encoding="utf-8").read()
-        if gate_text.count("CC.census(root)") != 1:
+        # AC-CLAIM5 (R3383, AC-SXFB39): still exactly ONE census call in the
+        # gate, and it now forwards the writer's candidate document - a second
+        # derivation is what this line exists to forbid.
+        if (gate_text.count("CC.census(") != 1
+                or "export_text=export_text" not in gate_text):
             bad5.append("gate-passes-detail")
         watched = [os.path.join(root, "src", "os", "backlog.md"),
                    os.path.join(root, "state", "qa_replacements.jsonl"),

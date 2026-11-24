@@ -1226,6 +1226,132 @@ def wire_arms():
     return not touched
 
 
+def fixed_point_arms():
+    """AC-SXFB39..AC-SXFB42 (R3383): the census is taken over the document it lands in.
+
+    R3382 measured the shipped writer landing claimed=40 / uncaptured=33 while
+    its own verifier derived 41/34 from the same file (`E_SXF_CLAIMS_STALE` on
+    every run): the export face carries `rows=` tokens inside its own prose rows
+    (`latest_artifact`, `next_milestone`), so a block derived from the document
+    as it stood BEFORE that apply's prose edits is stale the moment it lands.
+
+    This world has the exact shape - a milestone row that carries a `rows=`
+    token only once the edit is written - so the old writer is red here and the
+    fixed one is green. Every arm is private; the real faces are snapshotted and
+    must be untouched.
+    """
+    real_before = (snapshot(REAL_EXPORT), snapshot(REAL_STATE))
+    root = tempfile.mkdtemp(prefix="sxf-fixpoint-R3383-")
+    saved = rebind(root)
+    try:
+        export, _doc = build_world(root)
+        # The milestone row lands INSIDE the export face and carries a `rows=`
+        # token the pre-edit document does not have. Short enough not to be cut
+        # by the derive() width, and naming the ledger so it is a real claim.
+        with io.open(os.path.join(root, "src", "os", "backlog.md"), "w",
+                     encoding="utf-8", newline="\n") as handle:
+            handle.write("- [ ] [R2821] next window: fixture milestone, "
+                         "rows=1042 of the ledger\n")
+        pre_edit_text = io.open(export, encoding="utf-8").read()
+        pre_edit = {key: value for key, value in
+                    CC.census(root, export_text=pre_edit_text).items()
+                    if key != "faces"}
+
+        # AC-SXFB39: the writer lands the census of the document it wrote.
+        rc_apply = sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
+        landed_doc = json.loads(io.open(export, encoding="utf-8").read())
+        landed = claims_reading(landed_doc["claims"])
+        live = {key: value for key, value in CC.census(root).items()
+                if key != "faces"}
+        rc_check = sx.check(export, sx.STATE)
+        moved = pre_edit["claimed"] != live["claimed"]
+        record("AC-SXFB39", rc_apply == 0 and rc_check == 0 and moved
+               and landed == live,
+               "apply=%d check=%d moved=%s landed=%s live=%s"
+               % (rc_apply, rc_check, moved,
+                  json.dumps(landed, sort_keys=True),
+                  json.dumps(live, sort_keys=True)))
+
+        # AC-SXFB40: the criterion has weight - the R3382 shape (a block taken
+        # from the PRE-edit document) reddens by name, and it is not red for
+        # some other reason because the settled document reads green.
+        stale_doc = json.loads(json.dumps(landed_doc))
+        stale_doc["claims"] = dict(pre_edit, census_ts=landed_doc["claims"][sx.CLAIMS_TS_KEY])
+        write_json(export, stale_doc)
+        buffer = io.StringIO()
+        with contextlib.redirect_stdout(buffer):
+            rc_stale = sx.check(export, sx.STATE)
+        said = buffer.getvalue()
+        write_json(export, landed_doc)
+        rc_restored = sx.check(export, sx.STATE)
+        record("AC-SXFB40", rc_stale == 2 and "E_SXF_CLAIMS_STALE" in said
+               and rc_restored == 0,
+               "stale_rc=%d named=%s restored_rc=%d"
+               % (rc_stale, "E_SXF_CLAIMS_STALE" in said, rc_restored))
+
+        # AC-SXFB41: --check is read-only and a second apply on a pinned clock is
+        # byte-identical. The state and the board are not this writer's to move.
+        watched = (snapshot(sx.STATE),
+                   os.path.getsize(sx.BACKLOG), os.path.getmtime(sx.BACKLOG))
+        before_check = snapshot(export)
+        sx.check(export, sx.STATE)
+        after_check = snapshot(export)
+        real_clock = sx.now_local
+        pinned = dt.datetime(2026, 11, 23, 9, 0, 0,
+                             tzinfo=dt.timezone(dt.timedelta(hours=8)))
+        try:
+            sx.now_local = lambda: pinned
+            rc_once = sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
+            bytes_once = io.open(export, "rb").read()
+            rc_twice = sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
+            bytes_twice = io.open(export, "rb").read()
+        finally:
+            sx.now_local = real_clock
+        same_inputs = (watched[0] == snapshot(sx.STATE)
+                       and watched[1] == os.path.getsize(sx.BACKLOG)
+                       and watched[2] == os.path.getmtime(sx.BACKLOG))
+        record("AC-SXFB41", before_check == after_check and rc_once == 0
+               and rc_twice == 0 and bytes_once == bytes_twice and same_inputs,
+               "check_writes=%s apply=%d/%d idempotent=%s inputs_untouched=%s"
+               % (before_check == after_check, rc_once, rc_twice,
+                  bytes_once == bytes_twice, same_inputs))
+
+        # AC-SXFB42: a document that will not settle is refused BY NAME and
+        # nothing lands. Honest name: this is writer/verifier agreement on one
+        # text (a carrier contract), not a product capability.
+        real_face = sx.claims_face
+        counter = {"n": 0}
+
+        def moving_face(_root, export_text=None):
+            counter["n"] += 1
+            return {"claimed": counter["n"], "captured": 0, "contradicted": 0,
+                    "uncaptured": counter["n"], "historic": 0, "rows": 0,
+                    "present": True}
+
+        sx.claims_face = moving_face
+        try:
+            before_fail = snapshot(export)
+            buffer = io.StringIO()
+            with contextlib.redirect_stdout(buffer):
+                rc_moving = sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
+            fail_said = buffer.getvalue()
+        finally:
+            sx.claims_face = real_face
+        after_fail = snapshot(export)
+        record("AC-SXFB42", rc_moving == 9
+               and "E_SXF_CLAIMS_FIXPOINT" in fail_said
+               and before_fail == after_fail,
+               "rc=%d named=%s wrote=%s"
+               % (rc_moving, "E_SXF_CLAIMS_FIXPOINT" in fail_said,
+                  before_fail != after_fail))
+    finally:
+        restore(saved)
+        shutil.rmtree(root, ignore_errors=True)
+    real_after = (snapshot(REAL_EXPORT), snapshot(REAL_STATE))
+    record("AC-SXFB39-ISO", real_before == real_after,
+           "real export+state untouched by the fixed-point arms")
+
+
 def main():
     real_before = (snapshot(REAL_EXPORT), snapshot(REAL_STATE))
     root = tempfile.mkdtemp(prefix="sxf-R2821-")
@@ -1236,6 +1362,7 @@ def main():
         restore(saved)
         shutil.rmtree(root, ignore_errors=True)
     wire_arms()
+    fixed_point_arms()
     real_after = (snapshot(REAL_EXPORT), snapshot(REAL_STATE))
     record("ISOLATION", real_before == real_after, "real export+state untouched")
     bad = [name for name, ok, _ in results if not ok]

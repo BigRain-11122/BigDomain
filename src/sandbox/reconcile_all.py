@@ -6420,8 +6420,12 @@ SUITES = [
     # R3360: AC-SXFB38 gives this face the three rows it never graded - the two
     # self_drive counts and the results tick row - through one pure reader wired
     # to the shipped recount (38 -> 39).
+    # R3383: AC-SXFB39..42 take the census over the document it lands in - the
+    # writer and the verifier now ask the same text, a negative control proves
+    # the stale block reddens by name, --check stays read-only and idempotent,
+    # and a document that will not settle is refused before it lands (39 -> 45).
     ("os-status-export-fresh",
-     os.path.join("..", "os", "test_status_export_fresh.py"), 39),
+     os.path.join("..", "os", "test_status_export_fresh.py"), 45),
     # R2450: three writers land the CEO-visible export and none of them asked
     # the shared payload derivation, so the document was rewritten in whichever
     # transport the running writer felt like. Every writer the audit derives
