@@ -1,0 +1,17 @@
+# R3398 commit-side carrier face evidence
+## gate on the live tree
+HOOK TREE PASS files=4936 flags=0 reader_refused=0 gating=flags
+HOOK CARRIER worktree bytes=72112 crlf=164 bare_lf=0 items=154/154 layout_ok=True fold_readable=True
+HOOK MATRIX PASS DOC-CURRENT docs/sandbox-suite-matrix.md rows=767/767
+HOOK OK staged=0 freeze=2838 evidence=clean tree=PASS carrier=PASS matrix=PASS rc=0
+
+## suite
+PASS AC-HK10 law read from the world (refused=False, live=clean), one refusal site, verdict independent (anchors=1)
+PASS AC-HK11 commit asks the carrier (live=PASS lf=REFUSED none=SKIP wired=True)
+suite: 33 assertions over 22 criteria
+SUITE PASS 33/33 checks
+
+## registry/matrix/census
+DOC-CURRENT docs/sandbox-suite-matrix.md
+
+VERDICT PASS pinned=767

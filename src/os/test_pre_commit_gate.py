@@ -47,8 +47,8 @@ import one_off_round_scripts as OOS  # noqa: E402
 sys.path.insert(0, os.path.join(SRC, "sandbox"))
 import reconcile_all as RA  # SHELL_CAPTURE_LABEL, single source (AC-EVB3)
 
-EXPECTED_CRITERIA = 21
-EXPECTED_CHECKS = 32
+EXPECTED_CRITERIA = 22
+EXPECTED_CHECKS = 33
 HOOKS = os.path.join(ROOT, "tools", "hooks")
 GATE = os.path.join(HOOKS, "pre_commit_gate.py")
 ENABLE = os.path.join(HOOKS, "enable.py")
@@ -668,6 +668,45 @@ try:
           "one refusal site, verdict independent (anchors=%d)" % main_anchor)
 finally:
     shutil.rmtree(_world, ignore_errors=True)
+
+# AC-HK11 (R3398, pinned in the R3398 backlog row BEFORE the code): the
+# carrier face. R3390 rewrote src/os/state.json with bare LF and its commit
+# landed, because no station in the commit path read the carrier's shape; the
+# next window opened on `E_STATE_LAYOUT: CRLF layout not found` and paid for a
+# repair before it could fold. The law already existed in the battery (AC-SIO10/
+# 11/12 read the live carrier); this arm proves the COMMIT now asks it: the
+# live carrier reads PASS, the same bytes rewritten the way that window wrote
+# them are REFUSED by name, a tree with no carrier reads SKIP with its reason
+# instead of passing in silence, and the wired gate prints carrier=PASS.
+_cworld = tempfile.mkdtemp(prefix="hk11_")
+try:
+    _os_dir = os.path.join(_cworld, "src", "os")
+    os.makedirs(_os_dir)
+    _carrier_path = os.path.join(_os_dir, "state.json")
+    _live_raw = open(os.path.join(BASE, "state.json"), "rb").read()
+    with open(_carrier_path, "wb") as _sink:
+        _sink.write(_live_raw)
+    _kind_a, _lines_a = _gate.carrier_face(_cworld)
+    with open(_carrier_path, "wb") as _sink:   # the R3390 shape: bare LF
+        _sink.write(_live_raw.replace(b"\r\n", b"\n"))
+    _kind_b, _lines_b = _gate.carrier_face(_cworld)
+    os.remove(_carrier_path)
+    _kind_c, _lines_c = _gate.carrier_face(_cworld)
+finally:
+    shutil.rmtree(_cworld, ignore_errors=True)
+_code_h, _out_h, _err_h = run([sys.executable, GATE], ROOT)
+check(_kind_a == "PASS"
+      and _lines_a and _lines_a[0].startswith("HOOK CARRIER worktree")
+      and "layout_ok=True" in _lines_a[0]
+      and "fold_readable=True" in _lines_a[0]
+      and _kind_b == "REFUSED"
+      and _lines_b[0].startswith("E_HOOK_CARRIER drifted=worktree")
+      and "bare_lf=" in " ".join(_lines_b)
+      and _kind_c == "SKIP"
+      and _lines_c[0].startswith("HOOK CARRIER SKIP reason=no-state-file")
+      and _code_h == 0 and "carrier=PASS" in _out_h,
+      "AC-HK11 commit asks the carrier (live=%s lf=%s none=%s wired=%s)"
+      % (_kind_a, _kind_b, _kind_c, "carrier=PASS" in _out_h))
 
 total = PASSES + FAILS
 criteria = set()

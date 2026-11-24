@@ -262,6 +262,89 @@ def matrix_face(root):
     return "REFUSED", ["E_HOOK_MATRIX %s" % line]
 
 
+CARRIER_REL = "src/os/state.json"
+
+
+def load_carrier_laws(root):
+    """The carrier's own reader and the fold door's reader (R3398).
+
+    AC-HK12: a missing or broken law is a NAMED refusal, never a pass. Both
+    modules are imported from the tree being committed, so a commit cannot be
+    graded by a reader that is not the one shipping next to it.
+    """
+    law_dir = os.path.join(root, "src", "os")
+    if not os.path.isdir(law_dir):
+        raise GateError("E_HOOK_NO_CARRIER_LAW", law_dir)
+    if law_dir not in sys.path:
+        sys.path.insert(0, law_dir)
+    try:
+        import state_io as carrier
+        import logs_toolkit as fold
+    except Exception as exc:   # a broken law must not read as a clean commit
+        raise GateError("E_HOOK_NO_CARRIER_LAW",
+                        "%s: %s" % (type(exc).__name__, exc))
+    return carrier, fold
+
+
+def carrier_face(root):
+    """The state carrier, asked at the commit that ships it (R3398).
+
+    Why this exists (measured, not preferred): the R3390 window rewrote the
+    whole document with bare LF, and its commit landed - no station in the
+    commit path read the carrier's shape. The next window then opened on
+    `E_STATE_LAYOUT: CRLF layout not found` and had to repair the file before
+    it could fold, which is the cheapest possible work being displaced by a
+    round that had already been told its own suite grades the live carrier
+    (AC-SIO10/11/12 all read the same file). The law existed; the birth site
+    did not ask it.
+
+    Both readers are asked of the WORKING TREE bytes, and the descoped index
+    face is a measurement rather than a preference: .gitattributes pins this
+    path `text eol=crlf`, so the index blob is stored with bare LF by design
+    (measured at R3398 on the shipped tree: worktree 72112 bytes / crlf=164 /
+    layout_ok=True, index blob 71948 bytes / bare_lf=164 / layout_ok=False).
+    Judging the blob would have refused every clean commit in the repository.
+    The fold reads the checked-out file, so that is the byte set this station
+    grades.
+
+    Returns (kind, lines) with kind in PASS / REFUSED / SKIP, or raises
+    GateError for an input it cannot read.
+    """
+    path = os.path.join(root, "src", "os", "state.json")
+    if not os.path.isfile(path):
+        return "SKIP", ["HOOK CARRIER SKIP reason=no-state-file path=%s"
+                        % CARRIER_REL]
+    carrier, fold = load_carrier_laws(root)
+    try:
+        probes = [("worktree", carrier.read_raw(path))]
+    except (IOError, OSError) as exc:
+        raise GateError("E_HOOK_CARRIER_UNREADABLE",
+                        "%s: %s" % (type(exc).__name__, exc))
+    drifted = []
+    lines = []
+    for where, raw in probes:
+        try:
+            text = carrier.decode(raw)
+            measured = carrier.layout(text)
+            fold_readable = fold.split_ps_layout(
+                text, measured["log_len"]) is not None
+        except Exception as exc:   # the unmeasurable shape IS the disease
+            drifted.append("%s(unreadable:%s)" % (where, type(exc).__name__))
+            continue
+        lines.append("HOOK CARRIER %s bytes=%d crlf=%d bare_lf=%d "
+                     "items=%d/%d layout_ok=%s fold_readable=%s"
+                     % (where, measured["bytes"], measured["crlf"],
+                        measured["bare_lf"], measured["log_items"],
+                        measured["log_len"], measured["layout_ok"],
+                        fold_readable))
+        if not (measured["layout_ok"] and fold_readable):
+            drifted.append(where)
+    if drifted:
+        return "REFUSED", (["E_HOOK_CARRIER drifted=%s" % ",".join(drifted)]
+                           + lines)
+    return "PASS", lines
+
+
 def refusals(paths, law, freeze):
     """Staged paths whose basename is a one-off at or above the freeze."""
     out = []
@@ -358,6 +441,27 @@ def main(argv=None):
         for line in tree_lines:
             sys.stdout.write("%s\n" % line)
 
+    # AC-HK11 (R3398): the carrier is asked at the commit that ships it, so a
+    # document the next window cannot fold is refused here instead of costing
+    # that window a repair. Runs whether or not the path is staged, because
+    # the working-tree file is exactly what the fold will read.
+    carrier_kind = "SKIP"
+    if tree_kind != "REFUSED":
+        try:
+            carrier_kind, carrier_lines = carrier_face(root)
+        except GateError as exc:
+            sys.stderr.write("%s\n" % exc)
+            return 3
+        stream = sys.stderr if carrier_kind == "REFUSED" else sys.stdout
+        for line in carrier_lines:
+            stream.write("%s\n" % line)
+        if carrier_kind == "REFUSED":
+            sys.stderr.write(
+                "E_HOOK_CARRIER the state carrier is not readable by the fold "
+                "door: repair it with python src/os/state_io.py --fix "
+                "--execute, or bypass deliberately with: git commit "
+                "--no-verify\n")
+
     # AC-CGH6 (R3096): the derived document is asked LAST, and only when the
     # byte-drift face above did not already refuse - the same ordering reason
     # the closeout gate uses. A red tree prints no matrix row at all, so a
@@ -380,11 +484,12 @@ def main(argv=None):
                 "deliberately with: git commit --no-verify\n")
 
     if (refused or bad_evidence or tree_kind == "REFUSED"
-            or matrix_kind == "REFUSED"):
+            or carrier_kind == "REFUSED" or matrix_kind == "REFUSED"):
         return 1
     sys.stdout.write("HOOK OK staged=%d freeze=%d evidence=clean tree=%s "
-                     "matrix=%s rc=0\n"
-                     % (len(paths), freeze, tree_kind, matrix_kind))
+                     "carrier=%s matrix=%s rc=0\n"
+                     % (len(paths), freeze, tree_kind, carrier_kind,
+                        matrix_kind))
     return 0
 
 

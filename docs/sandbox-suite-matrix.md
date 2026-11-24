@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 767 | 6547 | 675/675 | R2739 |
+| 767 | 6548 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -517,7 +517,7 @@
 | 478 | os-state-io | ../os/test_state_io.py | 12 | green | 1.5 |
 | 479 | os-state-append | ../os/test_state_append.py | 12 | no-evidence | - |
 | 480 | os-one-off-round-scripts | ../os/test_one_off_round_scripts.py | 6 | no-evidence | - |
-| 481 | os-pre-commit-gate | ../os/test_pre_commit_gate.py | 21 | no-evidence | - |
+| 481 | os-pre-commit-gate | ../os/test_pre_commit_gate.py | 22 | no-evidence | - |
 | 482 | os-closeout | ../os/test_closeout.py | 29 | no-evidence | - |
 | 483 | os-debt-register | ../os/test_debt_register.py | 8 | green | 1.3 |
 | 484 | os-export-freshness | ../os/test_export_freshness.py | 6 | green | 0.9 |
@@ -804,7 +804,7 @@
 | 765 | claim-census | test_claim_census.py | 10 | no-evidence | - |
 | 766 | os-stage-residue | ../os/test_stage_residue.py | 4 | no-evidence | - |
 | 767 | os-corpus-supply-chain | ../os/test_corpus_supply_chain.py | 7 | no-evidence | - |
-|  | 合计 |  | 6547 | green 675 / FAIL 0 / no-evidence 92 |  |
+|  | 合计 |  | 6548 | green 675 / FAIL 0 / no-evidence 92 |  |
 
 ## 证据出处
 

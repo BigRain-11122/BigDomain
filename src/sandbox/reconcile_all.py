@@ -5183,7 +5183,7 @@ SUITES = [
     # R2933: +5 AC-CGH criteria (the same census asked over the WORKING TREE,
     # so an unstaged or index-disk-divergent shell capture is refused too).
     ("os-pre-commit-gate",
-     os.path.join("..", "os", "test_pre_commit_gate.py"), 21),
+     os.path.join("..", "os", "test_pre_commit_gate.py"), 22),
     # R2835: closing a round used to be two commands in two processes, so a
     # face (derived FROM state) could be published while the state write
     # failed - the R2831 defect with a different trigger. closeout.py makes
