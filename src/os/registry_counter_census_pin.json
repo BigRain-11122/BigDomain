@@ -514,6 +514,7 @@
     "os-library-declaration-dialect-sweep",
     "os-listing-position-board",
     "os-listing-velocity-board",
+    "os-listing-view-board",
     "os-live-proof",
     "os-lobby-checkout-demo",
     "os-lobby-city-view",

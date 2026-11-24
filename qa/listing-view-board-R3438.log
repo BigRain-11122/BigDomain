@@ -1,0 +1,21 @@
+EVIDENCE CAPTURE round=R3438 suite=src/os/test_listing_view_board.py legs=2
+== LEG A rc=0 digest=AE73E5F22F683602
+PASS AC-LVWB1 landed=True keys=11 missing=[] extra=[] rows=True market=True sources=True count=3/3 report=True
+PASS AC-LVWB2 identical=True disclaimer_same=True one_disclaimer=True ids_same=True rows=3
+PASS AC-LVWB3 problems=[] recomputed=True driver_laws=[]
+PASS AC-LVWB4 rows=True badges=True zero_avg=1 dash_avg=True null_stamp=3 dash_stamp=True laws=True empty_probe=True stand_in_none=False
+PASS AC-LVWB5 aigc=True disclaimer_on_page=True external_links=0 notadvice=True
+PASS AC-LVWB6 check_rc=0 wrote_nothing=True wired=6/6 face_suite=True
+SUITE PASS 6/6 criteria declared=6
+== LEG B rc=0 digest=AE73E5F22F683602
+PASS AC-LVWB1 landed=True keys=11 missing=[] extra=[] rows=True market=True sources=True count=3/3 report=True
+PASS AC-LVWB2 identical=True disclaimer_same=True one_disclaimer=True ids_same=True rows=3
+PASS AC-LVWB3 problems=[] recomputed=True driver_laws=[]
+PASS AC-LVWB4 rows=True badges=True zero_avg=1 dash_avg=True null_stamp=3 dash_stamp=True laws=True empty_probe=True stand_in_none=False
+PASS AC-LVWB5 aigc=True disclaimer_on_page=True external_links=0 notadvice=True
+PASS AC-LVWB6 check_rc=0 wrote_nothing=True wired=6/6 face_suite=True
+SUITE PASS 6/6 criteria declared=6
+== ADJACENT 2
+== src/sandbox/ledger/test_apimarket.py rc=0 SUITE PASS 7/7
+== src/os/test_price_reaction_board.py rc=0 SUITE PASS 6/6 criteria declared=6
+EVIDENCE identical=True adjacent=2 fails=0 digest=AE73E5F22F683602

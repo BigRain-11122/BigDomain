@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>货架详情对账板</title>
+<style>
+:root{--ink:#1b1f24;--muted:#66707a;--line:#dfe4ea;--bg:#f7f8fa}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:var(--bg);color:var(--ink);
+font:15px/1.65 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+main{max-width:1240px;margin:0 auto}
+h1{font-size:22px;margin:0 0 4px;font-weight:650}
+h2{font-size:16px;margin:22px 0 8px;font-weight:620}
+h3{font-size:14px;margin:18px 0 6px;font-weight:620;color:#3c4653}
+.meta{color:var(--muted);font-size:13px;margin-bottom:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;
+padding:14px 16px;margin-bottom:14px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600;font-size:12px}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.kpi{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.kpi div{flex:1 1 118px;border:1px solid var(--line);border-radius:8px;
+padding:10px 12px;background:#fff}
+.kpi b{display:block;font-size:19px;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--muted);font-size:12.5px}
+.disclaimer{border-left:3px solid #c9a227;background:#fdf8ea;padding:10px 14px;
+font-size:13px}
+.badge{display:inline-block;margin-right:8px;padding:2px 8px;
+border:1px solid var(--line);border-radius:999px;font-size:12px;
+color:var(--muted)}
+.badge.warn{border-color:#e7c1bb;background:#fdf1ef;color:#b42318}
+.law{font-size:13px;margin:6px 0}
+.empty{color:#b42318}
+.desc{color:var(--muted);font-size:13px;margin:6px 0 10px}
+footer{color:var(--muted);font-size:12px;margin:18px 0 0}
+</style></head><body><main>
+<h1>货架详情对账板</h1>
+<div class=meta>出厂演示世界的每一件货架：标价与基价、三族改版、成交与评分、退款与净成交 &middot; 生成于 2026-11-24 18:35:32Z &middot; <code>api_view</code></div>
+<div class=card data-market="1"><div class=kpi><div><span>货架数</span><b>3</b></div><div><span>成交</span><b>4</b></div><div><span>评分</span><b>2</b></div><div><span>退款</span><b>2</b></div><div><span>退款额</span><b>15</b></div><div><span>净成交</span><b>2</b></div><div><span>改版</span><b>0</b></div><div><span>带标识</span><b>1</b></div><div><span>已下架</span><b>0</b></div><div><span>标价合计</span><b>18</b></div><div><span>最高标价</span><b>10</b></div></div></div>
+<h2>逐货架详情</h2>
+<div class=card data-listing="1">
+<h3>1 &middot; Risk Scan API</h3>
+<div><span class="badge">在售</span><span class="badge warn">AIGC 未标识</span></div>
+<p class=desc>portfolio risk scan endpoint</p>
+<div class=kpi><div><span>成交</span><b>2</b></div><div><span>评分</span><b>1</b></div><div><span>均分</span><b>5.0</b></div><div><span>退款</span><b>1</b></div><div><span>退款额</span><b>10</b></div><div><span>净成交</span><b>1</b></div><div><span>改版</span><b>0</b></div><div><span>元数据改版</span><b>0</b></div><div><span>类目改版</span><b>0</b></div><div><span>标价</span><b>10</b></div><div><span>基价</span><b>10</b></div></div>
+<table><tr><td>开发者</td><td>usr:dana</td></tr><tr><td>货架键</td><td>risk-scan</td></tr><tr><td>类目</td><td>—</td></tr><tr><td>基类目</td><td>—</td></tr><tr><td>上架时间</td><td>2026-08-20T10:00:00Z</td></tr><tr><td>最近改版</td><td>—</td></tr><tr><td>最近元数据改版</td><td>—</td></tr><tr><td>最近类目改版</td><td>—</td></tr><tr><td>下架时间</td><td>—</td></tr></table>
+</div>
+<div class=card data-listing="2">
+<h3>2 &middot; Macro Feed API</h3>
+<div><span class="badge">在售</span><span class="badge">AIGC 已标识</span></div>
+<p class=desc>daily macro data feed</p>
+<div class=kpi><div><span>成交</span><b>1</b></div><div><span>评分</span><b>1</b></div><div><span>均分</span><b>4.0</b></div><div><span>退款</span><b>0</b></div><div><span>退款额</span><b>0</b></div><div><span>净成交</span><b>1</b></div><div><span>改版</span><b>0</b></div><div><span>元数据改版</span><b>0</b></div><div><span>类目改版</span><b>0</b></div><div><span>标价</span><b>3</b></div><div><span>基价</span><b>3</b></div></div>
+<table><tr><td>开发者</td><td>usr:dana</td></tr><tr><td>货架键</td><td>macro-feed</td></tr><tr><td>类目</td><td>—</td></tr><tr><td>基类目</td><td>—</td></tr><tr><td>上架时间</td><td>2026-08-20T10:00:00Z</td></tr><tr><td>最近改版</td><td>—</td></tr><tr><td>最近元数据改版</td><td>—</td></tr><tr><td>最近类目改版</td><td>—</td></tr><tr><td>下架时间</td><td>—</td></tr></table>
+</div>
+<div class=card data-listing="3">
+<h3>3 &middot; Chart Render API</h3>
+<div><span class="badge">在售</span><span class="badge warn">AIGC 未标识</span></div>
+<p class=desc>chart image render endpoint</p>
+<div class=kpi><div><span>成交</span><b>1</b></div><div><span>评分</span><b>0</b></div><div><span>均分</span><b>—</b></div><div><span>退款</span><b>1</b></div><div><span>退款额</span><b>5</b></div><div><span>净成交</span><b>0</b></div><div><span>改版</span><b>0</b></div><div><span>元数据改版</span><b>0</b></div><div><span>类目改版</span><b>0</b></div><div><span>标价</span><b>5</b></div><div><span>基价</span><b>5</b></div></div>
+<table><tr><td>开发者</td><td>usr:frank</td></tr><tr><td>货架键</td><td>chart-render</td></tr><tr><td>类目</td><td>—</td></tr><tr><td>基类目</td><td>—</td></tr><tr><td>上架时间</td><td>2026-08-20T10:00:00Z</td></tr><tr><td>最近改版</td><td>—</td></tr><tr><td>最近元数据改版</td><td>—</td></tr><tr><td>最近类目改版</td><td>—</td></tr><tr><td>下架时间</td><td>—</td></tr></table>
+</div>
+
+<h2>法与恒等律</h2>
+<div class=card><p class=law>货架数等于逐货架行数，listing_id 严格升序。</p><p class=law>净成交等于成交减退款，退款数不超过成交数。</p><p class=law>评分只可能来自买家，故评分不超过成交数。</p><p class=law>退款额是退款笔数的金额合计，不按当前标价重算。</p><p class=law>均分当且仅当有评分时存在，且落在 1 到 5 之间。</p><p class=law>三族改版计数为 0 时对应时间戳为空，本页印破折号而非零。</p><p class=law>已下架的货架必有下架时间戳。</p><p class=law>AIGC 标识只取 0 或 1，本页按位印徽标而不推断。</p><p class=law>本页不改写任何面字段，逐项照印出厂 api_view 的值。</p><p class=law>市场条带是本页对已印信封的求和，不是出厂字段，页面明说。</p><p class=law>本页是沙箱演示读数，非投顾，未接支付，不构成任何交易建议。</p></div>
+<h2>免责与非投顾</h2>
+<div class=card><div class=disclaimer>sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice</div>
+<p style="margin-top:10px"><span class=badge>本页含 AIGC 生成内容标识</span></p></div>
+<h2>复现命令</h2>
+<div class=card><code>python tools/listing_view_board.py</code></div>
+<footer>BigDomain OSLoop &middot; 2026-11-24 18:35:32Z &middot; 本页由 tools/listing_view_board.py 生成，不手改</footer>
+</main></body></html>

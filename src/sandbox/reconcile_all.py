@@ -8367,6 +8367,15 @@ SUITES = [
     # its own throwaway world.
     ("os-price-reaction-board",
      os.path.join("..", "os", "test_price_reaction_board.py"), 6),
+    # R3438: tools/listing_view_board.py renders the shelf detail face
+    # (api_view, 28-key envelope) which had zero readers under tools/,
+    # preview/ and src/os; the page prints one section per shelf - price
+    # against base price, the three revision families with their stamps,
+    # purchases, ratings, refunds, net purchases and the delist state - plus a
+    # market strip that sums the printed envelopes and says so, and the suite
+    # re-reads the face over its own throwaway world.
+    ("os-listing-view-board",
+     os.path.join("..", "os", "test_listing_view_board.py"), 6),
     # R3436: tools/watch_conversion_board.py renders the watch-to-purchase
     # funnel (api_watch_conversion, AC-WCV1..8) which had zero readers under
     # tools/, preview/ and the report collector; the page prints the market
