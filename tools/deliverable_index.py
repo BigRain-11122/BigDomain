@@ -228,6 +228,9 @@ PAIR_PRODUCERS = {
     # R3417: same single-writer shape - one render, one json, no back-hop block
     # - so the buyer monthly refund statement names its producer.
     "buyer-refund-months-board.json": "tools/buyer_refund_months_board.py",
+    # R3418: same single-writer shape - one render, one json, no back-hop block
+    # - so the whole-purchase dossier page names its producer.
+    "purchase-dossier-board.json": "tools/purchase_dossier_board.py",
 }
 # R3392 (AC-DIX21 recipe arm). One pair on this page cannot be reproduced by ONE
 # command, and until now the law had only two answers - name a producer or print

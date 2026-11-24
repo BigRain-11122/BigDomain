@@ -1,0 +1,46 @@
+R3418 PURCHASE DOSSIER BOARD - evidence log (window 2026-11-24)
+WHY: api_purchase_dossier shipped with AC-AMPD1..8 but git grep over tools/ and
+preview/ answered rc=1 with zero page readers, so "what actually happened to
+THIS purchase" could only be read from a shell.
+MEASURED (read-only, factory demo world, purchases enumerated through api_board
+-> api_sales): #1 bob/dana risk-scan 10 (7+3) 2026-08-31, refunded 10 on
+2026-10-02 month-crossing, no rating, no claim, refunded; #2 carol/dana
+risk-scan 10 (7+3) 2026-09-01, no refund, 5 stars, rated; #3 bob/dana
+macro-feed 3 (3+0) 2026-09-15, no refund, 4 stars, rated; #4 erin/frank
+chart-render 5 (4+1) 2026-09-20, refunded 5 same month on 2026-10-03, no
+rating, refunded; zero claims in this world.
+LANDED: tools/purchase_dossier_board.py -> preview/purchase-dossier-board.html
+(10842B) + preview/purchase-dossier-board.json (3678B); labels in
+preview/purchase-dossier-board-copy.json (driver stays ASCII).
+EVIDENCE: PURCHASE-DOSSIER CHECK PASS fails=0 html=10842B json=3678B;
+SUITE PASS 6/6 (AC-AMPDB1..6) green on the first full run after one real fix;
+AC-AMPDB2 re-reads the shipped face over the suite own throwaway world
+(identical=True disclaimer_same=True role_only_diff=True purchases=4);
+AC-AMPDB4 proves the empty world through the driver renderer in memory.
+WIRING: registry os-purchase-dossier-board(6); producer row
+purchase-dossier-board.json -> tools/purchase_dossier_board.py; matrix WRITTEN
+81411 bytes 787 rows then DOC-CURRENT; census rows=787 readable=787 VERDICT
+PASS pinned=787; entry index PASS 23/23; first-yuan chain PASS read_only=True;
+face sweep PASS 13/13 then --check 21/21. The entry-page fingerprint is
+deliberately not restated here: the export settle and the sweep move it after
+this log is written, so a restated number would be stale on landing.
+CLOSEOUT: CLOSEOUT-GATE PASS files=4957 census=PASS matrix=DOC-CURRENT;
+carrier post-fold 60312B against the 78500 gate (margin 18188B).
+CONTROL A: deleted label key law_notadvice -> rc=3 E_APDB_FACE, page bytes
+untouched.
+CONTROL B: forced purchases[0].price_paid +7 -> AC-AMPDB2 (identical=False) and
+AC-AMPDB3 (price split, refund amount) red at rc=2; restored pair re-reads
+SUITE PASS 6/6 and --check PASS.
+OWN DEVIATION: the first suite read red on AC-AMPDB4 because the law_state
+label carried ">" characters the page escapes to &gt;; the label now uses
+arrows and no arm sentence or threshold moved. The entry page and the chain
+quote each other bytes, so the chain --check read E_STALE twice before
+converging in the chain then index then chain order. The carrier fold window
+100:132 also swallowed this round own dated main line, so a dated main line was
+re-appended and the closeout gate then read round_main=OK.
+HONEST: this moves an already-delivered reading onto a CEO-openable page - zero
+new tables, zero new semantics; no purchase in this world opens a claim, so the
+claim block is an honest absence on every landed row; ZERO payment and no
+network beyond loopback - the five physical pieces are still missing, so buyers
+still cannot pay; carried unchanged: qa_log --ledger-check broken=5, full
+battery not re-run, Docker absent, test_face_sweep 54/56.

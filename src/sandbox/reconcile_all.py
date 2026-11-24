@@ -8285,6 +8285,15 @@ SUITES = [
     # and the wiring.
     ("os-buyer-refund-months-board",
      os.path.join("..", "os", "test_buyer_refund_months_board.py"), 6),
+    # R3418: tools/purchase_dossier_board.py renders one whole-purchase dossier
+    # per purchase. api_purchase_dossier shipped with AC-AMPD1..8 but had zero
+    # readers under tools/ and preview/, so the page prints the shipped
+    # envelope verbatim and the suite re-reads the face over its own throwaway
+    # demo world, pinning the two-leg split, the refund block, the recomputed
+    # ticket state, the party seam, the pure-read law, the honest nested
+    # absences, the seven law sentences and the wiring.
+    ("os-purchase-dossier-board",
+     os.path.join("..", "os", "test_purchase_dossier_board.py"), 6),
 
     # R3073: tools/city_face_report.py renders the P-47 item-1 city face and
     # carries its own --check (AC-CFY1..8), but this registry had no row naming

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>单笔交易档案页</title>
+<style>
+:root{--ink:#1b1f24;--muted:#66707a;--line:#dfe4ea;--bg:#f7f8fa}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:var(--bg);color:var(--ink);
+font:15px/1.65 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+main{max-width:1180px;margin:0 auto}
+h1{font-size:22px;margin:0 0 4px;font-weight:650}
+h2{font-size:16px;margin:22px 0 8px;font-weight:620}
+h3{font-size:13.5px;margin:0 0 6px;font-weight:620;color:var(--muted)}
+.meta{color:var(--muted);font-size:13px;margin-bottom:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;
+padding:14px 16px;margin-bottom:14px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600;font-size:12px}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.kpi{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.kpi div{flex:1 1 108px;border:1px solid var(--line);border-radius:8px;
+padding:10px 12px;background:#fff}
+.kpi b{display:block;font-size:19px;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--muted);font-size:12.5px}
+.disclaimer{border-left:3px solid #c9a227;background:#fdf8ea;padding:10px 14px;
+font-size:13px}
+.badge{display:inline-block;margin-right:8px;padding:2px 8px;
+border:1px solid var(--line);border-radius:999px;font-size:12px;
+color:var(--muted)}
+.law{font-size:13px;margin:6px 0}
+.empty{color:var(--muted);font-size:13px}
+.purchase{background:#fff;border:1px solid var(--line);border-radius:10px;
+padding:14px 16px;margin-bottom:16px}
+footer{color:var(--muted);font-size:12px;margin:20px 0 8px}
+code{font-size:12.5px;background:#f2f4f7;padding:1px 5px;border-radius:4px}
+</style></head><body><main>
+<h1>单笔交易档案页</h1>
+<div class=meta>逐笔：这一笔交易到底发生了什么——钱怎么分、退没退、评没评、有没有工单 &middot; 生成于 2026-11-24 11:52:21Z &middot; <code>api_purchase_dossier</code></div>
+<h2>全量一览（每笔一行）</h2>
+<div class=card><table><tr><th>#</th><th>挂单标题</th><th class=n>买家</th><th class=n>卖家</th><th class=n>成交额</th><th class=n>退款额</th><th class=n>评分</th><th class=n>工单状态</th><th class=n>已下架</th></tr><tr class="purchase"><td class=n>1</td><td>Risk Scan API</td><td>usr:bob</td><td>usr:dana</td><td class=n>10</td><td class=n>10</td><td class=n>—</td><td class=n>refunded</td><td class=n>否</td></tr><tr class="purchase"><td class=n>2</td><td>Risk Scan API</td><td>usr:carol</td><td>usr:dana</td><td class=n>10</td><td class=n>—</td><td class=n>5</td><td class=n>rated</td><td class=n>否</td></tr><tr class="purchase"><td class=n>3</td><td>Macro Feed API</td><td>usr:bob</td><td>usr:dana</td><td class=n>3</td><td class=n>—</td><td class=n>4</td><td class=n>rated</td><td class=n>否</td></tr><tr class="purchase"><td class=n>4</td><td>Chart Render API</td><td>usr:erin</td><td>usr:frank</td><td class=n>5</td><td class=n>5</td><td class=n>—</td><td class=n>refunded</td><td class=n>否</td></tr></table></div>
+<h2>逐笔档案</h2>
+<div class=purchase id="purchase-1"><h2>#1 Risk Scan API</h2><div class=kpi><div><span>成交额</span><b>10</b></div><div><span>开发者分成</span><b>7</b></div><div><span>平台分成</span><b>3</b></div><div><span>当前要价</span><b>10</b></div><div><span>退款额</span><b>10</b></div><div><span>评分</span><b>—</b></div><div><span>工单状态</span><b>refunded</b></div><div><span>已下架</span><b>否</b></div></div><div class=card><table><tr><th>挂单</th><td>risk-scan (#1)</td></tr><tr><th>类目</th><td>—</td></tr><tr><th>买家</th><td>usr:bob</td></tr><tr><th>卖家</th><td>usr:dana</td></tr><tr><th>查看者角色</th><td>buyer</td></tr><tr><th>购买时刻（UTC）</th><td>2026-08-31T23:59:59Z</td></tr><tr><th>消耗流水号</th><td>3a5d1beb704e2cea</td></tr><tr><th>当前要价</th><td>10</td></tr><tr><th>已下架</th><td>否</td></tr><tr><th>下架时刻（UTC）</th><td>—</td></tr></table></div><div class=card><h3>退款块</h3><table><tr><th>refund_id</th><td>1</td></tr><tr><th>amount</th><td>10</td></tr><tr><th>dev_share</th><td>7</td></tr><tr><th>platform_share</th><td>3</td></tr><tr><th>refund_tx</th><td>8ba56b903aeae03a</td></tr><tr><th>refunded_utc</th><td>2026-10-02T00:00:00Z</td></tr><tr><th>reason</th><td>month-crossing refund</td></tr></table></div><div class=card><h3>评分块</h3><p class=empty>未评分：买家尚未对该笔成交评分。</p></div><div class=card><h3>工单块</h3><p class=empty>无工单：该笔成交没有开过售后工单。</p></div></div><div class=purchase id="purchase-2"><h2>#2 Risk Scan API</h2><div class=kpi><div><span>成交额</span><b>10</b></div><div><span>开发者分成</span><b>7</b></div><div><span>平台分成</span><b>3</b></div><div><span>当前要价</span><b>10</b></div><div><span>退款额</span><b>—</b></div><div><span>评分</span><b>5</b></div><div><span>工单状态</span><b>rated</b></div><div><span>已下架</span><b>否</b></div></div><div class=card><table><tr><th>挂单</th><td>risk-scan (#1)</td></tr><tr><th>类目</th><td>—</td></tr><tr><th>买家</th><td>usr:carol</td></tr><tr><th>卖家</th><td>usr:dana</td></tr><tr><th>查看者角色</th><td>buyer</td></tr><tr><th>购买时刻（UTC）</th><td>2026-09-01T00:00:00Z</td></tr><tr><th>消耗流水号</th><td>07d07667b924742a</td></tr><tr><th>当前要价</th><td>10</td></tr><tr><th>已下架</th><td>否</td></tr><tr><th>下架时刻（UTC）</th><td>—</td></tr></table></div><div class=card><h3>退款块</h3><p class=empty>无退款：该笔成交没有退款行，故退款块为诚实缺席。</p></div><div class=card><h3>评分块</h3><table><tr><th>rating_id</th><td>1</td></tr><tr><th>stars</th><td>5</td></tr><tr><th>revision_count</th><td>0</td></tr><tr><th>revised_utc</th><td>—</td></tr></table></div><div class=card><h3>工单块</h3><p class=empty>无工单：该笔成交没有开过售后工单。</p></div></div><div class=purchase id="purchase-3"><h2>#3 Macro Feed API</h2><div class=kpi><div><span>成交额</span><b>3</b></div><div><span>开发者分成</span><b>3</b></div><div><span>平台分成</span><b>0</b></div><div><span>当前要价</span><b>3</b></div><div><span>退款额</span><b>—</b></div><div><span>评分</span><b>4</b></div><div><span>工单状态</span><b>rated</b></div><div><span>已下架</span><b>否</b></div></div><div class=card><table><tr><th>挂单</th><td>macro-feed (#2)</td></tr><tr><th>类目</th><td>—</td></tr><tr><th>买家</th><td>usr:bob</td></tr><tr><th>卖家</th><td>usr:dana</td></tr><tr><th>查看者角色</th><td>buyer</td></tr><tr><th>购买时刻（UTC）</th><td>2026-09-15T12:00:00Z</td></tr><tr><th>消耗流水号</th><td>2a9aa506ccfe848f</td></tr><tr><th>当前要价</th><td>3</td></tr><tr><th>已下架</th><td>否</td></tr><tr><th>下架时刻（UTC）</th><td>—</td></tr></table></div><div class=card><h3>退款块</h3><p class=empty>无退款：该笔成交没有退款行，故退款块为诚实缺席。</p></div><div class=card><h3>评分块</h3><table><tr><th>rating_id</th><td>2</td></tr><tr><th>stars</th><td>4</td></tr><tr><th>revision_count</th><td>0</td></tr><tr><th>revised_utc</th><td>—</td></tr></table></div><div class=card><h3>工单块</h3><p class=empty>无工单：该笔成交没有开过售后工单。</p></div></div><div class=purchase id="purchase-4"><h2>#4 Chart Render API</h2><div class=kpi><div><span>成交额</span><b>5</b></div><div><span>开发者分成</span><b>4</b></div><div><span>平台分成</span><b>1</b></div><div><span>当前要价</span><b>5</b></div><div><span>退款额</span><b>5</b></div><div><span>评分</span><b>—</b></div><div><span>工单状态</span><b>refunded</b></div><div><span>已下架</span><b>否</b></div></div><div class=card><table><tr><th>挂单</th><td>chart-render (#3)</td></tr><tr><th>类目</th><td>—</td></tr><tr><th>买家</th><td>usr:erin</td></tr><tr><th>卖家</th><td>usr:frank</td></tr><tr><th>查看者角色</th><td>buyer</td></tr><tr><th>购买时刻（UTC）</th><td>2026-09-20T08:30:00Z</td></tr><tr><th>消耗流水号</th><td>078369a01cb80be7</td></tr><tr><th>当前要价</th><td>5</td></tr><tr><th>已下架</th><td>否</td></tr><tr><th>下架时刻（UTC）</th><td>—</td></tr></table></div><div class=card><h3>退款块</h3><table><tr><th>refund_id</th><td>2</td></tr><tr><th>amount</th><td>5</td></tr><tr><th>dev_share</th><td>4</td></tr><tr><th>platform_share</th><td>1</td></tr><tr><th>refund_tx</th><td>f07f78205bfae33b</td></tr><tr><th>refunded_utc</th><td>2026-10-03T00:00:00Z</td></tr><tr><th>reason</th><td>demo refund same month</td></tr></table></div><div class=card><h3>评分块</h3><p class=empty>未评分：买家尚未对该笔成交评分。</p></div><div class=card><h3>工单块</h3><p class=empty>无工单：该笔成交没有开过售后工单。</p></div></div>
+<p class=empty>注：本页不重算任何市场规则，只印制出厂面交来的读数。</p>
+<h2>口径法则（页面不变式）</h2>
+<div class=card><p class=law>每笔成交额 = 开发者分成 + 平台分成（整数两条腿）；退款块的两条腿与该笔分成一致。</p><p class=law>退款块是该笔唯一的退款行，其金额恒等于成交额；无退款行时印显式缺席句而不是零元假行。</p><p class=law>工单状态按钉死优先级复算：已退款 → 已撤回 → 已答复 → 进行中 → 已评分 → 已结清，由退款、工单、评分三块现算。</p><p class=law>买家与卖家看到同一份档案，唯一差别是「查看者角色」这一个键；第三方被门拒绝。</p><p class=law>本面纯读：零行变更、零代币移动；已退市的挂单保留其历史档案，成交额是当时实付而不是当前要价。</p><p class=law>退款、评分、工单三块都是诚实缺席：有行才印行，无行印显式缺席句，永不补位。</p><p class=law>本面为开发者 API 服务市场记账面，不是投资建议。</p></div>
+<h2>来源与免责</h2>
+<div class=card><div class=disclaimer>sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice</div>
+<p style="margin-top:10px"><span class=badge>AIGC 生成内容标识：本页由沙箱读数渲染，数字非真实交易</span></p></div>
+<h2>复现命令</h2>
+<div class=card><code>python tools/purchase_dossier_board.py</code></div>
+<footer>BigDomain OSLoop &middot; 2026-11-24 11:52:21Z &middot; 本页由 tools/purchase_dossier_board.py 生成，不手改</footer>
+</main></body></html>
