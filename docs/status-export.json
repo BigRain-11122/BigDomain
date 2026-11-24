@@ -5,15 +5,15 @@
     ],
     "current": "2026-11-24 R3403 PRODUCT: the market now answers where a seller stands inside its own category - api_listing_position (live since R2144 with AC-AMPOS1..8) carried one docstring mention and zero readers across tools/ and preview/, and finally has one openable page.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
-    "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
-    "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
+    "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-16 commit]; later=html)",
+    "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-16 commit]; later=html)",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/listing-position-board-R3403.log (2583B, 2026-11-24)",
+    "latest_artifact_note": "",
     "latest_evidence": "qa/listing-position-board-R3403.log (2583B, 2026-11-24)",
     "newest_pair_on_disk_is_board": true,
     "next_milestone": "[R3403] next window (<=48h): (1) 载体 41060B／闸 78500（余量 37440B ≈ 10 轮；本轮已按板头第一件在轮边界折过 74932B→35398B，slice 2:93=R3383..R3395、`token_ok=true round_pointer_lost=[]`）——下窗仍**先读 `fold --plan-only`**，禁折在飞轮。 (2) S4U 落地仍欠一次提权运行（本窗实测 `LogonType=Interactive`，`elevated=False`）。 (3) 队列卫生：explore 仍仅余一条门控项（商户号），main 队头全门控（bootstrap 需物理件五件）——需补种。 (4) 同族余量：本窗只给 `api_listing_position` 开了门，仍有已交付读数无读者——`api_similar_listings`／`api_repeat_purchase`／`api_buyer_rating_pattern` 三面本轮实测在 `tools/`＋`preview/` 仍是 rc=1 零命中。 (5) **导出「最近实物」槽位仍被 mtime 排序牵动**（承 R3400/R3401/R3402 项 5，本轮再测）：本窗环内重渲 `first-yuan-chain` 后该槽位指向 `preview/first-yuan-chain.html` 而非本轮新页；`current`/`do`/`ceo_face.current` 三行仍正确点名 R3403（`status_export_fresh --check` 读 `VERDICT R3403 PASS`），槽位需按轮次锚定。 (6) 本轮新记写序事实：入口页 `deliverable_index --apply` 与 `first_yuan_chain` 互为输入（链页引用入口页字节），正法是「入口页 → 首元链 → 入口页」两遍收敛，再写面扫板；无闸阻止下窗再踩。 (7) 承账不变：`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`test_face_sweep` 54/56（AC-FSWB20/20c）。 (8) 提案面 BD-PROP-011 open（窗 11-22~11-28）在册，本窗配额已清。 (9) 诚实承账：物理件五件仍缺——买家仍付不了钱。",
-    "next_milestone_due": "2026-11-26T14:15:40+08:00",
-    "updated_at": "2026-11-24T14:15:40+08:00",
+    "next_milestone_due": "2026-11-26T14:17:52+08:00",
+    "updated_at": "2026-11-24T14:17:52+08:00",
     "heartbeat": {
       "tick": 3395,
       "state_tick": 3403,
@@ -29,7 +29,7 @@
       "over7": 0,
       "dup_rows": 0,
       "distinct": 12,
-      "collapsed": 0,
+      "collapsed": 1,
       "labels_refreshed": 0,
       "notes_stale": 0,
       "note_claims": 0,
@@ -38,7 +38,7 @@
     }
   },
   "current": "2026-11-24 R3403 PRODUCT: the market now answers where a seller stands inside its own category - api_listing_position (live since R2144 with AC-AMPOS1..8) carried one docstring mention and zero readers across tools/ and preview/, and finally has one openable page.",
-  "claims": {"claimed": 32, "captured": 2, "contradicted": 4, "uncaptured": 26, "historic": 4, "rows": 90, "present": true, "census_ts": "2026-11-24T14:15:40+08:00"},
+  "claims": {"claimed": 32, "captured": 2, "contradicted": 4, "uncaptured": 26, "historic": 4, "rows": 90, "present": true, "census_ts": "2026-11-24T14:17:52+08:00"},
   "chain": {"present": true, "rows": 90, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -68,12 +68,12 @@
     }
   ],
   "do": "2026-11-24 R3403 PRODUCT: the market now answers where a seller stands inside its own category - api_listing_position (live since R2144 with AC-AMPOS1..8) carried one docstring mention and zero readers across tools/ and preview/, and finally has one openable page.",
-  "export_ts": "2026-11-24T14:15:40+08:00",
-  "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
+  "export_ts": "2026-11-24T14:17:52+08:00",
+  "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-16 commit]; later=html)",
   "latest_evidence": "qa/listing-position-board-R3403.log (2583B, 2026-11-24)",
   "next_milestone": "[R3403] next window (<=48h): (1) 载体 41060B／闸 78500（余量 37440B ≈ 10 轮；本轮已按板头第一件在轮边界折过 74932B→35398B，slice 2:93=R3383..R3395、`token_ok=true round_pointer_lost=[]`）——下窗仍**先读 `fold --plan-only`**，禁折在飞轮。 (2) S4U 落地仍欠一次提权运行（本窗实测 `LogonType=Interactive`，`elevated=False`）。 (3) 队列卫生：explore 仍仅余一条门控项（商户号），main 队头全门控（bootstrap 需物理件五件）——需补种。 (4) 同族余量：本窗只给 `api_listing_position` 开了门，仍有已交付读数无读者——`api_similar_listings`／`api_repeat_purchase`／`api_buyer_rating_pattern` 三面本轮实测在 `tools/`＋`preview/` 仍是 rc=1 零命中。 (5) **导出「最近实物」槽位仍被 mtime 排序牵动**（承 R3400/R3401/R3402 项 5，本轮再测）：本窗环内重渲 `first-yuan-chain` 后该槽位指向 `preview/first-yuan-chain.html` 而非本轮新页；`current`/`do`/`ceo_face.current` 三行仍正确点名 R3403（`status_export_fresh --check` 读 `VERDICT R3403 PASS`），槽位需按轮次锚定。 (6) 本轮新记写序事实：入口页 `deliverable_index --apply` 与 `first_yuan_chain` 互为输入（链页引用入口页字节），正法是「入口页 → 首元链 → 入口页」两遍收敛，再写面扫板；无闸阻止下窗再踩。 (7) 承账不变：`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`test_face_sweep` 54/56（AC-FSWB20/20c）。 (8) 提案面 BD-PROP-011 open（窗 11-22~11-28）在册，本窗配额已清。 (9) 诚实承账：物理件五件仍缺——买家仍付不了钱。",
   "outs": [
-    "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
+    "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-16 commit]; later=html)",
     "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-24 commit]; later=html)",
     "preview/seller-quality-scorecard.html (4643B) + preview/seller-quality-scorecard.json (1762B) [2026-11-24 mtime]",
     "preview/market-price-percentiles.html (4888B) + preview/market-price-percentiles.json (1374B) [2026-11-24 mtime]",
@@ -172,7 +172,7 @@
     "queue_explore_open": 1
   },
   "state_bytes": 41060,
-  "next_milestone_due": "2026-11-26T14:15:40+08:00",
+  "next_milestone_due": "2026-11-26T14:17:52+08:00",
   "heartbeat": {
     "tick": 3395,
     "state_tick": 3403,
@@ -188,7 +188,7 @@
     "over7": 0,
     "dup_rows": 0,
     "distinct": 12,
-    "collapsed": 0,
+    "collapsed": 1,
     "labels_refreshed": 0,
     "notes_stale": 0,
     "note_claims": 0,
