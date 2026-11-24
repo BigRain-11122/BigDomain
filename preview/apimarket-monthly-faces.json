@@ -114,6 +114,75 @@
     },
     {
       "envelope": {
+        "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+        "first_month": "2026-08",
+        "gross_tokens": 28,
+        "last_month": "2026-09",
+        "latest_month_median_ticket": 5.0,
+        "max_ticket": 10,
+        "mean_ticket": 7.0,
+        "median_ticket": 7.5,
+        "min_ticket": 3,
+        "month_count": 2,
+        "months": [
+          {
+            "gross_tokens": 10,
+            "mean_ticket": 10.0,
+            "median_ticket": 10.0,
+            "month": "2026-08",
+            "p90_ticket": 10,
+            "refunded_sale_count": 1,
+            "running_ticket_tokens": 10,
+            "sale_count": 1
+          },
+          {
+            "gross_tokens": 18,
+            "mean_ticket": 6.0,
+            "median_ticket": 5.0,
+            "month": "2026-09",
+            "p90_ticket": 10,
+            "refunded_sale_count": 1,
+            "running_ticket_tokens": 28,
+            "sale_count": 3
+          }
+        ],
+        "p90_ticket": 10,
+        "peak_median_ticket": 10.0,
+        "peak_month": "2026-08",
+        "refunded_sale_count": 2,
+        "sale_count": 4,
+        "scope": "market"
+      },
+      "first_month": "2026-08",
+      "fn": "api_market_ticket_size_months",
+      "key_count": 17,
+      "last_month": "2026-09",
+      "month_count": 2,
+      "months": [
+        {
+          "gross_tokens": 10,
+          "mean_ticket": 10.0,
+          "median_ticket": 10.0,
+          "month": "2026-08",
+          "p90_ticket": 10,
+          "refunded_sale_count": 1,
+          "running_ticket_tokens": 10,
+          "sale_count": 1
+        },
+        {
+          "gross_tokens": 18,
+          "mean_ticket": 6.0,
+          "median_ticket": 5.0,
+          "month": "2026-09",
+          "p90_ticket": 10,
+          "refunded_sale_count": 1,
+          "running_ticket_tokens": 28,
+          "sale_count": 3
+        }
+      ]
+    },
+    {
+      "envelope": {
         "busiest_open_count": 3,
         "busiest_open_month": "2026-08",
         "closed_total": 0,

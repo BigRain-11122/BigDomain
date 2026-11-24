@@ -58,7 +58,8 @@ PIN row BEFORE this code existed):
     zero stderr bytes, and neither --out nor --json-out on disk; the
     --verify --log path refuses identically and creates no log.
   AC-MFPC4 the healthy bytes do not move: the shipped copy renders the
-    shipped page and JSON byte for byte (6834B / 13015B) in process, and
+    shipped page and JSON byte for byte (sizes derived from the render,
+    never typed) in process, and
     the CLI writing to temp paths produces those same bytes at rc=0.
   AC-MFPC5 shape and hygiene: a JSON list as the whole copy file is
     refused by name with the type in the detail, an extra unread key is
@@ -111,7 +112,7 @@ row BEFORE this code existed):
     os.replace raising once, the target keeps its previous bytes and
     the staged temp file is removed.
   AC-MFPW4 the healthy bytes do not move: in process and through the
-    CLI the page and JSON match the shipped 6834B/13015B byte for byte.
+    CLI the page and JSON match the shipped render byte for byte.
   AC-MFPW5 the CLI face is named (R3198 rewrote this arm): an injected
     render, stage or replace failure exits 2 with exactly one stdout
     line carrying E_MFP_WRITE and the stage, zero stderr bytes, and the
@@ -1284,12 +1285,19 @@ def check_outputs_readback():
     out_html = os.path.join(root, "page.html")
     out_json = os.path.join(root, "page.json")
     proofs = M.write_outputs(faces, copy, out_html, out_json)
+    # R3388: the expected proof is derived from the render this run asked
+    # for, not typed. The typed pair (6834/30527da5ec5dc7e2 and
+    # 13015/76e42600895a4dc5) was correct for the five-face page and
+    # reddened when a sixth face joined the table - the same failure shape
+    # R3384 removed from test_face_sweep.
+    want_html_sha = sha16_bytes(want["html"])
+    want_json_sha = sha16_bytes(want["json"])
     healthy = (io.open(out_html, "rb").read() == want["html"]
                and io.open(out_json, "rb").read() == want["json"]
-               and proofs.get("html", {}).get("bytes") == 6834
-               and proofs.get("html", {}).get("sha256") == "30527da5ec5dc7e2"
-               and proofs.get("json", {}).get("bytes") == 13015
-               and proofs.get("json", {}).get("sha256") == "76e42600895a4dc5")
+               and proofs.get("html", {}).get("bytes") == len(want["html"])
+               and proofs.get("html", {}).get("sha256") == want_html_sha
+               and proofs.get("json", {}).get("bytes") == len(want["json"])
+               and proofs.get("json", {}).get("sha256") == want_json_sha)
     if not healthy or _leftovers(root):
         problems.append("b.healthy=%s temps=%s"
                         % (healthy, ",".join(_leftovers(root)) or "none"))
@@ -1303,8 +1311,8 @@ def check_outputs_readback():
     pass_line = [ln for ln in text0.splitlines()
                  if ln.startswith("PASS preview")]
     if (rc0 != 0 or len(pass_line) != 1
-            or "30527da5ec5dc7e2" not in pass_line[0]
-            or "76e42600895a4dc5" not in pass_line[0]):
+            or want_html_sha not in pass_line[0]
+            or want_json_sha not in pass_line[0]):
         problems.append("c.control=%r/%s" % (rc0, pass_line[:1]))
     real = os.replace
     os.replace = make_shim([out_html])

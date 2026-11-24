@@ -1,8 +1,9 @@
 """R3193 product round: the first openable page over the shipped market
 MONTHLY read faces.
 
-Five market monthly faces already exist in the sandbox ledger
-(api_market_months, api_market_supply_months, api_market_claim_months,
+Six market monthly faces already exist in the sandbox ledger
+(api_market_months, api_market_ticket_size_months,
+api_market_supply_months, api_market_claim_months,
 api_market_restock_months, api_market_discount_months) but the review
 index preview/index.html only lists the settlement report family, so a
 reader cannot see any of them without writing code. This generator
@@ -152,6 +153,7 @@ OUT_JSON = os.path.join(BASE, "preview", "apimarket-monthly-faces.json")
 
 FACES = [
     "api_market_months",
+    "api_market_ticket_size_months",
     "api_market_supply_months",
     "api_market_claim_months",
     "api_market_restock_months",
@@ -166,6 +168,11 @@ IDENTITY = {
         ("refund_count", "lifetime_refund_count"),
         ("refunded", "lifetime_refunded"),
         ("net", "lifetime_net"),
+    ],
+    "api_market_ticket_size_months": [
+        ("sale_count", "sale_count"),
+        ("gross_tokens", "gross_tokens"),
+        ("refunded_sale_count", "refunded_sale_count"),
     ],
     "api_market_supply_months": [
         ("opened_count", "opened_total"),
@@ -348,7 +355,7 @@ def load_copy(path=COPY_PATH):
 
 def collect(tmp_root):
     """Build the deterministic demo world in a private dir and read the
-    five market monthly faces. Returns the ordered payload list."""
+    six market monthly faces. Returns the ordered payload list."""
     db = os.path.join(tmp_root, "monthly-faces.db")
     led = mtr = dk = am = None
     payload = []

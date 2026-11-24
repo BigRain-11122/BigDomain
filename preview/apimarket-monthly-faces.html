@@ -39,7 +39,7 @@
 </head><body>
 <header><div class="wrap">
 <h1>硅基域 · 市场月度台账</h1>
-<div class="sub">五个市场月度读面的第一张可开页：成交、供给、售后、补货、折扣</div>
+<div class="sub">六个市场月度读面的第一张可开页：成交、客单价、供给、售后、补货、折扣</div>
 <div class="badges">
 <span class="badge ai">AIGC 生成内容</span>
 <span class="badge">数据来源：确定性演示世界（两卖家 / 四买家 / 三上架 / 跨三个月成交与一笔跨月退款），不是真实交易。</span>
@@ -91,6 +91,39 @@
 </tr>
 </tbody></table>
 <p class="kv">month_count=3 · lifetime_sales_count=4 · lifetime_gross=28 · lifetime_refund_count=2 · lifetime_refunded=15 · lifetime_net=13 · lifetime_dev_revenue=10 · lifetime_platform_revenue=3</p>
+</div>
+<div class="card">
+<h2>市场月度成交客单价（均值 / 中位 / p90）</h2>
+<div class="src">api_market_ticket_size_months · 信封 17 键 · 月行 2 行</div>
+<table><thead><tr><th>月份</th>
+<th>sale_count</th>
+<th>含退款笔数</th>
+<th>成交额（token）</th>
+<th>客单价均值</th>
+<th>客单价中位</th>
+<th>客单价 p90</th>
+<th>累计成交额</th>
+</tr></thead><tbody>
+<tr><td>2026-08</td>
+<td>1</td>
+<td>1</td>
+<td>10</td>
+<td>10</td>
+<td>10</td>
+<td>10</td>
+<td>10</td>
+</tr>
+<tr><td>2026-09</td>
+<td>3</td>
+<td>1</td>
+<td>18</td>
+<td>6</td>
+<td>5</td>
+<td>10</td>
+<td>28</td>
+</tr>
+</tbody></table>
+<p class="kv">scope=market · sale_count=4 · 含退款笔数=2 · 成交额（token）=28 · 客单价均值=7 · 客单价中位=7.5 · 客单价 p90=10 · min_ticket=3</p>
 </div>
 <div class="card">
 <h2>市场月度供给（上架 / 在架 / 售罄 / 库存）</h2>
