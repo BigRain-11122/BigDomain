@@ -1,0 +1,22 @@
+R3410 seller revenue board - evidence (ASCII/English, one fact per line)
+1. render: SELLER-REVENUE preview/seller-revenue-board.html bytes=5797 sellers=2 months=5 (json 2386B)
+2. face: api_revenue_months, envelope 9 keys, month row 10 keys, sellers enumerated from shipped api_board()
+3. suite: PASS AC-SRV1 contract keys=9 sellers=2 report=True
+4. suite: PASS AC-SRV2 diffs=[] disclaimer_same=True months=5 (own throwaway world, no typed ids)
+5. suite: PASS AC-SRV3 problems=[] (five lifetime sums, per-row net and share splits, month order)
+6. suite: PASS AC-SRV4 rows=5/5 negatives=2 printed=True laws=True empty=True stand_in_none=False
+7. suite: PASS AC-SRV5 aigc=True disclaimer_on_page=True external_links=0
+8. suite: PASS AC-SRV6 check_rc=0 wrote_nothing=True wired=6/6 face_suite=True
+9. suite: SUITE PASS 6/6 criteria declared=6
+10. control A PASS rc=3 refusal=E_SRV_FACE html_untouched=True (one label key removed, driver refused before writing)
+11. control B PASS rc=2 AC-SRV2 red AC-SRV3 red (one printed net bumped)
+12. restore PASS identical=True suite_rc=0 green=True (copy, json and html back to the same sha256)
+13. registry: os-seller-revenue-board(6) in src/sandbox/reconcile_all.py; suite src/os/test_seller_revenue_board.py
+14. matrix: WRITTEN docs/sandbox-suite-matrix.md 80667 bytes 779 rows
+15. census: VERDICT PASS pinned=779 rows=779 readable=779
+16. entry index: VERDICT PASS 23/23 fingerprint=c3e32df4916123e5 (producer named seller-revenue-board.json -> tools/seller_revenue_board.py)
+17. first-yuan chain: VERDICT PASS legs=2 entries=2 tx=1 reconcile_rc=0 read_only=True
+18. face sweep: VERDICT PASS 13/13 fingerprint=3f1676f689b64330 ; --check 21/21
+19. honest: this moves an already-delivered reading onto a CEO-openable page; zero new tables, zero new semantics
+20. honest: the demo world holds two sellers over five months, two of them refund-only rows reading -10 and -5; the page prints the minus signs, it does not clamp
+21. honest: zero payment, zero network beyond loopback; the five physical pieces are still missing, buyers still cannot pay

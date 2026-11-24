@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>卖家月度营收与平台分成</title>
+<style>
+:root{--ink:#1b1f24;--muted:#66707a;--line:#dfe4ea;--bg:#f7f8fa}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:var(--bg);color:var(--ink);
+font:15px/1.65 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+main{max-width:1080px;margin:0 auto}
+h1{font-size:22px;margin:0 0 4px;font-weight:650}
+h2{font-size:16px;margin:22px 0 8px;font-weight:620}
+.meta{color:var(--muted);font-size:13px;margin-bottom:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;
+padding:14px 16px;margin-bottom:14px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600;font-size:12px}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+td.neg{color:#b42318}
+.kpi{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.kpi div{flex:1 1 108px;border:1px solid var(--line);border-radius:8px;
+padding:10px 12px;background:#fff}
+.kpi b{display:block;font-size:19px;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--muted);font-size:12.5px}
+.disclaimer{border-left:3px solid #c9a227;background:#fdf8ea;padding:10px 14px;
+font-size:13px}
+.badge{display:inline-block;margin-right:8px;padding:2px 8px;
+border:1px solid var(--line);border-radius:999px;font-size:12px;
+color:var(--muted)}
+.law{font-size:13px;margin:6px 0}
+.empty{color:var(--muted);font-size:13px}
+footer{color:var(--muted);font-size:12px;margin:20px 0 8px}
+code{font-size:12.5px;background:#f2f4f7;padding:1px 5px;border-radius:4px}
+</style></head><body><main>
+<h1>卖家月度营收与平台分成</h1>
+<div class=meta>出厂 api_revenue_months 的月度营收读数 · 每个卖家一段 · 负净额如实印出 &middot; 生成于 2026-11-24 09:05:22Z &middot; <code>api_revenue_months</code></div>
+<h2>卖家月度账</h2>
+<div class=seller id="seller-usr:dana"><h2>usr:dana</h2><div class=kpi><div><span>月份数</span><b>3</b></div><div><span>成交笔数（终身）</span><b>3</b></div><div><span>毛收入（终身）</span><b>23</b></div><div><span>退款笔数（终身）</span><b>1</b></div><div><span>退款额（终身）</span><b>10</b></div><div><span>净额（终身）</span><b>13</b></div></div><div class=card><table><tr><th class=n>月份</th><th class=n>成交笔数</th><th class=n>毛收入</th><th class=n>退款笔数</th><th class=n>退款额</th><th class=n>净额</th><th class=n>开发者分成</th><th class=n>平台分成</th><th class=n>开发者净得</th><th class=n>平台净得</th></tr><tr class="month"><td>2026-08</td><td class="n">1</td><td class="n">10</td><td class="n">0</td><td class="n">0</td><td class="n">10</td><td class="n">7</td><td class="n">3</td><td class="n">7</td><td class="n">3</td></tr><tr class="month"><td>2026-09</td><td class="n">2</td><td class="n">13</td><td class="n">0</td><td class="n">0</td><td class="n">13</td><td class="n">10</td><td class="n">3</td><td class="n">10</td><td class="n">3</td></tr><tr class="month"><td>2026-10</td><td class="n">0</td><td class="n">0</td><td class="n">1</td><td class="n">10</td><td class="n neg">-10</td><td class="n">0</td><td class="n">0</td><td class="n neg">-7</td><td class="n neg">-3</td></tr></table></div></div><div class=seller id="seller-usr:frank"><h2>usr:frank</h2><div class=kpi><div><span>月份数</span><b>2</b></div><div><span>成交笔数（终身）</span><b>1</b></div><div><span>毛收入（终身）</span><b>5</b></div><div><span>退款笔数（终身）</span><b>1</b></div><div><span>退款额（终身）</span><b>5</b></div><div><span>净额（终身）</span><b>0</b></div></div><div class=card><table><tr><th class=n>月份</th><th class=n>成交笔数</th><th class=n>毛收入</th><th class=n>退款笔数</th><th class=n>退款额</th><th class=n>净额</th><th class=n>开发者分成</th><th class=n>平台分成</th><th class=n>开发者净得</th><th class=n>平台净得</th></tr><tr class="month"><td>2026-09</td><td class="n">1</td><td class="n">5</td><td class="n">0</td><td class="n">0</td><td class="n">5</td><td class="n">4</td><td class="n">1</td><td class="n">4</td><td class="n">1</td></tr><tr class="month"><td>2026-10</td><td class="n">0</td><td class="n">0</td><td class="n">1</td><td class="n">5</td><td class="n neg">-5</td><td class="n">0</td><td class="n">0</td><td class="n neg">-4</td><td class="n neg">-1</td></tr></table></div></div>
+<h2>口径法则</h2>
+<div class=card><p class=law>逐月净额 = 毛收入 - 退款额，正负如实。</p><p class=law>开发者分成 + 平台分成 = 毛收入；两个分成都由出厂面给出，本页不重算。</p><p class=law>卖家终身五项（成交笔数／毛收入／退款笔数／退款额／净额）各自等于其月行之和。</p><p class=law>月份按日历升序排列，空月不补造。</p><p class=law>退款独月（当月无成交、只有退款）会读出负净额，本页保留负号，不截断成零。</p><p class=law>分成是出厂面记录的交易拆分，不是投顾口径，也不构成任何收益承诺。</p></div>
+<h2>免责声明</h2>
+<div class=card><div class=disclaimer>sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice</div>
+<p style="margin-top:10px"><span class=badge>本页含 AI 生成内容（AIGC）</span></p></div>
+<h2>复现</h2>
+<div class=card><code>python tools/seller_revenue_board.py</code></div>
+<footer>BigDomain OSLoop &middot; 2026-11-24 09:05:22Z &middot; 本页由 tools/seller_revenue_board.py 生成，不手改</footer>
+</main></body></html>

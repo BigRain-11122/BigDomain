@@ -1,0 +1,104 @@
+{
+ "generated_utc": "2026-11-24 09:05:22Z",
+ "face": "api_revenue_months",
+ "board_face": "api_board",
+ "seller_count": 2,
+ "sellers": [
+  {
+   "dev_account": "usr:dana",
+   "month_count": 3,
+   "lifetime_sales_count": 3,
+   "lifetime_gross": 23,
+   "lifetime_refund_count": 1,
+   "lifetime_refunded": 10,
+   "lifetime_net": 13,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "months": [
+    {
+     "month": "2026-08",
+     "sales_count": 1,
+     "gross": 10,
+     "refund_count": 0,
+     "refunded": 0,
+     "net": 10,
+     "dev_share": 7,
+     "platform_share": 3,
+     "dev_share_net": 7,
+     "platform_share_net": 3
+    },
+    {
+     "month": "2026-09",
+     "sales_count": 2,
+     "gross": 13,
+     "refund_count": 0,
+     "refunded": 0,
+     "net": 13,
+     "dev_share": 10,
+     "platform_share": 3,
+     "dev_share_net": 10,
+     "platform_share_net": 3
+    },
+    {
+     "month": "2026-10",
+     "sales_count": 0,
+     "gross": 0,
+     "refund_count": 1,
+     "refunded": 10,
+     "net": -10,
+     "dev_share": 0,
+     "platform_share": 0,
+     "dev_share_net": -7,
+     "platform_share_net": -3
+    }
+   ]
+  },
+  {
+   "dev_account": "usr:frank",
+   "month_count": 2,
+   "lifetime_sales_count": 1,
+   "lifetime_gross": 5,
+   "lifetime_refund_count": 1,
+   "lifetime_refunded": 5,
+   "lifetime_net": 0,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "months": [
+    {
+     "month": "2026-09",
+     "sales_count": 1,
+     "gross": 5,
+     "refund_count": 0,
+     "refunded": 0,
+     "net": 5,
+     "dev_share": 4,
+     "platform_share": 1,
+     "dev_share_net": 4,
+     "platform_share_net": 1
+    },
+    {
+     "month": "2026-10",
+     "sales_count": 0,
+     "gross": 0,
+     "refund_count": 1,
+     "refunded": 5,
+     "net": -5,
+     "dev_share": 0,
+     "platform_share": 0,
+     "dev_share_net": -4,
+     "platform_share_net": -1
+    }
+   ]
+  }
+ ],
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/seller-revenue-board.html",
+ "sources": {
+  "driver": "36b0f1ea565e88e8",
+  "copy": "9a5838eb06aac47e",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 5797,
+  "json": 2386
+ }
+}

@@ -8212,6 +8212,15 @@ SUITES = [
     # cumulative, Herfindahl, Pareto and ladder-order identities.
     ("os-seller-concentration-board",
      os.path.join("..", "os", "test_seller_concentration_board.py"), 6),
+    # R3410: api_revenue_months carried its own AC-REVM suite and a zero-reader
+    # git grep under tools/ and preview/. The page shows the month-by-month
+    # money and the developer/platform split, so a refund-only month can read a
+    # negative net. The suite re-reads the shipped face over its own throwaway
+    # demo world (never a typed fixture) and pins the five lifetime sum
+    # identities, the per-row net and share splits, month order, the
+    # un-clamped negative row and the explicit empty-month render.
+    ("os-seller-revenue-board",
+     os.path.join("..", "os", "test_seller_revenue_board.py"), 6),
     # R3073: tools/city_face_report.py renders the P-47 item-1 city face and
     # carries its own --check (AC-CFY1..8), but this registry had no row naming
     # it, so the face was graded only by the fail-soft [GATES] sweep - the
