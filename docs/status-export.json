@@ -1,17 +1,17 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-25 R3449 PRODUCT: the buyer-side answer-wait question now has a door - api_buyer_answer_wait (live with AC-BAW1..8 and its shipped suite on disk) had zero readers across tools/, preview/ and src/os, so how long one resident actually waited for answers month over month, how much of that was an older month's backlog and whether the account is being ignored right now could only be read by calling the sandbox from a shell.",
+    "current": "2026-11-25 R3450 PRODUCT: the per-category attention question now has a door - api_category_watch_months (live with AC-CWM1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so which buckets a market rushed into or dropped month over month, and where the live watch interest sits now, could only be read by calling the sandbox from a shell.",
     "do": "2026-11-25 R3449 PRODUCT: the buyer-side answer-wait question now has a door - api_buyer_answer_wait (live with AC-BAW1..8 and its shipped suite on disk) had zero readers across tools/, preview/ and src/os, so how long one resident actually waited for answers month over month, how much of that was an older month's backlog and whether the account is being ignored right now could only be read by calling the sandbox from a shell.",
-    "last_artifact": "preview/buyer-answer-wait-board.html (8364B) + preview/buyer-answer-wait-board.json (3107B) [2026-11-25 mtime]",
-    "latest_artifact": "preview/buyer-answer-wait-board.html (8364B) + preview/buyer-answer-wait-board.json (3107B) [2026-11-25 mtime]",
-    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\buyer-answer-wait-board.html",
+    "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 mtime] (halves differ: html [2026-11-25 mtime] + json [2026-11-16 commit]; later=html)",
+    "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 mtime] (halves differ: html [2026-11-25 mtime] + json [2026-11-16 commit]; later=html)",
+    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
     "latest_artifact_note": "",
     "latest_evidence": "qa/buyer-answer-wait-board-R3449.log (728B, 2026-11-25)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R3449] next window (<=48h): (1) 零读者面清单余 8 面（本窗消 `api_buyer_answer_wait`；余 `api_category_history`／`api_answer_history`／`api_provider_identity`／`api_buyer_watch_category_mix`／`api_category_question_months`／`api_category_watch_months`／`api_market_relist_months`／`api_market_provider_months`），下窗仍先只读普查点名一位（面自带套件在盘且 tools/＋preview/＋src/os 实测零命中才动手；出厂世界为空的面须经出厂写入门建行并显式声明）。(2) S4U 落地仍欠一次提权运行。(3) export 最新产物槽 writer 修复＋三条判据仍承账。(4) 基准下次到期 2026-12-01。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`。(6) tick 口径：本窗 3448→3449。",
-    "next_milestone_due": "2026-11-27T05:38:58+08:00",
-    "updated_at": "2026-11-25T05:53:46+08:00",
+    "next_milestone": "[R3450] next window (<=48h): (1) 零读者面清单余 7 面（本窗消 `api_category_watch_months`；余 `api_category_history`／`api_answer_history`／`api_provider_identity`／`api_buyer_watch_category_mix`／`api_category_question_months`／`api_market_relist_months`／`api_market_provider_months`），下窗仍先只读普查点名一位（面自带套件在盘且 tools/＋preview/＋src/os 实测零命中才动手；出厂世界为空的面须经出厂写入门建行并显式声明；已开门面不重开）。(2) S4U 落地仍欠一次提权运行（本窗未实测 `BigDomain-OSLoop` LogonType）。(3) export 最新产物槽 writer 修复＋三条判据仍承账。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`（本窗收口后 72300B／闸 78500／余 6200B）。(6) tick 口径：本窗 3449→3450。(7) 新页收敛次序复核＝驱动→套件→证据→矩阵→`registry_counter_census.py --no-cache --write-pin`→`first_yuan_chain`→`deliverable_index`→`first_yuan_chain --check`→面扫→`closeout_gate`，面扫必须最后跑。",
+    "next_milestone_due": "2026-11-27T06:19:46+08:00",
+    "updated_at": "2026-11-25T06:19:46+08:00",
     "heartbeat": {
       "tick": 3449,
       "state_tick": 3449,
@@ -35,23 +35,9 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-25 R3449 PRODUCT: the buyer-side answer-wait question now has a door - api_buyer_answer_wait (live with AC-BAW1..8 and its shipped suite on disk) had zero readers across tools/, preview/ and src/os, so how long one resident actually waited for answers month over month, how much of that was an older month's backlog and whether the account is being ignored right now could only be read by calling the sandbox from a shell.",
-  "claims": {
-    "claimed": 29,
-    "captured": 17,
-    "contradicted": 0,
-    "uncaptured": 12,
-    "historic": 0,
-    "rows": 100,
-    "present": true,
-    "census_ts": "2026-11-25T05:25:20+08:00"
-  },
-  "chain": {
-    "present": true,
-    "rows": 100,
-    "broken": 5,
-    "path": "state/qa_replacements.jsonl"
-  },
+  "current": "2026-11-25 R3450 PRODUCT: the per-category attention question now has a door - api_category_watch_months (live with AC-CWM1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so which buckets a market rushed into or dropped month over month, and where the live watch interest sits now, could only be read by calling the sandbox from a shell.",
+  "claims": {"claimed": 27, "captured": 16, "contradicted": 0, "uncaptured": 11, "historic": 0, "rows": 101, "present": true, "census_ts": "2026-11-25T06:19:46+08:00"},
+  "chain": {"present": true, "rows": 101, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -79,11 +65,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-25 R3449 PRODUCT: the buyer-side answer-wait question now has a door - api_buyer_answer_wait (live with AC-BAW1..8 and its shipped suite on disk) had zero readers across tools/, preview/ and src/os, so how long one resident actually waited for answers month over month, how much of that was an older month's backlog and whether the account is being ignored right now could only be read by calling the sandbox from a shell.",
-  "export_ts": "2026-11-25T05:53:46+08:00",
-  "latest_artifact": "preview/buyer-answer-wait-board.html (8364B) + preview/buyer-answer-wait-board.json (3107B) [2026-11-25 mtime]",
+  "do": "2026-11-25 R3450 PRODUCT: the per-category attention question now has a door - api_category_watch_months (live with AC-CWM1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so which buckets a market rushed into or dropped month over month, and where the live watch interest sits now, could only be read by calling the sandbox from a shell.",
+  "export_ts": "2026-11-25T06:19:46+08:00",
+  "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 mtime] (halves differ: html [2026-11-25 mtime] + json [2026-11-16 commit]; later=html)",
   "latest_evidence": "qa/buyer-answer-wait-board-R3449.log (728B, 2026-11-25)",
-  "next_milestone": "[R3449] next window (<=48h): (1) 零读者面清单余 8 面（本窗消 `api_buyer_answer_wait`；余 `api_category_history`／`api_answer_history`／`api_provider_identity`／`api_buyer_watch_category_mix`／`api_category_question_months`／`api_category_watch_months`／`api_market_relist_months`／`api_market_provider_months`），下窗仍先只读普查点名一位（面自带套件在盘且 tools/＋preview/＋src/os 实测零命中才动手；出厂世界为空的面须经出厂写入门建行并显式声明）。(2) S4U 落地仍欠一次提权运行。(3) export 最新产物槽 writer 修复＋三条判据仍承账。(4) 基准下次到期 2026-12-01。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`。(6) tick 口径：本窗 3448→3449。",
+  "next_milestone": "[R3450] next window (<=48h): (1) 零读者面清单余 7 面（本窗消 `api_category_watch_months`；余 `api_category_history`／`api_answer_history`／`api_provider_identity`／`api_buyer_watch_category_mix`／`api_category_question_months`／`api_market_relist_months`／`api_market_provider_months`），下窗仍先只读普查点名一位（面自带套件在盘且 tools/＋preview/＋src/os 实测零命中才动手；出厂世界为空的面须经出厂写入门建行并显式声明；已开门面不重开）。(2) S4U 落地仍欠一次提权运行（本窗未实测 `BigDomain-OSLoop` LogonType）。(3) export 最新产物槽 writer 修复＋三条判据仍承账。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`（本窗收口后 72300B／闸 78500／余 6200B）。(6) tick 口径：本窗 3449→3450。(7) 新页收敛次序复核＝驱动→套件→证据→矩阵→`registry_counter_census.py --no-cache --write-pin`→`first_yuan_chain`→`deliverable_index`→`first_yuan_chain --check`→面扫→`closeout_gate`，面扫必须最后跑。",
   "outs": [
     "preview/buyer-answer-wait-board.html (8364B) + preview/buyer-answer-wait-board.json (3107B) [2026-11-25 mtime]",
     "preview/buyer-watch-months-board.html (10013B) + preview/buyer-watch-months-board.json (4552B) [2026-11-25 mtime]",
@@ -178,8 +164,8 @@
     "queue_tech_open": 5,
     "queue_explore_open": 1
   },
-  "state_bytes": 70862,
-  "next_milestone_due": "2026-11-27T05:38:58+08:00",
+  "state_bytes": 72791,
+  "next_milestone_due": "2026-11-27T06:19:46+08:00",
   "heartbeat": {
     "tick": 3449,
     "state_tick": 3449,
