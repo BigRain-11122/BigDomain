@@ -1,0 +1,17 @@
+R3386 loop-task registrar, read-only arms
+
+live task BigDomain-OSLoop: state=Running logon=Interactive runlevel=Limited
+  userid=sjs20 action=wscript.exe interval=PT5M
+shell elevated=False -> an S4U principal cannot be applied from this session
+
+arm1 preserved : interval=PT5M interval_why=preserved lane_phase=4 first_fire=2026-11-24T08:54:00 logon=S4U runlevel=Limited
+arm2 explicit  : interval=PT5M interval_why=explicit  lane_phase=4 logon=S4U
+arm3 default   : interval=PT5M interval_why=default   (task name absent from the scheduler, render only)
+arm4 live read : live_interval=PT5M equals arm1 rendered interval, so the repair changes no cadence
+
+before R3386 the registrar typed -Minutes 10 and a ten-minute lane phase, so the
+one path that can repair the principal would have halved the round rate
+after measure the script reads Principal.LogonType and Repetition.Interval back
+and refuses (FAILED rc=1) unless the task answers what it rendered
+
+owed: powershell -NoProfile -ExecutionPolicy Bypass -File src/os/register_loop_task.ps1 from an elevated prompt
