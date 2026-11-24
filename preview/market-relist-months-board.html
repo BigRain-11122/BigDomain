@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>市场下架与回返月板</title>
+<style>
+:root{--ink:#1b1f24;--muted:#66707a;--line:#dfe4ea;--bg:#f7f8fa}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:var(--bg);color:var(--ink);
+font:15px/1.65 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+main{max-width:1180px;margin:0 auto}
+h1{font-size:22px;margin:0 0 4px;font-weight:650}
+h2{font-size:16px;margin:22px 0 8px;font-weight:620}
+.meta{color:var(--muted);font-size:13px;margin-bottom:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;
+padding:14px 16px;margin-bottom:14px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600;font-size:12px}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.kpi{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.kpi div{flex:1 1 104px;border:1px solid var(--line);border-radius:8px;
+padding:10px 12px;background:#fff}
+.kpi b{display:block;font-size:18px;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--muted);font-size:12.5px}
+.disclaimer{border-left:3px solid #c9a227;background:#fdf8ea;padding:10px 14px;
+font-size:13px}
+.badge{display:inline-block;margin-right:8px;padding:2px 8px;
+border:1px solid var(--line);border-radius:999px;font-size:12px;
+color:var(--muted)}
+.badge.on{border-color:#9ad1a7;background:#eef9f1;color:#1f6b33}
+.badge.off{border-color:#b9c7e4;background:#f1f4fd;color:#23388a}
+.badge.warn{border-color:#e4c9b9;background:#fdf1ea;color:#8a4623}
+.bar{position:relative;height:10px;min-width:120px;max-width:240px;
+border:1px solid var(--line);border-radius:999px;background:#f2f4f7}
+.bar i{position:absolute;top:-3px;width:3px;height:16px;background:#3c4653}
+.law{font-size:13px;margin:6px 0}
+.empty{color:#b42318}
+.quiet-row td{color:var(--muted)}
+.cap{color:var(--muted);font-size:12px;margin:8px 0 0}
+footer{color:var(--muted);font-size:12px;margin:18px 0 0}
+</style></head><body><main>
+<h1>市场下架与回返月板</h1>
+<div class=meta>市场面 · 逐月货架下架量、回返量与同月回返率（数据来自沙箱面 api_market_relist_months） &middot; 生成时间 2026-11-24 22:45:09Z &middot; <code>api_market_relist_months</code></div>
+<h2>市场摘要</h2>
+<div class=card><div class=kpi><div><span>月数</span><b>6</b></div><div><span>首月</span><b>2026-06</b></div><div><span>末月</span><b>2026-11</b></div><div><span>下架合计</span><b>4</b></div><div><span>回返合计</span><b>3</b></div><div><span>净离场</span><b>1</b></div><div><span>同月回返率</span><b>0.75</b></div><div><span>涉及卖家</span><b>2</b></div><div><span>涉及货架</span><b>3</b></div><div><span>下架最忙月</span><b>2026-09</b></div><div><span>最忙月下架数</span><b>2</b></div><div><span>回返最忙月</span><b>2026-11</b></div><div><span>最忙月回返数</span><b>2</b></div></div></div>
+<h2>逐月下架与回返</h2>
+<div class=card><table><thead><tr><th>月份</th><th>状态</th><th class="n">下架</th><th class="n">回返</th><th class="n">净</th><th class="n">同月回返率</th><th class="n">卖家</th><th class="n">货架</th><th class="n">累计下架</th><th class="n">累计回返</th><th class="n">条宽</th></tr></thead><tbody><tr data-month="2026-06"><td>2026-06</td><td><span class="badge off">有出有回</span></td><td class="n">1</td><td class="n">1</td><td class="n">0</td><td class="n">1</td><td class="n">1</td><td class="n">1</td><td class="n">1</td><td class="n">1</td><td><div class="bar"><i style="left:50.0%"></i></div></td></tr><tr data-month="2026-07" class="quiet-row"><td>2026-07</td><td><span class="badge">本月无事件</span></td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td class="n">—</td><td class="n">0</td><td class="n">0</td><td class="n">1</td><td class="n">1</td><td>—</td></tr><tr data-month="2026-08"><td>2026-08</td><td><span class="badge warn">只出不回</span></td><td class="n">1</td><td class="n">0</td><td class="n">1</td><td class="n">0</td><td class="n">1</td><td class="n">1</td><td class="n">2</td><td class="n">1</td><td><div class="bar"><i style="left:50.0%"></i></div></td></tr><tr data-month="2026-09"><td>2026-09</td><td><span class="badge warn">只出不回</span></td><td class="n">2</td><td class="n">0</td><td class="n">2</td><td class="n">0</td><td class="n">1</td><td class="n">2</td><td class="n">4</td><td class="n">1</td><td><div class="bar"><i style="left:100.0%"></i></div></td></tr><tr data-month="2026-10" class="quiet-row"><td>2026-10</td><td><span class="badge">本月无事件</span></td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td class="n">—</td><td class="n">0</td><td class="n">0</td><td class="n">4</td><td class="n">1</td><td>—</td></tr><tr data-month="2026-11"><td>2026-11</td><td><span class="badge on">纯回返月</span></td><td class="n">0</td><td class="n">2</td><td class="n">-2</td><td class="n">—</td><td class="n">1</td><td class="n">2</td><td class="n">4</td><td class="n">3</td><td>—</td></tr></tbody></table>
+<p class=cap>条宽表示该月下架数占本窗下架最忙月的比例位置，是位置不是占比。</p></div>
+<h2>本页判据（放在数字旁边，不放在脚注里）</h2>
+<div class=card><p class=law>月份网格自首个事件月到末个事件月连续，中间没有事件的月份如实保留零行。</p><p class=law>每行净离场等于当行下架减回返；信封净离场等于两项合计之差。</p><p class=law>同月回返率为当行回返除以下架并保留四位，是同期流水比不是配对比率；当月零下架时留空而不是编造零。</p><p class=law>下架记在自己发生当月的账上，回返记在自己发生当月的账上，后到的回返永不改写货架当初离开的月份。</p><p class=law>信封下架与回返合计等于逐行求和，末行的两个累计值等于这两个合计。</p><p class=law>最忙月取首个计数最大的月，零事件月永不算峰值；无事件时留空。</p><p class=law>首月与末月取网格两端，窗口为空时留空。</p><p class=law>没有事件的月份印零行与破折号，不印裸空值。</p><p class=law>条只标位置不标占比；未定义处一律印破折号。</p><p class=law>空世界（无任何下架与回返）如实回答零计数与全空派生项，页面印一句诚实空话而不画假表。</p><p class=law>本页为沙箱读数呈现，不构成投资建议，也不承诺任何收益。</p></div>
+<h2>沙箱免责声明（面自带，逐字呈现）</h2>
+<div class=card><div class=disclaimer>sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice</div>
+<p style="margin-top:10px"><span class=badge>本页内容由 AI 生成并经 AIGC 流程产出，仅供内部审阅</span></p></div>
+<h2>报表与复核</h2>
+<div class=card><code>preview/market-relist-months-board.json</code></div>
+<footer>BigDomain OSLoop &middot; 2026-11-24 22:45:09Z &middot; BigDomain · 硅基域沙箱读数呈现</footer>
+</main></body></html>

@@ -8492,6 +8492,16 @@ SUITES = [
     # clock.
     ("os-category-question-months-board",
      os.path.join("..", "os", "test_category_question_months_board.py"), 6),
+    # R3452: tools/market_relist_months_board.py renders the market's monthly
+    # retirement and return timeline (api_market_relist_months, AC-MRM1..8)
+    # which had zero readers under tools/, preview/ and src/os; the page prints
+    # the market KPI strip plus one contiguous month table whose per-row net,
+    # same-month flow ratio, running accumulators and peaks come from the face,
+    # and the suite re-reads the shipped face over its own throwaway world
+    # whose delistings and re-listings are all made through the shipped delist
+    # and relist doors under its own pinned clock.
+    ("os-market-relist-months-board",
+     os.path.join("..", "os", "test_market_relist_months_board.py"), 6),
     # R3443: tools/ticket_size_board.py renders the achieved ticket size
     # (api_market_ticket_size and api_market_ticket_size_months, AC-MTM1..8)
     # which had zero readers under tools/, preview/ and src/os; the page prints
