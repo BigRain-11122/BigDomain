@@ -8310,6 +8310,15 @@ SUITES = [
     # re-reads the face over its own throwaway demo world.
     ("os-listing-velocity-board",
      os.path.join("..", "os", "test_listing_velocity_board.py"), 6),
+    # R3421: tools/seller_refund_months_board.py renders the seller-side monthly
+    # refund reading as one section per seller with a month grid, keeping the
+    # developer and platform legs apart and printing a zero-gross month's rate
+    # as the dash. api_seller_refund_months shipped with AC-SRFM1..8 but had
+    # zero readers under tools/ and preview/, so the page prints the shipped
+    # envelope verbatim and the suite re-reads the face over its own throwaway
+    # demo world.
+    ("os-seller-refund-months-board",
+     os.path.join("..", "os", "test_seller_refund_months_board.py"), 6),
 
     # R3073: tools/city_face_report.py renders the P-47 item-1 city face and
     # carries its own --check (AC-CFY1..8), but this registry had no row naming

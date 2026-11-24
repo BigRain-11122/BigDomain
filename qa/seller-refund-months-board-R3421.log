@@ -1,0 +1,26 @@
+R3421 SELLER-REFUND-MONTHS-BOARD evidence (2026-11-24)
+FACE api_seller_refund_months (own AC-SRFM1..8 suite on disk), zero readers before this window
+CENSUS five candidates re-measured zero-reader: api_seller_refund_months api_review_queue api_public_listings api_search api_market_buyer_retention
+READING usr:dana months=3 2026-08 gross=10 net=10 2026-09 gross=13 net=13 2026-10 gross=0 refunded=10 dev=7 platform=3 net=-10 rate=None
+READING usr:frank months=2 2026-09 gross=5 2026-10 gross=0 refunded=5 dev=4 platform=1 net=-5 rate=None
+THRESHOLD market_refund_rate=0.54 carried by each seller envelope (true market lifetime rate)
+DRIVER tools/seller_refund_months_board.py
+PAGE preview/seller-refund-months-board.html 8218B
+JSON preview/seller-refund-months-board.json 3940B
+COPY preview/seller-refund-months-board-copy.json
+CHECK SELLER-REFUND-MONTHS CHECK PASS fails=0 html=8218B json=3940B
+SUITE AC-SRFMB1 PASS contract: payload keys 11, seller envelope 27, month row 14, seller_count 2 == blocks, report on disk
+SUITE AC-SRFMB2 PASS data truth: identical=True disclaimer_same=True sellers=2 months=5 over the suite own throwaway world
+SUITE AC-SRFMB3 PASS identities: net, legs, avg, unclamped rate, running accumulator, envelope sums, peak, latest, scope, market rate
+SUITE AC-SRFMB4 PASS honest page: sections and month rows marked, refund-only month keeps its minus, zero-gross rate prints the dash, 5 bars for 5 rows, no bare None, empty probe in memory
+SUITE AC-SRFMB5 PASS compliance: AIGC label and face disclaimer on page, zero external links
+SUITE AC-SRFMB6 PASS no relaxation: --check rc=0 wrote nothing, registry wired 6/6, face suite on disk
+SUITE RESULT SUITE PASS 6/6 criteria declared=6
+CONTROL-1 removed label key law_bar refused the render rc=3 E_SRFM_FACE, page sha256 unchanged, copy restored and --check PASS
+CONTROL-2 forced usr:dana 2026-10 refunded +7 reddened AC-SRFMB2 (identical=False) and AC-SRFMB3 (net, legs, avg, refunded sum) at rc=2, restored byte-identical and the suite re-read SUITE PASS 6/6
+WIRING registry os-seller-refund-months-board(6) matrix 81712B 790 rows DOC-CURRENT census 789->790 PASS pinned=790
+ENTRY index PASS 23/23 fingerprint 12e97b2beb38347d chain PASS read_only=True
+SWEEP face sweep SUITE PASS 56/56 over 20 criteria
+CLOSEOUT CLOSEOUT-GATE PASS files=4959 flags=0 census=PASS matrix=DOC-CURRENT
+CARRIER fold R789 window 4:106 executed first: pre 72770B post 18870B gate 78500 predicted_eq_actual=true round_pointer_lost=[]
+HONEST zero new tables, zero new readings; two of five month rows are refund-only and read negative; five physical pieces still missing so buyers still cannot pay
