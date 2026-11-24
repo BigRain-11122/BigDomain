@@ -3,7 +3,7 @@
     "board_pages_skipped": [
       "preview/face-sweep.html (8878B)"
     ],
-    "current": "2026-11-24 R3416 PRODUCT: the buyer spend question now has a door - api_buyer_months (live with AC-AMBM1..8 and its own suite) had zero page readers across tools/ and preview/, re-measured this window over the five faces the R3415 board named, so 'what did I actually spend this month, and which month was a refund month' could only be read by calling the sandbox from a shell (honest boundary: apimarket_report.py already writes the face into buyer_months.csv, so the CSV reader existed and the openable page did not).",
+    "current": "2026-11-24 R3417 PRODUCT: the buyer refund month now has a door - api_buyer_refund_months (live with AC-BRM1..8 and its own suite) had zero readers across tools/ and preview/, so 'how much money came back to me this month, and did the refund land in the purchase month or a later one' could only be read by calling the sandbox from a shell.",
     "do": "R3409: folded the state carrier first as the board ordered (71749B->19227B, slice 3:103=R3396..R3406, token_ok=true, round_pointer_lost=[]), then gave api_seller_concentration its first openable page - eleven KPI cards, a 0..10000 Herfindahl scale with this reading's marker, a per-buyer net-revenue ladder with share bars and cumulative share, the Pareto and largest-buyer callout, seven law sentences; AC-BCB1..6 SUITE 6/6, two measured controls, matrix 778 rows DOC-CURRENT, census pinned=778, entry index 23/23, chain read_only=True, face sweep 13/13, closeout PASS files=4947.",
     "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
     "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
@@ -11,9 +11,9 @@
     "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/seller-revenue-board-R3410.log (2083B, 2026-11-24)",
     "latest_evidence": "qa/seller-revenue-board-R3410.log (2083B, 2026-11-24)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3416] next window (<=48h): (1) 载体 `state` 附加区 81206B／闸 78500 —— **本轮收口后已超闸 2706B**，下窗第一动作=读 `logs_toolkit` 的 fold 用法（`fold --window-slice A:B`，窗口需覆盖轮边界且不得丢轮号，R3409 实锚）后执行折载，**禁手改 state 文件**；`src/os/backlog.md` 208710B→本轮三行新增后更大，折叠须显式给 `--keep` 使 threshold ≥ oldest（R3412 实锚 `E_BLF_NOT_ENOUGH_ROUNDS`）。(2) S4U 落地仍欠一次提权运行（本窗实测 `LogonType=Interactive`，本窗未提权）。(3) 队列卫生：explore 仍仅余一条门控项（商户号），main 队头全门控（bootstrap 需物理件五件）——需补种；本窗未补，如实承账。(4) 同族余量（本窗实测 123 面后只开 `api_buyer_months` 一门，下窗**重测不假设**）：本窗实测非空未开门=`api_buyer_refund_months`（bob 1 月／erin 1 月／carol 0 月，21 键信封）、`api_purchase_dossier`（4 笔、每笔 21 键含 claim／refund／rating 三块，purchase_id 可由 `api_sales()` 枚举）；实测空勿取：`api_buyer_todo`（三买家 pending 均空）、`api_buyer_claim_todo`（三买家 claims 均空）、`api_market_backlog_months`／`api_price_volatility`／`api_relist_gap`／`api_price_step_distribution`（R3389 判例）。(5) **导出「最近实物」槽位仍被 mtime 排序牵动**（承 R3400..R3415）——结构性缺陷：产品 pair 重渲→入口页→链，链必然最后写盘；修法须先立判据（建议=「本轮 PRODUCT 行点名的 pair 优先、链／入口页降级」，判据三条：pair 在盘、该 pair 有 producer 行、输出字段含原始来源标记）。(6) 写序事实再记：入口页与首元链互引字节，本窗「链→入口页→链→入口页」两步收敛，首跑链 `E_STALE`。(7) 新页面须在 `tools/deliverable_index.py` 的 `PAIR_PRODUCERS` 记一行 producer；注册表新行使 census 784→785、矩阵 785 行，正法=`suite_matrix_reconcile.py (truncated)",
-    "next_milestone_due": "2026-11-26T19:16:12+08:00",
-    "updated_at": "2026-11-24T19:16:12+08:00",
+    "next_milestone": "[R3417] next window (<=48h): (1) **载体已到 71690B／闸 78500（余量 6810B ≈ 1 轮）**——下窗**先**跑 `logs_toolkit` 的 `fold --plan-only`（`fold --window-slice A:B`，窗口须覆盖轮边界且不得丢轮号，R3409 实锚），再决定是否折载，**禁手改 state 文件**；`src/os/backlog.md` 亦须显式给 `--keep` 使 threshold ≥ oldest（R3412 实锚 `E_BLF_NOT_ENOUGH_ROUNDS`）。(2) S4U 落地仍欠一次提权运行（本窗实测 `LogonType=Interactive`，本窗未提权）。(3) 队列卫生：explore 仍仅余一条门控项（商户号），main 队头全门控（bootstrap 需物理件五件）——需补种；本窗未补，如实承账。(4) 同族余量（本窗只开 `api_buyer_refund_months` 一门，下窗**重测不假设**）：R3416 实测非空未开门还剩 `api_purchase_dossier`（4 笔、每笔 21 键含 claim／refund／rating 三块，purchase_id 可由 `api_sales()` 枚举）；实测空勿取：`api_buyer_todo`、`api_buyer_claim_todo`、`api_market_backlog_months`／`api_price_volatility`／`api_relist_gap`／`api_price_step_distribution`（R3389 判例）。(5) **导出「最近实物」槽位仍被 mtime 排序牵动**（承 R3400..R3416）——结构性缺陷：产品 pair 重渲→入口页→链，链必然最后写盘；修法须先立判据（建议=「本轮 PRODUCT 行点名的 pair 优先、链／入口页降级」，判据三条：pair 在盘、该 pair 有 producer 行、输出字段含原始来源标记）。(6) 写序事实再记：入口页与首元链互引字节、导出 settle 又移动入口页指纹，本窗按 `state → export(self_drive 由 recompute 派生) → index → chain → index → chain` 收敛到绿。(7) 新页面须在 `tools/deliverable_index.py` 的 `PAIR_PRODUCERS` 记一行 producer；注册表新行使 census 786→787、矩阵 787 行，正法=`suite_matrix_reconcile.py --write` 与 (truncated)",
+    "next_milestone_due": "2026-11-26T19:40:37+08:00",
+    "updated_at": "2026-11-24T19:40:37+08:00",
     "heartbeat": {
       "tick": 3410,
       "state_tick": 3410,
@@ -43,20 +43,20 @@
       "readable": 4949
     }
   },
-  "current": "2026-11-24 R3416 PRODUCT: the buyer spend question now has a door - api_buyer_months (live with AC-AMBM1..8 and its own suite) had zero page readers across tools/ and preview/, re-measured this window over the five faces the R3415 board named, so 'what did I actually spend this month, and which month was a refund month' could only be read by calling the sandbox from a shell (honest boundary: apimarket_report.py already writes the face into buyer_months.csv, so the CSV reader existed and the openable page did not).",
+  "current": "2026-11-24 R3417 PRODUCT: the buyer refund month now has a door - api_buyer_refund_months (live with AC-BRM1..8 and its own suite) had zero readers across tools/ and preview/, so 'how much money came back to me this month, and did the refund land in the purchase month or a later one' could only be read by calling the sandbox from a shell.",
   "claims": {
-    "claimed": 14,
-    "captured": 6,
+    "claimed": 16,
+    "captured": 8,
     "contradicted": 0,
     "uncaptured": 8,
     "historic": 0,
-    "rows": 94,
+    "rows": 95,
     "present": true,
-    "census_ts": "2026-11-24T19:16:12+08:00"
+    "census_ts": "2026-11-24T19:40:37+08:00"
   },
   "chain": {
     "present": true,
-    "rows": 94,
+    "rows": 95,
     "broken": 5,
     "path": "state/qa_replacements.jsonl"
   },
@@ -87,11 +87,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-24 R3416 PRODUCT: the buyer spend question now has a door - api_buyer_months (live with AC-AMBM1..8 and its own suite) had zero page readers across tools/ and preview/, re-measured this window over the five faces the R3415 board named, so 'what did I actually spend this month, and which month was a refund month' could only be read by calling the sandbox from a shell (honest boundary: apimarket_report.py already writes the face into buyer_months.csv, so the CSV reader existed and the openable page did not).",
-  "export_ts": "2026-11-24T19:16:12+08:00",
+  "do": "2026-11-24 R3417 PRODUCT: the buyer refund month now has a door - api_buyer_refund_months (live with AC-BRM1..8 and its own suite) had zero readers across tools/ and preview/, so 'how much money came back to me this month, and did the refund land in the purchase month or a later one' could only be read by calling the sandbox from a shell.",
+  "export_ts": "2026-11-24T19:40:37+08:00",
   "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
   "latest_evidence": "qa/seller-revenue-board-R3410.log (2083B, 2026-11-24)",
-  "next_milestone": "[R3416] next window (<=48h): (1) 载体 `state` 附加区 81206B／闸 78500 —— **本轮收口后已超闸 2706B**，下窗第一动作=读 `logs_toolkit` 的 fold 用法（`fold --window-slice A:B`，窗口需覆盖轮边界且不得丢轮号，R3409 实锚）后执行折载，**禁手改 state 文件**；`src/os/backlog.md` 208710B→本轮三行新增后更大，折叠须显式给 `--keep` 使 threshold ≥ oldest（R3412 实锚 `E_BLF_NOT_ENOUGH_ROUNDS`）。(2) S4U 落地仍欠一次提权运行（本窗实测 `LogonType=Interactive`，本窗未提权）。(3) 队列卫生：explore 仍仅余一条门控项（商户号），main 队头全门控（bootstrap 需物理件五件）——需补种；本窗未补，如实承账。(4) 同族余量（本窗实测 123 面后只开 `api_buyer_months` 一门，下窗**重测不假设**）：本窗实测非空未开门=`api_buyer_refund_months`（bob 1 月／erin 1 月／carol 0 月，21 键信封）、`api_purchase_dossier`（4 笔、每笔 21 键含 claim／refund／rating 三块，purchase_id 可由 `api_sales()` 枚举）；实测空勿取：`api_buyer_todo`（三买家 pending 均空）、`api_buyer_claim_todo`（三买家 claims 均空）、`api_market_backlog_months`／`api_price_volatility`／`api_relist_gap`／`api_price_step_distribution`（R3389 判例）。(5) **导出「最近实物」槽位仍被 mtime 排序牵动**（承 R3400..R3415）——结构性缺陷：产品 pair 重渲→入口页→链，链必然最后写盘；修法须先立判据（建议=「本轮 PRODUCT 行点名的 pair 优先、链／入口页降级」，判据三条：pair 在盘、该 pair 有 producer 行、输出字段含原始来源标记）。(6) 写序事实再记：入口页与首元链互引字节，本窗「链→入口页→链→入口页」两步收敛，首跑链 `E_STALE`。(7) 新页面须在 `tools/deliverable_index.py` 的 `PAIR_PRODUCERS` 记一行 producer；注册表新行使 census 784→785、矩阵 785 行，正法=`suite_matrix_reconcile.py (truncated)",
+  "next_milestone": "[R3417] next window (<=48h): (1) **载体已到 71690B／闸 78500（余量 6810B ≈ 1 轮）**——下窗**先**跑 `logs_toolkit` 的 `fold --plan-only`（`fold --window-slice A:B`，窗口须覆盖轮边界且不得丢轮号，R3409 实锚），再决定是否折载，**禁手改 state 文件**；`src/os/backlog.md` 亦须显式给 `--keep` 使 threshold ≥ oldest（R3412 实锚 `E_BLF_NOT_ENOUGH_ROUNDS`）。(2) S4U 落地仍欠一次提权运行（本窗实测 `LogonType=Interactive`，本窗未提权）。(3) 队列卫生：explore 仍仅余一条门控项（商户号），main 队头全门控（bootstrap 需物理件五件）——需补种；本窗未补，如实承账。(4) 同族余量（本窗只开 `api_buyer_refund_months` 一门，下窗**重测不假设**）：R3416 实测非空未开门还剩 `api_purchase_dossier`（4 笔、每笔 21 键含 claim／refund／rating 三块，purchase_id 可由 `api_sales()` 枚举）；实测空勿取：`api_buyer_todo`、`api_buyer_claim_todo`、`api_market_backlog_months`／`api_price_volatility`／`api_relist_gap`／`api_price_step_distribution`（R3389 判例）。(5) **导出「最近实物」槽位仍被 mtime 排序牵动**（承 R3400..R3416）——结构性缺陷：产品 pair 重渲→入口页→链，链必然最后写盘；修法须先立判据（建议=「本轮 PRODUCT 行点名的 pair 优先、链／入口页降级」，判据三条：pair 在盘、该 pair 有 producer 行、输出字段含原始来源标记）。(6) 写序事实再记：入口页与首元链互引字节、导出 settle 又移动入口页指纹，本窗按 `state → export(self_drive 由 recompute 派生) → index → chain → index → chain` 收敛到绿。(7) 新页面须在 `tools/deliverable_index.py` 的 `PAIR_PRODUCERS` 记一行 producer；注册表新行使 census 786→787、矩阵 787 行，正法=`suite_matrix_reconcile.py --write` 与 (truncated)",
   "outs": [
     "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
     "refund-reasons-R3407.log (2274B)",
@@ -159,7 +159,7 @@
       "2026-11-04 R2431 verification window on the item the debt gate named first=yes (reconcile-battery-R2431, carried from R2430): zero product code changed, the R2168 mixed-tree rule honoured. Leg 1 read 542/543 suites with the criteria total 4234 exactly as pre-registered and the only red was reconcile-daily-census at cd7 exit=2 DRIFT-FLAG; the census named the file (qa/battery-R2431-stdout.log, class=cmd-raw) because this window launched the battery with a Start-Process redirect pointed INTO the evidence directory. Repaired at the birth site, never by widening the baseline: the two launcher captures moved to the gitignored logs/ face, after which the census read flags=0 DRIFT-CLEAN with the 529-entry baseline untouched. Retry leg on the repaired tree: RUNNER PASS 543/543 suites plus controls 7/7 in 956.2s at criteria 4234, TMP RECLAIM 932/932. Four follow-up sections: matrix FAILED first on the stale doc without rewriting it, was regenerated stamp-aligned to 52317B, and the re-run read VERDICT R2431 PASS failing=none (fingerprint CLEAN 5 domains, profile byte-identical, census DRIFT-CLEAN). Debt: reconcile-battery-R2431 closed and product-face-R2432 opened first=yes through the shipped CLIs. Zero product points claimed."
     ],
     [
-      "3416",
+      "3417",
       "OSLoop 执行 tick",
       "卖家军团落盘：api_market_seller_cohort 首次开门，AC-SCB1..6 全绿，本月上货的人里多少是新面孔、多少是回头客从此可看"
     ]
@@ -173,18 +173,18 @@
   "self_drive": {
     "window": "2026-11-18..2026-11-24",
     "window_days": 7,
-    "log_lines_in_window": 114,
+    "log_lines_in_window": 124,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 12,
+    "substantive_non_idle_mention_lines": 13,
     "proposals_total": 11,
     "proposals_open": 9,
     "queue_main_open": 6,
     "queue_tech_open": 5,
     "queue_explore_open": 1
   },
-  "state_bytes": 66349,
-  "next_milestone_due": "2026-11-26T19:16:12+08:00",
+  "state_bytes": 71690,
+  "next_milestone_due": "2026-11-26T19:40:37+08:00",
   "heartbeat": {
     "tick": 3410,
     "state_tick": 3410,

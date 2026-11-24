@@ -1,0 +1,116 @@
+{
+ "generated_utc": "2026-11-24 11:30:15Z",
+ "face": "api_buyer_refund_months",
+ "board_face": "api_board",
+ "source_face": "api_sales",
+ "buyer_count": 3,
+ "buyers": [
+  {
+   "buyer_id": "usr:bob",
+   "scope": "buyer",
+   "month_count": 1,
+   "active_month_count": 1,
+   "refund_count": 1,
+   "refunded": 10,
+   "dev_refunded": 7,
+   "platform_refunded": 3,
+   "listing_count": 1,
+   "seller_count": 1,
+   "avg_refund_amount": 10.0,
+   "same_month_count": 0,
+   "largest_refund": 10,
+   "peak_month": "2026-10",
+   "peak_refund_count": 1,
+   "first_month": "2026-10",
+   "last_month": "2026-10",
+   "latest_month_refund_count": 1,
+   "latest_month_refunded": 10,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "months": [
+    {
+     "month": "2026-10",
+     "refund_count": 1,
+     "refunded": 10,
+     "dev_refunded": 7,
+     "platform_refunded": 3,
+     "listing_count": 1,
+     "seller_count": 1,
+     "avg_refund_amount": 10.0,
+     "same_month_count": 0,
+     "running_refund_count": 1
+    }
+   ]
+  },
+  {
+   "buyer_id": "usr:carol",
+   "scope": "buyer",
+   "month_count": 0,
+   "active_month_count": 0,
+   "refund_count": 0,
+   "refunded": 0,
+   "dev_refunded": 0,
+   "platform_refunded": 0,
+   "listing_count": 0,
+   "seller_count": 0,
+   "avg_refund_amount": null,
+   "same_month_count": 0,
+   "largest_refund": null,
+   "peak_month": null,
+   "peak_refund_count": null,
+   "first_month": null,
+   "last_month": null,
+   "latest_month_refund_count": null,
+   "latest_month_refunded": null,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "months": []
+  },
+  {
+   "buyer_id": "usr:erin",
+   "scope": "buyer",
+   "month_count": 1,
+   "active_month_count": 1,
+   "refund_count": 1,
+   "refunded": 5,
+   "dev_refunded": 4,
+   "platform_refunded": 1,
+   "listing_count": 1,
+   "seller_count": 1,
+   "avg_refund_amount": 5.0,
+   "same_month_count": 0,
+   "largest_refund": 5,
+   "peak_month": "2026-10",
+   "peak_refund_count": 1,
+   "first_month": "2026-10",
+   "last_month": "2026-10",
+   "latest_month_refund_count": 1,
+   "latest_month_refunded": 5,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "months": [
+    {
+     "month": "2026-10",
+     "refund_count": 1,
+     "refunded": 5,
+     "dev_refunded": 4,
+     "platform_refunded": 1,
+     "listing_count": 1,
+     "seller_count": 1,
+     "avg_refund_amount": 5.0,
+     "same_month_count": 0,
+     "running_refund_count": 1
+    }
+   ]
+  }
+ ],
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/buyer-refund-months-board.html",
+ "sources": {
+  "driver": "5ac679fbd4f7fa77",
+  "copy": "4e2c3e59fa3a9e3e",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 7101,
+  "json": 3010
+ }
+}

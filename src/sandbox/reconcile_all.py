@@ -8275,6 +8275,16 @@ SUITES = [
     # refund month minus sign, the empty probe and the wiring.
     ("os-buyer-months-board",
      os.path.join("..", "os", "test_buyer_months_board.py"), 6),
+    # R3417: tools/buyer_refund_months_board.py renders one monthly refund
+    # statement per buyer. api_buyer_refund_months shipped with AC-BRM1..8 but
+    # had zero readers under tools/ and preview/, so the page prints the
+    # shipped envelope verbatim and the suite re-reads the face over its own
+    # throwaway demo world, pinning the booking law, the contiguous month
+    # grid, the two-leg split, the running accumulator, the pooled average,
+    # the distinct counts, the seven law sentences, the explicit empty line
+    # and the wiring.
+    ("os-buyer-refund-months-board",
+     os.path.join("..", "os", "test_buyer_refund_months_board.py"), 6),
 
     # R3073: tools/city_face_report.py renders the P-47 item-1 city face and
     # carries its own --check (AC-CFY1..8), but this registry had no row naming
