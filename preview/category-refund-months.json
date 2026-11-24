@@ -1,0 +1,65 @@
+{
+ "generated_utc": "2026-11-24 05:42:47Z",
+ "face": "api_category_refund_months",
+ "include_uncategorized": true,
+ "category_count": 1,
+ "month_count": 3,
+ "trade_count": 4,
+ "gross": 28,
+ "refund_count": 2,
+ "refunded": 15,
+ "net": 13,
+ "refund_rate": 0.5357142857142857,
+ "worst_refund_month": "2026-08",
+ "worst_refund_rate": 0.0,
+ "top_refund_month": "2026-10",
+ "categories": [
+  {
+   "category": null,
+   "gross": 28,
+   "refund_count": 2,
+   "refunded": 15,
+   "net": 13,
+   "refund_rate": 0.5357142857142857,
+   "trade_count": 4,
+   "months": [
+    {
+     "month": "2026-08",
+     "gross": 10,
+     "refund_count": 0,
+     "refunded": 0,
+     "net": 10,
+     "refund_rate": 0.0
+    },
+    {
+     "month": "2026-09",
+     "gross": 18,
+     "refund_count": 0,
+     "refunded": 0,
+     "net": 18,
+     "refund_rate": 0.0
+    },
+    {
+     "month": "2026-10",
+     "gross": 0,
+     "refund_count": 2,
+     "refunded": 15,
+     "net": -15,
+     "refund_rate": null
+    }
+   ]
+  }
+ ],
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/category-refund-months.html",
+ "sources": {
+  "driver": "ab289bcf41454928",
+  "copy": "66ec6d4e50f456a7",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 4529,
+  "json": 1354
+ }
+}

@@ -8136,6 +8136,12 @@ SUITES = [
     # read-only --check.
     ("os-seller-quality-scorecard",
      os.path.join("..", "os", "test_seller_quality_scorecard.py"), 6),
+    # R3402: tools/category_refund_months.py renders the category x month
+    # refund timeline (api_category_refund_months had ZERO readers in tools/
+    # and preview/) with its own --check (AC-CRF1..6). The suite grades the
+    # page, not the face.
+    ("os-category-refund-months",
+     os.path.join("..", "os", "test_category_refund_months.py"), 6),
     # R3073: tools/city_face_report.py renders the P-47 item-1 city face and
     # carries its own --check (AC-CFY1..8), but this registry had no row naming
     # it, so the face was graded only by the fail-soft [GATES] sweep - the

@@ -1,0 +1,21 @@
+R3402 category refund months - evidence
+[1] git grep -F api_category_refund_months -- tools preview  => zero reader hits (only a prose mention in tools/market_price_percentiles.py docstring line 10)
+[2] demo world reading: category_count=1 month_count=3 trade_count=4 gross=28 refund_count=2 refunded=15 net=13 refund_rate=0.5357142857142857 top_refund_month=2026-10 worst_refund_month=2026-08 worst_refund_rate=0.0
+[3] month rows: 2026-08 gross=10 net=10 rate=0.0 / 2026-09 gross=18 net=18 rate=0.0 / 2026-10 gross=0 refunded=15 net=-15 rate=None (refund-only month, undefined rate)
+[4] generator:
+REFUND preview/category-refund-months.html bytes=4529 categories=1 months=3 trades=4 gross=28 refunded=15 net=13
+[5] generator --check:
+REFUND CHECK PASS fails=0 html=4529B json=1354B
+[6] suite src/os/test_category_refund_months.py:
+PASS AC-CRF1 landed=True keys=19 missing=[] extra=[] report=preview/category-refund-months.html
+PASS AC-CRF2 env_diff=[] categories_same=True disclaimer_same=True
+PASS AC-CRF3 per_row=True envelope_sums=True envelope_net=True rows=1/1 months=3/3
+PASS AC-CRF4 order=True cats=True zero_printed=True(live=1) neg_printed=True undef_marks=1/1 law=True
+PASS AC-CRF5 aigc=True disclaimer_on_page=True external_links=0
+PASS AC-CRF6 check_rc=0 wrote_nothing=True wired=True face_suite=True siblings=True criteria=6/6
+SUITE PASS 6/6 criteria
+[7] deliverable_index --check VERDICT:
+VERDICT PASS 23/23 fingerprint=a783844a61b754a3
+{"failed": [], "fingerprint": "a783844a61b754a3", "passed": 23, "total": 23}
+[8] registry_counter_census --check:
+VERDICT PASS pinned=771
