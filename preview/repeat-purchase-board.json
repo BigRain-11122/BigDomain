@@ -1,0 +1,84 @@
+{
+ "generated_utc": "2026-11-24 06:48:04Z",
+ "face": "api_repeat_purchase",
+ "board_face": "api_board",
+ "scope_count": 2,
+ "market": {
+  "dev_account": null,
+  "buyer_count": 2,
+  "repeat_buyer_count": 0,
+  "one_time_buyer_count": 2,
+  "repeat_rate": 0.0,
+  "purchase_count": 2,
+  "repeat_purchase_count": 0,
+  "avg_purchases_per_buyer": 1.0,
+  "max_purchases": 1,
+  "top_repeat_buyer": null,
+  "categories": [
+   {
+    "category": null,
+    "buyer_count": 2,
+    "repeat_buyer_count": 0,
+    "one_time_buyer_count": 2,
+    "repeat_rate": 0.0,
+    "purchase_count": 2,
+    "repeat_purchase_count": 0,
+    "avg_purchases_per_buyer": 1.0
+   }
+  ],
+  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice"
+ },
+ "scopes": [
+  {
+   "dev_account": "usr:dana",
+   "buyer_count": 2,
+   "repeat_buyer_count": 0,
+   "one_time_buyer_count": 2,
+   "repeat_rate": 0.0,
+   "purchase_count": 2,
+   "repeat_purchase_count": 0,
+   "avg_purchases_per_buyer": 1.0,
+   "max_purchases": 1,
+   "top_repeat_buyer": null,
+   "categories": [
+    {
+     "category": null,
+     "buyer_count": 2,
+     "repeat_buyer_count": 0,
+     "one_time_buyer_count": 2,
+     "repeat_rate": 0.0,
+     "purchase_count": 2,
+     "repeat_purchase_count": 0,
+     "avg_purchases_per_buyer": 1.0
+    }
+   ],
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice"
+  },
+  {
+   "dev_account": "usr:frank",
+   "buyer_count": 0,
+   "repeat_buyer_count": 0,
+   "one_time_buyer_count": 0,
+   "repeat_rate": null,
+   "purchase_count": 0,
+   "repeat_purchase_count": 0,
+   "avg_purchases_per_buyer": null,
+   "max_purchases": 0,
+   "top_repeat_buyer": null,
+   "categories": [],
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice"
+  }
+ ],
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/repeat-purchase-board.html",
+ "sources": {
+  "driver": "513ddef44c86da06",
+  "copy": "b1636b64de945203",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 5536,
+  "json": 2255
+ }
+}

@@ -8158,6 +8158,15 @@ SUITES = [
     # api_listing_position because the neighbour rows carry no category.
     ("os-similar-listing-board",
      os.path.join("..", "os", "test_similar_listing_board.py"), 6),
+    # R3405: tools/repeat_purchase_board.py renders the repeat-purchase
+    # retention face (api_repeat_purchase, AC-RPT1..8) onto one page. The face
+    # had zero readers across tools/ and preview/, so the marketplace's most
+    # load-bearing health question - does the same resident come back - could
+    # not be opened by anyone. The suite grades the page, not the face, and
+    # re-reads the market scope plus one scope per seller enumerated from
+    # api_board() instead of typing a fixture.
+    ("os-repeat-purchase-board",
+     os.path.join("..", "os", "test_repeat_purchase_board.py"), 6),
     # R3073: tools/city_face_report.py renders the P-47 item-1 city face and
     # carries its own --check (AC-CFY1..8), but this registry had no row naming
     # it, so the face was graded only by the fail-soft [GATES] sweep - the

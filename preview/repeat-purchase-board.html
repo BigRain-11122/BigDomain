@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>回购留存看板</title>
+<style>
+:root{--ink:#1b1f24;--muted:#66707a;--line:#dfe4ea;--bg:#f7f8fa}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:var(--bg);color:var(--ink);
+font:15px/1.65 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+main{max-width:1080px;margin:0 auto}
+h1{font-size:22px;margin:0 0 4px;font-weight:650}
+h2{font-size:16px;margin:22px 0 8px;font-weight:620}
+.meta{color:var(--muted);font-size:13px;margin-bottom:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;
+padding:14px 16px;margin-bottom:14px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600;font-size:12px}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+tr.market td{background:#f4f7fb;font-weight:600}
+.kpi{display:flex;gap:12px;flex-wrap:wrap}
+.kpi div{flex:1 1 108px;border:1px solid var(--line);border-radius:8px;
+padding:10px 12px;background:#fff}
+.kpi b{display:block;font-size:19px;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--muted);font-size:12.5px}
+.disclaimer{border-left:3px solid #c9a227;background:#fdf8ea;padding:10px 14px;
+font-size:13px}
+.badge{display:inline-block;margin-right:8px;padding:2px 8px;
+border:1px solid var(--line);border-radius:999px;font-size:12px;
+color:var(--muted)}
+.law{font-size:13px;margin:6px 0}
+footer{color:var(--muted);font-size:12px;margin:20px 0 8px}
+code{font-size:12.5px;background:#f2f4f7;padding:1px 5px;border-radius:4px}
+</style></head><body><main>
+<h1>回购留存看板</h1>
+<div class=meta>同一居民会不会再来买第二次（api_repeat_purchase 出厂读数） &middot; 生成于 2026-11-24 06:48:04Z &middot; <code>api_repeat_purchase</code></div>
+<h2>全市场留存总览</h2>
+<div class=card><div class=kpi><div><span>买家数</span><b>2</b></div><div><span>回购买家</span><b>0</b></div><div><span>一次性买家</span><b>2</b></div><div><span>净成交笔数</span><b>2</b></div><div><span>回购笔数</span><b>0</b></div><div><span>人均笔数</span><b>1</b></div><div><span>单客最多</span><b>1</b></div><div><span>回购最多的买家</span><b>-</b></div></div></div>
+<h2>按卖方分段的留存</h2>
+<div class=card><table><tr><th class=n>范围</th><th class=n>买家数</th><th class=n>回购买家</th><th class=n>一次性买家</th><th class=n>净成交笔数</th><th class=n>回购笔数</th><th class=n>人均笔数</th><th class=n>回购率</th><th class=n>单客最多</th><th class=n>回购最多的买家</th></tr><tr class="scope market"><td>全市场</td><td class=n>2</td><td class=n>0</td><td class=n>2</td><td class=n>2</td><td class=n>0</td><td class=n>1</td><td class=n>0</td><td class=n>1</td><td class=n>-</td></tr><tr class="scope"><td>usr:dana</td><td class=n>2</td><td class=n>0</td><td class=n>2</td><td class=n>2</td><td class=n>0</td><td class=n>1</td><td class=n>0</td><td class=n>1</td><td class=n>-</td></tr><tr class="scope"><td>usr:frank</td><td class=n>0</td><td class=n>0</td><td class=n>0</td><td class=n>0</td><td class=n>0</td><td class=n>-</td><td class=n>-</td><td class=n>0</td><td class=n>-</td></tr></table></div>
+<h2>按品类的留存</h2>
+<div class=card><table><tr><th class=n>品类</th><th class=n>买家数</th><th class=n>回购买家</th><th class=n>一次性买家</th><th class=n>净成交笔数</th><th class=n>回购笔数</th><th class=n>人均笔数</th><th class=n>回购率</th></tr><tr class="cat"><td>未分类</td><td class=n>2</td><td class=n>0</td><td class=n>2</td><td class=n>2</td><td class=n>0</td><td class=n>1</td><td class=n>0</td></tr></table></div>
+<h2>该面自述法则（照面口径陈列，不另立解释）</h2>
+<div class=card><p class=law>计数口径＝净成交：已退款的购买既不计入分母也不计入分子；只有退款记录的买家整体消失，而不是被误记为一次性买家。</p><p class=law>回购买家＝在同一范围内持有两笔及以上净成交的买家；回购笔数＝净成交笔数 − 买家数（每位买家首笔之外的每一笔）。</p><p class=law>回购率＝回购买家数 ÷ 买家数；零买家时该值未定义，本页印「-」而不印 0。</p><p class=law>范围法则：两家卖方各买一笔——对市场是一次回购，对任一卖方都不是回购，两个读数都正确。</p><p class=law>品类行取购买侧权威：只有库存、零成交的品类不出现；未分类桶排在最后。</p><p class=law>未定义或不存在的一律印「-」，不把空值折成 0，也不合成任何留存。</p><p class=law>品类笔数求和等于该范围净成交笔数（已校验）；买家数不做求和——同一位买家可跨品类购买，故买家列不可相加。</p></div>
+<h2>风险与合规定性</h2>
+<div class=card><div class=disclaimer>sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice</div>
+<p style="margin-top:10px"><span class=badge>AIGC 生成标识 · 本页数字由沙箱数据面读出，版式由模型生成</span></p></div>
+<h2>复现方式</h2>
+<div class=card><code>python tools/repeat_purchase_board.py</code></div>
+<footer>BigDomain OSLoop &middot; 2026-11-24 06:48:04Z &middot; 本页由 tools/repeat_purchase_board.py 生成，不手改</footer>
+</main></body></html>
