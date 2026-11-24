@@ -10,8 +10,8 @@
     "latest_evidence": "qa/benchmark-refresh-R3426.log (972B, 2026-11-24)",
     "newest_pair_on_disk_is_board": false,
     "next_milestone": "[R3426] next window (<=48h): (1) 载体 state 附加区；下窗**先**跑 `python src/os/logs_toolkit.py fold --plan-only` 再决定，**禁手改 state 文件**。(2) S4U 落地仍欠一次提权运行（本窗实测 `BigDomain-OSLoop`=Interactive）。(3) 导出「最近实物」槽仍按 mtime 排序（本窗无空位修；修法=写入器改读 deliverable 注册表顺序+三条判据先立）。(4) 零读者面重测不假设：`api_seller_rating_months`（1 月／2 笔／5★1＋4★1）为首选候选，实测空或弱勿取。(5) 基准下次到期 2026-12-01（本窗 11-24 已刷）。48h 窗至 2026-11-26。(6) tick 口径：本窗 3425→3426。",
-    "next_milestone_due": "2026-11-26T22:40:17+08:00",
-    "updated_at": "2026-11-24T22:40:17+08:00",
+    "next_milestone_due": "2026-11-26T22:41:07+08:00",
+    "updated_at": "2026-11-24T22:41:07+08:00",
     "heartbeat": {
       "tick": 3424,
       "state_tick": 3426,
@@ -36,7 +36,7 @@
     }
   },
   "current": "2026-11-24 R3426 DUTY: the seven-day benchmark gate was refreshed one day before it fell due, with three reads and zero new sources - the installment page rules matched the stored text word for word, the AIGC marking measure page still publishes effect date 2025-09-01 with no revision notice, and the virtual payment fee rate plus the iOS deadline stay at grade M because this window fetch landed on the ordinary payment API neighbour page. This window shipped no new openable page.",
-  "claims": {"claimed": 22, "captured": 11, "contradicted": 0, "uncaptured": 11, "historic": 0, "rows": 98, "present": true, "census_ts": "2026-11-24T22:40:17+08:00"},
+  "claims": {"claimed": 22, "captured": 11, "contradicted": 0, "uncaptured": 11, "historic": 0, "rows": 98, "present": true, "census_ts": "2026-11-24T22:41:07+08:00"},
   "chain": {"present": true, "rows": 98, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -66,7 +66,7 @@
     }
   ],
   "do": "2026-11-24 R3426 DUTY: the seven-day benchmark gate was refreshed one day before it fell due, with three reads and zero new sources - the installment page rules matched the stored text word for word, the AIGC marking measure page still publishes effect date 2025-09-01 with no revision notice, and the virtual payment fee rate plus the iOS deadline stay at grade M because this window fetch landed on the ordinary payment API neighbour page. This window shipped no new openable page.",
-  "export_ts": "2026-11-24T22:40:17+08:00",
+  "export_ts": "2026-11-24T22:41:07+08:00",
   "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-16 commit]; later=html)",
   "latest_evidence": "qa/benchmark-refresh-R3426.log (972B, 2026-11-24)",
   "next_milestone": "[R3426] next window (<=48h): (1) 载体 state 附加区；下窗**先**跑 `python src/os/logs_toolkit.py fold --plan-only` 再决定，**禁手改 state 文件**。(2) S4U 落地仍欠一次提权运行（本窗实测 `BigDomain-OSLoop`=Interactive）。(3) 导出「最近实物」槽仍按 mtime 排序（本窗无空位修；修法=写入器改读 deliverable 注册表顺序+三条判据先立）。(4) 零读者面重测不假设：`api_seller_rating_months`（1 月／2 笔／5★1＋4★1）为首选候选，实测空或弱勿取。(5) 基准下次到期 2026-12-01（本窗 11-24 已刷）。48h 窗至 2026-11-26。(6) tick 口径：本窗 3425→3426。",
@@ -151,7 +151,7 @@
   "self_drive": {
     "window": "2026-11-18..2026-11-24",
     "window_days": 7,
-    "log_lines_in_window": 87,
+    "log_lines_in_window": 88,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 9,
@@ -161,8 +161,8 @@
     "queue_tech_open": 5,
     "queue_explore_open": 1
   },
-  "state_bytes": 56303,
-  "next_milestone_due": "2026-11-26T22:40:17+08:00",
+  "state_bytes": 56530,
+  "next_milestone_due": "2026-11-26T22:41:07+08:00",
   "heartbeat": {
     "tick": 3424,
     "state_tick": 3426,
