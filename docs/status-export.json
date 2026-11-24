@@ -13,8 +13,8 @@
     "latest_evidence": "qa/evidence-market-ticket-size-months-R3387.log (594B, 2026-11-24)",
     "newest_pair_on_disk_is_board": true,
     "next_milestone": "[R3387] next window (<=48h): (1) **S4U 落地仍欠一次提权运行**——`register_loop_task.ps1` 已能自证（`VERIFY logon=S4U interval=PT5M`），非提权会话（本窗 `elevated=False`）勿再试。 (2) 队列卫生：tech 5 项里仅 L64（logs 工具链常设维护线）与 L98（suite_matrix live 归一态实测窗）带判据可认领，其余门控/`NO-CRITERIA`；explore 仅剩 1 项（微信支付合规跟进·门控）——下窗先补 explore 种子再认领。 (3) 承账不变：`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`BigDomain-OSLoop` LogonType=Interactive。 (4) 载体：下窗先读 `fold --plan-only` 再定是否折。 (5) 提案面 BD-PROP-011 open（窗 11-22~11-28）在册，本窗配额已清。 (6) 诚实承账：物理件五件仍缺（商户号／服务器／域名／备案+ICP／小程序 appid+secret）——买家仍付不了钱。",
-    "next_milestone_due": "2026-11-26T09:10:21+08:00",
-    "updated_at": "2026-11-24T09:10:21+08:00",
+    "next_milestone_due": "2026-11-26T09:11:46+08:00",
+    "updated_at": "2026-11-24T09:11:46+08:00",
     "heartbeat": {
       "tick": 3385,
       "state_tick": 3387,
@@ -39,7 +39,7 @@
     }
   },
   "current": "2026-11-24 R3387 PRODUCT: the market could not read whether the middle sale moved or only the extremes - api_market_ticket_size gave a lifetime mean over one scope and api_market_months gave monthly cash, so two different mixes could read the same number.",
-  "claims": {"claimed": 43, "captured": 2, "contradicted": 4, "uncaptured": 37, "historic": 4, "rows": 89, "present": true, "census_ts": "2026-11-24T09:10:21+08:00"},
+  "claims": {"claimed": 43, "captured": 2, "contradicted": 4, "uncaptured": 37, "historic": 4, "rows": 89, "present": true, "census_ts": "2026-11-24T09:11:46+08:00"},
   "chain": {"present": true, "rows": 89, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -69,7 +69,7 @@
     }
   ],
   "do": "2026-11-24 R3387 PRODUCT: the market could not read whether the middle sale moved or only the extremes - api_market_ticket_size gave a lifetime mean over one scope and api_market_months gave monthly cash, so two different mixes could read the same number.",
-  "export_ts": "2026-11-24T09:10:21+08:00",
+  "export_ts": "2026-11-24T09:11:46+08:00",
   "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-23 commit]; later=html)",
   "latest_evidence": "qa/evidence-market-ticket-size-months-R3387.log (594B, 2026-11-24)",
   "next_milestone": "[R3387] next window (<=48h): (1) **S4U 落地仍欠一次提权运行**——`register_loop_task.ps1` 已能自证（`VERIFY logon=S4U interval=PT5M`），非提权会话（本窗 `elevated=False`）勿再试。 (2) 队列卫生：tech 5 项里仅 L64（logs 工具链常设维护线）与 L98（suite_matrix live 归一态实测窗）带判据可认领，其余门控/`NO-CRITERIA`；explore 仅剩 1 项（微信支付合规跟进·门控）——下窗先补 explore 种子再认领。 (3) 承账不变：`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`BigDomain-OSLoop` LogonType=Interactive。 (4) 载体：下窗先读 `fold --plan-only` 再定是否折。 (5) 提案面 BD-PROP-011 open（窗 11-22~11-28）在册，本窗配额已清。 (6) 诚实承账：物理件五件仍缺（商户号／服务器／域名／备案+ICP／小程序 appid+secret）——买家仍付不了钱。",
@@ -159,7 +159,7 @@
   "self_drive": {
     "window": "2026-11-18..2026-11-24",
     "window_days": 7,
-    "log_lines_in_window": 160,
+    "log_lines_in_window": 161,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 22,
@@ -169,8 +169,8 @@
     "queue_tech_open": 5,
     "queue_explore_open": 1
   },
-  "state_bytes": 73977,
-  "next_milestone_due": "2026-11-26T09:10:21+08:00",
+  "state_bytes": 74431,
+  "next_milestone_due": "2026-11-26T09:11:46+08:00",
   "heartbeat": {
     "tick": 3385,
     "state_tick": 3387,
