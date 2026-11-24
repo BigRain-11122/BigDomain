@@ -141,6 +141,18 @@ STEPS = [
     ("export", "src/os/export_round.py", []),
 ]
 
+# R3391 measured, not landed: the UGC page (tools/ugc_gate_report.py) is a
+# TWO-WRITER product - its bare render carries no back-hop block, and
+# tools/face_backhop.py injects it - so a single recorded command cannot
+# reproduce the bytes the entry page quotes. Putting it in STEPS reddens
+# AC-DIX21/AC-DIX23 (measured), so the recurrence fix needs either a producer
+# that injects its own channel or a declared two-step recipe in the index.
+
+# A declared step whose module is gone would fail as a mid-pass transient and
+# the ring could still print PASS, so every declared path is checked before the
+# first step runs (AC-CUG2).
+MISSING_STEP = "E_MISSING_STEP"
+
 # (reader, writer, kind, reader_file, evidence_token) - kind in {"bytes","mtime"}.
 EDGES = [
     ("chain", "index", "bytes", "tools/face_backhop.py", "data-back-bytes"),
@@ -211,6 +223,15 @@ CHECKS = [
     ("sweep", "tools/face_sweep.py", ["--check"]),
     ("export", "src/os/export_round.py", ["--check"]),
 ]
+
+
+def missing_steps(steps=None):
+    """Declared modules that are not on disk, in declaration order (AC-CUG2)."""
+    out = []
+    for name, module, _ in (STEPS if steps is None else steps):
+        if not os.path.isfile(os.path.join(ROOT, module)):
+            out.append((name, module))
+    return out
 
 
 def _run(module, args):
@@ -587,6 +608,13 @@ def evidence_row():
 
 def cmd_plan():
     print("STEPS %d %s" % (len(STEPS), ",".join(n for n, _, _ in STEPS)))
+    gone = missing_steps()
+    if gone:
+        for name, module in gone:
+            print("MISSING %s %s" % (name, module))
+        print("VERDICT FAIL %s %s"
+              % (MISSING_STEP, ",".join(n for n, _ in gone)))
+        return 2
     for row in edge_report():
         print("EDGE %-7s <- %-7s %-5s %s:%s found=%s"
               % (row["reader"], row["writer"], row["kind"],
@@ -663,6 +691,13 @@ def cmd_check():
 
 
 def cmd_write():
+    gone = missing_steps()
+    if gone:
+        for name, module in gone:
+            print("MISSING %s %s" % (name, module))
+        print("VERDICT FAIL %s %s"
+              % (MISSING_STEP, ",".join(n for n, _ in gone)))
+        return 2
     for pass_no in range(1, MAX_PASSES + 1):
         transient = []
         for name, module, args in STEPS:

@@ -1,0 +1,48 @@
+R3391 evidence (2026-11-24) - carrier layout drift, round-boundary fold, UGC step measured
+
+1. CARRIER LAYOUT DRIFT (defect found at open, repaired by the shipped remedy)
+   logs_toolkit fold refused at open: E_STATE_LAYOUT CRLF layout not found.
+   raw bytes: 77466, crlf=0, lf=337, first bytes b'{\n ' (no BOM).
+   git show --stat HEAD -- src/os/state.json reads 337 insertions, 175 deletions
+   on one file, i.e. the previous window rewrote the whole document with bare LF
+   instead of appending. Repair: python src/os/logs_toolkit.py eol --fix --execute
+   read mode=fix-execute; after: bytes 77803, crlf=337, lf=337 (no content change).
+
+2. ROUND-BOUNDARY FOLD (fold R658)
+   plan-only at the tail answered minimal_window_lines=5 start=174, i.e. the
+   window still in flight, which the board forbids folding. Slice 1:40 (40 lines,
+   16241 content bytes) spans whole early blocks instead.
+   dry-run refused E_ROUND_LOST by name: R2405,R2907,R3211,R3212,R3296,R3354,
+   R3367,R3372,R3373. The landed summary sentence names all nine.
+   execute: token_ok=true round_pointer_lost=[] gate_ok=true
+   predicted_eq_actual=true archive_appended=true backup_written=true
+   bytes 77803 -> 61659 (margin against the 78500 gate = 16841).
+
+3. UGC STEP IN THE CLOSEOUT RING (measured, refused by a shipped law, NOT landed)
+   Board head R3390 item (1) asked for ("ugc", "tools/ugc_gate_report.py", [])
+   in tools/closeout_order.py STEPS. Measured three times:
+   (a) ugc after backhop: ring PASS3 reads face_sweep 12/13 with entry-index
+       21/23; deliverable_index --check prints
+       FAIL AC-DIX21 reason='no producer is recorded for ugc-gate-report.json'
+       FAIL AC-DIX23 pair=ugc-gate-report.json producer=- one-command-or-absence=False
+   (b) recording the producer in PAIR_PRODUCERS, then --
+       FAIL AC-DIX21 mode=check cmd='python tools/ugc_gate_report.py --check'
+       html=28799B json=20170B rc=0 html-eq-row=False printed-once=False
+       because the bare render is 28112B while the landed page is 28799B.
+   (c) reordering ugc BEFORE backhop so the ring injects the channel itself:
+       ring still ends on the same AC-DIX21/AC-DIX23 pair (index 21/23).
+   Root cause measured, not guessed: tools/ugc_gate_report.py writes a document
+   with no back-hop block and tools/face_backhop.py injects it afterwards, so the
+   pair has TWO writers and no single recorded command reproduces the on-disk
+   bytes the entry page quotes. The index one-command law therefore refuses it.
+   The step was reverted; the measurement is recorded as the next-window item.
+
+4. RING PREFLIGHT (landed)
+   tools/closeout_order.py gained missing_steps() and MISSING_STEP: --plan and
+   --write name every declared module that is not on disk and refuse rc=2 before
+   the first step runs, so a renamed writer cannot pass as a mid-pass transient.
+   positive reading: STEPS 5 chain,index,backhop,sweep,export + VERDICT PASS
+   edges=6 cycles=1.
+   negative control: appending ('ghost','tools/no_such_writer.py') in process
+   makes --plan print MISSING ghost tools/no_such_writer.py and
+   VERDICT FAIL E_MISSING_STEP ghost with rc=2.
