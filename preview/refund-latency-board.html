@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>退款时延分布对账页</title>
+<style>
+:root{--ink:#1b1f24;--muted:#66707a;--line:#dfe4ea;--bg:#f7f8fa}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:var(--bg);color:var(--ink);
+font:15px/1.65 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+main{max-width:1120px;margin:0 auto}
+h1{font-size:22px;margin:0 0 4px;font-weight:650}
+h2{font-size:16px;margin:22px 0 8px;font-weight:620}
+.meta{color:var(--muted);font-size:13px;margin-bottom:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;
+padding:14px 16px;margin-bottom:14px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600;font-size:12px}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.kpi{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.kpi div{flex:1 1 112px;border:1px solid var(--line);border-radius:8px;
+padding:10px 12px;background:#fff}
+.kpi b{display:block;font-size:18px;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--muted);font-size:12.5px}
+.bar{position:relative;height:9px;background:#eef1f5;border-radius:999px;
+min-width:110px}
+.bar i{display:block;height:9px;border-radius:999px;background:#5b7fa8}
+.disclaimer{border-left:3px solid #c9a227;background:#fdf8ea;padding:10px 14px;
+font-size:13px}
+.badge{display:inline-block;margin-right:8px;padding:2px 8px;
+border:1px solid var(--line);border-radius:999px;font-size:12px;
+color:var(--muted)}
+.law{font-size:13px;margin:6px 0}
+.empty{color:var(--muted);font-size:13px}
+caption{caption-side:top;text-align:left;color:var(--muted);font-size:12px;
+padding-bottom:6px}
+footer{color:var(--muted);font-size:12px;margin:20px 0 8px}
+code{font-size:12.5px;background:#f2f4f7;padding:1px 5px;border-radius:4px}
+</style></head><body><main>
+<h1>退款时延分布对账页</h1>
+<div class=meta>市场退款时延 · 六带分档 · 五项聚合 · 月度腿 &middot; 生成于 2026-11-24 19:04:29Z &middot; <code>api_refund_latency</code></div>
+<h2>市场总览</h2>
+<div class=card><div class=kpi><div><span>成交笔数</span><b>4</b></div><div><span>退款笔数</span><b>2</b></div><div><span>未退款笔数</span><b>2</b></div><div><span>退款率</span><b>0.5</b></div><div><span>平均时延（秒）</span><b>1885500.5</b></div><div><span>中位时延（秒）</span><b>1885500.5</b></div><div><span>P90 时延（秒）</span><b>2678401</b></div><div><span>最快（秒）</span><b>1092600</b></div><div><span>最慢（秒）</span><b>2678401</b></div><div><span>同日退（笔）</span><b>0</b></div><div><span>满一周（笔）</span><b>2</b></div><div><span>退款落地月数</span><b>1</b></div></div></div>
+<h2>时延六带（左闭右开，穷尽且互斥）</h2>
+<div class=card><table><caption>条只表示本行数值在本表最大值中的位置，是宽度不是占比</caption><tr><th>时延带</th><th class=n>下界（秒）</th><th class=n>上界（秒）</th><th class=n>退款笔数</th><th class=n>退款额</th><th>宽度</th></tr><tr data-band="0-1h"><td class="">0-1h</td><td class="n">0</td><td class="n">3600</td><td class="n">0</td><td class="n">0</td><td class=bar-cell><div class=bar><i style="width:0.0%"></i></div></td></tr><tr data-band="1-6h"><td class="">1-6h</td><td class="n">3600</td><td class="n">21600</td><td class="n">0</td><td class="n">0</td><td class=bar-cell><div class=bar><i style="width:0.0%"></i></div></td></tr><tr data-band="6-24h"><td class="">6-24h</td><td class="n">21600</td><td class="n">86400</td><td class="n">0</td><td class="n">0</td><td class=bar-cell><div class=bar><i style="width:0.0%"></i></div></td></tr><tr data-band="1-3d"><td class="">1-3d</td><td class="n">86400</td><td class="n">259200</td><td class="n">0</td><td class="n">0</td><td class=bar-cell><div class=bar><i style="width:0.0%"></i></div></td></tr><tr data-band="3-7d"><td class="">3-7d</td><td class="n">259200</td><td class="n">604800</td><td class="n">0</td><td class="n">0</td><td class=bar-cell><div class=bar><i style="width:0.0%"></i></div></td></tr><tr data-band="7d+"><td class="">7d+</td><td class="n">604800</td><td class="n">无上界</td><td class="n">2</td><td class="n">15</td><td class=bar-cell><div class=bar><i style="width:100.0%"></i></div></td></tr></table></div>
+<h2>退款落地月（自首月到尾月连续，无退款月为诚实零行）</h2>
+<div class=card><table><caption>条只表示本行数值在本表最大值中的位置，是宽度不是占比</caption><tr><th>月份</th><th class=n>退款笔数</th><th class=n>中位（秒）</th><th class=n>平均（秒）</th><th class=n>最慢（秒）</th><th>宽度</th></tr><tr data-month="2026-10"><td class="">2026-10</td><td class="n">2</td><td class="n">1885500.5</td><td class="n">1885500.5</td><td class="n">2678401</td><td class=bar-cell><div class=bar><i style="width:100.0%"></i></div></td></tr></table></div>
+<h2>本页遵守的口径</h2>
+<div class=card><p class=law>每条时延只由同一笔购买的两个存档时刻相减得出：购买时刻与退款时刻，从不读取墙上时钟。</p><p class=law>六带左闭右开，自 0 秒起首尾相接且末带无上界，因此每一笔退款恰落在一条带内。</p><p class=law>未退款的购买不贡献任何时延：它们只计入未退款笔数，绝不被当成零秒。</p><p class=law>中位为有序序列的中点值，P90 取最近秩，最快与最慢为端点，四者不得逆序。</p><p class=law>平均、中位、P90、最快、最慢只统计已退款的腿，空集时一律为空而不是 0。</p><p class=law>月度腿按退款落地月分桶，自首月到尾月连续补齐；无退款的月是零计数行，其三项统计为空。</p><p class=law>同日退＝退款日与购买日为同一 UTC 日期；满一周＝时延不少于 604800 秒，两个计数各自不超过退款笔数。</p><p class=law>带行与月行的条只作宽度对照，页面不把它当占比，也不由它推出任何金额结论。</p><p class=law>本页是市场口径的单一读数，不含卖家或买家拆分，也不做跨页加总。</p><p class=law>本页为开发者 API 市场的服务挂牌计数展示，非投资建议，不构成任何收益承诺。</p></div>
+<h2>面自带免责</h2>
+<div class=card><div class=disclaimer>sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice</div>
+<p style="margin-top:10px"><span class=badge>本页含 AIGC 生成标识：页面结构与文案由自动化管线生成，全部读数来自出厂沙箱演示世界</span></p></div>
+<h2>复现命令</h2>
+<div class=card><code>python tools/refund_latency_board.py</code></div>
+<footer>读数为出厂演示世界的落数据，只用于对账展示，不是真实交易记录。</footer>
+</main></body></html>

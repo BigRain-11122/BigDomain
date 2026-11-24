@@ -633,6 +633,7 @@
     "os-queue-row",
     "os-queue-row-exempt",
     "os-refund-exposure-board",
+    "os-refund-latency-board",
     "os-refund-propensity-board",
     "os-refund-reasons-board",
     "os-refused-check-declaration-face",

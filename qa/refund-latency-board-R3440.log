@@ -1,0 +1,21 @@
+EVIDENCE CAPTURE round=R3440 suite=src/os/test_refund_latency_board.py legs=2
+== LEG A rc=0 digest=E95F8B3502A282DD
+PASS AC-RFLB1 landed=True keys=12 missing=[] extra=[] env=True bands=True months=True count=6/1 report=True sources=True
+PASS AC-RFLB2 bands_same=True months_same=True scalars_same=True disclaimer_same=True bands=6 months=1
+PASS AC-RFLB3 problems=[] driver_laws=[]
+PASS AC-RFLB4 bands=True months=True open_label=True laws=True cap=True empty_probe=True dash=True stand_in_none=False
+PASS AC-RFLB5 aigc=True disclaimer_on_page=True external_links=0 notadvice=True
+PASS AC-RFLB6 check_rc=0 wrote_nothing=True wired=6/6 face_suite=True
+SUITE PASS 6/6 criteria declared=6
+== LEG B rc=0 digest=E95F8B3502A282DD
+PASS AC-RFLB1 landed=True keys=12 missing=[] extra=[] env=True bands=True months=True count=6/1 report=True sources=True
+PASS AC-RFLB2 bands_same=True months_same=True scalars_same=True disclaimer_same=True bands=6 months=1
+PASS AC-RFLB3 problems=[] driver_laws=[]
+PASS AC-RFLB4 bands=True months=True open_label=True laws=True cap=True empty_probe=True dash=True stand_in_none=False
+PASS AC-RFLB5 aigc=True disclaimer_on_page=True external_links=0 notadvice=True
+PASS AC-RFLB6 check_rc=0 wrote_nothing=True wired=6/6 face_suite=True
+SUITE PASS 6/6 criteria declared=6
+== ADJACENT 2
+== src/sandbox/ledger/test_apimarket_refundlatency.py rc=0 SUITE 8/8
+== src/os/test_category_price_months_board.py rc=0 SUITE PASS 6/6 criteria declared=6
+EVIDENCE identical=True adjacent=2 fails=0 digest=E95F8B3502A282DD

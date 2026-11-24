@@ -8384,6 +8384,14 @@ SUITES = [
     # bar - and the suite re-reads the face over its own throwaway world.
     ("os-category-price-months-board",
      os.path.join("..", "os", "test_category_price_months_board.py"), 6),
+    # R3440: tools/refund_latency_board.py renders the market refund latency
+    # distribution (api_refund_latency, AC-RFLT1..8) which no page under tools/
+    # or preview/ ever called; the page prints the six-band partition, the five
+    # aggregates over refunded rows only, the two named crossings and the
+    # contiguous monthly leg - and the suite re-reads the face over its own
+    # throwaway world.
+    ("os-refund-latency-board",
+     os.path.join("..", "os", "test_refund_latency_board.py"), 6),
     # R3436: tools/watch_conversion_board.py renders the watch-to-purchase
     # funnel (api_watch_conversion, AC-WCV1..8) which had zero readers under
     # tools/, preview/ and the report collector; the page prints the market

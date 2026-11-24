@@ -1,0 +1,140 @@
+{
+ "generated_utc": "2026-11-24 19:04:29Z",
+ "face": "api_refund_latency",
+ "scope": "market",
+ "band_count": 6,
+ "month_count": 1,
+ "envelope": {
+  "purchase_count": 4,
+  "refund_count": 2,
+  "unrefunded_count": 2,
+  "refund_rate": 0.5,
+  "avg_refund_seconds": 1885500.5,
+  "median_refund_seconds": 1885500.5,
+  "p90_refund_seconds": 2678401,
+  "fastest_seconds": 1092600,
+  "slowest_seconds": 2678401,
+  "same_day_count": 0,
+  "over_week_count": 2,
+  "month_count": 1,
+  "bands": [
+   {
+    "band": "0-1h",
+    "lower_seconds": 0,
+    "upper_seconds": 3600,
+    "refund_count": 0,
+    "refunded": 0
+   },
+   {
+    "band": "1-6h",
+    "lower_seconds": 3600,
+    "upper_seconds": 21600,
+    "refund_count": 0,
+    "refunded": 0
+   },
+   {
+    "band": "6-24h",
+    "lower_seconds": 21600,
+    "upper_seconds": 86400,
+    "refund_count": 0,
+    "refunded": 0
+   },
+   {
+    "band": "1-3d",
+    "lower_seconds": 86400,
+    "upper_seconds": 259200,
+    "refund_count": 0,
+    "refunded": 0
+   },
+   {
+    "band": "3-7d",
+    "lower_seconds": 259200,
+    "upper_seconds": 604800,
+    "refund_count": 0,
+    "refunded": 0
+   },
+   {
+    "band": "7d+",
+    "lower_seconds": 604800,
+    "upper_seconds": null,
+    "refund_count": 2,
+    "refunded": 15
+   }
+  ],
+  "months": [
+   {
+    "month": "2026-10",
+    "refund_count": 2,
+    "median_refund_seconds": 1885500.5,
+    "avg_refund_seconds": 1885500.5,
+    "slowest_seconds": 2678401
+   }
+  ],
+  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice"
+ },
+ "bands": [
+  {
+   "band": "0-1h",
+   "lower_seconds": 0,
+   "upper_seconds": 3600,
+   "refund_count": 0,
+   "refunded": 0
+  },
+  {
+   "band": "1-6h",
+   "lower_seconds": 3600,
+   "upper_seconds": 21600,
+   "refund_count": 0,
+   "refunded": 0
+  },
+  {
+   "band": "6-24h",
+   "lower_seconds": 21600,
+   "upper_seconds": 86400,
+   "refund_count": 0,
+   "refunded": 0
+  },
+  {
+   "band": "1-3d",
+   "lower_seconds": 86400,
+   "upper_seconds": 259200,
+   "refund_count": 0,
+   "refunded": 0
+  },
+  {
+   "band": "3-7d",
+   "lower_seconds": 259200,
+   "upper_seconds": 604800,
+   "refund_count": 0,
+   "refunded": 0
+  },
+  {
+   "band": "7d+",
+   "lower_seconds": 604800,
+   "upper_seconds": null,
+   "refund_count": 2,
+   "refunded": 15
+  }
+ ],
+ "months": [
+  {
+   "month": "2026-10",
+   "refund_count": 2,
+   "median_refund_seconds": 1885500.5,
+   "avg_refund_seconds": 1885500.5,
+   "slowest_seconds": 2678401
+  }
+ ],
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/refund-latency-board.html",
+ "sources": {
+  "driver": "fc071fe883c0911b",
+  "copy": "9df19c066bb405e2",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 7033,
+  "json": 2842
+ }
+}
