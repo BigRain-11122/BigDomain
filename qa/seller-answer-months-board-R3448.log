@@ -1,0 +1,7 @@
+R3448 SELLER-ANSWER-MONTHS driver render PASS html=7529B json=2734B sellers=2 months=3 answered=3
+R3448 suite src/os/test_seller_answer_months_board.py SUITE PASS 6/6 (AC-SAMB1..6) first run green; AC-SAMB2 re-reads both seller scopes over the suite own throwaway world (sellers_same=True disclaimer_same=True order_same=True)
+R3448 --check SELLER-ANSWER-MONTHS CHECK PASS fails=0 html=7529B json=2734B
+R3448 control A: deleting the law_bar copy key answered rc=3 E_SAMB_FACE with the page sha256 unchanged; the copy was restored byte for byte and --check re-read PASS
+R3448 control B: forcing peak_answered_count +7 in the landed json reddened AC-SAMB2 and the suite answered SUITE FAIL 5/6 rc=2; the restored json re-read SUITE PASS 6/6 and --check PASS
+R3448 wiring: registry os-seller-answer-months-board(6); matrix 84204B 816 rows DOC-CURRENT; census readable 816/816 VERDICT PASS pinned=816; entry index 23/23; first-yuan chain PASS read_only=True legs=2; face sweep PASS 13/13; closeout gate PASS files=4988 census=PASS matrix=DOC-CURRENT
+R3448 honest: only already-delivered readings moved onto a page; the factory world carries no question and no answer, so all four questions and three answers are landed rows made through the shipped ask_question and answer_question doors under a pinned clock - no sqlite rewrite, no typed ids, no padded rows

@@ -8450,6 +8450,15 @@ SUITES = [
     # own pinned clock.
     ("os-buyer-watch-months-board",
      os.path.join("..", "os", "test_buyer_watch_months_board.py"), 6),
+    # R3448: tools/seller_answer_months_board.py renders the seller's monthly
+    # pre-purchase Q&A answer cadence (api_seller_answer_months, AC-SAM1..8)
+    # which had zero readers under tools/, preview/ and src/os; the page prints
+    # per-seller month grids with the backlog/same-month split, the running
+    # lifetime count and the per-month latency band, and the suite re-reads the
+    # shipped face over its own throwaway world whose rows are made through the
+    # shipped ask_question and answer_question doors under its own pinned clock.
+    ("os-seller-answer-months-board",
+     os.path.join("..", "os", "test_seller_answer_months_board.py"), 6),
     # R3443: tools/ticket_size_board.py renders the achieved ticket size
     # (api_market_ticket_size and api_market_ticket_size_months, AC-MTM1..8)
     # which had zero readers under tools/, preview/ and src/os; the page prints
