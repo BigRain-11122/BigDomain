@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>买家逐月等待答复时延对账</title>
+<style>
+:root{--ink:#1b1f24;--muted:#66707a;--line:#dfe4ea;--bg:#f7f8fa}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:var(--bg);color:var(--ink);
+font:15px/1.65 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+main{max-width:1180px;margin:0 auto}
+h1{font-size:22px;margin:0 0 4px;font-weight:650}
+h2{font-size:16px;margin:22px 0 8px;font-weight:620}
+h3{font-size:14px;margin:16px 0 8px;font-weight:620;color:#3c4653}
+.meta{color:var(--muted);font-size:13px;margin-bottom:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;
+padding:14px 16px;margin-bottom:14px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600;font-size:12px}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.kpi{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.kpi div{flex:1 1 104px;border:1px solid var(--line);border-radius:8px;
+padding:10px 12px;background:#fff}
+.kpi b{display:block;font-size:18px;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--muted);font-size:12.5px}
+.disclaimer{border-left:3px solid #c9a227;background:#fdf8ea;padding:10px 14px;
+font-size:13px}
+.badge{display:inline-block;margin-right:8px;padding:2px 8px;
+border:1px solid var(--line);border-radius:999px;font-size:12px;
+color:var(--muted)}
+.badge.on{border-color:#9ad1a7;background:#eef9f1;color:#1f6b33}
+.badge.off{border-color:#b9c7e4;background:#f1f4fd;color:#23388a}
+.bar{position:relative;height:10px;min-width:120px;max-width:240px;
+border:1px solid var(--line);border-radius:999px;background:#f2f4f7}
+.bar i{position:absolute;top:-3px;width:3px;height:16px;background:#3c4653}
+.law{font-size:13px;margin:6px 0}
+.empty{color:#b42318}
+.quiet-row td{color:var(--muted)}
+.cap{color:var(--muted);font-size:12px;margin:8px 0 0}
+footer{color:var(--muted);font-size:12px;margin:18px 0 0}
+</style></head><body><main>
+<h1>买家逐月等待答复时延对账</h1>
+<div class=meta>单个买家提问后到底等了多久：答复记在答复当月的账上，跨月补答带着真实旧账 &middot; 生成于 2026-11-24 21:53:46Z &middot; <code>api_buyer_answer_wait</code></div>
+<h2>逐买家节奏</h2>
+<div class=card data-buyer="usr:bob">
+<h3>买家 usr:bob <span class=badge>已答笔数 3</span></h3>
+<div class=kpi><div><span>月数</span><b>3</b></div><div><span>提问笔数</span><b>5</b></div><div><span>已答笔数</span><b>3</b></div><div><span>待答笔数</span><b>2</b></div><div><span>答复率</span><b>0.6</b></div><div><span>补答旧问</span><b>2</b></div><div><span>同月答复</span><b>1</b></div><div><span>涉及卖家</span><b>2</b></div><div><span>问过货架</span><b>3</b></div><div><span>有效月数</span><b>2</b></div><div><span>峰值月</span><b>2026-11</b></div><div><span>峰值月答复</span><b>2</b></div><div><span>末月答复</span><b>2</b></div><div><span>最快等待秒</span><b>21607</b></div><div><span>平均等待秒</span><b>3031202</b></div><div><span>最慢等待秒</span><b>5702400</b></div></div>
+<table><thead><tr><th>月份</th><th class="n">答复</th><th class="n">补答</th><th class="n">同月</th><th class="n">卖家</th><th class="n">货架</th><th class="n">最快秒</th><th class="n">均秒</th><th class="n">最慢秒</th><th class="n">累计答复</th><th class="n">条宽</th></tr></thead><tbody><tr data-month="2026-09"><td>2026-09</td><td class="n">1</td><td class="n">0</td><td class="n">1</td><td class="n">1</td><td class="n">1</td><td class="n">21607</td><td class="n">21607</td><td class="n">21607</td><td class="n">1</td><td><span class="badge on">有答复</span></td><td><div class="bar"><i style="left:50.0%"></i></div></td></tr><tr data-month="2026-10" class="quiet-row"><td>2026-10</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">1</td><td><span class="badge">诚实零行</span></td><td>—</td></tr><tr data-month="2026-11"><td>2026-11</td><td class="n">2</td><td class="n">2</td><td class="n">0</td><td class="n">2</td><td class="n">2</td><td class="n">3369600</td><td class="n">4536000</td><td class="n">5702400</td><td class="n">3</td><td><span class="badge on">有答复</span></td><td><div class="bar"><i style="left:100.0%"></i></div></td></tr></tbody></table>
+</div>
+<div class=card data-buyer="usr:cy">
+<h3>买家 usr:cy <span class=badge>已答笔数 1</span></h3>
+<div class=kpi><div><span>月数</span><b>1</b></div><div><span>提问笔数</span><b>1</b></div><div><span>已答笔数</span><b>1</b></div><div><span>待答笔数</span><b>0</b></div><div><span>答复率</span><b>1</b></div><div><span>补答旧问</span><b>0</b></div><div><span>同月答复</span><b>1</b></div><div><span>涉及卖家</span><b>1</b></div><div><span>问过货架</span><b>1</b></div><div><span>有效月数</span><b>1</b></div><div><span>峰值月</span><b>2026-10</b></div><div><span>峰值月答复</span><b>1</b></div><div><span>末月答复</span><b>1</b></div><div><span>最快等待秒</span><b>3600</b></div><div><span>平均等待秒</span><b>3600</b></div><div><span>最慢等待秒</span><b>3600</b></div></div>
+<table><thead><tr><th>月份</th><th class="n">答复</th><th class="n">补答</th><th class="n">同月</th><th class="n">卖家</th><th class="n">货架</th><th class="n">最快秒</th><th class="n">均秒</th><th class="n">最慢秒</th><th class="n">累计答复</th><th class="n">条宽</th></tr></thead><tbody><tr data-month="2026-10"><td>2026-10</td><td class="n">1</td><td class="n">0</td><td class="n">1</td><td class="n">1</td><td class="n">1</td><td class="n">3600</td><td class="n">3600</td><td class="n">3600</td><td class="n">1</td><td><span class="badge on">有答复</span></td><td><div class="bar"><i style="left:100.0%"></i></div></td></tr></tbody></table>
+</div>
+
+<h2>本页自查的恒等律</h2>
+<div class=card><p class=law>月数等于行数，且各行按 UTC 月连续排列；没有答复的月份仍保留一行诚实零行。</p><p class=law>答复记在答复自身不可变的 answered_utc 所在月，而不是提问月；跨月补答只在答复月落行，提问月保持诚实零行。</p><p class=law>每行补答笔数加同月答复笔数等于该行答复笔数；仍无答复的提问不占月行，只进信封计数。</p><p class=law>等待秒一律从提问的 asked_utc 量到答复的 answered_utc；月内最快、最慢与均值为该月已答笔的极值与整数均值，零答复月三项全空。</p><p class=law>累计答复逐行只增不减，末行等于信封已答笔数。</p><p class=law>信封已答笔数与补答旧问笔数分别等于逐月求和；有效月数为答复笔数大于零的行数。</p><p class=law>峰值月取答复笔数最大的最早一月；零答复月不登顶，全无答复时峰值月为空。</p><p class=law>信封最快与最慢为各行极值，均值落在该区间内；只有单月有答复时均值等于该月均值。</p><p class=law>信封的卖家数与货架数覆盖该买家的全部提问（含仍开放的），月行只数当月被答复的卖家与货架，因此行和诚实不小于信封。</p><p class=law>条只作宽度，不是占比；没有答复或峰值为零时不画条。</p><p class=law>本页是沙箱服务面读数，不构成投资建议，也不含任何支付能力。</p>
+<p class=cap>条只标该月答复笔数相对本买家峰值月的位置，是宽度不是占比。</p></div>
+<h2>免责声明</h2>
+<div class=card><div class=disclaimer>sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice</div>
+<p style="margin-top:10px"><span class=badge>本页由 AIGC 生成并自动渲染，数据来自沙箱面的只读回读</span></p></div>
+<h2>产物与复现</h2>
+<div class=card><code>python tools/buyer_answer_wait_board.py</code></div>
+<footer>BigDomain OSLoop &middot; 2026-11-24 21:53:46Z &middot; 只读回读，不产生新表、新读数或业务语义</footer>
+</main></body></html>

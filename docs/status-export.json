@@ -1,20 +1,20 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-25 R3448 PRODUCT: the shop answer-cadence question now has a door - api_seller_answer_months (live with AC-SAM1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so whether a shop answered its pre-sale questions this month, how much of that was last month's backlog, how long the oldest wait ran and whether the shop is silent right now could only be read by calling the sandbox from a shell.",
-    "do": "2026-11-25 R3448 PRODUCT: the shop answer-cadence question now has a door - api_seller_answer_months (live with AC-SAM1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so whether a shop answered its pre-sale questions this month, how much of that was last month's backlog, how long the oldest wait ran and whether the shop is silent right now could only be read by calling the sandbox from a shell.",
-    "last_artifact": "preview/seller-answer-months-board.html (7529B) + preview/seller-answer-months-board.json (2734B) [2026-11-25 mtime]",
-    "latest_artifact": "preview/seller-answer-months-board.html (7529B) + preview/seller-answer-months-board.json (2734B) [2026-11-25 mtime]",
-    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\seller-answer-months-board.html",
+    "current": "2026-11-25 R3449 PRODUCT: the buyer-side answer-wait question now has a door - api_buyer_answer_wait (live with AC-BAW1..8 and its shipped suite on disk) had zero readers across tools/, preview/ and src/os, so how long one resident actually waited for answers month over month, how much of that was an older month's backlog and whether the account is being ignored right now could only be read by calling the sandbox from a shell.",
+    "do": "2026-11-25 R3449 PRODUCT: the buyer-side answer-wait question now has a door - api_buyer_answer_wait (live with AC-BAW1..8 and its shipped suite on disk) had zero readers across tools/, preview/ and src/os, so how long one resident actually waited for answers month over month, how much of that was an older month's backlog and whether the account is being ignored right now could only be read by calling the sandbox from a shell.",
+    "last_artifact": "preview/buyer-answer-wait-board.html (8364B) + preview/buyer-answer-wait-board.json (3107B) [2026-11-25 mtime]",
+    "latest_artifact": "preview/buyer-answer-wait-board.html (8364B) + preview/buyer-answer-wait-board.json (3107B) [2026-11-25 mtime]",
+    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\buyer-answer-wait-board.html",
     "latest_artifact_note": "",
-    "latest_evidence": "qa/seller-answer-months-board-R3448.log (1355B, 2026-11-25)",
+    "latest_evidence": "qa/buyer-answer-wait-board-R3449.log (728B, 2026-11-25)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R3448] next window (<=48h): (1) 零读者面清单余 9 面（本窗消 `api_seller_answer_months`；余 `api_category_history`／`api_answer_history`／`api_provider_identity`／`api_buyer_watch_category_mix`／`api_category_question_months`／`api_buyer_answer_wait`／`api_category_watch_months`／`api_market_relist_months`／`api_market_provider_months`），下窗仍先只读普查点名一位（面自带套件在盘且 tools/＋preview/＋src/os 实测零命中才动手；出厂世界为空的面须经出厂写入门建行并显式声明）。(2) S4U 落地仍欠一次提权运行。(3) export 最新产物槽 writer 修复＋三条判据仍承账。(4) 基准下次到期 2026-12-01。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`。(6) tick 口径：本窗 3447→3448。",
+    "next_milestone": "[R3449] next window (<=48h): (1) 零读者面清单余 8 面（本窗消 `api_buyer_answer_wait`；余 `api_category_history`／`api_answer_history`／`api_provider_identity`／`api_buyer_watch_category_mix`／`api_category_question_months`／`api_category_watch_months`／`api_market_relist_months`／`api_market_provider_months`），下窗仍先只读普查点名一位（面自带套件在盘且 tools/＋preview/＋src/os 实测零命中才动手；出厂世界为空的面须经出厂写入门建行并显式声明）。(2) S4U 落地仍欠一次提权运行。(3) export 最新产物槽 writer 修复＋三条判据仍承账。(4) 基准下次到期 2026-12-01。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`。(6) tick 口径：本窗 3448→3449。",
     "next_milestone_due": "2026-11-27T05:38:58+08:00",
-    "updated_at": "2026-11-25T05:38:58+08:00",
+    "updated_at": "2026-11-25T05:53:46+08:00",
     "heartbeat": {
-      "tick": 3448,
-      "state_tick": 3448,
+      "tick": 3449,
+      "state_tick": 3449,
       "lag": 0,
       "verdict": "OK",
       "reason": ""
@@ -35,7 +35,7 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-25 R3448 PRODUCT: the shop answer-cadence question now has a door - api_seller_answer_months (live with AC-SAM1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so whether a shop answered its pre-sale questions this month, how much of that was last month's backlog, how long the oldest wait ran and whether the shop is silent right now could only be read by calling the sandbox from a shell.",
+  "current": "2026-11-25 R3449 PRODUCT: the buyer-side answer-wait question now has a door - api_buyer_answer_wait (live with AC-BAW1..8 and its shipped suite on disk) had zero readers across tools/, preview/ and src/os, so how long one resident actually waited for answers month over month, how much of that was an older month's backlog and whether the account is being ignored right now could only be read by calling the sandbox from a shell.",
   "claims": {
     "claimed": 29,
     "captured": 17,
@@ -79,13 +79,13 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-25 R3448 PRODUCT: the shop answer-cadence question now has a door - api_seller_answer_months (live with AC-SAM1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so whether a shop answered its pre-sale questions this month, how much of that was last month's backlog, how long the oldest wait ran and whether the shop is silent right now could only be read by calling the sandbox from a shell.",
-  "export_ts": "2026-11-25T05:38:58+08:00",
-  "latest_artifact": "preview/seller-answer-months-board.html (7529B) + preview/seller-answer-months-board.json (2734B) [2026-11-25 mtime]",
-  "latest_evidence": "qa/seller-answer-months-board-R3448.log (1355B, 2026-11-25)",
-  "next_milestone": "[R3448] next window (<=48h): (1) 零读者面清单余 9 面（本窗消 `api_seller_answer_months`；余 `api_category_history`／`api_answer_history`／`api_provider_identity`／`api_buyer_watch_category_mix`／`api_category_question_months`／`api_buyer_answer_wait`／`api_category_watch_months`／`api_market_relist_months`／`api_market_provider_months`），下窗仍先只读普查点名一位（面自带套件在盘且 tools/＋preview/＋src/os 实测零命中才动手；出厂世界为空的面须经出厂写入门建行并显式声明）。(2) S4U 落地仍欠一次提权运行。(3) export 最新产物槽 writer 修复＋三条判据仍承账。(4) 基准下次到期 2026-12-01。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`。(6) tick 口径：本窗 3447→3448。",
+  "do": "2026-11-25 R3449 PRODUCT: the buyer-side answer-wait question now has a door - api_buyer_answer_wait (live with AC-BAW1..8 and its shipped suite on disk) had zero readers across tools/, preview/ and src/os, so how long one resident actually waited for answers month over month, how much of that was an older month's backlog and whether the account is being ignored right now could only be read by calling the sandbox from a shell.",
+  "export_ts": "2026-11-25T05:53:46+08:00",
+  "latest_artifact": "preview/buyer-answer-wait-board.html (8364B) + preview/buyer-answer-wait-board.json (3107B) [2026-11-25 mtime]",
+  "latest_evidence": "qa/buyer-answer-wait-board-R3449.log (728B, 2026-11-25)",
+  "next_milestone": "[R3449] next window (<=48h): (1) 零读者面清单余 8 面（本窗消 `api_buyer_answer_wait`；余 `api_category_history`／`api_answer_history`／`api_provider_identity`／`api_buyer_watch_category_mix`／`api_category_question_months`／`api_category_watch_months`／`api_market_relist_months`／`api_market_provider_months`），下窗仍先只读普查点名一位（面自带套件在盘且 tools/＋preview/＋src/os 实测零命中才动手；出厂世界为空的面须经出厂写入门建行并显式声明）。(2) S4U 落地仍欠一次提权运行。(3) export 最新产物槽 writer 修复＋三条判据仍承账。(4) 基准下次到期 2026-12-01。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`。(6) tick 口径：本窗 3448→3449。",
   "outs": [
-    "preview/seller-answer-months-board.html (7529B) + preview/seller-answer-months-board.json (2734B) [2026-11-25 mtime]",
+    "preview/buyer-answer-wait-board.html (8364B) + preview/buyer-answer-wait-board.json (3107B) [2026-11-25 mtime]",
     "preview/buyer-watch-months-board.html (10013B) + preview/buyer-watch-months-board.json (4552B) [2026-11-25 mtime]",
     "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 mtime] (halves differ: html [2026-11-25 mtime] + json [2026-11-16 commit]; later=html)",
     "preview/watch-conversion-board.html (9813B) + preview/watch-conversion-board.json (4590B) [2026-11-25 mtime]",
@@ -181,8 +181,8 @@
   "state_bytes": 70862,
   "next_milestone_due": "2026-11-27T05:38:58+08:00",
   "heartbeat": {
-    "tick": 3448,
-    "state_tick": 3448,
+    "tick": 3449,
+    "state_tick": 3449,
     "lag": 0,
     "verdict": "OK",
     "reason": ""

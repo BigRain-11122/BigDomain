@@ -1,0 +1,121 @@
+{
+ "generated_utc": "2026-11-24 21:53:46Z",
+ "face": "api_buyer_answer_wait",
+ "scope": "buyer",
+ "buyers": [
+  {
+   "buyer": "usr:bob",
+   "envelope": {
+    "buyer_id": "usr:bob",
+    "scope": "buyer",
+    "question_count": 5,
+    "answered_count": 3,
+    "unanswered_count": 2,
+    "answer_rate": 0.6,
+    "seller_count": 2,
+    "listing_count": 3,
+    "backlog_answered_count": 2,
+    "month_count": 3,
+    "active_month_count": 2,
+    "peak_month": "2026-11",
+    "peak_answered_count": 2,
+    "first_month": "2026-09",
+    "last_month": "2026-11",
+    "latest_month_answered_count": 2,
+    "fastest_seconds": 21607,
+    "slowest_seconds": 5702400,
+    "mean_seconds": 3031202,
+    "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+    "months": [
+     {
+      "month": "2026-09",
+      "answered_count": 1,
+      "backlog_count": 0,
+      "same_month_count": 1,
+      "seller_count": 1,
+      "listing_count": 1,
+      "fastest_seconds": 21607,
+      "slowest_seconds": 21607,
+      "mean_seconds": 21607,
+      "running_answered": 1
+     },
+     {
+      "month": "2026-10",
+      "answered_count": 0,
+      "backlog_count": 0,
+      "same_month_count": 0,
+      "seller_count": 0,
+      "listing_count": 0,
+      "fastest_seconds": null,
+      "slowest_seconds": null,
+      "mean_seconds": null,
+      "running_answered": 1
+     },
+     {
+      "month": "2026-11",
+      "answered_count": 2,
+      "backlog_count": 2,
+      "same_month_count": 0,
+      "seller_count": 2,
+      "listing_count": 2,
+      "fastest_seconds": 3369600,
+      "slowest_seconds": 5702400,
+      "mean_seconds": 4536000,
+      "running_answered": 3
+     }
+    ]
+   }
+  },
+  {
+   "buyer": "usr:cy",
+   "envelope": {
+    "buyer_id": "usr:cy",
+    "scope": "buyer",
+    "question_count": 1,
+    "answered_count": 1,
+    "unanswered_count": 0,
+    "answer_rate": 1.0,
+    "seller_count": 1,
+    "listing_count": 1,
+    "backlog_answered_count": 0,
+    "month_count": 1,
+    "active_month_count": 1,
+    "peak_month": "2026-10",
+    "peak_answered_count": 1,
+    "first_month": "2026-10",
+    "last_month": "2026-10",
+    "latest_month_answered_count": 1,
+    "fastest_seconds": 3600,
+    "slowest_seconds": 3600,
+    "mean_seconds": 3600,
+    "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+    "months": [
+     {
+      "month": "2026-10",
+      "answered_count": 1,
+      "backlog_count": 0,
+      "same_month_count": 1,
+      "seller_count": 1,
+      "listing_count": 1,
+      "fastest_seconds": 3600,
+      "slowest_seconds": 3600,
+      "mean_seconds": 3600,
+      "running_answered": 1
+     }
+    ]
+   }
+  }
+ ],
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/buyer-answer-wait-board.html",
+ "sources": {
+  "driver": "8dcd0935338b0ae1",
+  "copy": "579691e42b13ab32",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 8364,
+  "json": 3107
+ }
+}

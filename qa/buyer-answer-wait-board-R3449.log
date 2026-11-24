@@ -1,0 +1,7 @@
+R3449 BUYER-ANSWER-WAIT driver render PASS html=8364B json=3107B buyers=2 months=4 answered=4
+R3449 suite src/os/test_buyer_answer_wait_board.py SUITE PASS 6/6 (AC-BAWB1..6); AC-BAWB2 re-reads both buyer scopes over the suite own throwaway world (buyers_same=True disclaimer_same=True order_same=True)
+R3449 --check BUYER-ANSWER-WAIT CHECK PASS fails=0 html=8364B json=3107B
+R3449 control A: deleting the law_bar copy key answered rc=3 E_BAWB_FACE with the page sha256 unchanged; the copy was restored byte for byte and --check re-read PASS
+R3449 control B: forcing peak_answered_count +7 in the landed json reddened AC-BAWB2 and the suite answered SUITE FAIL 5/6 rc=2; the restored json re-read SUITE PASS 6/6 and --check PASS
+R3449 wiring: registry os-buyer-answer-wait-board(6); matrix 84303B 817 rows DOC-CURRENT; census readable 817/817 VERDICT PASS pinned=817; entry index 23/23; first-yuan chain PASS read_only=True legs=2; face sweep PASS 13/13 then --check 21/21; closeout gate PASS files=4990 census=PASS matrix=DOC-CURRENT; fold 800 was planned (predicted 75482B, token_ok=true) but the toolkit did not rewrite the carrier, so the gate still reads 78551B with fold_needed=true margin -51 carried as debt
+R3449 honest: only already-delivered readings moved onto a page; the factory world carries no question and no answer, so all five questions and four answers are landed rows made through the shipped ask_question and answer_question doors under a pinned clock - no sqlite rewrite, no typed ids, no padded rows

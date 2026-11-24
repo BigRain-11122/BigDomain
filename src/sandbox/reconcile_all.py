@@ -8459,6 +8459,16 @@ SUITES = [
     # shipped ask_question and answer_question doors under its own pinned clock.
     ("os-seller-answer-months-board",
      os.path.join("..", "os", "test_seller_answer_months_board.py"), 6),
+    # R3449: tools/buyer_answer_wait_board.py renders the buyer's monthly
+    # answer wait (api_buyer_answer_wait, AC-BAW1..8) which had zero readers
+    # under tools/, preview/ and src/os; the page prints per-buyer month grids
+    # with the backlog/same-month split, the running lifetime count, the
+    # per-month latency band and the asked-side envelope, and the suite
+    # re-reads the shipped face over its own throwaway world whose rows are made
+    # through the shipped ask_question and answer_question doors under its own
+    # pinned clock.
+    ("os-buyer-answer-wait-board",
+     os.path.join("..", "os", "test_buyer_answer_wait_board.py"), 6),
     # R3443: tools/ticket_size_board.py renders the achieved ticket size
     # (api_market_ticket_size and api_market_ticket_size_months, AC-MTM1..8)
     # which had zero readers under tools/, preview/ and src/os; the page prints
