@@ -1,0 +1,122 @@
+{
+ "generated_utc": "2026-11-24 14:04:02Z",
+ "face": "api_seller_refund_reasons",
+ "board_face": "api_board",
+ "source_face": "api_seller_refund_reasons",
+ "scope": "market",
+ "seller_count": 2,
+ "market": {
+  "scope": "market",
+  "dev_account": null,
+  "purchase_count": 4,
+  "refund_count": 2,
+  "refund_rate": 0.5,
+  "refunded_total": 15,
+  "labeled_count": 2,
+  "unlabeled_count": 0,
+  "reason_count": 2,
+  "top_reason": "month-crossing refund",
+  "top_reason_count": 1,
+  "top_reason_share": 0.5,
+  "reason_herfindahl": 5000.0,
+  "market_refund_rate": null,
+  "market_refund_share": null,
+  "rows": [
+   {
+    "reason": "month-crossing refund",
+    "refund_count": 1,
+    "refunded": 10,
+    "dev_share": 7,
+    "platform_share": 3,
+    "share": 0.5,
+    "avg_amount": 10.0,
+    "listing_count": 1
+   },
+   {
+    "reason": "demo refund same month",
+    "refund_count": 1,
+    "refunded": 5,
+    "dev_share": 4,
+    "platform_share": 1,
+    "share": 0.5,
+    "avg_amount": 5.0,
+    "listing_count": 1
+   }
+  ],
+  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice"
+ },
+ "sellers": [
+  {
+   "scope": "seller",
+   "dev_account": "usr:dana",
+   "purchase_count": 3,
+   "refund_count": 1,
+   "refund_rate": 0.3333,
+   "refunded_total": 10,
+   "labeled_count": 1,
+   "unlabeled_count": 0,
+   "reason_count": 1,
+   "top_reason": "month-crossing refund",
+   "top_reason_count": 1,
+   "top_reason_share": 1.0,
+   "reason_herfindahl": 10000.0,
+   "market_refund_rate": 0.5,
+   "market_refund_share": 0.6667,
+   "rows": [
+    {
+     "reason": "month-crossing refund",
+     "refund_count": 1,
+     "refunded": 10,
+     "dev_share": 7,
+     "platform_share": 3,
+     "share": 1.0,
+     "avg_amount": 10.0,
+     "listing_count": 1
+    }
+   ],
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice"
+  },
+  {
+   "scope": "seller",
+   "dev_account": "usr:frank",
+   "purchase_count": 1,
+   "refund_count": 1,
+   "refund_rate": 1.0,
+   "refunded_total": 5,
+   "labeled_count": 1,
+   "unlabeled_count": 0,
+   "reason_count": 1,
+   "top_reason": "demo refund same month",
+   "top_reason_count": 1,
+   "top_reason_share": 1.0,
+   "reason_herfindahl": 10000.0,
+   "market_refund_rate": 0.5,
+   "market_refund_share": 0.3333,
+   "rows": [
+    {
+     "reason": "demo refund same month",
+     "refund_count": 1,
+     "refunded": 5,
+     "dev_share": 4,
+     "platform_share": 1,
+     "share": 1.0,
+     "avg_amount": 5.0,
+     "listing_count": 1
+    }
+   ],
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice"
+  }
+ ],
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/seller-refund-reasons-board.html",
+ "sources": {
+  "driver": "a08c520bc79df218",
+  "copy": "1f7e0e35de5ca5d1",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 8229,
+  "json": 3076
+ }
+}

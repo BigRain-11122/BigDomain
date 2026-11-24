@@ -1,0 +1,11 @@
+R3424 SELLER-REFUND-REASONS BOARD EVIDENCE (BigDomain OSLoop)
+face api_seller_refund_reasons (own AC-SRR1..8 with test_apimarket_sellerrefundreasons.py on disk) had zero readers: git grep -l -F over tools/ preview/ answered rc=1 before this round.
+driver tools/seller_refund_reasons_board.py; labels preview/seller-refund-reasons-board-copy.json (ASCII driver, Chinese labels in copy).
+landed preview/seller-refund-reasons-board.html 8229B and preview/seller-refund-reasons-board.json 3076B.
+reading over the shipped demo world: market purchase_count=4 refund_count=2 refund_rate=0.5 refunded_total=15 labeled_count=2 unlabeled_count=0 reason_count=2 top_reason=month-crossing refund top_reason_share=0.5 reason_herfindahl=5000.0; two buckets at 10 (dev 7 + platform 3) and 5 (dev 4 + platform 1); usr:dana 3 purchases / 1 refund / 0.3333 / 10 / market_share 0.6667 and usr:frank 1 / 1 / 1.0 / 5 / market_share 0.3333.
+suite src/os/test_seller_refund_reasons_board.py SUITE PASS 6/6 (AC-SRRB1..6) on the first full run; AC-SRRB2 re-read the shipped face over the suite own throwaway world (market_same=True sellers_same=True disclaimer_same=True rows=4).
+control 1: a deleted label-copy key law_bar refuses the render by name rc=3 E_SRRB_FACE with the page sha256 unchanged; the copy was restored byte-identically.
+control 2: a forced sellers[0].rows[0].refunded +7 reddens AC-SRRB2 and AC-SRRB3 at rc=2; the restored json re-reads SUITE PASS 6/6 and --check PASS.
+wiring: registry row os-seller-refund-reasons-board(6); producer row seller-refund-reasons-board.json -> tools/seller_refund_reasons_board.py.
+counters this window: matrix 81991 bytes 793 rows DOC-CURRENT; census rows=793 readable=793 VERDICT PASS pinned=793; entry index PASS 23/23 fingerprint b7817aaf87676ecb; first-yuan chain PASS read_only=True; face sweep SUITE PASS 56/56 over 20 criteria then --check 21/21.
+honest: this moves an already-delivered reading onto a page the CEO can open - zero new tables, zero new readings, zero business semantics; both refunds in this demo world carry a written cause and the unlabeled count is 0, so the unlabeled bucket law is proved by an in-memory probe rather than a landed row; ZERO payment capability and no network beyond loopback - the five physical pieces are still missing.

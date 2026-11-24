@@ -8319,6 +8319,13 @@ SUITES = [
     # demo world.
     ("os-seller-refund-months-board",
      os.path.join("..", "os", "test_seller_refund_months_board.py"), 6),
+    # R3424: tools/seller_refund_reasons_board.py renders the seller-side refund
+    # cause envelope (the market scope plus one section per seller) with the
+    # market refund rate and this seller's share of the market refunded total as
+    # the benchmarks the face already ships. The suite re-reads the face over
+    # its own throwaway demo world and grades the page, not the face.
+    ("os-seller-refund-reasons-board",
+     os.path.join("..", "os", "test_seller_refund_reasons_board.py"), 6),
     # R3422: tools/public_listings_board.py renders the shipped public shelf
     # face (api_public_listings, AC-AMPI4) which had zero readers under tools/
     # and preview/; the page prints the shipped envelope verbatim and the suite

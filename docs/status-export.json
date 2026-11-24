@@ -3,20 +3,20 @@
     "board_pages_skipped": [
       "preview/face-sweep.html (8878B)"
     ],
-    "current": "2026-11-24 R3423 PRODUCT: the market discovery question now has a door - api_search (live with the AC-AMSQ keyword, AC-AMPG paging, AC-AMSR sort and AC-AMAV availability criteria and four suites on disk) had zero readers across tools/ and preview/, so 'which listings match my need - and what does each discovery axis actually do to the shelf' could only be read by calling the sandbox from a shell.",
+    "current": "2026-11-24 R3424 PRODUCT: the seller refund cause question now has a door - api_seller_refund_reasons (live with AC-SRR1..8 and its own suite on disk) had zero readers across tools/ and preview/, so what my refunds are actually caused by, and how heavy that is against the market benchmark, could only be read by calling the sandbox from a shell.",
     "do": "R3422: gave api_public_listings its first openable page - eight KPI cards, one row per listing carrying both review stamps, the refusal reason, the two shipped flags side by side, the provider name and the unified social credit code, ten law sentences and the cross-face law pending==review_queue.pending; AC-PLB1..6 SUITE 6/6 first run, two measured controls, matrix 791 rows DOC-CURRENT, census pinned=791, entry index 23/23, chain read_only=True, face sweep 56/56, closeout PASS files=4960.",
-    "last_artifact": "preview/search-board.html (12170B) + preview/search-board.json (8135B) [2026-11-24 mtime]",
-    "latest_artifact": "preview/search-board.html (12170B) + preview/search-board.json (8135B) [2026-11-24 mtime]",
-    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\search-board.html",
-    "latest_artifact_note": "this round's product pair, named by the R3422 PRODUCT line instead of being pulled by mtime",
-    "latest_evidence": "qa/public-listings-board-R3422.log (2026-11-24)",
+    "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
+    "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
+    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/seller-refund-reasons-board-R3424.log (2292B, 2026-11-24)",
+    "latest_evidence": "qa/seller-refund-reasons-board-R3424.log (2292B, 2026-11-24)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3423] next window (<=48h): (1) 载体 state 附加区 40877B／闸 78500（余量 37623B ≈ 8+ 轮，`fold_needed=false`，layout_ok=true；本窗写 state 时先坏 CRLF 再坏缩进，均用 `logs_toolkit eol --fix --execute` 与 `eol --fix-indent --execute` 就地修回）；下窗**先**跑 `python src/os/logs_toolkit.py fold --plan-only` 再决定，**禁手改 state 文件**。(2) S4U 落地仍欠一次提权运行（本窗实测 `BigDomain-OSLoop`=LogonType Interactive，本窗未提权）。(3) 零读者面：本窗八条 drill 实测后只开 `api_search` 一门——下窗**重测不假设**剩余 `api_market_buyer_retention`（1 cohort／month_count 1／max_offset 0，薄但不是空）与 `api_review_queue`（pending 3）；实测空勿取（R3389 空节律）：`api_buyer_todo`／`api_buyer_claim_todo`／`api_market_backlog_months`／`api_price_volatility`／`api_relist_gap`／`api_price_step_distribution`。(4) 48h 窗至 2026-11-26。(5) tick 口径：本窗 3422→3423，标签与计数器同为 3423。(6) 承账更新：`test_face_sweep` 本窗实测 `SUITE PASS 56/56 over 20 criteria`；收口环 `CLOSEOUT-GATE PASS files=4961`；其余不变——`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`backlog.md` 仍超 800000 闸且折载工具以轮数不足拒绝。(7) **导出「最近实物」槽位**：本窗规范 `--apply` 这次确实写成了本轮 pair（`preview/search-board.html` ＋ `.json`），因为该 pair 恰是 mtime 最新；结构缺陷（写入器按 mtime 排序）未修，三条判据仍欠——pair 在盘／该 pair 有 producer 行／输出字段含原始来源标记。(8) 新页面已在 `tools/deliverable_index.py` 的 `PAIR_PRODUCERS` 记 (truncated)",
-    "next_milestone_due": "2026-11-26T21:53:08+08:00",
-    "updated_at": "2026-11-24T21:53:08+08:00",
+    "next_milestone": "[R3424] next window (<=48h): (1) 载体 state 附加区 41909B／闸 78500（余量 36591B ≈ 8+ 轮；本窗 `fold --plan-only` 读 `writes_nothing=true`、`max_fold_post_bytes=3700`，无需折载）；下窗**先**跑 `python src/os/logs_toolkit.py fold --plan-only` 再决定，**禁手改 state 文件**。(2) S4U 落地仍欠一次提权运行（本窗实测 `BigDomain-OSLoop`=LogonType Interactive，本窗未提权）。(3) 零读者面：本窗 33 面零读者**实调用**普查后只开 `api_seller_refund_reasons` 一门——下窗**重测不假设**：`api_rating_reply_latency`（2 条评分／0 条已回复，覆盖率 0.0 是真读数）、`api_price_step_distribution`（13 键）、`api_seller_category_mix`（1 行）、`api_seller_rating_months`（1 月）、`api_category_restock_months`（3 月但 active 0，慎取）；实测空勿取（R3389 空节律）：其余 18 面出厂即空。(4) 48h 窗至 2026-11-26。(5) tick 口径：本窗 3423→3424，标签与计数器同为 3424。(6) 承账不变：`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`backlog.md` 仍超 800000 闸且折载工具以轮数不足拒绝。(7) 导出「最近实物」槽位仍按 mtime 排序（修法在写入器，三条判据仍欠）。(8) 新页面已在 `tools/deliverable_index.py` 记 producer 行；注册表新行使 census 792→793、矩阵 793 行。",
+    "next_milestone_due": "2026-11-26T22:09:13+08:00",
+    "updated_at": "2026-11-24T22:09:13+08:00",
     "heartbeat": {
-      "tick": 3410,
-      "state_tick": 3410,
+      "tick": 3424,
+      "state_tick": 3424,
       "lag": 0,
       "verdict": "PASS",
       "reason": "fresh"
@@ -29,7 +29,7 @@
       "over7": 0,
       "dup_rows": 0,
       "distinct": 4,
-      "collapsed": 1,
+      "collapsed": 0,
       "labels_refreshed": 0,
       "notes_stale": 0,
       "note_claims": 0,
@@ -37,29 +37,15 @@
       "criteria_claims": 0
     },
     "corpus": {
-      "files": 4949,
-      "bytes": 511761291,
+      "files": 4963,
+      "bytes": 511798746,
       "mb": 511.8,
-      "readable": 4949
+      "readable": 4963
     }
   },
-  "current": "2026-11-24 R3423 PRODUCT: the market discovery question now has a door - api_search (live with the AC-AMSQ keyword, AC-AMPG paging, AC-AMSR sort and AC-AMAV availability criteria and four suites on disk) had zero readers across tools/ and preview/, so 'which listings match my need - and what does each discovery axis actually do to the shelf' could only be read by calling the sandbox from a shell.",
-  "claims": {
-    "claimed": 16,
-    "captured": 5,
-    "contradicted": 0,
-    "uncaptured": 11,
-    "historic": 0,
-    "rows": 98,
-    "present": true,
-    "census_ts": "2026-11-24T21:53:08+08:00"
-  },
-  "chain": {
-    "present": true,
-    "rows": 98,
-    "broken": 5,
-    "path": "state/qa_replacements.jsonl"
-  },
+  "current": "2026-11-24 R3424 PRODUCT: the seller refund cause question now has a door - api_seller_refund_reasons (live with AC-SRR1..8 and its own suite on disk) had zero readers across tools/ and preview/, so what my refunds are actually caused by, and how heavy that is against the market benchmark, could only be read by calling the sandbox from a shell.",
+  "claims": {"claimed": 19, "captured": 8, "contradicted": 0, "uncaptured": 11, "historic": 0, "rows": 98, "present": true, "census_ts": "2026-11-24T22:09:13+08:00"},
+  "chain": {"present": true, "rows": 98, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -87,11 +73,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-24 R3423 PRODUCT: the market discovery question now has a door - api_search (live with the AC-AMSQ keyword, AC-AMPG paging, AC-AMSR sort and AC-AMAV availability criteria and four suites on disk) had zero readers across tools/ and preview/, so 'which listings match my need - and what does each discovery axis actually do to the shelf' could only be read by calling the sandbox from a shell.",
-  "export_ts": "2026-11-24T21:53:08+08:00",
-  "latest_artifact": "preview/search-board.html (12170B) + preview/search-board.json (8135B) [2026-11-24 mtime]",
-  "latest_evidence": "qa/seller-revenue-board-R3410.log (2083B, 2026-11-24)",
-  "next_milestone": "[R3423] next window (<=48h): (1) 载体 state 附加区 40877B／闸 78500（余量 37623B ≈ 8+ 轮，`fold_needed=false`，layout_ok=true；本窗写 state 时先坏 CRLF 再坏缩进，均用 `logs_toolkit eol --fix --execute` 与 `eol --fix-indent --execute` 就地修回）；下窗**先**跑 `python src/os/logs_toolkit.py fold --plan-only` 再决定，**禁手改 state 文件**。(2) S4U 落地仍欠一次提权运行（本窗实测 `BigDomain-OSLoop`=LogonType Interactive，本窗未提权）。(3) 零读者面：本窗八条 drill 实测后只开 `api_search` 一门——下窗**重测不假设**剩余 `api_market_buyer_retention`（1 cohort／month_count 1／max_offset 0，薄但不是空）与 `api_review_queue`（pending 3）；实测空勿取（R3389 空节律）：`api_buyer_todo`／`api_buyer_claim_todo`／`api_market_backlog_months`／`api_price_volatility`／`api_relist_gap`／`api_price_step_distribution`。(4) 48h 窗至 2026-11-26。(5) tick 口径：本窗 3422→3423，标签与计数器同为 3423。(6) 承账更新：`test_face_sweep` 本窗实测 `SUITE PASS 56/56 over 20 criteria`；收口环 `CLOSEOUT-GATE PASS files=4961`；其余不变——`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`backlog.md` 仍超 800000 闸且折载工具以轮数不足拒绝。(7) **导出「最近实物」槽位**：本窗规范 `--apply` 这次确实写成了本轮 pair（`preview/search-board.html` ＋ `.json`），因为该 pair 恰是 mtime 最新；结构缺陷（写入器按 mtime 排序）未修，三条判据仍欠——pair 在盘／该 pair 有 producer 行／输出字段含原始来源标记。(8) 新页面已在 `tools/deliverable_index.py` 的 `PAIR_PRODUCERS` 记 (truncated)",
+  "do": "2026-11-24 R3424 PRODUCT: the seller refund cause question now has a door - api_seller_refund_reasons (live with AC-SRR1..8 and its own suite on disk) had zero readers across tools/ and preview/, so what my refunds are actually caused by, and how heavy that is against the market benchmark, could only be read by calling the sandbox from a shell.",
+  "export_ts": "2026-11-24T22:09:13+08:00",
+  "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
+  "latest_evidence": "qa/seller-refund-reasons-board-R3424.log (2292B, 2026-11-24)",
+  "next_milestone": "[R3424] next window (<=48h): (1) 载体 state 附加区 41909B／闸 78500（余量 36591B ≈ 8+ 轮；本窗 `fold --plan-only` 读 `writes_nothing=true`、`max_fold_post_bytes=3700`，无需折载）；下窗**先**跑 `python src/os/logs_toolkit.py fold --plan-only` 再决定，**禁手改 state 文件**。(2) S4U 落地仍欠一次提权运行（本窗实测 `BigDomain-OSLoop`=LogonType Interactive，本窗未提权）。(3) 零读者面：本窗 33 面零读者**实调用**普查后只开 `api_seller_refund_reasons` 一门——下窗**重测不假设**：`api_rating_reply_latency`（2 条评分／0 条已回复，覆盖率 0.0 是真读数）、`api_price_step_distribution`（13 键）、`api_seller_category_mix`（1 行）、`api_seller_rating_months`（1 月）、`api_category_restock_months`（3 月但 active 0，慎取）；实测空勿取（R3389 空节律）：其余 18 面出厂即空。(4) 48h 窗至 2026-11-26。(5) tick 口径：本窗 3423→3424，标签与计数器同为 3424。(6) 承账不变：`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`backlog.md` 仍超 800000 闸且折载工具以轮数不足拒绝。(7) 导出「最近实物」槽位仍按 mtime 排序（修法在写入器，三条判据仍欠）。(8) 新页面已在 `tools/deliverable_index.py` 记 producer 行；注册表新行使 census 792→793、矩阵 793 行。",
   "outs": [
     "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
     "refund-reasons-R3407.log (2274B)",
@@ -159,7 +145,7 @@
       "2026-11-04 R2431 verification window on the item the debt gate named first=yes (reconcile-battery-R2431, carried from R2430): zero product code changed, the R2168 mixed-tree rule honoured. Leg 1 read 542/543 suites with the criteria total 4234 exactly as pre-registered and the only red was reconcile-daily-census at cd7 exit=2 DRIFT-FLAG; the census named the file (qa/battery-R2431-stdout.log, class=cmd-raw) because this window launched the battery with a Start-Process redirect pointed INTO the evidence directory. Repaired at the birth site, never by widening the baseline: the two launcher captures moved to the gitignored logs/ face, after which the census read flags=0 DRIFT-CLEAN with the 529-entry baseline untouched. Retry leg on the repaired tree: RUNNER PASS 543/543 suites plus controls 7/7 in 956.2s at criteria 4234, TMP RECLAIM 932/932. Four follow-up sections: matrix FAILED first on the stale doc without rewriting it, was regenerated stamp-aligned to 52317B, and the re-run read VERDICT R2431 PASS failing=none (fingerprint CLEAN 5 domains, profile byte-identical, census DRIFT-CLEAN). Debt: reconcile-battery-R2431 closed and product-face-R2432 opened first=yes through the shipped CLIs. Zero product points claimed."
     ],
     [
-      "3423",
+      "3424",
       "OSLoop 执行 tick",
       "对对外货架合规面落盘：api_public_listings 首次开门，AC-PLB1..6 全绿，哪张挂单待审、哪条未披露、哪条没有 AIGC 标识从此可看"
     ]
@@ -173,21 +159,21 @@
   "self_drive": {
     "window": "2026-11-18..2026-11-24",
     "window_days": 7,
-    "log_lines_in_window": 62,
+    "log_lines_in_window": 71,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 6,
+    "substantive_non_idle_mention_lines": 7,
     "proposals_total": 11,
     "proposals_open": 9,
     "queue_main_open": 6,
     "queue_tech_open": 5,
     "queue_explore_open": 1
   },
-  "state_bytes": 41909,
-  "next_milestone_due": "2026-11-26T21:53:08+08:00",
+  "state_bytes": 47159,
+  "next_milestone_due": "2026-11-26T22:09:13+08:00",
   "heartbeat": {
-    "tick": 3422,
-    "state_tick": 3422,
+    "tick": 3424,
+    "state_tick": 3424,
     "lag": 0,
     "verdict": "PASS",
     "reason": "fresh"
@@ -200,7 +186,7 @@
     "over7": 0,
     "dup_rows": 0,
     "distinct": 4,
-    "collapsed": 1,
+    "collapsed": 0,
     "labels_refreshed": 0,
     "notes_stale": 0,
     "note_claims": 0,
@@ -208,9 +194,9 @@
     "criteria_claims": 0
   },
   "corpus": {
-    "files": 4949,
-    "bytes": 511761291,
+    "files": 4963,
+    "bytes": 511798746,
     "mb": 511.8,
-    "readable": 4949
+    "readable": 4963
   }
 }
