@@ -8374,6 +8374,14 @@ SUITES = [
     # re-reads the face over its own throwaway world.
     ("os-seller-supply-board",
      os.path.join("..", "os", "test_seller_supply_board.py"), 6),
+    # R3433: tools/seller_todo_board.py renders the shipped seller duty queue
+    # envelope (one summary row and one card per seller: the four families
+    # rating/question/claim_open/claim_disputed, their totals, the distinct
+    # listing count and the oldest debt with its kind) which had zero readers
+    # under tools/ and preview/; the page prints the shipped envelope verbatim
+    # and the suite re-reads the face over its own throwaway demo world.
+    ("os-seller-todo-board",
+     os.path.join("..", "os", "test_seller_todo_board.py"), 6),
     # R3424: tools/seller_refund_reasons_board.py renders the seller-side refund
     # cause envelope (the market scope plus one section per seller) with the
     # market refund rate and this seller's share of the market refunded total as

@@ -1,0 +1,98 @@
+{
+ "generated_utc": "2026-11-24 16:45:32Z",
+ "face": "api_seller_todo",
+ "board_face": "api_board",
+ "scope": "seller",
+ "seller_count": 2,
+ "sellers": [
+  {
+   "dev_account": "usr:dana",
+   "total_count": 5,
+   "rating_count": 2,
+   "question_count": 1,
+   "claim_open_count": 1,
+   "claim_disputed_count": 1,
+   "listing_count": 2,
+   "oldest_utc": "2026-09-22T09:00:00Z",
+   "oldest_kind": "rating",
+   "rows": [
+    {
+     "kind": "rating",
+     "ref_id": 1,
+     "listing_id": 1,
+     "listing_key": "risk-scan",
+     "listing_title": "Risk Scan API",
+     "counterparty": "usr:carol",
+     "since_utc": "2026-09-22T09:00:00Z",
+     "detail": null
+    },
+    {
+     "kind": "rating",
+     "ref_id": 2,
+     "listing_id": 2,
+     "listing_key": "macro-feed",
+     "listing_title": "Macro Feed API",
+     "counterparty": "usr:bob",
+     "since_utc": "2026-09-22T09:00:00Z",
+     "detail": null
+    },
+    {
+     "kind": "question",
+     "ref_id": 1,
+     "listing_id": 1,
+     "listing_key": "risk-scan",
+     "listing_title": "Risk Scan API",
+     "counterparty": "usr:bob",
+     "since_utc": "2026-11-02T00:00:00Z",
+     "detail": "does the scan cover options?"
+    },
+    {
+     "kind": "claim_open",
+     "ref_id": 1,
+     "listing_id": 2,
+     "listing_key": "macro-feed",
+     "listing_title": "Macro Feed API",
+     "counterparty": "usr:carol",
+     "since_utc": "2026-11-03T00:00:00Z",
+     "detail": "feed returns stale rows"
+    },
+    {
+     "kind": "claim_disputed",
+     "ref_id": 2,
+     "listing_id": 2,
+     "listing_key": "macro-feed",
+     "listing_title": "Macro Feed API",
+     "counterparty": "usr:dave",
+     "since_utc": "2026-11-06T00:00:00Z",
+     "detail": "still stale this morning"
+    }
+   ],
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice"
+  },
+  {
+   "dev_account": "usr:frank",
+   "total_count": 0,
+   "rating_count": 0,
+   "question_count": 0,
+   "claim_open_count": 0,
+   "claim_disputed_count": 0,
+   "listing_count": 0,
+   "oldest_utc": null,
+   "oldest_kind": null,
+   "rows": [],
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice"
+  }
+ ],
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/seller-todo-board.html",
+ "sources": {
+  "driver": "0c7f560e58c0473c",
+  "copy": "b461f4295db75ee8",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 6870,
+  "json": 2588
+ }
+}
