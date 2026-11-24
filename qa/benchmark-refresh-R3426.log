@@ -1,0 +1,9 @@
+R3426 benchmark refresh - seven-day gate due 2026-11-25, run 2026-11-24 before maturity
+read 1 pay.weixin.qq.com/doc/v2/merchant/4011986682 note date 2026.10.21 (drift already logged at R2907); six rules matched the stored text word for word
+read 2 cac.gov.cn/2025-03/14/c_1743654684782215.htm effect date still 2025-09-01, no revision or repeal notice; articles 4,5,10,11,12,13,14 matched the stored text
+read 3 developers.weixin.qq.com virtual payment page landed on the wx.requestPayment neighbour page (ordinary payment API, not the virtual payment rule set); fee rate and iOS deadline stay at grade M, no clause rewritten
+state: benchmarks_refreshed 2026-11-18 -> 2026-11-24; tick 3425 -> 3426
+export_round --check: VERDICT PASS tick=3426
+closeout_gate: CLOSEOUT-GATE PASS files=4964 flags=0 round_main=OK census=PASS matrix=DOC-CURRENT
+carrier: bytes=56303 gate=78500 layout_ok=true crlf=101 bare_lf=0
+product note: no new openable page this window; cycle duty only
