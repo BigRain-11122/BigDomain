@@ -1,0 +1,18 @@
+R3416 evidence - buyer monthly spend board (AC-BMB1..6)
+ROUND 2026-11-24 R3416 PRODUCT: api_buyer_months had no page reader under tools/ or preview/ (apimarket_report.py already emits buyer_months.csv, so the page was the gap) - a buyer could not see what he spent month by month.
+WHY: api_buyer_months ships AC-AMBM1..8 in src/sandbox/ledger/test_apimarket_buyermonths.py; git grep over tools/ and preview/ answered zero hits.
+FACE CENSUS read-only: api_buyer_months, api_buyer_refund_months, api_buyer_todo, api_buyer_claim_todo and api_purchase_dossier each answered 0 readers.
+DEMO WORLD (shipped seeder): usr:bob 3 months (2026-08 gross 10 net 10, 2026-09 gross 3 net 3, 2026-10 refund only net -10); usr:carol 1 month (2026-09 gross 10 net 10); usr:erin 2 months (2026-09 gross 5 net 5, 2026-10 refund only net -5).
+LANDED: tools/buyer_months_board.py renders preview/buyer-months-board.html (8287B) and .json (3375B) - 3 buyer sections, 8 KPI cards each, 11 numeric month columns plus a net width bar, 7 law sentences, AIGC label and the face own disclaimer; Chinese labels live in preview/buyer-months-board-copy.json.
+READING BUYER-MONTHS CHECK PASS fails=0 html=8287B json=3375B.
+READING SUITE PASS 6/6 criteria declared=6: AC-BMB1 keys/contract, AC-BMB2 identical=True disclaimer_same=True buyers=3 months=6, AC-BMB3 problems=[], AC-BMB4 rows=6/6 negatives=2 neg_printed=True clamped=False laws=True empty_probe=True stand_in_none=False, AC-BMB5 aigc=True external_links=0, AC-BMB6 check_rc=0 wrote_nothing=True wired=6/6 face_suite=True.
+CONTROL A removed label key law_scope -> E_BMB_FACE rc=3, page bytes untouched, copy restored identical.
+CONTROL B bumped buyers[0].months[0].net by 7 -> AC-BMB2 and AC-BMB3 red at rc=2; html and json restored byte-identical and the suite re-read 6/6.
+WIRING registry os-buyer-months-board(6) in src/sandbox/reconcile_all.py; producer row buyer-months-board.json -> tools/buyer_months_board.py in tools/deliverable_index.py.
+MATRIX suite_matrix_reconcile --write then --check; CENSUS rows=785 readable=785 VERDICT PASS pinned=785.
+ENTRY CHAIN first-yuan-chain PASS read_only=True after the recorded chain then index then chain order; DELIVERABLE INDEX VERDICT PASS 23/23 fingerprint=09f214ede193a055.
+SWEEP face_sweep VERDICT PASS 13/13 fingerprint=3c90f3ac6e23e553 then --check 21/21.
+GROUP SCAN content-addressed: ledger 0 @BigDomain lines; decisions 144 live ids against a stored baseline of 149 with 0 newcomers; company orders head unchanged at the 2026-11-20 22:5x row; benchmarks_refreshed 2026-11-18 on day six of the seven-day gate; git status clean at open with no index.lock; board head R3415 item (4) was pullable so this is a work round.
+HONEST: this moves an already-delivered reading onto a page the CEO can open - zero new tables, zero new readings, zero business semantics; two of six month rows are refund-only and read -10 and -5, printed with their minus signs; the demo world spans three months for one buyer, so month sums are proved on landed rows rather than on synthetic ones; the bar is a width against the page-wide maximum, not a share, and the page says so.
+HONEST carried unchanged: qa_log --ledger-check broken=5 (R3371 ruling = diagnose, not repair); the full battery was not re-run; Docker absent; test_face_sweep 54/56 (AC-FSWB20/20c); five physical pieces still missing so buyers still cannot pay.
+TOKENS local only, api=0, zero cloud calls and zero external API touches.

@@ -1,0 +1,141 @@
+{
+ "generated_utc": "2026-11-24 11:10:17Z",
+ "face": "api_buyer_months",
+ "board_face": "api_board",
+ "source_face": "api_sales",
+ "buyer_count": 3,
+ "buyers": [
+  {
+   "buyer_id": "usr:bob",
+   "month_count": 3,
+   "lifetime_purchase_count": 2,
+   "lifetime_gross_spent": 13,
+   "lifetime_refund_count": 1,
+   "lifetime_refunded": 10,
+   "lifetime_net_spent": 3,
+   "lifetime_dev_paid": 3,
+   "lifetime_platform_paid": 0,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "months": [
+    {
+     "month": "2026-08",
+     "purchase_count": 1,
+     "gross_spent": 10,
+     "refund_count": 0,
+     "refunded": 0,
+     "net": 10,
+     "dev_paid": 7,
+     "platform_paid": 3,
+     "dev_paid_net": 7,
+     "platform_paid_net": 3,
+     "listing_count": 1
+    },
+    {
+     "month": "2026-09",
+     "purchase_count": 1,
+     "gross_spent": 3,
+     "refund_count": 0,
+     "refunded": 0,
+     "net": 3,
+     "dev_paid": 3,
+     "platform_paid": 0,
+     "dev_paid_net": 3,
+     "platform_paid_net": 0,
+     "listing_count": 1
+    },
+    {
+     "month": "2026-10",
+     "purchase_count": 0,
+     "gross_spent": 0,
+     "refund_count": 1,
+     "refunded": 10,
+     "net": -10,
+     "dev_paid": 0,
+     "platform_paid": 0,
+     "dev_paid_net": -7,
+     "platform_paid_net": -3,
+     "listing_count": 0
+    }
+   ]
+  },
+  {
+   "buyer_id": "usr:carol",
+   "month_count": 1,
+   "lifetime_purchase_count": 1,
+   "lifetime_gross_spent": 10,
+   "lifetime_refund_count": 0,
+   "lifetime_refunded": 0,
+   "lifetime_net_spent": 10,
+   "lifetime_dev_paid": 7,
+   "lifetime_platform_paid": 3,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "months": [
+    {
+     "month": "2026-09",
+     "purchase_count": 1,
+     "gross_spent": 10,
+     "refund_count": 0,
+     "refunded": 0,
+     "net": 10,
+     "dev_paid": 7,
+     "platform_paid": 3,
+     "dev_paid_net": 7,
+     "platform_paid_net": 3,
+     "listing_count": 1
+    }
+   ]
+  },
+  {
+   "buyer_id": "usr:erin",
+   "month_count": 2,
+   "lifetime_purchase_count": 1,
+   "lifetime_gross_spent": 5,
+   "lifetime_refund_count": 1,
+   "lifetime_refunded": 5,
+   "lifetime_net_spent": 0,
+   "lifetime_dev_paid": 0,
+   "lifetime_platform_paid": 0,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "months": [
+    {
+     "month": "2026-09",
+     "purchase_count": 1,
+     "gross_spent": 5,
+     "refund_count": 0,
+     "refunded": 0,
+     "net": 5,
+     "dev_paid": 4,
+     "platform_paid": 1,
+     "dev_paid_net": 4,
+     "platform_paid_net": 1,
+     "listing_count": 1
+    },
+    {
+     "month": "2026-10",
+     "purchase_count": 0,
+     "gross_spent": 0,
+     "refund_count": 1,
+     "refunded": 5,
+     "net": -5,
+     "dev_paid": 0,
+     "platform_paid": 0,
+     "dev_paid_net": -4,
+     "platform_paid_net": -1,
+     "listing_count": 0
+    }
+   ]
+  }
+ ],
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/buyer-months-board.html",
+ "sources": {
+  "driver": "e30674d5c2fe6661",
+  "copy": "b0dd1c7f7ddf6672",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 8287,
+  "json": 3375
+ }
+}

@@ -8270,6 +8270,12 @@ SUITES = [
     # marked refund credits, the explicit empty statement and the probe.
     ("os-buyer-ledger-board",
      os.path.join("..", "os", "test_buyer_ledger_board.py"), 6),
+    # R3416: tools/buyer_months_board.py renders the buyer monthly spend face
+    # and its suite grades the month identities, the shipped envelopes, the
+    # refund month minus sign, the empty probe and the wiring.
+    ("os-buyer-months-board",
+     os.path.join("..", "os", "test_buyer_months_board.py"), 6),
+
     # R3073: tools/city_face_report.py renders the P-47 item-1 city face and
     # carries its own --check (AC-CFY1..8), but this registry had no row naming
     # it, so the face was graded only by the fail-soft [GATES] sweep - the

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>居民月度花钱对账单</title>
+<style>
+:root{--ink:#1b1f24;--muted:#66707a;--line:#dfe4ea;--bg:#f7f8fa}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:var(--bg);color:var(--ink);
+font:15px/1.65 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+main{max-width:1120px;margin:0 auto}
+h1{font-size:22px;margin:0 0 4px;font-weight:650}
+h2{font-size:16px;margin:22px 0 8px;font-weight:620}
+.meta{color:var(--muted);font-size:13px;margin-bottom:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;
+padding:14px 16px;margin-bottom:14px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600;font-size:12px}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+td.neg{color:#b42318}
+.bar{height:8px;background:#e8ecf1;border-radius:4px;min-width:90px}
+.bar i{display:block;height:8px;background:#3d6ab5;border-radius:4px}
+.kpi{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.kpi div{flex:1 1 108px;border:1px solid var(--line);border-radius:8px;
+padding:10px 12px;background:#fff}
+.kpi b{display:block;font-size:19px;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--muted);font-size:12.5px}
+.disclaimer{border-left:3px solid #c9a227;background:#fdf8ea;padding:10px 14px;
+font-size:13px}
+.badge{display:inline-block;margin-right:8px;padding:2px 8px;
+border:1px solid var(--line);border-radius:999px;font-size:12px;
+color:var(--muted)}
+.law{font-size:13px;margin:6px 0}
+.empty{color:var(--muted);font-size:13px}
+footer{color:var(--muted);font-size:12px;margin:20px 0 8px}
+code{font-size:12.5px;background:#f2f4f7;padding:1px 5px;border-radius:4px}
+</style></head><body><main>
+<h1>居民月度花钱对账单</h1>
+<div class=meta>逐买家逐月：花了多少、退了多少、净花多少（退款月可为负） &middot; 生成于 2026-11-24 11:10:17Z &middot; <code>api_buyer_months</code></div>
+<h2>逐买家月度明细</h2>
+<div class=buyer id="buyer-usr:bob"><h2>usr:bob</h2><div class=kpi><div><span>活跃月份</span><b>3</b></div><div><span>终身成交笔数</span><b>2</b></div><div><span>终身退款笔数</span><b>1</b></div><div><span>终身毛花费</span><b>13</b></div><div><span>终身已退</span><b>10</b></div><div><span>终身净花费</span><b>3</b></div><div><span>终身开发者所得</span><b>3</b></div><div><span>终身平台所得</span><b>0</b></div></div><div class=card><table><tr><th>月份</th><th class=n>成交笔数</th><th class=n>退款笔数</th><th class=n>毛花费</th><th class=n>退款额</th><th class=n>净花费</th><th class=n>挂单数</th><th class=n>平台所得</th><th class=n>开发者所得</th><th class=n>平台净得</th><th class=n>开发者净得</th><th class=n>净花费条形（宽度非份额）</th></tr><tr class="month"><td>2026-08</td><td class="n">1</td><td class="n">0</td><td class="n">10</td><td class="n">0</td><td class="n">10</td><td class="n">1</td><td class="n">3</td><td class="n">7</td><td class="n">3</td><td class="n">7</td><td class=n><div class="bar" title="10"><i style="width:100%"></i></div></td></tr><tr class="month"><td>2026-09</td><td class="n">1</td><td class="n">0</td><td class="n">3</td><td class="n">0</td><td class="n">3</td><td class="n">1</td><td class="n">0</td><td class="n">3</td><td class="n">0</td><td class="n">3</td><td class=n><div class="bar" title="3"><i style="width:30%"></i></div></td></tr><tr class="month"><td>2026-10</td><td class="n">0</td><td class="n">1</td><td class="n">0</td><td class="n">10</td><td class="n neg">-10</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td class="n neg">-3</td><td class="n neg">-7</td><td class=n><div class="bar" title="-10"><i style="width:100%"></i></div></td></tr></table><p class=empty>条形长度=该月净花费绝对值对全页最大绝对值的比例，是宽度不是份额。</p></div></div><div class=buyer id="buyer-usr:carol"><h2>usr:carol</h2><div class=kpi><div><span>活跃月份</span><b>1</b></div><div><span>终身成交笔数</span><b>1</b></div><div><span>终身退款笔数</span><b>0</b></div><div><span>终身毛花费</span><b>10</b></div><div><span>终身已退</span><b>0</b></div><div><span>终身净花费</span><b>10</b></div><div><span>终身开发者所得</span><b>7</b></div><div><span>终身平台所得</span><b>3</b></div></div><div class=card><table><tr><th>月份</th><th class=n>成交笔数</th><th class=n>退款笔数</th><th class=n>毛花费</th><th class=n>退款额</th><th class=n>净花费</th><th class=n>挂单数</th><th class=n>平台所得</th><th class=n>开发者所得</th><th class=n>平台净得</th><th class=n>开发者净得</th><th class=n>净花费条形（宽度非份额）</th></tr><tr class="month"><td>2026-09</td><td class="n">1</td><td class="n">0</td><td class="n">10</td><td class="n">0</td><td class="n">10</td><td class="n">1</td><td class="n">3</td><td class="n">7</td><td class="n">3</td><td class="n">7</td><td class=n><div class="bar" title="10"><i style="width:100%"></i></div></td></tr></table><p class=empty>条形长度=该月净花费绝对值对全页最大绝对值的比例，是宽度不是份额。</p></div></div><div class=buyer id="buyer-usr:erin"><h2>usr:erin</h2><div class=kpi><div><span>活跃月份</span><b>2</b></div><div><span>终身成交笔数</span><b>1</b></div><div><span>终身退款笔数</span><b>1</b></div><div><span>终身毛花费</span><b>5</b></div><div><span>终身已退</span><b>5</b></div><div><span>终身净花费</span><b>0</b></div><div><span>终身开发者所得</span><b>0</b></div><div><span>终身平台所得</span><b>0</b></div></div><div class=card><table><tr><th>月份</th><th class=n>成交笔数</th><th class=n>退款笔数</th><th class=n>毛花费</th><th class=n>退款额</th><th class=n>净花费</th><th class=n>挂单数</th><th class=n>平台所得</th><th class=n>开发者所得</th><th class=n>平台净得</th><th class=n>开发者净得</th><th class=n>净花费条形（宽度非份额）</th></tr><tr class="month"><td>2026-09</td><td class="n">1</td><td class="n">0</td><td class="n">5</td><td class="n">0</td><td class="n">5</td><td class="n">1</td><td class="n">1</td><td class="n">4</td><td class="n">1</td><td class="n">4</td><td class=n><div class="bar" title="5"><i style="width:50%"></i></div></td></tr><tr class="month"><td>2026-10</td><td class="n">0</td><td class="n">1</td><td class="n">0</td><td class="n">5</td><td class="n neg">-5</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td class="n neg">-1</td><td class="n neg">-4</td><td class=n><div class="bar" title="-5"><i style="width:50%"></i></div></td></tr></table><p class=empty>条形长度=该月净花费绝对值对全页最大绝对值的比例，是宽度不是份额。</p></div></div>
+<h2>口径法则（页面不变式）</h2>
+<div class=card><p class=law>每月净花费 = 该月毛花费 − 该月退款额。</p><p class=law>每月净花费 = 该月平台净得 + 该月开发者净得（两腿相加恒等于净）。</p><p class=law>终身列 = 各月同名列之和（月份表可逐列相加得到终身口径）。</p><p class=law>月份严格升序，形如 YYYY-MM。</p><p class=law>只有退款的月份会读出负净花费；本页保留负号，绝不抹零。</p><p class=law>金额为沙箱记账口径；本页不重算平台与开发者的分成比例。</p><p class=law>本面为开发者 API 服务市场记账面，不是投资建议。</p></div>
+<h2>来源与免责</h2>
+<div class=card><div class=disclaimer>sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice</div>
+<p style="margin-top:10px"><span class=badge>AIGC 生成内容标识：本页由沙箱读数渲染，数字非真实交易</span></p></div>
+<h2>复现命令</h2>
+<div class=card><code>python tools/buyer_months_board.py</code></div>
+<footer>BigDomain OSLoop &middot; 2026-11-24 11:10:17Z &middot; 本页由 tools/buyer_months_board.py 生成，不手改</footer>
+</main></body></html>
