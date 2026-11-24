@@ -5,15 +5,15 @@
     ],
     "current": "2026-11-24 R3389 PRODUCT: the market monthly ledger page carries the seventh face - monthly rating flow (ratings, five-star, low-star, raters) - and the carrier was folded at a round boundary to buy back the room.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
-    "last_artifact": "preview/apimarket-monthly-faces.html (9070B) + preview/apimarket-monthly-faces.json (16463B) [2026-11-24 mtime]",
-    "latest_artifact": "preview/apimarket-monthly-faces.html (9070B) + preview/apimarket-monthly-faces.json (16463B) [2026-11-24 mtime]",
+    "last_artifact": "preview/apimarket-monthly-faces.html (9070B) + preview/apimarket-monthly-faces.json (16463B) [2026-11-24 commit]",
+    "latest_artifact": "preview/apimarket-monthly-faces.html (9070B) + preview/apimarket-monthly-faces.json (16463B) [2026-11-24 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\apimarket-monthly-faces.html",
     "latest_artifact_note": "",
     "latest_evidence": "qa/monthly-faces-seven-R3389.log (2898B, 2026-11-24)",
     "newest_pair_on_disk_is_board": true,
     "next_milestone": "[R3389] next window (<=48h): (1) **载体已回 69818B／闸 78500（余量 8682B ≈ 5 轮）**——下窗仍先读 `fold --plan-only`；折窗禁折在飞轮、按轮边界切、`--summary-sentence` 点名被折走的裸轮（本轮实证：`--window-slice` 是 1-based 闭区间）。 (2) **S4U 落地仍欠一次提权运行**——`register_loop_task.ps1` 已能自证（`VERIFY logon=S4U interval=PT5M`），非提权会话勿试。 (3) 队列卫生：explore 本窗未补种子（板头 R3388 要求「先补再认领」），tech 仅 L64／L98 带判据可认领，main 队头仍全门控（bootstrap 需物理件五件）。 (4) 下一张可搬的面：`api_market_feed_months` 在演示世界有 3 个月真数据（含 `by_kind` 嵌套），本轮已把嵌套值挡出表格列，但「按月分 kind 的事件构成」还需要一列专用渲染（不是现有八列能表达），属独立读数面工程。 (5) **新发现承账（非本窗引入）**：活树 `tools/face_sweep.py` 读 `VERDICT FAIL 12/13`，红面=`ugc-gate`（`tools/ugc_gate_report.py --check` 读 `checks=18/19 failed=AC-UGR13`，`test_prefix files=460 doors=9 counted=False`）——本窗只改月度页三件与载体，未碰 UGC 面，故列为下窗第一件（先判它是门文件数漂移还是真缺口，禁放宽判据）；收口链自己的 `CHECK sweep` 读 `PASS 21/21`，两者不是同一工具。 (6) 承账不变：`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`BigDomain-OSLoop` LogonType=Interactive。 (7) 提案面 BD-PROP-011 open（窗 11-22~11-28）在册，本窗配额已清。 (8) 诚实承账：物理件五件仍缺——买家仍付不了钱。",
-    "next_milestone_due": "2026-11-26T09:41:10+08:00",
-    "updated_at": "2026-11-24T09:41:10+08:00",
+    "next_milestone_due": "2026-11-26T09:43:28+08:00",
+    "updated_at": "2026-11-24T09:43:28+08:00",
     "heartbeat": {
       "tick": 3385,
       "state_tick": 3389,
@@ -29,7 +29,7 @@
       "over7": 0,
       "dup_rows": 0,
       "distinct": 9,
-      "collapsed": 0,
+      "collapsed": 1,
       "labels_refreshed": 0,
       "notes_stale": 0,
       "note_claims": 0,
@@ -38,7 +38,7 @@
     }
   },
   "current": "2026-11-24 R3389 PRODUCT: the market monthly ledger page carries the seventh face - monthly rating flow (ratings, five-star, low-star, raters) - and the carrier was folded at a round boundary to buy back the room.",
-  "claims": {"claimed": 42, "captured": 2, "contradicted": 4, "uncaptured": 36, "historic": 4, "rows": 89, "present": true, "census_ts": "2026-11-24T09:41:10+08:00"},
+  "claims": {"claimed": 42, "captured": 2, "contradicted": 4, "uncaptured": 36, "historic": 4, "rows": 89, "present": true, "census_ts": "2026-11-24T09:43:28+08:00"},
   "chain": {"present": true, "rows": 89, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -68,12 +68,12 @@
     }
   ],
   "do": "2026-11-24 R3389 PRODUCT: the market monthly ledger page carries the seventh face - monthly rating flow (ratings, five-star, low-star, raters) - and the carrier was folded at a round boundary to buy back the room.",
-  "export_ts": "2026-11-24T09:41:10+08:00",
-  "latest_artifact": "preview/apimarket-monthly-faces.html (9070B) + preview/apimarket-monthly-faces.json (16463B) [2026-11-24 mtime]",
+  "export_ts": "2026-11-24T09:43:28+08:00",
+  "latest_artifact": "preview/apimarket-monthly-faces.html (9070B) + preview/apimarket-monthly-faces.json (16463B) [2026-11-24 commit]",
   "latest_evidence": "qa/monthly-faces-seven-R3389.log (2898B, 2026-11-24)",
   "next_milestone": "[R3389] next window (<=48h): (1) **载体已回 69818B／闸 78500（余量 8682B ≈ 5 轮）**——下窗仍先读 `fold --plan-only`；折窗禁折在飞轮、按轮边界切、`--summary-sentence` 点名被折走的裸轮（本轮实证：`--window-slice` 是 1-based 闭区间）。 (2) **S4U 落地仍欠一次提权运行**——`register_loop_task.ps1` 已能自证（`VERIFY logon=S4U interval=PT5M`），非提权会话勿试。 (3) 队列卫生：explore 本窗未补种子（板头 R3388 要求「先补再认领」），tech 仅 L64／L98 带判据可认领，main 队头仍全门控（bootstrap 需物理件五件）。 (4) 下一张可搬的面：`api_market_feed_months` 在演示世界有 3 个月真数据（含 `by_kind` 嵌套），本轮已把嵌套值挡出表格列，但「按月分 kind 的事件构成」还需要一列专用渲染（不是现有八列能表达），属独立读数面工程。 (5) **新发现承账（非本窗引入）**：活树 `tools/face_sweep.py` 读 `VERDICT FAIL 12/13`，红面=`ugc-gate`（`tools/ugc_gate_report.py --check` 读 `checks=18/19 failed=AC-UGR13`，`test_prefix files=460 doors=9 counted=False`）——本窗只改月度页三件与载体，未碰 UGC 面，故列为下窗第一件（先判它是门文件数漂移还是真缺口，禁放宽判据）；收口链自己的 `CHECK sweep` 读 `PASS 21/21`，两者不是同一工具。 (6) 承账不变：`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`BigDomain-OSLoop` LogonType=Interactive。 (7) 提案面 BD-PROP-011 open（窗 11-22~11-28）在册，本窗配额已清。 (8) 诚实承账：物理件五件仍缺——买家仍付不了钱。",
   "outs": [
-    "preview/apimarket-monthly-faces.html (9070B) + preview/apimarket-monthly-faces.json (16463B) [2026-11-24 mtime]",
+    "preview/apimarket-monthly-faces.html (9070B) + preview/apimarket-monthly-faces.json (16463B) [2026-11-24 commit]",
     "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-23 commit]; later=html)",
     "preview/platform-live-report.html (8621B) + preview/platform-live-report.json (6228B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-23 commit]; later=html)",
     "preview/ledger-reconcile-face.html (8656B) + preview/ledger-reconcile-face.json (6151B) [2026-11-24 commit]",
@@ -169,7 +169,7 @@
     "queue_explore_open": 1
   },
   "state_bytes": 74800,
-  "next_milestone_due": "2026-11-26T09:41:10+08:00",
+  "next_milestone_due": "2026-11-26T09:43:28+08:00",
   "heartbeat": {
     "tick": 3385,
     "state_tick": 3389,
@@ -185,7 +185,7 @@
     "over7": 0,
     "dup_rows": 0,
     "distinct": 9,
-    "collapsed": 0,
+    "collapsed": 1,
     "labels_refreshed": 0,
     "notes_stale": 0,
     "note_claims": 0,
