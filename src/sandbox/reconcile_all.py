@@ -7817,8 +7817,10 @@ SUITES = [
     # also names its unit (arms=<n> gate=<n> graded=<n>), so the pair can no
     # longer be read as either unit by accident. Convention unchanged from the
     # rows above: the number is the suite's own announcement total.
+    # R3397: the five R3393 byte-width arms AC-BYI1..5 joined the row (23 -> 28
+    # arms over the same 21 gate rows). The gate itself was not touched.
     ("os-deliverable-index",
-     os.path.join("..", "os", "test_deliverable_index.py"), 23),
+     os.path.join("..", "os", "test_deliverable_index.py"), 28),
     # R2798. tools/battery_shard.py decides whether a FAMILY of suites is green
     # and carried no battery row, so a tool that grades suites was graded only
     # by the run that graded them. AC-BSH1..AC-BSH8 pinned in src/os/backlog.md

@@ -1,0 +1,12 @@
+R3397 AC-BYI1..5 registered as shipped suite arms (five new arms, 23 -> 28)
+suite: python src/os/test_deliverable_index.py -> SUITE PASS 28/28 announced=28 arms=28 gate=21 graded=28
+AC-BYI1 one formatter: width_defs=1 pad_defs=1 bare_fmt=[] sizes=13 padded=9 foreign=4 carve=True row=True
+AC-BYI1 carve-out named: the four remaining byte tokens sit on rows carrying the walk marker (controls), written by another module; every other size on the page carries the pinned width
+AC-BYI2 printed equals disk: widths=[10] exact=True unpadded=[] over probe 0..999999999
+AC-BYI3 fixed point: pair 108 -> 152 bytes in the same digit width, entry page 11799 -> 11799 bytes
+AC-BYI4 recipe settles in one pass: rc=0 row=PASS AC-DIX21 all-arms-green; negative control (counter-driven injector) rc=2 row pair-bytes-reproduced=False
+AC-BYI5 whitespace only: strip(BYTES_PAD(v)) == "%dB" % v for nine values; law comment present in tools/deliverable_index.py
+registry: os-deliverable-index 23 -> 28 in src/sandbox/reconcile_all.py
+matrix: suite_matrix_reconcile.py --write then --check -> DOC-CURRENT 79504 bytes 767 rows
+census: registry_counter_census.py --check -> VERDICT PASS pinned=767
+carried unchanged: qa_log --ledger-check broken=5, full battery not re-run, Docker absent, BigDomain-OSLoop LogonType=Interactive, physical five pieces still missing

@@ -24,13 +24,15 @@ import json
 import os
 import re
 import shutil
+import subprocess
 import sys
 import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 TOOL = os.path.join(ROOT, "tools", "deliverable_index.py")
-N = 23  # AC-DIX1..14, the two R2804 snapshot controls, the R2883 html-only controls,
-#         the two R3232 claims-age controls, and the three R3234 claims-readings controls
+N = 28  # AC-DIX1..14, the two R2804 snapshot controls, the R2883 html-only controls,
+#         the two R3232 claims-age controls, the three R3234 claims-readings controls,
+#         and the five R3393 byte-width arms AC-BYI1..5 registered by R3397
 
 FAILS = []
 CHECKS = []
@@ -38,7 +40,7 @@ CHECKS = []
 # AC ids the run grades; this suite runs 23 arms over them, and the closing
 # SUITE row states both so no reader has to guess which number is which.
 GATE_IDS = []
-ID_RE = re.compile(r"^(AC-(?:DIX|CVL|IDX|COO)\d+)[a-z]?$")
+ID_RE = re.compile(r"^(AC-(?:DIX|CVL|IDX|COO|BYI)\d+)[a-z]?$")
 
 
 def arm_ids(names):
@@ -521,6 +523,166 @@ def main():
         # spelled as a literal; an arm that names an id the gate never reports
         # is a red here instead of a silent undercount in the SUITE row.
         GATE_IDS[:] = sorted(rows_of(out_c4))
+
+        # ---- AC-BYI1..AC-BYI5 (pinned at R3393, registered by R3397): the page's
+        # own size must stop being an input to itself. Every printed byte count
+        # goes through ONE fixed-width formatter, so a pair whose byte count moves
+        # inside one digit width cannot move the page it is listed on.
+        toolsrc = read(TOOL)
+        width_defs = toolsrc.count("BYTES_WIDTH = ")
+        pad_defs = toolsrc.count("def BYTES_PAD(")
+        bare_fmt = [ln.strip() for ln in toolsrc.splitlines()
+                    if '"%dB"' in ln or "'%dB'" in ln]
+        point_to(mod, world)
+        call(mod, [])
+        band_y = block_of(read(os.path.join(pv, "index.html")))
+        sizes = re.findall(r"([ ]*\d+B)", band_y)
+        padded = [s for s in sizes if len(s) == mod.BYTES_WIDTH + 1]
+        face_size = os.path.getsize(os.path.join(pv, FACE + ".html"))
+        face_row = ("%s</span>" % mod.BYTES_PAD(face_size)) in band_y
+        # R3397 carve-out, measured rather than assumed: the block embeds one
+        # walk fragment written by ANOTHER module, whose four byte counts are
+        # printed in that module's own shape. Those rows are named by their
+        # marker; every other byte count on this page must carry the pinned
+        # width, so a new unpadded print anywhere else reddens here.
+        ctl_marker = "\u4e2a\u63a7\u4ef6"
+        short = [t for t in sizes if len(t) != mod.BYTES_WIDTH + 1]
+        short_lines = [ln for ln in band_y.splitlines()
+                       if any(t in ln for t in short)]
+        carve_ok = all(ctl_marker in ln for ln in short_lines)
+        ok("AC-BYI1 one fixed-width formatter and every printed size uses it",
+           width_defs == 1 and pad_defs == 1 and not bare_fmt and bool(sizes)
+           and len(padded) == len(sizes) - len(short) and face_row and carve_ok,
+           "width_defs=%d pad_defs=%d bare=%s sizes=%d padded=%d foreign=%d carve=%s row=%s"
+           % (width_defs, pad_defs, bare_fmt[:2], len(sizes), len(padded),
+              len(short), carve_ok, face_row))
+
+        probe = [0, 1, 9, 10, 99, 1000, 28799, 1234567, 999999999]
+        widths = sorted(set(len(mod.BYTES_PAD(v)) for v in probe))
+        exact = all(mod.BYTES_PAD(v).replace(" ", "") == ("%dB" % v)
+                    for v in probe)
+        reg_faces = json.loads(
+            read(os.path.join(pv, "deliverable-index.json")))["faces"]
+        unpadded = [e["html"] for e in reg_faces
+                    if mod.BYTES_PAD(
+                        os.path.getsize(os.path.join(pv, e["html"]))) not in band_y]
+        ok("AC-BYI2 the printed number still equals the bytes on disk",
+           exact and widths == [mod.BYTES_WIDTH + 1] and not unpadded
+           and face_size > 0,
+           "widths=%s exact=%s unpadded=%s" % (widths, exact, unpadded))
+
+        # AC-BYI3: same digit width, different value -> the entry page must land
+        # the same number of bytes. Measured by rendering two worlds that differ
+        # only in one listed pair's byte count.
+        world5 = os.path.join(tempfile.mkdtemp(prefix="dix5-"), "w")
+        shutil.copytree(world, world5)
+        target = os.path.join(world5, "preview", "beta-face.html")
+        start_n = os.path.getsize(target)
+        while len(str(os.path.getsize(target))) == len(str(start_n)) \
+                and os.path.getsize(target) - start_n < 40:
+            with io.open(target, "a", encoding="utf-8", newline="\n") as fh:
+                fh.write(" <!-- w -->")
+        moved_n = os.path.getsize(target)
+        call(mod, [])
+        page_a = os.path.getsize(os.path.join(pv, "index.html"))
+        mod_repo_before = mod.REPO
+        point_to(mod, world5)
+        call(mod, [])
+        page_b = os.path.getsize(os.path.join(world5, "preview", "index.html"))
+        point_to(mod, world)
+        call(mod, [])
+        ok("AC-BYI3 a same-width byte change leaves the entry page size unmoved",
+           len(str(start_n)) == len(str(moved_n)) and moved_n != start_n
+           and page_a == page_b and page_a > 4096,
+           "pair=%d->%d page=%d,%d" % (start_n, moved_n, page_a, page_b))
+        mod.REPO = mod_repo_before
+        shutil.rmtree(os.path.dirname(world5), ignore_errors=True)
+
+        # AC-BYI4: a declared two-step recipe settles in ONE check pass. The
+        # private world owns both writers, so the shipped recipe arm runs end to
+        # end without touching the real preview/ tree.
+        world6 = os.path.join(tempfile.mkdtemp(prefix="dix6-"), "w")
+        shutil.copytree(world, world6)
+        renderer = os.path.join(world6, "tmp_recipe_render.py")
+        injector = os.path.join(world6, "tmp_recipe_inject.py")
+        write(renderer,
+              "import io, os\n"
+              "HERE = os.path.dirname(os.path.abspath(__file__))\n"
+              "PV = os.path.join(HERE, 'preview')\n"
+              "def put(name, text):\n"
+              "    with io.open(os.path.join(PV, name), 'w', encoding='utf-8',\n"
+              "                 newline='\\n') as fh:\n"
+              "        fh.write(text)\n"
+              "put('recipe-face.json', '{\"verdict\": \"PASS\"}\\n')\n"
+              "put('recipe-face.html',\n"
+              "    '<!DOCTYPE html>\\n<html><body>recipe face</body></html>\\n')\n"
+              "print('RECIPE RENDER OK')\n")
+        write(injector,
+              "import io, os\n"
+              "HERE = os.path.dirname(os.path.abspath(__file__))\n"
+              "P = os.path.join(HERE, 'preview', 'recipe-face.html')\n"
+              "text = io.open(P, encoding='utf-8').read()\n"
+              "if 'back-hop' not in text:\n"
+              "    text = text.replace('</body>', '<!-- back-hop --></body>')\n"
+              "    with io.open(P, 'w', encoding='utf-8', newline='\\n') as fh:\n"
+              "        fh.write(text)\n"
+              "print('RECIPE INJECT OK')\n")
+
+        def run_recipe_world(world_x, inject_path):
+            mod.REPO = world_x
+            mod.PAIR_RECIPES["recipe-face.json"] = (
+                "tmp_recipe_render.py", os.path.basename(inject_path), [])
+            point_to(mod, world_x)
+            for script in (os.path.join(world_x, "tmp_recipe_render.py"),
+                           inject_path):
+                subprocess.run([sys.executable, script], cwd=world_x,
+                               capture_output=True, text=True)
+            call(mod, [])
+            rc_x, out_x = call(mod, ["--check"])
+            row = [ln for ln in out_x.splitlines() if "AC-DIX21" in ln]
+            return rc_x, (row[0] if row else "")
+
+        saved_recipes = dict(mod.PAIR_RECIPES)
+        saved_repo = mod.REPO
+        rc_y4, row_y4 = run_recipe_world(world6, injector)
+        world7 = os.path.join(tempfile.mkdtemp(prefix="dix7-"), "w")
+        shutil.copytree(world6, world7)
+        os.remove(os.path.join(world7, "preview", "recipe-face.html"))
+        os.remove(os.path.join(world7, "preview", "recipe-face.json"))
+        subprocess.run([sys.executable, os.path.join(world7, "tmp_recipe_render.py")],
+                       cwd=world7, capture_output=True, text=True)
+        loose = os.path.join(world7, "tmp_recipe_loose.py")
+        write(loose,
+              "import io, os\n"
+              "HERE = os.path.dirname(os.path.abspath(__file__))\n"
+              "P = os.path.join(HERE, 'preview', 'recipe-face.html')\n"
+              "C = os.path.join(HERE, 'tmp_recipe_counter.txt')\n"
+              "n = int(io.open(C).read()) if os.path.exists(C) else 0\n"
+              "n += 1\n"
+              "io.open(C, 'w').write(str(n))\n"
+              "text = io.open(P, encoding='utf-8').read()\n"
+              "text = text.replace('</body>', ('<!-- hop -->' * n) + '</body>')\n"
+              "with io.open(P, 'w', encoding='utf-8', newline='\\n') as fh:\n"
+              "    fh.write(text)\n"
+              "print('LOOSE INJECT OK')\n")
+        rc_y5, row_y5 = run_recipe_world(world7, loose)
+        mod.PAIR_RECIPES = saved_recipes
+        mod.REPO = saved_repo
+        point_to(mod, world)
+        call(mod, [])
+        ok("AC-BYI4 a declared recipe settles in one check pass (control reddens)",
+           rc_y4 == 0 and "all-arms-green" in row_y4
+           and rc_y5 == 2 and "pair-bytes-reproduced=False" in row_y5,
+           "rc=%s row=%s control_rc=%s" % (rc_y4, row_y4[:60], rc_y5))
+        shutil.rmtree(os.path.dirname(world6), ignore_errors=True)
+        shutil.rmtree(os.path.dirname(world7), ignore_errors=True)
+
+        # AC-BYI5: the change is whitespace only, and the law stays written down.
+        white = all(mod.BYTES_PAD(v).replace(" ", "") == ("%dB" % v)
+                    for v in probe)
+        law = "BYTES_WIDTH = 9" in toolsrc and "whitespace collapses" in toolsrc
+        ok("AC-BYI5 the width is whitespace only and the law is stated",
+           white and law, "whitespace_only=%s law_stated=%s" % (white, law))
 
         # suite hygiene, scored inside AC-DIX3..AC-CVL2 by design: none of the
         # criteria above may import network or shell, and this file
