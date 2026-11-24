@@ -1,0 +1,79 @@
+{
+ "generated_utc": "2026-11-24 16:09:54Z",
+ "face": "api_seller_reviews",
+ "board_face": "api_board",
+ "scope": "seller",
+ "seller_count": 2,
+ "sellers": [
+  {
+   "dev_account": "usr:dana",
+   "listing_count": 2,
+   "pending_count": 2,
+   "approved_count": 0,
+   "refused_count": 0,
+   "resubmit_count": 0,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "rows": [
+    {
+     "listing_id": 1,
+     "listing_key": "risk-scan",
+     "title": "Risk Scan API",
+     "token_price": 10,
+     "delisted": false,
+     "review_cycle": 1,
+     "review_state": "pending",
+     "review_reason": null,
+     "reviewed_utc": null,
+     "resubmit_count": 0
+    },
+    {
+     "listing_id": 2,
+     "listing_key": "macro-feed",
+     "title": "Macro Feed API",
+     "token_price": 3,
+     "delisted": false,
+     "review_cycle": 1,
+     "review_state": "pending",
+     "review_reason": null,
+     "reviewed_utc": null,
+     "resubmit_count": 0
+    }
+   ]
+  },
+  {
+   "dev_account": "usr:frank",
+   "listing_count": 1,
+   "pending_count": 1,
+   "approved_count": 0,
+   "refused_count": 0,
+   "resubmit_count": 0,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "rows": [
+    {
+     "listing_id": 3,
+     "listing_key": "chart-render",
+     "title": "Chart Render API",
+     "token_price": 5,
+     "delisted": false,
+     "review_cycle": 1,
+     "review_state": "pending",
+     "review_reason": null,
+     "reviewed_utc": null,
+     "resubmit_count": 0
+    }
+   ]
+  }
+ ],
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/seller-reviews-board.html",
+ "sources": {
+  "driver": "fd83f064c457f454",
+  "copy": "faf71d60ee7ee68b",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 6308,
+  "json": 1974
+ }
+}

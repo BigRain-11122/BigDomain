@@ -8358,6 +8358,14 @@ SUITES = [
     # over its own throwaway demo world.
     ("os-buyer-profile-board",
      os.path.join("..", "os", "test_buyer_profile_board.py"), 6),
+    # R3431: tools/seller_reviews_board.py renders the shipped seller review
+    # status envelope (one summary row and one section per seller: the current
+    # review cycle, the verdict, the refusal reason and the resubmit count per
+    # listing) which had zero readers under tools/ and preview/; the page prints
+    # the shipped envelope verbatim and the suite re-reads the face over its own
+    # throwaway demo world.
+    ("os-seller-reviews-board",
+     os.path.join("..", "os", "test_seller_reviews_board.py"), 6),
     # R3424: tools/seller_refund_reasons_board.py renders the seller-side refund
     # cause envelope (the market scope plus one section per seller) with the
     # market refund rate and this seller's share of the market refunded total as

@@ -1,0 +1,12 @@
+SELLER-REVIEWS BOARD R3431 EVIDENCE
+face=api_seller_reviews (AC-AMRC6, zero readers under tools/ and preview/ before this round)
+page=preview/seller-reviews-board.html json=preview/seller-reviews-board.json copy=preview/seller-reviews-board-copy.json
+REVIEWS CHECK PASS fails=0 html=6308B json=1974B
+SUITE PASS 6/6 criteria declared=6 (AC-SVRB1..6)
+AC-SVRB2 re-read the shipped face over the suite own throwaway world: sellers_same=True disclaimer_same=True sellers=2 rows=3
+AC-SVRB4 verdict probe over an in-memory envelope: refused reason printed, approved stamp printed, pending dashes, no bare None
+CONTROL1 dropped the copy key law_resubmit -> rc=3 E_SVRB_FACE with the page sha256 unchanged; copy restored byte-identically
+CONTROL2 forced sellers[0].pending_count +7 -> AC-SVRB2 and AC-SVRB3 red at rc=2; json restored byte-identically and the suite read back 6/6
+WIRING registry os-seller-reviews-board(6) matrix 82579B 799 rows DOC-CURRENT census rows=799 readable=799 entry-index 23/23 face-sweep 13/13
+MEASURED demo world: usr:dana 2 listings both pending at cycle 1 with null reason and null stamp; usr:frank an honest empty envelope; refused and approved paths proved in memory, not on landed rows
+PAYMENT zero; network loopback only; the five physical pieces are still missing so nobody can pay

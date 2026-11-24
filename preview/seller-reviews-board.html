@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>卖家挂单审核进度对账单</title>
+<style>
+:root{--ink:#1b1f24;--muted:#66707a;--line:#dfe4ea;--bg:#f7f8fa}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:var(--bg);color:var(--ink);
+font:15px/1.65 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+main{max-width:1180px;margin:0 auto}
+h1{font-size:22px;margin:0 0 4px;font-weight:650}
+h2{font-size:16px;margin:22px 0 8px;font-weight:620}
+h3{font-size:14px;margin:18px 0 6px;font-weight:620;color:#3c4653}
+.meta{color:var(--muted);font-size:13px;margin-bottom:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;
+padding:14px 16px;margin-bottom:14px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600;font-size:12px}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.kpi{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.kpi div{flex:1 1 118px;border:1px solid var(--line);border-radius:8px;
+padding:10px 12px;background:#fff}
+.kpi b{display:block;font-size:19px;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--muted);font-size:12.5px}
+.disclaimer{border-left:3px solid #c9a227;background:#fdf8ea;padding:10px 14px;
+font-size:13px}
+.badge{display:inline-block;margin-right:8px;padding:2px 8px;
+border:1px solid var(--line);border-radius:999px;font-size:12px;
+color:var(--muted)}
+.badge.pending{border-color:#c8b48f;color:#7a5f28}
+.badge.approved{border-color:#a9c6b0;color:#3f6a4c}
+.badge.refused{border-color:#dcb0b0;color:#8a4242}
+.law{font-size:13px;margin:6px 0}
+.empty{color:var(--muted);font-size:13px}
+.note{color:var(--muted);font-size:12.5px;margin:6px 0 0}
+footer{color:var(--muted);font-size:12px;margin:20px 0 8px}
+code{font-size:12.5px;background:#f2f4f7;padding:1px 5px;border-radius:4px}
+</style></head><body><main>
+<h1>卖家挂单审核进度对账单</h1>
+<div class=meta>每一笔挂单当下的审核周期与结论，直接来自出厂 api_seller_reviews 面 &middot; 生成于 2026-11-24 16:13:59Z &middot; <code>api_seller_reviews</code></div>
+<h2>卖家</h2>
+<div class=card><table><tr><th>卖家</th><th class=n>挂单总数</th><th class=n>待审核</th><th class=n>已通过</th><th class=n>已驳回</th><th class=n>累计重提次数</th></tr><tr data-seller="usr:dana"><td><code>usr:dana</code></td><td class=n>2</td><td class=n>2</td><td class=n>0</td><td class=n>0</td><td class=n>0</td></tr><tr data-seller="usr:frank"><td><code>usr:frank</code></td><td class=n>1</td><td class=n>1</td><td class=n>0</td><td class=n>0</td><td class=n>0</td></tr></table></div>
+<h2>卖家</h2>
+<div class=card data-seller="usr:dana"><h3>卖家 &middot; <code>usr:dana</code></h3><div class=kpi><div><span>挂单总数</span><b>2</b></div><div><span>待审核</span><b>2</b></div><div><span>已通过</span><b>0</b></div><div><span>已驳回</span><b>0</b></div><div><span>累计重提次数</span><b>0</b></div></div><table><tr><th>挂单号</th><th>挂单键</th><th>标题</th><th class=n>现价（代币）</th><th class=n>货架状态</th><th class=n>审核周期</th><th>审核结论</th><th>驳回原因</th><th>审核时刻</th><th class=n>本条重提次数</th></tr><tr data-state="pending" data-listing="1"><td>1</td><td>risk-scan</td><td>Risk Scan API</td><td><span class="badge pending">待审核</span></td><td>—</td><td>—</td><td class=n>10</td><td class=n>在架</td><td class=n>1</td><td class=n>0</td></tr><tr data-state="pending" data-listing="2"><td>2</td><td>macro-feed</td><td>Macro Feed API</td><td><span class="badge pending">待审核</span></td><td>—</td><td>—</td><td class=n>3</td><td class=n>在架</td><td class=n>1</td><td class=n>0</td></tr></table></div><div class=card data-seller="usr:frank"><h3>卖家 &middot; <code>usr:frank</code></h3><div class=kpi><div><span>挂单总数</span><b>1</b></div><div><span>待审核</span><b>1</b></div><div><span>已通过</span><b>0</b></div><div><span>已驳回</span><b>0</b></div><div><span>累计重提次数</span><b>0</b></div></div><table><tr><th>挂单号</th><th>挂单键</th><th>标题</th><th class=n>现价（代币）</th><th class=n>货架状态</th><th class=n>审核周期</th><th>审核结论</th><th>驳回原因</th><th>审核时刻</th><th class=n>本条重提次数</th></tr><tr data-state="pending" data-listing="3"><td>3</td><td>chart-render</td><td>Chart Render API</td><td><span class="badge pending">待审核</span></td><td>—</td><td>—</td><td class=n>5</td><td class=n>在架</td><td class=n>1</td><td class=n>0</td></tr></table></div>
+<h2>这页的口径法则</h2>
+<div class=card><p class=law>挂单总数等于本页逐行列数，不多不少。</p><p class=law>待审核、已通过、已驳回三个计数，各自等于逐行里该结论的条数。</p><p class=law>驳回原因当且仅当结论为已驳回时出现；待审核与已通过的行印破折号，不印空。</p><p class=law>审核时刻当且仅当结论不是待审核时出现；待审核行没有审核时刻。</p><p class=law>逐行按挂单号升序排列，同一挂单号不会出现两次。</p><p class=law>累计重提次数等于逐行重提次数之和；它不按审核周期折算，也不去掉被驳回的历史。</p><p class=law>本页只读当前周期的结论，历史周期的结论不在本页出现。</p><p class=law>重提次数是挂单自身的累计值，与审核周期相互独立：重提会进入新周期，但计数不减。</p><p class=law>本页是服务挂单的审核进度读数，不构成投资建议，也不是评分或信用评价。</p></div>
+<h2>面自带免责</h2>
+<div class=card><div class=disclaimer>sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice</div>
+<p style="margin-top:10px"><span class=badge>本页由 AI 生成（AIGC 标识）</span></p></div>
+<h2>复现方式</h2>
+<div class=card><code>python tools/seller_reviews_board.py</code></div>
+<footer>本页为本地沙箱读数页，零支付、零外网；只读一次出厂面，不改任何行。</footer>
+</main></body></html>
