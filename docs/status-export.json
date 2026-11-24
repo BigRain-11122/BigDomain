@@ -3,15 +3,15 @@
     "board_pages_skipped": [],
     "current": "2026-11-25 R3433 PRODUCT: 卖家义务合并队列有了可打开的一页 - api_seller_todo （AC-AMTD1..8 自带套件在盘）在 tools/ 与 preview/ 下实测零读者，所以「我现在欠什么、最老的一条等了多久」只能问 shell；tools/seller_todo_board.py 渲染 preview/seller-todo-board.html（6870B）与 json（2588B）：逐卖家汇总行（合计、四族、挂单数、最早时刻与族）加逐卖家卡（7 个 KPI 格与逐行义务表：四族具名徽标、编号、挂单键与标题、对方、起算时刻、明细），九条口径法则、AIGC 标识与面自带免责；中文标签在 preview/seller-todo-board-copy.json，驱动保持 ASCII。读数：SELLER-TODO CHECK PASS fails=0；SUITE PASS 6/6（AC-STDB1..6；AC-STDB2 在套件自建世界重读出厂面对账 sellers_same=True disclaimer_same=True sellers=2 duties=5 disputed=1）；两条实测负控（强改 total_count +7 → AC-STDB2/AC-STDB3 红且 json 逐字节复原；删 law_order → 驱动 rc=3 E_STDB_FACE 且页面 sha256 未动）；接线=注册表 os-seller-todo-board(6)、生产者行、矩阵 801 行 DOC-CURRENT、计数器钉 801/801、入口页 23/23、面扫 13/13 后 --check 21/21、普查 DRIFT-CLEAN、CLOSEOUT-GATE PASS；证据 qa/seller-todo-board-R3433-a.log 与 -b.log 逐字节同一 2050B sha256 582f1138…。",
     "do": "R3422: gave api_public_listings its first openable page - eight KPI cards, one row per listing carrying both review stamps, the refusal reason, the two shipped flags side by side, the provider name and the unified social credit code, ten law sentences and the cross-face law pending==review_queue.pending; AC-PLB1..6 SUITE 6/6 first run, two measured controls, matrix 791 rows DOC-CURRENT, census pinned=791, entry index 23/23, chain read_only=True, face sweep 56/56, closeout PASS files=4960.",
-    "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 mtime] (halves differ: html [2026-11-25 mtime] + json [2026-11-16 commit]; later=html)",
-    "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 mtime] (halves differ: html [2026-11-25 mtime] + json [2026-11-16 commit]; later=html)",
+    "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 commit] (halves differ: html [2026-11-25 commit] + json [2026-11-16 commit]; later=html)",
+    "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 commit] (halves differ: html [2026-11-25 commit] + json [2026-11-16 commit]; later=html)",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
     "latest_artifact_note": "",
     "latest_evidence": "qa/seller-todo-board-R3433-b.log (2050B, 2026-11-25)",
     "newest_pair_on_disk_is_board": false,
     "next_milestone": "[R3433] next window (<=48h): (1) 债务首项=按 state.json log 同轮行重写 backlog.md 顶部 R3431/R3432 两行被写成 '?' 的中文（判据=两行零 '?' 且保留原判据编号）。(2) S4U 落地仍欠一次提权运行（本窗实测 BigDomain-OSLoop=Interactive）。(3) 零读者面重测不假设：本窗汇总面清单余 64 面，下窗先只读普查点名一位（面自带套件在盘且 tools/＋preview/ 实测 rc=1 才动手，空或弱勿取，已开门面不重开）。(4) 载体 state 本窗收口后预计 ~74KB／闸 78500B：下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`，余量不足先折叠，禁手改 state 文件。(5) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(6) tick 口径：本窗 3432→3433。(7) 承账不变：qa_log --ledger-check broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、backlog.md 体量闸。",
-    "next_milestone_due": "2026-11-27T00:53:47+08:00",
-    "updated_at": "2026-11-25T00:53:47+08:00",
+    "next_milestone_due": "2026-11-27T00:54:54+08:00",
+    "updated_at": "2026-11-25T00:54:54+08:00",
     "heartbeat": {
       "tick": 3428,
       "state_tick": 3433,
@@ -27,7 +27,7 @@
       "over7": 0,
       "dup_rows": 0,
       "distinct": 5,
-      "collapsed": 0,
+      "collapsed": 1,
       "labels_refreshed": 0,
       "notes_stale": 0,
       "note_claims": 0,
@@ -36,7 +36,7 @@
     }
   },
   "current": "2026-11-25 R3433 PRODUCT: 卖家义务合并队列有了可打开的一页 - api_seller_todo （AC-AMTD1..8 自带套件在盘）在 tools/ 与 preview/ 下实测零读者，所以「我现在欠什么、最老的一条等了多久」只能问 shell；tools/seller_todo_board.py 渲染 preview/seller-todo-board.html（6870B）与 json（2588B）：逐卖家汇总行（合计、四族、挂单数、最早时刻与族）加逐卖家卡（7 个 KPI 格与逐行义务表：四族具名徽标、编号、挂单键与标题、对方、起算时刻、明细），九条口径法则、AIGC 标识与面自带免责；中文标签在 preview/seller-todo-board-copy.json，驱动保持 ASCII。读数：SELLER-TODO CHECK PASS fails=0；SUITE PASS 6/6（AC-STDB1..6；AC-STDB2 在套件自建世界重读出厂面对账 sellers_same=True disclaimer_same=True sellers=2 duties=5 disputed=1）；两条实测负控（强改 total_count +7 → AC-STDB2/AC-STDB3 红且 json 逐字节复原；删 law_order → 驱动 rc=3 E_STDB_FACE 且页面 sha256 未动）；接线=注册表 os-seller-todo-board(6)、生产者行、矩阵 801 行 DOC-CURRENT、计数器钉 801/801、入口页 23/23、面扫 13/13 后 --check 21/21、普查 DRIFT-CLEAN、CLOSEOUT-GATE PASS；证据 qa/seller-todo-board-R3433-a.log 与 -b.log 逐字节同一 2050B sha256 582f1138…。",
-  "claims": {"claimed": 32, "captured": 20, "contradicted": 0, "uncaptured": 12, "historic": 0, "rows": 98, "present": true, "census_ts": "2026-11-25T00:53:47+08:00"},
+  "claims": {"claimed": 32, "captured": 20, "contradicted": 0, "uncaptured": 12, "historic": 0, "rows": 98, "present": true, "census_ts": "2026-11-25T00:54:54+08:00"},
   "chain": {"present": true, "rows": 98, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -66,12 +66,12 @@
     }
   ],
   "do": "2026-11-25 R3433 PRODUCT: 卖家义务合并队列有了可打开的一页 - api_seller_todo （AC-AMTD1..8 自带套件在盘）在 tools/ 与 preview/ 下实测零读者，所以「我现在欠什么、最老的一条等了多久」只能问 shell；tools/seller_todo_board.py 渲染 preview/seller-todo-board.html（6870B）与 json（2588B）：逐卖家汇总行（合计、四族、挂单数、最早时刻与族）加逐卖家卡（7 个 KPI 格与逐行义务表：四族具名徽标、编号、挂单键与标题、对方、起算时刻、明细），九条口径法则、AIGC 标识与面自带免责；中文标签在 preview/seller-todo-board-copy.json，驱动保持 ASCII。读数：SELLER-TODO CHECK PASS fails=0；SUITE PASS 6/6（AC-STDB1..6；AC-STDB2 在套件自建世界重读出厂面对账 sellers_same=True disclaimer_same=True sellers=2 duties=5 disputed=1）；两条实测负控（强改 total_count +7 → AC-STDB2/AC-STDB3 红且 json 逐字节复原；删 law_order → 驱动 rc=3 E_STDB_FACE 且页面 sha256 未动）；接线=注册表 os-seller-todo-board(6)、生产者行、矩阵 801 行 DOC-CURRENT、计数器钉 801/801、入口页 23/23、面扫 13/13 后 --check 21/21、普查 DRIFT-CLEAN、CLOSEOUT-GATE PASS；证据 qa/seller-todo-board-R3433-a.log 与 -b.log 逐字节同一 2050B sha256 582f1138…。",
-  "export_ts": "2026-11-25T00:53:47+08:00",
-  "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 mtime] (halves differ: html [2026-11-25 mtime] + json [2026-11-16 commit]; later=html)",
+  "export_ts": "2026-11-25T00:54:54+08:00",
+  "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 commit] (halves differ: html [2026-11-25 commit] + json [2026-11-16 commit]; later=html)",
   "latest_evidence": "qa/seller-todo-board-R3433-b.log (2050B, 2026-11-25)",
   "next_milestone": "[R3433] next window (<=48h): (1) 债务首项=按 state.json log 同轮行重写 backlog.md 顶部 R3431/R3432 两行被写成 '?' 的中文（判据=两行零 '?' 且保留原判据编号）。(2) S4U 落地仍欠一次提权运行（本窗实测 BigDomain-OSLoop=Interactive）。(3) 零读者面重测不假设：本窗汇总面清单余 64 面，下窗先只读普查点名一位（面自带套件在盘且 tools/＋preview/ 实测 rc=1 才动手，空或弱勿取，已开门面不重开）。(4) 载体 state 本窗收口后预计 ~74KB／闸 78500B：下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`，余量不足先折叠，禁手改 state 文件。(5) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(6) tick 口径：本窗 3432→3433。(7) 承账不变：qa_log --ledger-check broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、backlog.md 体量闸。",
   "outs": [
-    "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 mtime] (halves differ: html [2026-11-25 mtime] + json [2026-11-16 commit]; later=html)",
+    "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 commit] (halves differ: html [2026-11-25 commit] + json [2026-11-16 commit]; later=html)",
     "preview/seller-reviews-board.html (6308B) + preview/seller-reviews-board.json (1974B) [2026-11-25 mtime]",
     "refund-reasons-R3407.log (2274B)",
     "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-24 commit]; later=html)",
@@ -163,7 +163,7 @@
     "queue_explore_open": 1
   },
   "state_bytes": 71851,
-  "next_milestone_due": "2026-11-27T00:53:47+08:00",
+  "next_milestone_due": "2026-11-27T00:54:54+08:00",
   "heartbeat": {
     "tick": 3428,
     "state_tick": 3433,
@@ -179,7 +179,7 @@
     "over7": 0,
     "dup_rows": 0,
     "distinct": 5,
-    "collapsed": 0,
+    "collapsed": 1,
     "labels_refreshed": 0,
     "notes_stale": 0,
     "note_claims": 0,
