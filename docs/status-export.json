@@ -3,21 +3,21 @@
     "board_pages_skipped": [
       "preview/face-sweep.html (8878B)"
     ],
-    "current": "2026-11-24 R3405 PRODUCT: the marketplace now answers whether the same resident comes back - api_repeat_purchase (live with AC-RPT1..8 and its own suite) had zero readers across tools/ and preview/ and finally has one openable page.",
+    "current": "2026-11-24 R3406 PRODUCT: the buyer side of a star finally has a door - api_buyer_rating_pattern (live with AC-BRP1..8 and its own suite) had zero readers across tools/ and preview/, so the question a seller and a resident both ask (is this buyer consistently harsh or generous, is it stricter than the market, how did its stars spread) had to be rebuilt by hand from raw ratings.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
-    "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-16 commit]; later=html)",
-    "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-16 commit]; later=html)",
+    "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
+    "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
-    "latest_artifact_note": "",
-    "latest_evidence": "qa/similar-listing-board-R3404.log (3289B, 2026-11-24)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/buyer-rating-pattern-board-R3406.log (1492B, 2026-11-24)",
+    "latest_evidence": "qa/buyer-rating-pattern-board-R3406.log (1492B, 2026-11-24)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3405] next window (<=48h): (1) carrier 46432B / gate 78500 (margin 32068B, about eight rounds) - the next window still reads `fold --plan-only` FIRST, never fold a round that is in flight, cut at a round boundary and name the bare rounds the summary displaces. (2) S4U landing is still owed one elevated run (this window measured `LogonType=Interactive`, not elevated). (3) queue hygiene: explore holds only one gated item (merchant id) and the main head is all gated (bootstrap needs the five physical pieces) - needs seeding. (4) same family remains: `api_buyer_rating_pattern` is STILL zero-reader (measured rc=1 this window) and can be given a door next. (5) the export latest-artifact slot is still dragged by mtime ordering (carried from R3400..R3404); `current`/`do` name the round correctly, the slot needs a round anchor. (6) write-order fact reproduced: the chain read `E_STALE` on its first check this window and went `rc=0` only after the order index -> chain -> index (truncated)",
-    "next_milestone_due": "2026-11-26T15:02:21+08:00",
-    "updated_at": "2026-11-24T15:02:21+08:00",
+    "next_milestone": "[R3406] next window (<=48h): (1) 载体 57475B／闸 78500（余量 21025B ≈ 5-6 轮）——下窗仍**先读 `fold --plan-only`**，禁折在飞轮、按轮边界切、摘要句点名被折走的裸轮。 (2) S4U 落地仍欠一次提权运行（本窗实测 `LogonType=Interactive`，本窗未提权）。 (3) 队列卫生：explore 仍仅余一条门控项（商户号），main 队头全门控（bootstrap 需物理件五件）——需补种。 (4) 同族余量：本窗给了 `api_buyer_rating_pattern` 门，下窗应**重测**剩余已交付读数的 `tools/`＋`preview/` 命中数而不假设清零（本窗只验了这一面）。 (5) **导出「最近实物」槽位仍被 mtime 排序牵动**（承 R3400..R3405 项 5）：本窗环内写首元链后该槽位指向 `preview/first-yuan-chain.html` 而非本轮新页；`current`／`do` 三行正确点名 R3406。 (6) 写序事实再现：首元链首次 `--check` 读 `E_STALE`，正法为「链 → 入口页 → 链」三步收敛；无闸阻止下窗再踩。 (7) 承账不变：`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`test_face_sweep` 54/56（AC-FSWB20/20c）。 (8) 提案面 BD-PROP-011 open（窗 11-22~11-28）在册，本窗配额已清。 (9) 诚实承账：物理件五件仍缺——买家仍付不了钱。",
+    "next_milestone_due": "2026-11-26T15:28:53+08:00",
+    "updated_at": "2026-11-24T15:28:53+08:00",
     "heartbeat": {
       "tick": 3395,
-      "state_tick": 3405,
-      "lag": 9,
+      "state_tick": 3406,
+      "lag": 11,
       "verdict": "FLAG",
       "reason": "heartbeat_row_debt"
     },
@@ -29,7 +29,7 @@
       "over7": 0,
       "dup_rows": 0,
       "distinct": 12,
-      "collapsed": 1,
+      "collapsed": 0,
       "labels_refreshed": 0,
       "notes_stale": 0,
       "note_claims": 0,
@@ -37,8 +37,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-24 R3405 PRODUCT: the marketplace now answers whether the same resident comes back - api_repeat_purchase (live with AC-RPT1..8 and its own suite) had zero readers across tools/ and preview/ and finally has one openable page.",
-  "claims": {"claimed": 38, "captured": 4, "contradicted": 4, "uncaptured": 30, "historic": 4, "rows": 90, "present": true, "census_ts": "2026-11-24T15:02:21+08:00"},
+  "current": "2026-11-24 R3406 PRODUCT: the buyer side of a star finally has a door - api_buyer_rating_pattern (live with AC-BRP1..8 and its own suite) had zero readers across tools/ and preview/, so the question a seller and a resident both ask (is this buyer consistently harsh or generous, is it stricter than the market, how did its stars spread) had to be rebuilt by hand from raw ratings.",
+  "claims": {"claimed": 39, "captured": 5, "contradicted": 4, "uncaptured": 30, "historic": 4, "rows": 90, "present": true, "census_ts": "2026-11-24T15:28:53+08:00"},
   "chain": {"present": true, "rows": 90, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -67,14 +67,14 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-24 R3405 PRODUCT: the marketplace now answers whether the same resident comes back - api_repeat_purchase (live with AC-RPT1..8 and its own suite) had zero readers across tools/ and preview/ and finally has one openable page.",
-  "export_ts": "2026-11-24T15:02:21+08:00",
-  "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-16 commit]; later=html)",
-  "latest_evidence": "qa/similar-listing-board-R3404.log (3289B, 2026-11-24)",
-  "next_milestone": "[R3405] next window (<=48h): (1) carrier 46432B / gate 78500 (margin 32068B, about eight rounds) - the next window still reads `fold --plan-only` FIRST, never fold a round that is in flight, cut at a round boundary and name the bare rounds the summary displaces. (2) S4U landing is still owed one elevated run (this window measured `LogonType=Interactive`, not elevated). (3) queue hygiene: explore holds only one gated item (merchant id) and the main head is all gated (bootstrap needs the five physical pieces) - needs seeding. (4) same family remains: `api_buyer_rating_pattern` is STILL zero-reader (measured rc=1 this window) and can be given a door next. (5) the export latest-artifact slot is still dragged by mtime ordering (carried from R3400..R3404); `current`/`do` name the round correctly, the slot needs a round anchor. (6) write-order fact reproduced: the chain read `E_STALE` on its first check this window and went `rc=0` only after the order index -> chain -> index (truncated)",
+  "do": "2026-11-24 R3406 PRODUCT: the buyer side of a star finally has a door - api_buyer_rating_pattern (live with AC-BRP1..8 and its own suite) had zero readers across tools/ and preview/, so the question a seller and a resident both ask (is this buyer consistently harsh or generous, is it stricter than the market, how did its stars spread) had to be rebuilt by hand from raw ratings.",
+  "export_ts": "2026-11-24T15:28:53+08:00",
+  "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
+  "latest_evidence": "qa/buyer-rating-pattern-board-R3406.log (1492B, 2026-11-24)",
+  "next_milestone": "[R3406] next window (<=48h): (1) 载体 57475B／闸 78500（余量 21025B ≈ 5-6 轮）——下窗仍**先读 `fold --plan-only`**，禁折在飞轮、按轮边界切、摘要句点名被折走的裸轮。 (2) S4U 落地仍欠一次提权运行（本窗实测 `LogonType=Interactive`，本窗未提权）。 (3) 队列卫生：explore 仍仅余一条门控项（商户号），main 队头全门控（bootstrap 需物理件五件）——需补种。 (4) 同族余量：本窗给了 `api_buyer_rating_pattern` 门，下窗应**重测**剩余已交付读数的 `tools/`＋`preview/` 命中数而不假设清零（本窗只验了这一面）。 (5) **导出「最近实物」槽位仍被 mtime 排序牵动**（承 R3400..R3405 项 5）：本窗环内写首元链后该槽位指向 `preview/first-yuan-chain.html` 而非本轮新页；`current`／`do` 三行正确点名 R3406。 (6) 写序事实再现：首元链首次 `--check` 读 `E_STALE`，正法为「链 → 入口页 → 链」三步收敛；无闸阻止下窗再踩。 (7) 承账不变：`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`test_face_sweep` 54/56（AC-FSWB20/20c）。 (8) 提案面 BD-PROP-011 open（窗 11-22~11-28）在册，本窗配额已清。 (9) 诚实承账：物理件五件仍缺——买家仍付不了钱。",
   "outs": [
+    "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
     "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-24 commit]; later=html)",
-    "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-16 commit]; later=html)",
     "preview/seller-quality-scorecard.html (4643B) + preview/seller-quality-scorecard.json (1762B) [2026-11-24 mtime]",
     "preview/market-price-percentiles.html (4888B) + preview/market-price-percentiles.json (1374B) [2026-11-24 mtime]",
     "preview/platform-live-report.html (8621B) + preview/platform-live-report.json (6228B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-23 commit]; later=html)",
@@ -147,7 +147,7 @@
       "2026-11-04 R2431 verification window on the item the debt gate named first=yes (reconcile-battery-R2431, carried from R2430): zero product code changed, the R2168 mixed-tree rule honoured. Leg 1 read 542/543 suites with the criteria total 4234 exactly as pre-registered and the only red was reconcile-daily-census at cd7 exit=2 DRIFT-FLAG; the census named the file (qa/battery-R2431-stdout.log, class=cmd-raw) because this window launched the battery with a Start-Process redirect pointed INTO the evidence directory. Repaired at the birth site, never by widening the baseline: the two launcher captures moved to the gitignored logs/ face, after which the census read flags=0 DRIFT-CLEAN with the 529-entry baseline untouched. Retry leg on the repaired tree: RUNNER PASS 543/543 suites plus controls 7/7 in 956.2s at criteria 4234, TMP RECLAIM 932/932. Four follow-up sections: matrix FAILED first on the stale doc without rewriting it, was regenerated stamp-aligned to 52317B, and the re-run read VERDICT R2431 PASS failing=none (fingerprint CLEAN 5 domains, profile byte-identical, census DRIFT-CLEAN). Debt: reconcile-battery-R2431 closed and product-face-R2432 opened first=yes through the shipped CLIs. Zero product points claimed."
     ],
     [
-      "3405",
+      "3406",
       "OSLoop 执行 tick",
       "回购留存看板落盘：api_repeat_purchase 首次开门，AC-RPN1..6 全绿，买家是否回头从此可看"
     ]
@@ -161,22 +161,22 @@
   "self_drive": {
     "window": "2026-11-18..2026-11-24",
     "window_days": 7,
-    "log_lines_in_window": 89,
+    "log_lines_in_window": 101,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 10,
+    "substantive_non_idle_mention_lines": 11,
     "proposals_total": 11,
     "proposals_open": 9,
     "queue_main_open": 6,
     "queue_tech_open": 5,
     "queue_explore_open": 1
   },
-  "state_bytes": 51156,
-  "next_milestone_due": "2026-11-26T15:02:21+08:00",
+  "state_bytes": 57475,
+  "next_milestone_due": "2026-11-26T15:28:53+08:00",
   "heartbeat": {
     "tick": 3395,
-    "state_tick": 3405,
-    "lag": 9,
+    "state_tick": 3406,
+    "lag": 11,
     "verdict": "FLAG",
     "reason": "heartbeat_row_debt"
   },
@@ -188,7 +188,7 @@
     "over7": 0,
     "dup_rows": 0,
     "distinct": 12,
-    "collapsed": 1,
+    "collapsed": 0,
     "labels_refreshed": 0,
     "notes_stale": 0,
     "note_claims": 0,

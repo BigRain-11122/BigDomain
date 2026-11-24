@@ -1,0 +1,20 @@
+R3406 buyer-rating-pattern-board evidence log
+Generated: 2026-11-24
+Face: api_buyer_rating_pattern (AC-BRP1..8, src/sandbox/ledger/test_apimarket_buyerratingpattern.py)
+Page criteria: AC-BRPB1..AC-BRPB6 (pre-registered in src/os/backlog.md R3406 PIN)
+Driver: tools/buyer_rating_pattern_board.py -> preview/buyer-rating-pattern-board.html + .json
+Labels: preview/buyer-rating-pattern-board-copy.json (driver stays ASCII)
+Zero readers before: git grep -F api_buyer_rating_pattern -- tools preview = rc1
+Demo world: 2 buyers (usr:bob, usr:carol), 1 rating each, market avg 4.5
+REPEAT CHECK: BUYER PATTERN CHECK PASS fails=0 html=5542B json=1869B
+SUITE: SUITE PASS 6/6 criteria declared=6 (AC-BRPB1..AC-BRPB6 green on first full run)
+NEGATIVE CONTROL A: deleted label copy key law_delta -> rc=3 E_BRPB_FACE (restored)
+NEGATIVE CONTROL B: forced star_sum +3 -> AC-BRPB2 diffs=[usr:bob] + AC-BRPB3 usr:bob star_sum rc=2 (restored, re-read 6/6)
+REGISTRY: os-buyer-rating-pattern-board -> src/os/test_buyer_rating_pattern_board.py (6)
+MATRIX: DOC-CURRENT 80287 bytes 775 rows
+CENSUS: VERDICT PASS pinned=775 rows=775 readable=775
+ENTRY INDEX: faces=9 defects=0 fingerprint=21960a91e50881eb
+FIRST YUAN CHAIN: VERDICT PASS read_only=True html=4403B
+FACE SWEEP: VERDICT PASS 13/13 fingerprint=cd334600d5757373
+CLOSEOUT GATE: PASS files=4944 census=PASS matrix=DOC-CURRENT
+Honest: already-delivered reading moved onto one openable page; zero new tables; zero payment; five physical pieces still missing.

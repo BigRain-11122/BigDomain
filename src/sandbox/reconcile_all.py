@@ -8167,6 +8167,16 @@ SUITES = [
     # api_board() instead of typing a fixture.
     ("os-repeat-purchase-board",
      os.path.join("..", "os", "test_repeat_purchase_board.py"), 6),
+    # R3406: tools/buyer_rating_pattern_board.py renders the buyer star-giving
+    # tendency face (api_buyer_rating_pattern, AC-BRP1..8) onto one page. The
+    # face had zero readers across tools/ and preview/, so the buyer-side
+    # question - is this resident consistently harsh or generous, is it
+    # stricter than the market, how did its stars spread - could not be opened
+    # by anyone. The suite grades the page, not the face, and re-reads one
+    # envelope per buyer enumerated from api_board() and api_ratings() instead
+    # of typing a fixture.
+    ("os-buyer-rating-pattern-board",
+     os.path.join("..", "os", "test_buyer_rating_pattern_board.py"), 6),
     # R3073: tools/city_face_report.py renders the P-47 item-1 city face and
     # carries its own --check (AC-CFY1..8), but this registry had no row naming
     # it, so the face was graded only by the fail-soft [GATES] sweep - the

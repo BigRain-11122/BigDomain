@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>买家评分倾向板</title>
+<style>
+:root{--ink:#1b1f24;--muted:#66707a;--line:#dfe4ea;--bg:#f7f8fa}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:var(--bg);color:var(--ink);
+font:15px/1.65 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+main{max-width:1080px;margin:0 auto}
+h1{font-size:22px;margin:0 0 4px;font-weight:650}
+h2{font-size:16px;margin:22px 0 8px;font-weight:620}
+.meta{color:var(--muted);font-size:13px;margin-bottom:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;
+padding:14px 16px;margin-bottom:14px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600;font-size:12px}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.kpi{display:flex;gap:12px;flex-wrap:wrap}
+.kpi div{flex:1 1 108px;border:1px solid var(--line);border-radius:8px;
+padding:10px 12px;background:#fff}
+.kpi b{display:block;font-size:19px;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--muted);font-size:12.5px}
+.disclaimer{border-left:3px solid #c9a227;background:#fdf8ea;padding:10px 14px;
+font-size:13px}
+.badge{display:inline-block;margin-right:8px;padding:2px 8px;
+border:1px solid var(--line);border-radius:999px;font-size:12px;
+color:var(--muted)}
+.law{font-size:13px;margin:6px 0}
+footer{color:var(--muted);font-size:12px;margin:20px 0 8px}
+code{font-size:12.5px;background:#f2f4f7;padding:1px 5px;border-radius:4px}
+</style></head><body><main>
+<h1>买家评分倾向板</h1>
+<div class=meta>这位居民是稳定严厉还是稳定宽松、比市场更严吗、星星怎么分布（api_buyer_rating_pattern 出厂读数） &middot; 生成于 2026-11-24 07:16:38Z &middot; <code>api_buyer_rating_pattern</code></div>
+<h2>全市场评分总览</h2>
+<div class=card><div class=kpi><div><span>市场均星（下游参照）</span><b>4.5000</b></div><div><span>评分买家数</span><b>2</b></div><div><span>评分总条数</span><b>2</b></div><div><span>严厉档合计</span><b>0</b></div><div><span>中性档合计</span><b>0</b></div><div><span>宽松档合计</span><b>2</b></div></div></div>
+<h2>逐买家评分倾向</h2>
+<div class=card><table><tr><th>买家</th><th class=n>评分数</th><th class=n>均星</th><th class=n>与市场差</th><th class=n>最低星</th><th class=n>最高星</th><th class=n>严厉档</th><th class=n>中性档</th><th class=n>宽松档</th><th class=n>严厉比</th><th class=n>宽松比</th><th class=n>评分覆盖</th><th class=n>被评挂单</th><th class=n>修订次数</th></tr><tr class="buyer"><td>usr:bob</td><td class=n>1</td><td class=n>4</td><td class=n>-0.5000</td><td class=n>4</td><td class=n>4</td><td class=n>0</td><td class=n>0</td><td class=n>1</td><td class=n>0</td><td class=n>1</td><td class=n>0.5000</td><td class=n>1</td><td class=n>0</td></tr><tr class="buyer"><td>usr:carol</td><td class=n>1</td><td class=n>5</td><td class=n>0.5000</td><td class=n>5</td><td class=n>5</td><td class=n>0</td><td class=n>0</td><td class=n>1</td><td class=n>0</td><td class=n>1</td><td class=n>1</td><td class=n>1</td><td class=n>0</td></tr></table></div>
+<h2>每位买家的星级分布</h2>
+<div class=card><table><tr><th>买家</th><th class=n>1</th><th class=n>2</th><th class=n>3</th><th class=n>4</th><th class=n>5</th></tr><tr class="shape"><td>usr:bob</td><td class=n>0</td><td class=n>0</td><td class=n>0</td><td class=n>1</td><td class=n>0</td></tr><tr class="shape"><td>usr:carol</td><td class=n>0</td><td class=n>0</td><td class=n>0</td><td class=n>0</td><td class=n>1</td></tr></table></div>
+<h2>该面自述法则（照面口径陈列，不另立解释）</h2>
+<div class=card><p class=law>分布守恒：五个星级桶求和 == 评分数 == 严厉档 + 中性档 + 宽松档；严厉＝1-2 星，中性＝3 星，宽松＝4-5 星。</p><p class=law>star_sum 由桶重算（Σ 星级 × 条数）；均星＝star_sum ÷ 评分数，零评分时该值未定义，本页印「-」而不印 0。</p><p class=law>两个比例都是「该档条数 ÷ 评分数」；零评分时未定义，同样印「-」。</p><p class=law>与市场差＝本买家均星 − 市场均星（市场均星按设计取全市场，是唯一跨买家读数）；负值＝比市场更严，正值＝比市场更宽；任一侧不存在时该值未定义。</p><p class=law>评分覆盖＝评分数 ÷ 购买笔数（含已退款购买）；零购买时未定义。覆盖率低于 1 表示买过但没评。</p><p class=law>一切星级走同一条生效星级缝：修订一笔评分会同步移动分布与全部派生值，回滚则整封信封逐字节复原。</p><p class=law>未定义或不存在的一律印「-」，不把空值折成 0，也不合成任何分布。</p></div>
+<h2>风险与合规定性</h2>
+<div class=card><div class=disclaimer>sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice</div>
+<p style="margin-top:10px"><span class=badge>AIGC 生成标识 · 本页数字由沙箱数据面读出，版式由模型生成</span></p></div>
+<h2>复现方式</h2>
+<div class=card><code>python tools/buyer_rating_pattern_board.py</code></div>
+<footer>BigDomain OSLoop &middot; 2026-11-24 07:16:38Z &middot; 本页由 tools/buyer_rating_pattern_board.py 生成，不手改</footer>
+</main></body></html>
