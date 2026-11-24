@@ -290,6 +290,8 @@ PAIR_PRODUCERS = {
     # R3441: the category velocity months page is a single-writer product too.
     "category-velocity-months-board.json":
         "tools/category_velocity_months_board.py",
+    # R3442: the monthly repricing cadence page is a single-writer product too.
+    "seller-price-cadence-board.json": "tools/seller_price_cadence_board.py",
 }
 # R3392 (AC-DIX21 recipe arm). One pair on this page cannot be reproduced by ONE
 # command, and until now the law had only two answers - name a producer or print

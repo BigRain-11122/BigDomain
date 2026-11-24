@@ -8401,6 +8401,15 @@ SUITES = [
     # suite re-reads the face over its own throwaway world.
     ("os-category-velocity-months-board",
      os.path.join("..", "os", "test_category_velocity_months_board.py"), 6),
+    # R3442: tools/seller_price_cadence_board.py renders the monthly repricing
+    # cadence (api_seller_price_cadence_months, AC-SPC1..8) which had zero
+    # readers under tools/, preview/ and src/os; the page prints the market
+    # envelope plus one scoped envelope per published seller - the revision
+    # counts, the up/down split, the pooled average step, the peak month and
+    # the contiguous month grid - and the suite re-reads the face over its own
+    # throwaway world whose repricing rows are made through the shipped doors.
+    ("os-seller-price-cadence-board",
+     os.path.join("..", "os", "test_seller_price_cadence_board.py"), 6),
     # R3436: tools/watch_conversion_board.py renders the watch-to-purchase
     # funnel (api_watch_conversion, AC-WCV1..8) which had zero readers under
     # tools/, preview/ and the report collector; the page prints the market

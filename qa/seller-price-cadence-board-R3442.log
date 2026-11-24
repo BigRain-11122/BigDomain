@@ -1,0 +1,7 @@
+PASS AC-SPCB1 landed=True keys=23 missing=[] extra=[] rows=True seller_rows=True count=3/3 sellers=2 report=True sources=True
+PASS AC-SPCB2 market_same=True months_same=True sellers_same=True disclaimer_same=True months=3 sellers=2
+PASS AC-SPCB3 problems=[] driver_laws=[]
+PASS AC-SPCB4 scopes=True rows=True dash_zero=True laws=True cap=True bars=6/6 empty=True zero=True stand_in_none=False
+PASS AC-SPCB5 aigc=True disclaimer_on_page=True external_links=0 notadvice=True
+PASS AC-SPCB6 check_rc=0 wrote_nothing=True wired=6/6 face_suite=True
+SUITE PASS 6/6 criteria declared=6

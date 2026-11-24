@@ -1,0 +1,174 @@
+{
+ "generated_utc": "2026-11-24 19:46:51Z",
+ "face": "api_seller_price_cadence_months",
+ "scope": "market",
+ "month_count": 3,
+ "active_month_count": 2,
+ "revision_count": 6,
+ "up_count": 4,
+ "down_count": 2,
+ "listing_count": 4,
+ "seller_count": 2,
+ "avg_abs_step_pct": 28.33,
+ "peak_month": "2026-09",
+ "peak_revision_count": 3,
+ "first_month": "2026-09",
+ "last_month": "2026-11",
+ "latest_month_revision_count": 3,
+ "market_avg_abs_step_pct": null,
+ "months": [
+  {
+   "month": "2026-09",
+   "revision_count": 3,
+   "up_count": 2,
+   "down_count": 1,
+   "net_count": 1,
+   "listing_count": 3,
+   "seller_count": 2,
+   "avg_abs_step_pct": 23.33,
+   "running_revision": 3
+  },
+  {
+   "month": "2026-10",
+   "revision_count": 0,
+   "up_count": 0,
+   "down_count": 0,
+   "net_count": 0,
+   "listing_count": 0,
+   "seller_count": 0,
+   "avg_abs_step_pct": null,
+   "running_revision": 3
+  },
+  {
+   "month": "2026-11",
+   "revision_count": 3,
+   "up_count": 2,
+   "down_count": 1,
+   "net_count": 1,
+   "listing_count": 3,
+   "seller_count": 2,
+   "avg_abs_step_pct": 33.33,
+   "running_revision": 6
+  }
+ ],
+ "sellers": [
+  {
+   "dev_account": "usr:dana",
+   "scope": "seller",
+   "month_count": 3,
+   "active_month_count": 2,
+   "revision_count": 3,
+   "up_count": 2,
+   "down_count": 1,
+   "listing_count": 2,
+   "seller_count": 1,
+   "avg_abs_step_pct": 23.33,
+   "peak_month": "2026-09",
+   "peak_revision_count": 2,
+   "first_month": "2026-09",
+   "last_month": "2026-11",
+   "latest_month_revision_count": 1,
+   "market_avg_abs_step_pct": 28.33,
+   "months": [
+    {
+     "month": "2026-09",
+     "revision_count": 2,
+     "up_count": 2,
+     "down_count": 0,
+     "net_count": 2,
+     "listing_count": 2,
+     "seller_count": 1,
+     "avg_abs_step_pct": 22.5,
+     "running_revision": 2
+    },
+    {
+     "month": "2026-10",
+     "revision_count": 0,
+     "up_count": 0,
+     "down_count": 0,
+     "net_count": 0,
+     "listing_count": 0,
+     "seller_count": 0,
+     "avg_abs_step_pct": null,
+     "running_revision": 2
+    },
+    {
+     "month": "2026-11",
+     "revision_count": 1,
+     "up_count": 0,
+     "down_count": 1,
+     "net_count": -1,
+     "listing_count": 1,
+     "seller_count": 1,
+     "avg_abs_step_pct": 25.0,
+     "running_revision": 3
+    }
+   ]
+  },
+  {
+   "dev_account": "usr:frank",
+   "scope": "seller",
+   "month_count": 3,
+   "active_month_count": 2,
+   "revision_count": 3,
+   "up_count": 2,
+   "down_count": 1,
+   "listing_count": 2,
+   "seller_count": 1,
+   "avg_abs_step_pct": 33.33,
+   "peak_month": "2026-11",
+   "peak_revision_count": 2,
+   "first_month": "2026-09",
+   "last_month": "2026-11",
+   "latest_month_revision_count": 2,
+   "market_avg_abs_step_pct": 28.33,
+   "months": [
+    {
+     "month": "2026-09",
+     "revision_count": 1,
+     "up_count": 0,
+     "down_count": 1,
+     "net_count": -1,
+     "listing_count": 1,
+     "seller_count": 1,
+     "avg_abs_step_pct": 25.0,
+     "running_revision": 1
+    },
+    {
+     "month": "2026-10",
+     "revision_count": 0,
+     "up_count": 0,
+     "down_count": 0,
+     "net_count": 0,
+     "listing_count": 0,
+     "seller_count": 0,
+     "avg_abs_step_pct": null,
+     "running_revision": 1
+    },
+    {
+     "month": "2026-11",
+     "revision_count": 2,
+     "up_count": 2,
+     "down_count": 0,
+     "net_count": 2,
+     "listing_count": 2,
+     "seller_count": 1,
+     "avg_abs_step_pct": 37.5,
+     "running_revision": 3
+    }
+   ]
+  }
+ ],
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/seller-price-cadence-board.html",
+ "sources": {
+  "driver": "cd6f4f855a868e28",
+  "copy": "fbdf8ada5646f9ec",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 10447,
+  "json": 3810
+ }
+}
