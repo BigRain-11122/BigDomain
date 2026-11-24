@@ -8302,6 +8302,14 @@ SUITES = [
     # own throwaway demo world.
     ("os-refund-propensity-board",
      os.path.join("..", "os", "test_refund_propensity_board.py"), 6),
+    # R3420: tools/listing_velocity_board.py renders the shelf-to-sale velocity
+    # reading as one market table plus one scoped line per seller.
+    # api_listing_velocity shipped with AC-LV1..8 but had zero readers under
+    # tools/ and preview/, so the page prints the shipped envelope verbatim,
+    # marks an unsold shelf with the dash instead of a zero, and the suite
+    # re-reads the face over its own throwaway demo world.
+    ("os-listing-velocity-board",
+     os.path.join("..", "os", "test_listing_velocity_board.py"), 6),
 
     # R3073: tools/city_face_report.py renders the P-47 item-1 city face and
     # carries its own --check (AC-CFY1..8), but this registry had no row naming

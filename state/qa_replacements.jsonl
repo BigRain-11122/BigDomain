@@ -94,3 +94,5 @@
 {"event": "REPLACED", "name": "buyer-ledger-board-R3415.log", "new_bytes": 990, "new_sha16": "d926a209bcf65d29", "old_bytes": 958, "old_sha16": "c07548159883262c", "prev_kind": "evidence", "ts": "2026-11-24T10:59:08Z"}
 {"event": "REPLACED", "name": "buyer-refund-months-board-R3417.log", "new_bytes": 4389, "new_sha16": "594e98e9e878d4c6", "old_bytes": 3770, "old_sha16": "bb56dd50d7cb6fc1", "prev_kind": "evidence", "ts": "2026-11-24T11:39:33Z"}
 {"event": "REPLACED", "name": "purchase-dossier-board-R3418.log", "new_bytes": 3206, "new_sha16": "393ac90dc7797364", "old_bytes": 2895, "old_sha16": "9d0b5e7504083078", "prev_kind": "evidence", "ts": "2026-11-24T12:03:53Z"}
+{"event": "REPLACED", "name": "listing-velocity-board-R3420.log", "new_bytes": 4933, "new_sha16": "dc0c945c8658de3a", "old_bytes": 4904, "old_sha16": "749c3717e2262a2a", "prev_kind": "evidence", "ts": "2026-11-24T12:46:48Z"}
+{"event": "REPLACED", "name": "listing-velocity-board-R3420.log", "new_bytes": 5006, "new_sha16": "9613b9a0acb7c154", "old_bytes": 4933, "old_sha16": "dc0c945c8658de3a", "prev_kind": "evidence", "ts": "2026-11-24T12:50:22Z"}
