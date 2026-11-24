@@ -8142,6 +8142,14 @@ SUITES = [
     # page, not the face.
     ("os-category-refund-months",
      os.path.join("..", "os", "test_category_refund_months.py"), 6),
+    # R3403: tools/listing_position_board.py renders the category
+    # competitive-standing board (api_listing_position had ZERO readers in
+    # tools/ and preview/ - one docstring sentence names it and reads
+    # nothing), enumerating ids through the shipped api_board() face and
+    # printing the bucket slice it is handed. The suite grades the page, not
+    # the face.
+    ("os-listing-position-board",
+     os.path.join("..", "os", "test_listing_position_board.py"), 6),
     # R3073: tools/city_face_report.py renders the P-47 item-1 city face and
     # carries its own --check (AC-CFY1..8), but this registry had no row naming
     # it, so the face was graded only by the fail-soft [GATES] sweep - the

@@ -191,6 +191,9 @@ PAIR_PRODUCERS = {
     # R3402: same single-writer shape - one render, one json, no back-hop block
     # - so the category x month refund timeline names its producer.
     "category-refund-months.json": "tools/category_refund_months.py",
+    # R3403: same single-writer shape again - one render, one json, no back-hop
+    # block - so the category competitive-standing board names its producer.
+    "listing-position-board.json": "tools/listing_position_board.py",
 }
 # R3392 (AC-DIX21 recipe arm). One pair on this page cannot be reproduced by ONE
 # command, and until now the law had only two answers - name a producer or print
