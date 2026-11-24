@@ -1,23 +1,23 @@
 {
   "ceo_face": {
     "board_pages_skipped": [
-      "preview/face-sweep.html (8913B)"
+      "preview/face-sweep.html (8878B)"
     ],
-    "current": "2026-11-24 R3389 PRODUCT: the market monthly ledger page carries the seventh face - monthly rating flow (ratings, five-star, low-star, raters) - and the carrier was folded at a round boundary to buy back the room.",
+    "current": "2026-11-24 R3390 PRODUCT+ENGINEERING: the CEO UGC face now reads its own count again - the carried red was a printed number aged out of the page, not a weakened door.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
-    "last_artifact": "preview/apimarket-monthly-faces.html (9070B) + preview/apimarket-monthly-faces.json (16463B) [2026-11-24 commit]",
-    "latest_artifact": "preview/apimarket-monthly-faces.html (9070B) + preview/apimarket-monthly-faces.json (16463B) [2026-11-24 commit]",
-    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\apimarket-monthly-faces.html",
+    "last_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 mtime]",
+    "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 mtime]",
+    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ugc-gate-report.html",
     "latest_artifact_note": "",
-    "latest_evidence": "qa/monthly-faces-seven-R3389.log (2898B, 2026-11-24)",
+    "latest_evidence": "qa/ugc-page-drift-R3390.log (2431B, 2026-11-24)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3389] next window (<=48h): (1) **载体已回 69818B／闸 78500（余量 8682B ≈ 5 轮）**——下窗仍先读 `fold --plan-only`；折窗禁折在飞轮、按轮边界切、`--summary-sentence` 点名被折走的裸轮（本轮实证：`--window-slice` 是 1-based 闭区间）。 (2) **S4U 落地仍欠一次提权运行**——`register_loop_task.ps1` 已能自证（`VERIFY logon=S4U interval=PT5M`），非提权会话勿试。 (3) 队列卫生：explore 本窗未补种子（板头 R3388 要求「先补再认领」），tech 仅 L64／L98 带判据可认领，main 队头仍全门控（bootstrap 需物理件五件）。 (4) 下一张可搬的面：`api_market_feed_months` 在演示世界有 3 个月真数据（含 `by_kind` 嵌套），本轮已把嵌套值挡出表格列，但「按月分 kind 的事件构成」还需要一列专用渲染（不是现有八列能表达），属独立读数面工程。 (5) **新发现承账（非本窗引入）**：活树 `tools/face_sweep.py` 读 `VERDICT FAIL 12/13`，红面=`ugc-gate`（`tools/ugc_gate_report.py --check` 读 `checks=18/19 failed=AC-UGR13`，`test_prefix files=460 doors=9 counted=False`）——本窗只改月度页三件与载体，未碰 UGC 面，故列为下窗第一件（先判它是门文件数漂移还是真缺口，禁放宽判据）；收口链自己的 `CHECK sweep` 读 `PASS 21/21`，两者不是同一工具。 (6) 承账不变：`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`BigDomain-OSLoop` LogonType=Interactive。 (7) 提案面 BD-PROP-011 open（窗 11-22~11-28）在册，本窗配额已清。 (8) 诚实承账：物理件五件仍缺——买家仍付不了钱。",
-    "next_milestone_due": "2026-11-26T09:43:28+08:00",
-    "updated_at": "2026-11-24T09:43:28+08:00",
+    "next_milestone": "[R3390] next window (<=48h): (1) **复发根治提案（本轮承账，最具体一件）**：给收口链加一条该页渲染步——`tools/closeout_order.py` 的 `STEPS` 在 `sweep` 之前插一条 `(\"ugc\", \"tools/ugc_gate_report.py\", [])`，让每窗收口自动重渲染 UGC 页，此后新增 test 源不再把红留到下一窗；动它必须同步 `src/os/test_closeout_order.py` 与注册表判据数（先 `git grep` 查 `STEPS` 断言面，禁放宽既有 AC-COO 判据）。 (2) 载体 69818B／闸 78500（余量 8682B ≈ 5 轮）——下窗先读 `fold --plan-only`，禁折在飞轮、按轮边界切、`--summary-sentence` 点名被折走的裸轮。 (3) **S4U 落地仍欠一次提权运行**——`register_loop_task.ps1` 已能自证（`VERIFY logon=S4U interval=PT5M`），非提权会话勿试。 (4) 队列卫生：explore 本窗未补种子（板头 R3388 要求「先补再认领」），tech 仅 L64／L98 带判据可认领，main 队头仍全门控（bootstrap 需物理件五件）。 (5) 承账不变：`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`BigDomain-OSLoop` LogonType=Interactive。 (6) 提案面 BD-PROP-011 open（窗 11-22~11-28）在册，本窗配额已清。 (7) 诚实承账：物理件五件仍缺——买家仍付不了钱。",
+    "next_milestone_due": "2026-11-26T09:59:08+08:00",
+    "updated_at": "2026-11-24T09:59:08+08:00",
     "heartbeat": {
       "tick": 3385,
-      "state_tick": 3389,
-      "lag": 4,
+      "state_tick": 3390,
+      "lag": 5,
       "verdict": "FLAG",
       "reason": "heartbeat_row_debt"
     },
@@ -29,7 +29,7 @@
       "over7": 0,
       "dup_rows": 0,
       "distinct": 9,
-      "collapsed": 1,
+      "collapsed": 0,
       "labels_refreshed": 0,
       "notes_stale": 0,
       "note_claims": 0,
@@ -37,8 +37,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-24 R3389 PRODUCT: the market monthly ledger page carries the seventh face - monthly rating flow (ratings, five-star, low-star, raters) - and the carrier was folded at a round boundary to buy back the room.",
-  "claims": {"claimed": 42, "captured": 2, "contradicted": 4, "uncaptured": 36, "historic": 4, "rows": 89, "present": true, "census_ts": "2026-11-24T09:43:28+08:00"},
+  "current": "2026-11-24 R3390 PRODUCT+ENGINEERING: the CEO UGC face now reads its own count again - the carried red was a printed number aged out of the page, not a weakened door.",
+  "claims": {"claimed": 42, "captured": 2, "contradicted": 4, "uncaptured": 36, "historic": 4, "rows": 89, "present": true, "census_ts": "2026-11-24T09:59:08+08:00"},
   "chain": {"present": true, "rows": 89, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -67,14 +67,14 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-24 R3389 PRODUCT: the market monthly ledger page carries the seventh face - monthly rating flow (ratings, five-star, low-star, raters) - and the carrier was folded at a round boundary to buy back the room.",
-  "export_ts": "2026-11-24T09:43:28+08:00",
-  "latest_artifact": "preview/apimarket-monthly-faces.html (9070B) + preview/apimarket-monthly-faces.json (16463B) [2026-11-24 commit]",
-  "latest_evidence": "qa/monthly-faces-seven-R3389.log (2898B, 2026-11-24)",
-  "next_milestone": "[R3389] next window (<=48h): (1) **载体已回 69818B／闸 78500（余量 8682B ≈ 5 轮）**——下窗仍先读 `fold --plan-only`；折窗禁折在飞轮、按轮边界切、`--summary-sentence` 点名被折走的裸轮（本轮实证：`--window-slice` 是 1-based 闭区间）。 (2) **S4U 落地仍欠一次提权运行**——`register_loop_task.ps1` 已能自证（`VERIFY logon=S4U interval=PT5M`），非提权会话勿试。 (3) 队列卫生：explore 本窗未补种子（板头 R3388 要求「先补再认领」），tech 仅 L64／L98 带判据可认领，main 队头仍全门控（bootstrap 需物理件五件）。 (4) 下一张可搬的面：`api_market_feed_months` 在演示世界有 3 个月真数据（含 `by_kind` 嵌套），本轮已把嵌套值挡出表格列，但「按月分 kind 的事件构成」还需要一列专用渲染（不是现有八列能表达），属独立读数面工程。 (5) **新发现承账（非本窗引入）**：活树 `tools/face_sweep.py` 读 `VERDICT FAIL 12/13`，红面=`ugc-gate`（`tools/ugc_gate_report.py --check` 读 `checks=18/19 failed=AC-UGR13`，`test_prefix files=460 doors=9 counted=False`）——本窗只改月度页三件与载体，未碰 UGC 面，故列为下窗第一件（先判它是门文件数漂移还是真缺口，禁放宽判据）；收口链自己的 `CHECK sweep` 读 `PASS 21/21`，两者不是同一工具。 (6) 承账不变：`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`BigDomain-OSLoop` LogonType=Interactive。 (7) 提案面 BD-PROP-011 open（窗 11-22~11-28）在册，本窗配额已清。 (8) 诚实承账：物理件五件仍缺——买家仍付不了钱。",
+  "do": "2026-11-24 R3390 PRODUCT+ENGINEERING: the CEO UGC face now reads its own count again - the carried red was a printed number aged out of the page, not a weakened door.",
+  "export_ts": "2026-11-24T09:59:08+08:00",
+  "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 mtime]",
+  "latest_evidence": "qa/ugc-page-drift-R3390.log (2431B, 2026-11-24)",
+  "next_milestone": "[R3390] next window (<=48h): (1) **复发根治提案（本轮承账，最具体一件）**：给收口链加一条该页渲染步——`tools/closeout_order.py` 的 `STEPS` 在 `sweep` 之前插一条 `(\"ugc\", \"tools/ugc_gate_report.py\", [])`，让每窗收口自动重渲染 UGC 页，此后新增 test 源不再把红留到下一窗；动它必须同步 `src/os/test_closeout_order.py` 与注册表判据数（先 `git grep` 查 `STEPS` 断言面，禁放宽既有 AC-COO 判据）。 (2) 载体 69818B／闸 78500（余量 8682B ≈ 5 轮）——下窗先读 `fold --plan-only`，禁折在飞轮、按轮边界切、`--summary-sentence` 点名被折走的裸轮。 (3) **S4U 落地仍欠一次提权运行**——`register_loop_task.ps1` 已能自证（`VERIFY logon=S4U interval=PT5M`），非提权会话勿试。 (4) 队列卫生：explore 本窗未补种子（板头 R3388 要求「先补再认领」），tech 仅 L64／L98 带判据可认领，main 队头仍全门控（bootstrap 需物理件五件）。 (5) 承账不变：`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`BigDomain-OSLoop` LogonType=Interactive。 (6) 提案面 BD-PROP-011 open（窗 11-22~11-28）在册，本窗配额已清。 (7) 诚实承账：物理件五件仍缺——买家仍付不了钱。",
   "outs": [
+    "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 mtime]",
     "preview/apimarket-monthly-faces.html (9070B) + preview/apimarket-monthly-faces.json (16463B) [2026-11-24 commit]",
-    "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-23 commit]; later=html)",
     "preview/platform-live-report.html (8621B) + preview/platform-live-report.json (6228B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-23 commit]; later=html)",
     "preview/ledger-reconcile-face.html (8656B) + preview/ledger-reconcile-face.json (6151B) [2026-11-24 commit]",
     "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-23 mtime] (halves differ: html [2026-11-23 mtime] + json [2026-11-16 commit]; later=html)",
@@ -144,7 +144,7 @@
       "2026-11-04 R2431 verification window on the item the debt gate named first=yes (reconcile-battery-R2431, carried from R2430): zero product code changed, the R2168 mixed-tree rule honoured. Leg 1 read 542/543 suites with the criteria total 4234 exactly as pre-registered and the only red was reconcile-daily-census at cd7 exit=2 DRIFT-FLAG; the census named the file (qa/battery-R2431-stdout.log, class=cmd-raw) because this window launched the battery with a Start-Process redirect pointed INTO the evidence directory. Repaired at the birth site, never by widening the baseline: the two launcher captures moved to the gitignored logs/ face, after which the census read flags=0 DRIFT-CLEAN with the 529-entry baseline untouched. Retry leg on the repaired tree: RUNNER PASS 543/543 suites plus controls 7/7 in 956.2s at criteria 4234, TMP RECLAIM 932/932. Four follow-up sections: matrix FAILED first on the stale doc without rewriting it, was regenerated stamp-aligned to 52317B, and the re-run read VERDICT R2431 PASS failing=none (fingerprint CLEAN 5 domains, profile byte-identical, census DRIFT-CLEAN). Debt: reconcile-battery-R2431 closed and product-face-R2432 opened first=yes through the shipped CLIs. Zero product points claimed."
     ],
     [
-      "3389",
+      "3390",
       "OSLoop 执行 tick",
       "a failed fold state write takes the appended archive block back and removes the backup"
     ]
@@ -158,22 +158,22 @@
   "self_drive": {
     "window": "2026-11-18..2026-11-24",
     "window_days": 7,
-    "log_lines_in_window": 164,
+    "log_lines_in_window": 176,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 21,
+    "substantive_non_idle_mention_lines": 22,
     "proposals_total": 11,
     "proposals_open": 9,
     "queue_main_open": 6,
     "queue_tech_open": 5,
     "queue_explore_open": 1
   },
-  "state_bytes": 74800,
-  "next_milestone_due": "2026-11-26T09:43:28+08:00",
+  "state_bytes": 77466,
+  "next_milestone_due": "2026-11-26T09:59:08+08:00",
   "heartbeat": {
     "tick": 3385,
-    "state_tick": 3389,
-    "lag": 4,
+    "state_tick": 3390,
+    "lag": 5,
     "verdict": "FLAG",
     "reason": "heartbeat_row_debt"
   },
@@ -185,7 +185,7 @@
     "over7": 0,
     "dup_rows": 0,
     "distinct": 9,
-    "collapsed": 1,
+    "collapsed": 0,
     "labels_refreshed": 0,
     "notes_stale": 0,
     "note_claims": 0,

@@ -1,0 +1,30 @@
+R3390 evidence: the UGC gate face was red on its own printed count, not on a hole
+board item: R3389 next-window (5) - face_sweep VERDICT FAIL 12/13, only red face ugc-gate
+BEFORE, face sweep row:
+  face ugc-gate exit=2 verdict=PASS AC-UGR9 json_sizes={'html': 28799, 'json': 20170} disk=28799/20170
+BEFORE, the driver own --check last line:
+  VERDICT CHECK-MISMATCH checks=18/19 failed=AC-UGR13
+BEFORE, the failing criterion line (page says 459, live walk says 460):
+  FAIL AC-UGR13 test_prefix files=460 doors=9 counted=False unnamed=0 mentions=0 mentions_counted=True mentions_unnamed=0
+BEFORE, the page printed number:
+  refused test_prefix: 459 sources
+SAME TOOL, live walk through the shipped function:
+  test_prefix 460 / vendor_dir 455 / read 187 (VENDOR_DIRS pruned as shipped)
+TREE ARITHMETIC (git, not prose):
+  git ls-tree -r 71afd180 -- src/sandbox  | test_*.py = 459
+  git ls-tree -r HEAD      -- src/sandbox  | test_*.py = 460
+  difference = exactly one path: src/sandbox/ledger/test_apimarket_marketticketsizemonths.py (R3387 suite)
+OTHER 18 CRITERIA (must_refuse / site set / decisions / vendor coverage): all PASS, so the door itself did not weaken
+VERDICT OF THE DIAGNOSIS: page staleness (printed count drift), not a content-safety gap
+REPAIR, shipped writer only (no criterion edited, no arithmetic touched):
+  python tools/ugc_gate_report.py        -> WROTE preview/ugc-gate-report.html + preview/ugc-gate-report.json
+  python tools/ugc_gate_report.py --check -> VERDICT PASS checks=19/19 failed=(none) rc=0
+  AC-UGR13 after: test_prefix files=460 doors=9 counted=True unnamed=0 mentions=0 mentions_counted=True mentions_unnamed=0
+RING: the re-render moved a quoted face size, so entry-index reddened 23/23 -> 21/23 as the ring predicts
+  python tools/closeout_order.py --write -> VERDICT PASS passes=2 steps=5 checks=4/4 transient_steps=0
+  PASS2 sweep rc=0 VERDICT PASS 13/13 fingerprint=e8776dcef0a70086
+  PASS2 CHECK index PASS 23/23 ; CHECK chain PASS ; CHECK sweep PASS 21/21 ; CHECK export PASS
+RECURRENCE, stated not fixed: any new or renamed test_ source under src/sandbox moves this printed count,
+  and no step of the closeout ring re-renders this page, so the same red returns by construction
+HONEST: zero new readings, zero new tables, zero business semantics; the page now says what the walk says
+ZERO payment capability and no network beyond loopback; the five physical pieces are still missing
