@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>月度买家军团：新客与回头客</title>
+<style>
+:root{--ink:#1b1f24;--muted:#66707a;--line:#dfe4ea;--bg:#f7f8fa}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:var(--bg);color:var(--ink);
+font:15px/1.65 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+main{max-width:1080px;margin:0 auto}
+h1{font-size:22px;margin:0 0 4px;font-weight:650}
+h2{font-size:16px;margin:22px 0 8px;font-weight:620}
+.meta{color:var(--muted);font-size:13px;margin-bottom:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;
+padding:14px 16px;margin-bottom:14px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600;font-size:12px}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+td.neg{color:#b42318}
+.kpi{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.kpi div{flex:1 1 108px;border:1px solid var(--line);border-radius:8px;
+padding:10px 12px;background:#fff}
+.kpi b{display:block;font-size:19px;font-variant-numeric:tabular-nums}
+.kpi b.neg{color:#b42318}
+.kpi span{color:var(--muted);font-size:12.5px}
+.bar{height:7px;background:#eef1f5;border-radius:4px;min-width:90px}
+.bar i{display:block;height:7px;background:#3b6ea5;border-radius:4px}
+.bar i.ret{background:#c9a227}
+.disclaimer{border-left:3px solid #c9a227;background:#fdf8ea;padding:10px 14px;
+font-size:13px}
+.badge{display:inline-block;margin-right:8px;padding:2px 8px;
+border:1px solid var(--line);border-radius:999px;font-size:12px;
+color:var(--muted)}
+.law{font-size:13px;margin:6px 0}
+.note{color:var(--muted);font-size:12.5px;margin-top:8px}
+.empty{color:var(--muted);font-size:13px}
+footer{color:var(--muted);font-size:12px;margin:20px 0 8px}
+code{font-size:12.5px;background:#f2f4f7;padding:1px 5px;border-radius:4px}
+</style></head><body><main>
+<h1>月度买家军团：新客与回头客</h1>
+<div class=meta>每月成交里，多少买家是第一次来，多少人又回来了 &middot; 生成于 2026-11-24 10:03:57Z &middot; <code>api_market_buyer_cohort</code></div>
+<div class=kpi><div><span>月份数</span><b>1</b></div><div><span>成交笔数</span><b>2</b></div><div><span>毛收入</span><b>13</b></div><div><span>买家数</span><b>2</b></div><div><span>回头客数</span><b>0</b></div><div><span>回头客率</span><b>0.0</b></div><div><span>回头客成交笔数</span><b>0</b></div></div>
+<h2>逐月分层表</h2>
+<div class=card><table><tr><th>月份</th><th>成交笔数</th><th>毛收入</th><th>买家数</th><th>新客数</th><th>回头客数</th><th>新客笔数</th><th>回头笔数</th><th>人均笔数</th></tr><tr class="month" data-month="2026-09"><td>2026-09</td><td class=n>2</td><td class=n>13</td><td class=n>2</td><td class=n>2</td><td class=n>0</td><td class=n>2</td><td class=n>0</td><td class=n>1.00</td></tr></table><p class=note>条形是当月成交笔数在新客与回头客之间的构成宽度，不是份额百分比；蓝=新客笔数，金=回头笔数。</p></div>
+<h2>每月成交笔数构成</h2>
+<div class=card><p class="split" data-month="2026-09">2026-09：新客 2 笔 / 回头 0 笔，合计 2 笔</p><div class="bar"><i style="width:100%"></i><i class="ret" style="width:0%"></i></div><p class="empty repeat-empty">本演示世界里没有任何买家跨月复购：回头客数为 0，这是如实读数而不是缺数。</p></div>
+<h2>口径法则</h2>
+<div class=card><p class=law>新客=该买家在本世界内最早净成交月恰为本月的那些买家；同一个买家只会被计为新客一次。</p><p class=law>已退款的购买不算成交：退款会把该买家从当月的成交里移除；若当月是他的最早成交月，其新客起点顺延到他真正付款的下一个月；整月全退款的月份会整行消失，而不是印一行 0。</p><p class=law>回头客=跨月复购的买家，不是终身复购口径；本页不合并任何月份。</p><p class=law>本页不重算任何市场规则：毛收入与各项计数逐项来自已交付读数面，缺数印「-」不印 0。</p><p class=law>本页是沙箱读数展示，不构成投顾口径，也不是真实交易凭证。</p></div>
+<h2>本面自带的免责句</h2>
+<div class=card><div class=disclaimer>sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice</div>
+<p style="margin-top:10px"><span class=badge>AIGC 生成内容标识：本页由沙箱演示数据自动生成，非真实交易记录</span></p></div>
+<h2>复现方式</h2>
+<div class=card><code>python tools/buyer_cohort_board.py</code></div>
+<footer>BigDomain OSLoop &middot; 2026-11-24 10:03:57Z &middot; 本页由 tools/buyer_cohort_board.py 生成，不手改</footer>
+</main></body></html>

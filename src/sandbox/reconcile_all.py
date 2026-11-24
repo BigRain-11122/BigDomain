@@ -8240,6 +8240,17 @@ SUITES = [
     # the in-memory shortfall probe.
     ("os-refund-exposure-board",
      os.path.join("..", "os", "test_refund_exposure_board.py"), 6),
+    # R3413: tools/buyer_cohort_board.py renders the monthly buyer cohort (new
+    # versus returning) that shipped with AC-MBC1..8 but answered zero readers
+    # under tools/ and preview/. The page shows, month by month, how much of the
+    # paid business came from first timers and how much from residents who came
+    # back, so the operator's monthly cohort question gets a row instead of a
+    # shell session. The suite re-reads the shipped face over its own throwaway
+    # demo world (never a typed fixture) and pins both partitions, the per-buyer
+    # average, the envelope sums, month order and shape, first/last month, the
+    # explicit zero-returning sentence and the in-memory empty probe.
+    ("os-buyer-cohort-board",
+     os.path.join("..", "os", "test_buyer_cohort_board.py"), 6),
     # R3073: tools/city_face_report.py renders the P-47 item-1 city face and
     # carries its own --check (AC-CFY1..8), but this registry had no row naming
     # it, so the face was graded only by the fail-soft [GATES] sweep - the

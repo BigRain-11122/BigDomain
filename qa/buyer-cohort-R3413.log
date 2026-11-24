@@ -1,0 +1,28 @@
+R3413 buyer cohort page — evidence (tools/buyer_cohort_board.py)
+face=api_market_buyer_cohort readers_before=0 (git grep -l -F over tools/ preview/ rc=1, four names)
+PIN row landed in src/os/backlog.md before any product code (AC-MBCB1..6)
+demo world: month_count=1 purchase_count=2 gross=13 buyer_count=2 repeat_buyer_count=0
+             repeat_rate=0.0 returning_purchase_count=0 first=last=2026-09
+             row 2026-09: 2 purchases / gross 13 / 2 buyers / 2 new / 0 returning
+                          / 2 new purchases / 0 returning purchases / avg 1.0
+render: BUYER-COHORT preview/buyer-cohort.html bytes=4956 months=1 purchases=2 buyers=2
+check : BUYER-COHORT CHECK PASS fails=0 html=4956B json=1111B
+suite : SUITE PASS 6/6 criteria declared=6 (AC-MBCB1..6)
+        AC-MBCB2 identical=True disclaimer_same=True months=1 purchases=2 buyers=2
+        AC-MBCB3 problems=[]
+        AC-MBCB4 rows=1/1 sections=True laws=True/True/True zero_sentence=True
+                 empty_probe=True stand_in_none=False
+        AC-MBCB5 aigc=True disclaimer_on_page=True external_links=0
+        AC-MBCB6 check_rc=0 wrote_nothing=True wired=6/6 face_suite=True
+registry: os-buyer-cohort-board(6) in src/sandbox/reconcile_all.py
+producer: preview/buyer-cohort.json -> tools/buyer_cohort_board.py in PAIR_PRODUCERS
+matrix  : WRITTEN docs/sandbox-suite-matrix.md 80942 bytes 782 rows; --check DOC-CURRENT
+census  : REGISTRY COUNTER CENSUS rows=782 readable=782 unparsed=0 silent=0
+          VERDICT PASS pinned=782
+chain   : VERDICT PASS legs=2 entries=2 tx=1 reconcile_rc=0 html=4403B read_only=True
+entry   : DELIVERABLE INDEX faces=9 defects=0 fingerprint=22950301e887a6e3 index=46145B
+sweep   : VERDICT PASS 13/13 fingerprint=d3b10f6ab3aec8b5
+honest  : zero new tables, zero new semantics, zero payment, no network beyond loopback;
+          the demo world has no returning buyer, so the landed page prints the explicit
+          zero-returning sentence and the empty-world arm is proved in memory only;
+          five physical pieces still missing, buyers still cannot pay.
