@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>卖家月度回复节奏对账页</title>
+<style>
+:root{--ink:#1b1f24;--muted:#66707a;--line:#dfe4ea;--bg:#f7f8fa}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:var(--bg);color:var(--ink);
+font:15px/1.65 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+main{max-width:1180px;margin:0 auto}
+h1{font-size:22px;margin:0 0 4px;font-weight:650}
+h2{font-size:16px;margin:22px 0 8px;font-weight:620}
+h3{font-size:14px;margin:16px 0 8px;font-weight:620;color:#3c4653}
+.meta{color:var(--muted);font-size:13px;margin-bottom:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;
+padding:14px 16px;margin-bottom:14px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600;font-size:12px}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.kpi{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.kpi div{flex:1 1 104px;border:1px solid var(--line);border-radius:8px;
+padding:10px 12px;background:#fff}
+.kpi b{display:block;font-size:18px;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--muted);font-size:12.5px}
+.disclaimer{border-left:3px solid #c9a227;background:#fdf8ea;padding:10px 14px;
+font-size:13px}
+.badge{display:inline-block;margin-right:8px;padding:2px 8px;
+border:1px solid var(--line);border-radius:999px;font-size:12px;
+color:var(--muted)}
+.badge.on{border-color:#9ad1a7;background:#eef9f1;color:#1f6b33}
+.badge.off{border-color:#e4b9b9;background:#fdf1f1;color:#8a2323}
+.bar{position:relative;height:10px;min-width:120px;max-width:240px;
+border:1px solid var(--line);border-radius:999px;background:#f2f4f7}
+.bar i{position:absolute;top:-3px;width:3px;height:16px;background:#3c4653}
+.law{font-size:13px;margin:6px 0}
+.empty{color:#b42318}
+.quiet-row td{color:var(--muted)}
+.cap{color:var(--muted);font-size:12px;margin:8px 0 0}
+footer{color:var(--muted);font-size:12px;margin:18px 0 0}
+</style></head><body><main>
+<h1>卖家月度回复节奏对账页</h1>
+<div class=meta>评分回复按回复自身时间戳归月：同月答复、跨月补答与沉默月各归各位 &middot; 生成于 2026-11-24 20:38:11Z &middot; <code>api_seller_reply_months</code></div>
+<h2>市场全量</h2>
+<div class=card data-scope="market">
+<h3>市场 <span class=badge>峰值月 2026-09</span> <span class=badge off>最老未回帖 2026-11-10T08:00:00Z</span></h3>
+<div class=kpi><div><span>评分总数</span><b>3</b></div><div><span>已回复</span><b>2</b></div><div><span>未回复</span><b>1</b></div><div><span>回复覆盖率</span><b>0.6667</b></div><div><span>跨月补答</span><b>1</b></div><div><span>同月答复</span><b>1</b></div><div><span>覆盖月数</span><b>3</b></div><div><span>有回帖月数</span><b>2</b></div><div><span>峰值月</span><b>2026-09</b></div><div><span>末月回复数</span><b>1</b></div><div><span>最快秒</span><b>658800</b></div><div><span>最慢秒</span><b>5065200</b></div><div><span>均值秒</span><b>2862000</b></div><div><span>最老未回帖</span><b>2026-11-10T08:00:00Z</b></div></div>
+<table><thead><tr><th>月份</th><th class="n">回复数</th><th class="n">跨月补答</th><th class="n">同月答复</th><th class="n">买家数</th><th class="n">货架数</th><th class="n">最快秒</th><th class="n">最慢秒</th><th class="n">均值秒</th><th class="n">累计回复</th><th class="n">状态</th><th class="n">位置条</th></tr></thead><tbody><tr data-month="2026-09"><td>2026-09</td><td class="n">1</td><td class="n">0</td><td class="n">1</td><td class="n">1</td><td class="n">1</td><td class="n">658800</td><td class="n">658800</td><td class="n">658800</td><td class="n">1</td><td><span class="badge on">同月答复</span></td><td><div class="bar"><i style="left:100.0%"></i></div></td></tr><tr data-month="2026-10" class="quiet-row"><td>2026-10</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">1</td><td><span class="badge">沉默月</span></td><td>—</td></tr><tr data-month="2026-11"><td>2026-11</td><td class="n">1</td><td class="n">1</td><td class="n">0</td><td class="n">1</td><td class="n">1</td><td class="n">5065200</td><td class="n">5065200</td><td class="n">5065200</td><td class="n">2</td><td><span class="badge off">跨月补答</span></td><td><div class="bar"><i style="left:100.0%"></i></div></td></tr></tbody></table>
+</div>
+
+<h2>逐个卖家</h2>
+<div class=card data-scope="usr:dana">
+<h3>卖家 usr:dana <span class=badge>峰值月 2026-09</span> <span class=badge>市场均值秒 2862000</span></h3>
+<div class=kpi><div><span>评分总数</span><b>2</b></div><div><span>已回复</span><b>2</b></div><div><span>未回复</span><b>0</b></div><div><span>回复覆盖率</span><b>1</b></div><div><span>跨月补答</span><b>1</b></div><div><span>同月答复</span><b>1</b></div><div><span>覆盖月数</span><b>3</b></div><div><span>有回帖月数</span><b>2</b></div><div><span>峰值月</span><b>2026-09</b></div><div><span>末月回复数</span><b>1</b></div><div><span>最快秒</span><b>658800</b></div><div><span>最慢秒</span><b>5065200</b></div><div><span>均值秒</span><b>2862000</b></div><div><span>最老未回帖</span><b>—</b></div></div>
+<table><thead><tr><th>月份</th><th class="n">回复数</th><th class="n">跨月补答</th><th class="n">同月答复</th><th class="n">买家数</th><th class="n">货架数</th><th class="n">最快秒</th><th class="n">最慢秒</th><th class="n">均值秒</th><th class="n">累计回复</th><th class="n">状态</th><th class="n">位置条</th></tr></thead><tbody><tr data-month="2026-09"><td>2026-09</td><td class="n">1</td><td class="n">0</td><td class="n">1</td><td class="n">1</td><td class="n">1</td><td class="n">658800</td><td class="n">658800</td><td class="n">658800</td><td class="n">1</td><td><span class="badge on">同月答复</span></td><td><div class="bar"><i style="left:100.0%"></i></div></td></tr><tr data-month="2026-10" class="quiet-row"><td>2026-10</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">1</td><td><span class="badge">沉默月</span></td><td>—</td></tr><tr data-month="2026-11"><td>2026-11</td><td class="n">1</td><td class="n">1</td><td class="n">0</td><td class="n">1</td><td class="n">1</td><td class="n">5065200</td><td class="n">5065200</td><td class="n">5065200</td><td class="n">2</td><td><span class="badge off">跨月补答</span></td><td><div class="bar"><i style="left:100.0%"></i></div></td></tr></tbody></table>
+</div>
+<div class=card data-scope="usr:frank">
+<h3>卖家 usr:frank <span class=badge off>最老未回帖 2026-11-10T08:00:00Z</span> <span class=badge>市场均值秒 2862000</span></h3>
+<div class=kpi><div><span>评分总数</span><b>1</b></div><div><span>已回复</span><b>0</b></div><div><span>未回复</span><b>1</b></div><div><span>回复覆盖率</span><b>0</b></div><div><span>跨月补答</span><b>0</b></div><div><span>同月答复</span><b>0</b></div><div><span>覆盖月数</span><b>0</b></div><div><span>有回帖月数</span><b>0</b></div><div><span>峰值月</span><b>—</b></div><div><span>末月回复数</span><b>0</b></div><div><span>最快秒</span><b>—</b></div><div><span>最慢秒</span><b>—</b></div><div><span>均值秒</span><b>—</b></div><div><span>最老未回帖</span><b>2026-11-10T08:00:00Z</b></div></div>
+<p class=empty>该作用域没有一条评分回复，这里是诚实的空集。</p>
+</div>
+
+<h2>页面律条</h2>
+<div class=card><p class=law>律一：评分总数等于已回复加未回复，三项互不重叠。</p><p class=law>律二：回复覆盖率等于已回复除评分总数，四舍五入四位；没有评分时为空而不是零。</p><p class=law>律三：月网格自首个回帖月连续到末个回帖月，中间没有回帖的月印诚实零行。</p><p class=law>律四：逐月回复数等于跨月补答加同月答复，补答按评分被留下的月份与回复月份不同来判定。</p><p class=law>律五：逐月最快不慢于均值，均值不慢于最慢；零回帖月的三项时延为空。</p><p class=law>律六：累计回复单调不减，末行等于信封里的已回复总数。</p><p class=law>律七：峰值月取回复数最大的月份，并列时取更早的月。</p><p class=law>律八：卖家作用域带市场均值秒作为基准，市场作用域不与自己比较；逐卖家评分与回复计数求和等于市场。</p><p class=law>律九：位置条只表示宽度，不是占比，也不含任何预测。</p><p class=law>律十：没有评分或没有回帖的作用域印具名安静句，不印空表。</p><p class=law>律十一：本面是开发者 API 市场的服务挂牌面，不构成投资建议。</p>
+<p class=cap>位置条只标该月回复数占峰值月回复数的宽度，页面不把它读成占比。</p></div>
+<h2>免责声明</h2>
+<div class=card><div class=disclaimer>sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice</div>
+<p style="margin-top:10px"><span class=badge>AIGC 生成标识：本页由沙箱代码生成，数据来自本地沙箱演示世界</span></p></div>
+<h2>复现命令</h2>
+<div class=card><code>python tools/seller_reply_months_board.py</code></div>
+<footer>BigDomain OSLoop &middot; 2026-11-24 20:38:11Z &middot; 本页只读，不发起任何网络请求</footer>
+</main></body></html>

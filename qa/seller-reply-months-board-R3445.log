@@ -1,0 +1,7 @@
+PASS AC-SRPM1 landed=True payload_missing=[] payload_extra=[] market=True rows=6 sellers=2 report=True sources=True
+PASS AC-SRPM2 market_same=True sellers_same=True disclaimer_same=True order_same=True rows=3 sellers=2
+PASS AC-SRPM3 driver_problems=0 forged_problems=3 split=True running=[1, 1, 2] peak=True coverage=True
+PASS AC-SRPM4 marked=True badges=True no_bare_none=True caption=True bars=4/4 kpi=True empty=True dash=—
+PASS AC-SRPM5 aigc=True disclaimer_verbatim=True notadvice=True zero_links=True
+PASS AC-SRPM6 readonly=True check_rc=0 registered=True declared_hit=True face_suite=True
+SUITE PASS 6/6 declared=6 row=os-seller-reply-months-board

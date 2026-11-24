@@ -8420,6 +8420,17 @@ SUITES = [
     # shipped doors under its own pinned clock.
     ("os-seller-price-demand-board",
      os.path.join("..", "os", "test_seller_price_demand_board.py"), 6),
+    # R3445: tools/seller_reply_months_board.py renders the monthly rating
+    # reply cadence (api_seller_reply_months, AC-SRM1..8) which had zero
+    # readers under tools/, preview/ and src/os; the page carries the
+    # same-month and backlog split, the contiguous month grid with its honest
+    # zero rows, the per-month fastest/mean/slowest latencies, the monotone
+    # accumulator, the earliest peak and the market benchmark every seller
+    # scope carries, and the suite re-reads the face over its own throwaway
+    # world whose rows are made through the shipped purchase, rate and reply
+    # doors under its own pinned clock.
+    ("os-seller-reply-months-board",
+     os.path.join("..", "os", "test_seller_reply_months_board.py"), 6),
     # R3443: tools/ticket_size_board.py renders the achieved ticket size
     # (api_market_ticket_size and api_market_ticket_size_months, AC-MTM1..8)
     # which had zero readers under tools/, preview/ and src/os; the page prints

@@ -1,0 +1,180 @@
+{
+ "generated_utc": "2026-11-24 20:38:11Z",
+ "face": "api_seller_reply_months",
+ "scope": "market",
+ "market": {
+  "dev_account": null,
+  "scope": "market",
+  "owned_listing_count": 3,
+  "market_mean_seconds": null,
+  "rating_count": 3,
+  "replied_count": 2,
+  "unreplied_count": 1,
+  "reply_coverage": 0.6667,
+  "backlog_reply_count": 1,
+  "same_month_reply_count": 1,
+  "buyer_count": 2,
+  "listing_count": 2,
+  "month_count": 3,
+  "active_month_count": 2,
+  "peak_month": "2026-09",
+  "peak_replied_count": 1,
+  "first_month": "2026-09",
+  "last_month": "2026-11",
+  "latest_month_replied_count": 1,
+  "fastest_seconds": 658800,
+  "slowest_seconds": 5065200,
+  "mean_seconds": 2862000,
+  "oldest_unreplied_utc": "2026-11-10T08:00:00Z",
+  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+  "months": [
+   {
+    "month": "2026-09",
+    "replied_count": 1,
+    "backlog_count": 0,
+    "same_month_count": 1,
+    "buyer_count": 1,
+    "listing_count": 1,
+    "fastest_seconds": 658800,
+    "slowest_seconds": 658800,
+    "mean_seconds": 658800,
+    "running_replied": 1
+   },
+   {
+    "month": "2026-10",
+    "replied_count": 0,
+    "backlog_count": 0,
+    "same_month_count": 0,
+    "buyer_count": 0,
+    "listing_count": 0,
+    "fastest_seconds": null,
+    "slowest_seconds": null,
+    "mean_seconds": null,
+    "running_replied": 1
+   },
+   {
+    "month": "2026-11",
+    "replied_count": 1,
+    "backlog_count": 1,
+    "same_month_count": 0,
+    "buyer_count": 1,
+    "listing_count": 1,
+    "fastest_seconds": 5065200,
+    "slowest_seconds": 5065200,
+    "mean_seconds": 5065200,
+    "running_replied": 2
+   }
+  ]
+ },
+ "sellers": [
+  {
+   "seller": "usr:dana",
+   "envelope": {
+    "dev_account": "usr:dana",
+    "scope": "seller",
+    "owned_listing_count": 2,
+    "market_mean_seconds": 2862000,
+    "rating_count": 2,
+    "replied_count": 2,
+    "unreplied_count": 0,
+    "reply_coverage": 1.0,
+    "backlog_reply_count": 1,
+    "same_month_reply_count": 1,
+    "buyer_count": 2,
+    "listing_count": 2,
+    "month_count": 3,
+    "active_month_count": 2,
+    "peak_month": "2026-09",
+    "peak_replied_count": 1,
+    "first_month": "2026-09",
+    "last_month": "2026-11",
+    "latest_month_replied_count": 1,
+    "fastest_seconds": 658800,
+    "slowest_seconds": 5065200,
+    "mean_seconds": 2862000,
+    "oldest_unreplied_utc": null,
+    "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+    "months": [
+     {
+      "month": "2026-09",
+      "replied_count": 1,
+      "backlog_count": 0,
+      "same_month_count": 1,
+      "buyer_count": 1,
+      "listing_count": 1,
+      "fastest_seconds": 658800,
+      "slowest_seconds": 658800,
+      "mean_seconds": 658800,
+      "running_replied": 1
+     },
+     {
+      "month": "2026-10",
+      "replied_count": 0,
+      "backlog_count": 0,
+      "same_month_count": 0,
+      "buyer_count": 0,
+      "listing_count": 0,
+      "fastest_seconds": null,
+      "slowest_seconds": null,
+      "mean_seconds": null,
+      "running_replied": 1
+     },
+     {
+      "month": "2026-11",
+      "replied_count": 1,
+      "backlog_count": 1,
+      "same_month_count": 0,
+      "buyer_count": 1,
+      "listing_count": 1,
+      "fastest_seconds": 5065200,
+      "slowest_seconds": 5065200,
+      "mean_seconds": 5065200,
+      "running_replied": 2
+     }
+    ]
+   }
+  },
+  {
+   "seller": "usr:frank",
+   "envelope": {
+    "dev_account": "usr:frank",
+    "scope": "seller",
+    "owned_listing_count": 1,
+    "market_mean_seconds": 2862000,
+    "rating_count": 1,
+    "replied_count": 0,
+    "unreplied_count": 1,
+    "reply_coverage": 0.0,
+    "backlog_reply_count": 0,
+    "same_month_reply_count": 0,
+    "buyer_count": 0,
+    "listing_count": 0,
+    "month_count": 0,
+    "active_month_count": 0,
+    "peak_month": null,
+    "peak_replied_count": null,
+    "first_month": null,
+    "last_month": null,
+    "latest_month_replied_count": 0,
+    "fastest_seconds": null,
+    "slowest_seconds": null,
+    "mean_seconds": null,
+    "oldest_unreplied_utc": "2026-11-10T08:00:00Z",
+    "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+    "months": []
+   }
+  }
+ ],
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/seller-reply-months-board.html",
+ "sources": {
+  "driver": "f787ee08941027f0",
+  "copy": "935e3890a88c085c",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 9810,
+  "json": 4681
+ }
+}
