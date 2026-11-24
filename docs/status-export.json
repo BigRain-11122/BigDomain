@@ -1,19 +1,17 @@
 {
   "ceo_face": {
-    "board_pages_skipped": [
-      "preview/face-sweep.html (8878B)"
-    ],
+    "board_pages_skipped": [],
     "current": "2026-11-24 R3425 PRODUCT: the rating reply latency question now has a door - api_rating_reply_latency (live with AC-RRL1..8 and its own suite on disk) had zero readers across tools/ and preview/, so 'how long did a rating sit before I answered it, and which ones are still owed' could only be read by calling the sandbox from a shell.",
     "do": "R3422: gave api_public_listings its first openable page - eight KPI cards, one row per listing carrying both review stamps, the refusal reason, the two shipped flags side by side, the provider name and the unified social credit code, ten law sentences and the cross-face law pending==review_queue.pending; AC-PLB1..6 SUITE 6/6 first run, two measured controls, matrix 791 rows DOC-CURRENT, census pinned=791, entry index 23/23, chain read_only=True, face sweep 56/56, closeout PASS files=4960.",
-    "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
-    "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
+    "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-16 commit]; later=html)",
+    "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-16 commit]; later=html)",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/reply-latency-board-R3425.log (2783B, 2026-11-24)",
+    "latest_artifact_note": "",
     "latest_evidence": "qa/reply-latency-board-R3425.log (2783B, 2026-11-24)",
-    "newest_pair_on_disk_is_board": true,
+    "newest_pair_on_disk_is_board": false,
     "next_milestone": "[R3425] next window (<=48h): (1) 载体 state 附加区 53961B／闸 78500（余量 24539B ≈ 6-7 轮，`fold_needed=false`，layout_ok=true，log_items=86）；下窗**先**跑 `python src/os/logs_toolkit.py fold --plan-only` 再决定，**禁手改 state 文件**——本窗实测教训：用 `json.dumps` 重写载体把日志项缩进从 16 空格压成 4 空格，收口环以 `E_CLG_CARRIER_LAYOUT`（indent_anomaly 86）拒收，须从 HEAD 还原后保形追加（保形法＝只在最后一条日志项后插入新项、给旧末项补逗号、末新项不带逗号、CRLF 保持）。(2) S4U 落地仍欠一次提权运行（本窗实测 `BigDomain-OSLoop`=LogonType Interactive，本窗未提权）。(3) 零读者面：本窗四候选实测后只开 `api_rating_reply_latency` 一门——下窗**重测不假设**：`api_seller_rating_months`（1 月／2 笔／5★1＋4★1／market_avg 4.5，薄但不是空）；实测空或弱勿取（R3389 空节律）：`api_price_step_distribution`（band_count 0 全桶零）、`api_category_restock_months`（active 0／listing 0）、`api_seller_category_mix`（1 行且 category 全 null）。(4) 48h 窗至 2026-11-26。(5) tick 口径：本窗 3424→3425，标签与计数器同为 3425。(6) **基准刷新到期**：`benchmarks_refreshed`=2026-11-18 七日期在 11-25 到期，下窗须跑一次全局基准刷新并更新该字段（P-2026-09-24-56）。(7) 导出「最近实物」槽位仍按 mtime 排序（修法在写入器，三条判据仍欠）。(8) 新页面已在 `tools/deliverable_index.py` 记 producer 行；注册表新行使 census 793→794、矩阵同行数。",
-    "next_milestone_due": "2026-11-26T22:27:50+08:00",
-    "updated_at": "2026-11-24T22:27:50+08:00",
+    "next_milestone_due": "2026-11-26T22:29:49+08:00",
+    "updated_at": "2026-11-24T22:29:49+08:00",
     "heartbeat": {
       "tick": 3424,
       "state_tick": 3425,
@@ -29,7 +27,7 @@
       "over7": 0,
       "dup_rows": 0,
       "distinct": 4,
-      "collapsed": 0,
+      "collapsed": 1,
       "labels_refreshed": 0,
       "notes_stale": 0,
       "note_claims": 0,
@@ -38,7 +36,7 @@
     }
   },
   "current": "2026-11-24 R3425 PRODUCT: the rating reply latency question now has a door - api_rating_reply_latency (live with AC-RRL1..8 and its own suite on disk) had zero readers across tools/ and preview/, so 'how long did a rating sit before I answered it, and which ones are still owed' could only be read by calling the sandbox from a shell.",
-  "claims": {"claimed": 22, "captured": 11, "contradicted": 0, "uncaptured": 11, "historic": 0, "rows": 98, "present": true, "census_ts": "2026-11-24T22:27:50+08:00"},
+  "claims": {"claimed": 22, "captured": 11, "contradicted": 0, "uncaptured": 11, "historic": 0, "rows": 98, "present": true, "census_ts": "2026-11-24T22:29:49+08:00"},
   "chain": {"present": true, "rows": 98, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -68,12 +66,12 @@
     }
   ],
   "do": "2026-11-24 R3425 PRODUCT: the rating reply latency question now has a door - api_rating_reply_latency (live with AC-RRL1..8 and its own suite on disk) had zero readers across tools/ and preview/, so 'how long did a rating sit before I answered it, and which ones are still owed' could only be read by calling the sandbox from a shell.",
-  "export_ts": "2026-11-24T22:27:50+08:00",
-  "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
+  "export_ts": "2026-11-24T22:29:49+08:00",
+  "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-16 commit]; later=html)",
   "latest_evidence": "qa/reply-latency-board-R3425.log (2783B, 2026-11-24)",
   "next_milestone": "[R3425] next window (<=48h): (1) 载体 state 附加区 53961B／闸 78500（余量 24539B ≈ 6-7 轮，`fold_needed=false`，layout_ok=true，log_items=86）；下窗**先**跑 `python src/os/logs_toolkit.py fold --plan-only` 再决定，**禁手改 state 文件**——本窗实测教训：用 `json.dumps` 重写载体把日志项缩进从 16 空格压成 4 空格，收口环以 `E_CLG_CARRIER_LAYOUT`（indent_anomaly 86）拒收，须从 HEAD 还原后保形追加（保形法＝只在最后一条日志项后插入新项、给旧末项补逗号、末新项不带逗号、CRLF 保持）。(2) S4U 落地仍欠一次提权运行（本窗实测 `BigDomain-OSLoop`=LogonType Interactive，本窗未提权）。(3) 零读者面：本窗四候选实测后只开 `api_rating_reply_latency` 一门——下窗**重测不假设**：`api_seller_rating_months`（1 月／2 笔／5★1＋4★1／market_avg 4.5，薄但不是空）；实测空或弱勿取（R3389 空节律）：`api_price_step_distribution`（band_count 0 全桶零）、`api_category_restock_months`（active 0／listing 0）、`api_seller_category_mix`（1 行且 category 全 null）。(4) 48h 窗至 2026-11-26。(5) tick 口径：本窗 3424→3425，标签与计数器同为 3425。(6) **基准刷新到期**：`benchmarks_refreshed`=2026-11-18 七日期在 11-25 到期，下窗须跑一次全局基准刷新并更新该字段（P-2026-09-24-56）。(7) 导出「最近实物」槽位仍按 mtime 排序（修法在写入器，三条判据仍欠）。(8) 新页面已在 `tools/deliverable_index.py` 记 producer 行；注册表新行使 census 793→794、矩阵同行数。",
   "outs": [
-    "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
+    "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-16 commit]; later=html)",
     "refund-reasons-R3407.log (2274B)",
     "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-24 commit]; later=html)",
     "preview/seller-quality-scorecard.html (4643B) + preview/seller-quality-scorecard.json (1762B) [2026-11-24 mtime]"
@@ -153,7 +151,7 @@
   "self_drive": {
     "window": "2026-11-18..2026-11-24",
     "window_days": 7,
-    "log_lines_in_window": 82,
+    "log_lines_in_window": 83,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 8,
@@ -163,8 +161,8 @@
     "queue_tech_open": 5,
     "queue_explore_open": 1
   },
-  "state_bytes": 53961,
-  "next_milestone_due": "2026-11-26T22:27:50+08:00",
+  "state_bytes": 54503,
+  "next_milestone_due": "2026-11-26T22:29:49+08:00",
   "heartbeat": {
     "tick": 3424,
     "state_tick": 3425,
@@ -180,7 +178,7 @@
     "over7": 0,
     "dup_rows": 0,
     "distinct": 4,
-    "collapsed": 0,
+    "collapsed": 1,
     "labels_refreshed": 0,
     "notes_stale": 0,
     "note_claims": 0,
