@@ -13,8 +13,8 @@
     "latest_evidence": "qa/battery-shard-rps-R3382.log (369B, 2026-11-24)",
     "newest_pair_on_disk_is_board": true,
     "next_milestone": "[R3382] next window (<=48h): (1) MAIN 头号——导出面 `claims` 块的**两个派生收成一处**：`export_round.py` 写 39 而验 40（`status_export_fresh --apply` 与闸内活体都读 40/33），三连跑不收敛，`--check` 又看不见这一块；正法=让写者与验者调用同一个派生函数（不是手改数字），并给 `--check` 加一条会红的判据（断言不得放宽）。 (2) 队列卫生：main／tech／explore 三线仍有 `NO-CRITERIA` 开项——认领=先把判据写进那一行。 (3) 承账不变：`qa_log --ledger-check` rows=87 broken=5（R3371 裁定=诊断不修）；全量 battery 未实跑；Docker 缺位；`BigDomain-OSLoop` LogonType=Interactive；`test_face_sweep` 54/56（AC-FSWB20/20c）。 (4) 载体：state 68600B／gate 78500／target 75500，`fold_needed=false`（余量 9900B）——下窗先读 `fold --plan-only` 再决定是否折。 (5) 诚实承账：物理件五件仍缺（商户号／服务器／域名／备案+ICP／小程序 appid+secret）——买家仍付不了钱。",
-    "next_milestone_due": "2026-11-26T07:59:05+08:00",
-    "updated_at": "2026-11-24T07:59:05+08:00",
+    "next_milestone_due": "2026-11-26T08:02:55+08:00",
+    "updated_at": "2026-11-24T08:02:55+08:00",
     "heartbeat": {
       "tick": 3365,
       "state_tick": 3382,
@@ -39,7 +39,7 @@
     }
   },
   "current": "2026-11-24 R3382 PRODUCT+ENGINEERING: the fold plan can now answer for the line the writer would really land, because the width and the composed summary are one fixed point instead of two guesses.",
-  "claims": {"claimed": 41, "captured": 2, "contradicted": 5, "uncaptured": 34, "historic": 5, "rows": 87, "present": true, "census_ts": "2026-11-24T07:59:05+08:00"},
+  "claims": {"claimed": 41, "captured": 2, "contradicted": 5, "uncaptured": 34, "historic": 5, "rows": 87, "present": true, "census_ts": "2026-11-24T08:02:55+08:00"},
   "chain": {"present": true, "rows": 87, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -69,7 +69,7 @@
     }
   ],
   "do": "2026-11-24 R3382 PRODUCT+ENGINEERING: the fold plan can now answer for the line the writer would really land, because the width and the composed summary are one fixed point instead of two guesses.",
-  "export_ts": "2026-11-24T07:59:05+08:00",
+  "export_ts": "2026-11-24T08:02:55+08:00",
   "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-23 commit]; later=html)",
   "latest_evidence": "qa/battery-shard-rps-R3382.log (369B, 2026-11-24)",
   "next_milestone": "[R3382] next window (<=48h): (1) MAIN 头号——导出面 `claims` 块的**两个派生收成一处**：`export_round.py` 写 39 而验 40（`status_export_fresh --apply` 与闸内活体都读 40/33），三连跑不收敛，`--check` 又看不见这一块；正法=让写者与验者调用同一个派生函数（不是手改数字），并给 `--check` 加一条会红的判据（断言不得放宽）。 (2) 队列卫生：main／tech／explore 三线仍有 `NO-CRITERIA` 开项——认领=先把判据写进那一行。 (3) 承账不变：`qa_log --ledger-check` rows=87 broken=5（R3371 裁定=诊断不修）；全量 battery 未实跑；Docker 缺位；`BigDomain-OSLoop` LogonType=Interactive；`test_face_sweep` 54/56（AC-FSWB20/20c）。 (4) 载体：state 68600B／gate 78500／target 75500，`fold_needed=false`（余量 9900B）——下窗先读 `fold --plan-only` 再决定是否折。 (5) 诚实承账：物理件五件仍缺（商户号／服务器／域名／备案+ICP／小程序 appid+secret）——买家仍付不了钱。",
@@ -159,7 +159,7 @@
   "self_drive": {
     "window": "2026-11-18..2026-11-24",
     "window_days": 7,
-    "log_lines_in_window": 150,
+    "log_lines_in_window": 151,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 20,
@@ -169,8 +169,8 @@
     "queue_tech_open": 5,
     "queue_explore_open": 1
   },
-  "state_bytes": 68600,
-  "next_milestone_due": "2026-11-26T07:59:05+08:00",
+  "state_bytes": 69210,
+  "next_milestone_due": "2026-11-26T08:02:55+08:00",
   "heartbeat": {
     "tick": 3365,
     "state_tick": 3382,
