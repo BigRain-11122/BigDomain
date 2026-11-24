@@ -8230,6 +8230,16 @@ SUITES = [
     # un-clamped negative net and the explicit empty-statement render.
     ("os-seller-ledger-board",
      os.path.join("..", "os", "test_seller_ledger_board.py"), 6),
+    # R3412: api_refund_exposure carried its own AC-RPX suite and a zero-reader
+    # git grep under tools/ and preview/. The page shows the liability standing
+    # against each seller's balance, so the operator's "who would break a refund
+    # today" question gets a row instead of a shell session. The suite re-reads
+    # the shipped face over its own throwaway demo world (never a typed fixture)
+    # and pins seller_count, the liability and shortfall sums, at_risk_count,
+    # the shortfall law, covered, row order, the explicit zero-risk sentence and
+    # the in-memory shortfall probe.
+    ("os-refund-exposure-board",
+     os.path.join("..", "os", "test_refund_exposure_board.py"), 6),
     # R3073: tools/city_face_report.py renders the P-47 item-1 city face and
     # carries its own --check (AC-CFY1..8), but this registry had no row naming
     # it, so the face was graded only by the fail-soft [GATES] sweep - the

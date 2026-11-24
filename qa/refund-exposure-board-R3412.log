@@ -1,0 +1,25 @@
+R3412 refund exposure board - evidence (ASCII/English, one fact per line)
+1. render: REFUND-EXPOSURE preview/refund-exposure.html bytes=4965 sellers=2 liability=10 at_risk=0 (json 1230B)
+2. face: api_refund_exposure, envelope 7 keys, row 9 keys, row set authority the listing table (dense), zero typed seller ids in the driver
+3. suite: PASS AC-REX1 landed=True keys=9 envelope=True rows=True sellers=2 report=True
+4. suite: PASS AC-REX2 identical=True disclaimer_same=True sellers=2 liability=10 at_risk=0 (own throwaway world, no fixture)
+5. suite: PASS AC-REX3 problems=[] (seller_count, liability sum, shortfall sum, at_risk_count, shortfall law, covered, row order)
+6. suite: PASS AC-REX4 rows=2/2 sections=True liability_law=True zero_sentence=True risk_probe=True stand_in_none=False
+7. suite: PASS AC-REX5 aigc=True disclaimer_on_page=True external_links=0
+8. suite: PASS AC-REX6 check_rc=0 wrote_nothing=True wired=6/6 face_suite=True
+9. suite: SUITE PASS 6/6 criteria declared=6
+10. control A PASS rc=3 refusal=E_REX_FACE html_untouched=True (one label key removed, driver refused before writing)
+11. control B PASS rc=2 AC-REX2 red AC-REX3 red AC-REX6 red (one printed total bumped to 999)
+12. restore PASS identical=True suite_rc=0 green=True (copy, json and html back to the same sha256)
+13. board fold: tools/backlog_fold.py --fold --keep 30 moved 365 rows, 964935B -> 172164B, verdict_after FOLD-CLEAR, no_line_lost=True, pointer_present=True
+14. registry: os-refund-exposure-board(6) in src/sandbox/reconcile_all.py; suite src/os/test_refund_exposure_board.py
+15. matrix: WRITTEN docs/sandbox-suite-matrix.md 80853 bytes 781 rows then DOC-CURRENT
+16. census: VERDICT PASS pinned=781 rows=781 readable=781
+17. entry index: faces=9 defects=0 fingerprint=9648961523793ee3 index=45965B (producer named refund-exposure.json -> tools/refund_exposure_board.py). The index quotes the export and the chain, so this round it moved three times before it settled: AC-CVL1 reddened each time and cleared on the recorded state -> export -> index -> chain -> index order, never by widening the arm.
+18. first-yuan chain: VERDICT PASS legs=2 entries=2 tx=1 reconcile_rc=0 read_only=True
+19. face sweep: VERDICT PASS 13/13 fingerprint=3c6d84affa63d5da ; --check 21/21
+20. closeout gate: CLOSEOUT-GATE PASS files=4951 census=PASS matrix=DOC-CURRENT carrier=42105B/78500
+21. export: status_export_fresh --check VERDICT R3412 PASS (do, ceo_face.current and current all name R3412) and check_export_consistency SUMMARY pass=22 fail=0 W=70 sub=8
+22. honest: this moves an already-delivered reading onto a CEO-openable page; zero new tables, zero new semantics
+23. honest: the demo world holds two sellers, dana liability 10 against balance 10 (exactly covered) and frank 0/0; at_risk_count is 0 here, so the zero-risk sentence is the landed reading and the shortfall row is proved by an in-memory render probe
+24. honest: zero payment, zero network beyond loopback; the five physical pieces are still missing, buyers still cannot pay

@@ -88,3 +88,5 @@
 {"event": "REPLACED", "name": "battery-shard-fxp-R3383.log", "new_bytes": 368, "new_sha16": "2ecde6298445e224", "old_bytes": 279, "old_sha16": "357aef24aa7580a7", "prev_kind": "progress", "ts": "2026-11-24T00:16:59Z"}
 {"event": "REPLACED", "name": "fixpoint-R3383.log", "new_bytes": 1337, "new_sha16": "b6a807d88bedfc0c", "old_bytes": 1337, "old_sha16": "b6a807d88bedfc0c", "prev_kind": "evidence", "ts": "2026-11-24T00:18:41Z"}
 {"event": "REPLACED", "name": "battery-shard-chf-R3396.log", "new_bytes": 376, "new_sha16": "380325d96562b8e4", "old_bytes": 286, "old_sha16": "8ddc58cefdb8bb19", "prev_kind": "progress", "ts": "2026-11-24T03:49:12Z"}
+{"event": "REPLACED", "name": "refund-exposure-board-R3412.log", "new_bytes": 3046, "new_sha16": "429b8918a73702b7", "old_bytes": 2605, "old_sha16": "4cb6beeaf86e9064", "prev_kind": "evidence", "ts": "2026-11-24T09:51:33Z"}
+{"event": "REPLACED", "name": "refund-exposure-board-R3412.log", "new_bytes": 3028, "new_sha16": "a0f1f05a4f788523", "old_bytes": 3046, "old_sha16": "429b8918a73702b7", "prev_kind": "evidence", "ts": "2026-11-24T09:53:59Z"}

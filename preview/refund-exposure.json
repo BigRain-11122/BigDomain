@@ -1,0 +1,50 @@
+{
+ "generated_utc": "2026-11-24 09:41:28Z",
+ "face": "api_refund_exposure",
+ "board_face": "api_board",
+ "seller_count": 2,
+ "exposure": {
+  "dev_account": null,
+  "seller_count": 2,
+  "total_liability": 10,
+  "total_shortfall": 0,
+  "at_risk_count": 0,
+  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+  "rows": [
+   {
+    "dev_account": "usr:dana",
+    "listing_count": 2,
+    "open_purchases": 2,
+    "refunded_purchases": 1,
+    "refundable_liability": 10,
+    "balance": 10,
+    "balance_known": true,
+    "shortfall": 0,
+    "covered": true
+   },
+   {
+    "dev_account": "usr:frank",
+    "listing_count": 1,
+    "open_purchases": 0,
+    "refunded_purchases": 1,
+    "refundable_liability": 0,
+    "balance": 0,
+    "balance_known": true,
+    "shortfall": 0,
+    "covered": true
+   }
+  ]
+ },
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/refund-exposure.html",
+ "sources": {
+  "driver": "580218e10c3bacb0",
+  "copy": "37e7a4c40ebc5506",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 4965,
+  "json": 1230
+ }
+}
