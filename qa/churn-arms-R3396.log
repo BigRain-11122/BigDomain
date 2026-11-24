@@ -1,0 +1,14 @@
+R3396 evidence - AC-CHF1..AC-CHF6 registered as factory suite arms on the ninth face
+criterion source: the AC-CHF1..6 sentences were pre-registered in the R3395 board PIN row BEFORE this code
+suite ledger-monthly-faces-preview SUITE PASS 39/39 (was 33) SUITE-SHA16 3bef1b93145d7c49
+AC-CHF1 faces=9 unique=True module=True face=True label_in_page=True src_line_in_page=True
+AC-CHF2 months=1 count=1 base=3 problems=none
+AC-CHF3 pairs=6 problems=none net_unpaired=True
+AC-CHF4 months=1 ascending=True gaps=0 identity_problems=0 problems=none
+AC-CHF5 page_bytes=10589 label=True aigc=True disclaimer=True external=False
+AC-CHF6 declared=39 recorded=39 law=39 older=33 older_all_pass=True
+AC-MFPX8 positional half moved to AC-CHF6 (JUDGED-CHANGED, sentence otherwise unchanged, module hygiene still green)
+registry row ledger-monthly-faces-preview 33 -> 39
+matrix docs/sandbox-suite-matrix.md 79504 bytes 767 rows 6542 criteria DOC-CURRENT
+census rows=767 readable=767 unparsed=0 VERDICT PASS pinned=767
+shard qa/battery-shard-chf-R3396.log bytes=376 lines=3 sha256=380325d96562b8e4 row ledger-monthly-faces-preview rc=0 pass=39 fail=0 crit=39 crit_mismatch=0 17.4s

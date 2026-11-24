@@ -206,6 +206,33 @@ R3201's AC-MFPW6 positional half moved here by measurement, exactly as
 earlier rounds moved it: its sentence is unchanged and no law was
 relaxed.
 
+R3395 pre-registered AC-CHF1..AC-CHF6 in the board PIN row BEFORE the
+ninth face landed; this window registers them as arms (R3396). Each one
+grades what the CEO-openable page says about the seller-churn face, not
+a private reading:
+
+  AC-CHF1 declaration: FACES carries exactly nine unique faces, the
+    generator is on disk, and the shipped page carries both the churn
+    face label and that face own src line.
+  AC-CHF2 the data is the world's, not invented: every churn month stamp
+    is YYYY-MM, the printed month_count equals the row count and is at
+    least one, and every stamp also exists on the primary sales-month
+    grid (no month outside the demo world's own calendar).
+  AC-CHF3 the identity law holds: IDENTITY[churn] is exactly the six
+    registered pairs, each sum(row) equals its envelope key, and
+    net_change is NOT paired (the row sum and the envelope
+    net_seller_change are different calibers).
+  AC-CHF4 the grid is a grid: stamps ascend, adjacent stamps are
+    consecutive months, and the generator own check_identity reports
+    zero problems over the whole world.
+  AC-CHF5 standing compliance on the shipped page: the churn label, the
+    AIGC label and the disclaimer are present and the page carries no
+    http(s) literal.
+  AC-CHF6 no criterion was relaxed: the registry count equals DECLARED,
+    this run recorded exactly DECLARED criteria, and all 33 older arms
+    passed. (This positional duty moved here from AC-MFPX8, whose
+    sentence is otherwise unchanged - JUDGED-CHANGED, no law relaxed.)
+
 Usage: python test_monthly_faces_preview.py
 """
 
@@ -232,7 +259,7 @@ SUITE_FILE = os.path.abspath(__file__)
 RECONCILE = os.path.join(BASE, "src", "sandbox", "reconcile_all.py")
 MODULE = os.path.join(LEDGER, "monthly_faces_preview.py")
 LABEL = "ledger-monthly-faces-preview"
-DECLARED = 33
+DECLARED = 39
 TEMPS = []
 
 
@@ -1889,8 +1916,10 @@ def check_verify_proof():
     with io.open(RECONCILE, "r", encoding="utf-8") as fh:
         declared = registry_declared(fh.read())
     total_after = len(RESULTS) + 1
+    # The positional half moved to AC-CHF6 (R3396) when the suite grew
+    # from 33 criteria to 39 - JUDGED-CHANGED, no sentence relaxed.
     if not (ascii_ok and kept == 1 and named == 2 and literal == 1
-            and declared == DECLARED and total_after == DECLARED):
+            and declared == DECLARED):
         problems.append("f.hygiene=ascii:%s kept:%d named:%d literal:%d "
                         "declared:%d recorded:%d"
                         % (ascii_ok, kept, named, literal, declared,
@@ -1900,6 +1929,172 @@ def check_verify_proof():
            "problems=%s"
            % (lines[-1][:56] if lines else "", first, moved, ascii_ok,
               named, declared, ",".join(problems) or "none"))
+
+
+CHURN = "api_market_seller_churn_months"
+CHURN_PAIRS = [
+    ("joined_seller_count", "joined_count"),
+    ("new_seller_count", "new_seller_count"),
+    ("returning_seller_count", "returning_seller_count"),
+    ("departed_seller_count", "departed_count"),
+    ("retreating_seller_count", "retreating_count"),
+    ("expanding_seller_count", "expanding_count"),
+]
+
+
+def _face_by_name(faces, name):
+    for face in faces:
+        if face["fn"] == name:
+            return face
+    return None
+
+
+def shipped_page():
+    """The page a buyer opens, read as text; empty when it is absent."""
+    if not os.path.isfile(M.OUT_HTML):
+        return ""
+    with io.open(M.OUT_HTML, "r", encoding="utf-8") as fh:
+        return fh.read()
+
+
+def check_churn_declaration():
+    """AC-CHF1: the page declares nine faces and this one carries a body."""
+    copy = M.load_copy()
+    faces = M.collect(temp_root("churn-decl"))
+    names = [face["fn"] for face in faces]
+    face = _face_by_name(faces, CHURN)
+    page = shipped_page()
+    label = copy["faces"].get(CHURN, CHURN)
+    src_line = ""
+    if face is not None:
+        src_line = copy["src_line"] % (CHURN, face["key_count"],
+                                       face["month_count"])
+    ok = (len(names) == 9 and len(set(names)) == len(names)
+          and os.path.isfile(MODULE) and face is not None
+          and label in page and src_line in page)
+    record("AC-CHF1", ok,
+           "faces=%d unique=%s module=%s face=%s label_in_page=%s "
+           "src_line_in_page=%s"
+           % (len(names), len(set(names)) == len(names),
+              os.path.isfile(MODULE), face is not None,
+              label in page, bool(src_line) and src_line in page))
+
+
+def check_churn_data():
+    """AC-CHF2: the churn months are the demo world's own months."""
+    faces = M.collect(temp_root("churn-data"))
+    face = _face_by_name(faces, CHURN)
+    base_face = _face_by_name(faces, "api_market_months")
+    page = shipped_page()
+    problems = []
+    if face is None or base_face is None:
+        problems.append("face-missing")
+        record("AC-CHF2", False, "problems=%s" % ",".join(problems))
+        return
+    months = face["months"]
+    base = set(row.get("month") for row in base_face["months"])
+    if not months:
+        problems.append("no-months")
+    if face["month_count"] != len(months):
+        problems.append("count=%d rows=%d"
+                        % (face["month_count"], len(months)))
+    for row in months:
+        stamp = row.get("month")
+        if not (isinstance(stamp, str)
+                and re.match(r"^\d{4}-\d{2}$", stamp)):
+            problems.append("shape=%r" % (stamp,))
+        elif stamp not in base:
+            problems.append("foreign-month=%s" % stamp)
+        elif str(stamp) not in page:
+            problems.append("unprinted-month=%s" % stamp)
+    record("AC-CHF2", not problems,
+           "months=%d count=%d base=%d problems=%s"
+           % (len(months), face["month_count"], len(base),
+              ",".join(problems) or "none"))
+
+
+def check_churn_identity():
+    """AC-CHF3: the six registered pairs hold and net_change is unpaired."""
+    faces = M.collect(temp_root("churn-identity"))
+    face = _face_by_name(faces, CHURN)
+    pairs = list(M.IDENTITY.get(CHURN, ()))
+    problems = []
+    if face is None:
+        record("AC-CHF3", False, "face-missing pairs=%d" % len(pairs))
+        return
+    if pairs != CHURN_PAIRS:
+        problems.append("pairs=%r" % (pairs,))
+    for row_key, env_key in CHURN_PAIRS:
+        total = sum((row.get(row_key) or 0) for row in face["months"])
+        want = face["envelope"].get(env_key)
+        if total != want:
+            problems.append("%s:%s!=%s" % (row_key, total, want))
+    paired = set(key for pair in pairs for key in pair)
+    if "net_change" in paired or "net_seller_change" in paired:
+        problems.append("net-paired")
+    record("AC-CHF3", not problems,
+           "pairs=%d problems=%s net_unpaired=%s"
+           % (len(pairs), ",".join(problems) or "none",
+              "net_change" not in paired))
+
+
+def check_churn_grid():
+    """AC-CHF4: ascending consecutive months and a clean identity check."""
+    faces = M.collect(temp_root("churn-grid"))
+    face = _face_by_name(faces, CHURN)
+    problems = []
+    stamps = [] if face is None else [row["month"] for row in face["months"]]
+    if face is None:
+        problems.append("face-missing")
+    if stamps != sorted(stamps):
+        problems.append("ascending=False")
+    gaps = []
+    for earlier, later in zip(stamps, stamps[1:]):
+        span = ((int(later[:4]) * 12 + int(later[5:7]))
+                - (int(earlier[:4]) * 12 + int(earlier[5:7])))
+        if span != 1:
+            gaps.append("%s->%s:%d" % (earlier, later, span))
+    if gaps:
+        problems.append("gaps=" + ",".join(gaps))
+    identity = []
+    M.check_identity(faces, identity)
+    if identity:
+        problems.append("identity=" + ",".join(identity))
+    record("AC-CHF4", not problems,
+           "months=%d ascending=%s gaps=%d identity_problems=%d "
+           "problems=%s"
+           % (len(stamps), stamps == sorted(stamps), len(gaps),
+              len(identity), ",".join(problems) or "none"))
+
+
+def check_churn_compliance():
+    """AC-CHF5: the shipped page keeps the standing compliance faces."""
+    copy = M.load_copy()
+    page = shipped_page()
+    label = copy["faces"].get(CHURN, CHURN)
+    aigc = copy["aigc_label"] in page
+    dis = copy["disclaimer"] in page
+    external = ("http://" in page) or ("https://" in page)
+    record("AC-CHF5",
+           bool(page) and label in page and aigc and dis and not external,
+           "page_bytes=%d label=%s aigc=%s disclaimer=%s external=%s"
+           % (len(page.encode("utf-8")), label in page, aigc, dis,
+              external))
+
+
+def check_churn_no_relax():
+    """AC-CHF6: DECLARED, the registry and the older arms still agree."""
+    with io.open(RECONCILE, "r", encoding="utf-8") as fh:
+        declared = registry_declared(fh.read())
+    total_after = len(RESULTS) + 1
+    older = [(ac, yes) for ac, yes, _ev in RESULTS
+             if not ac.startswith("AC-CHF")]
+    older_pass = all(yes for _ac, yes in older)
+    ok = (declared == DECLARED and total_after == DECLARED
+          and len(older) == 33 and older_pass)
+    record("AC-CHF6", ok,
+           "declared=%d recorded=%d law=%d older=%d older_all_pass=%s"
+           % (declared, total_after, DECLARED, len(older), older_pass))
 
 
 def main():
@@ -1938,6 +2133,12 @@ def main():
         check_outputs_readback()
         check_write_wiring()
         check_verify_proof()
+        check_churn_declaration()
+        check_churn_data()
+        check_churn_identity()
+        check_churn_grid()
+        check_churn_compliance()
+        check_churn_no_relax()
     finally:
         for path in TEMPS:
             shutil.rmtree(path, ignore_errors=True)

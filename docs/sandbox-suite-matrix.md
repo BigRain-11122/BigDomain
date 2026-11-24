@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 767 | 6536 | 675/675 | R2739 |
+| 767 | 6542 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -379,7 +379,7 @@
 | 340 | ledger-apimarket-marketmonths | ledger/test_apimarket_marketmonths.py | 8 | green | 1.6 |
 | 341 | ledger-apimarket-buyermonths | ledger/test_apimarket_buyermonths.py | 8 | green | 2.0 |
 | 342 | ledger-apimarket-report | ledger/test_apimarket_report.py | 9 | green | 3.1 |
-| 343 | ledger-monthly-faces-preview | ledger/test_monthly_faces_preview.py | 33 | no-evidence | - |
+| 343 | ledger-monthly-faces-preview | ledger/test_monthly_faces_preview.py | 39 | no-evidence | - |
 | 344 | ledger-apimarket-attention | ledger/test_apimarket_report_attention.py | 9 | green | 4.2 |
 | 345 | ledger-apimarket-reportjson | ledger/test_apimarket_report_json.py | 10 | green | 5.9 |
 | 346 | ledger-apimarket-reportworkbench | ledger/test_apimarket_report_workbench.py | 8 | green | 20.5 |
@@ -804,7 +804,7 @@
 | 765 | claim-census | test_claim_census.py | 10 | no-evidence | - |
 | 766 | os-stage-residue | ../os/test_stage_residue.py | 4 | no-evidence | - |
 | 767 | os-corpus-supply-chain | ../os/test_corpus_supply_chain.py | 7 | no-evidence | - |
-|  | 合计 |  | 6536 | green 675 / FAIL 0 / no-evidence 92 |  |
+|  | 合计 |  | 6542 | green 675 / FAIL 0 / no-evidence 92 |  |
 
 ## 证据出处
 

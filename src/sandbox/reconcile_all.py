@@ -3548,8 +3548,11 @@ SUITES = [
     # R3202 added AC-MFPX8: a proven log is named on stdout with the
     # read-back bytes, lines and sha16, and that line never enters the log
     # itself (a log cannot carry its own sha16).
+    # R3396: 33 -> 39. AC-CHF1..AC-CHF6 (pre-registered in the R3395 board
+    # PIN row) are now arms over the ninth face the CEO page carries, so the
+    # announced count moved with them.
     ("ledger-monthly-faces-preview", os.path.join(
-        "ledger", "test_monthly_faces_preview.py"), 33),
+        "ledger", "test_monthly_faces_preview.py"), 39),
     # R2102 attention digest on the same report generator: the
     # statement-shaped R2101 page now opens with an ordered operator
     # to-do list derived from the faces (seller inbox debt, sold-out
