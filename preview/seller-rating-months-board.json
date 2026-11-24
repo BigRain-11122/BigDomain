@@ -1,0 +1,121 @@
+{
+ "generated_utc": "2026-11-24 14:50:20Z",
+ "face": "api_seller_rating_months",
+ "board_face": "api_board",
+ "scope": "market",
+ "seller_count": 2,
+ "market": {
+  "scope": "market",
+  "dev_account": null,
+  "month_count": 1,
+  "active_month_count": 1,
+  "rating_count": 2,
+  "buyer_count": 2,
+  "star_sum": 9,
+  "avg_stars": 4.5,
+  "five_star_count": 1,
+  "low_star_count": 0,
+  "replied_count": 0,
+  "reply_coverage": 0.0,
+  "peak_month": "2026-09",
+  "peak_rating_count": 2,
+  "first_month": "2026-09",
+  "last_month": "2026-09",
+  "latest_month_rating_count": 2,
+  "months": [
+   {
+    "month": "2026-09",
+    "rating_count": 2,
+    "buyer_count": 2,
+    "star_sum": 9,
+    "avg_stars": 4.5,
+    "five_star_count": 1,
+    "four_star_count": 1,
+    "three_star_count": 0,
+    "two_star_count": 0,
+    "one_star_count": 0,
+    "low_star_count": 0,
+    "replied_count": 0,
+    "reply_coverage": 0.0,
+    "running_rating": 2
+   }
+  ],
+  "market_avg_stars": null,
+  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice"
+ },
+ "sellers": [
+  {
+   "scope": "seller",
+   "dev_account": "usr:dana",
+   "month_count": 1,
+   "active_month_count": 1,
+   "rating_count": 2,
+   "buyer_count": 2,
+   "star_sum": 9,
+   "avg_stars": 4.5,
+   "five_star_count": 1,
+   "low_star_count": 0,
+   "replied_count": 0,
+   "reply_coverage": 0.0,
+   "peak_month": "2026-09",
+   "peak_rating_count": 2,
+   "first_month": "2026-09",
+   "last_month": "2026-09",
+   "latest_month_rating_count": 2,
+   "months": [
+    {
+     "month": "2026-09",
+     "rating_count": 2,
+     "buyer_count": 2,
+     "star_sum": 9,
+     "avg_stars": 4.5,
+     "five_star_count": 1,
+     "four_star_count": 1,
+     "three_star_count": 0,
+     "two_star_count": 0,
+     "one_star_count": 0,
+     "low_star_count": 0,
+     "replied_count": 0,
+     "reply_coverage": 0.0,
+     "running_rating": 2
+    }
+   ],
+   "market_avg_stars": 4.5,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice"
+  },
+  {
+   "scope": "seller",
+   "dev_account": "usr:frank",
+   "month_count": 0,
+   "active_month_count": 0,
+   "rating_count": 0,
+   "buyer_count": 0,
+   "star_sum": 0,
+   "avg_stars": null,
+   "five_star_count": 0,
+   "low_star_count": 0,
+   "replied_count": 0,
+   "reply_coverage": null,
+   "peak_month": null,
+   "peak_rating_count": null,
+   "first_month": null,
+   "last_month": null,
+   "latest_month_rating_count": 0,
+   "months": [],
+   "market_avg_stars": 4.5,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice"
+  }
+ ],
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/seller-rating-months-board.html",
+ "sources": {
+  "driver": "5d143e9f38bf1887",
+  "copy": "0803683e82b65f02",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 8186,
+  "json": 3046
+ }
+}

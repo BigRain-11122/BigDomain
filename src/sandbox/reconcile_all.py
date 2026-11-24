@@ -8327,6 +8327,14 @@ SUITES = [
     # over its own throwaway demo world.
     ("os-reply-latency-board",
      os.path.join("..", "os", "test_reply_latency_board.py"), 6),
+    # R3427: tools/seller_rating_months_board.py renders the shipped seller
+    # monthly rating envelope (the market scope plus one section per seller)
+    # with the five bucket histogram and the reply coverage on the month axis;
+    # the face had zero readers under tools/ and preview/, so the page prints
+    # the shipped envelope verbatim and the suite re-reads the face over its
+    # own throwaway demo world.
+    ("os-seller-rating-months-board",
+     os.path.join("..", "os", "test_seller_rating_months_board.py"), 6),
     # R3424: tools/seller_refund_reasons_board.py renders the seller-side refund
     # cause envelope (the market scope plus one section per seller) with the
     # market refund rate and this seller's share of the market refunded total as

@@ -1,21 +1,21 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-24 R3426 DUTY: the seven-day benchmark gate was refreshed one day before it fell due, with three reads and zero new sources - the installment page rules matched the stored text word for word, the AIGC marking measure page still publishes effect date 2025-09-01 with no revision notice, and the virtual payment fee rate plus the iOS deadline stay at grade M because this window fetch landed on the ordinary payment API neighbour page. This window shipped no new openable page.",
+    "current": "2026-11-24 R3427 PRODUCT: the seller monthly rating question now has a door - api_seller_rating_months (live with AC-SRT1..8 and its own suite on disk) had zero readers across tools/ and preview/, so whether a shop's rating intake and its star level are moving month over month, and how the five bucket histogram sits beside the reply coverage, could only be read by calling the sandbox from a shell.",
     "do": "R3422: gave api_public_listings its first openable page - eight KPI cards, one row per listing carrying both review stamps, the refusal reason, the two shipped flags side by side, the provider name and the unified social credit code, ten law sentences and the cross-face law pending==review_queue.pending; AC-PLB1..6 SUITE 6/6 first run, two measured controls, matrix 791 rows DOC-CURRENT, census pinned=791, entry index 23/23, chain read_only=True, face sweep 56/56, closeout PASS files=4960.",
-    "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-16 commit]; later=html)",
-    "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-16 commit]; later=html)",
+    "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
+    "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/benchmark-refresh-R3426.log (972B, 2026-11-24)",
-    "latest_evidence": "qa/benchmark-refresh-R3426.log (972B, 2026-11-24)",
+    "latest_artifact_note": "",
+    "latest_evidence": "qa/seller-rating-months-board-R3427.log (3196B, 2026-11-24)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R3426] next window (<=48h): (1) 载体 state 附加区；下窗**先**跑 `python src/os/logs_toolkit.py fold --plan-only` 再决定，**禁手改 state 文件**。(2) S4U 落地仍欠一次提权运行（本窗实测 `BigDomain-OSLoop`=Interactive）。(3) 导出「最近实物」槽仍按 mtime 排序（本窗无空位修；修法=写入器改读 deliverable 注册表顺序+三条判据先立）。(4) 零读者面重测不假设：`api_seller_rating_months`（1 月／2 笔／5★1＋4★1）为首选候选，实测空或弱勿取。(5) 基准下次到期 2026-12-01（本窗 11-24 已刷）。48h 窗至 2026-11-26。(6) tick 口径：本窗 3425→3426。",
-    "next_milestone_due": "2026-11-26T22:41:07+08:00",
-    "updated_at": "2026-11-24T22:41:07+08:00",
+    "next_milestone": "[R3427] next window (<=48h): (1) 载体 state 附加区本窗已推进至 3427（log_items 103）；下窗**先**跑 `python src/os/logs_toolkit.py fold --plan-only` 再决定，**禁手改 state 文件**（本窗再证：载体为 CRLF，平仅式拼接必须用 `\\r\\n`）。(2) S4U 落地仍欠一次提权运行（本窗未提权）。(3) 导出「最近实物」槽仍按 mtime 排序（本窗未修；修法=写入器改读 deliverable 注册表顺序+三条判据先立）。(4) 零读者面重测不假设：`api_market_rating_months`（市场月轴，与本窗卖家面同族）为首选候选，实测空或弱勿取（R3389 空节律）；同族已开门面不重开。(5) 基准下次到期 2026-12-01。48h 窗至 2026-11-26。(6) tick 口径：本窗 3426→3427。(7) 承账不变：`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`backlog.md` 仍超 800000 闸。",
+    "next_milestone_due": "2026-11-26T22:56:42+08:00",
+    "updated_at": "2026-11-24T22:56:42+08:00",
     "heartbeat": {
       "tick": 3424,
-      "state_tick": 3426,
-      "lag": 2,
+      "state_tick": 3427,
+      "lag": 3,
       "verdict": "FLAG",
       "reason": "heartbeat_row_debt"
     },
@@ -27,7 +27,7 @@
       "over7": 0,
       "dup_rows": 0,
       "distinct": 4,
-      "collapsed": 0,
+      "collapsed": 1,
       "labels_refreshed": 0,
       "notes_stale": 0,
       "note_claims": 0,
@@ -35,8 +35,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-24 R3426 DUTY: the seven-day benchmark gate was refreshed one day before it fell due, with three reads and zero new sources - the installment page rules matched the stored text word for word, the AIGC marking measure page still publishes effect date 2025-09-01 with no revision notice, and the virtual payment fee rate plus the iOS deadline stay at grade M because this window fetch landed on the ordinary payment API neighbour page. This window shipped no new openable page.",
-  "claims": {"claimed": 22, "captured": 11, "contradicted": 0, "uncaptured": 11, "historic": 0, "rows": 98, "present": true, "census_ts": "2026-11-24T22:41:07+08:00"},
+  "current": "2026-11-24 R3427 PRODUCT: the seller monthly rating question now has a door - api_seller_rating_months (live with AC-SRT1..8 and its own suite on disk) had zero readers across tools/ and preview/, so whether a shop's rating intake and its star level are moving month over month, and how the five bucket histogram sits beside the reply coverage, could only be read by calling the sandbox from a shell.",
+  "claims": {"claimed": 25, "captured": 14, "contradicted": 0, "uncaptured": 11, "historic": 0, "rows": 98, "present": true, "census_ts": "2026-11-24T22:56:42+08:00"},
   "chain": {"present": true, "rows": 98, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -65,13 +65,13 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-24 R3426 DUTY: the seven-day benchmark gate was refreshed one day before it fell due, with three reads and zero new sources - the installment page rules matched the stored text word for word, the AIGC marking measure page still publishes effect date 2025-09-01 with no revision notice, and the virtual payment fee rate plus the iOS deadline stay at grade M because this window fetch landed on the ordinary payment API neighbour page. This window shipped no new openable page.",
-  "export_ts": "2026-11-24T22:41:07+08:00",
-  "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-16 commit]; later=html)",
-  "latest_evidence": "qa/benchmark-refresh-R3426.log (972B, 2026-11-24)",
-  "next_milestone": "[R3426] next window (<=48h): (1) 载体 state 附加区；下窗**先**跑 `python src/os/logs_toolkit.py fold --plan-only` 再决定，**禁手改 state 文件**。(2) S4U 落地仍欠一次提权运行（本窗实测 `BigDomain-OSLoop`=Interactive）。(3) 导出「最近实物」槽仍按 mtime 排序（本窗无空位修；修法=写入器改读 deliverable 注册表顺序+三条判据先立）。(4) 零读者面重测不假设：`api_seller_rating_months`（1 月／2 笔／5★1＋4★1）为首选候选，实测空或弱勿取。(5) 基准下次到期 2026-12-01（本窗 11-24 已刷）。48h 窗至 2026-11-26。(6) tick 口径：本窗 3425→3426。",
+  "do": "2026-11-24 R3427 PRODUCT: the seller monthly rating question now has a door - api_seller_rating_months (live with AC-SRT1..8 and its own suite on disk) had zero readers across tools/ and preview/, so whether a shop's rating intake and its star level are moving month over month, and how the five bucket histogram sits beside the reply coverage, could only be read by calling the sandbox from a shell.",
+  "export_ts": "2026-11-24T22:56:42+08:00",
+  "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
+  "latest_evidence": "qa/seller-rating-months-board-R3427.log (3196B, 2026-11-24)",
+  "next_milestone": "[R3427] next window (<=48h): (1) 载体 state 附加区本窗已推进至 3427（log_items 103）；下窗**先**跑 `python src/os/logs_toolkit.py fold --plan-only` 再决定，**禁手改 state 文件**（本窗再证：载体为 CRLF，平仅式拼接必须用 `\\r\\n`）。(2) S4U 落地仍欠一次提权运行（本窗未提权）。(3) 导出「最近实物」槽仍按 mtime 排序（本窗未修；修法=写入器改读 deliverable 注册表顺序+三条判据先立）。(4) 零读者面重测不假设：`api_market_rating_months`（市场月轴，与本窗卖家面同族）为首选候选，实测空或弱勿取（R3389 空节律）；同族已开门面不重开。(5) 基准下次到期 2026-12-01。48h 窗至 2026-11-26。(6) tick 口径：本窗 3426→3427。(7) 承账不变：`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`backlog.md` 仍超 800000 闸。",
   "outs": [
-    "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-16 commit]; later=html)",
+    "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
     "refund-reasons-R3407.log (2274B)",
     "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-24 commit]; later=html)",
     "preview/seller-quality-scorecard.html (4643B) + preview/seller-quality-scorecard.json (1762B) [2026-11-24 mtime]"
@@ -137,7 +137,7 @@
       "2026-11-04 R2431 verification window on the item the debt gate named first=yes (reconcile-battery-R2431, carried from R2430): zero product code changed, the R2168 mixed-tree rule honoured. Leg 1 read 542/543 suites with the criteria total 4234 exactly as pre-registered and the only red was reconcile-daily-census at cd7 exit=2 DRIFT-FLAG; the census named the file (qa/battery-R2431-stdout.log, class=cmd-raw) because this window launched the battery with a Start-Process redirect pointed INTO the evidence directory. Repaired at the birth site, never by widening the baseline: the two launcher captures moved to the gitignored logs/ face, after which the census read flags=0 DRIFT-CLEAN with the 529-entry baseline untouched. Retry leg on the repaired tree: RUNNER PASS 543/543 suites plus controls 7/7 in 956.2s at criteria 4234, TMP RECLAIM 932/932. Four follow-up sections: matrix FAILED first on the stale doc without rewriting it, was regenerated stamp-aligned to 52317B, and the re-run read VERDICT R2431 PASS failing=none (fingerprint CLEAN 5 domains, profile byte-identical, census DRIFT-CLEAN). Debt: reconcile-battery-R2431 closed and product-face-R2432 opened first=yes through the shipped CLIs. Zero product points claimed."
     ],
     [
-      "3426",
+      "3427",
       "OSLoop 执行 tick",
       "对对外货架合规面落盘：api_public_listings 首次开门，AC-PLB1..6 全绿，哪张挂单待审、哪条未披露、哪条没有 AIGC 标识从此可看"
     ]
@@ -151,22 +151,22 @@
   "self_drive": {
     "window": "2026-11-18..2026-11-24",
     "window_days": 7,
-    "log_lines_in_window": 88,
+    "log_lines_in_window": 99,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 9,
+    "substantive_non_idle_mention_lines": 10,
     "proposals_total": 11,
     "proposals_open": 9,
     "queue_main_open": 6,
     "queue_tech_open": 5,
     "queue_explore_open": 1
   },
-  "state_bytes": 56530,
-  "next_milestone_due": "2026-11-26T22:41:07+08:00",
+  "state_bytes": 62771,
+  "next_milestone_due": "2026-11-26T22:56:42+08:00",
   "heartbeat": {
     "tick": 3424,
-    "state_tick": 3426,
-    "lag": 2,
+    "state_tick": 3427,
+    "lag": 3,
     "verdict": "FLAG",
     "reason": "heartbeat_row_debt"
   },
@@ -178,7 +178,7 @@
     "over7": 0,
     "dup_rows": 0,
     "distinct": 4,
-    "collapsed": 0,
+    "collapsed": 1,
     "labels_refreshed": 0,
     "notes_stale": 0,
     "note_claims": 0,

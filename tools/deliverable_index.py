@@ -250,6 +250,9 @@ PAIR_PRODUCERS = {
     # R3425: same single-writer shape - one render, one json, no back-hop block
     # - so the rating reply latency page names its producer.
     "reply-latency-board.json": "tools/reply_latency_board.py",
+    # R3427: same single-writer shape - one render, one json, no back-hop block
+    # - so the seller monthly rating page names its producer.
+    "seller-rating-months-board.json": "tools/seller_rating_months_board.py",
 }
 # R3392 (AC-DIX21 recipe arm). One pair on this page cannot be reproduced by ONE
 # command, and until now the law had only two answers - name a producer or print

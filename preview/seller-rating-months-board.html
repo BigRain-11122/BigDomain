@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>卖家月度评分对账单</title>
+<style>
+:root{--ink:#1b1f24;--muted:#66707a;--line:#dfe4ea;--bg:#f7f8fa}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:var(--bg);color:var(--ink);
+font:15px/1.65 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+main{max-width:1180px;margin:0 auto}
+h1{font-size:22px;margin:0 0 4px;font-weight:650}
+h2{font-size:16px;margin:22px 0 8px;font-weight:620}
+h3{font-size:14px;margin:18px 0 6px;font-weight:620;color:#3c4653}
+.meta{color:var(--muted);font-size:13px;margin-bottom:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;
+padding:14px 16px;margin-bottom:14px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600;font-size:12px}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.kpi{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.kpi div{flex:1 1 118px;border:1px solid var(--line);border-radius:8px;
+padding:10px 12px;background:#fff}
+.kpi b{display:block;font-size:19px;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--muted);font-size:12.5px}
+.bar{position:relative;height:9px;background:#eef1f5;border-radius:999px;
+min-width:110px}
+.bar i{display:block;height:9px;border-radius:999px;background:#4f7cac}
+.disclaimer{border-left:3px solid #c9a227;background:#fdf8ea;padding:10px 14px;
+font-size:13px}
+.badge{display:inline-block;margin-right:8px;padding:2px 8px;
+border:1px solid var(--line);border-radius:999px;font-size:12px;
+color:var(--muted)}
+.badge.peak{border-color:#9fb8c3;color:#3f6473}
+.law{font-size:13px;margin:6px 0}
+.empty{color:var(--muted);font-size:13px}
+footer{color:var(--muted);font-size:12px;margin:20px 0 8px}
+code{font-size:12.5px;background:#f2f4f7;padding:1px 5px;border-radius:4px}
+</style></head><body><main>
+<h1>卖家月度评分对账单</h1>
+<div class=meta>评分引入律 × 星级水位 × 五桶直方图 × 回复覆盖率 &middot; 生成于 2026-11-24 14:50:20Z &middot; <code>api_seller_rating_months</code></div>
+<h2>市场合计</h2>
+<div class=card><div class=kpi><div><span>覆盖月份数</span><b>1</b></div><div><span>有评分月份数</span><b>1</b></div><div><span>评分笔数</span><b>2</b></div><div><span>评分买家数</span><b>2</b></div><div><span>池化平均星级</span><b>4.5</b></div><div><span>五星笔数</span><b>1</b></div><div><span>低星笔数（≤2★）</span><b>0</b></div><div><span>已回复笔数</span><b>0</b></div><div><span>回复覆盖率</span><b>0.0</b></div><div><span>评分最高月</span><b>2026-09</b></div><div><span>最近月评分笔数</span><b>2</b></div></div><table><tr><th>月份</th><th class=n>评分笔数</th><th class=n>买家数</th><th class=n>平均星级</th><th class=n>5★</th><th class=n>4★</th><th class=n>3★</th><th class=n>2★</th><th class=n>1★</th><th class=n>低星数</th><th class=n>已回复</th><th class=n>回复覆盖率</th><th class=n>累计评分</th><th>笔数宽度条</th></tr><tr class="active" data-month="2026-09"><td>2026-09 <span class="badge peak">峰值月</span></td><td class="n">2</td><td class="n">2</td><td class="n">4.5</td><td class="n">1</td><td class="n">1</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td class="n">0.0</td><td class="n">2</td><td class=bar-cell><div class=bar><i style="width:100.0%"></i></div></td></tr></table></div>
+<h2>逐卖家</h2>
+<div class=card data-seller="usr:dana"><h3>逐卖家 &middot; <code>usr:dana</code></h3><div class=kpi><div><span>覆盖月份数</span><b>1</b></div><div><span>有评分月份数</span><b>1</b></div><div><span>评分笔数</span><b>2</b></div><div><span>评分买家数</span><b>2</b></div><div><span>池化平均星级</span><b>4.5</b></div><div><span>五星笔数</span><b>1</b></div><div><span>低星笔数（≤2★）</span><b>0</b></div><div><span>已回复笔数</span><b>0</b></div><div><span>回复覆盖率</span><b>0.0</b></div><div><span>评分最高月</span><b>2026-09</b></div><div><span>最近月评分笔数</span><b>2</b></div><div><span>市场池化平均（参照）</span><b>4.5</b></div></div><table><tr><th>月份</th><th class=n>评分笔数</th><th class=n>买家数</th><th class=n>平均星级</th><th class=n>5★</th><th class=n>4★</th><th class=n>3★</th><th class=n>2★</th><th class=n>1★</th><th class=n>低星数</th><th class=n>已回复</th><th class=n>回复覆盖率</th><th class=n>累计评分</th><th>笔数宽度条</th></tr><tr class="active" data-month="2026-09"><td>2026-09 <span class="badge peak">峰值月</span></td><td class="n">2</td><td class="n">2</td><td class="n">4.5</td><td class="n">1</td><td class="n">1</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td class="n">0.0</td><td class="n">2</td><td class=bar-cell><div class=bar><i style="width:100.0%"></i></div></td></tr></table></div><div class=card data-seller="usr:frank"><h3>逐卖家 &middot; <code>usr:frank</code></h3><div class=kpi><div><span>覆盖月份数</span><b>0</b></div><div><span>有评分月份数</span><b>0</b></div><div><span>评分笔数</span><b>0</b></div><div><span>评分买家数</span><b>0</b></div><div><span>池化平均星级</span><b>—</b></div><div><span>五星笔数</span><b>0</b></div><div><span>低星笔数（≤2★）</span><b>0</b></div><div><span>已回复笔数</span><b>0</b></div><div><span>回复覆盖率</span><b>—</b></div><div><span>评分最高月</span><b>—</b></div><div><span>最近月评分笔数</span><b>0</b></div><div><span>市场池化平均（参照）</span><b>4.5</b></div></div><p class=empty>该作用域尚无任何评分（诚实空，不是零分）</p></div>
+<h2>口径法则</h2>
+<div class=card><p class=law>法则一：月份数等于月行数，评分笔数等于月行笔数之和，且等于最后一月的累计评分。</p><p class=law>法则二：月行是从首个评分月到最后一个月的连续网格，中间无评分的月份照实印零行，其平均星级与回复覆盖率印破折号而不是 0.0。</p><p class=law>法则三：平均星级是全作用域池化均值（总星数除以总笔数），不是月均值的均值。</p><p class=law>法则四：五桶直方图（5★/4★/3★/2★/1★）逐月相加等于该月评分笔数。</p><p class=law>法则五：低星笔数是 2★ 与 1★ 之和。</p><p class=law>法则六：回复覆盖率的分母是该月评分笔数，无评分月份为未定义（破折号）。</p><p class=law>法则七：峰值月取首个评分笔数最多的月份，全部为零时印破折号。</p><p class=law>法则八：累计评分是单调累加器，最后一月的累计值等于信封评分笔数。</p><p class=law>法则九：买家数是去重计数，可以小于月行买家数相加；页面不按笔数反推买家。</p><p class=law>法则十：市场作用域从不与自身对标（市场平均为空）；卖家作用域带市场池化平均作为参照，其他卖家数据不会漏入。</p><p class=law>法则十一：宽度条横向比较各月评分笔数，是宽度不是份额；零行不画条。</p><p class=law>法则十二：开发者 API 市场是服务挂单面，不是投资建议。</p></div>
+<h2>免责声明</h2>
+<div class=card><div class=disclaimer>sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice</div>
+<p style="margin-top:10px"><span class=badge>AIGC 标识：本页由 AI 生成内容，数据为沙箱演示世界读数，非真实交易</span></p></div>
+<h2>生成方式</h2>
+<div class=card><code>python tools/seller_rating_months_board.py  ·  python tools/seller_rating_months_board.py --check</code></div>
+<footer>本页只印出厂面 api_seller_rating_months() 交给它的数，不重算任何合计；判据 AC-SRMB1..6 预注册于 src/os/backlog.md（R3427 PIN）。</footer>
+</main></body></html>
