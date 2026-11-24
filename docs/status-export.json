@@ -1,23 +1,21 @@
 {
   "ceo_face": {
-    "board_pages_skipped": [
-      "preview/face-sweep.html (8878B)"
-    ],
-    "current": "2026-11-25 R3440 PRODUCT: tools/refund_latency_board.py renders preview/refund-latency-board.html (7033B) and its json (2842B) from the shipped api_refund_latency face over a throwaway demo world - twelve KPI cards, a six-band half-open table whose last band carries a named no-upper-bound label, a contiguous month table, and the dash wherever the face has none.",
+    "board_pages_skipped": [],
+    "current": "2026-11-25 R3441 PRODUCT: tools/category_velocity_months_board.py renders preview/category-velocity-months-board.html (6449B) and its json (1302B) plus its label copy from the shipped api_category_velocity_months face over a throwaway demo world seeded through the shipped report helpers - one marked section per UTC sale month carrying the sale and listing counts, the four duration aggregates, both listing ids, the peak month and the whole-history benchmark, one row per category bucket, and the dash wherever the face has nothing.",
     "do": "R3422: gave api_public_listings its first openable page - eight KPI cards, one row per listing carrying both review stamps, the refusal reason, the two shipped flags side by side, the provider name and the unified social credit code, ten law sentences and the cross-face law pending==review_queue.pending; AC-PLB1..6 SUITE 6/6 first run, two measured controls, matrix 791 rows DOC-CURRENT, census pinned=791, entry index 23/23, chain read_only=True, face sweep 56/56, closeout PASS files=4960.",
     "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 mtime] (halves differ: html [2026-11-25 mtime] + json [2026-11-16 commit]; later=html)",
     "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 mtime] (halves differ: html [2026-11-25 mtime] + json [2026-11-16 commit]; later=html)",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/refund-latency-board-R3440.log (1528B, 2026-11-25)",
-    "latest_evidence": "qa/refund-latency-board-R3440.log (1528B, 2026-11-25)",
-    "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3440] next window (<=48h): (1) 零读者面清单余 24 面（本窗消 api_refund_latency），下窗仍先只读普查点名一位（面自带套件在盘且 tools/＋preview/ 实测零命中才动手，出厂世界为空的面勿取，已开门面不重开）。(2) S4U 落地仍欠一次提权运行（本窗实测 BigDomain-OSLoop=Interactive）。(3) export 最新产物槽的 writer 修复＋三条判据仍承账（R3422 记；本窗同证链必须最后渲）。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`：本窗开轮 72936B／闸 78500／minimal_window_lines=0，收口 76595B／余 1905B＝极紧，下窗必须先把载体腾出空间再干产品活，禁手改 state 文件。(6) tick 口径：本窗 3439→3440。(7) 承账不变：qa_log --ledger-check broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、backlog.md 体量闸。",
-    "next_milestone_due": "2026-11-27T03:09:51+08:00",
-    "updated_at": "2026-11-25T03:09:51+08:00",
+    "latest_artifact_note": "",
+    "latest_evidence": "qa/category-velocity-months-board-R3441.log (917B, 2026-11-25)",
+    "newest_pair_on_disk_is_board": false,
+    "next_milestone": "[R3441] next window (<=48h): (1) 零读者面清单余 23 面（本窗消 api_category_velocity_months），下窗仍先只读普查点名一位（面自带套件在盘且 tools/＋preview/＋src/os/ 实测零命中才动手，出厂世界为空的面勿取，已开门面不重开）。(2) S4U 落地仍欠一次提权运行（本窗实测 BigDomain-OSLoop=Interactive）。(3) export 最新产物槽的 writer 修复＋三条判据仍承账（R3422 记；本窗实证链必须最后渲）。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`：本窗开轮 76595B／闸 78500／余 1905B，执行 fold 795（R3422..R3426 五块 29228B）后 47128B，收口 53608B／余 24892B，禁手改 state 文件。(6) tick 口径：本窗 3440→3441。(7) 承账不变：qa_log --ledger-check broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、backlog.md 体量闸。",
+    "next_milestone_due": "2026-11-27T03:28:08+08:00",
+    "updated_at": "2026-11-25T03:28:08+08:00",
     "heartbeat": {
       "tick": 3428,
-      "state_tick": 3440,
-      "lag": 12,
+      "state_tick": 3441,
+      "lag": 13,
       "verdict": "FLAG",
       "reason": "heartbeat_row_debt"
     },
@@ -37,8 +35,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-25 R3440 PRODUCT: tools/refund_latency_board.py renders preview/refund-latency-board.html (7033B) and its json (2842B) from the shipped api_refund_latency face over a throwaway demo world - twelve KPI cards, a six-band half-open table whose last band carries a named no-upper-bound label, a contiguous month table, and the dash wherever the face has none.",
-  "claims": {"claimed": 33, "captured": 21, "contradicted": 0, "uncaptured": 12, "historic": 0, "rows": 99, "present": true, "census_ts": "2026-11-25T03:09:51+08:00"},
+  "current": "2026-11-25 R3441 PRODUCT: tools/category_velocity_months_board.py renders preview/category-velocity-months-board.html (6449B) and its json (1302B) plus its label copy from the shipped api_category_velocity_months face over a throwaway demo world seeded through the shipped report helpers - one marked section per UTC sale month carrying the sale and listing counts, the four duration aggregates, both listing ids, the peak month and the whole-history benchmark, one row per category bucket, and the dash wherever the face has nothing.",
+  "claims": {"claimed": 31, "captured": 19, "contradicted": 0, "uncaptured": 12, "historic": 0, "rows": 99, "present": true, "census_ts": "2026-11-25T03:28:08+08:00"},
   "chain": {"present": true, "rows": 99, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -67,11 +65,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-25 R3440 PRODUCT: tools/refund_latency_board.py renders preview/refund-latency-board.html (7033B) and its json (2842B) from the shipped api_refund_latency face over a throwaway demo world - twelve KPI cards, a six-band half-open table whose last band carries a named no-upper-bound label, a contiguous month table, and the dash wherever the face has none.",
-  "export_ts": "2026-11-25T03:09:51+08:00",
+  "do": "2026-11-25 R3441 PRODUCT: tools/category_velocity_months_board.py renders preview/category-velocity-months-board.html (6449B) and its json (1302B) plus its label copy from the shipped api_category_velocity_months face over a throwaway demo world seeded through the shipped report helpers - one marked section per UTC sale month carrying the sale and listing counts, the four duration aggregates, both listing ids, the peak month and the whole-history benchmark, one row per category bucket, and the dash wherever the face has nothing.",
+  "export_ts": "2026-11-25T03:28:08+08:00",
   "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 mtime] (halves differ: html [2026-11-25 mtime] + json [2026-11-16 commit]; later=html)",
-  "latest_evidence": "qa/refund-latency-board-R3440.log (1528B, 2026-11-25)",
-  "next_milestone": "[R3440] next window (<=48h): (1) 零读者面清单余 24 面（本窗消 api_refund_latency），下窗仍先只读普查点名一位（面自带套件在盘且 tools/＋preview/ 实测零命中才动手，出厂世界为空的面勿取，已开门面不重开）。(2) S4U 落地仍欠一次提权运行（本窗实测 BigDomain-OSLoop=Interactive）。(3) export 最新产物槽的 writer 修复＋三条判据仍承账（R3422 记；本窗同证链必须最后渲）。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`：本窗开轮 72936B／闸 78500／minimal_window_lines=0，收口 76595B／余 1905B＝极紧，下窗必须先把载体腾出空间再干产品活，禁手改 state 文件。(6) tick 口径：本窗 3439→3440。(7) 承账不变：qa_log --ledger-check broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、backlog.md 体量闸。",
+  "latest_evidence": "qa/category-velocity-months-board-R3441.log (917B, 2026-11-25)",
+  "next_milestone": "[R3441] next window (<=48h): (1) 零读者面清单余 23 面（本窗消 api_category_velocity_months），下窗仍先只读普查点名一位（面自带套件在盘且 tools/＋preview/＋src/os/ 实测零命中才动手，出厂世界为空的面勿取，已开门面不重开）。(2) S4U 落地仍欠一次提权运行（本窗实测 BigDomain-OSLoop=Interactive）。(3) export 最新产物槽的 writer 修复＋三条判据仍承账（R3422 记；本窗实证链必须最后渲）。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`：本窗开轮 76595B／闸 78500／余 1905B，执行 fold 795（R3422..R3426 五块 29228B）后 47128B，收口 53608B／余 24892B，禁手改 state 文件。(6) tick 口径：本窗 3440→3441。(7) 承账不变：qa_log --ledger-check broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、backlog.md 体量闸。",
   "outs": [
     "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 mtime] (halves differ: html [2026-11-25 mtime] + json [2026-11-16 commit]; later=html)",
     "preview/watch-conversion-board.html (9813B) + preview/watch-conversion-board.json (4590B) [2026-11-25 mtime]",
@@ -141,7 +139,7 @@
       "2026-11-04 R2431 verification window on the item the debt gate named first=yes (reconcile-battery-R2431, carried from R2430): zero product code changed, the R2168 mixed-tree rule honoured. Leg 1 read 542/543 suites with the criteria total 4234 exactly as pre-registered and the only red was reconcile-daily-census at cd7 exit=2 DRIFT-FLAG; the census named the file (qa/battery-R2431-stdout.log, class=cmd-raw) because this window launched the battery with a Start-Process redirect pointed INTO the evidence directory. Repaired at the birth site, never by widening the baseline: the two launcher captures moved to the gitignored logs/ face, after which the census read flags=0 DRIFT-CLEAN with the 529-entry baseline untouched. Retry leg on the repaired tree: RUNNER PASS 543/543 suites plus controls 7/7 in 956.2s at criteria 4234, TMP RECLAIM 932/932. Four follow-up sections: matrix FAILED first on the stale doc without rewriting it, was regenerated stamp-aligned to 52317B, and the re-run read VERDICT R2431 PASS failing=none (fingerprint CLEAN 5 domains, profile byte-identical, census DRIFT-CLEAN). Debt: reconcile-battery-R2431 closed and product-face-R2432 opened first=yes through the shipped CLIs. Zero product points claimed."
     ],
     [
-      "3440",
+      "3441",
       "OSLoop 执行 tick",
       "买家价格反应对账页落盘：api_buyer_price_reaction 首次开门，AC-BPRB1..6 全绿，关注后涨跌与成交从此可看。"
     ]
@@ -155,22 +153,22 @@
   "self_drive": {
     "window": "2026-11-19..2026-11-25",
     "window_days": 7,
-    "log_lines_in_window": 123,
+    "log_lines_in_window": 86,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 13,
+    "substantive_non_idle_mention_lines": 9,
     "proposals_total": 11,
     "proposals_open": 9,
     "queue_main_open": 6,
     "queue_tech_open": 5,
     "queue_explore_open": 1
   },
-  "state_bytes": 76595,
-  "next_milestone_due": "2026-11-27T03:09:51+08:00",
+  "state_bytes": 54162,
+  "next_milestone_due": "2026-11-27T03:28:08+08:00",
   "heartbeat": {
     "tick": 3428,
-    "state_tick": 3440,
-    "lag": 12,
+    "state_tick": 3441,
+    "lag": 13,
     "verdict": "FLAG",
     "reason": "heartbeat_row_debt"
   },

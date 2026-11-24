@@ -8392,6 +8392,15 @@ SUITES = [
     # throwaway world.
     ("os-refund-latency-board",
      os.path.join("..", "os", "test_refund_latency_board.py"), 6),
+    # R3441: tools/category_velocity_months_board.py renders the per-category
+    # monthly net sell-through velocity (api_category_velocity_months,
+    # AC-CVMT1..8) which had zero readers under tools/, preview/ and src/os;
+    # the page prints one marked section per UTC sale month - the sale and
+    # listing counts, the four duration aggregates, the peak month and the
+    # whole-history benchmark - plus one row per category bucket, and the
+    # suite re-reads the face over its own throwaway world.
+    ("os-category-velocity-months-board",
+     os.path.join("..", "os", "test_category_velocity_months_board.py"), 6),
     # R3436: tools/watch_conversion_board.py renders the watch-to-purchase
     # funnel (api_watch_conversion, AC-WCV1..8) which had zero readers under
     # tools/, preview/ and the report collector; the page prints the market

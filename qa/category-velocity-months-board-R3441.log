@@ -1,0 +1,13 @@
+CATEGORY-VELOCITY CHECK PASS fails=0 html=6449B json=1302B
+PASS AC-CVMB1 landed=True keys=19 missing=[] extra=[] rows=True cells=True count=1/1 report=True sources=True
+PASS AC-CVMB2 identical=True disclaimer_same=True bounds_same=True rows=1
+PASS AC-CVMB3 problems=[] driver_laws=[]
+PASS AC-CVMB4 months=True cells=True badge=True dash=True laws=True cap=True empty=True zero=True stand_in_none=False
+PASS AC-CVMB5 aigc=True disclaimer_on_page=True external_links=0 notadvice=True
+PASS AC-CVMB6 check_rc=0 wrote_nothing=True wired=6/6 face_suite=True
+SUITE PASS 6/6 criteria declared=6
+  evidence-source=walk-leg
+  evidence-walk considered=756 decoded=12 ceiling=64
+REGISTRY COUNTER CENSUS rows=809 readable=809 unparsed=0 silent=0 assembled_print_lines=304
+VERDICT PASS pinned=809
+CONTROLS: law_bar removal rc=3 E_CVMB_FACE page_same=True copy_same=True; month_count +7 reddens AC-CVMB1 AC-CVMB3 rc=2 restored=True
