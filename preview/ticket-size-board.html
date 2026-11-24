@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>客单价对账页 · 一单到底多大</title>
+<style>
+:root{--ink:#1b1f24;--muted:#66707a;--line:#dfe4ea;--bg:#f7f8fa}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:var(--bg);color:var(--ink);
+font:15px/1.65 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+main{max-width:1180px;margin:0 auto}
+h1{font-size:22px;margin:0 0 4px;font-weight:650}
+h2{font-size:16px;margin:22px 0 8px;font-weight:620}
+h3{font-size:14px;margin:16px 0 8px;font-weight:620;color:#3c4653}
+.meta{color:var(--muted);font-size:13px;margin-bottom:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;
+padding:14px 16px;margin-bottom:14px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600;font-size:12px}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.kpi{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.kpi div{flex:1 1 104px;border:1px solid var(--line);border-radius:8px;
+padding:10px 12px;background:#fff}
+.kpi b{display:block;font-size:18px;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--muted);font-size:12.5px}
+.disclaimer{border-left:3px solid #c9a227;background:#fdf8ea;padding:10px 14px;
+font-size:13px}
+.badge{display:inline-block;margin-right:8px;padding:2px 8px;
+border:1px solid var(--line);border-radius:999px;font-size:12px;
+color:var(--muted)}
+.bar{position:relative;height:10px;min-width:120px;max-width:240px;
+border:1px solid var(--line);border-radius:999px;background:#f2f4f7}
+.bar i{position:absolute;top:-3px;width:3px;height:16px;background:#3c4653}
+.law{font-size:13px;margin:6px 0}
+.empty{color:#b42318}
+.quiet-row td{color:var(--muted)}
+.cap{color:var(--muted);font-size:12px;margin:8px 0 0}
+footer{color:var(--muted);font-size:12px;margin:18px 0 0}
+</style></head><body><main>
+<h1>客单价对账页 · 一单到底多大</h1>
+<div class=meta>市场终身口径（含退款／不含退款两读）＋逐卖家口径＋月度走势 &middot; 生成于 2026-11-24 19:59:20Z &middot; <code>api_market_ticket_size</code> + <code>api_market_ticket_size_months</code></div>
+<h2>市场终身口径：退款算不算（两面并列）</h2>
+<div class=card data-scope="plain">
+<h3>不含退款单（面默认口径）</h3>
+<div class=kpi><div><span>成交单数</span><b>2</b></div><div><span>其中退款单</span><b>0</b></div><div><span>票面合计</span><b>13</b></div><div><span>退款票面</span><b>0</b></div><div><span>净票面</span><b>13</b></div><div><span>均值</span><b>6.5</b></div><div><span>P25</span><b>4.75</b></div><div><span>P50 中位</span><b>6.5</b></div><div><span>P75</span><b>8.25</b></div><div><span>P90</span><b>9.3</b></div><div><span>最低</span><b>3</b></div><div><span>最高</span><b>10</b></div><div><span>极差</span><b>7</b></div><div><span>类目数</span><b>1</b></div></div>
+<table><thead><tr><th>类目</th><th class="n">成交</th><th class="n">退款单</th><th class="n">票面</th><th class="n">净票面</th><th class="n">退款票面</th><th class="n">均值</th><th class="n">P50</th><th class="n">最低</th><th class="n">最高</th></tr></thead><tbody><tr data-category=""><td>未分类 <span class=badge>未分类</span></td><td class="n">2</td><td class="n">0</td><td class="n">13</td><td class="n">13</td><td class="n">0</td><td class="n">6.5</td><td class="n">6.5</td><td class="n">3</td><td class="n">10</td></tr></tbody></table>
+</div>
+
+<div class=card data-scope="refunded">
+<h3>含退款单（include_refunded=True）</h3>
+<div class=kpi><div><span>成交单数</span><b>4</b></div><div><span>其中退款单</span><b>2</b></div><div><span>票面合计</span><b>28</b></div><div><span>退款票面</span><b>15</b></div><div><span>净票面</span><b>13</b></div><div><span>均值</span><b>7</b></div><div><span>P25</span><b>4.5</b></div><div><span>P50 中位</span><b>7.5</b></div><div><span>P75</span><b>10</b></div><div><span>P90</span><b>10</b></div><div><span>最低</span><b>3</b></div><div><span>最高</span><b>10</b></div><div><span>极差</span><b>7</b></div><div><span>类目数</span><b>1</b></div></div>
+<table><thead><tr><th>类目</th><th class="n">成交</th><th class="n">退款单</th><th class="n">票面</th><th class="n">净票面</th><th class="n">退款票面</th><th class="n">均值</th><th class="n">P50</th><th class="n">最低</th><th class="n">最高</th></tr></thead><tbody><tr data-category=""><td>未分类 <span class=badge>未分类</span></td><td class="n">4</td><td class="n">2</td><td class="n">28</td><td class="n">13</td><td class="n">15</td><td class="n">7</td><td class="n">7.5</td><td class="n">3</td><td class="n">10</td></tr></tbody></table>
+</div>
+
+<h2>逐卖家终身口径（含退款）</h2>
+<div class=card data-scope="usr:dana">
+<h3>卖家</h3>
+<div class=kpi><div><span>成交单数</span><b>3</b></div><div><span>其中退款单</span><b>1</b></div><div><span>票面合计</span><b>23</b></div><div><span>退款票面</span><b>10</b></div><div><span>净票面</span><b>13</b></div><div><span>均值</span><b>7.67</b></div><div><span>P25</span><b>6.5</b></div><div><span>P50 中位</span><b>10</b></div><div><span>P75</span><b>10</b></div><div><span>P90</span><b>10</b></div><div><span>最低</span><b>3</b></div><div><span>最高</span><b>10</b></div><div><span>极差</span><b>7</b></div><div><span>类目数</span><b>1</b></div></div>
+<table><thead><tr><th>类目</th><th class="n">成交</th><th class="n">退款单</th><th class="n">票面</th><th class="n">净票面</th><th class="n">退款票面</th><th class="n">均值</th><th class="n">P50</th><th class="n">最低</th><th class="n">最高</th></tr></thead><tbody><tr data-category=""><td>未分类 <span class=badge>未分类</span></td><td class="n">3</td><td class="n">1</td><td class="n">23</td><td class="n">13</td><td class="n">10</td><td class="n">7.67</td><td class="n">10</td><td class="n">3</td><td class="n">10</td></tr></tbody></table>
+</div>
+<div class=card data-scope="usr:frank">
+<h3>卖家</h3>
+<div class=kpi><div><span>成交单数</span><b>1</b></div><div><span>其中退款单</span><b>1</b></div><div><span>票面合计</span><b>5</b></div><div><span>退款票面</span><b>5</b></div><div><span>净票面</span><b>0</b></div><div><span>均值</span><b>5</b></div><div><span>P25</span><b>5</b></div><div><span>P50 中位</span><b>5</b></div><div><span>P75</span><b>5</b></div><div><span>P90</span><b>5</b></div><div><span>最低</span><b>5</b></div><div><span>最高</span><b>5</b></div><div><span>极差</span><b>0</b></div><div><span>类目数</span><b>1</b></div></div>
+<table><thead><tr><th>类目</th><th class="n">成交</th><th class="n">退款单</th><th class="n">票面</th><th class="n">净票面</th><th class="n">退款票面</th><th class="n">均值</th><th class="n">P50</th><th class="n">最低</th><th class="n">最高</th></tr></thead><tbody><tr data-category=""><td>未分类 <span class=badge>未分类</span></td><td class="n">1</td><td class="n">1</td><td class="n">5</td><td class="n">0</td><td class="n">5</td><td class="n">5</td><td class="n">5</td><td class="n">5</td><td class="n">5</td></tr></tbody></table>
+</div>
+
+<h2>月度客单价走势</h2>
+<div class=card><table><thead><tr><th>月份</th><th class="n">成交</th><th class="n">退款单</th><th class="n">票面</th><th class="n">均值</th><th class="n">P50</th><th class="n">P90</th><th class="n">累计票面</th><th class="n">P90 位置</th></tr></thead><tbody><tr data-month="2026-08"><td>2026-08</td><td class="n">1</td><td class="n">1</td><td class="n">10</td><td class="n">10</td><td class="n">10</td><td class="n">10</td><td class="n">10</td><td><div class="bar"><i style="left:100.0%"></i></div></td></tr><tr data-month="2026-09"><td>2026-09</td><td class="n">3</td><td class="n">1</td><td class="n">18</td><td class="n">6</td><td class="n">5</td><td class="n">10</td><td class="n">28</td><td><div class="bar"><i style="left:100.0%"></i></div></td></tr></tbody></table>
+<p class=cap>条只标该月 P90 在本页月网格最低..最高之间的位置，是宽度不是占比。</p></div>
+<h2>页面读数的恒等律</h2>
+<div class=card><p class=law>恒等律一：每个口径的成交数、退款单数与票面合计，各自等于其类目行求和。</p><p class=law>恒等律二：净票面＝票面合计－退款票面；不计退款口径的票面合计等于计入退款口径的净票面。</p><p class=law>恒等律三：均值当且仅当成交数大于零时存在，且等于票面合计除以成交数（四位小数）。</p><p class=law>恒等律四：五数带与均值必须落在最低..最高之内，且极差＝最高－最低。</p><p class=law>读法：只读一个口径就会把「客单价」读成半个真相——退款单在默认口径里不参与均价。</p><p class=law>恒等律五：逐卖家计入退款口径的成交与票面求和，等于市场计入退款口径的同项。</p><p class=law>恒等律六：月度成交、退款单、票面三项求和，等于终身计入退款口径的同项。</p><p class=law>恒等律七：月度累计票面单调不减，且末行等于月度信封的票面合计。</p><p class=law>恒等律八：月份是连续 UTC 月网格，窗内无成交的月份仍以零行占位。</p><p class=law>恒等律九：峰值月取最早出现的最大中位月，末月中位与信封末值同源。</p><p class=law>恒等律十：逐月的均值、中位与 P90 都落在该月最低..最高之内，且中位不高于 P90。</p><p class=law>条只作位置不作占比：本页不计算份额、不计算增长率、不做任何推断。</p><p class=law>非投顾：本页是沙箱内开发者 API 市场的服务报价对账件，不构成任何投资建议。</p></div>
+<h2>面自带免责声明（逐字）</h2>
+<div class=card><div class=disclaimer>sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice</div>
+<p style="margin-top:10px"><span class=badge>AIGC 生成标识：本页由 BigDomain OSLoop 自迭代轮自动生成，数据来自本地沙箱只读面</span></p></div>
+<h2>复现命令</h2>
+<div class=card><code>python tools/ticket_size_board.py</code></div>
+<footer>BigDomain OSLoop &middot; 2026-11-24 19:59:20Z &middot; 只读对账件 · 不涉及真实交易 · 无外链</footer>
+</main></body></html>

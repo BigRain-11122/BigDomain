@@ -8410,6 +8410,14 @@ SUITES = [
     # throwaway world whose repricing rows are made through the shipped doors.
     ("os-seller-price-cadence-board",
      os.path.join("..", "os", "test_seller_price_cadence_board.py"), 6),
+    # R3443: tools/ticket_size_board.py renders the achieved ticket size
+    # (api_market_ticket_size and api_market_ticket_size_months, AC-MTM1..8)
+    # which had zero readers under tools/, preview/ and src/os; the page prints
+    # both refund conventions for the market, one scope per published seller and
+    # the monthly grid with its running accumulator, and the suite re-reads the
+    # shipped faces over its own throwaway world.
+    ("os-ticket-size-board",
+     os.path.join("..", "os", "test_ticket_size_board.py"), 6),
     # R3436: tools/watch_conversion_board.py renders the watch-to-purchase
     # funnel (api_watch_conversion, AC-WCV1..8) which had zero readers under
     # tools/, preview/ and the report collector; the page prints the market

@@ -1,0 +1,258 @@
+{
+ "generated_utc": "2026-11-24 19:59:20Z",
+ "face": "api_market_ticket_size",
+ "faces": [
+  "api_market_ticket_size",
+  "api_market_ticket_size_months"
+ ],
+ "scope": "market",
+ "market_lifetime": {
+  "scope": "market",
+  "dev_account": null,
+  "include_refunded": false,
+  "sale_count": 2,
+  "refunded_sale_count": 0,
+  "gross_tokens": 13,
+  "refunded_tokens": 0,
+  "net_gross_tokens": 13,
+  "mean_ticket": 6.5,
+  "p25_ticket": 4.75,
+  "p50_ticket": 6.5,
+  "p75_ticket": 8.25,
+  "p90_ticket": 9.3,
+  "min_ticket": 3,
+  "max_ticket": 10,
+  "spread": 7,
+  "category_count": 1,
+  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+  "categories": [
+   {
+    "category": null,
+    "sale_count": 2,
+    "refunded_sale_count": 0,
+    "gross_tokens": 13,
+    "net_gross_tokens": 13,
+    "refunded_tokens": 0,
+    "mean_ticket": 6.5,
+    "p50_ticket": 6.5,
+    "min_ticket": 3,
+    "max_ticket": 10
+   }
+  ]
+ },
+ "market_lifetime_refunded": {
+  "scope": "market",
+  "dev_account": null,
+  "include_refunded": true,
+  "sale_count": 4,
+  "refunded_sale_count": 2,
+  "gross_tokens": 28,
+  "refunded_tokens": 15,
+  "net_gross_tokens": 13,
+  "mean_ticket": 7.0,
+  "p25_ticket": 4.5,
+  "p50_ticket": 7.5,
+  "p75_ticket": 10.0,
+  "p90_ticket": 10.0,
+  "min_ticket": 3,
+  "max_ticket": 10,
+  "spread": 7,
+  "category_count": 1,
+  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+  "categories": [
+   {
+    "category": null,
+    "sale_count": 4,
+    "refunded_sale_count": 2,
+    "gross_tokens": 28,
+    "net_gross_tokens": 13,
+    "refunded_tokens": 15,
+    "mean_ticket": 7.0,
+    "p50_ticket": 7.5,
+    "min_ticket": 3,
+    "max_ticket": 10
+   }
+  ]
+ },
+ "sellers": [
+  {
+   "seller": "usr:dana",
+   "lifetime": {
+    "scope": "seller",
+    "dev_account": "usr:dana",
+    "include_refunded": true,
+    "sale_count": 3,
+    "refunded_sale_count": 1,
+    "gross_tokens": 23,
+    "refunded_tokens": 10,
+    "net_gross_tokens": 13,
+    "mean_ticket": 7.666666666666667,
+    "p25_ticket": 6.5,
+    "p50_ticket": 10.0,
+    "p75_ticket": 10.0,
+    "p90_ticket": 10.0,
+    "min_ticket": 3,
+    "max_ticket": 10,
+    "spread": 7,
+    "category_count": 1,
+    "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+    "categories": [
+     {
+      "category": null,
+      "sale_count": 3,
+      "refunded_sale_count": 1,
+      "gross_tokens": 23,
+      "net_gross_tokens": 13,
+      "refunded_tokens": 10,
+      "mean_ticket": 7.666666666666667,
+      "p50_ticket": 10.0,
+      "min_ticket": 3,
+      "max_ticket": 10
+     }
+    ]
+   },
+   "lifetime_plain": {
+    "scope": "seller",
+    "dev_account": "usr:dana",
+    "include_refunded": false,
+    "sale_count": 2,
+    "refunded_sale_count": 0,
+    "gross_tokens": 13,
+    "refunded_tokens": 0,
+    "net_gross_tokens": 13,
+    "mean_ticket": 6.5,
+    "p25_ticket": 4.75,
+    "p50_ticket": 6.5,
+    "p75_ticket": 8.25,
+    "p90_ticket": 9.3,
+    "min_ticket": 3,
+    "max_ticket": 10,
+    "spread": 7,
+    "category_count": 1,
+    "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+    "categories": [
+     {
+      "category": null,
+      "sale_count": 2,
+      "refunded_sale_count": 0,
+      "gross_tokens": 13,
+      "net_gross_tokens": 13,
+      "refunded_tokens": 0,
+      "mean_ticket": 6.5,
+      "p50_ticket": 6.5,
+      "min_ticket": 3,
+      "max_ticket": 10
+     }
+    ]
+   }
+  },
+  {
+   "seller": "usr:frank",
+   "lifetime": {
+    "scope": "seller",
+    "dev_account": "usr:frank",
+    "include_refunded": true,
+    "sale_count": 1,
+    "refunded_sale_count": 1,
+    "gross_tokens": 5,
+    "refunded_tokens": 5,
+    "net_gross_tokens": 0,
+    "mean_ticket": 5.0,
+    "p25_ticket": 5.0,
+    "p50_ticket": 5.0,
+    "p75_ticket": 5.0,
+    "p90_ticket": 5.0,
+    "min_ticket": 5,
+    "max_ticket": 5,
+    "spread": 0,
+    "category_count": 1,
+    "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+    "categories": [
+     {
+      "category": null,
+      "sale_count": 1,
+      "refunded_sale_count": 1,
+      "gross_tokens": 5,
+      "net_gross_tokens": 0,
+      "refunded_tokens": 5,
+      "mean_ticket": 5.0,
+      "p50_ticket": 5.0,
+      "min_ticket": 5,
+      "max_ticket": 5
+     }
+    ]
+   },
+   "lifetime_plain": {
+    "scope": "seller",
+    "dev_account": "usr:frank",
+    "include_refunded": false,
+    "sale_count": 0,
+    "refunded_sale_count": 0,
+    "gross_tokens": 0,
+    "refunded_tokens": 0,
+    "net_gross_tokens": 0,
+    "mean_ticket": null,
+    "p25_ticket": null,
+    "p50_ticket": null,
+    "p75_ticket": null,
+    "p90_ticket": null,
+    "min_ticket": null,
+    "max_ticket": null,
+    "spread": null,
+    "category_count": 0,
+    "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+    "categories": []
+   }
+  }
+ ],
+ "months": {
+  "month_count": 2,
+  "first_month": "2026-08",
+  "last_month": "2026-09",
+  "sale_count": 4,
+  "refunded_sale_count": 2,
+  "gross_tokens": 28,
+  "mean_ticket": 7.0,
+  "median_ticket": 7.5,
+  "p90_ticket": 10,
+  "min_ticket": 3,
+  "max_ticket": 10,
+  "peak_month": "2026-08",
+  "peak_median_ticket": 10.0,
+  "latest_month_median_ticket": 5.0,
+  "rows": [
+   {
+    "month": "2026-08",
+    "sale_count": 1,
+    "refunded_sale_count": 1,
+    "gross_tokens": 10,
+    "mean_ticket": 10.0,
+    "median_ticket": 10.0,
+    "p90_ticket": 10,
+    "running_ticket_tokens": 10
+   },
+   {
+    "month": "2026-09",
+    "sale_count": 3,
+    "refunded_sale_count": 1,
+    "gross_tokens": 18,
+    "mean_ticket": 6.0,
+    "median_ticket": 5.0,
+    "p90_ticket": 10,
+    "running_ticket_tokens": 28
+   }
+  ]
+ },
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/ticket-size-board.html",
+ "sources": {
+  "driver": "bab310fe0c9c0372",
+  "copy": "c01b2f7aba39acdd",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 10591,
+  "json": 6260
+ }
+}

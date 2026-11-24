@@ -734,6 +734,7 @@
     "os-suite-matrix-reconcile-shape",
     "os-suite-matrix-reconcile-table-shape",
     "os-suite-output-audit",
+    "os-ticket-size-board",
     "os-tree-snapshot",
     "os-ugc-gate-report",
     "os-value-domain",

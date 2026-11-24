@@ -3,23 +3,23 @@
     "board_pages_skipped": [
       "preview/face-sweep.html (8878B)"
     ],
-    "current": "2026-11-25 R3442 PRODUCT: the monthly repricing question now has a door - api_seller_price_cadence_months (live with AC-SPC1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so whether a shop repriced this month, which way, how big the steps were and how quiet last month was could only be read by calling the sandbox from a shell.",
+    "current": "2026-11-25 R3443 PRODUCT: the ticket size question now has a door - api_market_ticket_size and api_market_ticket_size_months (live with AC-MTM1..8 and their shipped suite on disk) had zero readers across tools/, preview/ and src/os, so how large one order actually is, what the five-number band looks like with refunded tickets counted and left out, how wide one seller's own band sits and whether this month's tickets are richer than last month's could only be read by calling the sandbox from a shell.",
     "do": "R3422: gave api_public_listings its first openable page - eight KPI cards, one row per listing carrying both review stamps, the refusal reason, the two shipped flags side by side, the provider name and the unified social credit code, ten law sentences and the cross-face law pending==review_queue.pending; AC-PLB1..6 SUITE 6/6 first run, two measured controls, matrix 791 rows DOC-CURRENT, census pinned=791, entry index 23/23, chain read_only=True, face sweep 56/56, closeout PASS files=4960.",
     "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 mtime] (halves differ: html [2026-11-25 mtime] + json [2026-11-16 commit]; later=html)",
     "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 mtime] (halves differ: html [2026-11-25 mtime] + json [2026-11-16 commit]; later=html)",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
     "latest_artifact_note": "",
-    "latest_evidence": "qa/seller-price-cadence-board-R3442.log (578B, 2026-11-25)",
+    "latest_evidence": "qa/reconcile-ticket-size-R3443.log (1150B, 2026-11-25)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3442] next window (<=48h): (1) 零读者面清单余 25 面（本窗消 api_seller_price_cadence_months），下窗仍先只读普查点名一位（面自带套件在盘且 tools/＋preview/＋src/os 实测零命中才动手，出厂世界为空的面须经出厂写入门建行并显式声明）。(2) S4U 落地仍欠一次提权运行（本窗未测 LogonType）。(3) export 最新产物槽 writer 修复＋三条判据仍承账（R3422 记；本窗再证条目依赖渲染顺序）。**(4) 渲染顺序新实测（本窗两轮才收敛）＝`驱动→套件→证据→矩阵→入口页→首元链→面扫`；面扫必须最后写，且入口页/链须在面扫之前渲完并各自通过 `--check`，否则 AC-FSW10 E_FACE_STALE 与 AC-DIX21/23 互锁。** (5) 基准下次到期 2026-12-01。(6) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`（本窗开轮 54162B／闸 78500＝无需 fold）。(7) tick 口径：本窗 3441→3442。(8) 承账不变：qa_log --ledger-check broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、backlog.md 体量闸。",
-    "next_milestone_due": "2026-11-27T03:48:42+08:00",
-    "updated_at": "2026-11-25T03:48:42+08:00",
+    "next_milestone": "[R3443] next window (<=48h): (1) 零读者面清单余 27 面（本窗消 `api_market_ticket_size` 与 `api_market_ticket_size_months` 两面），下窗仍先只读普查点名一位（面自带套件在盘且 tools/＋preview/＋src/os 实测零命中才动手，出厂世界为空的面勿取，已开门面不重开）。(2) S4U 落地仍欠一次提权运行（本窗未测 LogonType）。(3) export 最新产物槽 writer 修复＋三条判据仍承账（R3422 记；本窗再证链最后渲致槽落在链页）。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`：本窗开轮 60219B／闸 78500，收口 66840B／余 11660B，禁手改 state 文件（本窗写回时两处引号自伤已就地修好并验 JSON，教训＝追加器须整条 JSON 串拼接，勿切掉既有条目收尾引号）。(6) tick 口径：本窗 3442→3443。(7) **矩阵写法实测**＝`reconcile_all.py --only <row>` 产出的是 `RUNNER PARTIAL`，`suite_matrix_reconcile.py --write --evidence` 会拒（reason=no RUNNER line）；正法＝不带 `--evidence` 走 walk-leg 挑最新全量 PASS 腿。(8) 承账不变：qa_log --ledger-check broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、backlog.md 体量闸。",
+    "next_milestone_due": "2026-11-27T04:07:12+08:00",
+    "updated_at": "2026-11-25T04:07:12+08:00",
     "heartbeat": {
       "tick": 3442,
-      "state_tick": 3442,
-      "lag": 0,
-      "verdict": "PASS",
-      "reason": "fresh"
+      "state_tick": 3443,
+      "lag": 1,
+      "verdict": "FLAG",
+      "reason": "heartbeat_row_debt"
     },
     "outs_age": {
       "rows": 6,
@@ -35,16 +35,10 @@
       "note_claims": 0,
       "criteria_stale": 0,
       "criteria_claims": 0
-    },
-    "corpus": {
-      "files": 4982,
-      "bytes": 511843518,
-      "mb": 511.8,
-      "readable": 4982
     }
   },
-  "current": "2026-11-25 R3442 PRODUCT: the monthly repricing question now has a door - api_seller_price_cadence_months (live with AC-SPC1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so whether a shop repriced this month, which way, how big the steps were and how quiet last month was could only be read by calling the sandbox from a shell.",
-  "claims": {"claimed": 31, "captured": 19, "contradicted": 0, "uncaptured": 12, "historic": 0, "rows": 100, "present": true, "census_ts": "2026-11-25T03:48:42+08:00"},
+  "current": "2026-11-25 R3443 PRODUCT: the ticket size question now has a door - api_market_ticket_size and api_market_ticket_size_months (live with AC-MTM1..8 and their shipped suite on disk) had zero readers across tools/, preview/ and src/os, so how large one order actually is, what the five-number band looks like with refunded tickets counted and left out, how wide one seller's own band sits and whether this month's tickets are richer than last month's could only be read by calling the sandbox from a shell.",
+  "claims": {"claimed": 31, "captured": 19, "contradicted": 0, "uncaptured": 12, "historic": 0, "rows": 100, "present": true, "census_ts": "2026-11-25T04:07:12+08:00"},
   "chain": {"present": true, "rows": 100, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -73,11 +67,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-25 R3442 PRODUCT: the monthly repricing question now has a door - api_seller_price_cadence_months (live with AC-SPC1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so whether a shop repriced this month, which way, how big the steps were and how quiet last month was could only be read by calling the sandbox from a shell.",
-  "export_ts": "2026-11-25T03:48:42+08:00",
+  "do": "2026-11-25 R3443 PRODUCT: the ticket size question now has a door - api_market_ticket_size and api_market_ticket_size_months (live with AC-MTM1..8 and their shipped suite on disk) had zero readers across tools/, preview/ and src/os, so how large one order actually is, what the five-number band looks like with refunded tickets counted and left out, how wide one seller's own band sits and whether this month's tickets are richer than last month's could only be read by calling the sandbox from a shell.",
+  "export_ts": "2026-11-25T04:07:12+08:00",
   "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 mtime] (halves differ: html [2026-11-25 mtime] + json [2026-11-16 commit]; later=html)",
-  "latest_evidence": "qa/seller-price-cadence-board-R3442.log (578B, 2026-11-25)",
-  "next_milestone": "[R3442] next window (<=48h): (1) 零读者面清单余 25 面（本窗消 api_seller_price_cadence_months），下窗仍先只读普查点名一位（面自带套件在盘且 tools/＋preview/＋src/os 实测零命中才动手，出厂世界为空的面须经出厂写入门建行并显式声明）。(2) S4U 落地仍欠一次提权运行（本窗未测 LogonType）。(3) export 最新产物槽 writer 修复＋三条判据仍承账（R3422 记；本窗再证条目依赖渲染顺序）。**(4) 渲染顺序新实测（本窗两轮才收敛）＝`驱动→套件→证据→矩阵→入口页→首元链→面扫`；面扫必须最后写，且入口页/链须在面扫之前渲完并各自通过 `--check`，否则 AC-FSW10 E_FACE_STALE 与 AC-DIX21/23 互锁。** (5) 基准下次到期 2026-12-01。(6) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`（本窗开轮 54162B／闸 78500＝无需 fold）。(7) tick 口径：本窗 3441→3442。(8) 承账不变：qa_log --ledger-check broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、backlog.md 体量闸。",
+  "latest_evidence": "qa/reconcile-ticket-size-R3443.log (1150B, 2026-11-25)",
+  "next_milestone": "[R3443] next window (<=48h): (1) 零读者面清单余 27 面（本窗消 `api_market_ticket_size` 与 `api_market_ticket_size_months` 两面），下窗仍先只读普查点名一位（面自带套件在盘且 tools/＋preview/＋src/os 实测零命中才动手，出厂世界为空的面勿取，已开门面不重开）。(2) S4U 落地仍欠一次提权运行（本窗未测 LogonType）。(3) export 最新产物槽 writer 修复＋三条判据仍承账（R3422 记；本窗再证链最后渲致槽落在链页）。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`：本窗开轮 60219B／闸 78500，收口 66840B／余 11660B，禁手改 state 文件（本窗写回时两处引号自伤已就地修好并验 JSON，教训＝追加器须整条 JSON 串拼接，勿切掉既有条目收尾引号）。(6) tick 口径：本窗 3442→3443。(7) **矩阵写法实测**＝`reconcile_all.py --only <row>` 产出的是 `RUNNER PARTIAL`，`suite_matrix_reconcile.py --write --evidence` 会拒（reason=no RUNNER line）；正法＝不带 `--evidence` 走 walk-leg 挑最新全量 PASS 腿。(8) 承账不变：qa_log --ledger-check broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、backlog.md 体量闸。",
   "outs": [
     "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 mtime] (halves differ: html [2026-11-25 mtime] + json [2026-11-16 commit]; later=html)",
     "preview/watch-conversion-board.html (9813B) + preview/watch-conversion-board.json (4590B) [2026-11-25 mtime]",
@@ -147,7 +141,7 @@
       "2026-11-04 R2431 verification window on the item the debt gate named first=yes (reconcile-battery-R2431, carried from R2430): zero product code changed, the R2168 mixed-tree rule honoured. Leg 1 read 542/543 suites with the criteria total 4234 exactly as pre-registered and the only red was reconcile-daily-census at cd7 exit=2 DRIFT-FLAG; the census named the file (qa/battery-R2431-stdout.log, class=cmd-raw) because this window launched the battery with a Start-Process redirect pointed INTO the evidence directory. Repaired at the birth site, never by widening the baseline: the two launcher captures moved to the gitignored logs/ face, after which the census read flags=0 DRIFT-CLEAN with the 529-entry baseline untouched. Retry leg on the repaired tree: RUNNER PASS 543/543 suites plus controls 7/7 in 956.2s at criteria 4234, TMP RECLAIM 932/932. Four follow-up sections: matrix FAILED first on the stale doc without rewriting it, was regenerated stamp-aligned to 52317B, and the re-run read VERDICT R2431 PASS failing=none (fingerprint CLEAN 5 domains, profile byte-identical, census DRIFT-CLEAN). Debt: reconcile-battery-R2431 closed and product-face-R2432 opened first=yes through the shipped CLIs. Zero product points claimed."
     ],
     [
-      "3442",
+      "3443",
       "OSLoop 执行 tick",
       "买家价格反应对账页落盘：api_buyer_price_reaction 首次开门，AC-BPRB1..6 全绿，关注后涨跌与成交从此可看。"
     ]
@@ -161,24 +155,24 @@
   "self_drive": {
     "window": "2026-11-19..2026-11-25",
     "window_days": 7,
-    "log_lines_in_window": 97,
+    "log_lines_in_window": 107,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 10,
+    "substantive_non_idle_mention_lines": 11,
     "proposals_total": 11,
     "proposals_open": 9,
     "queue_main_open": 6,
     "queue_tech_open": 5,
     "queue_explore_open": 1
   },
-  "state_bytes": 60219,
-  "next_milestone_due": "2026-11-27T03:48:42+08:00",
+  "state_bytes": 67001,
+  "next_milestone_due": "2026-11-27T04:07:12+08:00",
   "heartbeat": {
     "tick": 3442,
-    "state_tick": 3442,
-    "lag": 0,
-    "verdict": "PASS",
-    "reason": "fresh"
+    "state_tick": 3443,
+    "lag": 1,
+    "verdict": "FLAG",
+    "reason": "heartbeat_row_debt"
   },
   "outs_age": {
     "rows": 6,
@@ -194,11 +188,5 @@
     "note_claims": 0,
     "criteria_stale": 0,
     "criteria_claims": 0
-  },
-  "corpus": {
-    "files": 4982,
-    "bytes": 511843518,
-    "mb": 511.8,
-    "readable": 4982
   }
 }
