@@ -732,6 +732,7 @@
     "os-ugc-gate-report",
     "os-value-domain",
     "os-watch-alerts-board",
+    "os-watch-conversion-board",
     "panel",
     "panel-lobby",
     "panel-log-ns",

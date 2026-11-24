@@ -1,0 +1,59 @@
+WATCH-CONVERSION-BOARD R3436 evidence
+=====================================
+face      api_watch_conversion (AC-WCV1..8, suite src/sandbox/ledger/test_apimarket_watchconversion.py on disk)
+reader    zero readers under tools/, preview/ and src/sandbox/ledger/apimarket_report.py at open (git grep -c -F rc=1)
+driver    tools/watch_conversion_board.py -> preview/watch-conversion-board.html + preview/watch-conversion-board.json + copy
+criteria  AC-WCVB1..AC-WCVB6 pre-registered in src/os/backlog.md (R3436 PIN) before any code
+world     shipped doors only (publish_api / watch_api / purchase_api / refund_api) under a patched clock;
+          the shipped demo world carries no watch row at all, so the funnel fixture is built with those doors
+
+CHECK     WATCH-CONVERSION CHECK PASS fails=0 html=9813B json=4590B
+SUITE     SUITE PASS 6/6 criteria declared=6
+  AC-WCVB1 landed=True keys=11 missing=[] extra=[] blocks=True rows=True sources=True sellers=2/2 report=True
+  AC-WCVB2 market_same=True sellers_same=True ids_same=True disclaimer_same=True order_same=True sellers=2 watches=8
+  AC-WCVB3 problems=[]
+  AC-WCVB4 market_cards=1 seller_cards=2/2 rows=6/6 bars=6/6 dashes=10/0 laws=True kpi=True mix=True empty_probe=True nocat_probe=True bare_none=False
+  AC-WCVB5 aigc=True disclaimer_on_page=True not_advice=True external_links=0
+  AC-WCVB6 check_rc=0 wrote_nothing=True wired=6/6 face_suite=True producer=True
+
+MEASURED  market watches=8 pre_owned=2 funnel=6 converted=3 pending=3 rate=50.0%
+          latency avg=133.67s median=100s fastest=1s slowest=300s oldest_pending=2026-11-01T00:00:00Z
+  data   watches 3 / pre_owned 1 / funnel 2 / converted 1 / pending 1 / rate 50.0% / avg 100s
+  tools  watches 4 / pre_owned 1 / funnel 3 / converted 2 / pending 1 / rate 66.7% / avg 150.5s
+  none   watches 1 / pre_owned 0 / funnel 1 / converted 0 / pending 1 / rate 0.0% / latency dashes
+  usr:dana  4 watches / funnel 3 / converted 1 / pending 2 / rate 33.3%  (data + uncategorized)
+  usr:frank 4 watches / funnel 3 / converted 2 / pending 1 / rate 66.7%  (tools)
+
+CONTROL-A a removed label-copy key (law_bar) refused rc=3 E_WCVB_FACE with the page sha256 unchanged
+          and the copy restored byte-identically from the pre-edit copy
+CONTROL-B a forced market.converted_count +7 over an untouched row set reddened AC-WCVB2, AC-WCVB3,
+          AC-WCVB4 and AC-WCVB6 at rc=2; the restored json re-read SUITE PASS 6/6 and --check PASS
+
+WIRING    registry os-watch-conversion-board(6); producer row watch-conversion-board.json -> tools/watch_conversion_board.py
+          matrix WRITTEN 83022 bytes 804 rows then DOC-CURRENT (walk-leg evidence qa/reconcile-all-R2739.log)
+          census rows=804 readable=804 VERDICT PASS pinned=804
+          entry index VERDICT PASS 23/23 fingerprint=d04c385e63b295a2
+          first-yuan chain VERDICT PASS read_only=True legs=2
+          face sweep VERDICT PASS 13/13 fingerprint=6049b5fd1edde251 then --check 21/21
+          closeout CLOSEOUT-GATE PASS files=4976 census=PASS matrix=DOC-CURRENT
+          carrier 71893B gate 78500 margin 6607 fold_needed=false (fold R790 moved R3419/R3420 first)
+
+HONEST
+  (a) this moves an already-delivered reading onto a page the CEO can open - zero new tables,
+      zero new readings, zero business semantics.
+  (b) the shipped demo world holds no watch row, so the whole funnel fixture comes from the
+      shipped publish/watch/purchase/refund doors under a patched clock; the face subtracts the
+      two stored stamps it finds, so the latency chain is real and the fixture is not hidden.
+  (c) the uncategorized bucket, its null-last order and the zero-rate dash are landed rows
+      (erin watched d3, bought it and refunded it, so the net law parks it pending); the
+      empty-seller and empty-category shapes are proved by in-memory probes only.
+  (d) ZERO payment capability and no network beyond loopback - the five physical pieces
+      (merchant id, server, domain, filing+ICP, miniprogram appid+secret) are still missing,
+      so buyers still cannot pay.
+  (e) the CEO-face newest-artifact slot still answers by mtime (this window it names
+      preview/first-yuan-chain.html because the entry page and the chain quote each other's
+      bytes and the chain has to render last); the slot writer fix and its three criteria
+      carry unchanged as debt.
+  (f) carried unchanged: qa_log --ledger-check broken=5 (R3371 ruling = diagnose, not repair),
+      the full battery was not re-run, Docker absent, backlog.md past the 800000 gate, and
+      BigDomain-OSLoop still runs at LogonType=Interactive (the S4U elevation is still owed).

@@ -1,0 +1,159 @@
+{
+ "generated_utc": "2026-11-24 17:49:37Z",
+ "face": "api_watch_conversion",
+ "board_face": "api_board",
+ "scope": "market+seller",
+ "seller_count": 2,
+ "sellers": [
+  {
+   "dev_account": "usr:dana",
+   "include_uncategorized": true,
+   "watch_count": 4,
+   "pre_owned_count": 1,
+   "funnel_count": 3,
+   "converted_count": 1,
+   "pending_count": 2,
+   "conversion_rate": 0.3333333333333333,
+   "avg_convert_seconds": 100.0,
+   "median_convert_seconds": 100.0,
+   "fastest_convert_seconds": 100,
+   "slowest_convert_seconds": 100,
+   "oldest_pending_watch_utc": "2026-11-01T00:00:00Z",
+   "categories": [
+    {
+     "category": "data",
+     "watch_count": 3,
+     "pre_owned_count": 1,
+     "funnel_count": 2,
+     "converted_count": 1,
+     "pending_count": 1,
+     "conversion_rate": 0.5,
+     "avg_convert_seconds": 100.0,
+     "median_convert_seconds": 100.0,
+     "fastest_convert_seconds": 100,
+     "slowest_convert_seconds": 100,
+     "oldest_pending_watch_utc": "2026-11-01T00:03:20Z"
+    },
+    {
+     "category": null,
+     "watch_count": 1,
+     "pre_owned_count": 0,
+     "funnel_count": 1,
+     "converted_count": 0,
+     "pending_count": 1,
+     "conversion_rate": 0.0,
+     "avg_convert_seconds": null,
+     "median_convert_seconds": null,
+     "fastest_convert_seconds": null,
+     "slowest_convert_seconds": null,
+     "oldest_pending_watch_utc": "2026-11-01T00:00:00Z"
+    }
+   ],
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice"
+  },
+  {
+   "dev_account": "usr:frank",
+   "include_uncategorized": true,
+   "watch_count": 4,
+   "pre_owned_count": 1,
+   "funnel_count": 3,
+   "converted_count": 2,
+   "pending_count": 1,
+   "conversion_rate": 0.6666666666666666,
+   "avg_convert_seconds": 150.5,
+   "median_convert_seconds": 150.5,
+   "fastest_convert_seconds": 1,
+   "slowest_convert_seconds": 300,
+   "oldest_pending_watch_utc": "2026-11-01T00:11:40Z",
+   "categories": [
+    {
+     "category": "tools",
+     "watch_count": 4,
+     "pre_owned_count": 1,
+     "funnel_count": 3,
+     "converted_count": 2,
+     "pending_count": 1,
+     "conversion_rate": 0.6666666666666666,
+     "avg_convert_seconds": 150.5,
+     "median_convert_seconds": 150.5,
+     "fastest_convert_seconds": 1,
+     "slowest_convert_seconds": 300,
+     "oldest_pending_watch_utc": "2026-11-01T00:11:40Z"
+    }
+   ],
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice"
+  }
+ ],
+ "market": {
+  "dev_account": null,
+  "include_uncategorized": true,
+  "watch_count": 8,
+  "pre_owned_count": 2,
+  "funnel_count": 6,
+  "converted_count": 3,
+  "pending_count": 3,
+  "conversion_rate": 0.5,
+  "avg_convert_seconds": 133.66666666666666,
+  "median_convert_seconds": 100.0,
+  "fastest_convert_seconds": 1,
+  "slowest_convert_seconds": 300,
+  "oldest_pending_watch_utc": "2026-11-01T00:00:00Z",
+  "categories": [
+   {
+    "category": "data",
+    "watch_count": 3,
+    "pre_owned_count": 1,
+    "funnel_count": 2,
+    "converted_count": 1,
+    "pending_count": 1,
+    "conversion_rate": 0.5,
+    "avg_convert_seconds": 100.0,
+    "median_convert_seconds": 100.0,
+    "fastest_convert_seconds": 100,
+    "slowest_convert_seconds": 100,
+    "oldest_pending_watch_utc": "2026-11-01T00:03:20Z"
+   },
+   {
+    "category": "tools",
+    "watch_count": 4,
+    "pre_owned_count": 1,
+    "funnel_count": 3,
+    "converted_count": 2,
+    "pending_count": 1,
+    "conversion_rate": 0.6666666666666666,
+    "avg_convert_seconds": 150.5,
+    "median_convert_seconds": 150.5,
+    "fastest_convert_seconds": 1,
+    "slowest_convert_seconds": 300,
+    "oldest_pending_watch_utc": "2026-11-01T00:11:40Z"
+   },
+   {
+    "category": null,
+    "watch_count": 1,
+    "pre_owned_count": 0,
+    "funnel_count": 1,
+    "converted_count": 0,
+    "pending_count": 1,
+    "conversion_rate": 0.0,
+    "avg_convert_seconds": null,
+    "median_convert_seconds": null,
+    "fastest_convert_seconds": null,
+    "slowest_convert_seconds": null,
+    "oldest_pending_watch_utc": "2026-11-01T00:00:00Z"
+   }
+  ],
+  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice"
+ },
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/watch-conversion-board.html",
+ "sources": {
+  "driver": "9221f8df8ceee78a",
+  "copy": "5e14f11a9309974a",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 9813,
+  "json": 4590
+ }
+}

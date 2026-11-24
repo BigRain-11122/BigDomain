@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>关注→成交漏斗对账页</title>
+<style>
+:root{--ink:#1b1f24;--muted:#66707a;--line:#dfe4ea;--bg:#f7f8fa}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:var(--bg);color:var(--ink);
+font:15px/1.65 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+main{max-width:1240px;margin:0 auto}
+h1{font-size:22px;margin:0 0 4px;font-weight:650}
+h2{font-size:16px;margin:22px 0 8px;font-weight:620}
+h3{font-size:14px;margin:16px 0 6px;font-weight:620;color:#3c4653}
+.meta{color:var(--muted);font-size:13px;margin-bottom:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;
+padding:14px 16px;margin-bottom:14px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--line);
+white-space:nowrap}
+th{color:var(--muted);font-weight:600;font-size:12px}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.kpi{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.kpi div{flex:1 1 118px;border:1px solid var(--line);border-radius:8px;
+padding:10px 12px;background:#fff}
+.kpi b{display:block;font-size:19px;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--muted);font-size:12.5px}
+.badge{display:inline-block;padding:1px 7px;border-radius:999px;
+border:1px solid var(--line);font-size:11.5px;background:#f2f5f8;
+color:#3c4653}
+.badge.conv{background:#eef7ee;border-color:#c9e2c9;color:#2e6b34}
+.badge.pend{background:#f6f7f9;color:var(--muted)}
+.badge.own{background:#eef4fb;border-color:#c8d9ef;color:#28527f}
+.bar{display:inline-block;height:8px;width:120px;background:#eef1f5;
+border-radius:999px;overflow:hidden;vertical-align:middle}
+.bar span{display:block;height:100%;background:#5b8def}
+.note{color:var(--muted);font-size:12.5px;margin:8px 0 0}
+.law{color:#3c4653;font-size:13px;margin:2px 0}
+.empty{color:var(--muted);font-size:13px;margin:6px 0}
+.disclaimer{color:var(--muted);font-size:12.5px}
+code{font-size:12px;background:#f2f5f8;padding:1px 5px;border-radius:5px}
+footer{color:var(--muted);font-size:12px;margin:26px 0 8px}
+</style></head><body><main>
+<h1>关注→成交漏斗对账页</h1>
+<div class=meta>关注了却没有成交的部分、成交等了多久、谁家的关注更愿意下单 &middot; 生成于 2026-11-24 17:49:37Z &middot; <code>api_watch_conversion</code></div>
+<h2>全市场</h2>
+<div class=card data-market=1><p class=note>口径：全市场（面默认 scope，未按卖家收窄）</p><div class=kpi><div><span>关注数</span><b>8</b></div><div><span>先买后关</span><b>2</b></div><div><span>漏斗分母</span><b>6</b></div><div><span>已成交</span><b>3</b></div><div><span>仍在等</span><b>3</b></div><div><span>转化率</span><b>50.0%</b></div><div><span>平均等待</span><b>2m 13s</b></div><div><span>中位等待</span><b>1m 40s</b></div><div><span>最快</span><b>1s</b></div><div><span>最慢</span><b>5m 0s</b></div><div><span>最老未成交关注</span><b>2026-11-01T00:00:00Z</b></div></div><p class=note><span class="badge conv">成交 3</span> <span class="badge pend">等待 3</span> <span class="badge own">先买后关 2</span></p><table><tr><th>类目</th><th>关注</th><th>先买后关</th><th>分母</th><th>成交</th><th>等待</th><th>转化率</th><th>平均等待</th><th>中位等待</th><th>最快</th><th>最慢</th><th>最老未成交</th><th>率条</th></tr><tr data-category="data"><td>data</td><td class=n>3</td><td class=n>1</td><td class=n>2</td><td class=n>1</td><td class=n>1</td><td class=n>50.0%</td><td class=n>1m 40s</td><td class=n>1m 40s</td><td class=n>1m 40s</td><td class=n>1m 40s</td><td>2026-11-01T00:03:20Z</td><td><span class="bar"><span style="width:50.0%"></span></span></td></tr><tr data-category="tools"><td>tools</td><td class=n>4</td><td class=n>1</td><td class=n>3</td><td class=n>2</td><td class=n>1</td><td class=n>66.7%</td><td class=n>2m 30s</td><td class=n>2m 30s</td><td class=n>1s</td><td class=n>5m 0s</td><td>2026-11-01T00:11:40Z</td><td><span class="bar"><span style="width:66.7%"></span></span></td></tr><tr data-category="__none__"><td>—</td><td class=n>1</td><td class=n>0</td><td class=n>1</td><td class=n>0</td><td class=n>1</td><td class=n>0.0%</td><td class=n>—</td><td class=n>—</td><td class=n>—</td><td class=n>—</td><td>2026-11-01T00:00:00Z</td><td><span class="bar"><span style="width:0.0%"></span></span></td></tr></table><p class=note>率条是宽度，不是占比；转化率一栏才是读数。未定义处印破折号且不画条。</p></div>
+<h2>逐卖家（面自带 scope 隔离）</h2>
+<div class=card data-seller="usr:dana"><h3><code>usr:dana</code></h3><p class=note>口径：该卖家名下挂单（面自带严格隔离）</p><div class=kpi><div><span>关注数</span><b>4</b></div><div><span>先买后关</span><b>1</b></div><div><span>漏斗分母</span><b>3</b></div><div><span>已成交</span><b>1</b></div><div><span>仍在等</span><b>2</b></div><div><span>转化率</span><b>33.3%</b></div><div><span>平均等待</span><b>1m 40s</b></div><div><span>中位等待</span><b>1m 40s</b></div><div><span>最快</span><b>1m 40s</b></div><div><span>最慢</span><b>1m 40s</b></div><div><span>最老未成交关注</span><b>2026-11-01T00:00:00Z</b></div></div><p class=note><span class="badge conv">成交 1</span> <span class="badge pend">等待 2</span> <span class="badge own">先买后关 1</span></p><table><tr><th>类目</th><th>关注</th><th>先买后关</th><th>分母</th><th>成交</th><th>等待</th><th>转化率</th><th>平均等待</th><th>中位等待</th><th>最快</th><th>最慢</th><th>最老未成交</th><th>率条</th></tr><tr data-category="data"><td>data</td><td class=n>3</td><td class=n>1</td><td class=n>2</td><td class=n>1</td><td class=n>1</td><td class=n>50.0%</td><td class=n>1m 40s</td><td class=n>1m 40s</td><td class=n>1m 40s</td><td class=n>1m 40s</td><td>2026-11-01T00:03:20Z</td><td><span class="bar"><span style="width:50.0%"></span></span></td></tr><tr data-category="__none__"><td>—</td><td class=n>1</td><td class=n>0</td><td class=n>1</td><td class=n>0</td><td class=n>1</td><td class=n>0.0%</td><td class=n>—</td><td class=n>—</td><td class=n>—</td><td class=n>—</td><td>2026-11-01T00:00:00Z</td><td><span class="bar"><span style="width:0.0%"></span></span></td></tr></table><p class=note>率条是宽度，不是占比；转化率一栏才是读数。未定义处印破折号且不画条。</p></div><div class=card data-seller="usr:frank"><h3><code>usr:frank</code></h3><p class=note>口径：该卖家名下挂单（面自带严格隔离）</p><div class=kpi><div><span>关注数</span><b>4</b></div><div><span>先买后关</span><b>1</b></div><div><span>漏斗分母</span><b>3</b></div><div><span>已成交</span><b>2</b></div><div><span>仍在等</span><b>1</b></div><div><span>转化率</span><b>66.7%</b></div><div><span>平均等待</span><b>2m 30s</b></div><div><span>中位等待</span><b>2m 30s</b></div><div><span>最快</span><b>1s</b></div><div><span>最慢</span><b>5m 0s</b></div><div><span>最老未成交关注</span><b>2026-11-01T00:11:40Z</b></div></div><p class=note><span class="badge conv">成交 2</span> <span class="badge pend">等待 1</span> <span class="badge own">先买后关 1</span></p><table><tr><th>类目</th><th>关注</th><th>先买后关</th><th>分母</th><th>成交</th><th>等待</th><th>转化率</th><th>平均等待</th><th>中位等待</th><th>最快</th><th>最慢</th><th>最老未成交</th><th>率条</th></tr><tr data-category="tools"><td>tools</td><td class=n>4</td><td class=n>1</td><td class=n>3</td><td class=n>2</td><td class=n>1</td><td class=n>66.7%</td><td class=n>2m 30s</td><td class=n>2m 30s</td><td class=n>1s</td><td class=n>5m 0s</td><td>2026-11-01T00:11:40Z</td><td><span class="bar"><span style="width:66.7%"></span></span></td></tr></table><p class=note>率条是宽度，不是占比；转化率一栏才是读数。未定义处印破折号且不画条。</p></div>
+<h2>口径法则</h2>
+<div class=card><p class=law>关注数 = 先买后关 + 漏斗分母；漏斗分母 = 已成交 + 仍在等。</p><p class=law>先买后关＝买入时刻早于关注时刻，永远不可能计入转化，故不进分母。</p><p class=law>退款把这一条关注退回「仍在等」（净额法则），不退关注行。</p><p class=law>最老未成交关注只取仍在等的关注时刻，没有等待就印破折号。</p><p class=law>转化率 = 已成交 ÷ 漏斗分母；它不可相加，类目行与信封都是各自池化的率。</p><p class=law>等待时延只由两枚落库时刻相减得出，永不读墙钟；四枚时延在零成交时全部印破折号。</p><p class=law>类目行按类目升序，未归类桶恒在末位；同一类目不会出现两行。</p><p class=law>市场卡是全市场口径；卖家卡由面自带的账号作用域读取，互相严格隔离。</p><p class=law>率条只画已成交占分母的比例，页面明说它是宽度不是占比。</p><p class=law>本页是服务挂单的读数面，不是投资建议，也不替任何人做买卖决定。</p></div>
+<h2>免责与标识</h2>
+<div class=card><div class=disclaimer>sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice</div>
+<p style="margin-top:10px"><span class=badge>本页为生成内容的呈现面，已按 AIGC 标识要求标注</span></p></div>
+<h2>复现命令</h2>
+<div class=card><code>python tools/watch_conversion_board.py</code></div>
+<footer>本页只渲染沙箱出厂面读数，不构成投资建议，也不判定任何商品是否值得购买。</footer>
+</main></body></html>

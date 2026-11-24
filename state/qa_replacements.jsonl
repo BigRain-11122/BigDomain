@@ -96,3 +96,4 @@
 {"event": "REPLACED", "name": "purchase-dossier-board-R3418.log", "new_bytes": 3206, "new_sha16": "393ac90dc7797364", "old_bytes": 2895, "old_sha16": "9d0b5e7504083078", "prev_kind": "evidence", "ts": "2026-11-24T12:03:53Z"}
 {"event": "REPLACED", "name": "listing-velocity-board-R3420.log", "new_bytes": 4933, "new_sha16": "dc0c945c8658de3a", "old_bytes": 4904, "old_sha16": "749c3717e2262a2a", "prev_kind": "evidence", "ts": "2026-11-24T12:46:48Z"}
 {"event": "REPLACED", "name": "listing-velocity-board-R3420.log", "new_bytes": 5006, "new_sha16": "9613b9a0acb7c154", "old_bytes": 4933, "old_sha16": "dc0c945c8658de3a", "prev_kind": "evidence", "ts": "2026-11-24T12:50:22Z"}
+{"event": "REPLACED", "name": "watch-conversion-board-R3436.log", "new_bytes": 4629, "new_sha16": "c009759b25f6b83b", "old_bytes": 2603, "old_sha16": "ae3d598fd30e1132", "prev_kind": "evidence", "ts": "2026-11-24T17:52:18Z"}
