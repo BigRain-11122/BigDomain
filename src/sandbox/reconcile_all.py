@@ -8513,6 +8513,17 @@ SUITES = [
     # revise_provider doors under its own pinned clock.
     ("os-market-provider-months-board",
      os.path.join("..", "os", "test_market_provider_months_board.py"), 6),
+    # R3454: tools/watch_category_mix_board.py renders the buyer watch-intent
+    # category mix (api_buyer_watch_category_mix, AC-BWCM1..8) which had zero
+    # readers under tools/, preview/ and src/os; the page prints the market
+    # baseline plus one card per buyer scope whose bucket counts, purchased and
+    # delisted splits, seller axis, share, cumulative share, herfindahl and
+    # integer pareto count come from the face, and the suite re-reads every
+    # buyer scope over its own throwaway world whose watches, unwatches,
+    # purchases and delistings are all made through the shipped doors under
+    # its own pinned clock.
+    ("os-watch-category-mix-board",
+     os.path.join("..", "os", "test_watch_category_mix_board.py"), 6),
     # R3443: tools/ticket_size_board.py renders the achieved ticket size
     # (api_market_ticket_size and api_market_ticket_size_months, AC-MTM1..8)
     # which had zero readers under tools/, preview/ and src/os; the page prints

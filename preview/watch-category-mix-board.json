@@ -1,0 +1,175 @@
+{
+ "generated_utc": "2026-11-24 23:25:09Z",
+ "face": "api_buyer_watch_category_mix",
+ "scope": "buyers",
+ "market": {
+  "watch_count": 13,
+  "herfindahl": 3372.78
+ },
+ "buyers": [
+  {
+   "buyer_id": "usr:bob",
+   "watch_count": 10,
+   "category_count": 4,
+   "purchased_count": 1,
+   "open_count": 9,
+   "delisted_count": 1,
+   "seller_count": 2,
+   "top_seller": "usr:dana",
+   "top_seller_share": 0.6,
+   "top1_share": 0.4,
+   "top3_share": 0.9,
+   "herfindahl": 3000.0,
+   "pareto_category_count": 3,
+   "market_watch_count": 13,
+   "market_herfindahl": 3372.78,
+   "rows": [
+    {
+     "category": "data",
+     "watch_count": 4,
+     "purchased_count": 1,
+     "open_count": 3,
+     "delisted_count": 0,
+     "seller_count": 2,
+     "top_seller": "usr:dana",
+     "top_seller_share": 0.5,
+     "share": 0.4,
+     "cumulative_share": 0.4,
+     "rank": 1
+    },
+    {
+     "category": "tools",
+     "watch_count": 3,
+     "purchased_count": 0,
+     "open_count": 3,
+     "delisted_count": 1,
+     "seller_count": 2,
+     "top_seller": "usr:dana",
+     "top_seller_share": 0.666667,
+     "share": 0.3,
+     "cumulative_share": 0.7,
+     "rank": 2
+    },
+    {
+     "category": null,
+     "watch_count": 2,
+     "purchased_count": 0,
+     "open_count": 2,
+     "delisted_count": 0,
+     "seller_count": 1,
+     "top_seller": "usr:dana",
+     "top_seller_share": 1.0,
+     "share": 0.2,
+     "cumulative_share": 0.9,
+     "rank": 3
+    },
+    {
+     "category": "media",
+     "watch_count": 1,
+     "purchased_count": 0,
+     "open_count": 1,
+     "delisted_count": 0,
+     "seller_count": 1,
+     "top_seller": "usr:frank",
+     "top_seller_share": 1.0,
+     "share": 0.1,
+     "cumulative_share": 1.0,
+     "rank": 4
+    }
+   ]
+  },
+  {
+   "buyer_id": "usr:carol",
+   "watch_count": 3,
+   "category_count": 2,
+   "purchased_count": 1,
+   "open_count": 2,
+   "delisted_count": 0,
+   "seller_count": 2,
+   "top_seller": "usr:dana",
+   "top_seller_share": 0.666667,
+   "top1_share": 0.666667,
+   "top3_share": 1.0,
+   "herfindahl": 5555.56,
+   "pareto_category_count": 2,
+   "market_watch_count": 13,
+   "market_herfindahl": 3372.78,
+   "rows": [
+    {
+     "category": "data",
+     "watch_count": 2,
+     "purchased_count": 1,
+     "open_count": 1,
+     "delisted_count": 0,
+     "seller_count": 2,
+     "top_seller": "usr:dana",
+     "top_seller_share": 0.5,
+     "share": 0.666667,
+     "cumulative_share": 0.666667,
+     "rank": 1
+    },
+    {
+     "category": "tools",
+     "watch_count": 1,
+     "purchased_count": 0,
+     "open_count": 1,
+     "delisted_count": 0,
+     "seller_count": 1,
+     "top_seller": "usr:dana",
+     "top_seller_share": 1.0,
+     "share": 0.333333,
+     "cumulative_share": 1.0,
+     "rank": 2
+    }
+   ]
+  },
+  {
+   "buyer_id": "usr:dave",
+   "watch_count": 0,
+   "category_count": 0,
+   "purchased_count": 0,
+   "open_count": 0,
+   "delisted_count": 0,
+   "seller_count": 0,
+   "top_seller": null,
+   "top_seller_share": null,
+   "top1_share": null,
+   "top3_share": null,
+   "herfindahl": null,
+   "pareto_category_count": null,
+   "market_watch_count": 13,
+   "market_herfindahl": 3372.78,
+   "rows": []
+  },
+  {
+   "buyer_id": "usr:ghost",
+   "watch_count": 0,
+   "category_count": 0,
+   "purchased_count": 0,
+   "open_count": 0,
+   "delisted_count": 0,
+   "seller_count": 0,
+   "top_seller": null,
+   "top_seller_share": null,
+   "top1_share": null,
+   "top3_share": null,
+   "herfindahl": null,
+   "pareto_category_count": null,
+   "market_watch_count": 13,
+   "market_herfindahl": 3372.78,
+   "rows": []
+  }
+ ],
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/watch-category-mix-board.html",
+ "sources": {
+  "driver": "faeb16db459c26e7",
+  "copy": "66ac7bc80e4bb48d",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 10926,
+  "json": 3919
+ }
+}
