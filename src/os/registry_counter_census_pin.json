@@ -618,6 +618,7 @@
     "os-queue-only-floor-wire",
     "os-queue-row",
     "os-queue-row-exempt",
+    "os-refund-reasons-board",
     "os-refused-check-declaration-face",
     "os-registry-counter-census",
     "os-relative-import-alias-gate",

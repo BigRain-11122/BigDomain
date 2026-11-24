@@ -8177,6 +8177,17 @@ SUITES = [
     # of typing a fixture.
     ("os-buyer-rating-pattern-board",
      os.path.join("..", "os", "test_buyer_rating_pattern_board.py"), 6),
+    # R3407: tools/refund_reasons_board.py renders api_refund_reasons - the
+    # free-text reason the refund table has always stored but no face ever
+    # aggregated - onto one openable page. The R3407 reader census measured
+    # zero hits for that face under tools/ and preview/ before this row
+    # existed, so the after-sales question (is this refund load a quality
+    # problem, a description mismatch or noise) had no door. The suite grades
+    # the page: it re-reads the shipped face over its own throwaway demo world
+    # instead of typing a fixture, and pins the bucket, money, split, share,
+    # average and named-reason identities.
+    ("os-refund-reasons-board",
+     os.path.join("..", "os", "test_refund_reasons_board.py"), 6),
     # R3073: tools/city_face_report.py renders the P-47 item-1 city face and
     # carries its own --check (AC-CFY1..8), but this registry had no row naming
     # it, so the face was graded only by the fail-soft [GATES] sweep - the

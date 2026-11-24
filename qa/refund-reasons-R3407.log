@@ -1,0 +1,20 @@
+R3407 refund reasons board evidence - api_refund_reasons given its first openable page
+FACE api_refund_reasons prior readers under tools/ and preview/: 0 (R3407 census over 119 api_* faces)
+DRIVER tools/refund_reasons_board.py render preview/refund-reasons.html 5003B and preview/refund-reasons.json 1053B over a throwaway demo world
+CHECK python tools/refund_reasons_board.py --check rc=0 REFUND-REASONS CHECK PASS fails=0 html=5003B json=1053B
+SUITE python src/os/test_refund_reasons_board.py rc=0 SUITE PASS 6/6 criteria declared=6 (AC-RRB1..6 green on first full run)
+ARMS AC-RRB1 keys=18 missing=[] extra=[] row_keys=True rows=2 | AC-RRB2 diffs=[] disclaimer_same=True | AC-RRB3 problems=[] | AC-RRB4 rows=2/2 top=True/True | AC-RRB5 aigc=True external_links=0 | AC-RRB6 check_rc=0 wrote_nothing=True wired=6/6
+CONTROL A honest unlabeled bucket: blank reason renders the named label, two reason rows, named reason present
+CONTROL A probe: blank reason collapses to the None bucket sorted last, top_reason stays the labeled bucket with share 1.0 over 1 labeled row, case and whitespace variant folds into one bucket
+CONTROL B deleted label copy key law4 -> render refuses rc=3 E_RRB_FACE
+CONTROL C forced by_reason refunded 999 -> rc=2 FAIL AC-RRB2 diffs=[by_reason] FAIL AC-RRB3 refunded_sum -> restored byte-identical and re-read SUITE PASS 6/6
+REGISTRY row os-refund-reasons-board(6) in src/sandbox/reconcile_all.py
+MATRIX WRITTEN docs/sandbox-suite-matrix.md 80380 bytes 776 rows then DOC-CURRENT
+CENSUS rows=776 readable=776 unparsed=0 silent=0 VERDICT PASS pinned=776
+ENTRY-INDEX faces=9 defects=0 VERDICT 23/23 after the recorded chain/index convergence passes
+FACE-SWEEP VERDICT PASS 13/13 written then 21/21 checked
+CLOSEOUT-GATE PASS files=4945 flags=0 census=PASS matrix=DOC-CURRENT ENTRY-PAGES faces=2 fail=0
+CARRIER bytes=57475 gate=78500 margin=21025 fold_needed=false
+HONEST no new tables and no new readings; demo world carries two labeled refunds and zero unlabeled rows, so the page prints two honest rows
+HONEST zero payment capability and no network beyond loopback; the five physical pieces are still missing
+CARRIED qa_log --ledger-check broken=5 (R3371 ruling = diagnose, not repair), full battery not re-run, Docker absent, test_face_sweep 54/56

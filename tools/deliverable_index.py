@@ -197,6 +197,9 @@ PAIR_PRODUCERS = {
     # R3404: same single-writer shape again - one render, one json, no back-hop
     # block - so the similar-listing neighbour board names its producer.
     "similar-listing-board.json": "tools/similar_listing_board.py",
+    # R3407: same single-writer shape - one render, one json, no back-hop block
+    # - so the refund reason distribution page names its producer.
+    "refund-reasons.json": "tools/refund_reasons_board.py",
 }
 # R3392 (AC-DIX21 recipe arm). One pair on this page cannot be reproduced by ONE
 # command, and until now the law had only two answers - name a producer or print

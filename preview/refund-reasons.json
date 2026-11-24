@@ -1,0 +1,47 @@
+{
+ "generated_utc": "2026-11-24 07:39:56Z",
+ "face": "api_refund_reasons",
+ "purchase_count": 4,
+ "refund_count": 2,
+ "refund_rate": 0.5,
+ "labeled_count": 2,
+ "unlabeled_count": 0,
+ "reason_count": 2,
+ "refunded_total": 15,
+ "avg_refunded": 7.5,
+ "top_reason": "month-crossing refund",
+ "top_reason_count": 1,
+ "top_reason_share": 0.5,
+ "by_reason": [
+  {
+   "reason": "month-crossing refund",
+   "refund_count": 1,
+   "refunded": 10,
+   "dev_share": 7,
+   "platform_share": 3,
+   "share": 0.5,
+   "avg_amount": 10.0
+  },
+  {
+   "reason": "demo refund same month",
+   "refund_count": 1,
+   "refunded": 5,
+   "dev_share": 4,
+   "platform_share": 1,
+   "share": 0.5,
+   "avg_amount": 5.0
+  }
+ ],
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/refund-reasons.html",
+ "sources": {
+  "driver": "3d8c5bf05c509b25",
+  "copy": "7e86a8a2aeffd647",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 5003,
+  "json": 1053
+ }
+}
