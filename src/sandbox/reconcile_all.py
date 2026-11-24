@@ -8128,6 +8128,14 @@ SUITES = [
     # order, the bucket identity, the compliance faces and a read-only --check.
     ("os-market-price-percentiles",
      os.path.join("..", "os", "test_market_price_percentiles.py"), 6),
+    # R3401: tools/seller_quality_scorecard.py renders the seller reputation
+    # scorecard (api_seller_quality, graded by test_apimarket_sellerquality)
+    # onto one openable page. This row grades the PAGE - pinned payload keys,
+    # provenance against the face's own reading, the star-shape identity, the
+    # row order plus the weakest-live callout, the compliance faces and a
+    # read-only --check.
+    ("os-seller-quality-scorecard",
+     os.path.join("..", "os", "test_seller_quality_scorecard.py"), 6),
     # R3073: tools/city_face_report.py renders the P-47 item-1 city face and
     # carries its own --check (AC-CFY1..8), but this registry had no row naming
     # it, so the face was graded only by the fail-soft [GATES] sweep - the

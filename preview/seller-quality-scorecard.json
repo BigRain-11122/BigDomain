@@ -1,0 +1,93 @@
+{
+ "generated_utc": "2026-11-24 05:27:21Z",
+ "face": "api_seller_quality",
+ "seller_count": 2,
+ "listing_count": 3,
+ "rating_count": 2,
+ "reply_count": 0,
+ "unanswered_count": 2,
+ "reply_coverage": 0.0,
+ "rating_avg": 4.5,
+ "star_distribution": {
+  "1": 0,
+  "2": 0,
+  "3": 0,
+  "4": 1,
+  "5": 1
+ },
+ "low_rated_count": 0,
+ "rows": [
+  {
+   "listing_id": 1,
+   "listing_key": "risk-scan",
+   "title": "Risk Scan API",
+   "retired": false,
+   "rating_count": 1,
+   "rating_avg": 5.0,
+   "unanswered_count": 1,
+   "reply_count": 0,
+   "lowest_stars": 5,
+   "star_distribution": {
+    "1": 0,
+    "2": 0,
+    "3": 0,
+    "4": 0,
+    "5": 1
+   }
+  },
+  {
+   "listing_id": 2,
+   "listing_key": "macro-feed",
+   "title": "Macro Feed API",
+   "retired": false,
+   "rating_count": 1,
+   "rating_avg": 4.0,
+   "unanswered_count": 1,
+   "reply_count": 0,
+   "lowest_stars": 4,
+   "star_distribution": {
+    "1": 0,
+    "2": 0,
+    "3": 0,
+    "4": 1,
+    "5": 0
+   }
+  },
+  {
+   "listing_id": 3,
+   "listing_key": "chart-render",
+   "title": "Chart Render API",
+   "retired": false,
+   "rating_count": 0,
+   "rating_avg": 0.0,
+   "unanswered_count": 0,
+   "reply_count": 0,
+   "lowest_stars": null,
+   "star_distribution": {
+    "1": 0,
+    "2": 0,
+    "3": 0,
+    "4": 0,
+    "5": 0
+   }
+  }
+ ],
+ "weakest": {
+  "listing_id": 2,
+  "title": "Macro Feed API",
+  "rating_avg": 4.0,
+  "rating_count": 1
+ },
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/seller-quality-scorecard.html",
+ "sources": {
+  "driver": "71978397fd2a25a3",
+  "copy": "ae76e8fbf278355d",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 4643,
+  "json": 1762
+ }
+}

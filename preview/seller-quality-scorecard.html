@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>卖家质量记分卡</title>
+<style>
+:root{--ink:#1b1f24;--muted:#66707a;--line:#dfe4ea;--bg:#f7f8fa}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:var(--bg);color:var(--ink);
+font:15px/1.65 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+main{max-width:1080px;margin:0 auto}
+h1{font-size:22px;margin:0 0 4px;font-weight:650}
+h2{font-size:16px;margin:22px 0 8px;font-weight:620}
+.meta{color:var(--muted);font-size:13px;margin-bottom:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;
+padding:14px 16px;margin-bottom:14px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600;font-size:12px}
+td.n{text-align:right;font-variant-numeric:tabular-nums}
+.kpi{display:flex;gap:12px;flex-wrap:wrap}
+.kpi div{flex:1 1 110px;border:1px solid var(--line);border-radius:8px;
+padding:10px 12px;background:#fff}
+.kpi b{display:block;font-size:19px;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--muted);font-size:12.5px}
+.bars{display:flex;flex-direction:column;gap:6px}
+.bar{display:grid;grid-template-columns:64px 1fr 56px;align-items:center;
+gap:8px;font-size:12.5px}
+.bar .track{background:#eef1f5;border-radius:4px;height:14px}
+.bar .fill{background:#3d5a80;height:14px;border-radius:4px;min-width:0}
+.bar b{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.disclaimer{border-left:3px solid #c9a227;background:#fdf8ea;padding:10px 14px;
+font-size:13px}
+.badge{display:inline-block;margin-right:8px;padding:2px 8px;
+border:1px solid var(--line);border-radius:999px;font-size:12px;
+color:var(--muted)}
+.weak{font-size:14px}
+.weak b{font-variant-numeric:tabular-nums}
+footer{color:var(--muted);font-size:12px;margin:20px 0 8px}
+code{font-size:12.5px;background:#f2f4f7;padding:1px 5px;border-radius:4px}
+</style></head><body><main>
+<h1>卖家质量记分卡</h1>
+<div class=meta>星等形状 · 回复覆盖 · 逐架上架质量（读自 api_seller_quality） &middot; 生成于 2026-11-24 05:27:21Z &middot; <code>api_seller_quality</code></div>
+<div class=card><div class=kpi><div><span>卖家数</span><b>2</b></div><div><span>上架数</span><b>3</b></div><div><span>评价数</span><b>2</b></div><div><span>平均星等</span><b>4.5</b></div><div><span>已回复</span><b>0</b></div><div><span>未回复</span><b>2</b></div><div><span>回复覆盖率</span><b>0</b></div><div><span>低分在售架</span><b>0</b></div></div></div>
+<h2>五桶星等形状</h2>
+<div class=card><div class=bars><div class=bar data-star="1"><span>1 星</span><div class=track><div class=fill style="width:0.0%"></div></div><b>0</b></div><div class=bar data-star="2"><span>2 星</span><div class=track><div class=fill style="width:0.0%"></div></div><b>0</b></div><div class=bar data-star="3"><span>3 星</span><div class=track><div class=fill style="width:0.0%"></div></div><b>0</b></div><div class=bar data-star="4"><span>4 星</span><div class=track><div class=fill style="width:50.0%"></div></div><b>1</b></div><div class=bar data-star="5"><span>5 星</span><div class=track><div class=fill style="width:50.0%"></div></div><b>1</b></div></div></div>
+<h2>逐架上架质量</h2>
+<div class=card><table><tr><th>上架</th><th>状态</th><th class=n>评价数</th><th class=n>平均星等</th><th class=n>最低星等</th><th class=n>已回复</th><th class=n>未回复</th></tr><tr><td>Risk Scan API</td><td>在售</td><td class=n>1</td><td class=n>5</td><td class=n>5</td><td class=n>0</td><td class=n>1</td></tr><tr><td>Macro Feed API</td><td>在售</td><td class=n>1</td><td class=n>4</td><td class=n>4</td><td class=n>0</td><td class=n>1</td></tr><tr><td>Chart Render API</td><td>在售</td><td class=n>0</td><td class=n>-</td><td class=n>-</td><td class=n>0</td><td class=n>0</td></tr></table></div>
+<h2>最弱在售架</h2>
+<div class=card><p class=weak>Macro Feed API &middot; 4 / 1</p></div>
+<h2>免责与标识</h2>
+<div class=card><div class=disclaimer>sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice</div>
+<p style="margin-top:10px"><span class=badge>AIGC 生成内容标识</span></p></div>
+<h2>复现命令</h2>
+<div class=card><code>python tools/seller_quality_scorecard.py</code></div>
+<footer>BigDomain OSLoop &middot; 2026-11-24 05:27:21Z &middot; 本页由 tools/seller_quality_scorecard.py 生成，不手改</footer>
+</main></body></html>

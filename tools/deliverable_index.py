@@ -185,6 +185,9 @@ PAIR_PRODUCERS = {
     # R3400: same shape as the line above - one render, one json, no back-hop
     # block - so the asking-price distribution page names its producer.
     "market-price-percentiles.json": "tools/market_price_percentiles.py",
+    # R3401: same shape again - one render, one json, no back-hop block - so
+    # the seller quality scorecard names its producer rather than a recipe.
+    "seller-quality-scorecard.json": "tools/seller_quality_scorecard.py",
 }
 # R3392 (AC-DIX21 recipe arm). One pair on this page cannot be reproduced by ONE
 # command, and until now the law had only two answers - name a producer or print

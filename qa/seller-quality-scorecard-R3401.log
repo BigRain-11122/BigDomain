@@ -1,0 +1,20 @@
+R3401 EVIDENCE - seller quality scorecard page (api_seller_quality, first door)
+WHY: api_seller_quality shipped with AC-AMQL criteria; git grep -F over tools/ and preview/ returned rc=1 (zero readers), so the only way to read it was a shell call.
+PIN: AC-SQS1..6 pre-registered in src/os/backlog.md R3401 PIN before tools/seller_quality_scorecard.py existed; prefix occupancy `git grep -c AC-SQS -- src tools` rc=1.
+FACE READING (own throwaway demo world): seller_count=2 listing_count=3 rating_count=2 reply_count=0 unanswered_count=2 reply_coverage=0.0 rating_avg=4.5 star_distribution={1:0,2:0,3:0,4:1,5:1} low_rated_count=0 rows=3 (listing_id 1,2,3 ascending; row 3 unrated).
+RENDER: SELLER preview/seller-quality-scorecard.html bytes=4643 sellers=2 listings=3 ratings=2 avg=4.5 coverage=0 weak=2
+CHECK: SELLER CHECK PASS fails=0 html=4643B json=1762B (read-only; (size,mtime_ns) unchanged across it)
+SUITE: SUITE PASS 6/6 criteria
+  AC-SQS1 landed=True keys=17 missing=[] extra=[] report=preview/seller-quality-scorecard.html
+  AC-SQS2 env_diff=[] rows_same=True disclaimer_same=True (provenance re-read from the face, no typed fixture)
+  AC-SQS3 buckets=2 rating_count=2 per_row=True rows=3/3 avg=True low=0/0
+  AC-SQS4 order=True ids=[1,2,3] states=True(live=3 retired=0) weak=2 expect=2 named=True
+  AC-SQS5 aigc=True disclaimer_on_page=True external_links=0
+  AC-SQS6 check_rc=0 wrote_nothing=True wired=True face_suite=True siblings=True criteria=6/6
+NEGATIVE CONTROLS (measured, not asserted):
+  ctrl1 one extra bucket in star_distribution -> bucket_sum_ok=False sum=3 rating_count=2
+  ctrl2 two live rows tied at 4.0 -> lowest_live=None (names nobody)
+  ctrl3 retired 1.0 shelf beside live 4.5 shelf -> pick=2 (retired excluded)
+  unrated row prints the no-value mark: row3_unrated_dash=True (envelope rating_avg 0.0 is never shown as a star score)
+WIRING: registry row os-seller-quality-scorecard(6); matrix DOC-CURRENT 79797 bytes 770 rows; census VERDICT PASS pinned=770 (re-pinned, cache reused 770/770); entry index VERDICT PASS 23/23 (AC-DIX21/23 name this pair producer); face sweep VERDICT PASS 13/13 fingerprint=691c77f54cbccae9; closeout ring VERDICT PASS passes=1 steps=5 checks=4/4.
+HONEST: no new table, no new reading and no new business semantics - this moves an already-delivered face onto one openable page. The demo world holds 3 shelves, only 2 of them rated, and reply_count is 0, so the page honestly shows one unanswered-by-everyone scorecard rather than a synthesized spread. The page is a standalone artifact with no back-hop block. ZERO payment capability and no network beyond loopback - the five physical pieces (merchant id, server, domain, filing+ICP, miniprogram appid+secret) are still missing.
