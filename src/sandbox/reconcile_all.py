@@ -8319,6 +8319,12 @@ SUITES = [
     # demo world.
     ("os-seller-refund-months-board",
      os.path.join("..", "os", "test_seller_refund_months_board.py"), 6),
+    # R3422: tools/public_listings_board.py renders the shipped public shelf
+    # face (api_public_listings, AC-AMPI4) which had zero readers under tools/
+    # and preview/; the page prints the shipped envelope verbatim and the suite
+    # re-reads the face over its own throwaway demo world.
+    ("os-public-listings-board",
+     os.path.join("..", "os", "test_public_listings_board.py"), 6),
 
     # R3073: tools/city_face_report.py renders the P-47 item-1 city face and
     # carries its own --check (AC-CFY1..8), but this registry had no row naming

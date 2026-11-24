@@ -1,0 +1,72 @@
+{
+ "generated_utc": "2026-11-24 13:18:19Z",
+ "face": "api_public_listings",
+ "source_face": "api_public_listings",
+ "listing_count": 3,
+ "review_pending_count": 3,
+ "disclosure_ok_count": 0,
+ "ai_label_count": 1,
+ "disclosed_and_labeled": 0,
+ "seller_count": 2,
+ "shelf_total": 18,
+ "top_price": 10,
+ "listings": [
+  {
+   "listing_id": 1,
+   "dev_account": "usr:dana",
+   "listing_key": "risk-scan",
+   "title": "Risk Scan API",
+   "token_price": 10,
+   "ai_label": 0,
+   "listed_utc": "2026-08-20T10:00:00Z",
+   "provider_name": null,
+   "credit_code": null,
+   "disclosure_ok": false,
+   "review_state": "pending",
+   "review_reason": null,
+   "reviewed_utc": null
+  },
+  {
+   "listing_id": 2,
+   "dev_account": "usr:dana",
+   "listing_key": "macro-feed",
+   "title": "Macro Feed API",
+   "token_price": 3,
+   "ai_label": 1,
+   "listed_utc": "2026-08-20T10:00:00Z",
+   "provider_name": null,
+   "credit_code": null,
+   "disclosure_ok": false,
+   "review_state": "pending",
+   "review_reason": null,
+   "reviewed_utc": null
+  },
+  {
+   "listing_id": 3,
+   "dev_account": "usr:frank",
+   "listing_key": "chart-render",
+   "title": "Chart Render API",
+   "token_price": 5,
+   "ai_label": 0,
+   "listed_utc": "2026-08-20T10:00:00Z",
+   "provider_name": null,
+   "credit_code": null,
+   "disclosure_ok": false,
+   "review_state": "pending",
+   "review_reason": null,
+   "reviewed_utc": null
+  }
+ ],
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/public-listings-board.html",
+ "sources": {
+  "driver": "a4a72f934ca15939",
+  "copy": "fb4949631d6cb855",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 5515,
+  "json": 1761
+ }
+}

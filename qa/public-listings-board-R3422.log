@@ -1,0 +1,21 @@
+R3422 PUBLIC-LISTINGS-BOARD evidence (2026-11-24)
+FACE api_public_listings (own AC-AMPI4 criteria, suite src/sandbox/ledger/test_apimarket_provideridentity.py on disk), zero readers before this window
+CENSUS five candidates re-measured zero-reader: api_review_queue api_public_listings api_search api_market_buyer_retention api_seller_refund_months
+READING listing_count=3 disclosure_ok_count=0 review_pending_count=3
+READING listing 1 usr:dana risk-scan price=10 ai_label=0 provider=None credit=None review=pending reason=None reviewed=None
+READING listing 2 usr:dana macro-feed price=3 ai_label=1 provider=None credit=None review=pending reason=None reviewed=None
+READING listing 3 usr:frank chart-render price=5 ai_label=0 provider=None credit=None review=pending reason=None reviewed=None
+CROSS-FACE pending review_pending_count=3 equals api_review_queue().pending_count=3 before the render is allowed
+PAGE preview/public-listings-board.html 5515B + preview/public-listings-board.json 1761B labels in preview/public-listings-board-copy.json
+CRITERIA AC-PLB1 contract AC-PLB2 data-real AC-PLB3 identities-and-cross-face AC-PLB4 honest-page AC-PLB5 compliance AC-PLB6 no-older-relaxed
+SUITE SUITE PASS 6/6 criteria declared=6 first full run
+CONTROL-A deleted label key law_cross -> rc=3 E_PLB_FACE page sha256 unchanged
+CONTROL-B forced first-row token_price +7 -> AC-PLB2 AC-PLB3 red rc=2 restored -> SUITE PASS 6/6
+WIRING registry os-public-listings-board(6) producer public-listings-board.json -> tools/public_listings_board.py
+MATRIX 81807 bytes 791 rows DOC-CURRENT
+CENSUS registry rows=791 readable=791 VERDICT PASS pinned=791
+ENTRY-PAGE PASS 23/23 fingerprint 883f001a17cb2024
+CHAIN PASS read_only=True
+FACE-SWEEP SUITE PASS 56/56 over 20 criteria
+CLOSEOUT CLOSEOUT-GATE PASS files=4960 census=PASS matrix=DOC-CURRENT
+HONEST zero new tables zero new readings zero business semantics; all three shelves pending and none disclosed in this demo world; disclosed_and_labeled is this page's conjunction count, not a shipped field and not a launch verdict; zero payment and no network beyond loopback; five physical pieces still missing

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>对外货架合规面看板</title>
+<style>
+:root{--ink:#1b1f24;--muted:#66707a;--line:#dfe4ea;--bg:#f7f8fa}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:var(--bg);color:var(--ink);
+font:15px/1.65 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+main{max-width:1280px;margin:0 auto}
+h1{font-size:22px;margin:0 0 4px;font-weight:650}
+h2{font-size:16px;margin:22px 0 8px;font-weight:620}
+.meta{color:var(--muted);font-size:13px;margin-bottom:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;
+padding:14px 16px;margin-bottom:14px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600;font-size:12px}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.kpi{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.kpi div{flex:1 1 118px;border:1px solid var(--line);border-radius:8px;
+padding:10px 12px;background:#fff}
+.kpi b{display:block;font-size:19px;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--muted);font-size:12.5px}
+.flag-no{color:#b42318;font-weight:600}
+.flag-yes{color:#1f6f43;font-weight:600}
+.disclaimer{border-left:3px solid #c9a227;background:#fdf8ea;padding:10px 14px;
+font-size:13px}
+.badge{display:inline-block;margin-right:8px;padding:2px 8px;
+border:1px solid var(--line);border-radius:999px;font-size:12px;
+color:var(--muted)}
+.law{font-size:13px;margin:6px 0}
+.empty{color:#b42318}
+footer{color:var(--muted);font-size:12px;margin:18px 0 0}
+</style></head><body><main>
+<h1>对外货架合规面看板</h1>
+<div class=meta>公开货架逐条：审核态 / 主体披露 / AIGC 标识 / 价格 / 上架时刻 &middot; 生成时刻 2026-11-24 13:18:19Z &middot; <code>api_public_listings</code></div>
+<div class=card><div class=kpi><div><span>在架挂单</span><b>3</b></div><div><span>待审</span><b>3</b></div><div><span>披露就绪</span><b>0</b></div><div><span>带 AIGC 标识</span><b>1</b></div><div><span>披露且标识</span><b>0</b></div><div><span>卖家数</span><b>2</b></div><div><span>货架定价合计</span><b>18</b></div><div><span>最高单价</span><b>10</b></div></div></div>
+<h2>货架逐条</h2>
+<div class=card><table><tr><th>#</th><th>挂单号</th><th>卖家</th><th class=n>挂单键</th><th>标题</th><th class=n>标价</th><th>上架时刻</th><th>审核态</th><th>拒绝理由</th><th>审核时刻</th><th>主体披露</th><th>AIGC 标识</th><th>主体名称</th><th>统一社会信用代码</th></tr><tr data-listing="1"><td class="n">1</td><td class="n">1</td><td class="">usr:dana</td><td class="">risk-scan</td><td class="">Risk Scan API</td><td class="n">10</td><td class="">2026-08-20T10:00:00Z</td><td class="">待审</td><td class="">—</td><td class="">—</td><td class="flag-no">否</td><td class="flag-no">否</td><td class="">—</td><td class="">—</td></tr><tr data-listing="2"><td class="n">2</td><td class="n">2</td><td class="">usr:dana</td><td class="">macro-feed</td><td class="">Macro Feed API</td><td class="n">3</td><td class="">2026-08-20T10:00:00Z</td><td class="">待审</td><td class="">—</td><td class="">—</td><td class="flag-no">否</td><td class="flag-yes">是</td><td class="">—</td><td class="">—</td></tr><tr data-listing="3"><td class="n">3</td><td class="n">3</td><td class="">usr:frank</td><td class="">chart-render</td><td class="">Chart Render API</td><td class="n">5</td><td class="">2026-08-20T10:00:00Z</td><td class="">待审</td><td class="">—</td><td class="">—</td><td class="flag-no">否</td><td class="flag-no">否</td><td class="">—</td><td class="">—</td></tr></table></div>
+<h2>本页口径法则</h2>
+<div class=card><p class=law>行数等于面给的 listing_count，逐行照印，不补位不隐藏。</p><p class=law>待审数由逐行审核态复算，且必须等于审核队列面的 pending_count，两面不许漂移。</p><p class=law>主体披露为真当且仅当主体名称与统一社会信用代码都在册；缺一为假。</p><p class=law>AIGC 标识逐行照印出厂旗，不由本页推断或补写。</p><p class=law>「披露且标识」是本页对两枚出厂旗的合取计数，不是出厂字段，也不是上架裁决。</p><p class=law>拒绝理由只在已拒绝行有值；待审与已通过行的理由与审核时刻一律印破折号。</p><p class=law>行序照出厂面：按挂单号升序，本页不重排。</p><p class=law>待审集合与审核队列面同源，跨面相等是本页打印前的拒渲条件。</p><p class=law>本页只并列展示两枚出厂旗，不判定上架就绪、不给合规结论、不做投放建议。</p><p class=law>开发者 API 市场是服务挂单面，非投资建议，非收益承诺。</p></div>
+<h2>风险提示</h2>
+<div class=card><div class=disclaimer>sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice</div>
+<p style="margin-top:10px"><span class=badge>AIGC 生成内容标识：本页为沙箱读数渲染，非真实交易数据</span></p></div>
+<h2>生成命令</h2>
+<div class=card><code>python tools/public_listings_board.py</code></div>
+<footer>BigDomain OSLoop &middot; 2026-11-24 13:18:19Z &middot; 本页由 tools/public_listings_board.py 生成，不手改</footer>
+</main></body></html>
