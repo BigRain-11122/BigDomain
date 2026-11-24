@@ -179,10 +179,43 @@ PAIR_PRODUCERS = {
     # recorded producer, so AC-DIX21/AC-DIX23 could only read a named absence.
     "battery-shard-report.json": "tools/battery_shard_report.py",
 }
+# R3392 (AC-DIX21 recipe arm). One pair on this page cannot be reproduced by ONE
+# command, and until now the law had only two answers - name a producer or print
+# a named absence - so the pair either reddened the page or stayed unreproducible
+# in silence. Measured in R3391/R3392: preview/ugc-gate-report.html is a
+# TWO-WRITER product (tools/ugc_gate_report.py renders the body; tools/face_backhop.py
+# injects the back-hop block and patches the recorded sizes), so the landed bytes
+# are the product of a declared two-step recipe. R3392 also measured that running
+# that renderer FIRST in the closeout ring does not dodge the question: the
+# injector's size patch is the last write, so this pair is the newest one and the
+# entry page must answer for it.
+#
+# The recipe is therefore DECLARED - both writers named here - and graded by
+# running BOTH and requiring the pair's bytes to come back identical. No producer
+# is invented, no criterion is loosened: a pair with neither a producer nor a
+# recipe still prints the named absence, and a recipe that stops reproducing its
+# pair reddens this page instead of hiding behind a printed number.
+PAIR_RECIPES = {
+    "ugc-gate-report.json": ("tools/ugc_gate_report.py",
+                             "tools/face_backhop.py", ["--write"]),
+}
+RECIPE_CAVEAT = ("\u4e24\u6b65\u914d\u65b9\uff08\u6e32\u67d3+\u56de\u6ce8\uff09"
+                 "\uff1a\u5b83\u8bc1\u8fd9\u5bf9\u5b57\u8282\u4ecd\u80fd\u88ab"
+                 "\u4e24\u4f4d\u5199\u8005\u590d\u73b0\uff0c"
+                 "\u4e0d\u8bc1\u9875\u5185\u6570\u5b57\u662f\u5b9e\u51b5")
 SELF_VERIFY_FLAGS = ("--dry-run", "--stamp")
 CHECK_CAVEAT = (
     "\u53ea\u8bc1\u8fd9\u4efd\u914d\u65b9\u8fd8\u80fd\u9020\u51fa\u540c\u4e00"
     "\u4efd\u5b57\u8282\uff0c\u4e0d\u8bc1\u9875\u5185\u6570\u5b57\u662f\u5b9e\u51b5")
+
+
+def recipe_for(json_name):
+    """The declared two-step recipe for THIS pair, or None.
+
+    R3392: a recipe names both shipped writers (renderer, injector) so the law
+    can grade the landed bytes without pretending one command made them.
+    """
+    return PAIR_RECIPES.get(json_name or "")
 
 
 def producer_for(new):
@@ -220,6 +253,11 @@ def self_verify(new):
     """
     if new.get("empty"):
         return None, None, "no artifact pair on disk"
+    recipe = recipe_for(new.get("json") or "")
+    if recipe is not None:
+        render, inject, inject_args = recipe
+        return ("python %s && python %s %s"
+                % (render, inject, " ".join(inject_args))), "recipe", None
     rel, why_not = producer_for(new)
     if rel is None:
         return None, None, why_not
@@ -330,6 +368,17 @@ def render_newest(new):
             '<code>%s</code>\uff0d\u5b83\u4f1a\u62a5\u51fa\u540c\u4e00\u4e2a '
             '<b>%dB</b> \u5e76\u4e14\u4e0d\u5199\u4efb\u4f55\u5b57\u8282\u3002</div>'
             % (html.escape(command), new.get("html_bytes", 0)))
+    elif command and mode == "recipe":
+        # R3392: the pair is a declared two-step product, so the row prints BOTH
+        # writers instead of one command it cannot honestly claim.
+        out.append(
+            '<div class="note">\u81ea\u5df1\u9a8c\u4e00\u904d\uff08\u4e24\u6b65'
+            '\u914d\u65b9\u73b0\u8bfb\u81ea\u914d\u5bf9\u8868\uff0c\u975e\u624b'
+            '\u5199\uff09\uff1a<code>%s</code>'
+            '\uff0d\u5b83%s\uff1b\u8dd1\u5b83\u4f1a\u91cd\u5199\u8fd9\u4e24'
+            '\u4f4d\u5199\u8005\u7684\u4ea7\u7269\uff08\u5e42\u7b49\uff1a'
+            '\u5b57\u8282\u5e94\u9010\u5bf9\u56de\u6765\uff09\u3002</div>'
+            % (html.escape(command), html.escape(RECIPE_CAVEAT)))
     elif command:
         # R3298 (AC-DIX23): a check-mode producer re-derives and compares bytes;
         # the row must not let that read as proof of the numbers themselves.
@@ -942,7 +991,11 @@ def main(argv):
                "no-command-reason=%r printed-as-named-absence=%s"
                % (why_not, absence in band))
     else:
-        rel, _why = producer_for(fresh)
+        recipe = recipe_for(fresh.get("json") or "")
+        if recipe is not None:
+            rel = recipe[0]
+        else:
+            rel, _why = producer_for(fresh)
         target = os.path.join(REPO, *rel.split("/"))
         stamp = newest_rendered_on(fresh)
         html_path = os.path.join(PREVIEW, fresh["html"])
@@ -954,16 +1007,60 @@ def main(argv):
             except OSError:
                 return None
 
-        before = (stat_pair(html_path), stat_pair(json_path))
-        flags = (["--dry-run", "--stamp", stamp] if mode == "dry"
-                 else ["--check"])
-        proc = subprocess.run(
-            [sys.executable, target] + flags,
-            cwd=REPO, capture_output=True, text=True)
-        after = (stat_pair(html_path), stat_pair(json_path))
+        def read_pair():
+            out = []
+            for path in (html_path, json_path):
+                try:
+                    with open(path, "rb") as fh:
+                        out.append(fh.read())
+                except OSError:
+                    out.append(None)
+            return tuple(out)
+
         printed_once = band.count(html.escape(command)) == 1
         printed_html = ("html=%dB" % fresh.get("html_bytes", 0)) in band
-        if mode == "dry":
+        before = (stat_pair(html_path), stat_pair(json_path))
+        if mode != "recipe":
+            flags = (["--dry-run", "--stamp", stamp] if mode == "dry"
+                     else ["--check"])
+            proc = subprocess.run(
+                [sys.executable, target] + flags,
+                cwd=REPO, capture_output=True, text=True)
+            after = (stat_pair(html_path), stat_pair(json_path))
+
+        if mode == "recipe":
+            # R3392: two declared writers, and the law is BYTE EQUALITY of the
+            # pair they land - not a number either of them prints. A recipe that
+            # stops reproducing its pair reddens here even though both writers
+            # still exit 0.
+            render_mod, inject_mod, inject_args = recipe
+            mods = [os.path.join(REPO, *rel.split("/"))
+                    for rel in (render_mod, inject_mod)]
+            before_bytes = read_pair()
+            rc_render = subprocess.run([sys.executable, mods[0]],
+                                       cwd=REPO, capture_output=True,
+                                       text=True).returncode
+            rc_inject = subprocess.run([sys.executable, mods[1]] + inject_args,
+                                       cwd=REPO, capture_output=True,
+                                       text=True).returncode
+            after_bytes = read_pair()
+            arms = {
+                "printed-once": printed_once,
+                "both-modules-on-disk": all(os.path.exists(m) for m in mods),
+                "rc0-both": rc_render == 0 and rc_inject == 0,
+                "pair-bytes-reproduced": (before_bytes == after_bytes
+                                          and None not in after_bytes),
+                "row-quotes-html": printed_html,
+                "caveat-printed": html.escape(RECIPE_CAVEAT) in band,
+            }
+            record("AC-DIX21", all(arms.values()),
+                   "mode=recipe cmd=%r rc=%d/%d html=%dB json=%dB %s"
+                   % (command, rc_render, rc_inject, fresh.get("html_bytes", 0),
+                      fresh["bytes"],
+                      " ".join("%s=%s" % (k, v)
+                               for k, v in sorted(arms.items())
+                               if not v) or "all-arms-green"))
+        elif mode == "dry":
             dry_lines = [ln for ln in (proc.stdout or "").splitlines()
                          if ln.startswith("DRY ")]
             dry = dry_lines[-1] if dry_lines else ""
@@ -1024,6 +1121,12 @@ def main(argv):
                                                 "empty": False})
     if command and mode == "dry":
         promise = ("<b>%dB</b>" % fresh.get("html_bytes", 0)) in band
+    elif command and mode == "recipe":
+        # R3392: a recipe announces itself as a recipe - it may not borrow the
+        # single-command caveat, and its own caveat may not stand in for a
+        # byte promise nobody can make.
+        promise = (html.escape(RECIPE_CAVEAT) in band
+                   and html.escape(CHECK_CAVEAT) not in band)
     elif command:
         promise = html.escape(CHECK_CAVEAT) in band
     else:
@@ -1039,7 +1142,8 @@ def main(argv):
         "per-pair-table": (len(PAIR_PRODUCERS) >= 2
                            and len(set(PAIR_PRODUCERS.values())) >= 2),
         "path-from-table": (command is None
-                            or rel == PAIR_PRODUCERS.get(fresh["json"])),
+                            or rel == PAIR_PRODUCERS.get(fresh["json"])
+                            or rel == (PAIR_RECIPES.get(fresh["json"]) or ("",))[0]),
         "unknown-refused": unknown is None and bool(why_unknown),
         "mode-announced": promise,
     }

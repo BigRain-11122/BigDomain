@@ -1,0 +1,26 @@
+R3392 evidence - the entry page can declare a two-step recipe, graded by bytes
+[1] recipe idempotence (shipped writers only, run twice):
+    pass1 html=45716a5a50c3c8f5 json=e8551199317b3c6d sizes=28799/20170
+    pass2 html=45716a5a50c3c8f5 json=e8551199317b3c6d sizes=28799/20170
+    => the pair is reproduced byte-identically by render-then-inject.
+[2] ring fixed point after the law change:
+    closeout_order --write => VERDICT PASS passes=1 steps=5 checks=4/4 transient_steps=0
+    CHECK index PASS 23/23 | CHECK sweep PASS 21/21 | CHECK chain PASS | CHECK export PASS
+[3] rank-flip probe (measured, not hidden): touch preview/ugc-gate-report.json,
+    re-render index, then --check:
+      PASS AC-DIX8 newest=ugc-gate-report.json
+      PASS AC-DIX23 pair=ugc-gate-report.json mode=recipe all-arms-green
+      FAIL AC-DIX21 mode=recipe rc=0/0 pair-bytes-reproduced=False  (22/23)
+    Cause: at the flip the entry page's own bytes move (its row now names this
+    pair), and the back-hop block inside the UGC page embeds the entry page's
+    byte count - so the pair is byte-stable at the ring's fixed point and not
+    at the instant of the flip. Re-running the ring converges again (pass 1).
+[4] the UGC render step was measured in the ring twice and NOT landed:
+    (a) step first, original order => AC-DIX21/23 red (the injector's size patch
+        is the last write, so this pair is newest) and no fixed point in 3 passes
+    (b) step before a re-ordered index (chain,ugc,backhop,index,sweep,export)
+        => sweep dropped to 9/21. Both reverted; STEPS is the canonical five.
+[5] own defect found and fixed in this window: the recipe tuple unpacked into
+    the name `inject`, shadowing the module's inject() function in main() and
+    raising TypeError: 'str' object is not callable on any bare render. Renamed.
+[6] suite: python src/os/test_deliverable_index.py => SUITE PASS 23/23

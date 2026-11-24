@@ -147,6 +147,17 @@ STEPS = [
 # reproduce the bytes the entry page quotes. Putting it in STEPS reddens
 # AC-DIX21/AC-DIX23 (measured), so the recurrence fix needs either a producer
 # that injects its own channel or a declared two-step recipe in the index.
+#
+# R3392 measured BOTH placements and neither holds a fixed point (recorded in
+# qa/repro-recipe-R3392.log): with the ugc step first the injector's size patch
+# is still the last write to that page's json, so the pair the entry page calls
+# newest is the UGC pair and the page must answer for it; with the step placed
+# before a re-ordered index the sweep lost nine faces. The step therefore stays
+# OUT of the ring, and the entry page's answer for that pair is a DECLARED
+# two-step recipe in PAIR_RECIPES (tools/deliverable_index.py), graded by byte
+# equality rather than by a printed number. What would let it into the ring is a
+# renderer that writes the sizes of its own FINAL bytes - i.e. one that accounts
+# for the injected block - which is the next window's item.
 
 # A declared step whose module is gone would fail as a mid-pass transient and
 # the ring could still print PASS, so every declared path is checked before the
