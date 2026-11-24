@@ -1,0 +1,398 @@
+{
+ "generated_utc": "2026-11-24 13:39:43Z",
+ "face": "api_search",
+ "board_face": "search-board",
+ "source_face": "api_search",
+ "shelf": {
+  "listing_count": 3,
+  "seller_count": 2,
+  "price_min": 3,
+  "price_max": 10,
+  "price_avg": 6.0,
+  "rated_count": 2,
+  "rating_avg": 4.5,
+  "ai_label_count": 1
+ },
+ "drills": [
+  {
+   "key": "default",
+   "title": "① 默认检索（当前价升序）",
+   "criteria": {
+    "keyword": null,
+    "dev_account": null,
+    "min_price": null,
+    "max_price": null,
+    "include_delisted": false
+   },
+   "envelope_keys": [
+    "count",
+    "criteria",
+    "disclaimer",
+    "listings"
+   ],
+   "count": 3,
+   "total": null,
+   "truncated": null,
+   "limit": null,
+   "offset": null,
+   "listings": [
+    {
+     "listing_id": 2,
+     "dev_account": "usr:dana",
+     "listing_key": "macro-feed",
+     "title": "Macro Feed API",
+     "token_price": 3,
+     "ai_label": 1,
+     "rating_count": 1,
+     "rating_avg": 4.0,
+     "category": null,
+     "delisted": false,
+     "delisted_utc": null
+    },
+    {
+     "listing_id": 3,
+     "dev_account": "usr:frank",
+     "listing_key": "chart-render",
+     "title": "Chart Render API",
+     "token_price": 5,
+     "ai_label": 0,
+     "rating_count": 0,
+     "rating_avg": 0.0,
+     "category": null,
+     "delisted": false,
+     "delisted_utc": null
+    },
+    {
+     "listing_id": 1,
+     "dev_account": "usr:dana",
+     "listing_key": "risk-scan",
+     "title": "Risk Scan API",
+     "token_price": 10,
+     "ai_label": 0,
+     "rating_count": 1,
+     "rating_avg": 5.0,
+     "category": null,
+     "delisted": false,
+     "delisted_utc": null
+    }
+   ]
+  },
+  {
+   "key": "keyword",
+   "title": "② 关键字 API（大小写不敏感）",
+   "criteria": {
+    "keyword": "API",
+    "dev_account": null,
+    "min_price": null,
+    "max_price": null,
+    "include_delisted": false
+   },
+   "envelope_keys": [
+    "count",
+    "criteria",
+    "disclaimer",
+    "listings"
+   ],
+   "count": 3,
+   "total": null,
+   "truncated": null,
+   "limit": null,
+   "offset": null,
+   "listings": [
+    {
+     "listing_id": 2,
+     "dev_account": "usr:dana",
+     "listing_key": "macro-feed",
+     "title": "Macro Feed API",
+     "token_price": 3,
+     "ai_label": 1,
+     "rating_count": 1,
+     "rating_avg": 4.0,
+     "category": null,
+     "delisted": false,
+     "delisted_utc": null
+    },
+    {
+     "listing_id": 3,
+     "dev_account": "usr:frank",
+     "listing_key": "chart-render",
+     "title": "Chart Render API",
+     "token_price": 5,
+     "ai_label": 0,
+     "rating_count": 0,
+     "rating_avg": 0.0,
+     "category": null,
+     "delisted": false,
+     "delisted_utc": null
+    },
+    {
+     "listing_id": 1,
+     "dev_account": "usr:dana",
+     "listing_key": "risk-scan",
+     "title": "Risk Scan API",
+     "token_price": 10,
+     "ai_label": 0,
+     "rating_count": 1,
+     "rating_avg": 5.0,
+     "category": null,
+     "delisted": false,
+     "delisted_utc": null
+    }
+   ]
+  },
+  {
+   "key": "band",
+   "title": "③ 价格带 4—9（闭区间）",
+   "criteria": {
+    "keyword": null,
+    "dev_account": null,
+    "min_price": 4,
+    "max_price": 9,
+    "include_delisted": false
+   },
+   "envelope_keys": [
+    "count",
+    "criteria",
+    "disclaimer",
+    "listings"
+   ],
+   "count": 1,
+   "total": null,
+   "truncated": null,
+   "limit": null,
+   "offset": null,
+   "listings": [
+    {
+     "listing_id": 3,
+     "dev_account": "usr:frank",
+     "listing_key": "chart-render",
+     "title": "Chart Render API",
+     "token_price": 5,
+     "ai_label": 0,
+     "rating_count": 0,
+     "rating_avg": 0.0,
+     "category": null,
+     "delisted": false,
+     "delisted_utc": null
+    }
+   ]
+  },
+  {
+   "key": "rating",
+   "title": "④ 按评分排序（未评分下沉）",
+   "criteria": {
+    "keyword": null,
+    "dev_account": null,
+    "min_price": null,
+    "max_price": null,
+    "include_delisted": false,
+    "sort": "rating"
+   },
+   "envelope_keys": [
+    "count",
+    "criteria",
+    "disclaimer",
+    "listings"
+   ],
+   "count": 3,
+   "total": null,
+   "truncated": null,
+   "limit": null,
+   "offset": null,
+   "listings": [
+    {
+     "listing_id": 1,
+     "dev_account": "usr:dana",
+     "listing_key": "risk-scan",
+     "title": "Risk Scan API",
+     "token_price": 10,
+     "ai_label": 0,
+     "rating_count": 1,
+     "rating_avg": 5.0,
+     "category": null,
+     "delisted": false,
+     "delisted_utc": null
+    },
+    {
+     "listing_id": 2,
+     "dev_account": "usr:dana",
+     "listing_key": "macro-feed",
+     "title": "Macro Feed API",
+     "token_price": 3,
+     "ai_label": 1,
+     "rating_count": 1,
+     "rating_avg": 4.0,
+     "category": null,
+     "delisted": false,
+     "delisted_utc": null
+    },
+    {
+     "listing_id": 3,
+     "dev_account": "usr:frank",
+     "listing_key": "chart-render",
+     "title": "Chart Render API",
+     "token_price": 5,
+     "ai_label": 0,
+     "rating_count": 0,
+     "rating_avg": 0.0,
+     "category": null,
+     "delisted": false,
+     "delisted_utc": null
+    }
+   ]
+  },
+  {
+   "key": "page",
+   "title": "⑤ 分页：第 2 行起取 1 行",
+   "criteria": {
+    "keyword": null,
+    "dev_account": null,
+    "min_price": null,
+    "max_price": null,
+    "include_delisted": false,
+    "limit": 1,
+    "offset": 1
+   },
+   "envelope_keys": [
+    "count",
+    "criteria",
+    "disclaimer",
+    "limit",
+    "listings",
+    "offset",
+    "returned",
+    "total",
+    "truncated"
+   ],
+   "count": 1,
+   "total": 3,
+   "truncated": true,
+   "limit": 1,
+   "offset": 1,
+   "listings": [
+    {
+     "listing_id": 3,
+     "dev_account": "usr:frank",
+     "listing_key": "chart-render",
+     "title": "Chart Render API",
+     "token_price": 5,
+     "ai_label": 0,
+     "rating_count": 0,
+     "rating_avg": 0.0,
+     "category": null,
+     "delisted": false,
+     "delisted_utc": null
+    }
+   ]
+  },
+  {
+   "key": "seller",
+   "title": "⑥ 卖家筛选 usr:dana",
+   "criteria": {
+    "keyword": null,
+    "dev_account": "usr:dana",
+    "min_price": null,
+    "max_price": null,
+    "include_delisted": false
+   },
+   "envelope_keys": [
+    "count",
+    "criteria",
+    "disclaimer",
+    "listings"
+   ],
+   "count": 2,
+   "total": null,
+   "truncated": null,
+   "limit": null,
+   "offset": null,
+   "listings": [
+    {
+     "listing_id": 2,
+     "dev_account": "usr:dana",
+     "listing_key": "macro-feed",
+     "title": "Macro Feed API",
+     "token_price": 3,
+     "ai_label": 1,
+     "rating_count": 1,
+     "rating_avg": 4.0,
+     "category": null,
+     "delisted": false,
+     "delisted_utc": null
+    },
+    {
+     "listing_id": 1,
+     "dev_account": "usr:dana",
+     "listing_key": "risk-scan",
+     "title": "Risk Scan API",
+     "token_price": 10,
+     "ai_label": 0,
+     "rating_count": 1,
+     "rating_avg": 5.0,
+     "category": null,
+     "delisted": false,
+     "delisted_utc": null
+    }
+   ]
+  },
+  {
+   "key": "soldout",
+   "title": "⑦ 只看售罄（补货队列）",
+   "criteria": {
+    "keyword": null,
+    "dev_account": null,
+    "min_price": null,
+    "max_price": null,
+    "include_delisted": false,
+    "in_stock": false
+   },
+   "envelope_keys": [
+    "count",
+    "criteria",
+    "disclaimer",
+    "listings"
+   ],
+   "count": 0,
+   "total": null,
+   "truncated": null,
+   "limit": null,
+   "offset": null,
+   "listings": []
+  },
+  {
+   "key": "empty",
+   "title": "⑧ 空结果（关键字 zzz-nothing）",
+   "criteria": {
+    "keyword": "zzz-nothing",
+    "dev_account": null,
+    "min_price": null,
+    "max_price": null,
+    "include_delisted": false
+   },
+   "envelope_keys": [
+    "count",
+    "criteria",
+    "disclaimer",
+    "listings"
+   ],
+   "count": 0,
+   "total": null,
+   "truncated": null,
+   "limit": null,
+   "offset": null,
+   "listings": []
+  }
+ ],
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/search-board.html",
+ "sources": {
+  "driver": "8339d820fd2d7028",
+  "copy": "0984d3bd9a31428c",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 12170,
+  "json": 8135
+ }
+}

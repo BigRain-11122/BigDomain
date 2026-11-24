@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>市场发现钻取板（api_search）</title>
+<style>
+:root{--ink:#1b1f24;--muted:#66707a;--line:#dfe4ea;--bg:#f7f8fa}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:var(--bg);color:var(--ink);
+font:15px/1.65 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+main{max-width:1280px;margin:0 auto}
+h1{font-size:22px;margin:0 0 4px;font-weight:650}
+h2{font-size:16px;margin:22px 0 8px;font-weight:620}
+.meta{color:var(--muted);font-size:13px;margin-bottom:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;
+padding:14px 16px;margin-bottom:14px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600;font-size:12px}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.kpi{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.kpi div{flex:1 1 118px;border:1px solid var(--line);border-radius:8px;
+padding:10px 12px;background:#fff}
+.kpi b{display:block;font-size:19px;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--muted);font-size:12.5px}
+.crit{color:var(--muted);font-size:12.5px;margin:0 0 8px}
+.crit code{background:#f0f2f5;border-radius:4px;padding:1px 5px}
+.flag-yes{color:#1f6f43;font-weight:600}
+.flag-no{color:#b42318;font-weight:600}
+.disclaimer{border-left:3px solid #c9a227;background:#fdf8ea;padding:10px 14px;
+font-size:13px}
+.badge{display:inline-block;margin-right:8px;padding:2px 8px;
+border:1px solid var(--line);border-radius:999px;font-size:12px;
+color:var(--muted)}
+.law{font-size:13px;margin:6px 0}
+.empty{color:#b42318}
+.paged{color:var(--muted);font-size:12.5px;margin:8px 0 0}
+footer{color:var(--muted);font-size:12px;margin:18px 0 0}
+</style></head><body><main>
+<h1>市场发现钻取板（api_search）</h1>
+<div class=meta>同一货架上八次真实检索：关键字、价格带、排序、分页、卖家、可售、空结果 &middot; 生成时刻 2026-11-24 13:39:43Z &middot; <code>api_search</code></div>
+<div class=card><div class=kpi><div><span>在架挂单</span><b>3</b></div><div><span>卖家数</span><b>2</b></div><div><span>价格带</span><b>3-10</b></div><div><span>平均标价</span><b>6.0</b></div><div><span>已评分挂单</span><b>2</b></div><div><span>平均评分</span><b>4.5</b></div><div><span>带 AIGC 标识</span><b>1</b></div></div></div>
+<h2 data-drill="default">① 默认检索（当前价升序）</h2>
+<div class=card><p class=crit>检索条件： <code>keyword=—</code> &middot; <code>dev_account=—</code> &middot; <code>min_price=—</code> &middot; <code>max_price=—</code> &middot; <code>include_delisted=否</code></p><table><tr><th>序</th><th>挂单号</th><th>标题</th><th>卖家</th><th class=n>挂单键</th><th class=n>标价</th><th class=n>评分</th><th class=n>评分数</th><th>AIGC 标识</th><th>分类</th><th>下架时刻</th></tr><tr data-listing="2"><td class="n">1</td><td class="n">2</td><td class="">Macro Feed API</td><td class="">usr:dana</td><td class="n">macro-feed</td><td class="n">3</td><td class="n">4.0</td><td class="n">1</td><td class="flag-yes">是</td><td class="">—</td><td class="">—</td></tr><tr data-listing="3"><td class="n">2</td><td class="n">3</td><td class="">Chart Render API</td><td class="">usr:frank</td><td class="n">chart-render</td><td class="n">5</td><td class="n">未评分</td><td class="n">0</td><td class="flag-no">否</td><td class="">—</td><td class="">—</td></tr><tr data-listing="1"><td class="n">3</td><td class="n">1</td><td class="">Risk Scan API</td><td class="">usr:dana</td><td class="n">risk-scan</td><td class="n">10</td><td class="n">5.0</td><td class="n">1</td><td class="flag-no">否</td><td class="">—</td><td class="">—</td></tr></table></div>
+<h2 data-drill="keyword">② 关键字 API（大小写不敏感）</h2>
+<div class=card><p class=crit>检索条件： <code>keyword=API</code> &middot; <code>dev_account=—</code> &middot; <code>min_price=—</code> &middot; <code>max_price=—</code> &middot; <code>include_delisted=否</code></p><table><tr><th>序</th><th>挂单号</th><th>标题</th><th>卖家</th><th class=n>挂单键</th><th class=n>标价</th><th class=n>评分</th><th class=n>评分数</th><th>AIGC 标识</th><th>分类</th><th>下架时刻</th></tr><tr data-listing="2"><td class="n">1</td><td class="n">2</td><td class="">Macro Feed API</td><td class="">usr:dana</td><td class="n">macro-feed</td><td class="n">3</td><td class="n">4.0</td><td class="n">1</td><td class="flag-yes">是</td><td class="">—</td><td class="">—</td></tr><tr data-listing="3"><td class="n">2</td><td class="n">3</td><td class="">Chart Render API</td><td class="">usr:frank</td><td class="n">chart-render</td><td class="n">5</td><td class="n">未评分</td><td class="n">0</td><td class="flag-no">否</td><td class="">—</td><td class="">—</td></tr><tr data-listing="1"><td class="n">3</td><td class="n">1</td><td class="">Risk Scan API</td><td class="">usr:dana</td><td class="n">risk-scan</td><td class="n">10</td><td class="n">5.0</td><td class="n">1</td><td class="flag-no">否</td><td class="">—</td><td class="">—</td></tr></table></div>
+<h2 data-drill="band">③ 价格带 4—9（闭区间）</h2>
+<div class=card><p class=crit>检索条件： <code>keyword=—</code> &middot; <code>dev_account=—</code> &middot; <code>min_price=4</code> &middot; <code>max_price=9</code> &middot; <code>include_delisted=否</code></p><table><tr><th>序</th><th>挂单号</th><th>标题</th><th>卖家</th><th class=n>挂单键</th><th class=n>标价</th><th class=n>评分</th><th class=n>评分数</th><th>AIGC 标识</th><th>分类</th><th>下架时刻</th></tr><tr data-listing="3"><td class="n">1</td><td class="n">3</td><td class="">Chart Render API</td><td class="">usr:frank</td><td class="n">chart-render</td><td class="n">5</td><td class="n">未评分</td><td class="n">0</td><td class="flag-no">否</td><td class="">—</td><td class="">—</td></tr></table></div>
+<h2 data-drill="rating">④ 按评分排序（未评分下沉）</h2>
+<div class=card><p class=crit>检索条件： <code>keyword=—</code> &middot; <code>dev_account=—</code> &middot; <code>min_price=—</code> &middot; <code>max_price=—</code> &middot; <code>sort=rating</code> &middot; <code>include_delisted=否</code></p><table><tr><th>序</th><th>挂单号</th><th>标题</th><th>卖家</th><th class=n>挂单键</th><th class=n>标价</th><th class=n>评分</th><th class=n>评分数</th><th>AIGC 标识</th><th>分类</th><th>下架时刻</th></tr><tr data-listing="1"><td class="n">1</td><td class="n">1</td><td class="">Risk Scan API</td><td class="">usr:dana</td><td class="n">risk-scan</td><td class="n">10</td><td class="n">5.0</td><td class="n">1</td><td class="flag-no">否</td><td class="">—</td><td class="">—</td></tr><tr data-listing="2"><td class="n">2</td><td class="n">2</td><td class="">Macro Feed API</td><td class="">usr:dana</td><td class="n">macro-feed</td><td class="n">3</td><td class="n">4.0</td><td class="n">1</td><td class="flag-yes">是</td><td class="">—</td><td class="">—</td></tr><tr data-listing="3"><td class="n">3</td><td class="n">3</td><td class="">Chart Render API</td><td class="">usr:frank</td><td class="n">chart-render</td><td class="n">5</td><td class="n">未评分</td><td class="n">0</td><td class="flag-no">否</td><td class="">—</td><td class="">—</td></tr></table></div>
+<h2 data-drill="page">⑤ 分页：第 2 行起取 1 行</h2>
+<div class=card><p class=crit>检索条件： <code>keyword=—</code> &middot; <code>dev_account=—</code> &middot; <code>min_price=—</code> &middot; <code>max_price=—</code> &middot; <code>include_delisted=否</code> &middot; <code>limit=1</code> &middot; <code>offset=1</code></p><table><tr><th>序</th><th>挂单号</th><th>标题</th><th>卖家</th><th class=n>挂单键</th><th class=n>标价</th><th class=n>评分</th><th class=n>评分数</th><th>AIGC 标识</th><th>分类</th><th>下架时刻</th></tr><tr data-listing="3"><td class="n">1</td><td class="n">3</td><td class="">Chart Render API</td><td class="">usr:frank</td><td class="n">chart-render</td><td class="n">5</td><td class="n">未评分</td><td class="n">0</td><td class="flag-no">否</td><td class="">—</td><td class="">—</td></tr></table><p class=paged>分页前匹配总数 3 &middot; 本页行数 1 &middot; 后面还有行 是</p></div>
+<h2 data-drill="seller">⑥ 卖家筛选 usr:dana</h2>
+<div class=card><p class=crit>检索条件： <code>keyword=—</code> &middot; <code>dev_account=usr:dana</code> &middot; <code>min_price=—</code> &middot; <code>max_price=—</code> &middot; <code>include_delisted=否</code></p><table><tr><th>序</th><th>挂单号</th><th>标题</th><th>卖家</th><th class=n>挂单键</th><th class=n>标价</th><th class=n>评分</th><th class=n>评分数</th><th>AIGC 标识</th><th>分类</th><th>下架时刻</th></tr><tr data-listing="2"><td class="n">1</td><td class="n">2</td><td class="">Macro Feed API</td><td class="">usr:dana</td><td class="n">macro-feed</td><td class="n">3</td><td class="n">4.0</td><td class="n">1</td><td class="flag-yes">是</td><td class="">—</td><td class="">—</td></tr><tr data-listing="1"><td class="n">2</td><td class="n">1</td><td class="">Risk Scan API</td><td class="">usr:dana</td><td class="n">risk-scan</td><td class="n">10</td><td class="n">5.0</td><td class="n">1</td><td class="flag-no">否</td><td class="">—</td><td class="">—</td></tr></table></div>
+<h2 data-drill="soldout">⑦ 只看售罄（补货队列）</h2>
+<div class=card><p class=crit>检索条件： <code>keyword=—</code> &middot; <code>dev_account=—</code> &middot; <code>min_price=—</code> &middot; <code>max_price=—</code> &middot; <code>in_stock=否</code> &middot; <code>include_delisted=否</code></p><p class=empty>本次检索零命中：出厂面返回空列表，本节不补位、不合成行。</p></div>
+<h2 data-drill="empty">⑧ 空结果（关键字 zzz-nothing）</h2>
+<div class=card><p class=crit>检索条件： <code>keyword=zzz-nothing</code> &middot; <code>dev_account=—</code> &middot; <code>min_price=—</code> &middot; <code>max_price=—</code> &middot; <code>include_delisted=否</code></p><p class=empty>本次检索零命中：出厂面返回空列表，本节不补位、不合成行。</p></div>
+<h2>口径法则</h2>
+<div class=card><p class=law>每节的 count 等于本节行数，页面自己复算，不抄出厂计数。</p><p class=law>默认与 price_asc 按当前标价升序，同价以挂单号升序破平，行序可复现。</p><p class=law>rating 模式按（平均分、评分数）降序；未评分挂单读 0.0 并下沉，本页如实印成「未评分」。</p><p class=law>价格带是闭区间，作用于当前标价——改价即时移动区间归属。</p><p class=law>关键字是标题或挂单键的大小写不敏感子串，描述不参与检索。</p><p class=law>卖家筛选按 dev 账号精确匹配，不做模糊。</p><p class=law>分页键只在请求时出现；total 是分页前的匹配总数，truncated 表示后面还有行。</p><p class=law>全部门禁在任何读取之前、失败即拒——倒挂价格带会被拒，而不是静默返回空集。</p><p class=law>可售筛选走唯一稀缺缝，售罄行就是卖家的补货队列，与库存面同步移动。</p><p class=law>本页是市场发现读数，不是投资建议，也不给任何挂单背书。</p></div>
+<h2>免责声明</h2>
+<div class=card><div class=disclaimer>sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice</div>
+<p style="margin-top:10px"><span class=badge>AIGC 生成内容标识</span></p></div>
+<h2>再生命令</h2>
+<div class=card><code>python tools/search_board.py</code></div>
+<footer>BigDomain OSLoop · 2026-11-24 13:39:43Z · 本页由 tools/search_board.py 生成，不手改</footer>
+</main></body></html>

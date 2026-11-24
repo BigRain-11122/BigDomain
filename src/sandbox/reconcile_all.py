@@ -8325,6 +8325,14 @@ SUITES = [
     # re-reads the face over its own throwaway demo world.
     ("os-public-listings-board",
      os.path.join("..", "os", "test_public_listings_board.py"), 6),
+    # R3423: tools/search_board.py renders the shipped market discovery face
+    # (api_search, AC-AMSQ/AMPG/AMSR/AMAV) which had zero readers under
+    # tools/ and preview/, as eight real calls side by side - keyword, price
+    # band, sort, paging, seller, availability and an empty result - so the
+    # effect of every discovery axis is visible on one page; the suite
+    # re-issues each drill against the face over its own throwaway world.
+    ("os-search-board",
+     os.path.join("..", "os", "test_search_board.py"), 6),
 
     # R3073: tools/city_face_report.py renders the P-47 item-1 city face and
     # carries its own --check (AC-CFY1..8), but this registry had no row naming

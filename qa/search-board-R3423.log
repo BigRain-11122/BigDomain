@@ -1,0 +1,38 @@
+R3423 SEARCH-BOARD evidence (window 2026-11-24, BigDomain OSLoop)
+FACE    api_search (AC-AMSQ keyword / AC-AMPG paging / AC-AMSR sort / AC-AMAV availability)
+READERS before this round: git grep -l -F over tools/ and preview/ answers rc=1, zero hits.
+DRILLS  eight real calls over one throwaway demo world, criteria echoed beside the rows:
+        1 default            count=3  rows (2 macro-feed 3), (3 chart-render 5), (1 risk-scan 10)
+        2 keyword=API        count=3  ids 2,3,1
+        3 band 4..9          count=1  row 3 chart-render 5
+        4 sort=rating        ids 1,2,3 -> 5.0 / 4.0 / 0.0 (unrated sinks)
+        5 limit=1 offset=1   count=1 total=3 truncated=True row 3
+        6 seller usr:dana    count=2  ids 2,1
+        7 in_stock=False     count=0  (landed empty result, seller restock queue)
+        8 keyword=zzz-nothing count=0 (landed empty result)
+PAIR    preview/search-board.html 12170B sha16 26df91ebaf046ecf
+        preview/search-board.json  8135B
+        preview/search-board-copy.json 2885B sha16 0984d3bd9a31428c
+CHECK   SEARCH-BOARD CHECK PASS fails=0 html=12170B json=8135B
+SUITE   SUITE PASS 6/6 (AC-SDB1..6) on the first full run
+        AC-SDB1 landed=True keys=10 blocks=True rows=True shelf=True report=True
+        AC-SDB2 drills_same=True disclaimer_same=True drills=8
+        AC-SDB3 problems=[] stats=True case_insensitive=True empty_landed=True
+        AC-SDB4 sections=True criteria=True dash=True unrated=True empty_sentence=True paged=True bare_none=False
+        AC-SDB5 aigc=True disclaimer_on_page=True external_links=0
+        AC-SDB6 check_rc=0 wrote_nothing=True wired=6/6 face_suites=True
+CONTROL1 deleted label key law_band -> rc=3 E_SDB_FACE: label copy keys missing: law_band,
+        page sha16 unchanged at 26df91ebaf046ecf.
+CONTROL2 forced drills[0].listings[0].token_price +7 -> rc=2, reds AC-SDB2 and AC-SDB6
+        (AC-SDB3 reads the shipped world, not the landed json, so it stays green - recorded
+        as measured, not as expected); restored pair re-reads SUITE PASS 6/6 and CHECK PASS.
+WIRING  registry os-search-board(6); producer row search-board.json -> tools/search_board.py;
+        matrix WRITTEN 81884 bytes 792 rows then DOC-CURRENT; census re-pinned 791->792
+        VERDICT PASS pinned=792; entry index PASS 23/23; first-yuan chain PASS read_only=True;
+        face sweep SUITE PASS 56/56 over 20 criteria; closeout CLOSEOUT-GATE PASS files=4961.
+HONEST  zero new tables, zero new readings, zero business semantics - this moves an already
+        delivered discovery face onto one page the CEO can open; all three shelves are pending
+        and every category is unset in this demo world, so the band drill and the dash column
+        are landed rows rather than probes; ZERO payment capability and no network beyond
+        loopback - the five physical pieces (merchant id, server, domain, filing+ICP,
+        miniprogram appid+secret) are still missing, so buyers still cannot pay.
