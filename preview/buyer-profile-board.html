@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>居民账户对账单</title>
+<style>
+:root{--ink:#1b1f24;--muted:#66707a;--line:#dfe4ea;--bg:#f7f8fa}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:var(--bg);color:var(--ink);
+font:15px/1.65 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+main{max-width:1180px;margin:0 auto}
+h1{font-size:22px;margin:0 0 4px;font-weight:650}
+h2{font-size:16px;margin:22px 0 8px;font-weight:620}
+h3{font-size:14px;margin:18px 0 6px;font-weight:620;color:#3c4653}
+.meta{color:var(--muted);font-size:13px;margin-bottom:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;
+padding:14px 16px;margin-bottom:14px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600;font-size:12px}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.kpi{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.kpi div{flex:1 1 118px;border:1px solid var(--line);border-radius:8px;
+padding:10px 12px;background:#fff}
+.kpi b{display:block;font-size:19px;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--muted);font-size:12.5px}
+.split{display:flex;height:10px;border-radius:999px;overflow:hidden;
+background:#eef1f5;min-width:160px;margin:6px 0 2px}
+.split i{display:block;height:10px}
+.split i.dev{background:#4f7cac}
+.split i.plat{background:#c9a227}
+.zero-dot{display:inline-block;width:7px;height:7px;margin-right:5px;
+border-radius:999px;background:#9aa6b2;vertical-align:middle}
+.disclaimer{border-left:3px solid #c9a227;background:#fdf8ea;padding:10px 14px;
+font-size:13px}
+.badge{display:inline-block;margin-right:8px;padding:2px 8px;
+border:1px solid var(--line);border-radius:999px;font-size:12px;
+color:var(--muted)}
+.badge.quiet{border-color:#d8dde3;color:#7b848e}
+.law{font-size:13px;margin:6px 0}
+.empty{color:var(--muted);font-size:13px}
+.note{color:var(--muted);font-size:12.5px;margin:6px 0 0}
+footer{color:var(--muted);font-size:12px;margin:20px 0 8px}
+code{font-size:12.5px;background:#f2f4f7;padding:1px 5px;border-radius:4px}
+</style></head><body><main>
+<h1>居民账户对账单</h1>
+<div class=meta>一个居民账号一共花了多少、退回来多少、开发者与平台各拿多少 &middot; 生成于 2026-11-24 15:41:13Z &middot; <code>api_buyer_profile</code></div>
+<h2>市场总览（逐买家相加，非去重）</h2>
+<div class=card data-market=1><div class=kpi><div><span>账户数</span><b>3</b></div><div><span>成交笔数</span><b>4</b></div><div><span>退款笔数</span><b>2</b></div><div><span>净成交笔数</span><b>2</b></div><div><span>挂单次数</span><b>4</b></div><div><span>毛支出</span><b>28</b></div><div><span>已退</span><b>15</b></div><div><span>净支出</span><b>13</b></div><div><span>开发者分成</span><b>10</b></div><div><span>平台分成</span><b>3</b></div><div><span>评分笔数</span><b>2</b></div><div><span>平均星级</span><b>4.50</b></div><div><span>关注 / 在用关注</span><b>0 / 0</b></div></div><p class=note>市场总览行是逐买家按列相加的算术和，不是去重后的市场计数；市场平均星级按评分笔数加权。</p></div>
+<h2>逐买家对账单</h2>
+<div class=card data-buyer="usr:bob"><h3>逐买家对账单 &middot; <code>usr:bob</code></h3><div class=kpi><div><span>成交笔数</span><b>2</b></div><div><span>退款笔数</span><b>1</b></div><div><span>净成交笔数</span><b>1</b></div><div><span>挂单次数</span><b>2</b></div><div><span>毛支出</span><b>13</b></div><div><span>已退</span><b>10</b></div><div><span>净支出</span><b>3</b></div><div><span>开发者分成</span><b>3</b></div><div><span>平台分成</span><b>0</b></div><div><span>评分笔数</span><b>1</b></div><div><span>平均星级</span><b>4.00</b></div><div><span>关注 / 在用关注</span><b>0 / 0</b></div></div><p class=note>分成条：开发者分成占净支出的宽度（宽度不是份额）</p><div class=split><i class=dev style="width:100.0%"></i><i class=plat style="width:0.0%"></i></div><p class=note>开发者 3 &middot; 平台 0</p><table><tr><th>项目</th><th class=n>读数</th></tr><tr data-field="0"><td>成交笔数</td><td class=n>2</td></tr><tr data-field="1"><td>退款笔数</td><td class=n>1</td></tr><tr data-field="2"><td>净成交笔数</td><td class=n>1</td></tr><tr data-field="3"><td>挂单次数</td><td class=n>2</td></tr><tr data-field="4"><td>毛支出</td><td class=n>13</td></tr><tr data-field="5"><td>已退</td><td class=n>10</td></tr><tr data-field="6"><td>净支出</td><td class=n>3</td></tr><tr data-field="7"><td>开发者分成</td><td class=n>3</td></tr><tr data-field="8"><td>平台分成</td><td class=n>0</td></tr><tr data-field="9"><td>评分笔数</td><td class=n>1</td></tr><tr data-field="10"><td>平均星级</td><td class=n>4.00</td></tr><tr data-field="11"><td>关注 / 在用关注</td><td class=n>0 / 0</td></tr><tr data-field="12"><td>首笔时刻</td><td class=n>2026-08-31T23:59:59Z</td></tr><tr data-field="13"><td>末笔时刻</td><td class=n>2026-09-15T12:00:00Z</td></tr></table></div><div class=card data-buyer="usr:carol"><h3>逐买家对账单 &middot; <code>usr:carol</code></h3><div class=kpi><div><span>成交笔数</span><b>1</b></div><div><span>退款笔数</span><b>0</b></div><div><span>净成交笔数</span><b>1</b></div><div><span>挂单次数</span><b>1</b></div><div><span>毛支出</span><b>10</b></div><div><span>已退</span><b>0</b></div><div><span>净支出</span><b>10</b></div><div><span>开发者分成</span><b>7</b></div><div><span>平台分成</span><b>3</b></div><div><span>评分笔数</span><b>1</b></div><div><span>平均星级</span><b>5.00</b></div><div><span>关注 / 在用关注</span><b>0 / 0</b></div></div><p class=note>分成条：开发者分成占净支出的宽度（宽度不是份额）</p><div class=split><i class=dev style="width:70.0%"></i><i class=plat style="width:30.0%"></i></div><p class=note>开发者 7 &middot; 平台 3</p><table><tr><th>项目</th><th class=n>读数</th></tr><tr data-field="0"><td>成交笔数</td><td class=n>1</td></tr><tr data-field="1"><td>退款笔数</td><td class=n>0</td></tr><tr data-field="2"><td>净成交笔数</td><td class=n>1</td></tr><tr data-field="3"><td>挂单次数</td><td class=n>1</td></tr><tr data-field="4"><td>毛支出</td><td class=n>10</td></tr><tr data-field="5"><td>已退</td><td class=n>0</td></tr><tr data-field="6"><td>净支出</td><td class=n>10</td></tr><tr data-field="7"><td>开发者分成</td><td class=n>7</td></tr><tr data-field="8"><td>平台分成</td><td class=n>3</td></tr><tr data-field="9"><td>评分笔数</td><td class=n>1</td></tr><tr data-field="10"><td>平均星级</td><td class=n>5.00</td></tr><tr data-field="11"><td>关注 / 在用关注</td><td class=n>0 / 0</td></tr><tr data-field="12"><td>首笔时刻</td><td class=n>2026-09-01T00:00:00Z</td></tr><tr data-field="13"><td>末笔时刻</td><td class=n>2026-09-01T00:00:00Z</td></tr></table></div><div class=card data-buyer="usr:erin"><h3>逐买家对账单 &middot; <code>usr:erin</code></h3><div class=kpi><div><span>成交笔数</span><b>1</b></div><div><span>退款笔数</span><b>1</b></div><div><span>净成交笔数</span><b>0</b></div><div><span>挂单次数</span><b>1</b></div><div><span>毛支出</span><b>5</b></div><div><span>已退</span><b>5</b></div><div><span>净支出</span><b>0</b></div><div><span>开发者分成</span><b>0</b></div><div><span>平台分成</span><b>0</b></div><div><span>评分笔数</span><b>0</b></div><div><span>平均星级</span><b>—</b></div><div><span>关注 / 在用关注</span><b>0 / 0</b></div></div><p class=note><span class="badge quiet">分成条：开发者分成占净支出的宽度（宽度不是份额）</span>净支出不为正：分成条无定义，本行不画条</p><table><tr><th>项目</th><th class=n>读数</th></tr><tr data-field="0"><td>成交笔数</td><td class=n>1</td></tr><tr data-field="1"><td>退款笔数</td><td class=n>1</td></tr><tr data-field="2"><td>净成交笔数</td><td class=n>0</td></tr><tr data-field="3"><td>挂单次数</td><td class=n>1</td></tr><tr data-field="4"><td>毛支出</td><td class=n>5</td></tr><tr data-field="5"><td>已退</td><td class=n>5</td></tr><tr data-field="6"><td>净支出</td><td class=n>0</td></tr><tr data-field="7"><td>开发者分成</td><td class=n>0</td></tr><tr data-field="8"><td>平台分成</td><td class=n>0</td></tr><tr data-field="9"><td>评分笔数</td><td class=n>0</td></tr><tr data-field="10"><td>平均星级</td><td class=n>—</td></tr><tr data-field="11"><td>关注 / 在用关注</td><td class=n>0 / 0</td></tr><tr data-field="12"><td>首笔时刻</td><td class=n>2026-09-20T08:30:00Z</td></tr><tr data-field="13"><td>末笔时刻</td><td class=n>2026-09-20T08:30:00Z</td></tr></table></div>
+<h2>口径法则</h2>
+<div class=card><p class=law>账户数等于落盘买家块数；每个买家块与市场块都带出厂面的完整键集，缺一即拒渲。</p><p class=law>逐账户：净支出 = 毛支出 - 已退，且成交笔数 = 净成交笔数 + 退款笔数。</p><p class=law>逐账户：开发者分成 + 平台分成 = 净支出；两边都是整数，不留小数尾差。</p><p class=law>逐账户：挂单次数与成交笔数分开计，退款不减少已经发生的挂单。</p><p class=law>逐账户：在用关注数不超过关注总数；取消关注不抹掉历史。</p><p class=law>逐账户：评分笔数为 0 时平均星级为未定义（印破折号），不得写成 0.0。</p><p class=law>逐账户：平均星级落在 0 到 5 之间；越界即判负。</p><p class=law>逐账户：有成交才有首笔与末笔时刻，且首笔不晚于末笔；无成交账户两枚时刻皆为未定义。</p><p class=law>市场总览行是逐买家按列相加的算术和，不是去重后的市场计数；市场平均星级按评分笔数加权。</p><p class=law>买家编号一律以 usr: 开头；同一账户在本页只出现一次。</p><p class=law>分成条只表示开发者分成占净支出的宽度；净支出不为正时不画条。</p><p class=law>本页是开发者 API 市场的服务清单读数，不构成投资建议，也不是风险评分或信用评价。</p></div>
+<h2>免责声明</h2>
+<div class=card><div class=disclaimer>sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice</div>
+<p style="margin-top:10px"><span class=badge>本页含 AIGC 生成内容标识：页面由脚本按沙箱出厂面渲染，非人工手写读数</span></p></div>
+<h2>复现命令</h2>
+<div class=card><code>python tools/buyer_profile_board.py &amp;&amp; python tools/buyer_profile_board.py --check</code></div>
+<footer>只读页面：数字全部来自沙箱出厂面 api_buyer_profile，本页不重算任何总额。</footer>
+</main></body></html>

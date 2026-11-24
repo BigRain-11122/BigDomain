@@ -1,0 +1,14 @@
+R3430 BUYER PROFILE BOARD - evidence log (written through tools/qa_log.py)
+product: preview/buyer-profile-board.html + .json rendered by tools/buyer_profile_board.py
+face: api_buyer_profile (AC-AMBY1..8) over a throwaway demo world; buyers enumerated through api_board() + api_sales()
+CHECK PASS fails=0 html=11045B json=2690B
+SUITE PASS 6/6 (AC-BPFB1..6) green on the first full run; AC-BPFB2 re-reads the shipped face over the suite own throwaway world (buyers_same=True disclaimer_same=True buyers=3 purchases=4)
+AC-BPFB3 identities: net = gross - refunded; purchases = net purchases + refunds; dev + platform = net; live watches <= watches; zero ratings forces a null average; market row is the column sum with a rating-count-weighted average
+AC-BPFB4 page honesty: 3 buyer cards, 2 split bars (the one non-positive-net account names its undefined split and draws no bar), a measured 0.00 average kept apart from the dash, twelve law sentences, no bare None
+AC-BPFB5 compliance: AIGC label present, the face own disclaimer verbatim on the page, not-advice sentence present, external links 0
+AC-BPFB6 no older criterion relaxed: --check rc=0 with both file stamps unchanged, registry row os-buyer-profile-board(6), face suite AC-AMBY on disk
+control A: deleted label-copy key law_bar -> rc=3 E_BPFB_FACE with the page sha256 unchanged, copy restored
+control B: forced first-buyer net_spent +7 -> AC-BPFB2, AC-BPFB3 and AC-BPFB6 red at rc=2; restored pair re-reads SUITE PASS 6/6 and --check PASS
+wiring: matrix WRITTEN 82486 bytes 798 rows then DOC-CURRENT; registry counter census re-pinned 797->798 VERDICT PASS pinned=798; entry index VERDICT PASS 23/23 fingerprint 398ca04c91cb09ab; first-yuan chain VERDICT PASS read_only=True; face sweep VERDICT PASS 13/13 then --check 21/21
+group scan (content-addressed, read before any work): ledger carried 0 @BigDomain lines; docs/decisions.md answered 144 distinct ids against a stored baseline of 149 with 0 newcomers; company orders head unchanged at the 2026-11-20 22:5x row; benchmarks_refreshed 2026-11-24 sits inside the seven-day gate; git status clean at open with no index.lock; board head was R3429 item (4) zero-reader re-measure and WAS pullable
+honest: this moves an already-delivered reading onto a page the CEO can open - zero new tables, zero new readings, zero business semantics; one of three accounts has non-positive net spend so the no-bar rule is proved by a landed row; ZERO payment capability and no network beyond loopback - the five physical pieces are still missing

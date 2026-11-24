@@ -8350,6 +8350,14 @@ SUITES = [
     # verbatim and the suite re-reads the face over its own throwaway world.
     ("os-seller-repeat-months-board",
      os.path.join("..", "os", "test_seller_repeat_months_board.py"), 6),
+    # R3430: tools/buyer_profile_board.py renders the shipped resident account
+    # envelope (one market row plus one statement card per buyer: purchases,
+    # refunds, gross, refunded, net, the developer/platform pool split and the
+    # rating aggregates) which had zero readers under tools/ and preview/; the
+    # page prints the shipped envelope verbatim and the suite re-reads the face
+    # over its own throwaway demo world.
+    ("os-buyer-profile-board",
+     os.path.join("..", "os", "test_buyer_profile_board.py"), 6),
     # R3424: tools/seller_refund_reasons_board.py renders the seller-side refund
     # cause envelope (the market scope plus one section per seller) with the
     # market refund rate and this seller's share of the market refunded total as
