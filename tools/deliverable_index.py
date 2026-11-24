@@ -203,6 +203,9 @@ PAIR_PRODUCERS = {
     # R3408: same single-writer shape again - one render, one json, no back-hop
     # block - so the daily calendar settlement sheet names its producer.
     "market-daily.json": "tools/market_daily_board.py",
+    # R3409: same single-writer shape - one render, one json, no back-hop block
+    # - so the buyer concentration ladder names its producer.
+    "seller-concentration.json": "tools/seller_concentration_board.py",
 }
 # R3392 (AC-DIX21 recipe arm). One pair on this page cannot be reproduced by ONE
 # command, and until now the law had only two answers - name a producer or print

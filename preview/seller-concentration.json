@@ -1,0 +1,68 @@
+{
+ "generated_utc": "2026-11-24 08:44:47Z",
+ "face": "api_seller_concentration",
+ "dev_account": null,
+ "scope": "market",
+ "purchase_count": 4,
+ "refund_count": 2,
+ "buyer_count": 3,
+ "refunded_buyers": 2,
+ "gross_revenue": 28,
+ "refunded_tokens": 15,
+ "net_revenue": 13,
+ "top1_share": 0.769231,
+ "top3_share": 1.0,
+ "herfindahl": 6449.7,
+ "pareto_buyer_count": 2,
+ "market_herfindahl": null,
+ "buyers": [
+  {
+   "buyer_id": "usr:carol",
+   "purchase_count": 1,
+   "refund_count": 0,
+   "net_purchase_count": 1,
+   "gross_revenue": 10,
+   "refunded_tokens": 0,
+   "net_revenue": 10,
+   "share": 0.769231,
+   "cumulative_share": 0.769231,
+   "rank": 1
+  },
+  {
+   "buyer_id": "usr:bob",
+   "purchase_count": 2,
+   "refund_count": 1,
+   "net_purchase_count": 1,
+   "gross_revenue": 13,
+   "refunded_tokens": 10,
+   "net_revenue": 3,
+   "share": 0.230769,
+   "cumulative_share": 1.0,
+   "rank": 2
+  },
+  {
+   "buyer_id": "usr:erin",
+   "purchase_count": 1,
+   "refund_count": 1,
+   "net_purchase_count": 0,
+   "gross_revenue": 5,
+   "refunded_tokens": 5,
+   "net_revenue": 0,
+   "share": 0.0,
+   "cumulative_share": 1.0,
+   "rank": 3
+  }
+ ],
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/seller-concentration.html",
+ "sources": {
+  "driver": "2202864f3823ca80",
+  "copy": "a17c9bdcbaebb31c",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 6256,
+  "json": 1505
+ }
+}

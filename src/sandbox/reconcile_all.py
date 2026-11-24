@@ -8200,6 +8200,18 @@ SUITES = [
     # identities.
     ("os-market-daily-board",
      os.path.join("..", "os", "test_market_daily_board.py"), 6),
+    # R3409: tools/seller_concentration_board.py renders api_seller_concentration
+    # - how many residents the net revenue hangs on, the Herfindahl weight, the
+    # ladder head and the Pareto count - onto one openable page. The R3409
+    # reader re-measure over the five faces the R3408 board named counted zero
+    # readers under tools/ and preview/ for every one of them, and three of them
+    # read empty on the shipped demo world (revision_count=0, gap_count=0), so
+    # only this non-empty face was taken. The suite grades the page: it
+    # re-reads the shipped face over its own throwaway demo world instead of
+    # typing a fixture, and pins the row-sum, zero-weight buyer, share,
+    # cumulative, Herfindahl, Pareto and ladder-order identities.
+    ("os-seller-concentration-board",
+     os.path.join("..", "os", "test_seller_concentration_board.py"), 6),
     # R3073: tools/city_face_report.py renders the P-47 item-1 city face and
     # carries its own --check (AC-CFY1..8), but this registry had no row naming
     # it, so the face was graded only by the fail-soft [GATES] sweep - the

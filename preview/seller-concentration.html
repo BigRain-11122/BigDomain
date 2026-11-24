@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>买家集中度 / 我的净收入挂在几个人身上</title>
+<style>
+:root{--ink:#1b1f24;--muted:#66707a;--line:#dfe4ea;--bg:#f7f8fa}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:var(--bg);color:var(--ink);
+font:15px/1.65 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+main{max-width:1080px;margin:0 auto}
+h1{font-size:22px;margin:0 0 4px;font-weight:650}
+h2{font-size:16px;margin:22px 0 8px;font-weight:620}
+.meta{color:var(--muted);font-size:13px;margin-bottom:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;
+padding:14px 16px;margin-bottom:14px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600;font-size:12px}
+td.n{text-align:right;font-variant-numeric:tabular-nums}
+td.s{text-align:center;color:var(--muted)}
+.kpi{display:flex;gap:12px;flex-wrap:wrap}
+.kpi div{flex:1 1 110px;border:1px solid var(--line);border-radius:8px;
+padding:10px 12px;background:#fff}
+.kpi b{display:block;font-size:19px;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--muted);font-size:12.5px}
+.track{background:#eef1f5;border-radius:4px;height:10px;min-width:60px}
+.fill{background:#3d5a80;height:10px;border-radius:4px;min-width:0}
+.scale{position:relative;height:12px;background:#eef1f5;border-radius:6px;
+margin:26px 0 6px}
+.scale .mark{position:absolute;top:-4px;width:2px;height:20px;background:#b23b3b}
+.scale-legend{display:flex;justify-content:space-between;font-size:12px;
+color:var(--muted)}
+.disclaimer{border-left:3px solid #c9a227;background:#fdf8ea;padding:10px 14px;
+font-size:13px}
+.badge{display:inline-block;margin-right:8px;padding:2px 8px;
+border:1px solid var(--line);border-radius:999px;font-size:12px;
+color:var(--muted)}
+.weak{font-size:14px}
+.weak b{font-variant-numeric:tabular-nums}
+ol.laws{margin:0;padding-left:20px;font-size:13px;color:#2b3138}
+ol.laws li{margin-bottom:4px}
+footer{color:var(--muted);font-size:12px;margin:20px 0 8px}
+code{font-size:12.5px;background:#f2f4f7;padding:1px 5px;border-radius:4px}
+</style></head><body><main>
+<h1>买家集中度 / 我的净收入挂在几个人身上</h1>
+<div class=meta>市场级读数 · 行面权威=购买侧 · 收入权威=净额 &middot; 生成于 2026-11-24 08:44:47Z &middot; <code>api_seller_concentration</code></div>
+<div class=card><div class=kpi><div><span>成交笔数</span><b>4</b></div><div><span>退款笔数</span><b>2</b></div><div><span>贡献买家数</span><b>3</b></div><div><span>有退款的买家</span><b>2</b></div><div><span>毛收入</span><b>28</b></div><div><span>退款额</span><b>15</b></div><div><span>净收入</span><b>13</b></div><div><span>最大买家份额 %</span><b>76.9</b></div><div><span>前三买家份额 %</span><b>100</b></div><div><span>赫芬达尔指数</span><b>6449.7</b></div><div><span>帕累托买家数</span><b>2</b></div></div></div>
+<h2>赫芬达尔标尺（0 = 完全分散，10000 = 一人包揽）</h2>
+<div class=card><div class="scale"><div class="mark" style="left:64.50%" title="本口读数"></div></div><div class=scale-legend><span>0 完全分散</span><span>5000</span><span>10000 一人包揽</span></div><p class=weak>本口读数 <b>6449.7</b></p></div>
+<h2>买家梯级（按净额降序，份额是净收入权重）</h2>
+<div class=card><table><tr><th class=s>#</th><th>买家</th><th class=n>成交</th><th class=n>退款</th><th class=n>净成交</th><th class=n>毛收入</th><th class=n>退款额</th><th class=n>净收入</th><th>份额 %</th><th class=n>份额 %</th><th class=n>累计份额 %</th></tr><tr class="buyer"><td class=s>1</td><td>usr:carol</td><td class=n>1</td><td class=n>0</td><td class=n>1</td><td class=n>10</td><td class=n>0</td><td class=n>10</td><td><div class=track><div class=fill style="width:76.92%"></div></div></td><td class=n>76.9</td><td class=n>76.9</td></tr><tr class="buyer"><td class=s>2</td><td>usr:bob</td><td class=n>2</td><td class=n>1</td><td class=n>1</td><td class=n>13</td><td class=n>10</td><td class=n>3</td><td><div class=track><div class=fill style="width:23.08%"></div></div></td><td class=n>23.1</td><td class=n>100</td></tr><tr class="buyer"><td class=s>3</td><td>usr:erin</td><td class=n>1</td><td class=n>1</td><td class=n>0</td><td class=n>5</td><td class=n>5</td><td class=n>0</td><td><div class=track><div class=fill style="width:0.00%"></div></div></td><td class=n>0</td><td class=n>100</td></tr></table></div>
+<h2>点名</h2>
+<div class=card><p class=weak>撑起 80% 净收入的买家数 2<br>最大单一买家 usr:carol &middot; 76.9%</p></div>
+<h2>本面口径法则</h2>
+<div class=card><ol class=laws><li>行面权威是购买侧：从没成交过的居民不进名册，即使卖家手上还有在售挂单。</li><li>收入权威是净额：只被全额退款的买家留在名册上（购买确实发生过），但权重为 0，既不被静默删除也不虚增份额。</li><li>份额＝该买家净收入 ÷ 本口净收入总额；总额为 0 时份额未定义，页面印无值记号而不是 0。</li><li>累计份额按本页锁定顺序逐行累加，末行必到 1.0。</li><li>赫芬达尔指数＝Σ份额²×10000：一个买家读 10000.0，n 个等额买家读 10000/n。</li><li>帕累托买家数＝使累计净额达到总额 80% 的最小 k，按整数判（cum×5 ≥ total×4），正好落在 80% 的买家计入。</li><li>份额是净收入权重，不是购买次数；前三买家份额不足三行就只加两行，不补齐。</li></ol></div>
+<h2>免责与标识</h2>
+<div class=card><div class=disclaimer>sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice</div>
+<p style="margin-top:10px"><span class=badge>AIGC 生成 · 沙箱替代数据</span></p></div>
+<h2>复现命令</h2>
+<div class=card><code>python tools/seller_concentration_board.py</code></div>
+<footer>BigDomain OSLoop &middot; 2026-11-24 08:44:47Z &middot; 本页由 tools/seller_concentration_board.py 生成，不手改</footer>
+</main></body></html>
