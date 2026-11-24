@@ -1,0 +1,124 @@
+{
+ "generated_utc": "2026-11-24 20:55:24Z",
+ "face": "api_buyer_gap_months",
+ "scope": "buyer",
+ "as_of_month": "2026-12",
+ "buyers": [
+  {
+   "buyer": "usr:bob",
+   "envelope": {
+    "buyer_id": "usr:bob",
+    "activity_month_count": 2,
+    "purchase_count": 2,
+    "first_activity_month": "2026-06",
+    "last_activity_month": "2026-09",
+    "gap_count": 1,
+    "dormant_months_total": 2,
+    "avg_gap_months": 2.0,
+    "median_gap_months": 2,
+    "max_gap_months": 2,
+    "longest_from_month": "2026-06",
+    "longest_to_month": "2026-09",
+    "as_of_month": "2026-12",
+    "trailing_dormant_months": 3,
+    "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+    "gaps": [
+     {
+      "from_month": "2026-06",
+      "to_month": "2026-09",
+      "span_months": 3,
+      "gap_months": 2
+     }
+    ]
+   }
+  },
+  {
+   "buyer": "usr:carol",
+   "envelope": {
+    "buyer_id": "usr:carol",
+    "activity_month_count": 3,
+    "purchase_count": 3,
+    "first_activity_month": "2026-09",
+    "last_activity_month": "2026-11",
+    "gap_count": 2,
+    "dormant_months_total": 0,
+    "avg_gap_months": 0.0,
+    "median_gap_months": 0.0,
+    "max_gap_months": 0,
+    "longest_from_month": "2026-09",
+    "longest_to_month": "2026-10",
+    "as_of_month": "2026-12",
+    "trailing_dormant_months": 1,
+    "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+    "gaps": [
+     {
+      "from_month": "2026-09",
+      "to_month": "2026-10",
+      "span_months": 1,
+      "gap_months": 0
+     },
+     {
+      "from_month": "2026-10",
+      "to_month": "2026-11",
+      "span_months": 1,
+      "gap_months": 0
+     }
+    ]
+   }
+  },
+  {
+   "buyer": "usr:dave",
+   "envelope": {
+    "buyer_id": "usr:dave",
+    "activity_month_count": 1,
+    "purchase_count": 1,
+    "first_activity_month": "2026-11",
+    "last_activity_month": "2026-11",
+    "gap_count": 0,
+    "dormant_months_total": 0,
+    "avg_gap_months": null,
+    "median_gap_months": null,
+    "max_gap_months": null,
+    "longest_from_month": null,
+    "longest_to_month": null,
+    "as_of_month": "2026-12",
+    "trailing_dormant_months": 1,
+    "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+    "gaps": []
+   }
+  },
+  {
+   "buyer": "usr:erin",
+   "envelope": {
+    "buyer_id": "usr:erin",
+    "activity_month_count": 0,
+    "purchase_count": 0,
+    "first_activity_month": null,
+    "last_activity_month": null,
+    "gap_count": 0,
+    "dormant_months_total": 0,
+    "avg_gap_months": null,
+    "median_gap_months": null,
+    "max_gap_months": null,
+    "longest_from_month": null,
+    "longest_to_month": null,
+    "as_of_month": "2026-12",
+    "trailing_dormant_months": null,
+    "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+    "gaps": []
+   }
+  }
+ ],
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/buyer-gap-board.html",
+ "sources": {
+  "driver": "7cfbb874302f76b7",
+  "copy": "d7ec3506cbd667c9",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 8614,
+  "json": 3350
+ }
+}

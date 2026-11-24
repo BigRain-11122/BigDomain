@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>回购节奏与沉默期对账</title>
+<style>
+:root{--ink:#1b1f24;--muted:#66707a;--line:#dfe4ea;--bg:#f7f8fa}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:var(--bg);color:var(--ink);
+font:15px/1.65 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+main{max-width:1180px;margin:0 auto}
+h1{font-size:22px;margin:0 0 4px;font-weight:650}
+h2{font-size:16px;margin:22px 0 8px;font-weight:620}
+h3{font-size:14px;margin:16px 0 8px;font-weight:620;color:#3c4653}
+.meta{color:var(--muted);font-size:13px;margin-bottom:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;
+padding:14px 16px;margin-bottom:14px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600;font-size:12px}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.kpi{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.kpi div{flex:1 1 104px;border:1px solid var(--line);border-radius:8px;
+padding:10px 12px;background:#fff}
+.kpi b{display:block;font-size:18px;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--muted);font-size:12.5px}
+.disclaimer{border-left:3px solid #c9a227;background:#fdf8ea;padding:10px 14px;
+font-size:13px}
+.badge{display:inline-block;margin-right:8px;padding:2px 8px;
+border:1px solid var(--line);border-radius:999px;font-size:12px;
+color:var(--muted)}
+.badge.on{border-color:#9ad1a7;background:#eef9f1;color:#1f6b33}
+.badge.off{border-color:#b9c7e4;background:#f1f4fd;color:#23388a}
+.bar{position:relative;height:10px;min-width:120px;max-width:240px;
+border:1px solid var(--line);border-radius:999px;background:#f2f4f7}
+.bar i{position:absolute;top:-3px;width:3px;height:16px;background:#3c4653}
+.law{font-size:13px;margin:6px 0}
+.empty{color:#b42318}
+.quiet-row td{color:var(--muted)}
+.cap{color:var(--muted);font-size:12px;margin:8px 0 0}
+footer{color:var(--muted);font-size:12px;margin:18px 0 0}
+</style></head><body><main>
+<h1>回购节奏与沉默期对账</h1>
+<div class=meta>单个买家的净购买活动月、月间隔与最长沉默 &middot; 生成于 2026-11-24 20:55:24Z &middot; 沉默计算截止月 2026-12 &middot; <code>api_buyer_gap_months</code></div>
+<h2>逐买家节奏</h2>
+<div class=card data-buyer="usr:bob">
+<h3>买家 usr:bob <span class=badge>尾随沉默 3</span></h3>
+<div class=kpi><div><span>活动月数</span><b>2</b></div><div><span>净购买笔数</span><b>2</b></div><div><span>间隔段数</span><b>1</b></div><div><span>区间内沉默月合计</span><b>2</b></div><div><span>平均间隔月</span><b>2</b></div><div><span>中位间隔月</span><b>2</b></div><div><span>最长间隔月</span><b>2</b></div><div><span>最长间隔起月</span><b>2026-06</b></div><div><span>最长间隔止月</span><b>2026-09</b></div><div><span>首次活动月</span><b>2026-06</b></div><div><span>最后活动月</span><b>2026-09</b></div><div><span>截止月尾随沉默</span><b>3</b></div></div>
+<table><thead><tr><th>起月</th><th class="n">止月</th><th class="n">跨月数</th><th class="n">中间空月</th><th class="n">间隔宽度</th></tr></thead><tbody><tr data-gap="2026-06..2026-09"><td>2026-06</td><td class="n">2026-06</td><td class="n">2026-09</td><td class="n">3</td><td class="n">2</td><td><span class="badge off">有空月</span></td><td><div class="bar"><i style="left:100.0%"></i></div></td></tr></tbody></table>
+</div>
+<div class=card data-buyer="usr:carol">
+<h3>买家 usr:carol <span class=badge>尾随沉默 1</span></h3>
+<div class=kpi><div><span>活动月数</span><b>3</b></div><div><span>净购买笔数</span><b>3</b></div><div><span>间隔段数</span><b>2</b></div><div><span>区间内沉默月合计</span><b>0</b></div><div><span>平均间隔月</span><b>0</b></div><div><span>中位间隔月</span><b>0</b></div><div><span>最长间隔月</span><b>0</b></div><div><span>最长间隔起月</span><b>2026-09</b></div><div><span>最长间隔止月</span><b>2026-10</b></div><div><span>首次活动月</span><b>2026-09</b></div><div><span>最后活动月</span><b>2026-11</b></div><div><span>截止月尾随沉默</span><b>1</b></div></div>
+<table><thead><tr><th>起月</th><th class="n">止月</th><th class="n">跨月数</th><th class="n">中间空月</th><th class="n">间隔宽度</th></tr></thead><tbody><tr data-gap="2026-09..2026-10" class="quiet-row"><td>2026-09</td><td class="n">2026-09</td><td class="n">2026-10</td><td class="n">1</td><td class="n">0</td><td><span class="badge on">未断档</span></td><td>—</td></tr><tr data-gap="2026-10..2026-11" class="quiet-row"><td>2026-10</td><td class="n">2026-10</td><td class="n">2026-11</td><td class="n">1</td><td class="n">0</td><td><span class="badge on">未断档</span></td><td>—</td></tr></tbody></table>
+</div>
+<div class=card data-buyer="usr:dave">
+<h3>买家 usr:dave <span class=badge>尾随沉默 1</span></h3>
+<div class=kpi><div><span>活动月数</span><b>1</b></div><div><span>净购买笔数</span><b>1</b></div><div><span>间隔段数</span><b>0</b></div><div><span>区间内沉默月合计</span><b>0</b></div><div><span>平均间隔月</span><b>—</b></div><div><span>中位间隔月</span><b>—</b></div><div><span>最长间隔月</span><b>—</b></div><div><span>最长间隔起月</span><b>—</b></div><div><span>最长间隔止月</span><b>—</b></div><div><span>首次活动月</span><b>2026-11</b></div><div><span>最后活动月</span><b>2026-11</b></div><div><span>截止月尾随沉默</span><b>1</b></div></div>
+<p class=empty>该买家没有任何净购买活动，本段为诚实空集。</p>
+<p class=cap>该买家只有一个月有净购买，因此没有间隔段可算；尾随沉默仍按截止月计。</p></div>
+<div class=card data-buyer="usr:erin">
+<h3>买家 usr:erin</h3>
+<div class=kpi><div><span>活动月数</span><b>0</b></div><div><span>净购买笔数</span><b>0</b></div><div><span>间隔段数</span><b>0</b></div><div><span>区间内沉默月合计</span><b>0</b></div><div><span>平均间隔月</span><b>—</b></div><div><span>中位间隔月</span><b>—</b></div><div><span>最长间隔月</span><b>—</b></div><div><span>最长间隔起月</span><b>—</b></div><div><span>最长间隔止月</span><b>—</b></div><div><span>首次活动月</span><b>—</b></div><div><span>最后活动月</span><b>—</b></div><div><span>截止月尾随沉默</span><b>—</b></div></div>
+<p class=empty>该买家没有任何净购买活动，本段为诚实空集。</p>
+<p class=empty>该买家没有任何净购买活动，本段为诚实空集。</p></div>
+
+<h2>本页自查的恒等律</h2>
+<div class=card><p class=law>间隔段数等于活动月数减一，且与行数一致。</p><p class=law>每行跨月数等于中间空月数加一，空月数不为负。</p><p class=law>相邻间隔段首尾相接；首行起月等于首次活动月，末行止月等于最后活动月。</p><p class=law>区间内沉默月合计等于所有间隔空月数之和。</p><p class=law>平均间隔月等于空月合计除以段数。</p><p class=law>中位间隔月等于空月数的排序中位数。</p><p class=law>最长间隔月等于最大的空月数，起止月取首个达到该值的段。</p><p class=law>尾随沉默等于截止月与最后活动月的月差；截止月早于最后活动月时拒绝。</p><p class=law>活动月按净购买计：已退款的购买不计为活动，退款可能移除一个活动月。</p><p class=law>条只作宽度，不是占比；没有间隔或最长间隔为零时不画条。</p><p class=law>零购买买家所有派生字段为空且无行；单月买家有尾随沉默但没有间隔段。</p><p class=law>本页是沙箱服务面读数，不构成投资建议，也不含任何支付能力。</p>
+<p class=cap>条只标该段空月数相对本买家最长间隔的位置，是宽度不是占比。</p></div>
+<h2>免责声明</h2>
+<div class=card><div class=disclaimer>sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice</div>
+<p style="margin-top:10px"><span class=badge>本页由 AIGC 生成并自动渲染，数据来自沙箱面的只读回读</span></p></div>
+<h2>产物与复现</h2>
+<div class=card><code>python tools/buyer_gap_board.py</code></div>
+<footer>BigDomain OSLoop &middot; 2026-11-24 20:55:24Z &middot; 只读回读，不产生新表、新读数或业务语义</footer>
+</main></body></html>

@@ -8431,6 +8431,15 @@ SUITES = [
     # doors under its own pinned clock.
     ("os-seller-reply-months-board",
      os.path.join("..", "os", "test_seller_reply_months_board.py"), 6),
+    # R3446: tools/buyer_gap_board.py renders the buyer repurchase rhythm
+    # (api_buyer_gap_months, AC-BGM1..8), which had zero readers under tools/,
+    # preview/ and src/os. The page prints one card per buyer with the activity
+    # months, the gap count, the dormant total, the average/median/max gap, the
+    # longest pair, the trailing dormancy and one row per gap, and the suite
+    # re-reads every buyer scope over its own throwaway world whose rows are
+    # made through the shipped purchase door under its own pinned clock.
+    ("os-buyer-gap-board",
+     os.path.join("..", "os", "test_buyer_gap_board.py"), 6),
     # R3443: tools/ticket_size_board.py renders the achieved ticket size
     # (api_market_ticket_size and api_market_ticket_size_months, AC-MTM1..8)
     # which had zero readers under tools/, preview/ and src/os; the page prints
