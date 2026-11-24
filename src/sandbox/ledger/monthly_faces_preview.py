@@ -159,6 +159,7 @@ FACES = [
     "api_market_restock_months",
     "api_market_discount_months",
     "api_market_rating_months",
+    "api_market_feed_months",
 ]
 
 # (row key, envelope key) pairs that must sum to the envelope total.
@@ -192,6 +193,9 @@ IDENTITY = {
         ("five_star_count", "five_star_count"),
         ("low_star_count", "low_star_count"),
         ("revised_count", "revised_rating_count"),
+    ],
+    "api_market_feed_months": [
+        ("event_count", "event_total"),
     ],
 }
 

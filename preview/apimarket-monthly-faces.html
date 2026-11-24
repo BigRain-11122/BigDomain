@@ -39,7 +39,7 @@
 </head><body>
 <header><div class="wrap">
 <h1>硅基域 · 市场月度台账</h1>
-<div class="sub">七个市场月度读面的第一张可开页：成交、客单价、供给、售后、补货、折扣、评价</div>
+<div class="sub">八个市场月度读面的第一张可开页：成交、客单价、供给、售后、补货、折扣、评价、事件流</div>
 <div class="badges">
 <span class="badge ai">AIGC 生成内容</span>
 <span class="badge">数据来源：确定性演示世界（两卖家 / 四买家 / 三上架 / 跨三个月成交与一笔跨月退款），不是真实交易。</span>
@@ -255,6 +255,32 @@
 </tr>
 </tbody></table>
 <p class="kv">scope=market · dev_account=- · month_count=1 · 有评价月数=1 · 评价数=2 · 买家数=2 · 星级总分=9 · 平均星级=4.5</p>
+</div>
+<div class="card">
+<h2>市场月度事件流（上架 / 成交 / 评价 / 退款 · 事件数 / 活跃类型）</h2>
+<div class="src">api_market_feed_months · 信封 17 键 · 月行 3 行</div>
+<table><thead><tr><th>月份</th>
+<th>事件数</th>
+<th>活跃类型数</th>
+<th>累计事件</th>
+</tr></thead><tbody>
+<tr><td>2026-08</td>
+<td>4</td>
+<td>2</td>
+<td>4</td>
+</tr>
+<tr><td>2026-09</td>
+<td>5</td>
+<td>2</td>
+<td>9</td>
+</tr>
+<tr><td>2026-10</td>
+<td>2</td>
+<td>1</td>
+<td>11</td>
+</tr>
+</tbody></table>
+<p class="kv">scope=market · dev_account=- · since_utc=- · until_utc=- · month_count=3 · 有评价月数=3 · event_total=11 · 最多事件类型=purchased</p>
 </div>
 </div>
 <footer>

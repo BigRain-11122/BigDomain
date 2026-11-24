@@ -546,6 +546,116 @@
           "star_sum": 9
         }
       ]
+    },
+    {
+      "envelope": {
+        "active_month_count": 3,
+        "busiest_kind": "purchased",
+        "by_kind": {
+          "published": 3,
+          "purchased": 4,
+          "rated": 2,
+          "refunded": 2
+        },
+        "dev_account": null,
+        "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+        "event_total": 11,
+        "first_month": "2026-08",
+        "kinds": [
+          "published",
+          "relisted",
+          "price_revised",
+          "metadata_revised",
+          "restocked",
+          "purchased",
+          "rated",
+          "rating_revised",
+          "rating_replied",
+          "refunded",
+          "delisted"
+        ],
+        "last_month": "2026-10",
+        "latest_month_event_count": 2,
+        "month_count": 3,
+        "months": [
+          {
+            "active_kind_count": 2,
+            "busiest_kind": "published",
+            "by_kind": {
+              "published": 3,
+              "purchased": 1
+            },
+            "event_count": 4,
+            "month": "2026-08",
+            "running_total": 4
+          },
+          {
+            "active_kind_count": 2,
+            "busiest_kind": "purchased",
+            "by_kind": {
+              "purchased": 3,
+              "rated": 2
+            },
+            "event_count": 5,
+            "month": "2026-09",
+            "running_total": 9
+          },
+          {
+            "active_kind_count": 1,
+            "busiest_kind": "refunded",
+            "by_kind": {
+              "refunded": 2
+            },
+            "event_count": 2,
+            "month": "2026-10",
+            "running_total": 11
+          }
+        ],
+        "peak_event_count": 5,
+        "peak_month": "2026-09",
+        "scope": "market",
+        "since_utc": null,
+        "until_utc": null
+      },
+      "first_month": "2026-08",
+      "fn": "api_market_feed_months",
+      "key_count": 17,
+      "last_month": "2026-10",
+      "month_count": 3,
+      "months": [
+        {
+          "active_kind_count": 2,
+          "busiest_kind": "published",
+          "by_kind": {
+            "published": 3,
+            "purchased": 1
+          },
+          "event_count": 4,
+          "month": "2026-08",
+          "running_total": 4
+        },
+        {
+          "active_kind_count": 2,
+          "busiest_kind": "purchased",
+          "by_kind": {
+            "purchased": 3,
+            "rated": 2
+          },
+          "event_count": 5,
+          "month": "2026-09",
+          "running_total": 9
+        },
+        {
+          "active_kind_count": 1,
+          "busiest_kind": "refunded",
+          "by_kind": {
+            "refunded": 2
+          },
+          "event_count": 2,
+          "month": "2026-10",
+          "running_total": 11
+        }
+      ]
     }
   ],
   "source": "apimarket_report.seed_demo"
