@@ -537,6 +537,7 @@
     "os-market-daily-board",
     "os-market-hour-heatmap",
     "os-market-price-percentiles",
+    "os-market-provider-months-board",
     "os-market-relist-months-board",
     "os-matrix-evidence-pile-consistency",
     "os-matrix-stamp-compare",
