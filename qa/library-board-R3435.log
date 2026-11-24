@@ -1,0 +1,60 @@
+LIBRARY-BOARD R3435 evidence
+============================
+face      api_library (AC-AML1..8, suite src/sandbox/ledger/test_apimarket_library.py on disk)
+reader    zero readers under tools/ and preview/ at open (git grep -c -F rc=1)
+driver    tools/library_board.py -> preview/library-board.html + preview/library-board.json + copy
+criteria  AC-LIBB1..AC-LIBB6 pre-registered in src/os/backlog.md (R3435 PIN) before any code
+
+CHECK     LIBRARY CHECK PASS fails=0 html=9654B json=4388B
+SUITE     SUITE PASS 6/6 criteria declared=6
+  AC-LIBB1 landed=True keys=11 missing=[] extra=[] envelopes=True rows=True market=True sources=True count=6/6 report=True
+  AC-LIBB2 buyers_same=True disclaimer_same=True buyers=6 purchases=4
+  AC-LIBB3 problems=[]
+  AC-LIBB4 sections=6/6 rows=4/4 refund_markers=2/2 unrated=2/2 rated=2/2 empty=3/3 laws=True kpi=True empty_probe=True retired_probe=True bare_none=False
+  AC-LIBB5 aigc=True disclaimer_on_page=True not_advice=True external_links=0
+  AC-LIBB6 check_rc=0 wrote_nothing=True wired=6/6 face_suite=True producer=True
+
+MEASURED  market buyers=6 purchases=4 spent=28 net=13 (per-buyer sums, not a shipped field)
+  usr:bob   2 purchases / spent 13 / 1 refund 10 / net 3
+  usr:carol 1 purchase  / spent 10 / net 10 / rated 5
+  usr:dave  0 purchases / honest empty library
+  usr:erin  1 purchase  / spent 5  / 1 refund 5 / net 0
+  usr:dana and usr:frank are sellers with no purchases and print the honest empty shape
+
+CONTROL-A a removed label-copy key (law_live) refused rc=3 E_LIBB_FACE with the page sha256
+          unchanged and the copy restored byte-identically (hash compared to the pre-edit hash)
+CONTROL-B a forced buyers[0].total_spent +7 over an untouched row set reddened AC-LIBB2,
+          AC-LIBB3, AC-LIBB4 and AC-LIBB6 at rc=2; the restored json re-read SUITE PASS 6/6
+
+WIRING    registry os-library-board(6); producer row library-board.json -> tools/library_board.py
+          matrix WRITTEN 82925 bytes 803 rows then DOC-CURRENT
+          census rows=803 readable=803 VERDICT PASS pinned=803
+          entry index VERDICT PASS 23/23; first-yuan chain legs=2 read-only
+          face sweep SUITE PASS 56/56 over 20 criteria
+          closeout CLOSEOUT-GATE PASS files=4974 census=PASS matrix=DOC-CURRENT
+          carrier 70137B gate 78500 margin 8363 fold_needed=false
+
+DEVIATIONS (own, recorded not hidden)
+  (a) the first render raised TypeError because api_sales takes a dev_account argument; buyer
+      enumeration now calls api_sales per seller read from the shipped board face. No criterion
+      or threshold moved.
+  (b) the first suite run reddened AC-LIBB4 at unrated=4 vs 2 because the label text for the
+      unrated badge also occurs twice inside the rating law sentence; the arm now counts the
+      badge markup instead of the raw label. No threshold moved.
+  (c) the first negative-control draft compared a hash to itself after restore; both controls
+      now compare against the pre-edit hash and both answer byte-identical restore.
+
+HONEST
+  (a) this moves an already-delivered reading onto a page the CEO can open - zero new tables,
+      zero new readings, zero business semantics.
+  (b) the factory demo world carries no retired shelf, so the delist badge and its stamp are
+      proved by an in-memory envelope probe; the refund badge, the rated badge, the unrated
+      badge and the honest empty buyer are all landed rows.
+  (c) the account statement page (R3430) sums totals; this page lists the individual purchases,
+      so the two are complementary and the page says what each column is.
+  (d) ZERO payment capability and no network beyond loopback - the five physical pieces
+      (merchant id, server, domain, filing+ICP, miniprogram appid+secret) are still missing,
+      so buyers still cannot pay.
+  (e) carried unchanged: qa_log --ledger-check broken=5 (R3371 ruling = diagnose, not repair),
+      the full battery was not re-run, Docker absent, backlog.md past the 800000 gate, and the
+      export newest-artifact slot writer fix with its three criteria still carries as debt.

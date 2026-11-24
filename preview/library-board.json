@@ -1,0 +1,168 @@
+{
+ "generated_utc": "2026-11-24 17:21:30Z",
+ "face": "api_library",
+ "board_face": "api_board",
+ "scope": "buyer",
+ "buyer_count": 6,
+ "buyers": [
+  {
+   "buyer_id": "usr:bob",
+   "purchase_count": 2,
+   "total_spent": 13,
+   "refund_count": 1,
+   "total_refunded": 10,
+   "net_spent": 3,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "purchases": [
+    {
+     "purchase_id": 1,
+     "listing_id": 1,
+     "listing_key": "risk-scan",
+     "title": "Risk Scan API",
+     "dev_account": "usr:dana",
+     "price_paid": 10,
+     "dev_share": 7,
+     "platform_share": 3,
+     "spend_tx": "3a5d1beb704e2cea",
+     "purchased_utc": "2026-08-31T23:59:59Z",
+     "current_price": 10,
+     "delisted": false,
+     "delisted_utc": null,
+     "my_rating": null,
+     "refunded": true,
+     "refunded_utc": "2026-10-02T00:00:00Z",
+     "refund_tx": "8ba56b903aeae03a"
+    },
+    {
+     "purchase_id": 3,
+     "listing_id": 2,
+     "listing_key": "macro-feed",
+     "title": "Macro Feed API",
+     "dev_account": "usr:dana",
+     "price_paid": 3,
+     "dev_share": 3,
+     "platform_share": 0,
+     "spend_tx": "2a9aa506ccfe848f",
+     "purchased_utc": "2026-09-15T12:00:00Z",
+     "current_price": 3,
+     "delisted": false,
+     "delisted_utc": null,
+     "my_rating": 4,
+     "refunded": false,
+     "refunded_utc": null,
+     "refund_tx": null
+    }
+   ]
+  },
+  {
+   "buyer_id": "usr:carol",
+   "purchase_count": 1,
+   "total_spent": 10,
+   "refund_count": 0,
+   "total_refunded": 0,
+   "net_spent": 10,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "purchases": [
+    {
+     "purchase_id": 2,
+     "listing_id": 1,
+     "listing_key": "risk-scan",
+     "title": "Risk Scan API",
+     "dev_account": "usr:dana",
+     "price_paid": 10,
+     "dev_share": 7,
+     "platform_share": 3,
+     "spend_tx": "07d07667b924742a",
+     "purchased_utc": "2026-09-01T00:00:00Z",
+     "current_price": 10,
+     "delisted": false,
+     "delisted_utc": null,
+     "my_rating": 5,
+     "refunded": false,
+     "refunded_utc": null,
+     "refund_tx": null
+    }
+   ]
+  },
+  {
+   "buyer_id": "usr:dana",
+   "purchase_count": 0,
+   "total_spent": 0,
+   "refund_count": 0,
+   "total_refunded": 0,
+   "net_spent": 0,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "purchases": []
+  },
+  {
+   "buyer_id": "usr:dave",
+   "purchase_count": 0,
+   "total_spent": 0,
+   "refund_count": 0,
+   "total_refunded": 0,
+   "net_spent": 0,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "purchases": []
+  },
+  {
+   "buyer_id": "usr:erin",
+   "purchase_count": 1,
+   "total_spent": 5,
+   "refund_count": 1,
+   "total_refunded": 5,
+   "net_spent": 0,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "purchases": [
+    {
+     "purchase_id": 4,
+     "listing_id": 3,
+     "listing_key": "chart-render",
+     "title": "Chart Render API",
+     "dev_account": "usr:frank",
+     "price_paid": 5,
+     "dev_share": 4,
+     "platform_share": 1,
+     "spend_tx": "078369a01cb80be7",
+     "purchased_utc": "2026-09-20T08:30:00Z",
+     "current_price": 5,
+     "delisted": false,
+     "delisted_utc": null,
+     "my_rating": null,
+     "refunded": true,
+     "refunded_utc": "2026-10-03T00:00:00Z",
+     "refund_tx": "f07f78205bfae33b"
+    }
+   ]
+  },
+  {
+   "buyer_id": "usr:frank",
+   "purchase_count": 0,
+   "total_spent": 0,
+   "refund_count": 0,
+   "total_refunded": 0,
+   "net_spent": 0,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "purchases": []
+  }
+ ],
+ "market": {
+  "buyer_count": 6,
+  "purchase_count": 4,
+  "total_spent": 28,
+  "refund_count": 2,
+  "total_refunded": 15,
+  "net_spent": 13
+ },
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/library-board.html",
+ "sources": {
+  "driver": "e9d854eedc05419d",
+  "copy": "f047e1a081a3d1df",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 9654,
+  "json": 4388
+ }
+}

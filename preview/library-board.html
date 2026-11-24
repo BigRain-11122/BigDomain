@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>居民购买库对账单</title>
+<style>
+:root{--ink:#1b1f24;--muted:#66707a;--line:#dfe4ea;--bg:#f7f8fa}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:var(--bg);color:var(--ink);
+font:15px/1.65 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+main{max-width:1240px;margin:0 auto}
+h1{font-size:22px;margin:0 0 4px;font-weight:650}
+h2{font-size:16px;margin:22px 0 8px;font-weight:620}
+h3{font-size:14px;margin:18px 0 6px;font-weight:620;color:#3c4653}
+.meta{color:var(--muted);font-size:13px;margin-bottom:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;
+padding:14px 16px;margin-bottom:14px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--line);
+white-space:nowrap}
+th{color:var(--muted);font-weight:600;font-size:12px}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.kpi{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.kpi div{flex:1 1 118px;border:1px solid var(--line);border-radius:8px;
+padding:10px 12px;background:#fff}
+.kpi b{display:block;font-size:19px;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--muted);font-size:12.5px}
+.badge{display:inline-block;padding:1px 7px;border-radius:999px;
+border:1px solid var(--line);font-size:11.5px;background:#f2f5f8;
+color:#3c4653}
+.badge.refund{background:#fff1f0;border-color:#f3c9c4;color:#98322a}
+.badge.delist{background:#f4f0fb;border-color:#d8cdf0;color:#553a94}
+.badge.rated{background:#eef7ee;border-color:#c9e2c9;color:#2e6b34}
+.badge.quiet{background:#f6f7f9;color:var(--muted)}
+.badge.live{background:#eef4fb;border-color:#c8d9ef;color:#28527f}
+.note{color:var(--muted);font-size:12.5px;margin:8px 0 0}
+.law{color:#3c4653;font-size:13px;margin:2px 0}
+.empty{color:var(--muted);font-size:13px;margin:6px 0}
+.disclaimer{color:var(--muted);font-size:12.5px}
+code{font-size:12px;background:#f2f5f8;padding:1px 5px;border-radius:5px}
+footer{color:var(--muted);font-size:12px;margin:26px 0 8px}
+</style></head><body><main>
+<h1>居民购买库对账单</h1>
+<div class=meta>每位居民买过的每一件服务：成交价、开发者与平台分成、实时要价、退款、下架与自己的评分 &middot; 生成时刻 2026-11-24 17:21:30Z &middot; <code>api_library</code></div>
+<h2>市场合计（按已印出的居民信封逐一相加，非面内字段）</h2>
+<div class=card data-market=1><div class=kpi><div><span>居民数</span><b>6</b></div><div><span>成交笔数</span><b>4</b></div><div><span>毛支出</span><b>28</b></div><div><span>退款笔数</span><b>2</b></div><div><span>已退金额</span><b>15</b></div><div><span>净支出</span><b>13</b></div></div><p class=note>市场合计是上表逐居民信封的相加结果，不是面内字段，也不是去重计数。</p></div>
+<h2>逐居民购买库</h2>
+<div class=card data-buyer="usr:bob"><h3><code>usr:bob</code></h3><div class=kpi><div><span>成交笔数</span><b>2</b></div><div><span>毛支出</span><b>13</b></div><div><span>退款笔数</span><b>1</b></div><div><span>已退金额</span><b>10</b></div><div><span>净支出</span><b>3</b></div></div><table><tr><th>成交号</th><th>服务</th><th>开发者</th><th>成交价</th><th>分成（开发 / 平台）</th><th>实时要价</th><th>退款</th><th>在售状态</th><th>我的评分</th><th>成交时刻</th><th>账本交易</th></tr><tr data-listing="1" data-refund="1"><td class=n>1</td><td><code>risk-scan</code> Risk Scan API</td><td><code>usr:dana</code></td><td class=n>10</td><td class=n>7 / 3</td><td class=n>10</td><td><span class="badge refund">已退</span> 2026-10-02T00:00:00Z</td><td><span class="badge live">在售</span></td><td><span class="badge quiet">未评</span></td><td>2026-08-31T23:59:59Z</td><td><code>3a5d1beb</code></td></tr><tr data-listing="2" data-refund="0"><td class=n>3</td><td><code>macro-feed</code> Macro Feed API</td><td><code>usr:dana</code></td><td class=n>3</td><td class=n>3 / 0</td><td class=n>3</td><td><span class="badge quiet">未退</span></td><td><span class="badge live">在售</span></td><td><span class="badge rated">已评</span> 4</td><td>2026-09-15T12:00:00Z</td><td><code>2a9aa506</code></td></tr></table><p class=note>本居民全部分成合计 &middot; 开发者合计 10 &middot; 平台合计 3</p></div><div class=card data-buyer="usr:carol"><h3><code>usr:carol</code></h3><div class=kpi><div><span>成交笔数</span><b>1</b></div><div><span>毛支出</span><b>10</b></div><div><span>退款笔数</span><b>0</b></div><div><span>已退金额</span><b>0</b></div><div><span>净支出</span><b>10</b></div></div><table><tr><th>成交号</th><th>服务</th><th>开发者</th><th>成交价</th><th>分成（开发 / 平台）</th><th>实时要价</th><th>退款</th><th>在售状态</th><th>我的评分</th><th>成交时刻</th><th>账本交易</th></tr><tr data-listing="1" data-refund="0"><td class=n>2</td><td><code>risk-scan</code> Risk Scan API</td><td><code>usr:dana</code></td><td class=n>10</td><td class=n>7 / 3</td><td class=n>10</td><td><span class="badge quiet">未退</span></td><td><span class="badge live">在售</span></td><td><span class="badge rated">已评</span> 5</td><td>2026-09-01T00:00:00Z</td><td><code>07d07667</code></td></tr></table><p class=note>本居民全部分成合计 &middot; 开发者合计 7 &middot; 平台合计 3</p></div><div class=card data-buyer="usr:dana"><h3><code>usr:dana</code></h3><div class=kpi><div><span>成交笔数</span><b>0</b></div><div><span>毛支出</span><b>0</b></div><div><span>退款笔数</span><b>0</b></div><div><span>已退金额</span><b>0</b></div><div><span>净支出</span><b>0</b></div></div><p class=empty data-buyer-empty="1">该居民没有购买记录：这是一份诚实的空库，不是错误。</p></div><div class=card data-buyer="usr:dave"><h3><code>usr:dave</code></h3><div class=kpi><div><span>成交笔数</span><b>0</b></div><div><span>毛支出</span><b>0</b></div><div><span>退款笔数</span><b>0</b></div><div><span>已退金额</span><b>0</b></div><div><span>净支出</span><b>0</b></div></div><p class=empty data-buyer-empty="1">该居民没有购买记录：这是一份诚实的空库，不是错误。</p></div><div class=card data-buyer="usr:erin"><h3><code>usr:erin</code></h3><div class=kpi><div><span>成交笔数</span><b>1</b></div><div><span>毛支出</span><b>5</b></div><div><span>退款笔数</span><b>1</b></div><div><span>已退金额</span><b>5</b></div><div><span>净支出</span><b>0</b></div></div><table><tr><th>成交号</th><th>服务</th><th>开发者</th><th>成交价</th><th>分成（开发 / 平台）</th><th>实时要价</th><th>退款</th><th>在售状态</th><th>我的评分</th><th>成交时刻</th><th>账本交易</th></tr><tr data-listing="3" data-refund="1"><td class=n>4</td><td><code>chart-render</code> Chart Render API</td><td><code>usr:frank</code></td><td class=n>5</td><td class=n>4 / 1</td><td class=n>5</td><td><span class="badge refund">已退</span> 2026-10-03T00:00:00Z</td><td><span class="badge live">在售</span></td><td><span class="badge quiet">未评</span></td><td>2026-09-20T08:30:00Z</td><td><code>078369a0</code></td></tr></table><p class=note>本居民全部分成合计 &middot; 开发者合计 4 &middot; 平台合计 1</p></div><div class=card data-buyer="usr:frank"><h3><code>usr:frank</code></h3><div class=kpi><div><span>成交笔数</span><b>0</b></div><div><span>毛支出</span><b>0</b></div><div><span>退款笔数</span><b>0</b></div><div><span>已退金额</span><b>0</b></div><div><span>净支出</span><b>0</b></div></div><p class=empty data-buyer-empty="1">该居民没有购买记录：这是一份诚实的空库，不是错误。</p></div>
+<h2>口径法则</h2>
+<div class=card><p class=law>成交笔数等于购买行数；毛支出等于逐行成交价之和。</p><p class=law>成交价是该笔实际扣款的金额，实时要价是挂单当下的标价，两者是不同量。</p><p class=law>退款笔数等于已退行数；净支出等于毛支出减去已退金额。</p><p class=law>已退金额只统计已退行的退款额，未退行不参与该合计。</p><p class=law>逐行开发者分成加平台分成等于该行成交价。</p><p class=law>已下架标记当且仅当该挂单带有下架时刻；下架不删除购买历史。</p><p class=law>已退标记当且仅当该行同时带有退款时刻与退款交易号。</p><p class=law>“我的评分”只显示本买家自己的星级，未评时印未评，绝不借用他人评分。</p><p class=law>购买行按成交号严格升序排列。</p><p class=law>实时要价可能因后续改价而不同于成交价，本页并排印出、不做差值判断。</p><p class=law>市场合计是上表逐居民信封的相加结果，不是面内字段，也不是去重计数。</p><p class=law>本页不是投资建议，也不构成任何收益承诺。</p></div>
+<h2>面自带免责声明</h2>
+<div class=card><div class=disclaimer>sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice</div>
+<p style="margin-top:10px"><span class=badge>本页为 AI 辅助生成内容（AIGC），仅用于沙箱演示。</span></p></div>
+<h2>复现命令</h2>
+<div class=card><code>python tools/library_board.py</code></div>
+<footer>数据源自沙箱开发者 API 市场面的购买库读数；本页只呈现该面返回的数字，不重算、不做判断。</footer>
+</main></body></html>

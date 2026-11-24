@@ -271,6 +271,9 @@ PAIR_PRODUCERS = {
     # R3434: same single-writer shape - one render, one json, no back-hop block
     # - so the buyer watch alert page names its producer.
     "watch-alerts-board.json": "tools/watch_alerts_board.py",
+    # R3435: the resident purchase library is a single-writer product (one
+    # render, one json, no back-hop block), so it names its producer.
+    "library-board.json": "tools/library_board.py",
 }
 # R3392 (AC-DIX21 recipe arm). One pair on this page cannot be reproduced by ONE
 # command, and until now the law had only two answers - name a producer or print

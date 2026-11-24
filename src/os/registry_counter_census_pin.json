@@ -510,6 +510,7 @@
     "os-leg-audit",
     "os-leg-header-check",
     "os-leg-watch",
+    "os-library-board",
     "os-library-declaration-dialect-sweep",
     "os-listing-position-board",
     "os-listing-velocity-board",

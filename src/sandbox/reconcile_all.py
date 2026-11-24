@@ -8358,6 +8358,14 @@ SUITES = [
     # over its own throwaway demo world.
     ("os-buyer-profile-board",
      os.path.join("..", "os", "test_buyer_profile_board.py"), 6),
+    # R3435: tools/library_board.py renders the buyer purchase library
+    # (api_library, AC-AML1..8) which had zero readers under tools/ and
+    # preview/; the page prints the shipped envelope verbatim - one row per
+    # purchase with the charged price, the two split legs, the live asking
+    # price, the refund stamps, the retirement stamp and this buyer's own
+    # stars - and the suite re-reads the face over its own throwaway world.
+    ("os-library-board",
+     os.path.join("..", "os", "test_library_board.py"), 6),
     # R3431: tools/seller_reviews_board.py renders the shipped seller review
     # status envelope (one summary row and one section per seller: the current
     # review cycle, the verdict, the refusal reason and the resubmit count per
