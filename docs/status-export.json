@@ -5,15 +5,15 @@
   ],
   "current": "2026-11-24 R3409 PRODUCT: the seller concentration question now has a door - api_seller_concentration (live with AC-SBC1..8 and its own suite) had zero readers across tools/ and preview/, re-measured this window over the five faces the R3408 board named, so 'how many residents is my net revenue hanging on, and how much rides on the biggest one' could only be read by calling the sandbox from a shell.",
   "do": "R3409: folded the state carrier first as the board ordered (71749B->19227B, slice 3:103=R3396..R3406, token_ok=true, round_pointer_lost=[]), then gave api_seller_concentration its first openable page - eleven KPI cards, a 0..10000 Herfindahl scale with this reading's marker, a per-buyer net-revenue ladder with share bars and cumulative share, the Pareto and largest-buyer callout, seven law sentences; AC-BCB1..6 SUITE 6/6, two measured controls, matrix 778 rows DOC-CURRENT, census pinned=778, entry index 23/23, chain read_only=True, face sweep 13/13, closeout PASS files=4947.",
-  "last_artifact": "preview/seller-concentration.html (6256B) + preview/seller-concentration.json (1505B) [2026-11-24 mtime]",
-  "latest_artifact": "preview/seller-concentration.html (6256B) + preview/seller-concentration.json (1505B) [2026-11-24 mtime]",
+  "last_artifact": "preview/seller-concentration.html (6256B) + preview/seller-concentration.json (1505B) [2026-11-24 commit]",
+  "latest_artifact": "preview/seller-concentration.html (6256B) + preview/seller-concentration.json (1505B) [2026-11-24 commit]",
   "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\seller-concentration.html",
   "latest_artifact_note": "this window's newest pair is a product page, not evidence",
   "latest_evidence": "qa/seller-concentration-R3409.log (1398B, 2026-11-24)",
   "newest_pair_on_disk_is_board": true,
   "next_milestone": "[R3409] next window (<=48h): (1) backlog.md itself is still past the 800000 gate (about 940KB) and its fold tool refuses E_BLF_NOT_ENOUGH_ROUNDS - read its --keep and round-boundary rules before folding, never hand-edit. (2) S4U still owes one elevated run (LogonType=Interactive measured). (3) Queue hygiene: explore has one gated item left, main head is all gated. (4) Family remainder: api_price_volatility, api_price_step_distribution and api_relist_gap read empty on the shipped demo world (revision_count=0, gap_count=0), so opening them needs the world driven through the shipped write face, or another non-empty face. (5) The export latest-artifact slot is still mtime-driven. (6) Carried: qa_log --ledger-check broken=5, full battery not re-run, Docker absent, test_face_sweep 54/56. (7) Honest: the five physical pieces are still missing, so buyers still cannot pay.",
-  "next_milestone_due": "2026-11-26T16:49:13+08:00",
-  "updated_at": "2026-11-24T16:49:13+08:00",
+  "next_milestone_due": "2026-11-26T16:55:21+08:00",
+  "updated_at": "2026-11-24T16:55:21+08:00",
   "heartbeat": {
    "tick": 3395,
    "state_tick": 3406,
@@ -81,8 +81,8 @@
   }
  ],
  "do": "2026-11-24 R3408 PRODUCT: the daily settlement question now has a door - api_market_daily (live with AC-MDL1..8 and its own suite) had zero readers across tools/ and preview/, re-measured this window over all six faces the R3407 board named, so 'what did the market do on one day, and which day was the busiest' could only be read by calling the sandbox from a shell.",
- "export_ts": "2026-11-24T16:49:13+08:00",
- "latest_artifact": "preview/seller-concentration.html (6256B) + preview/seller-concentration.json (1505B) [2026-11-24 mtime]",
+ "export_ts": "2026-11-24T16:55:21+08:00",
+ "latest_artifact": "preview/seller-concentration.html (6256B) + preview/seller-concentration.json (1505B) [2026-11-24 commit]",
  "latest_evidence": "qa/seller-concentration-R3409.log (1398B, 2026-11-24)",
  "next_milestone": "[R3408] next window (<=48h): (1) **载体（本窗末实测）：state 附加区 70991B／阀 78500（余量仅 7509B）——**下窗必须先做折叠**再写任何轮账，否则下下窗即撞阀；另记：`backlog.md` 自身已越 800000 闸（现约 934KB），`--fold --dry-run` 读 `E_BLF_NOT_ENOUGH_ROUNDS`，下窗须查该工具 `--keep` 与轮边界规则，**禁手改文件**。(2) S4U 落地仍欠一次提权运行（本窗实测 `LogonType=Interactive`，本窗未提权）。(3) 队列卫生：explore 仍仅余一条门控项（商户号），main 队头全门控（bootstrap 需物理件五件）——需补种。(4) 同族余量：本窗给 `api_market_daily` 开了门；下窗应**重测**剩余五面（`api_price_volatility`／`api_buyer_concentration`／`api_seller_concentration`／`api_relist_gap`／`api_price_step_distribution`）而不假设清零，只取一面开门。(5) **导出「最近实物」槽位仍被 mtime 排序牵动**（承 R3400..R3407）。(6) 写序事实再记：入口页与首元链互引字节，正法=「链 → 入口页 → 链」迭代到双方 `--check` rc=0（本窗首跑 `E_STALE`，一轮即收敛）。(7) **新记（本窗实测）**：注册表每新增一行，`registry_counter_census` 计数 +1，收口环 census 面会报 `readable +1 -0` 并拒收——正法=`python src/os/registry_counter_census.py --write-pin` 后 `--check` 读 PASS（本窗 776→777）。(8) 承账不变：`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`test_face_sweep` 54/56（AC-FSWB20/20c）。(9) 提案面 BD-PROP-011 open（窗 11-22~11-28）在册，本窗配额已清。(10) 诚实承账：物理件五件仍缺——买家仍付不了钱。",
  "outs": [
@@ -166,7 +166,7 @@
  "self_drive": {
   "window": "2026-11-18..2026-11-24",
   "window_days": 7,
-  "log_lines_in_window": 39,
+  "log_lines_in_window": 40,
   "idle_fast_mention_lines": 0,
   "no_pullable_mention_lines": 0,
   "substantive_non_idle_mention_lines": 3,
@@ -176,7 +176,7 @@
   "queue_tech_open": 5,
   "queue_explore_open": 1
  },
- "state_bytes": 25710,
+ "state_bytes": 25958,
  "next_milestone_due": "2026-11-26T16:30:28+08:00",
  "heartbeat": {
   "tick": 3395,
