@@ -518,6 +518,7 @@
     "os-logs-inventory",
     "os-logs-toolkit",
     "os-machine-gate",
+    "os-market-daily-board",
     "os-market-hour-heatmap",
     "os-market-price-percentiles",
     "os-matrix-evidence-pile-consistency",

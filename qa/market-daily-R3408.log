@@ -1,0 +1,39 @@
+MARKET-DAILY BOARD EVIDENCE (R3408)
+face=api_market_daily reader before this round: 0 hits under tools/ and preview/
+  (re-measured over the six faces the R3407 board named: api_price_volatility,
+   api_market_daily, api_buyer_concentration, api_seller_concentration,
+   api_relist_gap, api_price_step_distribution - every one answered 0)
+demo world read from the shipped face, not typed:
+  day_count=34 active=6 zero=28 window=2026-08-31..2026-10-03
+  lifetime gross=28 refunded=15 net=13 dev=10 platform=3 avg_net_per_active=2.17
+  busiest=2026-08-31 (net 10) quietest_active=2026-10-02 (net -10)
+landed: tools/market_daily_board.py -> preview/market-daily.html + .json
+  page: ten KPI cards, one row per calendar day with a net bar (width, not a
+  share), the refund days shown with zero participants and negative net, the
+  extremes section, seven law sentences, AIGC label, the face own disclaimer
+RENDER: MARKET-DAILY preview/market-daily.html bytes=15367 days=34 active=6
+  zero=28 net=13 busiest=2026-08-31
+CHECK: MARKET-DAILY CHECK PASS fails=0 html=15367B json=10426B
+SUITE: SUITE PASS 6/6 criteria declared=6 (AC-MDB1..6) green on the first run
+  AC-MDB2 diffs=[] disclaimer_same=True rows=34
+CONTROL-A: deleted label-copy key law7 -> rc=3 E_MDB_FACE label copy keys
+  missing: law7; copy restored byte-identically then RENDER rc=0
+CONTROL-B: forced lifetime_net +7 and days[0].net +7 -> rc=2 with
+  AC-MDB2 diffs=['lifetime_net','days'] and AC-MDB3 problems=
+  ['2026-08-31 net','avg_net_per_active_day']; restored SUITE PASS 6/6,
+  bytes identical copy=True json=True
+WIRING: registry row os-market-daily-board(6); matrix WRITTEN 80469 bytes
+  777 rows then DOC-CURRENT; registry census re-pinned 776->777 VERDICT PASS
+  pinned=777; entry index PASS 23/23; first-yuan chain PASS read_only=True
+  (one E_STALE before the recorded chain->index->chain order, as carried)
+SWEEP: face sweep VERDICT PASS 13/13 fingerprint=2f78667df750c652
+CLOSEOUT: CLOSEOUT-GATE PASS files=4946 flags=0 census=PASS matrix=DOC-CURRENT
+HONEST: this moves an already-delivered reading onto a page the CEO can open -
+  zero new tables, zero new readings, zero business semantics; the 28 zero-trade
+  days occupy honest rows rather than being folded; ZERO payment capability and
+  no network beyond loopback - the five physical pieces are still missing, so
+  buyers still cannot pay.
+CARRIED: qa_log --ledger-check broken=5 (R3371 ruling = diagnose, not repair),
+  full battery not re-run, Docker absent, test_face_sweep 54/56 (AC-FSWB20/20c),
+  S4U adoption still needs one elevated run, backlog.md past the 800000 gate
+  (BACKLOG-FOLD FOLD-DUE, tool refused for not enough rounds).

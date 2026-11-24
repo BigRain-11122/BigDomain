@@ -8188,6 +8188,18 @@ SUITES = [
     # average and named-reason identities.
     ("os-refund-reasons-board",
      os.path.join("..", "os", "test_refund_reasons_board.py"), 6),
+    # R3408: tools/market_daily_board.py renders api_market_daily - the daily
+    # calendar settlement sheet, the one time axis the market never exposed as
+    # a page - onto one openable face. The R3408 census re-measured the six
+    # candidate faces the R3407 board named and counted zero readers under
+    # tools/ and preview/ for every one of them, api_market_daily included, so
+    # "what did the market do on one day, and which day was the busiest" had no
+    # door. The suite grades the page: it re-reads the shipped face over its own
+    # throwaway demo world instead of typing a fixture, and pins the continuity,
+    # column-sum, per-row net, zero-row, active-average and extremes
+    # identities.
+    ("os-market-daily-board",
+     os.path.join("..", "os", "test_market_daily_board.py"), 6),
     # R3073: tools/city_face_report.py renders the P-47 item-1 city face and
     # carries its own --check (AC-CFY1..8), but this registry had no row naming
     # it, so the face was graded only by the fail-soft [GATES] sweep - the
