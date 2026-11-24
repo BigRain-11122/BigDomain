@@ -1,0 +1,58 @@
+{
+ "title": "关注提醒台 · 我的关注里出了什么事",
+ "sub": "买方关注清单的事件流：降价 / 涨价 / 售罄 / 下架",
+ "gen": "渲染于",
+ "aigc": "AIGC 生成标识：本页由沙箱演示世界生成，仅供内部审看",
+ "foot": "读数来源＝出厂面 api_watch_alerts（每买家一条信封），页面只照抄不重算；沙箱演示世界，闭环本地。",
+ "sec_buyers": "逐买家读数",
+ "sec_law": "口径法则",
+ "sec_disc": "面自带免责",
+ "sec_rep": "复现命令",
+
+ "kpi_watches": "关注数",
+ "kpi_alerts": "提醒数",
+ "kpi_delisted": "下架",
+ "kpi_sold_out": "售罄",
+ "kpi_drops": "降价",
+ "kpi_rises": "涨价",
+ "kpi_net_delta": "价差合计",
+
+ "col_buyer": "买家",
+ "col_watches": "关注",
+ "col_alerts": "提醒",
+ "col_delisted": "下架",
+ "col_sold_out": "售罄",
+ "col_drops": "降价",
+ "col_rises": "涨价",
+
+ "col_kind": "类型",
+ "col_listing": "上架项",
+ "col_seller": "卖家",
+ "col_severity": "级别",
+ "col_at_watch": "关注时价",
+ "col_current": "现价",
+ "col_delta": "价差",
+ "col_watched": "关注时刻",
+
+ "label_delisted": "已下架",
+ "label_sold_out": "已售罄",
+ "label_price_drop": "降价",
+ "label_price_rise": "涨价",
+
+ "empty_buyer": "这位买家没有关注任何上架项，提醒流为空。",
+ "none": "—",
+
+ "law_count": "提醒数恒等于行数：alert_count 由行派生，不写死。",
+ "law_watches": "关注数不小于提醒数：已购的关注已结清，不再提醒。",
+ "law_kinds": "类型恒在四族内：已下架 / 已售罄 / 降价 / 涨价，且按族序 下架→售罄→降价→涨价 排列。",
+ "law_severity": "级别与族绑定：已下架＝high，已售罄＝warn，降价与涨价＝info。",
+ "law_delta": "价差恒等于现价减关注时价；降价行的价差必小于零，涨价行的价差必大于零。",
+ "law_order": "行序是（族序，上架编号）的升序，同族内不插队。",
+ "law_retired": "已下架的上架项只报下架一族：价格已无意义，不再报涨跌。",
+ "law_purchased": "已购的关注不入提醒流：买方已经拿到，不再打扰。",
+ "law_silent": "价格没动就不报：面不制造信号，空白即安静。",
+ "law_scope": "本页只覆盖关注清单，不含全市场行情；空买家印具名安静句而不是空表。",
+ "law_notadvice": "本页是服务上架信息面，不构成投资建议。",
+
+ "cmd": "python tools/watch_alerts_board.py"
+}

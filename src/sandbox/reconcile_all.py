@@ -8382,6 +8382,13 @@ SUITES = [
     # and the suite re-reads the face over its own throwaway demo world.
     ("os-seller-todo-board",
      os.path.join("..", "os", "test_seller_todo_board.py"), 6),
+    # R3434: tools/watch_alerts_board.py renders the buyer watch alert feed
+    # (api_watch_alerts, AC-WAL1..5) which had zero readers under tools/ and
+    # preview/; the page prints the shipped envelope verbatim - four kinds, the
+    # pinned severity, the delta and the honest empty buyer - and the suite
+    # re-reads the face over its own throwaway demo world.
+    ("os-watch-alerts-board",
+     os.path.join("..", "os", "test_watch_alerts_board.py"), 6),
     # R3424: tools/seller_refund_reasons_board.py renders the seller-side refund
     # cause envelope (the market scope plus one section per seller) with the
     # market refund rate and this seller's share of the market refunded total as

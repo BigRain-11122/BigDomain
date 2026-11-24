@@ -730,6 +730,7 @@
     "os-tree-snapshot",
     "os-ugc-gate-report",
     "os-value-domain",
+    "os-watch-alerts-board",
     "panel",
     "panel-lobby",
     "panel-log-ns",
