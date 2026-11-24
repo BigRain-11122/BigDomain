@@ -1,0 +1,129 @@
+{
+ "generated_utc": "2026-11-24 14:19:22Z",
+ "face": "api_rating_reply_latency",
+ "board_face": "api_board",
+ "source_face": "api_rating_reply_latency",
+ "scope": "market",
+ "seller_count": 2,
+ "market": {
+  "dev_account": null,
+  "rating_count": 2,
+  "replied_count": 0,
+  "unreplied_count": 2,
+  "reply_coverage": 0.0,
+  "avg_seconds": null,
+  "median_seconds": null,
+  "fastest_seconds": null,
+  "slowest_seconds": null,
+  "latest_reply_utc": null,
+  "oldest_unreplied_utc": "2026-09-22T09:00:00Z",
+  "rows": [
+   {
+    "rating_id": 1,
+    "listing_id": 1,
+    "listing_key": "risk-scan",
+    "title": "Risk Scan API",
+    "dev_account": "usr:dana",
+    "buyer_id": "usr:carol",
+    "stars": 5,
+    "rated_utc": "2026-09-22T09:00:00Z",
+    "replied": false,
+    "reply_id": null,
+    "replied_utc": null,
+    "reply_text": null,
+    "latency_seconds": null
+   },
+   {
+    "rating_id": 2,
+    "listing_id": 2,
+    "listing_key": "macro-feed",
+    "title": "Macro Feed API",
+    "dev_account": "usr:dana",
+    "buyer_id": "usr:bob",
+    "stars": 4,
+    "rated_utc": "2026-09-22T09:00:00Z",
+    "replied": false,
+    "reply_id": null,
+    "replied_utc": null,
+    "reply_text": null,
+    "latency_seconds": null
+   }
+  ],
+  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice"
+ },
+ "sellers": [
+  {
+   "dev_account": "usr:dana",
+   "rating_count": 2,
+   "replied_count": 0,
+   "unreplied_count": 2,
+   "reply_coverage": 0.0,
+   "avg_seconds": null,
+   "median_seconds": null,
+   "fastest_seconds": null,
+   "slowest_seconds": null,
+   "latest_reply_utc": null,
+   "oldest_unreplied_utc": "2026-09-22T09:00:00Z",
+   "rows": [
+    {
+     "rating_id": 1,
+     "listing_id": 1,
+     "listing_key": "risk-scan",
+     "title": "Risk Scan API",
+     "dev_account": "usr:dana",
+     "buyer_id": "usr:carol",
+     "stars": 5,
+     "rated_utc": "2026-09-22T09:00:00Z",
+     "replied": false,
+     "reply_id": null,
+     "replied_utc": null,
+     "reply_text": null,
+     "latency_seconds": null
+    },
+    {
+     "rating_id": 2,
+     "listing_id": 2,
+     "listing_key": "macro-feed",
+     "title": "Macro Feed API",
+     "dev_account": "usr:dana",
+     "buyer_id": "usr:bob",
+     "stars": 4,
+     "rated_utc": "2026-09-22T09:00:00Z",
+     "replied": false,
+     "reply_id": null,
+     "replied_utc": null,
+     "reply_text": null,
+     "latency_seconds": null
+    }
+   ],
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice"
+  },
+  {
+   "dev_account": "usr:frank",
+   "rating_count": 0,
+   "replied_count": 0,
+   "unreplied_count": 0,
+   "reply_coverage": null,
+   "avg_seconds": null,
+   "median_seconds": null,
+   "fastest_seconds": null,
+   "slowest_seconds": null,
+   "latest_reply_utc": null,
+   "oldest_unreplied_utc": null,
+   "rows": [],
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice"
+  }
+ ],
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/reply-latency-board.html",
+ "sources": {
+  "driver": "25436afe957e6020",
+  "copy": "9b05d6fd4d1cc036",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 9100,
+  "json": 3369
+ }
+}

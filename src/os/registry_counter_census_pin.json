@@ -640,6 +640,7 @@
     "os-repin-dialect-preservation",
     "os-repin-noop-eol-dialect",
     "os-repin-noop-parity",
+    "os-reply-latency-board",
     "os-residue-batch-status-face",
     "os-residue-triage",
     "os-residue-triage-append",

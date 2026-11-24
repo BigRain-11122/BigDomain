@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>评分回复时效对账单</title>
+<style>
+:root{--ink:#1b1f24;--muted:#66707a;--line:#dfe4ea;--bg:#f7f8fa}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:var(--bg);color:var(--ink);
+font:15px/1.65 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+main{max-width:1180px;margin:0 auto}
+h1{font-size:22px;margin:0 0 4px;font-weight:650}
+h2{font-size:16px;margin:22px 0 8px;font-weight:620}
+h3{font-size:14px;margin:18px 0 6px;font-weight:620;color:#3c4653}
+.meta{color:var(--muted);font-size:13px;margin-bottom:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;
+padding:14px 16px;margin-bottom:14px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600;font-size:12px}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.kpi{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.kpi div{flex:1 1 118px;border:1px solid var(--line);border-radius:8px;
+padding:10px 12px;background:#fff}
+.kpi b{display:block;font-size:19px;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--muted);font-size:12.5px}
+.bar{position:relative;height:9px;background:#eef1f5;border-radius:999px;
+min-width:110px}
+.bar i{display:block;height:9px;border-radius:999px;background:#4f7cac}
+.disclaimer{border-left:3px solid #c9a227;background:#fdf8ea;padding:10px 14px;
+font-size:13px}
+.badge{display:inline-block;margin-right:8px;padding:2px 8px;
+border:1px solid var(--line);border-radius:999px;font-size:12px;
+color:var(--muted)}
+.badge.owed{border-color:#c3a0a8;color:#8c4a5c}
+.law{font-size:13px;margin:6px 0}
+.empty{color:var(--muted);font-size:13px}
+footer{color:var(--muted);font-size:12px;margin:20px 0 8px}
+code{font-size:12.5px;background:#f2f4f7;padding:1px 5px;border-radius:4px}
+</style></head><body><main>
+<h1>评分回复时效对账单</h1>
+<div class=meta>数据来源：出厂演示沙箱 api_rating_reply_latency，市场作用域加逐卖家作用域 &middot; 渲染时刻（UTC） 2026-11-24 14:19:22Z &middot; <code>api_rating_reply_latency</code></div>
+<h2>市场总览</h2>
+<div class=card><div class=kpi><div><span>评分笔数</span><b>2</b></div><div><span>已回复</span><b>0</b></div><div><span>待回复</span><b>2</b></div><div><span>回复覆盖率</span><b>0.0</b></div><div><span>平均时效（秒）</span><b>—</b></div><div><span>中位时效（秒）</span><b>—</b></div><div><span>最快（秒）</span><b>—</b></div><div><span>最慢（秒）</span><b>—</b></div><div><span>最近回复时刻</span><b>—</b></div><div><span>最久未回评分时刻</span><b>2026-09-22T09:00:00Z</b></div></div><table><tr><th class=n>评分号</th><th>挂单键</th><th>标题</th><th>买家</th><th class=n>星级</th><th>评分时刻</th><th>是否已回</th><th>回复时刻</th><th class=n>时效（秒）</th><th>回复摘要</th><th>时效条</th></tr><tr class="pending" data-rating="1"><td class="n">1</td><td class="">risk-scan</td><td class="">Risk Scan API</td><td class="">usr:carol</td><td class="n">5</td><td class="">2026-09-22T09:00:00Z</td><td class="">&lt;span class=&quot;badge owed&quot;&gt;未回复&lt;/span&gt;</td><td class="">—</td><td class="n">—</td><td class="">—</td><td class=bar-cell><span class=empty>—</span></td></tr><tr class="pending" data-rating="2"><td class="n">2</td><td class="">macro-feed</td><td class="">Macro Feed API</td><td class="">usr:bob</td><td class="n">4</td><td class="">2026-09-22T09:00:00Z</td><td class="">&lt;span class=&quot;badge owed&quot;&gt;未回复&lt;/span&gt;</td><td class="">—</td><td class="n">—</td><td class="">—</td><td class=bar-cell><span class=empty>—</span></td></tr></table></div>
+<h2>逐卖家</h2>
+<div class=card data-seller="usr:dana"><h3>逐卖家 &middot; <code>usr:dana</code></h3><div class=kpi><div><span>评分笔数</span><b>2</b></div><div><span>已回复</span><b>0</b></div><div><span>待回复</span><b>2</b></div><div><span>回复覆盖率</span><b>0.0</b></div><div><span>平均时效（秒）</span><b>—</b></div><div><span>中位时效（秒）</span><b>—</b></div><div><span>最快（秒）</span><b>—</b></div><div><span>最慢（秒）</span><b>—</b></div><div><span>最近回复时刻</span><b>—</b></div><div><span>最久未回评分时刻</span><b>2026-09-22T09:00:00Z</b></div><div><span>市场回复覆盖率（参照）</span><b>0.0</b></div></div><table><tr><th class=n>评分号</th><th>挂单键</th><th>标题</th><th>买家</th><th class=n>星级</th><th>评分时刻</th><th>是否已回</th><th>回复时刻</th><th class=n>时效（秒）</th><th>回复摘要</th><th>时效条</th></tr><tr class="pending" data-rating="1"><td class="n">1</td><td class="">risk-scan</td><td class="">Risk Scan API</td><td class="">usr:carol</td><td class="n">5</td><td class="">2026-09-22T09:00:00Z</td><td class="">&lt;span class=&quot;badge owed&quot;&gt;未回复&lt;/span&gt;</td><td class="">—</td><td class="n">—</td><td class="">—</td><td class=bar-cell><span class=empty>—</span></td></tr><tr class="pending" data-rating="2"><td class="n">2</td><td class="">macro-feed</td><td class="">Macro Feed API</td><td class="">usr:bob</td><td class="n">4</td><td class="">2026-09-22T09:00:00Z</td><td class="">&lt;span class=&quot;badge owed&quot;&gt;未回复&lt;/span&gt;</td><td class="">—</td><td class="n">—</td><td class="">—</td><td class=bar-cell><span class=empty>—</span></td></tr></table></div><div class=card data-seller="usr:frank"><h3>逐卖家 &middot; <code>usr:frank</code></h3><div class=kpi><div><span>评分笔数</span><b>0</b></div><div><span>已回复</span><b>0</b></div><div><span>待回复</span><b>0</b></div><div><span>回复覆盖率</span><b>—</b></div><div><span>平均时效（秒）</span><b>—</b></div><div><span>中位时效（秒）</span><b>—</b></div><div><span>最快（秒）</span><b>—</b></div><div><span>最慢（秒）</span><b>—</b></div><div><span>最近回复时刻</span><b>—</b></div><div><span>最久未回评分时刻</span><b>—</b></div><div><span>市场回复覆盖率（参照）</span><b>0.0</b></div></div><p class=empty>该作用域没有评分记录：出厂信封给出空集，本页不补任何行。</p></div>
+<h2>口径法则</h2>
+<div class=card><p class=law>笔数口径：评分笔数等于出厂面行数，一评分一行，不合并同一挂单的多条评分。</p><p class=law>两半口径：每条评分只属于「已回复」或「未回复」之一，两者之和等于评分笔数；未回复数由出厂面直接给出，不由本页相减。</p><p class=law>覆盖率口径：回复覆盖率＝已回复笔数÷评分笔数（保留四位）；评分笔数为零时出厂面给的是空值，本页印破折号，不印 0.0。</p><p class=law>平均口径：平均时效只取已回复的评分，未回复的评分不进任何汇总，因此不会被算得更快。</p><p class=law>中位口径：中位数只取已回复的评分；笔数为奇数取正中一项，偶数取中间两项的均值。</p><p class=law>极值口径：最快与最慢都只取自出厂面的已回复集合；无已回复时印破折号。</p><p class=law>时刻口径：最近回复时刻取已回复评分的最大回复时刻；最久未回评分时刻取未回复评分的最小评分时刻；两者互不替代。</p><p class=law>行口径：一条评分「已回复」当且仅当回复时刻与回复编号同时非空；时效由评分时刻与回复时刻两枚存盘时刻复算，与出厂面逐行相等，未回复行的时效是空值而不是 0。</p><p class=law>排序口径：已回复行按时效从慢到快排在前面，同一时效按评分号升序；未回复行排在后面，按评分时刻升序再按评分号升序。</p><p class=law>作用域口径：市场作用域不带卖家账号；卖家作用域只含该卖家的评分，前缀合法的账号若没有评分则得到诚实空信封。</p><p class=law>时效条口径：条宽是本行时效相对本作用域已回复最大值的宽度，不是任何份额，也不是评分好坏；未回复行不画条。</p><p class=law>定性口径：本页是开发者 API 市场的服务挂单读数，不是投资建议，也不构成对卖家服务质量的裁决。</p></div>
+<h2>免责</h2>
+<div class=card><div class=disclaimer>sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice</div>
+<p style="margin-top:10px"><span class=badge>AIGC 生成内容已标识</span></p></div>
+<h2>复现</h2>
+<div class=card><code>python tools/reply_latency_board.py   # 重渲染
+python tools/reply_latency_board.py --check   # 只读复核</code></div>
+<footer>本页只印出厂面交来的读数，不重算任何汇总；页面自身不判定卖家服务好坏，也不给投资建议。</footer>
+</main></body></html>
