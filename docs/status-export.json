@@ -1,19 +1,17 @@
 {
   "ceo_face": {
-    "board_pages_skipped": [
-      "preview/face-sweep.html (8878B)"
-    ],
+    "board_pages_skipped": [],
     "current": "2026-11-24 R3429 PRODUCT: the zero-reader census named api_seller_repeat_months (AC-SRB1..8 suite on disk; git grep -c -F over tools/ and preview/ answered rc=1 on four names) and the shipped demo world measured usr:dana at one month (2026-09) with two purchases, two buyers, zero returning buyers and a 0.0 repeat rate while usr:frank is an honest empty envelope (month_count 0, repeat_rate null), so this round built tools/seller_repeat_months_board.py and rendered preview/seller-repeat-months-board.html (6957B) plus .json (1970B): one section per seller with twelve KPI cards and an eleven-column month grid (purchases, gross, buyers, newcomers, returning buyers, share, newcomer and regular purchase counts and gross, a width bar); an undefined share prints the dash and draws no bar, a measured 0.0 prints 0.0% with a separate zero marker and never shares a shape with undefined, a quiet month is named, and a single month carries the no-trend sentence; ten capital rules plus the AIGC label and the face own disclaimer ride on the page with zero external links. Readback: SUITE PASS 6/6 declared=6 (AC-RPTB1..6; AC-RPTB2 re-reads the face over the suite own throwaway world sellers_same=True disclaimer_same=True sellers=2 rows=1; AC-RPTB4 proves the returning path and the quiet month with two in-memory envelopes because this demo world carries zero returning buyers). Two measured controls: removing the label key law_bar answered rc=3 E_RPTB_FACE with the page sha256 untouched, and forcing repeat_buyer_count +7 reddened AC-RPTB2 and AC-RPTB3 at rc=2, restored byte-identically back to 6/6. Wiring: registry os-seller-repeat-months-board(6), producer row seller-repeat-months-board.json -> tools/seller_repeat_months_board.py, matrix 82395B 797 rows DOC-CURRENT, census rows=797 readable=797 VERDICT PASS pinned=797, entry page 23/23, first-yuan chain read_only=True, face sweep 13/13 then --check 21/21, evidence qa/seller-repeat-months-board-R3429.log 1722B/20 lines sha256 3f1f8ead9cff2b73.",
     "do": "R3422: gave api_public_listings its first openable page - eight KPI cards, one row per listing carrying both review stamps, the refusal reason, the two shipped flags side by side, the provider name and the unified social credit code, ten law sentences and the cross-face law pending==review_queue.pending; AC-PLB1..6 SUITE 6/6 first run, two measured controls, matrix 791 rows DOC-CURRENT, census pinned=791, entry index 23/23, chain read_only=True, face sweep 56/56, closeout PASS files=4960.",
-    "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
-    "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
+    "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-16 commit]; later=html)",
+    "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-16 commit]; later=html)",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/seller-repeat-months-board-R3429.log (1722B, 2026-11-24)",
+    "latest_artifact_note": "",
     "latest_evidence": "qa/seller-repeat-months-board-R3429.log (1722B, 2026-11-24)",
-    "newest_pair_on_disk_is_board": true,
+    "newest_pair_on_disk_is_board": false,
     "next_milestone": "[R3429] next window (<=48h): (1) 载体 state 73278B／闸 78500（余 5222B，**不足一轮**）；下窗**先**跑 `python src/os/logs_toolkit.py fold --plan-only`，余量不足即按工具报的窗口折叠，**禁手改 state 文件**。(2) S4U 落地仍欠一次提权运行（本窗实测 `BigDomain-OSLoop`=Interactive，本窗未提权）。(3) 导出「最近实物」槽仍按 mtime 排序（本窗再证：链成为最新文件后导出首读 `E_SXF_ARTIFACT_STALE`）；修法=写入器改读 deliverable 注册表顺序+三条判据先立，本窗未做。(4) 零读者面重测不假设：本窗 124 面普查余 71 面，`api_buyer_profile`（只在生命周期计数）为首选；实测空或弱勿取（R3389 空节律），已开门面不重开。(5) 基准下次到期 2026-12-01。48h 窗至 2026-11-26。(6) tick 口径：本窗 3428→3429。(7) 承账不变：`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`backlog.md` 仍超 800000 闸。",
-    "next_milestone_due": "2026-11-26T23:29:25+08:00",
-    "updated_at": "2026-11-24T23:29:25+08:00",
+    "next_milestone_due": "2026-11-26T23:31:20+08:00",
+    "updated_at": "2026-11-24T23:31:20+08:00",
     "heartbeat": {
       "tick": 3428,
       "state_tick": 3429,
@@ -38,7 +36,7 @@
     }
   },
   "current": "2026-11-24 R3429 PRODUCT: the zero-reader census named api_seller_repeat_months (AC-SRB1..8 suite on disk; git grep -c -F over tools/ and preview/ answered rc=1 on four names) and the shipped demo world measured usr:dana at one month (2026-09) with two purchases, two buyers, zero returning buyers and a 0.0 repeat rate while usr:frank is an honest empty envelope (month_count 0, repeat_rate null), so this round built tools/seller_repeat_months_board.py and rendered preview/seller-repeat-months-board.html (6957B) plus .json (1970B): one section per seller with twelve KPI cards and an eleven-column month grid (purchases, gross, buyers, newcomers, returning buyers, share, newcomer and regular purchase counts and gross, a width bar); an undefined share prints the dash and draws no bar, a measured 0.0 prints 0.0% with a separate zero marker and never shares a shape with undefined, a quiet month is named, and a single month carries the no-trend sentence; ten capital rules plus the AIGC label and the face own disclaimer ride on the page with zero external links. Readback: SUITE PASS 6/6 declared=6 (AC-RPTB1..6; AC-RPTB2 re-reads the face over the suite own throwaway world sellers_same=True disclaimer_same=True sellers=2 rows=1; AC-RPTB4 proves the returning path and the quiet month with two in-memory envelopes because this demo world carries zero returning buyers). Two measured controls: removing the label key law_bar answered rc=3 E_RPTB_FACE with the page sha256 untouched, and forcing repeat_buyer_count +7 reddened AC-RPTB2 and AC-RPTB3 at rc=2, restored byte-identically back to 6/6. Wiring: registry os-seller-repeat-months-board(6), producer row seller-repeat-months-board.json -> tools/seller_repeat_months_board.py, matrix 82395B 797 rows DOC-CURRENT, census rows=797 readable=797 VERDICT PASS pinned=797, entry page 23/23, first-yuan chain read_only=True, face sweep 13/13 then --check 21/21, evidence qa/seller-repeat-months-board-R3429.log 1722B/20 lines sha256 3f1f8ead9cff2b73.",
-  "claims": {"claimed": 38, "captured": 27, "contradicted": 0, "uncaptured": 11, "historic": 0, "rows": 98, "present": true, "census_ts": "2026-11-24T23:29:25+08:00"},
+  "claims": {"claimed": 38, "captured": 27, "contradicted": 0, "uncaptured": 11, "historic": 0, "rows": 98, "present": true, "census_ts": "2026-11-24T23:31:20+08:00"},
   "chain": {"present": true, "rows": 98, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -68,12 +66,12 @@
     }
   ],
   "do": "2026-11-24 R3429 PRODUCT: the zero-reader census named api_seller_repeat_months (AC-SRB1..8 suite on disk; git grep -c -F over tools/ and preview/ answered rc=1 on four names) and the shipped demo world measured usr:dana at one month (2026-09) with two purchases, two buyers, zero returning buyers and a 0.0 repeat rate while usr:frank is an honest empty envelope (month_count 0, repeat_rate null), so this round built tools/seller_repeat_months_board.py and rendered preview/seller-repeat-months-board.html (6957B) plus .json (1970B): one section per seller with twelve KPI cards and an eleven-column month grid (purchases, gross, buyers, newcomers, returning buyers, share, newcomer and regular purchase counts and gross, a width bar); an undefined share prints the dash and draws no bar, a measured 0.0 prints 0.0% with a separate zero marker and never shares a shape with undefined, a quiet month is named, and a single month carries the no-trend sentence; ten capital rules plus the AIGC label and the face own disclaimer ride on the page with zero external links. Readback: SUITE PASS 6/6 declared=6 (AC-RPTB1..6; AC-RPTB2 re-reads the face over the suite own throwaway world sellers_same=True disclaimer_same=True sellers=2 rows=1; AC-RPTB4 proves the returning path and the quiet month with two in-memory envelopes because this demo world carries zero returning buyers). Two measured controls: removing the label key law_bar answered rc=3 E_RPTB_FACE with the page sha256 untouched, and forcing repeat_buyer_count +7 reddened AC-RPTB2 and AC-RPTB3 at rc=2, restored byte-identically back to 6/6. Wiring: registry os-seller-repeat-months-board(6), producer row seller-repeat-months-board.json -> tools/seller_repeat_months_board.py, matrix 82395B 797 rows DOC-CURRENT, census rows=797 readable=797 VERDICT PASS pinned=797, entry page 23/23, first-yuan chain read_only=True, face sweep 13/13 then --check 21/21, evidence qa/seller-repeat-months-board-R3429.log 1722B/20 lines sha256 3f1f8ead9cff2b73.",
-  "export_ts": "2026-11-24T23:29:25+08:00",
-  "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
+  "export_ts": "2026-11-24T23:31:20+08:00",
+  "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-16 commit]; later=html)",
   "latest_evidence": "qa/seller-repeat-months-board-R3429.log (1722B, 2026-11-24)",
   "next_milestone": "[R3429] next window (<=48h): (1) 载体 state 73278B／闸 78500（余 5222B，**不足一轮**）；下窗**先**跑 `python src/os/logs_toolkit.py fold --plan-only`，余量不足即按工具报的窗口折叠，**禁手改 state 文件**。(2) S4U 落地仍欠一次提权运行（本窗实测 `BigDomain-OSLoop`=Interactive，本窗未提权）。(3) 导出「最近实物」槽仍按 mtime 排序（本窗再证：链成为最新文件后导出首读 `E_SXF_ARTIFACT_STALE`）；修法=写入器改读 deliverable 注册表顺序+三条判据先立，本窗未做。(4) 零读者面重测不假设：本窗 124 面普查余 71 面，`api_buyer_profile`（只在生命周期计数）为首选；实测空或弱勿取（R3389 空节律），已开门面不重开。(5) 基准下次到期 2026-12-01。48h 窗至 2026-11-26。(6) tick 口径：本窗 3428→3429。(7) 承账不变：`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`backlog.md` 仍超 800000 闸。",
   "outs": [
-    "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
+    "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-16 commit]; later=html)",
     "refund-reasons-R3407.log (2274B)",
     "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-24 commit]; later=html)",
     "preview/seller-quality-scorecard.html (4643B) + preview/seller-quality-scorecard.json (1762B) [2026-11-24 mtime]"
@@ -164,7 +162,7 @@
     "queue_explore_open": 1
   },
   "state_bytes": 73292,
-  "next_milestone_due": "2026-11-26T23:29:25+08:00",
+  "next_milestone_due": "2026-11-26T23:31:20+08:00",
   "heartbeat": {
     "tick": 3428,
     "state_tick": 3429,
