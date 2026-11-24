@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-24 04:50:14Z",
+ "generated_utc": "2026-11-24 04:57:42Z",
  "face": "api_market_hour_heatmap",
  "hour_count": 24,
  "weekday_count": 7,
@@ -1347,7 +1347,7 @@
  ],
  "report": "preview/market-hour-heatmap.html",
  "sources": {
-  "driver": "3d9939906930a7c5",
+  "driver": "8fcc8eaa8245be90",
   "apimarket": "82a49194bef85737",
   "report": "3a83dce99c9e2bd4"
  },

@@ -130,7 +130,8 @@
                 "R3399 tokens: local=~26k api=0 api_reason=no cloud call: one five-still scan, one board and state read set, two queue-head readings, two face-inventory probes, one zero-reader grep, one PIN row before any code, one page driver, one six-arm suite, one registry row, one producer-table row, three index/backhop/sweep renders, one matrix write, one census pin, one evidence log through the shipped writer, and the closeout ring; zero cloud calls and zero external API touches",
                 "R3399 tick: 3398 -> 3399.",
                 "R3399 closeout: tick advanced to 3399; the market hourly activity face that shipped in R2165 with eight green criteria now has one openable page whose key set, complete 7x24 grid, three-view identity and standing compliance faces are graded by six named arms, and every registry, matrix and census number moved by its own writer.",
-                "R3399 carrier: appends read 59685B against the 78500 gate (18815B headroom), so no fold was due at open and none was run."
+                "R3399 carrier: appends read 59685B against the 78500 gate (18815B headroom), so no fold was due at open and none was run.",
+                "R3399 own defect recorded after the first push: the page title shipped as the wrong hanzi (chu for gui), caught by reading the landed page rather than trusting the render exit, fixed at the birth site in the driver, then the index, backhop and closeout ring re-converged (VERDICT PASS passes=1 steps=5 checks=4/4)."
   ],
   "tick":3399
 }

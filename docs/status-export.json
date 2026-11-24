@@ -5,15 +5,15 @@
     ],
     "current": "2026-11-24 R3399 PRODUCT: the market now answers which hour and which weekday it actually trades in - the shipped api_market_hour_heatmap (168 cells, live since R2165) finally has a door, one openable page instead of a shell call.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
-    "last_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-24 commit]; later=html)",
-    "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-24 commit]; later=html)",
-    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ugc-gate-report.html",
+    "last_artifact": "preview/market-hour-heatmap.html (27204B) + preview/market-hour-heatmap.json (19565B) [2026-11-24 mtime]",
+    "latest_artifact": "preview/market-hour-heatmap.html (27204B) + preview/market-hour-heatmap.json (19565B) [2026-11-24 mtime]",
+    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\market-hour-heatmap.html",
     "latest_artifact_note": "",
     "latest_evidence": "qa/market-hour-heatmap-R3399.log (1291B, 2026-11-24)",
     "newest_pair_on_disk_is_board": true,
     "next_milestone": "[R3399] next window (<=48h): (1) 载体 59827B／闸 78500（余量 18673B ≈ 6-7 轮）——下窗仍**先读 `fold --plan-only`**，禁折在飞轮、按轮边界切、摘要句点名被折走的裸轮。 (2) S4U 落地仍欠一次提权运行（本窗实测 `LogonType=Interactive`，`elevated=False`）。 (3) 队列卫生：explore 仅余一条门控项（商户号），main 队头全门控（bootstrap 需物理件五件）——需补种。 (4) 同族余量：演示世界中 `api_market_question/backlog/watch/relist/provider/conversion_months` 六面仍 month_count=0（空小节不算产品增量，R3389 判例），非空面已全部上页。 (5) 承账不变：`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`test_face_sweep` 54/56（AC-FSWB20/20c）。 (6) 提案面 BD-PROP-011 open（窗 11-22~11-28）在册，本窗配额已清。 (7) 诚实承账：物理件五件仍缺——买家仍付不了钱。",
-    "next_milestone_due": "2026-11-26T12:55:55+08:00",
-    "updated_at": "2026-11-24T12:55:55+08:00",
+    "next_milestone_due": "2026-11-26T12:58:04+08:00",
+    "updated_at": "2026-11-24T12:58:04+08:00",
     "heartbeat": {
       "tick": 3395,
       "state_tick": 3399,
@@ -38,7 +38,7 @@
     }
   },
   "current": "2026-11-24 R3399 PRODUCT: the market now answers which hour and which weekday it actually trades in - the shipped api_market_hour_heatmap (168 cells, live since R2165) finally has a door, one openable page instead of a shell call.",
-  "claims": {"claimed": 32, "captured": 2, "contradicted": 4, "uncaptured": 26, "historic": 4, "rows": 90, "present": true, "census_ts": "2026-11-24T12:55:55+08:00"},
+  "claims": {"claimed": 32, "captured": 2, "contradicted": 4, "uncaptured": 26, "historic": 4, "rows": 90, "present": true, "census_ts": "2026-11-24T12:58:04+08:00"},
   "chain": {"present": true, "rows": 90, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -68,13 +68,13 @@
     }
   ],
   "do": "2026-11-24 R3399 PRODUCT: the market now answers which hour and which weekday it actually trades in - the shipped api_market_hour_heatmap (168 cells, live since R2165) finally has a door, one openable page instead of a shell call.",
-  "export_ts": "2026-11-24T12:55:55+08:00",
-  "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-24 commit]; later=html)",
+  "export_ts": "2026-11-24T12:58:04+08:00",
+  "latest_artifact": "preview/market-hour-heatmap.html (27204B) + preview/market-hour-heatmap.json (19565B) [2026-11-24 mtime]",
   "latest_evidence": "qa/market-hour-heatmap-R3399.log (1291B, 2026-11-24)",
   "next_milestone": "[R3399] next window (<=48h): (1) 载体 59827B／闸 78500（余量 18673B ≈ 6-7 轮）——下窗仍**先读 `fold --plan-only`**，禁折在飞轮、按轮边界切、摘要句点名被折走的裸轮。 (2) S4U 落地仍欠一次提权运行（本窗实测 `LogonType=Interactive`，`elevated=False`）。 (3) 队列卫生：explore 仅余一条门控项（商户号），main 队头全门控（bootstrap 需物理件五件）——需补种。 (4) 同族余量：演示世界中 `api_market_question/backlog/watch/relist/provider/conversion_months` 六面仍 month_count=0（空小节不算产品增量，R3389 判例），非空面已全部上页。 (5) 承账不变：`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`test_face_sweep` 54/56（AC-FSWB20/20c）。 (6) 提案面 BD-PROP-011 open（窗 11-22~11-28）在册，本窗配额已清。 (7) 诚实承账：物理件五件仍缺——买家仍付不了钱。",
   "outs": [
-    "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-24 commit]; later=html)",
     "preview/market-hour-heatmap.html (27204B) + preview/market-hour-heatmap.json (19565B) [2026-11-24 mtime]",
+    "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-24 commit]; later=html)",
     "preview/apimarket-monthly-faces.html (10589B) + preview/apimarket-monthly-faces.json (21540B) [2026-11-24 commit]",
     "preview/platform-live-report.html (8621B) + preview/platform-live-report.json (6228B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-23 commit]; later=html)",
     "preview/ledger-reconcile-face.html (8656B) + preview/ledger-reconcile-face.json (6151B) [2026-11-24 commit]",
@@ -170,7 +170,7 @@
     "queue_explore_open": 1
   },
   "state_bytes": 59827,
-  "next_milestone_due": "2026-11-26T12:55:55+08:00",
+  "next_milestone_due": "2026-11-26T12:58:04+08:00",
   "heartbeat": {
     "tick": 3395,
     "state_tick": 3399,
