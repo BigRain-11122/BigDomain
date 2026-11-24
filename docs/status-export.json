@@ -5,15 +5,15 @@
     ],
     "current": "2026-11-24 R3422 PRODUCT: the public shelf compliance question now has a door - api_public_listings (live with AC-AMPI4 and its own suite on disk) had zero readers across tools/ and preview/, so 'what does the outside reader see on the shelf right now - the review state, the registered provider identity, the AIGC label and the price' could only be read by calling the sandbox from a shell.",
     "do": "R3422: gave api_public_listings its first openable page - eight KPI cards, one row per listing carrying both review stamps, the refusal reason, the two shipped flags side by side, the provider name and the unified social credit code, ten law sentences and the cross-face law pending==review_queue.pending; AC-PLB1..6 SUITE 6/6 first run, two measured controls, matrix 791 rows DOC-CURRENT, census pinned=791, entry index 23/23, chain read_only=True, face sweep 56/56, closeout PASS files=4960.",
-    "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
-    "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
+    "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-16 commit]; later=html)",
+    "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-16 commit]; later=html)",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
     "latest_artifact_note": "this round's product pair, named by the R3422 PRODUCT line instead of being pulled by mtime",
     "latest_evidence": "qa/public-listings-board-R3422.log (2026-11-24)",
     "newest_pair_on_disk_is_board": true,
     "next_milestone": "[R3422] next window (<=48h): (1) 载体 state 附加区 26520B／闸 78500（余量 51980B ≈ 10+ 轮，`fold_needed=false`，layout_ok=true）；下窗**先**跑 `python src/os/logs_toolkit.py fold --plan-only` 再决定，**禁手改 state 文件**。(2) S4U 落地仍欠一次提权运行（本窗实测 `BigDomain-OSLoop`=LogonType Interactive，本窗未提权）。(3) 零读者面：本窗五个候选重测后只开 `api_public_listings` 一门——下窗**重测不假设**剩余的 `api_search`（count 3、带评分与价格筛选口径）与 `api_market_buyer_retention`（1 cohort／month_count 1，薄但不是空）；实测空勿取（R3389 空节律）：`api_buyer_todo`／`api_buyer_claim_todo`／`api_market_backlog_months`／`api_price_volatility`／`api_relist_gap`／`api_price_step_distribution`；`api_review_queue` 本窗已作为跨面律被新页消费（尚未独立开门，可再评估）。(4) 48h 窗至 2026-11-26。(5) tick 口径：本窗 3421→3422，标签与计数器同为 3422。(6) 承账更新：`test_face_sweep` 本窗实测 `SUITE PASS 56/56 over 20 criteria`；收口环 `CLOSEOUT-GATE PASS files=4960`；其余不变——`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`backlog.md` 仍超 800000 闸且折载工具以轮数不足拒绝。(7) **导出形态修正本窗已落**：`docs/status-export.json` 原为 1 空格缩进，`status_export_fresh.py --apply` 报 `E_SXF_NO_KEY`（行锚点匹配不到）；本窗把它重写为 2 空格缩进并同步 ceo_face 三行与 `state_bytes`，`--check` 复读 `VERDICT R3422 PASS`；**「最近实物」槽位仍是 mtime 排序**——本窗手写改成本轮 pair 后，规范 `--apply` 又把它写回 mtime 最新的 (truncated)",
-    "next_milestone_due": "2026-11-26T21:27:45+08:00",
-    "updated_at": "2026-11-24T21:27:45+08:00",
+    "next_milestone_due": "2026-11-26T21:29:52+08:00",
+    "updated_at": "2026-11-24T21:29:52+08:00",
     "heartbeat": {
       "tick": 3410,
       "state_tick": 3410,
@@ -44,7 +44,7 @@
     }
   },
   "current": "2026-11-24 R3422 PRODUCT: the public shelf compliance question now has a door - api_public_listings (live with AC-AMPI4 and its own suite on disk) had zero readers across tools/ and preview/, so 'what does the outside reader see on the shelf right now - the review state, the registered provider identity, the AIGC label and the price' could only be read by calling the sandbox from a shell.",
-  "claims": {"claimed": 16, "captured": 5, "contradicted": 0, "uncaptured": 11, "historic": 0, "rows": 98, "present": true, "census_ts": "2026-11-24T21:27:45+08:00"},
+  "claims": {"claimed": 16, "captured": 5, "contradicted": 0, "uncaptured": 11, "historic": 0, "rows": 98, "present": true, "census_ts": "2026-11-24T21:29:52+08:00"},
   "chain": {"present": true, "rows": 98, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -74,8 +74,8 @@
     }
   ],
   "do": "2026-11-24 R3422 PRODUCT: the public shelf compliance question now has a door - api_public_listings (live with AC-AMPI4 and its own suite on disk) had zero readers across tools/ and preview/, so 'what does the outside reader see on the shelf right now - the review state, the registered provider identity, the AIGC label and the price' could only be read by calling the sandbox from a shell.",
-  "export_ts": "2026-11-24T21:27:45+08:00",
-  "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
+  "export_ts": "2026-11-24T21:29:52+08:00",
+  "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-16 commit]; later=html)",
   "latest_evidence": "qa/seller-revenue-board-R3410.log (2083B, 2026-11-24)",
   "next_milestone": "[R3422] next window (<=48h): (1) 载体 state 附加区 26520B／闸 78500（余量 51980B ≈ 10+ 轮，`fold_needed=false`，layout_ok=true）；下窗**先**跑 `python src/os/logs_toolkit.py fold --plan-only` 再决定，**禁手改 state 文件**。(2) S4U 落地仍欠一次提权运行（本窗实测 `BigDomain-OSLoop`=LogonType Interactive，本窗未提权）。(3) 零读者面：本窗五个候选重测后只开 `api_public_listings` 一门——下窗**重测不假设**剩余的 `api_search`（count 3、带评分与价格筛选口径）与 `api_market_buyer_retention`（1 cohort／month_count 1，薄但不是空）；实测空勿取（R3389 空节律）：`api_buyer_todo`／`api_buyer_claim_todo`／`api_market_backlog_months`／`api_price_volatility`／`api_relist_gap`／`api_price_step_distribution`；`api_review_queue` 本窗已作为跨面律被新页消费（尚未独立开门，可再评估）。(4) 48h 窗至 2026-11-26。(5) tick 口径：本窗 3421→3422，标签与计数器同为 3422。(6) 承账更新：`test_face_sweep` 本窗实测 `SUITE PASS 56/56 over 20 criteria`；收口环 `CLOSEOUT-GATE PASS files=4960`；其余不变——`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`backlog.md` 仍超 800000 闸且折载工具以轮数不足拒绝。(7) **导出形态修正本窗已落**：`docs/status-export.json` 原为 1 空格缩进，`status_export_fresh.py --apply` 报 `E_SXF_NO_KEY`（行锚点匹配不到）；本窗把它重写为 2 空格缩进并同步 ceo_face 三行与 `state_bytes`，`--check` 复读 `VERDICT R3422 PASS`；**「最近实物」槽位仍是 mtime 排序**——本窗手写改成本轮 pair 后，规范 `--apply` 又把它写回 mtime 最新的 (truncated)",
   "outs": [
@@ -170,7 +170,7 @@
     "queue_explore_open": 1
   },
   "state_bytes": 35053,
-  "next_milestone_due": "2026-11-26T21:27:45+08:00",
+  "next_milestone_due": "2026-11-26T21:29:52+08:00",
   "heartbeat": {
     "tick": 3422,
     "state_tick": 3422,
