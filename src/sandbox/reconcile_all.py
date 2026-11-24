@@ -8251,6 +8251,16 @@ SUITES = [
     # explicit zero-returning sentence and the in-memory empty probe.
     ("os-buyer-cohort-board",
      os.path.join("..", "os", "test_buyer_cohort_board.py"), 6),
+    # R3414: the seller side of the same monthly cohort question - how many of
+    # the sellers putting supply on the shelf this month are first timers and
+    # how many came back. api_market_seller_cohort shipped with AC-MSC1..8 but
+    # had zero readers under tools/ and preview/, so the page prints the
+    # shipped envelope verbatim and the suite re-reads the face over its own
+    # throwaway demo world, pinning both partitions, the relisting subset, the
+    # per-seller average, envelope sums, month order and shape, first/last
+    # month, the explicit zero-returning sentence and the empty probe.
+    ("os-seller-cohort-board",
+     os.path.join("..", "os", "test_seller_cohort_board.py"), 6),
     # R3073: tools/city_face_report.py renders the P-47 item-1 city face and
     # carries its own --check (AC-CFY1..8), but this registry had no row naming
     # it, so the face was graded only by the fail-soft [GATES] sweep - the

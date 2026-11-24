@@ -1,0 +1,33 @@
+R3414 seller cohort page - evidence (tools/seller_cohort_board.py)
+face=api_market_seller_cohort readers_before=0 (git grep -l -F over tools/ preview/ rc=1)
+PIN row landed in src/os/backlog.md before any product code (AC-SCB1..6)
+demo world: month_count=1 seller_count=2 listing_event_count=3 relisting_event_count=0
+            relisting_seller_count=0 repeat_seller_count=0 repeat_rate=0.0
+            returning_event_count=0 first=last=2026-08
+            row 2026-08: 2 sellers / 2 new / 0 returning / 3 events / 0 relisting
+                         / 3 new events / 0 returning events / avg 1.5
+render: SELLER-COHORT preview/seller-cohort.html bytes=5413 months=1 sellers=2 events=3
+check : SELLER-COHORT CHECK PASS fails=0 html=5413B json=1178B
+suite : SUITE PASS 6/6 criteria declared=6 (AC-SCB1..6)
+        AC-SCB2 identical=True disclaimer_same=True months=1 sellers=2 events=3
+        AC-SCB3 problems=[]
+        AC-SCB4 rows=1/1 sections=True laws=True/True/True/True zero_sentence=True
+                 empty_probe=True stand_in_none=False
+        AC-SCB5 aigc=True disclaimer_on_page=True external_links=0
+        AC-SCB6 check_rc=0 wrote_nothing=True wired=6/6 face_suite=True
+controls: (a) removed label key law_notadvice -> rc=3 E_SCB_FACE, page bytes untouched
+          (b) forced months[0].new_seller_count 2->99 -> AC-SCB2 identical=False and
+              AC-SCB3 '2026-08 seller partition' red at rc=2; restored to 2, --check PASS
+registry: os-seller-cohort-board(6) in src/sandbox/reconcile_all.py
+producer: preview/seller-cohort.json -> tools/seller_cohort_board.py in PAIR_PRODUCERS
+matrix  : WRITTEN docs/sandbox-suite-matrix.md 81033 bytes 783 rows; --check DOC-CURRENT
+census  : REGISTRY COUNTER CENSUS rows=783 readable=783 unparsed=0 silent=0 VERDICT PASS pinned=783
+chain   : VERDICT PASS legs=2 entries=2 tx=1 reconcile_rc=0 html=4403B read_only=True
+entry   : DELIVERABLE INDEX faces=9 defects=0 index=46328B; --check VERDICT PASS 23/23
+sweep   : VERDICT PASS 13/13; --check 21/21
+closeout: CLOSEOUT-GATE PASS files=4952 flags=0 census=PASS matrix=DOC-CURRENT
+honest  : zero new tables, zero new semantics, zero payment, no network beyond loopback;
+          the demo world has no returning seller and no relisting event, so the landed page
+          prints the explicit zero-returning sentence and the relisting-subset bound holds
+          on a zero row rather than on a landed non-zero row; five physical pieces still
+          missing, buyers still cannot pay.

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>月度卖家军团：新卖家与回头卖家</title>
+<style>
+:root{--ink:#1b1f24;--muted:#66707a;--line:#dfe4ea;--bg:#f7f8fa}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:var(--bg);color:var(--ink);
+font:15px/1.65 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+main{max-width:1080px;margin:0 auto}
+h1{font-size:22px;margin:0 0 4px;font-weight:650}
+h2{font-size:16px;margin:22px 0 8px;font-weight:620}
+.meta{color:var(--muted);font-size:13px;margin-bottom:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;
+padding:14px 16px;margin-bottom:14px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600;font-size:12px}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+td.neg{color:#b42318}
+.kpi{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.kpi div{flex:1 1 108px;border:1px solid var(--line);border-radius:8px;
+padding:10px 12px;background:#fff}
+.kpi b{display:block;font-size:19px;font-variant-numeric:tabular-nums}
+.kpi b.neg{color:#b42318}
+.kpi span{color:var(--muted);font-size:12.5px}
+.bar{height:7px;background:#eef1f5;border-radius:4px;min-width:90px}
+.bar i{display:block;height:7px;background:#3b6ea5;border-radius:4px}
+.bar i.ret{background:#c9a227}
+.disclaimer{border-left:3px solid #c9a227;background:#fdf8ea;padding:10px 14px;
+font-size:13px}
+.badge{display:inline-block;margin-right:8px;padding:2px 8px;
+border:1px solid var(--line);border-radius:999px;font-size:12px;
+color:var(--muted)}
+.law{font-size:13px;margin:6px 0}
+.note{color:var(--muted);font-size:12.5px;margin-top:8px}
+.empty{color:var(--muted);font-size:13px}
+footer{color:var(--muted);font-size:12px;margin:20px 0 8px}
+code{font-size:12.5px;background:#f2f4f7;padding:1px 5px;border-radius:4px}
+</style></head><body><main>
+<h1>月度卖家军团：新卖家与回头卖家</h1>
+<div class=meta>每月上货的人里，多少卖家是第一次来，多少人是又回来了 &middot; 生成于 2026-11-24 10:24:23Z &middot; <code>api_market_seller_cohort</code></div>
+<div class=kpi><div><span>月份数</span><b>1</b></div><div><span>卖家数</span><b>2</b></div><div><span>上货事件数</span><b>3</b></div><div><span>改挂事件数</span><b>0</b></div><div><span>改挂卖家数</span><b>0</b></div><div><span>回头卖家数</span><b>0</b></div><div><span>回头卖家率</span><b>0.0</b></div><div><span>回头卖家事件数</span><b>0</b></div></div>
+<h2>逐月分层表</h2>
+<div class=card><table><tr><th>月份</th><th>卖家数</th><th>新卖家</th><th>回头卖家</th><th>事件数</th><th>改挂事件</th><th>新卖家事件</th><th>回头卖家事件</th><th>人均事件</th><th>构成</th></tr><tr class="month" data-month="2026-08"><td>2026-08</td><td class=n>2</td><td class=n>2</td><td class=n>0</td><td class=n>3</td><td class=n>0</td><td class=n>3</td><td class=n>0</td><td class=n>1.50</td><td class=n><div class="bar"><i style="width:100%"></i><i class="ret" style="width:0%"></i></div></td></tr></table><p class=note>条形是当月事件数在新卖家事件与回头卖家事件之间的构成宽度，不是份额百分比；蓝=新卖家事件，金=回头卖家事件。</p></div>
+<h2>每月上货事件构成</h2>
+<div class=card><p class="split" data-month="2026-08">2026-08：新卖家事件 3 次 / 回头卖家事件 0 次，合计 3 次</p><div class="bar"><i style="width:100%"></i><i class="ret" style="width:0%"></i></div><p class="empty repeat-empty">本演示世界里没有任何卖家跨月上货：回头卖家数为 0，这是如实读数而不是缺数。</p></div>
+<h2>口径法则</h2>
+<div class=card><p class=law>新卖家=该卖家在本世界内最早一次上货（挂单或改挂）恰为本月的那些卖家；同一个卖家只会被计为新卖家一次，跨月卖家只算一次，因此信封卖家数不等于各行卖家数之和。</p><p class=law>本期事件=挂单事件+改挂事件，改挂事件是其中的子集，故改挂事件数不可能超过事件数；退休与售罄不是事件，故某月可以整行消失，而不是印一行 0。</p><p class=law>回头卖家=跨月上货的卖家，不是终身复购口径；本页不合并任何月份。</p><p class=law>信封的事件合计与会话合计逐项等于月行同名列之和；平均事件数是事件数除以当月卖家数。</p><p class=law>本页不重算任何市场规则：各项计数逐项来自已交付读数面，缺数印「-」不印 0。</p><p class=law>本页是沙箱读数展示，不构成投顾口径，也不是真实交易凭证。</p></div>
+<h2>本面自带的免责句</h2>
+<div class=card><div class=disclaimer>sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice</div>
+<p style="margin-top:10px"><span class=badge>AIGC 生成内容标识：本页由沙箱演示数据自动生成，非真实交易记录</span></p></div>
+<h2>复现方式</h2>
+<div class=card><code>python tools/seller_cohort_board.py</code></div>
+<footer>BigDomain OSLoop &middot; 2026-11-24 10:24:23Z &middot; 本页由 tools/seller_cohort_board.py 生成，不手改</footer>
+</main></body></html>

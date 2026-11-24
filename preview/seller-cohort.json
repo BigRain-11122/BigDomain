@@ -1,0 +1,44 @@
+{
+ "generated_utc": "2026-11-24 10:24:23Z",
+ "face": "api_market_seller_cohort",
+ "board_face": "api_board",
+ "month_count": 1,
+ "cohort": {
+  "month_count": 1,
+  "seller_count": 2,
+  "listing_event_count": 3,
+  "relisting_event_count": 0,
+  "relisting_seller_count": 0,
+  "repeat_seller_count": 0,
+  "repeat_rate": 0.0,
+  "returning_event_count": 0,
+  "first_month": "2026-08",
+  "last_month": "2026-08",
+  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+  "months": [
+   {
+    "month": "2026-08",
+    "seller_count": 2,
+    "new_seller_count": 2,
+    "returning_seller_count": 0,
+    "listing_event_count": 3,
+    "relisting_event_count": 0,
+    "new_event_count": 3,
+    "returning_event_count": 0,
+    "avg_events_per_seller": 1.5
+   }
+  ]
+ },
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/seller-cohort.html",
+ "sources": {
+  "driver": "ef9efff5969f5a8d",
+  "copy": "e1a930fa1c357c29",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 5413,
+  "json": 1178
+ }
+}
