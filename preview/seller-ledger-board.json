@@ -1,0 +1,118 @@
+{
+ "generated_utc": "2026-11-24 09:21:28Z",
+ "face": "api_seller_ledger",
+ "board_face": "api_board",
+ "seller_count": 2,
+ "sellers": [
+  {
+   "dev_account": "usr:dana",
+   "balance": 10,
+   "balance_known": true,
+   "entry_count": 4,
+   "credit_total": 17,
+   "debit_total": 7,
+   "net": 10,
+   "limit": 50,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "entries": [
+    {
+     "tx_id": "8ba56b903aeae03a",
+     "ts_utc": "2026-10-02T00:00:00Z",
+     "type": "adjust",
+     "action": "adjust",
+     "ref": "apimarket:refund:1",
+     "ref_type": "order",
+     "direction": "debit",
+     "amount": 7,
+     "memo": "apimarket refund purchase=1 listing=1 buyer=usr:bob reason=month-crossing refund",
+     "source_ai": false
+    },
+    {
+     "tx_id": "a9b3b47bd027f77c",
+     "ts_utc": "2026-09-15T12:00:00Z",
+     "type": "share",
+     "action": "apimarket_dev_share",
+     "ref": "apimarket:share:2a9aa506ccfe848f",
+     "ref_type": "settlement",
+     "direction": "credit",
+     "amount": 3,
+     "memo": null,
+     "source_ai": false
+    },
+    {
+     "tx_id": "962359915b78fe9c",
+     "ts_utc": "2026-09-01T00:00:00Z",
+     "type": "share",
+     "action": "apimarket_dev_share",
+     "ref": "apimarket:share:07d07667b924742a",
+     "ref_type": "settlement",
+     "direction": "credit",
+     "amount": 7,
+     "memo": null,
+     "source_ai": false
+    },
+    {
+     "tx_id": "ba2055a09412e7fe",
+     "ts_utc": "2026-08-31T23:59:59Z",
+     "type": "share",
+     "action": "apimarket_dev_share",
+     "ref": "apimarket:share:3a5d1beb704e2cea",
+     "ref_type": "settlement",
+     "direction": "credit",
+     "amount": 7,
+     "memo": null,
+     "source_ai": false
+    }
+   ]
+  },
+  {
+   "dev_account": "usr:frank",
+   "balance": 0,
+   "balance_known": true,
+   "entry_count": 2,
+   "credit_total": 4,
+   "debit_total": 4,
+   "net": 0,
+   "limit": 50,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "entries": [
+    {
+     "tx_id": "f07f78205bfae33b",
+     "ts_utc": "2026-10-03T00:00:00Z",
+     "type": "adjust",
+     "action": "adjust",
+     "ref": "apimarket:refund:4",
+     "ref_type": "order",
+     "direction": "debit",
+     "amount": 4,
+     "memo": "apimarket refund purchase=4 listing=3 buyer=usr:erin reason=demo refund same month",
+     "source_ai": false
+    },
+    {
+     "tx_id": "0dd4b278d2c343f2",
+     "ts_utc": "2026-09-20T08:30:00Z",
+     "type": "share",
+     "action": "apimarket_dev_share",
+     "ref": "apimarket:share:078369a01cb80be7",
+     "ref_type": "settlement",
+     "direction": "credit",
+     "amount": 4,
+     "memo": null,
+     "source_ai": false
+    }
+   ]
+  }
+ ],
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/seller-ledger-board.html",
+ "sources": {
+  "driver": "37674c5da4475eb2",
+  "copy": "8dcc8ebbcc9884b0",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 5912,
+  "json": 3122
+ }
+}

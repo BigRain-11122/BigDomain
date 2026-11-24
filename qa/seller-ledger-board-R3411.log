@@ -1,0 +1,22 @@
+R3411 seller ledger statement board - evidence (ASCII/English, one fact per line)
+1. render: SELLER-LEDGER preview/seller-ledger-board.html bytes=5912 sellers=2 entries=6 (json 3122B)
+2. face: api_seller_ledger, envelope 10 keys, entry row 10 base keys (ai_label optional), sellers enumerated from shipped api_board()
+3. suite: PASS AC-SLG1 contract keys=9 sellers=2 report=True
+4. suite: PASS AC-SLG2 diffs=[] disclaimer_same=True entries=6 (own throwaway world, no typed ids)
+5. suite: PASS AC-SLG3 problems=[] (entry_count, credit and debit sums, net, non-negative amounts, direction, newest-first)
+6. suite: PASS AC-SLG4 rows=6/6 sections=True negative=True empty=True laws=True stand_in_none=False
+7. suite: PASS AC-SLG5 aigc=True disclaimer_on_page=True external_links=0
+8. suite: PASS AC-SLG6 check_rc=0 wrote_nothing=True wired=6/6 face_suite=True
+9. suite: SUITE PASS 6/6 criteria declared=6
+10. control A PASS rc=3 refusal=E_SLG_FACE html_untouched=True (one label key removed, driver refused before writing)
+11. control B PASS rc=2 AC-SLG2 red AC-SLG3 red (one printed net bumped)
+12. restore PASS identical=True suite_rc=0 green=True (copy, json and html back to the same sha256)
+13. registry: os-seller-ledger-board(6) in src/sandbox/reconcile_all.py; suite src/os/test_seller_ledger_board.py
+14. matrix: WRITTEN docs/sandbox-suite-matrix.md 80758 bytes 780 rows
+15. census: VERDICT PASS pinned=780 rows=780 readable=780
+16. entry index: VERDICT PASS 23/23 fingerprint=5483ffd04abc2ad2 (producer named seller-ledger-board.json -> tools/seller_ledger_board.py)
+17. first-yuan chain: VERDICT PASS legs=2 entries=2 tx=1 reconcile_rc=0 read_only=True
+18. face sweep: VERDICT PASS 13/13 fingerprint=f29b9464361e697a ; --check 21/21
+19. honest: this moves an already-delivered reading onto a CEO-openable page; zero new tables, zero new semantics
+20. honest: the demo world holds two sellers over six entries; dana 4 entries 17 credit 7 debit net 10 balance 10, frank 2 entries 4/4 net 0 balance 0; no account reads negative here, the minus law is proved by an in-memory render probe
+21. honest: zero payment, zero network beyond loopback; the five physical pieces are still missing, buyers still cannot pay

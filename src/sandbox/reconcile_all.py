@@ -8221,6 +8221,15 @@ SUITES = [
     # un-clamped negative row and the explicit empty-month render.
     ("os-seller-revenue-board",
      os.path.join("..", "os", "test_seller_revenue_board.py"), 6),
+    # R3411: api_seller_ledger carried its own AC-AMLG suite and a zero-reader
+    # git grep under tools/ and preview/. The page shows the live balance and
+    # the per-entry ledger behind it, so a debit-heavy account can honestly read
+    # a negative net. The suite re-reads the shipped face over its own throwaway
+    # demo world (never a typed fixture) and pins entry_count, the credit and
+    # debit totals, net, non-negative amounts, direction, newest-first order, the
+    # un-clamped negative net and the explicit empty-statement render.
+    ("os-seller-ledger-board",
+     os.path.join("..", "os", "test_seller_ledger_board.py"), 6),
     # R3073: tools/city_face_report.py renders the P-47 item-1 city face and
     # carries its own --check (AC-CFY1..8), but this registry had no row naming
     # it, so the face was graded only by the fail-soft [GATES] sweep - the
