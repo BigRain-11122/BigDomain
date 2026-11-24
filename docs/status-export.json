@@ -9,12 +9,12 @@
     "last_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-23 commit]; later=html)",
     "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-23 commit]; later=html)",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ugc-gate-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/face-sweep-R3384.log (1393B, 2026-11-24)",
-    "latest_evidence": "qa/face-sweep-R3384.log (1393B, 2026-11-24)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/fold-R3385.log (1848B, 2026-11-24)",
+    "latest_evidence": "qa/fold-R3385.log (1848B, 2026-11-24)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3384] next window (<=48h): (1) **载体折窗已到期**：state 78105B / 闸 78500B，余量仅 395B；`fold --plan-only` 读 `minimal_window_lines=7 start=165 predicted_post_bytes=75047 would_fail=[]`，但 165..171 正是本轮行——**禁折最新轮**，须选更早切片，并在 `--summary-sentence` 里点名该切片会被折走的裸轮，否则 `E_ROUND_LOST` 具名拒绝（这是判据不是建议）。 (2) 队列卫生承账：main／tech／explore 三线仍全 `NO-CRITERIA`（tech open=5 claimable=4、explore open=1、main open=6 claimable=5）——认领=先把判据写进那一行。 (3) 承账变更：`test_face_sweep` 54/56 这条**退场**（现 56/56）；余不变=`qa_log --ledger-check` rows=89 broken=5（R3371 裁定=诊断不修）、全量 battery 未实跑、Docker 缺位、`BigDomain-OSLoop` LogonType=Interactive。 (4) 收盘写序新实锚：本轮按声明序 chain→index→backhop→sweep→export 跑，仍被 `E_CLG_ENTRY_PAGES` 拒（入口页引 export 的 census 日）；按门面自己的 remedy 再跑 index→backhop→sweep→export 才 PASS——下窗照后者，别只照声明序。 (5) 诚实承账：物理件五件仍缺（商户号／服务器／域名／备案+ICP／小程序 appid+secret）——买家仍付不了钱。",
-    "next_milestone_due": "2026-11-26T08:44:38+08:00",
-    "updated_at": "2026-11-24T08:44:38+08:00",
+    "next_milestone": "[R3385] next window (<=48h): (1) 载体余量 9352B ≈ 6 轮，下窗不必折；折窗仍按轮边界切、摘要点名被折走的裸轮（本轮实证：占位摘要只会让 `E_ROUND_LOST` 变成上界而非判词）。 (2) 收口写序新实证：export 之后入口页会红 `AC-CVL1`，整链必须再跑一遍 `index→backhop→sweep→export` 才 PASS（本轮两遍实证，已替代 R3384 的单遍说法）。 (3) 队列卫生：main／tech／explore 三线队头仍全门控（bootstrap 需物理件五件／docker 缺位／商户号未到），其余 claimable 项均 NO-CRITERIA——认领＝先把判据写进那一行。 (4) 承账不变：`qa_log --ledger-check` rows=89 broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`BigDomain-OSLoop` LogonType=Interactive。 (5) 提案面：BD-PROP-011 open（窗 11-22~11-28）在册，本窗配额已清。 (6) 诚实承账：物理件五件仍缺（商户号／服务器／域名／备案+ICP／小程序 appid+secret）——买家仍付不了钱。",
+    "next_milestone_due": "2026-11-26T08:47:36+08:00",
+    "updated_at": "2026-11-24T08:47:36+08:00",
     "heartbeat": {
       "tick": 3385,
       "state_tick": 3385,
@@ -39,7 +39,7 @@
     }
   },
   "current": "2026-11-24 R3385 CARRIER: the fold the board head measured as due is done at a round boundary, not at the tail - 28 verbatim lines (the R3368 coverage legs, the R3369 board fold, the R3370 coverage milestone) moved to logs/state-log-archive-2026-11.md and src/os/state.json went 78105B -> 66338B with predicted == post byte for byte.",
-  "claims": {"claimed": 44, "captured": 2, "contradicted": 4, "uncaptured": 38, "historic": 4, "rows": 89, "present": true, "census_ts": "2026-11-24T08:44:38+08:00"},
+  "claims": {"claimed": 45, "captured": 2, "contradicted": 4, "uncaptured": 39, "historic": 4, "rows": 89, "present": true, "census_ts": "2026-11-24T08:47:36+08:00"},
   "chain": {"present": true, "rows": 89, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -69,10 +69,10 @@
     }
   ],
   "do": "2026-11-24 R3385 CARRIER: the fold the board head measured as due is done at a round boundary, not at the tail - 28 verbatim lines (the R3368 coverage legs, the R3369 board fold, the R3370 coverage milestone) moved to logs/state-log-archive-2026-11.md and src/os/state.json went 78105B -> 66338B with predicted == post byte for byte.",
-  "export_ts": "2026-11-24T08:44:38+08:00",
+  "export_ts": "2026-11-24T08:47:36+08:00",
   "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-23 commit]; later=html)",
-  "latest_evidence": "qa/face-sweep-R3384.log (1393B, 2026-11-24)",
-  "next_milestone": "[R3384] next window (<=48h): (1) **载体折窗已到期**：state 78105B / 闸 78500B，余量仅 395B；`fold --plan-only` 读 `minimal_window_lines=7 start=165 predicted_post_bytes=75047 would_fail=[]`，但 165..171 正是本轮行——**禁折最新轮**，须选更早切片，并在 `--summary-sentence` 里点名该切片会被折走的裸轮，否则 `E_ROUND_LOST` 具名拒绝（这是判据不是建议）。 (2) 队列卫生承账：main／tech／explore 三线仍全 `NO-CRITERIA`（tech open=5 claimable=4、explore open=1、main open=6 claimable=5）——认领=先把判据写进那一行。 (3) 承账变更：`test_face_sweep` 54/56 这条**退场**（现 56/56）；余不变=`qa_log --ledger-check` rows=89 broken=5（R3371 裁定=诊断不修）、全量 battery 未实跑、Docker 缺位、`BigDomain-OSLoop` LogonType=Interactive。 (4) 收盘写序新实锚：本轮按声明序 chain→index→backhop→sweep→export 跑，仍被 `E_CLG_ENTRY_PAGES` 拒（入口页引 export 的 census 日）；按门面自己的 remedy 再跑 index→backhop→sweep→export 才 PASS——下窗照后者，别只照声明序。 (5) 诚实承账：物理件五件仍缺（商户号／服务器／域名／备案+ICP／小程序 appid+secret）——买家仍付不了钱。",
+  "latest_evidence": "qa/fold-R3385.log (1848B, 2026-11-24)",
+  "next_milestone": "[R3385] next window (<=48h): (1) 载体余量 9352B ≈ 6 轮，下窗不必折；折窗仍按轮边界切、摘要点名被折走的裸轮（本轮实证：占位摘要只会让 `E_ROUND_LOST` 变成上界而非判词）。 (2) 收口写序新实证：export 之后入口页会红 `AC-CVL1`，整链必须再跑一遍 `index→backhop→sweep→export` 才 PASS（本轮两遍实证，已替代 R3384 的单遍说法）。 (3) 队列卫生：main／tech／explore 三线队头仍全门控（bootstrap 需物理件五件／docker 缺位／商户号未到），其余 claimable 项均 NO-CRITERIA——认领＝先把判据写进那一行。 (4) 承账不变：`qa_log --ledger-check` rows=89 broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`BigDomain-OSLoop` LogonType=Interactive。 (5) 提案面：BD-PROP-011 open（窗 11-22~11-28）在册，本窗配额已清。 (6) 诚实承账：物理件五件仍缺（商户号／服务器／域名／备案+ICP／小程序 appid+secret）——买家仍付不了钱。",
   "outs": [
     "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-23 commit]; later=html)",
     "preview/platform-live-report.html (8621B) + preview/platform-live-report.json (6228B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-23 commit]; later=html)",
@@ -170,7 +170,7 @@
     "queue_explore_open": 1
   },
   "state_bytes": 69148,
-  "next_milestone_due": "2026-11-26T08:44:38+08:00",
+  "next_milestone_due": "2026-11-26T08:47:36+08:00",
   "heartbeat": {
     "tick": 3385,
     "state_tick": 3385,
