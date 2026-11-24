@@ -12,8 +12,8 @@
     "latest_evidence": "qa/seller-quality-scorecard-R3401.log (2738B, 2026-11-24)",
     "newest_pair_on_disk_is_board": true,
     "next_milestone": "[R3401] next window (<=48h): (1) 载体 69200B／闸 78500（余量 9300B ≈ 3 轮）——下窗仍**先读 `fold --plan-only`**，禁折在飞轮、按轮边界切、摘要句点名被折走的裸轮。 (2) S4U 落地仍欠一次提权运行（本窗实测 `LogonType=Interactive`，本窗未提权）。 (3) 队列卫生：explore 仍仅余一条门控项（商户号），main 队头全门控（bootstrap 需物理件五件）——需补种。 (4) 同族余量：仍有已交付读数无读者（R3400 验过零命中的五个面仍无门：`api_listing_position`／`api_similar_listings`／`api_repeat_purchase`／`api_category_refund_months`／`api_buyer_rating_pattern`），下窗可再挑一面给门。 (5) **导出「最近实物」槽位仍被 mtime 排序牵动**（承 R3400 项 5）：本轮环内 `backhop` 重写 ugc 页后该槽位仍指向他页——`current`/`do` 三行正确点名 R3401，但槽位需按轮次锚定，下窗立判据或记诊断。 (6) 承账不变：`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`test_face_sweep` 54/56（AC-FSWB20/20c）。 (7) 提案面 BD-PROP-011 open（窗 11-22~11-28）在册，本窗配额已清。 (8) 诚实承账：物理件五件仍缺——买家仍付不了钱。",
-    "next_milestone_due": "2026-11-26T13:31:14+08:00",
-    "updated_at": "2026-11-24T13:31:14+08:00",
+    "next_milestone_due": "2026-11-26T13:32:43+08:00",
+    "updated_at": "2026-11-24T13:32:43+08:00",
     "heartbeat": {
       "tick": 3395,
       "state_tick": 3401,
@@ -29,7 +29,7 @@
       "over7": 0,
       "dup_rows": 0,
       "distinct": 12,
-      "collapsed": 1,
+      "collapsed": 0,
       "labels_refreshed": 0,
       "notes_stale": 0,
       "note_claims": 0,
@@ -38,7 +38,7 @@
     }
   },
   "current": "2026-11-24 R3401 PRODUCT: the market now answers what shape a seller reputation has - api_seller_quality (shipped earlier with its own AC-AMQL criteria) had zero readers under tools/ and preview/ and finally has one openable page.",
-  "claims": {"claimed": 32, "captured": 2, "contradicted": 4, "uncaptured": 26, "historic": 4, "rows": 90, "present": true, "census_ts": "2026-11-24T13:31:14+08:00"},
+  "claims": {"claimed": 32, "captured": 2, "contradicted": 4, "uncaptured": 26, "historic": 4, "rows": 90, "present": true, "census_ts": "2026-11-24T13:32:43+08:00"},
   "chain": {"present": true, "rows": 90, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -68,7 +68,7 @@
     }
   ],
   "do": "2026-11-24 R3401 PRODUCT: the market now answers what shape a seller reputation has - api_seller_quality (shipped earlier with its own AC-AMQL criteria) had zero readers under tools/ and preview/ and finally has one openable page.",
-  "export_ts": "2026-11-24T13:31:14+08:00",
+  "export_ts": "2026-11-24T13:32:43+08:00",
   "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 commit]",
   "latest_evidence": "qa/seller-quality-scorecard-R3401.log (2738B, 2026-11-24)",
   "next_milestone": "[R3401] next window (<=48h): (1) 载体 69200B／闸 78500（余量 9300B ≈ 3 轮）——下窗仍**先读 `fold --plan-only`**，禁折在飞轮、按轮边界切、摘要句点名被折走的裸轮。 (2) S4U 落地仍欠一次提权运行（本窗实测 `LogonType=Interactive`，本窗未提权）。 (3) 队列卫生：explore 仍仅余一条门控项（商户号），main 队头全门控（bootstrap 需物理件五件）——需补种。 (4) 同族余量：仍有已交付读数无读者（R3400 验过零命中的五个面仍无门：`api_listing_position`／`api_similar_listings`／`api_repeat_purchase`／`api_category_refund_months`／`api_buyer_rating_pattern`），下窗可再挑一面给门。 (5) **导出「最近实物」槽位仍被 mtime 排序牵动**（承 R3400 项 5）：本轮环内 `backhop` 重写 ugc 页后该槽位仍指向他页——`current`/`do` 三行正确点名 R3401，但槽位需按轮次锚定，下窗立判据或记诊断。 (6) 承账不变：`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`test_face_sweep` 54/56（AC-FSWB20/20c）。 (7) 提案面 BD-PROP-011 open（窗 11-22~11-28）在册，本窗配额已清。 (8) 诚实承账：物理件五件仍缺——买家仍付不了钱。",
@@ -161,7 +161,7 @@
   "self_drive": {
     "window": "2026-11-18..2026-11-24",
     "window_days": 7,
-    "log_lines_in_window": 141,
+    "log_lines_in_window": 142,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 16,
@@ -171,8 +171,8 @@
     "queue_tech_open": 5,
     "queue_explore_open": 1
   },
-  "state_bytes": 69200,
-  "next_milestone_due": "2026-11-26T13:31:14+08:00",
+  "state_bytes": 69772,
+  "next_milestone_due": "2026-11-26T13:32:43+08:00",
   "heartbeat": {
     "tick": 3395,
     "state_tick": 3401,
@@ -188,7 +188,7 @@
     "over7": 0,
     "dup_rows": 0,
     "distinct": 12,
-    "collapsed": 1,
+    "collapsed": 0,
     "labels_refreshed": 0,
     "notes_stale": 0,
     "note_claims": 0,
