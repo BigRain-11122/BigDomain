@@ -5,15 +5,15 @@
     ],
     "current": "2026-11-24 R3407 PRODUCT: the after-sales question now has a door - api_refund_reasons (live with AC-RFR1..8 and its own suite) had zero readers across tools/ and preview/ in the R3407 face census, so 'is this refund load a quality problem, a description mismatch or noise' could only be read by pulling every refund row by hand.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
-    "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
-    "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
+    "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-16 commit]; later=html)",
+    "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-16 commit]; later=html)",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
     "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/buyer-rating-pattern-board-R3406.log (1492B, 2026-11-24)",
     "latest_evidence": "qa/buyer-rating-pattern-board-R3406.log (1492B, 2026-11-24)",
     "newest_pair_on_disk_is_board": true,
     "next_milestone": "[R3407] next window (<=48h): (1) 载体 63537B／闸 78500（余量 14963B ≈ 3 轮）——下窗仍**先读折叠计划**再说了；另记：`backlog.md` 自身 926977B 已越 800000 闸（`BACKLOG-FOLD verdict=FOLD-DUE`），但 `--fold --dry-run --round R3407` 读 `FAIL E_BLF_NOT_ENOUGH_ROUNDS board carries 157 labels (R3406..R3371), keep=120 needs a remainder to move`——下窗须查该工具 `--keep` 边界与轮边界规则再决定折法，**禁手改文件**。 (2) S4U 落地仍欠一次提权运行（本窗实测 `LogonType=Interactive`，本窗未提权）。 (3) 队列卫生：explore 仍仅余一条门控项（商户号），main 队头全门控（bootstrap 需物理件五件）——需补种。 (4) 同族余量：本窗 119 面普查实测仍约 90 面零读者，其中具名候选=`api_price_volatility`／`api_market_daily`／`api_buyer_concentration`／`api_seller_concentration`／`api_relist_gap`／`api_price_step_distribution`（下窗仍**重测不假设**，只取一面开门）。 (5) **导出「最近实物」槽位仍被 mtime 排序牵动**（承 R3400..R3406 项 5）。 (6) 写序事实再记：入口页与首元链互引字节，正法=「链 → 入口页 → 链」迭代到双方 `--check` rc=0（本窗首跑 `E_STALE`，一轮即收敛，无闸阻止下窗再踩）。 (7) 承账不变：`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`test_face_sweep` 54/56（AC-FSWB20/20c）。 (8) 提案面 BD-PROP-011 open（窗 11-22~11-28）在册，本窗配额已清。 (9) 诚实承账：物理件五件仍缺——买家仍付不了钱。",
-    "next_milestone_due": "2026-11-26T15:49:22+08:00",
-    "updated_at": "2026-11-24T15:49:22+08:00",
+    "next_milestone_due": "2026-11-26T15:51:23+08:00",
+    "updated_at": "2026-11-24T15:51:23+08:00",
     "heartbeat": {
       "tick": 3395,
       "state_tick": 3406,
@@ -38,7 +38,7 @@
     }
   },
   "current": "2026-11-24 R3407 PRODUCT: the after-sales question now has a door - api_refund_reasons (live with AC-RFR1..8 and its own suite) had zero readers across tools/ and preview/ in the R3407 face census, so 'is this refund load a quality problem, a description mismatch or noise' could only be read by pulling every refund row by hand.",
-  "claims": {"claimed": 40, "captured": 6, "contradicted": 4, "uncaptured": 30, "historic": 4, "rows": 90, "present": true, "census_ts": "2026-11-24T15:49:22+08:00"},
+  "claims": {"claimed": 40, "captured": 6, "contradicted": 4, "uncaptured": 30, "historic": 4, "rows": 90, "present": true, "census_ts": "2026-11-24T15:51:23+08:00"},
   "chain": {"present": true, "rows": 90, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -68,8 +68,8 @@
     }
   ],
   "do": "2026-11-24 R3407 PRODUCT: the after-sales question now has a door - api_refund_reasons (live with AC-RFR1..8 and its own suite) had zero readers across tools/ and preview/ in the R3407 face census, so 'is this refund load a quality problem, a description mismatch or noise' could only be read by pulling every refund row by hand.",
-  "export_ts": "2026-11-24T15:49:22+08:00",
-  "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-16 commit]; later=html)",
+  "export_ts": "2026-11-24T15:51:23+08:00",
+  "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-16 commit]; later=html)",
   "latest_evidence": "qa/buyer-rating-pattern-board-R3406.log (1492B, 2026-11-24)",
   "next_milestone": "[R3407] next window (<=48h): (1) 载体 63537B／闸 78500（余量 14963B ≈ 3 轮）——下窗仍**先读折叠计划**再说了；另记：`backlog.md` 自身 926977B 已越 800000 闸（`BACKLOG-FOLD verdict=FOLD-DUE`），但 `--fold --dry-run --round R3407` 读 `FAIL E_BLF_NOT_ENOUGH_ROUNDS board carries 157 labels (R3406..R3371), keep=120 needs a remainder to move`——下窗须查该工具 `--keep` 边界与轮边界规则再决定折法，**禁手改文件**。 (2) S4U 落地仍欠一次提权运行（本窗实测 `LogonType=Interactive`，本窗未提权）。 (3) 队列卫生：explore 仍仅余一条门控项（商户号），main 队头全门控（bootstrap 需物理件五件）——需补种。 (4) 同族余量：本窗 119 面普查实测仍约 90 面零读者，其中具名候选=`api_price_volatility`／`api_market_daily`／`api_buyer_concentration`／`api_seller_concentration`／`api_relist_gap`／`api_price_step_distribution`（下窗仍**重测不假设**，只取一面开门）。 (5) **导出「最近实物」槽位仍被 mtime 排序牵动**（承 R3400..R3406 项 5）。 (6) 写序事实再记：入口页与首元链互引字节，正法=「链 → 入口页 → 链」迭代到双方 `--check` rc=0（本窗首跑 `E_STALE`，一轮即收敛，无闸阻止下窗再踩）。 (7) 承账不变：`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`test_face_sweep` 54/56（AC-FSWB20/20c）。 (8) 提案面 BD-PROP-011 open（窗 11-22~11-28）在册，本窗配额已清。 (9) 诚实承账：物理件五件仍缺——买家仍付不了钱。",
   "outs": [
@@ -164,7 +164,7 @@
     "queue_explore_open": 1
   },
   "state_bytes": 63537,
-  "next_milestone_due": "2026-11-26T15:49:22+08:00",
+  "next_milestone_due": "2026-11-26T15:51:23+08:00",
   "heartbeat": {
     "tick": 3395,
     "state_tick": 3406,
