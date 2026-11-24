@@ -493,6 +493,59 @@
       "last_month": null,
       "month_count": 0,
       "months": []
+    },
+    {
+      "envelope": {
+        "active_month_count": 1,
+        "avg_stars": 4.5,
+        "buyer_count": 2,
+        "dev_account": null,
+        "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+        "first_month": "2026-09",
+        "five_star_count": 1,
+        "last_month": "2026-09",
+        "latest_month_rating_count": 2,
+        "low_star_count": 0,
+        "market_avg_stars": null,
+        "month_count": 1,
+        "months": [
+          {
+            "avg_stars": 4.5,
+            "buyer_count": 2,
+            "five_star_count": 1,
+            "low_star_count": 0,
+            "month": "2026-09",
+            "rating_count": 2,
+            "revised_count": 0,
+            "running_rating": 2,
+            "star_sum": 9
+          }
+        ],
+        "peak_month": "2026-09",
+        "peak_rating_count": 2,
+        "rating_count": 2,
+        "revised_rating_count": 0,
+        "scope": "market",
+        "star_sum": 9
+      },
+      "first_month": "2026-09",
+      "fn": "api_market_rating_months",
+      "key_count": 19,
+      "last_month": "2026-09",
+      "month_count": 1,
+      "months": [
+        {
+          "avg_stars": 4.5,
+          "buyer_count": 2,
+          "five_star_count": 1,
+          "low_star_count": 0,
+          "month": "2026-09",
+          "rating_count": 2,
+          "revised_count": 0,
+          "running_rating": 2,
+          "star_sum": 9
+        }
+      ]
     }
   ],
   "source": "apimarket_report.seed_demo"

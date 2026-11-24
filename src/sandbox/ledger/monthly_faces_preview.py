@@ -158,6 +158,7 @@ FACES = [
     "api_market_claim_months",
     "api_market_restock_months",
     "api_market_discount_months",
+    "api_market_rating_months",
 ]
 
 # (row key, envelope key) pairs that must sum to the envelope total.
@@ -185,6 +186,13 @@ IDENTITY = {
     ],
     "api_market_claim_months": [],
     "api_market_discount_months": [],
+    "api_market_rating_months": [
+        ("rating_count", "rating_count"),
+        ("star_sum", "star_sum"),
+        ("five_star_count", "five_star_count"),
+        ("low_star_count", "low_star_count"),
+        ("revised_count", "revised_rating_count"),
+    ],
 }
 
 
@@ -421,6 +429,10 @@ def numeric_columns(months):
         if key == "month" or key == "as_of":
             continue
         if isinstance(months[0][key], str):
+            continue
+        # R3389 AC-MRG5: a nested mapping (e.g. by_kind) is not a table
+        # cell - it would print as a Python repr on the CEO page.
+        if isinstance(months[0][key], (dict, list, tuple)):
             continue
         cols.append(key)
         if len(cols) >= 8:

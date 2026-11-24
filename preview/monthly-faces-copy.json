@@ -3,7 +3,7 @@
   "empty_default": "该读面在此源里没有月份。",
   "sep": " · ",
   "title": "硅基域 · 市场月度台账",
-  "subtitle": "六个市场月度读面的第一张可开页：成交、客单价、供给、售后、补货、折扣",
+  "subtitle": "七个市场月度读面的第一张可开页：成交、客单价、供给、售后、补货、折扣、评价",
   "source_note": "数据来源：确定性演示世界（两卖家 / 四买家 / 三上架 / 跨三个月成交与一笔跨月退款），不是真实交易。",
   "aigc_label": "AIGC 生成内容",
   "disclaimer": "非投资建议：本页仅展示开发者服务市场的月度读数，不构成任何投资或交易建议。演示世界数据，不涉及真实资金。",
@@ -19,7 +19,8 @@
     "api_market_supply_months": "市场月度供给（上架 / 在架 / 售罄 / 库存）",
     "api_market_claim_months": "市场月度售后压力",
     "api_market_restock_months": "市场月度补货压力",
-    "api_market_discount_months": "市场月度折扣"
+    "api_market_discount_months": "市场月度折扣",
+    "api_market_rating_months": "市场月度评价（评分 / 五星 / 低星 / 评价人数）"
   },
   "fields": {
     "month": "月份",
@@ -56,7 +57,20 @@
     "restock_coverage": "补回覆盖率",
     "recovered_episode_count": "恢复档期",
     "running_restock_count": "累计补货",
-    "running_units_added": "累计入库"
+    "running_units_added": "累计入库",
+    "rating_count": "评价数",
+    "star_sum": "星级总分",
+    "avg_stars": "平均星级",
+    "five_star_count": "五星评价",
+    "low_star_count": "一至二星",
+    "revised_count": "改评笔数",
+    "running_rating": "累计评价",
+    "market_avg_stars": "市场平均星级",
+    "peak_month": "评价峰值月",
+    "peak_rating_count": "峰值月评价数",
+    "active_month_count": "有评价月数",
+    "latest_month_rating_count": "末月评价数",
+    "revised_rating_count": "改评总数"
   },
   "footer_note": "本页由 src/sandbox/ledger/monthly_faces_preview.py 生成，文案与字段名来自本 JSON；生成器源保持纯 ASCII。"
 }

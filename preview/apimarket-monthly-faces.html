@@ -39,7 +39,7 @@
 </head><body>
 <header><div class="wrap">
 <h1>硅基域 · 市场月度台账</h1>
-<div class="sub">六个市场月度读面的第一张可开页：成交、客单价、供给、售后、补货、折扣</div>
+<div class="sub">七个市场月度读面的第一张可开页：成交、客单价、供给、售后、补货、折扣、评价</div>
 <div class="badges">
 <span class="badge ai">AIGC 生成内容</span>
 <span class="badge">数据来源：确定性演示世界（两卖家 / 四买家 / 三上架 / 跨三个月成交与一笔跨月退款），不是真实交易。</span>
@@ -169,7 +169,7 @@
 <td>3</td>
 </tr>
 </tbody></table>
-<p class="kv">scope=market · month_count=3 · first_month=2026-08 · last_month=2026-10 · 商品数=3 · 卖家数=2 · peak_month=2026-08 · peak_live_listing_count=3</p>
+<p class="kv">scope=market · month_count=3 · first_month=2026-08 · last_month=2026-10 · 商品数=3 · 卖家数=2 · 评价峰值月=2026-08 · peak_live_listing_count=3</p>
 </div>
 <div class="card">
 <h2>市场月度售后压力</h2>
@@ -222,13 +222,39 @@
 </tr>
 </tbody></table>
 <p class="kv">该世界没有补货事件；月网格仍与供给面同源连续，故三行全为零（诚实零行，不是缺失）。</p>
-<p class="kv">scope=market · dev_account=- · month_count=3 · active_month_count=0 · 补货次数=0 · 入库=0 · 商品数=0 · 卖家数=0</p>
+<p class="kv">scope=market · dev_account=- · month_count=3 · 有评价月数=0 · 补货次数=0 · 入库=0 · 商品数=0 · 卖家数=0</p>
 </div>
 <div class="card">
 <h2>市场月度折扣</h2>
 <div class="src">api_market_discount_months · 信封 25 键 · 月行 0 行</div>
 <div class="empty">演示世界没有改价/折扣事件（price_revisions 表 0 行），因此本月度折扣压力为诚实空态，不合成任何月份。</div>
-<p class="kv">scope=market · include_uncategorized=yes · month_count=0 · active_month_count=0 · revision_count=0 · discount_count=0 · raise_count=0 · discount_share=-</p>
+<p class="kv">scope=market · include_uncategorized=yes · month_count=0 · 有评价月数=0 · revision_count=0 · discount_count=0 · raise_count=0 · discount_share=-</p>
+</div>
+<div class="card">
+<h2>市场月度评价（评分 / 五星 / 低星 / 评价人数）</h2>
+<div class="src">api_market_rating_months · 信封 19 键 · 月行 1 行</div>
+<table><thead><tr><th>月份</th>
+<th>评价数</th>
+<th>买家数</th>
+<th>星级总分</th>
+<th>平均星级</th>
+<th>五星评价</th>
+<th>一至二星</th>
+<th>改评笔数</th>
+<th>累计评价</th>
+</tr></thead><tbody>
+<tr><td>2026-09</td>
+<td>2</td>
+<td>2</td>
+<td>9</td>
+<td>4.5</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>2</td>
+</tr>
+</tbody></table>
+<p class="kv">scope=market · dev_account=- · month_count=1 · 有评价月数=1 · 评价数=2 · 买家数=2 · 星级总分=9 · 平均星级=4.5</p>
 </div>
 </div>
 <footer>
