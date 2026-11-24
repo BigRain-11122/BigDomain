@@ -143,6 +143,7 @@
     "ledger-apimarket-marketrestockmonths",
     "ledger-apimarket-marketstats",
     "ledger-apimarket-marketsupplymonths",
+    "ledger-apimarket-marketticketsizemonths",
     "ledger-apimarket-marketwatchmonths",
     "ledger-apimarket-metadata",
     "ledger-apimarket-persist",

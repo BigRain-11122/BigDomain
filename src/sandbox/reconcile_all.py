@@ -3162,6 +3162,17 @@ SUITES = [
     # registered in the R3155 explore-queue claim row BEFORE the code.
     ("ledger-apimarket-buyerclaimoutcomemonths", os.path.join(
         "ledger", "test_apimarket_buyerclaimoutcomemonths.py"), 8),
+    # market-wide monthly achieved ticket size (a sale books only in the
+    # UTC month of its own purchased_utc, a later refund rewrites no
+    # month and removes no row while refunded_sale_count keeps it
+    # visible, mean/median/p90/min/max over the month's tickets, a
+    # contiguous grid with an honest zero month carrying the running
+    # cash, the earlier-month peak tie-break, and per-month gross +
+    # lifetime mean identity against api_market_months and
+    # api_market_ticket_size) - criteria AC-MTM1..AC-MTM8 registered in
+    # the R3387 explore-queue claim row BEFORE the code.
+    ("ledger-apimarket-marketticketsizemonths", os.path.join(
+        "ledger", "test_apimarket_marketticketsizemonths.py"), 8),
     # market-wide monthly restock pressure (a restock books in its own
     # restocked_utc month, the sold-out denominator is sampled by the
     # same law as the market supply face, coverage is measured against

@@ -5469,6 +5469,128 @@ class APIMarketFace:
                 "categories": rows,
                 "disclaimer": self.disclaimer}
 
+    def api_market_ticket_size_months(self):
+        """Market-wide MONTHLY achieved ticket size (criteria
+        AC-MTM1..AC-MTM8 pre-registered in the R3387 explore-queue
+        claim row BEFORE this code existed; the AC-MTM prefix,
+        api_market_ticket_size_months,
+        test_apimarket_marketticketsizemonths,
+        ledger-apimarket-marketticketsizemonths, mean_ticket_month,
+        peak_median_ticket and running_ticket_tokens were git-grep
+        zero-occupancy against HEAD 2026-11-24, rc=1).
+
+        api_market_ticket_size answers the lifetime distribution for
+        one scope (mean/min/max over the whole history) and
+        api_market_months carries monthly cash, so the month-by-month
+        MIDDLE of what a sale costs had no face: a market that only
+        moves its extremes and a market where every price rose read
+        the same mean, and no reader could see the mix shift.
+
+        Booking law: a sale books ONLY in the UTC month of its own
+        purchased_utc. A refund is not an event for this face - it
+        keeps the month it landed in, never rewrites the sale month
+        and never removes a row (refunded_sale_count keeps it visible
+        instead of pretending the sale never happened). Statistics are
+        over every achieved ticket in the month: mean, median (odd and
+        even rules), nearest-rank p90, min and max. The grid runs
+        contiguously from the first to the last sale month, so a month
+        that sold nothing is an honest zero row with None statistics
+        rather than a gap, and running_ticket_tokens carries the
+        cumulative cash across that zero month. Pure read, no
+        arguments: zero row mutations and zero token movement. The
+        envelope carries the resident non-advisory disclaimer."""
+        with self._lock:
+            raw = self._conn.execute(
+                "SELECT p.purchased_utc, p.price_paid,"
+                " (SELECT COUNT(*) FROM apimarket_refunds f"
+                "  WHERE f.purchase_id = p.purchase_id) AS refunds"
+                " FROM apimarket_purchases p"
+                " ORDER BY p.purchase_id").fetchall()
+
+        cells = {}
+        for purchased_utc, price_paid, refunds in raw:
+            month = str(purchased_utc)[:7]
+            cell = cells.setdefault(month, {"vals": [], "refunded": 0})
+            cell["vals"].append(int(price_paid))
+            if int(refunds):
+                cell["refunded"] += 1
+
+        months = []
+        running = 0
+        for month in _contiguous_months(sorted(cells)):
+            cell = cells.get(month)
+            if cell:
+                values = sorted(cell["vals"])
+                count = len(values)
+                gross = sum(values)
+                mid = count // 2
+                median = (float(values[mid]) if count % 2
+                          else (values[mid - 1] + values[mid]) / 2.0)
+                rank = int(-(-count * 9 // 10))
+                months.append({
+                    "month": month,
+                    "sale_count": count,
+                    "refunded_sale_count": cell["refunded"],
+                    "gross_tokens": gross,
+                    "mean_ticket": round(float(gross) / count, 4),
+                    "median_ticket": median,
+                    "p90_ticket": values[rank - 1],
+                    "running_ticket_tokens": running + gross})
+                running += gross
+            else:
+                months.append({
+                    "month": month,
+                    "sale_count": 0,
+                    "refunded_sale_count": 0,
+                    "gross_tokens": 0,
+                    "mean_ticket": None,
+                    "median_ticket": None,
+                    "p90_ticket": None,
+                    "running_ticket_tokens": running})
+
+        all_vals = sorted(int(row[1]) for row in raw)
+        sale_count = len(all_vals)
+        if all_vals:
+            mid = sale_count // 2
+            median = (float(all_vals[mid]) if sale_count % 2
+                      else (all_vals[mid - 1] + all_vals[mid]) / 2.0)
+            rank = int(-(-sale_count * 9 // 10))
+            p90 = all_vals[rank - 1]
+        else:
+            median = None
+            p90 = None
+
+        peak_month = None
+        peak_median = None
+        for row in months:
+            if row["median_ticket"] is None:
+                continue
+            if peak_median is None or row["median_ticket"] > peak_median:
+                peak_median = row["median_ticket"]
+                peak_month = row["month"]
+
+        return {
+            "scope": "market",
+            "sale_count": sale_count,
+            "refunded_sale_count": sum(1 for row in raw
+                                       if int(row[2])),
+            "gross_tokens": sum(all_vals),
+            "mean_ticket": (round(float(sum(all_vals)) / sale_count, 4)
+                            if sale_count else None),
+            "median_ticket": median,
+            "p90_ticket": p90,
+            "min_ticket": all_vals[0] if all_vals else None,
+            "max_ticket": all_vals[-1] if all_vals else None,
+            "month_count": len(months),
+            "first_month": months[0]["month"] if months else None,
+            "last_month": months[-1]["month"] if months else None,
+            "peak_month": peak_month,
+            "peak_median_ticket": peak_median,
+            "latest_month_median_ticket": (months[-1]["median_ticket"]
+                                           if months else None),
+            "disclaimer": self.disclaimer,
+            "months": months}
+
     def api_market_ticket_size(self, dev_account=None,
                                include_refunded=False):
         """Achieved ticket-size distribution (criteria

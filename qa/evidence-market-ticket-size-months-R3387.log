@@ -1,0 +1,9 @@
+PASS AC-MTM1: keys=True empty=(0, 0, []) bad_arg=True
+PASS AC-MTM2: sep=(4, 56, 1) nov_refunded=0 refunded_total=1
+PASS AC-MTM3: sep=(14.0, 11.0, 30) nov=(11.0, 11.0, 14) dec=(6.0, 6.0) env=(12.0, 10.0, 30, 4, 30)
+PASS AC-MTM4: months=['2026-09', '2026-10', '2026-11', '2026-12'] running=[56, 56, 78, 84]
+PASS AC-MTM5: sum_sales=7 sum_gross=84 cash_keys=['2026-09', '2026-11', '2026-12'] life=(7, 12.0)
+PASS AC-MTM6: peak=('2026-09', 11.0) tied=['2026-09', '2026-11'] latest=6.0
+PASS AC-MTM7: same=True digests=True tx=True no_write=True
+PASS AC-MTM8: wired=True ascii=True shas=True
+SUITE 8/8
