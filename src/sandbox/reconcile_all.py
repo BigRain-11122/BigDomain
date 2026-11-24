@@ -8120,6 +8120,14 @@ SUITES = [
     # identity, the standing compliance faces and a read-only --check.
     ("os-market-hour-heatmap",
      os.path.join("..", "os", "test_market_hour_heatmap.py"), 6),
+    # R3400: tools/market_price_percentiles.py renders the market asking-price
+    # distribution (api_market_price_percentiles, live since R2160 with
+    # AC-MPP1..8) onto one openable page. The face is graded by
+    # test_apimarket_pricepercentiles.py; this row grades the PAGE - pinned
+    # payload keys, provenance against the face's own reading, the ladder
+    # order, the bucket identity, the compliance faces and a read-only --check.
+    ("os-market-price-percentiles",
+     os.path.join("..", "os", "test_market_price_percentiles.py"), 6),
     # R3073: tools/city_face_report.py renders the P-47 item-1 city face and
     # carries its own --check (AC-CFY1..8), but this registry had no row naming
     # it, so the face was graded only by the fail-soft [GATES] sweep - the

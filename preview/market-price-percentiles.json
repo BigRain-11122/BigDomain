@@ -1,0 +1,77 @@
+{
+ "generated_utc": "2026-11-24 05:11:40Z",
+ "face": "api_market_price_percentiles",
+ "listing_count": 3,
+ "live_listing_count": 3,
+ "retired_listing_count": 0,
+ "min_price": 3,
+ "max_price": 10,
+ "p25_price": 4.0,
+ "p50_price": 5.0,
+ "p75_price": 7.5,
+ "p90_price": 9.0,
+ "mean_price": 6.0,
+ "spread": 7,
+ "category_count": 1,
+ "categories": [
+  {
+   "category": null,
+   "listing_count": 3,
+   "live_listing_count": 3,
+   "retired_listing_count": 0,
+   "min_price": 3,
+   "max_price": 10,
+   "mean_price": 6.0,
+   "p50_price": 5.0
+  }
+ ],
+ "quantiles": [
+  {
+   "key": "min_price",
+   "price": 3,
+   "pos": 0.0
+  },
+  {
+   "key": "p25_price",
+   "price": 4.0,
+   "pos": 14.3
+  },
+  {
+   "key": "p50_price",
+   "price": 5.0,
+   "pos": 28.6
+  },
+  {
+   "key": "p75_price",
+   "price": 7.5,
+   "pos": 64.3
+  },
+  {
+   "key": "p90_price",
+   "price": 9.0,
+   "pos": 85.7
+  },
+  {
+   "key": "max_price",
+   "price": 10,
+   "pos": 100.0
+  },
+  {
+   "key": "mean_price",
+   "price": 6.0,
+   "pos": 42.9
+  }
+ ],
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/market-price-percentiles.html",
+ "sources": {
+  "driver": "6ea80a09f4c5c839",
+  "copy": "519cc7ee9a7fb711",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 4888,
+  "json": 1374
+ }
+}

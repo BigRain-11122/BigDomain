@@ -516,6 +516,7 @@
     "os-logs-toolkit",
     "os-machine-gate",
     "os-market-hour-heatmap",
+    "os-market-price-percentiles",
     "os-matrix-evidence-pile-consistency",
     "os-matrix-stamp-compare",
     "os-matrix-stamp-from-liveness",

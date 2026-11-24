@@ -1,0 +1,21 @@
+R3400 market asking-price distribution page - evidence
+== R3400 PIN: criteria AC-MPQ1..6 pre-registered in src/os/backlog.md before tools/market_price_percentiles.py existed
+== zero-reader measurement: git grep -F api_market_price_percentiles over tools/ and preview/ = 0 hits (only src/sandbox suites, queue and probe logs carry the name)
+== driver render + check
+PRICE preview/market-price-percentiles.html bytes=4888 listings=3 min=3 p50=5 p90=9 spread=7
+PRICE CHECK PASS fails=0 html=4888B json=1374B
+== suite
+PASS AC-MPQ1 landed=True keys=20 missing=[] extra=[]
+PASS AC-MPQ2 env_diff=[] categories_same=True disclaimer_same=True
+PASS AC-MPQ3 ordered=True prices=[3, 4.0, 5.0, 7.5, 9.0, 10] spread_ok=True ruler=0.0..100.0 unprinted=[]
+PASS AC-MPQ4 row_sum=3 envelope=3 live+retired=3 extremes=True page_rows=1/1
+PASS AC-MPQ5 aigc=True disclaimer_on_page=True external_links=0
+PASS AC-MPQ6 check_rc=0 wrote_nothing=True wired=True face_suite=True
+SUITE PASS 6/6 criteria
+== matrix + census (read-only legs)
+DOC-CURRENT docs/sandbox-suite-matrix.md
+  evidence-source=walk-leg
+  evidence-walk considered=756 decoded=12 ceiling=64
+CACHE E_RCC_CACHE_HIT reused=769/769
+REGISTRY COUNTER CENSUS rows=769 readable=769 unparsed=0 silent=0 assembled_print_lines=304
+VERDICT PASS pinned=769
