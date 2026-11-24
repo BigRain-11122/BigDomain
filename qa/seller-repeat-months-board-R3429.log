@@ -1,0 +1,20 @@
+R3429 EVIDENCE - seller monthly returning-buyer board (AC-RPTB1..6)
+render: SELLER-REPEAT-MONTHS preview/seller-repeat-months-board.html bytes=6957 sellers=2 months=1 repeat_buyers=0
+pair: html=6957B sha16=18ea5eb528539b21 json=1970B sha16=839897c1ad2b58c8
+suite: SUITE PASS 6/6 criteria declared=6
+  AC-RPTB1 landed=True keys=10 envelopes=True rows=True sources=True count=2/2 report=True
+  AC-RPTB2 sellers_same=True disclaimer_same=True sellers=2 rows=1
+  AC-RPTB3 problems=[]
+  AC-RPTB4 sections=2/2 months_marked=1/1 bars=0/0 dots=1/1 single=True laws=True empty_probe=True returning_probe=True quiet_probe=True bare_none=False
+  AC-RPTB5 aigc=True disclaimer_on_page=True not_advice=True external_links=0
+  AC-RPTB6 check_rc=0 wrote_nothing=True wired=6/6 face_suite=True
+control A: rc=3 refused=True page_untouched=True (label key law_bar removed -> E_RPTB_FACE)
+control B: rc=2 reds=AC-RPTB2,AC-RPTB3 (repeat_buyer_count +7)
+restore: bytes_identical=True rc=0 tail=SUITE PASS 6/6 criteria declared=6
+check: SELLER-REPEAT-MONTHS CHECK PASS fails=0 html=6957B json=1970B
+matrix: WRITTEN docs/sandbox-suite-matrix.md 82395 bytes 797 rows -> DOC-CURRENT
+census: rows=797 readable=797 unparsed=0 silent=0 VERDICT PASS pinned=797
+entry page: VERDICT PASS 23/23
+first-yuan chain: VERDICT PASS legs=2 entries=2 tx=1 reconcile_rc=0 read_only=True
+face sweep: VERDICT PASS 13/13 -> --check 21/21
+honest: one already-delivered reading moved onto a page a human can open; zero new tables, zero new semantics; the demo world carries one month with zero returning buyers, so the measured-zero path is proved on landed data while the returning path is proved by an in-memory envelope; zero payment, zero network beyond loopback.

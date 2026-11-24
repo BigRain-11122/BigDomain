@@ -8343,6 +8343,13 @@ SUITES = [
     # demo world.
     ("os-buyer-concentration-board",
      os.path.join("..", "os", "test_buyer_concentration_board.py"), 6),
+    # R3429: tools/seller_repeat_months_board.py renders the shipped seller
+    # monthly returning-buyer envelope (one section per seller on a contiguous
+    # month grid, newcomer versus regular buyers and gross) which had zero
+    # readers under tools/ and preview/; the page prints the shipped envelope
+    # verbatim and the suite re-reads the face over its own throwaway world.
+    ("os-seller-repeat-months-board",
+     os.path.join("..", "os", "test_seller_repeat_months_board.py"), 6),
     # R3424: tools/seller_refund_reasons_board.py renders the seller-side refund
     # cause envelope (the market scope plus one section per seller) with the
     # market refund rate and this seller's share of the market refunded total as

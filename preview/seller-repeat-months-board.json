@@ -1,0 +1,75 @@
+{
+ "generated_utc": "2026-11-24 15:23:28Z",
+ "face": "api_seller_repeat_months",
+ "board_face": "api_board",
+ "scope": "seller",
+ "seller_count": 2,
+ "sellers": [
+  {
+   "scope": "seller",
+   "dev_account": "usr:dana",
+   "buyer_count": 2,
+   "repeat_buyer_count": 0,
+   "repeat_rate": 0.0,
+   "purchase_count": 2,
+   "gross": 13,
+   "new_gross": 13,
+   "returning_gross": 0,
+   "month_count": 1,
+   "active_month_count": 1,
+   "first_month": "2026-09",
+   "last_month": "2026-09",
+   "peak_month": null,
+   "peak_returning_buyer_count": null,
+   "latest_month_returning_share": 0.0,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "months": [
+    {
+     "month": "2026-09",
+     "purchase_count": 2,
+     "gross": 13,
+     "buyer_count": 2,
+     "new_buyer_count": 2,
+     "returning_buyer_count": 0,
+     "returning_share": 0.0,
+     "new_purchase_count": 2,
+     "returning_purchase_count": 0,
+     "new_gross": 13,
+     "returning_gross": 0
+    }
+   ]
+  },
+  {
+   "scope": "seller",
+   "dev_account": "usr:frank",
+   "buyer_count": 0,
+   "repeat_buyer_count": 0,
+   "repeat_rate": null,
+   "purchase_count": 0,
+   "gross": 0,
+   "new_gross": 0,
+   "returning_gross": 0,
+   "month_count": 0,
+   "active_month_count": 0,
+   "first_month": null,
+   "last_month": null,
+   "peak_month": null,
+   "peak_returning_buyer_count": null,
+   "latest_month_returning_share": null,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "months": []
+  }
+ ],
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/seller-repeat-months-board.html",
+ "sources": {
+  "driver": "2841218ff8dcf403",
+  "copy": "81bccd0f2fc1b4fc",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 6957,
+  "json": 1970
+ }
+}
