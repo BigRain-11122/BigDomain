@@ -1,0 +1,7 @@
+PASS AC-BWMB1 payload_missing=[] payload_extra=[] envelopes=4 buyers=4 rows=9 report=True sources=True
+PASS AC-BWMB2 buyers_same=True disclaimer_same=True order_same=True buyers=4
+PASS AC-BWMB3 driver_problems=0 forged_problems=1 identities=True zero_row=True negative_month=True zero_buyer=True converted=True
+PASS AC-BWMB4 marked=True month_marked=True no_bare_none=True caption=True bars=4/4 empty_sentence=True dash=True empty_probe=True
+PASS AC-BWMB5 aigc=True disclaimer_verbatim=True notadvice=True zero_links=True
+PASS AC-BWMB6 readonly=True check_rc=0 registered=True declared_hit=True face_suite=True
+SUITE PASS 6/6 declared=6 row=os-buyer-watch-months-board

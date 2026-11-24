@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>买家关注月流对账板</title>
+<style>
+:root{--ink:#1b1f24;--muted:#66707a;--line:#dfe4ea;--bg:#f7f8fa}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:var(--bg);color:var(--ink);
+font:15px/1.65 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+main{max-width:1180px;margin:0 auto}
+h1{font-size:22px;margin:0 0 4px;font-weight:650}
+h2{font-size:16px;margin:22px 0 8px;font-weight:620}
+h3{font-size:14px;margin:16px 0 8px;font-weight:620;color:#3c4653}
+.meta{color:var(--muted);font-size:13px;margin-bottom:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;
+padding:14px 16px;margin-bottom:14px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600;font-size:12px}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.kpi{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.kpi div{flex:1 1 104px;border:1px solid var(--line);border-radius:8px;
+padding:10px 12px;background:#fff}
+.kpi b{display:block;font-size:18px;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--muted);font-size:12.5px}
+.disclaimer{border-left:3px solid #c9a227;background:#fdf8ea;padding:10px 14px;
+font-size:13px}
+.badge{display:inline-block;margin-right:8px;padding:2px 8px;
+border:1px solid var(--line);border-radius:999px;font-size:12px;
+color:var(--muted)}
+.badge.on{border-color:#9ad1a7;background:#eef9f1;color:#1f6b33}
+.badge.off{border-color:#b9c7e4;background:#f1f4fd;color:#23388a}
+.bar{position:relative;height:10px;min-width:120px;max-width:240px;
+border:1px solid var(--line);border-radius:999px;background:#f2f4f7}
+.bar i{position:absolute;top:-3px;width:3px;height:16px;background:#3c4653}
+.law{font-size:13px;margin:6px 0}
+.empty{color:#b42318}
+.quiet-row td{color:var(--muted)}
+.cap{color:var(--muted);font-size:12px;margin:8px 0 0}
+footer{color:var(--muted);font-size:12px;margin:18px 0 0}
+</style></head><body><main>
+<h1>买家关注月流对账板</h1>
+<div class=meta>一条居民关注时间线：每月上新几件、撤下几件、月末还剩几件，以及关注里有多少真的成交了 &middot; 生成于 2026-11-24 21:14:13Z &middot; <code>api_buyer_watch_months</code></div>
+<h2>逐买家关注月流</h2>
+<div class=card data-buyer="usr:bob">
+<h3>买家 usr:bob <span class=badge>当前在关注 0</span></h3>
+<div class=kpi><div><span>月数</span><b>6</b></div><div><span>关注总数</span><b>1</b></div><div><span>撤下总数</span><b>1</b></div><div><span>净变化</span><b>0</b></div><div><span>当前在关注</span><b>0</b></div><div><span>成交转化</span><b>1</b></div><div><span>转化记月</span><b>2026-06</b></div><div><span>涉及货架</span><b>1</b></div><div><span>涉及卖家</span><b>1</b></div><div><span>最热月份</span><b>2026-06</b></div><div><span>最热月上新</span><b>1</b></div></div>
+<table><thead><tr><th>月份</th><th class="n">上新</th><th class="n">撤下</th><th class="n">净</th><th class="n">月末在手</th><th class="n">转化</th><th class="n">货架</th><th class="n">上新宽度</th></tr></thead><tbody><tr data-month="2026-06"><td>2026-06</td><td class="n">1</td><td class="n">0</td><td class="n">1</td><td class="n">1</td><td class="n">1</td><td class="n">1</td><td><span class="badge on">仍在关注</span></td><td><div class="bar"><i style="left:100.0%"></i></div></td></tr><tr data-month="2026-07" class="quiet-row"><td>2026-07</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td class="n">1</td><td class="n">0</td><td class="n">0</td><td><span class="badge on">仍在关注</span></td><td>—</td></tr><tr data-month="2026-08" class="quiet-row"><td>2026-08</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td class="n">1</td><td class="n">0</td><td class="n">0</td><td><span class="badge on">仍在关注</span></td><td>—</td></tr><tr data-month="2026-09" class="quiet-row"><td>2026-09</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td class="n">1</td><td class="n">0</td><td class="n">0</td><td><span class="badge on">仍在关注</span></td><td>—</td></tr><tr data-month="2026-10" class="quiet-row"><td>2026-10</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td class="n">1</td><td class="n">0</td><td class="n">0</td><td><span class="badge on">仍在关注</span></td><td>—</td></tr><tr data-month="2026-11"><td>2026-11</td><td class="n">0</td><td class="n">1</td><td class="n">-1</td><td class="n">0</td><td class="n">0</td><td class="n">1</td><td><span class="badge off">本月净减</span></td><td>—</td></tr></tbody></table>
+</div>
+<div class=card data-buyer="usr:carol">
+<h3>买家 usr:carol <span class=badge>当前在关注 2</span></h3>
+<div class=kpi><div><span>月数</span><b>2</b></div><div><span>关注总数</span><b>2</b></div><div><span>撤下总数</span><b>0</b></div><div><span>净变化</span><b>2</b></div><div><span>当前在关注</span><b>2</b></div><div><span>成交转化</span><b>1</b></div><div><span>转化记月</span><b>2026-10</b></div><div><span>涉及货架</span><b>2</b></div><div><span>涉及卖家</span><b>2</b></div><div><span>最热月份</span><b>2026-10</b></div><div><span>最热月上新</span><b>1</b></div></div>
+<table><thead><tr><th>月份</th><th class="n">上新</th><th class="n">撤下</th><th class="n">净</th><th class="n">月末在手</th><th class="n">转化</th><th class="n">货架</th><th class="n">上新宽度</th></tr></thead><tbody><tr data-month="2026-10"><td>2026-10</td><td class="n">1</td><td class="n">0</td><td class="n">1</td><td class="n">1</td><td class="n">1</td><td class="n">1</td><td><span class="badge on">仍在关注</span></td><td><div class="bar"><i style="left:100.0%"></i></div></td></tr><tr data-month="2026-11"><td>2026-11</td><td class="n">1</td><td class="n">0</td><td class="n">1</td><td class="n">2</td><td class="n">0</td><td class="n">1</td><td><span class="badge on">仍在关注</span></td><td><div class="bar"><i style="left:100.0%"></i></div></td></tr></tbody></table>
+</div>
+<div class=card data-buyer="usr:dave">
+<h3>买家 usr:dave <span class=badge>当前在关注 0</span></h3>
+<div class=kpi><div><span>月数</span><b>1</b></div><div><span>关注总数</span><b>1</b></div><div><span>撤下总数</span><b>1</b></div><div><span>净变化</span><b>0</b></div><div><span>当前在关注</span><b>0</b></div><div><span>成交转化</span><b>0</b></div><div><span>转化记月</span><b>—</b></div><div><span>涉及货架</span><b>1</b></div><div><span>涉及卖家</span><b>1</b></div><div><span>最热月份</span><b>2026-11</b></div><div><span>最热月上新</span><b>1</b></div></div>
+<table><thead><tr><th>月份</th><th class="n">上新</th><th class="n">撤下</th><th class="n">净</th><th class="n">月末在手</th><th class="n">转化</th><th class="n">货架</th><th class="n">上新宽度</th></tr></thead><tbody><tr data-month="2026-11"><td>2026-11</td><td class="n">1</td><td class="n">1</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td class="n">1</td><td><span class="badge off">本月净减</span></td><td><div class="bar"><i style="left:100.0%"></i></div></td></tr></tbody></table>
+</div>
+<div class=card data-buyer="usr:erin">
+<h3>买家 usr:erin <span class=badge>当前在关注 0</span></h3>
+<div class=kpi><div><span>月数</span><b>0</b></div><div><span>关注总数</span><b>0</b></div><div><span>撤下总数</span><b>0</b></div><div><span>净变化</span><b>0</b></div><div><span>当前在关注</span><b>0</b></div><div><span>成交转化</span><b>0</b></div><div><span>转化记月</span><b>—</b></div><div><span>涉及货架</span><b>0</b></div><div><span>涉及卖家</span><b>0</b></div><div><span>最热月份</span><b>—</b></div><div><span>最热月上新</span><b>—</b></div></div>
+<p class=empty>该买家没有任何关注行，派生值一律为空。</p>
+<p class=empty>该买家没有任何关注行，派生值一律为空。</p></div>
+
+<h2>页面自证法则</h2>
+<div class=card><p class=law>月行是从第一个事件月到最后一个事件月的连续网格，中间没有事件的月保留诚实的零行。</p><p class=law>每行净变化等于当月上新减当月撤下，纯撤下月如实为负。</p><p class=law>月末在手是净变化的累计值，逐月滚动。</p><p class=law>累计值的最后一位等于信封里的当前在关注件数。</p><p class=law>信封的上新、撤下、净变化三项与月行逐项求和相等。</p><p class=law>转化按关注月记账：关注之后有未退款购买才算转化，退款后不再算转化。</p><p class=law>最热月份取上新最多的第一个月，没有上新则为空。</p><p class=law>转化记月取转化最多的第一个月，没有转化则为空。</p><p class=law>没有任何事件的买家回答零月、空网格与零合计，不凭推测补行。</p><p class=law>条宽只表示当月上新件数，页面不把宽度读成比例或金额。</p><p class=law>本页是沙箱服务挂单面的对账视图，不构成投资建议。</p>
+<p class=cap>条宽表示当月上新件数的相对宽度，不是金额，也不与其他买家横向比较。</p></div>
+<h2>免责与标识</h2>
+<div class=card><div class=disclaimer>sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice</div>
+<p style="margin-top:10px"><span class=badge>AIGC 生成标识：本页由 BigDomain OSLoop 自迭代轮自动生成，数据为沙箱演示世界</span></p></div>
+<h2>复现命令</h2>
+<div class=card><code>python tools/buyer_watch_months_board.py</code></div>
+<footer>BigDomain OSLoop &middot; 2026-11-24 21:14:13Z &middot; BigDomain 硅基域 · 沙箱对账面 · 非投资建议</footer>
+</main></body></html>

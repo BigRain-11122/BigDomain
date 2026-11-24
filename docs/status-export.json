@@ -1,34 +1,32 @@
 {
   "ceo_face": {
-    "board_pages_skipped": [
-      "preview/face-sweep.html (8878B)"
-    ],
-    "current": "2026-11-25 R3446 PRODUCT: the buyer repurchase rhythm now has a door - api_buyer_gap_months (live with AC-BGM1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so how often one resident actually buys, how long the longest silence ran and whether the account is asleep right now could only be read by calling the sandbox from a shell.",
+    "board_pages_skipped": [],
+    "current": "2026-11-25 R3447 PRODUCT: the buyer attention timeline now has a door - api_buyer_watch_months (live with AC-BWM1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so whether a resident's interest was heating up or cooling down, how many shelves they dropped and how many of the watches actually turned into purchases could only be read by calling the sandbox from a shell.",
     "do": "R3422: gave api_public_listings its first openable page - eight KPI cards, one row per listing carrying both review stamps, the refusal reason, the two shipped flags side by side, the provider name and the unified social credit code, ten law sentences and the cross-face law pending==review_queue.pending; AC-PLB1..6 SUITE 6/6 first run, two measured controls, matrix 791 rows DOC-CURRENT, census pinned=791, entry index 23/23, chain read_only=True, face sweep 56/56, closeout PASS files=4960.",
-    "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 mtime] (halves differ: html [2026-11-25 mtime] + json [2026-11-16 commit]; later=html)",
-    "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 mtime] (halves differ: html [2026-11-25 mtime] + json [2026-11-16 commit]; later=html)",
-    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
+    "last_artifact": "preview/buyer-watch-months-board.html (10013B) + preview/buyer-watch-months-board.json (4552B) [2026-11-25 mtime]",
+    "latest_artifact": "preview/buyer-watch-months-board.html (10013B) + preview/buyer-watch-months-board.json (4552B) [2026-11-25 mtime]",
+    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\buyer-watch-months-board.html",
     "latest_artifact_note": "",
-    "latest_evidence": "qa/buyer-gap-board-R3446.log (628B, 2026-11-25)",
-    "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3445] next window (<=48h): (1) 零读者面清单余 17 面（本窗消 `api_seller_reply_months`），下窗仍先只读普查点名一位（面自带套件在盘且 tools/＋preview/＋src/os 实测零命中才动手；出厂世界为空的面须经出厂写入门建行并显式声明；已开门面不重开）。(2) S4U 落地仍欠一次提权运行（本窗未测 LogonType）。(3) export 最新产物槽 writer 修复＋三条判据仍承账（R3422 记；本窗再证链最后渲）。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`：本窗执行 fold 796（R3427 块＋fold 790/791 两行）后开轮 67226B／闸 78500／余 11274B。(6) tick 口径：本窗 3444→3445。(7) **新页收敛次序实测**＝驱动→套件→证据→矩阵→`registry_counter_census.py --write-pin`→`closeout_gate`→`first_yuan_chain`→`deliverable_index`→`first_yuan_chain --check`→面扫最后再跑一遍 `closeout_gate`；跳过重钉必被 E_CLG_CENSUS 拒，跳过入口页重渲必被 E_CLG_ENTRY_PAGES 拒（AC-DIX3/8/9/17/21/23 六臂同红）。(8) 承账不变：qa_log --ledger-check broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、backlog.md 体量闸。",
-    "next_milestone_due": "2026-11-27T05:02:34+08:00",
-    "updated_at": "2026-11-25T05:02:34+08:00",
+    "latest_evidence": "qa/buyer-watch-months-board-R3447.log (669B, 2026-11-25)",
+    "newest_pair_on_disk_is_board": false,
+    "next_milestone": "[R3447] next window (<=48h): (1) 零读者面清单余 10 面（本窗消 `api_buyer_watch_months`；余 `api_category_history`／`api_answer_history`／`api_provider_identity`／`api_buyer_watch_category_mix`／`api_category_question_months`／`api_seller_answer_months`／`api_buyer_answer_wait`／`api_category_watch_months`／`api_market_relist_months`／`api_market_provider_months`），下窗仍先只读普查点名一位（面自带套件在盘且 tools/＋preview/＋src/os 实测零命中才动手；出厂世界为空的面须经出厂写入门建行并显式声明；已开门面不重开）。(2) S4U 落地仍欠一次提权运行（本窗未实测 `BigDomain-OSLoop` LogonType）。(3) export 最新产物槽 writer 修复＋三条判据仍承账（本窗实测 `latest_artifact` 仍落在 first-yuan-chain 页，非新页）。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`：本窗收口写入预估越闸，须先折再干活。(6) tick 口径：本窗 3446→3447。(7) 收敛次序实测补一条：`deliverable_index` 写盘前必先让 `first_yuan_chain --check` 绿（否则 AC-DIX21 rc=2），写盘后重跑面扫与台账校验仍须双绿。",
+    "next_milestone_due": "2026-11-27T05:25:20+08:00",
+    "updated_at": "2026-11-25T05:25:20+08:00",
     "heartbeat": {
       "tick": 3446,
-      "state_tick": 3446,
-      "lag": 0,
-      "verdict": "PASS",
-      "reason": "fresh"
+      "state_tick": 3447,
+      "lag": 1,
+      "verdict": "FLAG",
+      "reason": "heartbeat_row_debt"
     },
     "outs_age": {
-      "rows": 6,
-      "measurable": 5,
+      "rows": 7,
+      "measurable": 6,
       "unmeasurable": 1,
       "oldest_days": 1,
       "over7": 0,
       "dup_rows": 0,
-      "distinct": 6,
+      "distinct": 7,
       "collapsed": 0,
       "labels_refreshed": 0,
       "notes_stale": 0,
@@ -37,8 +35,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-25 R3446 PRODUCT: the buyer repurchase rhythm now has a door - api_buyer_gap_months (live with AC-BGM1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so how often one resident actually buys, how long the longest silence ran and whether the account is asleep right now could only be read by calling the sandbox from a shell.",
-  "claims": {"claimed": 30, "captured": 18, "contradicted": 0, "uncaptured": 12, "historic": 0, "rows": 100, "present": true, "census_ts": "2026-11-25T05:02:34+08:00"},
+  "current": "2026-11-25 R3447 PRODUCT: the buyer attention timeline now has a door - api_buyer_watch_months (live with AC-BWM1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so whether a resident's interest was heating up or cooling down, how many shelves they dropped and how many of the watches actually turned into purchases could only be read by calling the sandbox from a shell.",
+  "claims": {"claimed": 29, "captured": 17, "contradicted": 0, "uncaptured": 12, "historic": 0, "rows": 100, "present": true, "census_ts": "2026-11-25T05:25:20+08:00"},
   "chain": {"present": true, "rows": 100, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -67,12 +65,13 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-25 R3446 PRODUCT: the buyer repurchase rhythm now has a door - api_buyer_gap_months (live with AC-BGM1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so how often one resident actually buys, how long the longest silence ran and whether the account is asleep right now could only be read by calling the sandbox from a shell.",
-  "export_ts": "2026-11-25T05:02:34+08:00",
-  "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 mtime] (halves differ: html [2026-11-25 mtime] + json [2026-11-16 commit]; later=html)",
-  "latest_evidence": "qa/buyer-gap-board-R3446.log (628B, 2026-11-25)",
-  "next_milestone": "[R3445] next window (<=48h): (1) 零读者面清单余 17 面（本窗消 `api_seller_reply_months`），下窗仍先只读普查点名一位（面自带套件在盘且 tools/＋preview/＋src/os 实测零命中才动手；出厂世界为空的面须经出厂写入门建行并显式声明；已开门面不重开）。(2) S4U 落地仍欠一次提权运行（本窗未测 LogonType）。(3) export 最新产物槽 writer 修复＋三条判据仍承账（R3422 记；本窗再证链最后渲）。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`：本窗执行 fold 796（R3427 块＋fold 790/791 两行）后开轮 67226B／闸 78500／余 11274B。(6) tick 口径：本窗 3444→3445。(7) **新页收敛次序实测**＝驱动→套件→证据→矩阵→`registry_counter_census.py --write-pin`→`closeout_gate`→`first_yuan_chain`→`deliverable_index`→`first_yuan_chain --check`→面扫最后再跑一遍 `closeout_gate`；跳过重钉必被 E_CLG_CENSUS 拒，跳过入口页重渲必被 E_CLG_ENTRY_PAGES 拒（AC-DIX3/8/9/17/21/23 六臂同红）。(8) 承账不变：qa_log --ledger-check broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、backlog.md 体量闸。",
+  "do": "2026-11-25 R3447 PRODUCT: the buyer attention timeline now has a door - api_buyer_watch_months (live with AC-BWM1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so whether a resident's interest was heating up or cooling down, how many shelves they dropped and how many of the watches actually turned into purchases could only be read by calling the sandbox from a shell.",
+  "export_ts": "2026-11-25T05:25:20+08:00",
+  "latest_artifact": "preview/buyer-watch-months-board.html (10013B) + preview/buyer-watch-months-board.json (4552B) [2026-11-25 mtime]",
+  "latest_evidence": "qa/buyer-watch-months-board-R3447.log (669B, 2026-11-25)",
+  "next_milestone": "[R3447] next window (<=48h): (1) 零读者面清单余 10 面（本窗消 `api_buyer_watch_months`；余 `api_category_history`／`api_answer_history`／`api_provider_identity`／`api_buyer_watch_category_mix`／`api_category_question_months`／`api_seller_answer_months`／`api_buyer_answer_wait`／`api_category_watch_months`／`api_market_relist_months`／`api_market_provider_months`），下窗仍先只读普查点名一位（面自带套件在盘且 tools/＋preview/＋src/os 实测零命中才动手；出厂世界为空的面须经出厂写入门建行并显式声明；已开门面不重开）。(2) S4U 落地仍欠一次提权运行（本窗未实测 `BigDomain-OSLoop` LogonType）。(3) export 最新产物槽 writer 修复＋三条判据仍承账（本窗实测 `latest_artifact` 仍落在 first-yuan-chain 页，非新页）。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`：本窗收口写入预估越闸，须先折再干活。(6) tick 口径：本窗 3446→3447。(7) 收敛次序实测补一条：`deliverable_index` 写盘前必先让 `first_yuan_chain --check` 绿（否则 AC-DIX21 rc=2），写盘后重跑面扫与台账校验仍须双绿。",
   "outs": [
+    "preview/buyer-watch-months-board.html (10013B) + preview/buyer-watch-months-board.json (4552B) [2026-11-25 mtime]",
     "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 mtime] (halves differ: html [2026-11-25 mtime] + json [2026-11-16 commit]; later=html)",
     "preview/watch-conversion-board.html (9813B) + preview/watch-conversion-board.json (4590B) [2026-11-25 mtime]",
     "preview/seller-reviews-board.html (6308B) + preview/seller-reviews-board.json (1974B) [2026-11-25 mtime]",
@@ -141,7 +140,7 @@
       "2026-11-04 R2431 verification window on the item the debt gate named first=yes (reconcile-battery-R2431, carried from R2430): zero product code changed, the R2168 mixed-tree rule honoured. Leg 1 read 542/543 suites with the criteria total 4234 exactly as pre-registered and the only red was reconcile-daily-census at cd7 exit=2 DRIFT-FLAG; the census named the file (qa/battery-R2431-stdout.log, class=cmd-raw) because this window launched the battery with a Start-Process redirect pointed INTO the evidence directory. Repaired at the birth site, never by widening the baseline: the two launcher captures moved to the gitignored logs/ face, after which the census read flags=0 DRIFT-CLEAN with the 529-entry baseline untouched. Retry leg on the repaired tree: RUNNER PASS 543/543 suites plus controls 7/7 in 956.2s at criteria 4234, TMP RECLAIM 932/932. Four follow-up sections: matrix FAILED first on the stale doc without rewriting it, was regenerated stamp-aligned to 52317B, and the re-run read VERDICT R2431 PASS failing=none (fingerprint CLEAN 5 domains, profile byte-identical, census DRIFT-CLEAN). Debt: reconcile-battery-R2431 closed and product-face-R2432 opened first=yes through the shipped CLIs. Zero product points claimed."
     ],
     [
-      "3446",
+      "3447",
       "OSLoop 执行 tick",
       "买家价格反应对账页落盘：api_buyer_price_reaction 首次开门，AC-BPRB1..6 全绿，关注后涨跌与成交从此可看。"
     ]
@@ -155,7 +154,7 @@
   "self_drive": {
     "window": "2026-11-19..2026-11-25",
     "window_days": 7,
-    "log_lines_in_window": 122,
+    "log_lines_in_window": 124,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 12,
@@ -165,23 +164,23 @@
     "queue_tech_open": 5,
     "queue_explore_open": 1
   },
-  "state_bytes": 75135,
-  "next_milestone_due": "2026-11-27T05:02:34+08:00",
+  "state_bytes": 74982,
+  "next_milestone_due": "2026-11-27T05:25:20+08:00",
   "heartbeat": {
     "tick": 3446,
-    "state_tick": 3446,
-    "lag": 0,
-    "verdict": "PASS",
-    "reason": "fresh"
+    "state_tick": 3447,
+    "lag": 1,
+    "verdict": "FLAG",
+    "reason": "heartbeat_row_debt"
   },
   "outs_age": {
-    "rows": 6,
-    "measurable": 5,
+    "rows": 7,
+    "measurable": 6,
     "unmeasurable": 1,
     "oldest_days": 1,
     "over7": 0,
     "dup_rows": 0,
-    "distinct": 6,
+    "distinct": 7,
     "collapsed": 0,
     "labels_refreshed": 0,
     "notes_stale": 0,

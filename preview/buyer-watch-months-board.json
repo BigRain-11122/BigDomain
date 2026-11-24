@@ -1,0 +1,192 @@
+{
+ "generated_utc": "2026-11-24 21:14:13Z",
+ "face": "api_buyer_watch_months",
+ "scope": "buyer",
+ "buyers": [
+  {
+   "buyer": "usr:bob",
+   "envelope": {
+    "scope": "buyer",
+    "buyer_id": "usr:bob",
+    "month_count": 6,
+    "watch_count": 1,
+    "unwatch_count": 1,
+    "net_count": 0,
+    "live_watch_count": 0,
+    "converted_count": 1,
+    "converted_month": "2026-06",
+    "listing_count": 1,
+    "seller_count": 1,
+    "busiest_month": "2026-06",
+    "busiest_watch_count": 1,
+    "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+    "months": [
+     {
+      "month": "2026-06",
+      "watch_count": 1,
+      "unwatch_count": 0,
+      "net_count": 1,
+      "active_count": 1,
+      "converted_count": 1,
+      "listing_count": 1,
+      "seller_count": 1
+     },
+     {
+      "month": "2026-07",
+      "watch_count": 0,
+      "unwatch_count": 0,
+      "net_count": 0,
+      "active_count": 1,
+      "converted_count": 0,
+      "listing_count": 0,
+      "seller_count": 0
+     },
+     {
+      "month": "2026-08",
+      "watch_count": 0,
+      "unwatch_count": 0,
+      "net_count": 0,
+      "active_count": 1,
+      "converted_count": 0,
+      "listing_count": 0,
+      "seller_count": 0
+     },
+     {
+      "month": "2026-09",
+      "watch_count": 0,
+      "unwatch_count": 0,
+      "net_count": 0,
+      "active_count": 1,
+      "converted_count": 0,
+      "listing_count": 0,
+      "seller_count": 0
+     },
+     {
+      "month": "2026-10",
+      "watch_count": 0,
+      "unwatch_count": 0,
+      "net_count": 0,
+      "active_count": 1,
+      "converted_count": 0,
+      "listing_count": 0,
+      "seller_count": 0
+     },
+     {
+      "month": "2026-11",
+      "watch_count": 0,
+      "unwatch_count": 1,
+      "net_count": -1,
+      "active_count": 0,
+      "converted_count": 0,
+      "listing_count": 1,
+      "seller_count": 1
+     }
+    ]
+   }
+  },
+  {
+   "buyer": "usr:carol",
+   "envelope": {
+    "scope": "buyer",
+    "buyer_id": "usr:carol",
+    "month_count": 2,
+    "watch_count": 2,
+    "unwatch_count": 0,
+    "net_count": 2,
+    "live_watch_count": 2,
+    "converted_count": 1,
+    "converted_month": "2026-10",
+    "listing_count": 2,
+    "seller_count": 2,
+    "busiest_month": "2026-10",
+    "busiest_watch_count": 1,
+    "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+    "months": [
+     {
+      "month": "2026-10",
+      "watch_count": 1,
+      "unwatch_count": 0,
+      "net_count": 1,
+      "active_count": 1,
+      "converted_count": 1,
+      "listing_count": 1,
+      "seller_count": 1
+     },
+     {
+      "month": "2026-11",
+      "watch_count": 1,
+      "unwatch_count": 0,
+      "net_count": 1,
+      "active_count": 2,
+      "converted_count": 0,
+      "listing_count": 1,
+      "seller_count": 1
+     }
+    ]
+   }
+  },
+  {
+   "buyer": "usr:dave",
+   "envelope": {
+    "scope": "buyer",
+    "buyer_id": "usr:dave",
+    "month_count": 1,
+    "watch_count": 1,
+    "unwatch_count": 1,
+    "net_count": 0,
+    "live_watch_count": 0,
+    "converted_count": 0,
+    "converted_month": null,
+    "listing_count": 1,
+    "seller_count": 1,
+    "busiest_month": "2026-11",
+    "busiest_watch_count": 1,
+    "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+    "months": [
+     {
+      "month": "2026-11",
+      "watch_count": 1,
+      "unwatch_count": 1,
+      "net_count": 0,
+      "active_count": 0,
+      "converted_count": 0,
+      "listing_count": 1,
+      "seller_count": 1
+     }
+    ]
+   }
+  },
+  {
+   "buyer": "usr:erin",
+   "envelope": {
+    "scope": "buyer",
+    "buyer_id": "usr:erin",
+    "month_count": 0,
+    "watch_count": 0,
+    "unwatch_count": 0,
+    "net_count": 0,
+    "live_watch_count": 0,
+    "converted_count": 0,
+    "converted_month": null,
+    "listing_count": 0,
+    "seller_count": 0,
+    "busiest_month": null,
+    "busiest_watch_count": null,
+    "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+    "months": []
+   }
+  }
+ ],
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/buyer-watch-months-board.html",
+ "sources": {
+  "driver": "cb9b4059daae722a",
+  "copy": "ac9b5007704fa9a8",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 10013,
+  "json": 4552
+ }
+}

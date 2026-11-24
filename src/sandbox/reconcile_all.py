@@ -8440,6 +8440,16 @@ SUITES = [
     # made through the shipped purchase door under its own pinned clock.
     ("os-buyer-gap-board",
      os.path.join("..", "os", "test_buyer_gap_board.py"), 6),
+    # R3447: tools/buyer_watch_months_board.py renders the buyer-side monthly
+    # watch flow (api_buyer_watch_months, AC-BWM1..8) which had zero readers
+    # under tools/, preview/ and src/os; the page prints one card per buyer with
+    # the month grid, the per-row net, the running live count, the conversion
+    # booked in the watch month and the busiest and converted months, and the
+    # suite re-reads every buyer scope over its own throwaway world whose rows
+    # are made through the shipped watch, unwatch and purchase doors under its
+    # own pinned clock.
+    ("os-buyer-watch-months-board",
+     os.path.join("..", "os", "test_buyer_watch_months_board.py"), 6),
     # R3443: tools/ticket_size_board.py renders the achieved ticket size
     # (api_market_ticket_size and api_market_ticket_size_months, AC-MTM1..8)
     # which had zero readers under tools/, preview/ and src/os; the page prints
