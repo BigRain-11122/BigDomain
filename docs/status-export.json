@@ -1,17 +1,17 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-25 R3437 PRODUCT: the buyer price-reaction question now has a door - api_buyer_price_reaction (live with AC-BPR1..8 and its own suite on disk) had zero readers across tools/, preview/ and the report collector, so 'of the shelves I watched, what did the price do and did I buy' could only be read by calling the sandbox from a shell.",
+    "current": "2026-11-25 R3437 PRODUCT: the buyer price-reaction question now has a door - api_buyer_price_reaction (live with AC-BPR1..8 and its own suite on disk) had zero readers across tools/, preview/ and the report collector, so how the shelves I watched moved after the watch and whether I bought them could only be read by calling the sandbox from a shell.",
     "do": "R3422: gave api_public_listings its first openable page - eight KPI cards, one row per listing carrying both review stamps, the refusal reason, the two shipped flags side by side, the provider name and the unified social credit code, ten law sentences and the cross-face law pending==review_queue.pending; AC-PLB1..6 SUITE 6/6 first run, two measured controls, matrix 791 rows DOC-CURRENT, census pinned=791, entry index 23/23, chain read_only=True, face sweep 56/56, closeout PASS files=4960.",
-    "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 mtime] (halves differ: html [2026-11-25 mtime] + json [2026-11-16 commit]; later=html)",
-    "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 mtime] (halves differ: html [2026-11-25 mtime] + json [2026-11-16 commit]; later=html)",
+    "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 commit] (halves differ: html [2026-11-25 commit] + json [2026-11-16 commit]; later=html)",
+    "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 commit] (halves differ: html [2026-11-25 commit] + json [2026-11-16 commit]; later=html)",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
     "latest_artifact_note": "",
     "latest_evidence": "qa/watch-conversion-board-R3436.log (2603B, 2026-11-25)",
     "newest_pair_on_disk_is_board": false,
     "next_milestone": "[R3437] next window (<=48h): (1) 零读者面清单余 59 面（本窗消 api_buyer_price_reaction），下窗仍先只读普查点名一位（面自带套件在盘且 tools/＋preview/ 实测零命中才动手，出厂世界为空的面勿取，已开门面不重开）。(2) S4U 落地仍欠一次提权运行（本窗实测 BigDomain-OSLoop=Interactive）。(3) export 最新产物槽的 writer 修复＋三条判据仍承账（R3422 记；本窗实证链必须最后渲，槽因此落在链页）。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`：本窗报预 71893B／闸 78500／minimal_window_lines=0（无可折叠窗），禁手改 state 文件。(6) tick 口径：本窗 3436→3437。(7) 承账不变：qa_log --ledger-check broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、backlog.md 体量闸。",
-    "next_milestone_due": "2026-11-27T02:17:43+08:00",
-    "updated_at": "2026-11-25T02:17:43+08:00",
+    "next_milestone_due": "2026-11-27T02:23:22+08:00",
+    "updated_at": "2026-11-25T02:23:22+08:00",
     "heartbeat": {
       "tick": 3428,
       "state_tick": 3436,
@@ -35,7 +35,7 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-25 R3437 PRODUCT: the buyer price-reaction question now has a door - api_buyer_price_reaction (live with AC-BPR1..8 and its own suite on disk) had zero readers across tools/, preview/ and the report collector, so 'of the shelves I watched, what did the price do and did I buy' could only be read by calling the sandbox from a shell.",
+  "current": "2026-11-25 R3437 PRODUCT: the buyer price-reaction question now has a door - api_buyer_price_reaction (live with AC-BPR1..8 and its own suite on disk) had zero readers across tools/, preview/ and the report collector, so how the shelves I watched moved after the watch and whether I bought them could only be read by calling the sandbox from a shell.",
   "claims": {
     "claimed": 31,
     "captured": 19,
@@ -44,7 +44,7 @@
     "historic": 0,
     "rows": 99,
     "present": true,
-    "census_ts": "2026-11-25T02:17:43+08:00"
+    "census_ts": "2026-11-25T02:23:22+08:00"
   },
   "chain": {
     "present": true,
@@ -79,9 +79,9 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-25 R3437 PRODUCT: the buyer price-reaction question now has a door - api_buyer_price_reaction (live with AC-BPR1..8 and its own suite on disk) had zero readers across tools/, preview/ and the report collector, so 'of the shelves I watched, what did the price do and did I buy' could only be read by calling the sandbox from a shell.",
-  "export_ts": "2026-11-25T02:17:43+08:00",
-  "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 mtime] (halves differ: html [2026-11-25 mtime] + json [2026-11-16 commit]; later=html)",
+  "do": "2026-11-25 R3437 PRODUCT: the buyer price-reaction question now has a door - api_buyer_price_reaction (live with AC-BPR1..8 and its own suite on disk) had zero readers across tools/, preview/ and the report collector, so how the shelves I watched moved after the watch and whether I bought them could only be read by calling the sandbox from a shell.",
+  "export_ts": "2026-11-25T02:23:22+08:00",
+  "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 commit] (halves differ: html [2026-11-25 commit] + json [2026-11-16 commit]; later=html)",
   "latest_evidence": "qa/watch-conversion-board-R3436.log (2603B, 2026-11-25)",
   "next_milestone": "[R3437] next window (<=48h): (1) 零读者面清单余 59 面（本窗消 api_buyer_price_reaction），下窗仍先只读普查点名一位（面自带套件在盘且 tools/＋preview/ 实测零命中才动手，出厂世界为空的面勿取，已开门面不重开）。(2) S4U 落地仍欠一次提权运行（本窗实测 BigDomain-OSLoop=Interactive）。(3) export 最新产物槽的 writer 修复＋三条判据仍承账（R3422 记；本窗实证链必须最后渲，槽因此落在链页）。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`：本窗报预 71893B／闸 78500／minimal_window_lines=0（无可折叠窗），禁手改 state 文件。(6) tick 口径：本窗 3436→3437。(7) 承账不变：qa_log --ledger-check broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、backlog.md 体量闸。",
   "outs": [
@@ -167,7 +167,7 @@
   "self_drive": {
     "window": "2026-11-19..2026-11-25",
     "window_days": 7,
-    "log_lines_in_window": 122,
+    "log_lines_in_window": 123,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 12,
@@ -177,8 +177,8 @@
     "queue_tech_open": 5,
     "queue_explore_open": 1
   },
-  "state_bytes": 77556,
-  "next_milestone_due": "2026-11-27T02:17:43+08:00",
+  "state_bytes": 77933,
+  "next_milestone_due": "2026-11-27T02:23:22+08:00",
   "heartbeat": {
     "tick": 3428,
     "state_tick": 3436,
