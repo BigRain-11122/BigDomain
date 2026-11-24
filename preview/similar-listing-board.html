@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>相似挂单邻居榜</title>
+<style>
+:root{--ink:#1b1f24;--muted:#66707a;--line:#dfe4ea;--bg:#f7f8fa}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:var(--bg);color:var(--ink);
+font:15px/1.65 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+main{max-width:1080px;margin:0 auto}
+h1{font-size:22px;margin:0 0 4px;font-weight:650}
+h2{font-size:16px;margin:22px 0 8px;font-weight:620}
+h3{font-size:14px;margin:14px 0 6px;font-weight:600;color:var(--muted)}
+.meta{color:var(--muted);font-size:13px;margin-bottom:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;
+padding:14px 16px;margin-bottom:14px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600;font-size:12px}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.kpi{display:flex;gap:12px;flex-wrap:wrap}
+.kpi div{flex:1 1 110px;border:1px solid var(--line);border-radius:8px;
+padding:10px 12px;background:#fff}
+.kpi b{display:block;font-size:19px;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--muted);font-size:12.5px}
+.disclaimer{border-left:3px solid #c9a227;background:#fdf8ea;padding:10px 14px;
+font-size:13px}
+.badge{display:inline-block;margin-right:8px;padding:2px 8px;
+border:1px solid var(--line);border-radius:999px;font-size:12px;
+color:var(--muted)}
+.law{font-size:13px;margin:6px 0}
+.headline{font-size:13.5px;color:var(--muted);margin:0 0 6px}
+footer{color:var(--muted);font-size:12px;margin:20px 0 8px}
+code{font-size:12.5px;background:#f2f4f7;padding:1px 5px;border-radius:4px}
+</style></head><body><main>
+<h1>相似挂单邻居榜</h1>
+<div class=meta>每架挂单在自家桶内的邻居集，按出厂面公布的「绝对差价 → 要价 → 挂单号」全序排列；本页只印读数，不重算邻居 &middot; 生成于 2026-11-24 06:31:34Z &middot; <code>api_similar_listings</code></div>
+<div class=card><div class=kpi><div><span>挂单数</span><b>3</b></div><div><span>邻边数</span><b>6</b></div><div><span>无邻居头数</span><b>0</b></div><div><span>平均邻居数</span><b>2</b></div><div><span>桶数</span><b>1</b></div></div></div>
+<h2>逐架邻居集</h2>
+<div class=card><h3>邻居集 1 &middot; Risk Scan API</h3><p class=headline>本架 在售 &middot; 未分类 &middot; 邻边数 2</p><table><tr><th>邻居</th><th class=n>要价</th><th class=n>差价</th><th class=n>绝对差价</th><th class=n>评分</th><th class=n>净成交</th><th>状态</th></tr><tr><td>3 &middot; Chart Render API</td><td class=n>5</td><td class=n>-5</td><td class=n>5</td><td class=n>-</td><td class=n>0</td><td>在售</td></tr><tr><td>2 &middot; Macro Feed API</td><td class=n>3</td><td class=n>-7</td><td class=n>7</td><td class=n>4</td><td class=n>1</td><td>在售</td></tr></table><h3>邻居集 2 &middot; Macro Feed API</h3><p class=headline>本架 在售 &middot; 未分类 &middot; 邻边数 2</p><table><tr><th>邻居</th><th class=n>要价</th><th class=n>差价</th><th class=n>绝对差价</th><th class=n>评分</th><th class=n>净成交</th><th>状态</th></tr><tr><td>3 &middot; Chart Render API</td><td class=n>5</td><td class=n>2</td><td class=n>2</td><td class=n>-</td><td class=n>0</td><td>在售</td></tr><tr><td>1 &middot; Risk Scan API</td><td class=n>10</td><td class=n>7</td><td class=n>7</td><td class=n>5</td><td class=n>1</td><td>在售</td></tr></table><h3>邻居集 3 &middot; Chart Render API</h3><p class=headline>本架 在售 &middot; 未分类 &middot; 邻边数 2</p><table><tr><th>邻居</th><th class=n>要价</th><th class=n>差价</th><th class=n>绝对差价</th><th class=n>评分</th><th class=n>净成交</th><th>状态</th></tr><tr><td>2 &middot; Macro Feed API</td><td class=n>3</td><td class=n>-2</td><td class=n>2</td><td class=n>4</td><td class=n>1</td><td>在售</td></tr><tr><td>1 &middot; Risk Scan API</td><td class=n>10</td><td class=n>5</td><td class=n>5</td><td class=n>5</td><td class=n>1</td><td>在售</td></tr></table></div>
+<h2>该面自述法则</h2>
+<div class=card><p class=law>邻居序=以绝对差价、要价、挂单号依次比较的全序；两个等距邻居不会在两次调用之间互换位置。</p><p class=law>每行差价取自该面读数，绝对差价等于差价绝对值；本页不另立算法。</p><p class=law>未分类的头只招募未分类挂单（零跨桶渗透）；已下架的头仍可读，历史不被擦除。</p><p class=law>零评分邻居印无值记号，不把读数封套里的 0.0 当作「被打 0 星」。</p></div>
+<h2>合规与免责</h2>
+<div class=card><div class=disclaimer>sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice</div>
+<p style="margin-top:10px"><span class=badge>AIGC 生成内容 · 本页为演示世界读数，非实况交易</span></p></div>
+<h2>复现</h2>
+<div class=card><code>python tools/similar_listing_board.py</code></div>
+<footer>BigDomain OSLoop &middot; 2026-11-24 06:31:34Z &middot; 本页由 tools/similar_listing_board.py 生成，不手改</footer>
+</main></body></html>

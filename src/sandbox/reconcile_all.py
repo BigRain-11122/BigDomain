@@ -8150,6 +8150,14 @@ SUITES = [
     # the face.
     ("os-listing-position-board",
      os.path.join("..", "os", "test_listing_position_board.py"), 6),
+    # R3404: tools/similar_listing_board.py renders the similar-listing
+    # neighbour board (api_similar_listings had ZERO readers in tools/ and
+    # preview/), enumerating ids and titles through the shipped api_board()
+    # face and printing the neighbour envelopes it is handed. The suite grades
+    # the page, not the face, and reads each neighbour's own bucket through
+    # api_listing_position because the neighbour rows carry no category.
+    ("os-similar-listing-board",
+     os.path.join("..", "os", "test_similar_listing_board.py"), 6),
     # R3073: tools/city_face_report.py renders the P-47 item-1 city face and
     # carries its own --check (AC-CFY1..8), but this registry had no row naming
     # it, so the face was graded only by the fail-soft [GATES] sweep - the

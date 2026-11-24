@@ -1,0 +1,153 @@
+{
+ "generated_utc": "2026-11-24 06:31:34Z",
+ "face": "api_similar_listings",
+ "board_face": "api_board",
+ "listing_count": 3,
+ "pair_count": 6,
+ "heads": [
+  {
+   "listing_id": 1,
+   "category": null,
+   "live": true,
+   "delisted_utc": null,
+   "current_price": 10,
+   "include_delisted": false,
+   "limit": null,
+   "total": 2,
+   "returned": 2,
+   "truncated": false,
+   "rows": [
+    {
+     "listing_id": 3,
+     "dev_account": "usr:frank",
+     "listing_key": "chart-render",
+     "title": "Chart Render API",
+     "current_price": 5,
+     "price_delta": -5,
+     "abs_price_delta": 5,
+     "rating_count": 0,
+     "rating_avg": 0.0,
+     "net_sales": 0,
+     "live": true,
+     "delisted_utc": null
+    },
+    {
+     "listing_id": 2,
+     "dev_account": "usr:dana",
+     "listing_key": "macro-feed",
+     "title": "Macro Feed API",
+     "current_price": 3,
+     "price_delta": -7,
+     "abs_price_delta": 7,
+     "rating_count": 1,
+     "rating_avg": 4.0,
+     "net_sales": 1,
+     "live": true,
+     "delisted_utc": null
+    }
+   ],
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "title": "Risk Scan API"
+  },
+  {
+   "listing_id": 2,
+   "category": null,
+   "live": true,
+   "delisted_utc": null,
+   "current_price": 3,
+   "include_delisted": false,
+   "limit": null,
+   "total": 2,
+   "returned": 2,
+   "truncated": false,
+   "rows": [
+    {
+     "listing_id": 3,
+     "dev_account": "usr:frank",
+     "listing_key": "chart-render",
+     "title": "Chart Render API",
+     "current_price": 5,
+     "price_delta": 2,
+     "abs_price_delta": 2,
+     "rating_count": 0,
+     "rating_avg": 0.0,
+     "net_sales": 0,
+     "live": true,
+     "delisted_utc": null
+    },
+    {
+     "listing_id": 1,
+     "dev_account": "usr:dana",
+     "listing_key": "risk-scan",
+     "title": "Risk Scan API",
+     "current_price": 10,
+     "price_delta": 7,
+     "abs_price_delta": 7,
+     "rating_count": 1,
+     "rating_avg": 5.0,
+     "net_sales": 1,
+     "live": true,
+     "delisted_utc": null
+    }
+   ],
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "title": "Macro Feed API"
+  },
+  {
+   "listing_id": 3,
+   "category": null,
+   "live": true,
+   "delisted_utc": null,
+   "current_price": 5,
+   "include_delisted": false,
+   "limit": null,
+   "total": 2,
+   "returned": 2,
+   "truncated": false,
+   "rows": [
+    {
+     "listing_id": 2,
+     "dev_account": "usr:dana",
+     "listing_key": "macro-feed",
+     "title": "Macro Feed API",
+     "current_price": 3,
+     "price_delta": -2,
+     "abs_price_delta": 2,
+     "rating_count": 1,
+     "rating_avg": 4.0,
+     "net_sales": 1,
+     "live": true,
+     "delisted_utc": null
+    },
+    {
+     "listing_id": 1,
+     "dev_account": "usr:dana",
+     "listing_key": "risk-scan",
+     "title": "Risk Scan API",
+     "current_price": 10,
+     "price_delta": 5,
+     "abs_price_delta": 5,
+     "rating_count": 1,
+     "rating_avg": 5.0,
+     "net_sales": 1,
+     "live": true,
+     "delisted_utc": null
+    }
+   ],
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "title": "Chart Render API"
+  }
+ ],
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/similar-listing-board.html",
+ "sources": {
+  "driver": "c9afbf131e1dd7c6",
+  "copy": "eb4491dbd617c7ac",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 5298,
+  "json": 3639
+ }
+}

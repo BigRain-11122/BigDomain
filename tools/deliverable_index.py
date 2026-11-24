@@ -194,6 +194,9 @@ PAIR_PRODUCERS = {
     # R3403: same single-writer shape again - one render, one json, no back-hop
     # block - so the category competitive-standing board names its producer.
     "listing-position-board.json": "tools/listing_position_board.py",
+    # R3404: same single-writer shape again - one render, one json, no back-hop
+    # block - so the similar-listing neighbour board names its producer.
+    "similar-listing-board.json": "tools/similar_listing_board.py",
 }
 # R3392 (AC-DIX21 recipe arm). One pair on this page cannot be reproduced by ONE
 # command, and until now the law had only two answers - name a producer or print
