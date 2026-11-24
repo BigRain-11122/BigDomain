@@ -3,15 +3,15 @@
     "board_pages_skipped": [],
     "current": "2026-11-25 R3435 PRODUCT: the resident purchase library question now has a door - api_library (AC-AML1..8, suite on disk) had zero readers under tools/ and preview/, so 'what did I buy, what did each cost and what do I own now' could only be read by calling the sandbox from a shell.",
     "do": "R3422: gave api_public_listings its first openable page - eight KPI cards, one row per listing carrying both review stamps, the refusal reason, the two shipped flags side by side, the provider name and the unified social credit code, ten law sentences and the cross-face law pending==review_queue.pending; AC-PLB1..6 SUITE 6/6 first run, two measured controls, matrix 791 rows DOC-CURRENT, census pinned=791, entry index 23/23, chain read_only=True, face sweep 56/56, closeout PASS files=4960.",
-    "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 mtime] (halves differ: html [2026-11-25 mtime] + json [2026-11-16 commit]; later=html)",
-    "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 mtime] (halves differ: html [2026-11-25 mtime] + json [2026-11-16 commit]; later=html)",
+    "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 commit] (halves differ: html [2026-11-25 commit] + json [2026-11-16 commit]; later=html)",
+    "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 commit] (halves differ: html [2026-11-25 commit] + json [2026-11-16 commit]; later=html)",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
     "latest_artifact_note": "",
     "latest_evidence": "qa/library-board-R3435.log (4074B, 2026-11-25)",
     "newest_pair_on_disk_is_board": false,
     "next_milestone": "[R3435] next window (<=48h): (1) 零读者面清单余 58 面（本窗消 api_library），下窗仍先只读普查点名一位（面自带套件在盘且 tools/＋preview/ 实测 rc=1 才动手，空或弱勿取）。(2) S4U 落地仍欠一次提权运行（本窗实测 BigDomain-OSLoop=Interactive）。(3) export 最新产物槽的 writer 修复＋三条判据仍承账（R3422 记）。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`：本窗报预 70137B／闸 78500／minimal_window_lines=0（无可折叠窗），禁手改 state 文件。(6) tick 口径：本窗 3434→3435。(7) 承账不变：qa_log --ledger-check broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、backlog.md 体量闸。",
-    "next_milestone_due": "2026-11-27T01:29:15+08:00",
-    "updated_at": "2026-11-25T01:29:15+08:00",
+    "next_milestone_due": "2026-11-27T01:30:42+08:00",
+    "updated_at": "2026-11-25T01:30:42+08:00",
     "heartbeat": {
       "tick": 3428,
       "state_tick": 3435,
@@ -27,7 +27,7 @@
       "over7": 0,
       "dup_rows": 0,
       "distinct": 5,
-      "collapsed": 0,
+      "collapsed": 1,
       "labels_refreshed": 0,
       "notes_stale": 0,
       "note_claims": 0,
@@ -36,7 +36,7 @@
     }
   },
   "current": "2026-11-25 R3435 PRODUCT: the resident purchase library question now has a door - api_library (AC-AML1..8, suite on disk) had zero readers under tools/ and preview/, so 'what did I buy, what did each cost and what do I own now' could only be read by calling the sandbox from a shell.",
-  "claims": {"claimed": 32, "captured": 20, "contradicted": 0, "uncaptured": 12, "historic": 0, "rows": 98, "present": true, "census_ts": "2026-11-25T01:29:15+08:00"},
+  "claims": {"claimed": 32, "captured": 20, "contradicted": 0, "uncaptured": 12, "historic": 0, "rows": 98, "present": true, "census_ts": "2026-11-25T01:30:42+08:00"},
   "chain": {"present": true, "rows": 98, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -66,12 +66,12 @@
     }
   ],
   "do": "2026-11-25 R3435 PRODUCT: the resident purchase library question now has a door - api_library (AC-AML1..8, suite on disk) had zero readers under tools/ and preview/, so 'what did I buy, what did each cost and what do I own now' could only be read by calling the sandbox from a shell.",
-  "export_ts": "2026-11-25T01:29:15+08:00",
-  "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 mtime] (halves differ: html [2026-11-25 mtime] + json [2026-11-16 commit]; later=html)",
+  "export_ts": "2026-11-25T01:30:42+08:00",
+  "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 commit] (halves differ: html [2026-11-25 commit] + json [2026-11-16 commit]; later=html)",
   "latest_evidence": "qa/library-board-R3435.log (4074B, 2026-11-25)",
   "next_milestone": "[R3435] next window (<=48h): (1) 零读者面清单余 58 面（本窗消 api_library），下窗仍先只读普查点名一位（面自带套件在盘且 tools/＋preview/ 实测 rc=1 才动手，空或弱勿取）。(2) S4U 落地仍欠一次提权运行（本窗实测 BigDomain-OSLoop=Interactive）。(3) export 最新产物槽的 writer 修复＋三条判据仍承账（R3422 记）。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`：本窗报预 70137B／闸 78500／minimal_window_lines=0（无可折叠窗），禁手改 state 文件。(6) tick 口径：本窗 3434→3435。(7) 承账不变：qa_log --ledger-check broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、backlog.md 体量闸。",
   "outs": [
-    "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 mtime] (halves differ: html [2026-11-25 mtime] + json [2026-11-16 commit]; later=html)",
+    "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 commit] (halves differ: html [2026-11-25 commit] + json [2026-11-16 commit]; later=html)",
     "preview/seller-reviews-board.html (6308B) + preview/seller-reviews-board.json (1974B) [2026-11-25 mtime]",
     "refund-reasons-R3407.log (2274B)",
     "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-24 commit]; later=html)",
@@ -163,7 +163,7 @@
     "queue_explore_open": 1
   },
   "state_bytes": 76043,
-  "next_milestone_due": "2026-11-27T01:29:15+08:00",
+  "next_milestone_due": "2026-11-27T01:30:42+08:00",
   "heartbeat": {
     "tick": 3428,
     "state_tick": 3435,
@@ -179,7 +179,7 @@
     "over7": 0,
     "dup_rows": 0,
     "distinct": 5,
-    "collapsed": 0,
+    "collapsed": 1,
     "labels_refreshed": 0,
     "notes_stale": 0,
     "note_claims": 0,
