@@ -5,15 +5,15 @@
     ],
     "current": "2026-11-24 R3392 PRODUCT+ENGINEERING: the CEO front door can now declare a TWO-STEP recipe and be graded on bytes - the UGC pair stopped being a named absence and became a checked claim.",
     "do": "R3214: measured the one in-place qa/ door (2633 py files, 567 referencing qa/, 3795 write-open/fsync lines, one literal qa-bound one-off) and closed both faces; AC-QALB18/19/20, 20 criteria; SUITE 22/22, battery-shard 32/32, matrix DOC-CURRENT, census DRIFT-CLEAN, carrier folded 76967->65403, closeout PASS files=4555.",
-    "last_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 commit]",
-    "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 commit]",
+    "last_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-24 commit]; later=html)",
+    "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-24 commit]; later=html)",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ugc-gate-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/repro-recipe-R3392.log (1896B, 2026-11-24)",
+    "latest_artifact_note": "",
     "latest_evidence": "qa/repro-recipe-R3392.log (1896B, 2026-11-24)",
     "newest_pair_on_disk_is_board": true,
     "next_milestone": "[R3392] next window (<=48h): (1) **让配对在翻转瞬间也稳定**（本窗唯一残留·已实测根因）：要么让 `tools/ugc_gate_report.py` 写出「自己最终字节」的 sizes（把回注块算进 `sizes`，则回注器不再改写该 json、该对也不再依赖入口页字节），要么把入口页「最新一对」的字节行改成不含对方字节宽度的稳定形状；任一改法须同步 `src/os/test_deliverable_index.py` 与 `AC-DIX21/23` 的臂，禁放宽既有判据。完成判据=`touch preview/ugc-gate-report.json` 后 `deliverable_index.py --check` 仍读 23/23。 (2) 该对进环的前置条件随之解除：sizes 自洽后再把 `(\"ugc\",\"tools/ugc_gate_report.py\",[])` 插回 `STEPS`（本窗两条排法已量 red，勿盲试），并须证明「新增一枚 `src/sandbox/**/test_*.py` 后同一窗环跑完页面印数即等于活走查」。 (3) 载体 71362B／闸 78500（余量 7138B ≈ 3-4 轮，本窗已逼近）——下窗**先折再干活**：读 `fold --plan-only`，禁折在飞轮、按轮边界切、`--summary-sentence` 点名被折走的裸轮，否则 `E_ROUND_LOST` 具名拒绝。 (4) **布局漂移的出生地仍未修**（承 R3391）：`eol --fix` 只修载体，真正写坏的是整份重写 `state.json` 的那条路径——下窗 `git log -p -- src/os/state.json` 定位并改走 `state_append.py`。 (5) S4U 落地仍欠一次提权运行（`register_loop_task.ps1` 自证 `VERIFY logon=S4U interval=PT5M`）。 (6) 队列卫生：explore 仍未补种子，tech 仅 L64／L98 带判据可认领，main 队头全门控。 (7) 承账不变：`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`BigDomain-OSLoop` LogonType=Interactive。 (8) 提案面 BD-PROP-011 open（窗 11-22~11-28）在册，本窗配额已清。 (9) 诚实承账：物理件五件仍缺——买家仍付不了钱。",
-    "next_milestone_due": "2026-11-26T10:37:27+08:00",
-    "updated_at": "2026-11-24T10:37:27+08:00",
+    "next_milestone_due": "2026-11-26T10:46:19+08:00",
+    "updated_at": "2026-11-24T10:46:19+08:00",
     "heartbeat": {
       "tick": 3385,
       "state_tick": 3392,
@@ -38,7 +38,7 @@
     }
   },
   "current": "2026-11-24 R3392 PRODUCT+ENGINEERING: the CEO front door can now declare a TWO-STEP recipe and be graded on bytes - the UGC pair stopped being a named absence and became a checked claim.",
-  "claims": {"claimed": 37, "captured": 2, "contradicted": 4, "uncaptured": 31, "historic": 4, "rows": 89, "present": true, "census_ts": "2026-11-24T10:37:27+08:00"},
+  "claims": {"claimed": 37, "captured": 2, "contradicted": 4, "uncaptured": 31, "historic": 4, "rows": 89, "present": true, "census_ts": "2026-11-24T10:46:19+08:00"},
   "chain": {"present": true, "rows": 89, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -68,12 +68,12 @@
     }
   ],
   "do": "2026-11-24 R3392 PRODUCT+ENGINEERING: the CEO front door can now declare a TWO-STEP recipe and be graded on bytes - the UGC pair stopped being a named absence and became a checked claim.",
-  "export_ts": "2026-11-24T10:37:27+08:00",
-  "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 commit]",
+  "export_ts": "2026-11-24T10:46:19+08:00",
+  "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-24 commit]; later=html)",
   "latest_evidence": "qa/repro-recipe-R3392.log (1896B, 2026-11-24)",
   "next_milestone": "[R3392] next window (<=48h): (1) **让配对在翻转瞬间也稳定**（本窗唯一残留·已实测根因）：要么让 `tools/ugc_gate_report.py` 写出「自己最终字节」的 sizes（把回注块算进 `sizes`，则回注器不再改写该 json、该对也不再依赖入口页字节），要么把入口页「最新一对」的字节行改成不含对方字节宽度的稳定形状；任一改法须同步 `src/os/test_deliverable_index.py` 与 `AC-DIX21/23` 的臂，禁放宽既有判据。完成判据=`touch preview/ugc-gate-report.json` 后 `deliverable_index.py --check` 仍读 23/23。 (2) 该对进环的前置条件随之解除：sizes 自洽后再把 `(\"ugc\",\"tools/ugc_gate_report.py\",[])` 插回 `STEPS`（本窗两条排法已量 red，勿盲试），并须证明「新增一枚 `src/sandbox/**/test_*.py` 后同一窗环跑完页面印数即等于活走查」。 (3) 载体 71362B／闸 78500（余量 7138B ≈ 3-4 轮，本窗已逼近）——下窗**先折再干活**：读 `fold --plan-only`，禁折在飞轮、按轮边界切、`--summary-sentence` 点名被折走的裸轮，否则 `E_ROUND_LOST` 具名拒绝。 (4) **布局漂移的出生地仍未修**（承 R3391）：`eol --fix` 只修载体，真正写坏的是整份重写 `state.json` 的那条路径——下窗 `git log -p -- src/os/state.json` 定位并改走 `state_append.py`。 (5) S4U 落地仍欠一次提权运行（`register_loop_task.ps1` 自证 `VERIFY logon=S4U interval=PT5M`）。 (6) 队列卫生：explore 仍未补种子，tech 仅 L64／L98 带判据可认领，main 队头全门控。 (7) 承账不变：`qa_log --ledger-check` broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、`BigDomain-OSLoop` LogonType=Interactive。 (8) 提案面 BD-PROP-011 open（窗 11-22~11-28）在册，本窗配额已清。 (9) 诚实承账：物理件五件仍缺——买家仍付不了钱。",
   "outs": [
-    "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 commit]",
+    "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-24 mtime] (halves differ: html [2026-11-24 mtime] + json [2026-11-24 commit]; later=html)",
     "preview/apimarket-monthly-faces.html (9070B) + preview/apimarket-monthly-faces.json (16463B) [2026-11-24 commit]",
     "preview/platform-live-report.html (8621B) + preview/platform-live-report.json (6228B) [2026-11-24 commit] (halves differ: html [2026-11-24 commit] + json [2026-11-23 commit]; later=html)",
     "preview/ledger-reconcile-face.html (8656B) + preview/ledger-reconcile-face.json (6151B) [2026-11-24 commit]",
@@ -158,7 +158,7 @@
   "self_drive": {
     "window": "2026-11-18..2026-11-24",
     "window_days": 7,
-    "log_lines_in_window": 152,
+    "log_lines_in_window": 153,
     "idle_fast_mention_lines": 0,
     "no_pullable_mention_lines": 0,
     "substantive_non_idle_mention_lines": 16,
@@ -168,8 +168,8 @@
     "queue_tech_open": 5,
     "queue_explore_open": 1
   },
-  "state_bytes": 71362,
-  "next_milestone_due": "2026-11-26T10:37:27+08:00",
+  "state_bytes": 71735,
+  "next_milestone_due": "2026-11-26T10:46:19+08:00",
   "heartbeat": {
     "tick": 3385,
     "state_tick": 3392,

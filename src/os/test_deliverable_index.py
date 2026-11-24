@@ -259,7 +259,9 @@ def main():
 
         # ---- AC-DIX2: every quoted row size equals os.path.getsize ----
         wrong = [h for h in sorted(reg_set)
-                 if ("%dB</span>" % os.path.getsize(os.path.join(pv, h))) not in block]
+                 if ("%s</span>"
+                     % mod.BYTES_PAD(os.path.getsize(os.path.join(pv, h))))
+                 not in block]
         ok("AC-DIX2 every row byte size quoted equals disk", not wrong,
            "rows=%d wrong=%s" % (len(reg_set), wrong))
 
@@ -350,7 +352,9 @@ def main():
         newest = newest_pair(world)
         ok("AC-DIX8 newest pair named with its byte size in the landed block",
            newest is not None and newest[2] in block
-           and ("%dB</span>" % os.path.getsize(os.path.join(pv, newest[1]))) in block,
+           and (("%s</span>"
+                 % mod.BYTES_PAD(os.path.getsize(os.path.join(pv, newest[1]))))
+                in block),
            "newest=%s" % (newest[2] if newest else "(none)"))
 
         # ---- AC-DIX9: every pair on disk is listed by href ----
@@ -382,8 +386,9 @@ def main():
 
         # ---- AC-DIX13: every recorded pair byte size equals disk ----
         wrong_size = [h for h, _ in pairs
-                      if ("%dB</span>" % os.path.getsize(os.path.join(pv, h)))
-                      not in block]
+                      if (("%s</span>"
+                           % mod.BYTES_PAD(os.path.getsize(os.path.join(pv, h))))
+                          not in block)]
         ok("AC-DIX13 every recorded pair byte size equals disk", not wrong_size,
            "pairs=%d wrong=%s" % (len(pairs), wrong_size))
 

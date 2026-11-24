@@ -345,14 +345,33 @@ def CLOCK_PAD(word):
     return (word or "").ljust(CLOCK_WORD_WIDTH)
 
 
+# R3393 (AC-BYI1..AC-BYI5, pinned in src/os/backlog.md BEFORE this code): the
+# same class of defect CLOCK_PAD exists for, one level deeper. Every face that
+# matches the catch-all back-hop rule carries `data-back-bytes` = THE SIZE OF
+# THIS PAGE, and this page quotes the size of every face - so page size and
+# face bytes were each other's input. Measured in R3392: at the instant the
+# newest pair flipped, the entry page reddened its own recipe arm
+# (`pair-bytes-reproduced=False`) and only a second ring pass converged it.
+# A number whose WIDTH varies with its value feeds that loop; padding it to one
+# width inside the HTML source (whitespace collapses, the rendered sentence and
+# the exact value are unchanged) takes the width out of the page's size.
+BYTES_WIDTH = 9
+
+
+def BYTES_PAD(count):
+    """Fixed-width byte count, e.g. '    28799B' (see BYTES_WIDTH)."""
+    return ("%" + str(BYTES_WIDTH) + "dB") % count
+
+
 def newest_line(new):
     """The one derived line AC-DIX8 compares against a fresh read."""
     if new["empty"]:
         return "preview/ carries no json artifact yet - stated, not blank."
     # R3296: both sizes, because the self-verify command prints the html byte
     # count while this band used to quote only the json's.
-    return "%s \u00b7 json=%dB \u00b7 html=%dB \u00b7 %s" % (
-        new["json"], new["bytes"], new.get("html_bytes", 0), new["stamp"])
+    return "%s \u00b7 json=%s \u00b7 html=%s \u00b7 %s" % (
+        new["json"], BYTES_PAD(new["bytes"]),
+        BYTES_PAD(new.get("html_bytes", 0)), new["stamp"])
 
 
 def render_newest(new):
@@ -366,8 +385,8 @@ def render_newest(new):
             '\u53c2\u6570\u73b0\u8bfb\u81ea\u4ea7\u51fa\u5668\u4e0e\u8be5\u5bf9'
             '\u6587\u4ef6\uff0c\u975e\u624b\u5199\uff09\uff1a'
             '<code>%s</code>\uff0d\u5b83\u4f1a\u62a5\u51fa\u540c\u4e00\u4e2a '
-            '<b>%dB</b> \u5e76\u4e14\u4e0d\u5199\u4efb\u4f55\u5b57\u8282\u3002</div>'
-            % (html.escape(command), new.get("html_bytes", 0)))
+            '<b>%s</b> \u5e76\u4e14\u4e0d\u5199\u4efb\u4f55\u5b57\u8282\u3002</div>'
+            % (html.escape(command), BYTES_PAD(new.get("html_bytes", 0))))
     elif command and mode == "recipe":
         # R3392: the pair is a declared two-step product, so the row prints BOTH
         # writers instead of one command it cannot honestly claim.
@@ -526,9 +545,10 @@ def render_pairs(pairs):
         label = ("json=%s" % p["json"]) if paired else "json=missing"
         tag = (" " + hist_tag(hist[p["stem"]])) if p["stem"] in hist else ""
         out.append(
-            '<li><a href="%s">%s</a> <span class="tag">%dB</span> '
+            '<li><a href="%s">%s</a> <span class="tag">%s</span> '
             '<span class="tag">%s</span> <span class="tag%s">%s</span>%s</li>'
-            % (html.escape(p["html"]), html.escape(p["stem"]), p["bytes"],
+            % (html.escape(p["html"]), html.escape(p["stem"]),
+               BYTES_PAD(p["bytes"]),
                html.escape(stamp), "" if paired else " warn",
                html.escape(label), tag)
         )
@@ -643,9 +663,10 @@ def render_body(rows, defects_total, newest, pairs, claims):
         cell = (
             '<a href="%s">%s</a><br>'
             '<span class="tag %s">verdict=%s</span> '
-            '<span class="tag">%dB</span> '
+            '<span class="tag">%s</span> '
             '<span class="tag">%s</span>'
-            % (r["html"], r["html"], tag, html.escape(r["verdict"]), r["bytes"],
+            % (r["html"], r["html"], tag, html.escape(r["verdict"]),
+               BYTES_PAD(r["bytes"]),
                html.escape(r["stamp"]))
         )
         if r["defects"]:
@@ -753,7 +774,8 @@ def main(argv):
               sorted(on_disk - registered), sorted(registered - on_disk)))
 
     size_rows = [r for r in rows
-                 if ("%dB</span>" % r["bytes"]) in block and r["html"] in block]
+                 if (("%s</span>" % BYTES_PAD(r["bytes"])) in block
+                     and r["html"] in block)]
     record("AC-DIX2", len(size_rows) == len(rows),
            "quoted-sizes=%d of %d, each equal to os.path.getsize" % (len(size_rows), len(rows)))
 
@@ -858,7 +880,7 @@ def main(argv):
               len(pairs)))
 
     wrong = [p["html"] for p in pairs
-             if ("%dB</span>" % p["bytes"]) not in band_text]
+             if (("%s</span>" % BYTES_PAD(p["bytes"])) not in band_text)]
     record("AC-DIX13", not wrong, "self-referential-bytes-wrong=%s" % wrong)
 
     gate = [p["stem"] for p in pairs if p["stem"] in GATE_PAGES]
@@ -1018,7 +1040,7 @@ def main(argv):
             return tuple(out)
 
         printed_once = band.count(html.escape(command)) == 1
-        printed_html = ("html=%dB" % fresh.get("html_bytes", 0)) in band
+        printed_html = ("html=%s" % BYTES_PAD(fresh.get("html_bytes", 0))) in band
         before = (stat_pair(html_path), stat_pair(json_path))
         if mode != "recipe":
             flags = (["--dry-run", "--stamp", stamp] if mode == "dry"
@@ -1120,7 +1142,8 @@ def main(argv):
     unknown, _umode, why_unknown = self_verify({"json": "no-such-pair.json",
                                                 "empty": False})
     if command and mode == "dry":
-        promise = ("<b>%dB</b>" % fresh.get("html_bytes", 0)) in band
+        promise = (("<b>%s</b>" % BYTES_PAD(fresh.get("html_bytes", 0)))
+                   in band)
     elif command and mode == "recipe":
         # R3392: a recipe announces itself as a recipe - it may not borrow the
         # single-command caveat, and its own caveat may not stand in for a

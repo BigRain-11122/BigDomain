@@ -1,0 +1,87 @@
+R3393 evidence - the entry page's size no longer depends on a pair's byte digits
+==============================================================================
+five-still scan (content-addressed, read before any work)
+  cph4/evolution-ledger.md @BigDomain lines: 0 (no dispatch owed)
+  docs/decisions.md: D-20261118-01..15 and D-20261119-01..09 are ALL already in
+    the stored last_dec_tokens baseline -> 0 newcomers
+  company docs/orders.md head: no new command line
+  benchmarks_refreshed 2026-11-18 -> day 6 of the seven-day gate
+  git status --short: empty, no index.lock
+  board head R3392 next-window item (1) was pullable -> work round
+  fold --plan-only: minimal_window_lines=0 window_content_bytes=0
+    predicted_post_bytes=71735 == pre_bytes -> carrier already below target
+    (gate 78500, target 75500), so this window folds nothing and does not
+    push the carrier; recorded instead of folding for the sake of folding.
+
+the defect (measured in R3392, repaired here)
+  preview/ugc-gate-report.html carries data-back-bytes = the size of
+  preview/index.html (tools/face_backhop.py catch-all rule -> index.html),
+  while index.html quotes that pair's sizes three ways (newest band,
+  all-pairs band, registry table). Page size and pair bytes were each
+  other's input; at the flip instant the recipe arm read
+  pair-bytes-reproduced=False and only a second ring pass converged it.
+  The same class already had a precedent on this page: CLOCK_WORD_WIDTH /
+  CLOCK_PAD (R3298) pins a clock word to one width for exactly this reason.
+
+what landed (one definition, all six sites)
+  tools/deliverable_index.py: BYTES_WIDTH = 9 and BYTES_PAD(count) ->
+  "%9dB" (whitespace collapses in HTML, the value and the rendered
+  sentence are unchanged). Used by newest_line, the dry-run promise in
+  render_newest, render_pairs, the registry table cell, and by the three
+  arms that read those numbers back (AC-DIX2, AC-DIX13, AC-DIX21
+  printed_html, and the AC-DIX23 dry promise). No literal %dB survives on
+  a render path; the only remaining ones are detail strings and the
+  stdout summary, which are not page bytes.
+  src/os/test_deliverable_index.py: the three arm literals now compare
+  against mod.BYTES_PAD(os.path.getsize(...)) instead of a second format
+  string, so the criterion (quoted size == disk) is unchanged and the
+  suite carries no private copy of the format.
+
+measurements
+  probe (tmp/probe-R3393.py, read-only, loaded the shipped tool):
+    BYTES_PAD widths across 9 values 0..999999999 -> [10]  (one width)
+    render_newest base=729  bumped(+1 byte)=729  equal=True
+    render_pairs  base=9591 bumped(+1 byte)=9591 equal=True
+  suite: python src/os/test_deliverable_index.py ->
+    SUITE PASS 23/23 announced=23 arms=23 gate=21 graded=23
+  ring: python tools/closeout_order.py --write ->
+    PASS1 index rc=0 faces=9 defects=0 index=43113B
+    PASS1 backhop rc=0 faces=32 sizes patched=0
+    PASS1 sweep rc=0 VERDICT PASS 13/13 fingerprint=d74441b4fc4da898
+    VERDICT PASS passes=1 steps=5 checks=4/4 transient_steps=0
+  flip test, exactly as the board wrote it (touch the pair's json, then
+  one --check, no re-render):
+    FAIL AC-DIX21 mode=recipe caveat-printed=False printed-once=False
+    VERDICT FAIL 21/23
+    -> this red is a STALE PAGE, not the recipe: touching changes which
+    pair is newest, so the landed band still quotes the previous newest
+    pair and cannot print a recipe row for a pair it never saw. Honest
+    reading: the board's completion test as literally written is not
+    satisfiable by any writer, because the band is a snapshot.
+  flip test after ONE re-render plus ONE injection (what the ring does
+  inside a single pass):
+    DELIVERABLE INDEX faces=9 fingerprint=1a26d80aece81b2f index=43230B
+    VERDICT PASS 23/23 fingerprint=b906ec062cc8b071
+    PASS AC-DIX21 mode=recipe rc=0/0 all-arms-green
+    PASS AC-DIX23 mode=recipe all-arms-green
+  note the size moved 43113B -> 43230B on that flip: the newest pair's
+  NAME changed, which is content, not a number whose width wobbles. The
+  numeric loop is gone; a flip still costs one re-render, which the ring
+  already performs before its checks.
+
+honest
+  (a) this is a carrier invariant, not a product capability: no page a
+      buyer can use appeared, and the shipped faces read the same content
+      (the padded numbers render identically).
+  (b) the fix removes the NUMERIC feedback edge only. Any window that
+      changes index.html's size for a content reason still stales every
+      face block that quotes it until backhop re-injects - that is the
+      backhop step's job and it was already in the ring.
+  (c) the criteria AC-BYI1..AC-BYI5 live in the pinned board row and are
+      measured here; they are NOT yet registered as shipped suite arms
+      (the suite count stays 23/23), so next window owes the registration
+      if they are to be held by the battery.
+  (d) ZERO payment capability, no network beyond loopback; the five
+      physical pieces (merchant id, server, domain, filing+ICP,
+      miniprogram appid+secret) are still missing - buyers still cannot
+      pay.
