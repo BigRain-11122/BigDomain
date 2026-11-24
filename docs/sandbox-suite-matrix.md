@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 767 | 6548 | 675/675 | R2739 |
+| 768 | 6554 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -791,20 +791,21 @@
 | 752 | os-live-proof | ../os/test_live_proof.py | 13 | no-evidence | - |
 | 753 | os-platform-live-report | ../os/test_platform_live_report.py | 8 | no-evidence | - |
 | 754 | os-ledger-business-report | ../os/test_ledger_business_report.py | 8 | no-evidence | - |
-| 755 | os-city-face-report | ../os/test_city_face_report.py | 7 | no-evidence | - |
-| 756 | os-corpus-rewrite-audit | ../os/test_corpus_rewrite_audit.py | 1 | no-evidence | - |
-| 757 | os-heartbeat | ../os/test_heartbeat.py | 1 | no-evidence | - |
-| 758 | frontdoor-heartbeat-card | test_frontdoor_heartbeat_card.py | 1 | no-evidence | - |
-| 759 | frontdoor-face-age | test_frontdoor_face_age.py | 1 | no-evidence | - |
-| 760 | frontdoor-corpus-card | test_frontdoor_corpus_card.py | 6 | no-evidence | - |
-| 761 | frontdoor-outs-age-card | test_frontdoor_outs_age_card.py | 4 | no-evidence | - |
-| 762 | frontdoor-chain-card | test_frontdoor_chain_card.py | 4 | no-evidence | - |
-| 763 | frontdoor-claims-card | test_frontdoor_claims_card.py | 5 | no-evidence | - |
-| 764 | claims-view-parity | test_claims_view_parity.py | 3 | no-evidence | - |
-| 765 | claim-census | test_claim_census.py | 10 | no-evidence | - |
-| 766 | os-stage-residue | ../os/test_stage_residue.py | 4 | no-evidence | - |
-| 767 | os-corpus-supply-chain | ../os/test_corpus_supply_chain.py | 7 | no-evidence | - |
-|  | 合计 |  | 6548 | green 675 / FAIL 0 / no-evidence 92 |  |
+| 755 | os-market-hour-heatmap | ../os/test_market_hour_heatmap.py | 6 | no-evidence | - |
+| 756 | os-city-face-report | ../os/test_city_face_report.py | 7 | no-evidence | - |
+| 757 | os-corpus-rewrite-audit | ../os/test_corpus_rewrite_audit.py | 1 | no-evidence | - |
+| 758 | os-heartbeat | ../os/test_heartbeat.py | 1 | no-evidence | - |
+| 759 | frontdoor-heartbeat-card | test_frontdoor_heartbeat_card.py | 1 | no-evidence | - |
+| 760 | frontdoor-face-age | test_frontdoor_face_age.py | 1 | no-evidence | - |
+| 761 | frontdoor-corpus-card | test_frontdoor_corpus_card.py | 6 | no-evidence | - |
+| 762 | frontdoor-outs-age-card | test_frontdoor_outs_age_card.py | 4 | no-evidence | - |
+| 763 | frontdoor-chain-card | test_frontdoor_chain_card.py | 4 | no-evidence | - |
+| 764 | frontdoor-claims-card | test_frontdoor_claims_card.py | 5 | no-evidence | - |
+| 765 | claims-view-parity | test_claims_view_parity.py | 3 | no-evidence | - |
+| 766 | claim-census | test_claim_census.py | 10 | no-evidence | - |
+| 767 | os-stage-residue | ../os/test_stage_residue.py | 4 | no-evidence | - |
+| 768 | os-corpus-supply-chain | ../os/test_corpus_supply_chain.py | 7 | no-evidence | - |
+|  | 合计 |  | 6554 | green 675 / FAIL 0 / no-evidence 93 |  |
 
 ## 证据出处
 

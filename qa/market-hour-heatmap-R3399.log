@@ -1,0 +1,22 @@
+R3399 market hour heatmap page - evidence
+generated_utc: 2026-11-24 04:50:14Z
+--- face render ---
+HEATMAP preview/market-hour-heatmap.html bytes=27204 cells=168 sales=4 gross=28 busiest=0/1
+--- face check ---
+HEATMAP CHECK PASS fails=0 html=27204B json=19565B
+--- page suite ---
+PASS AC-MHP1 landed=True keys=21 missing=[] extra=[]
+PASS AC-MHP2 hour_count=24 rows=24 weekday_count=7 rows=7 cell_count=168 cells=168
+PASS AC-MHP3 cells=168 missing=[] duplicate=[]
+PASS AC-MHP4 counts[sales_count=4/4/4/4 refund_count=2/2/2/2] money[gross=28/28/28 refunded=15/15/15]
+PASS AC-MHP5 aigc=True disclaimer=True external_links=0
+PASS AC-MHP6 check_rc=0 wrote_nothing=True wired=True face_suite=True
+SUITE PASS 6/6 criteria
+--- entry index ---
+PASS AC-DIX7   verdicts-quoted=9/9 defect-rows=0
+PASS AC-DIX21  mode=check cmd='python tools/market_hour_heatmap.py --check' html=27204B json=19565B rc=0 all-arms-green
+PASS AC-DIX23  pair=market-hour-heatmap.json producer=tools/market_hour_heatmap.py mode=check all-arms-green
+VERDICT PASS 23/23 fingerprint=e3d5732a2eef472b
+--- sweep ---
+landed C:/Users/sjs20/Desktop/FluxGroup/domain/BigDomain/preview/face-sweep.html 8878B / C:/Users/sjs20/Desktop/FluxGroup/domain/BigDomain/preview/face-sweep.json 8619B
+VERDICT PASS 13/13 fingerprint=455788d705f85f73

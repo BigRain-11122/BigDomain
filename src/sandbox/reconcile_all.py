@@ -8113,6 +8113,13 @@ SUITES = [
     # render); nothing here re-implements a ledger rule.
     ("os-ledger-business-report",
      os.path.join("..", "os", "test_ledger_business_report.py"), 8),
+    # R3399: tools/market_hour_heatmap.py renders the market activity-by-time
+    # face (api_market_hour_heatmap, live since R2165) onto one openable page.
+    # The face itself is graded by test_apimarket_hourheatmap.py; this row
+    # grades the PAGE - pinned key set, complete 7x24 grid, the three-view
+    # identity, the standing compliance faces and a read-only --check.
+    ("os-market-hour-heatmap",
+     os.path.join("..", "os", "test_market_hour_heatmap.py"), 6),
     # R3073: tools/city_face_report.py renders the P-47 item-1 city face and
     # carries its own --check (AC-CFY1..8), but this registry had no row naming
     # it, so the face was graded only by the fail-soft [GATES] sweep - the

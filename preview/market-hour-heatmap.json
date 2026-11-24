@@ -1,0 +1,1358 @@
+{
+ "generated_utc": "2026-11-24 04:50:14Z",
+ "face": "api_market_hour_heatmap",
+ "hour_count": 24,
+ "weekday_count": 7,
+ "cell_count": 168,
+ "sales_count": 4,
+ "gross": 28,
+ "refund_count": 2,
+ "refunded": 15,
+ "net": 13,
+ "buyer_count": 3,
+ "seller_count": 2,
+ "busiest_hour": 0,
+ "busiest_weekday": 1,
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "hours": [
+  {
+   "hour": 0,
+   "sales_count": 1,
+   "gross": 10,
+   "refund_count": 2,
+   "refunded": 15,
+   "net": -5,
+   "buyer_count": 1,
+   "seller_count": 1
+  },
+  {
+   "hour": 1,
+   "sales_count": 0,
+   "gross": 0,
+   "refund_count": 0,
+   "refunded": 0,
+   "net": 0,
+   "buyer_count": 0,
+   "seller_count": 0
+  },
+  {
+   "hour": 2,
+   "sales_count": 0,
+   "gross": 0,
+   "refund_count": 0,
+   "refunded": 0,
+   "net": 0,
+   "buyer_count": 0,
+   "seller_count": 0
+  },
+  {
+   "hour": 3,
+   "sales_count": 0,
+   "gross": 0,
+   "refund_count": 0,
+   "refunded": 0,
+   "net": 0,
+   "buyer_count": 0,
+   "seller_count": 0
+  },
+  {
+   "hour": 4,
+   "sales_count": 0,
+   "gross": 0,
+   "refund_count": 0,
+   "refunded": 0,
+   "net": 0,
+   "buyer_count": 0,
+   "seller_count": 0
+  },
+  {
+   "hour": 5,
+   "sales_count": 0,
+   "gross": 0,
+   "refund_count": 0,
+   "refunded": 0,
+   "net": 0,
+   "buyer_count": 0,
+   "seller_count": 0
+  },
+  {
+   "hour": 6,
+   "sales_count": 0,
+   "gross": 0,
+   "refund_count": 0,
+   "refunded": 0,
+   "net": 0,
+   "buyer_count": 0,
+   "seller_count": 0
+  },
+  {
+   "hour": 7,
+   "sales_count": 0,
+   "gross": 0,
+   "refund_count": 0,
+   "refunded": 0,
+   "net": 0,
+   "buyer_count": 0,
+   "seller_count": 0
+  },
+  {
+   "hour": 8,
+   "sales_count": 1,
+   "gross": 5,
+   "refund_count": 0,
+   "refunded": 0,
+   "net": 5,
+   "buyer_count": 1,
+   "seller_count": 1
+  },
+  {
+   "hour": 9,
+   "sales_count": 0,
+   "gross": 0,
+   "refund_count": 0,
+   "refunded": 0,
+   "net": 0,
+   "buyer_count": 0,
+   "seller_count": 0
+  },
+  {
+   "hour": 10,
+   "sales_count": 0,
+   "gross": 0,
+   "refund_count": 0,
+   "refunded": 0,
+   "net": 0,
+   "buyer_count": 0,
+   "seller_count": 0
+  },
+  {
+   "hour": 11,
+   "sales_count": 0,
+   "gross": 0,
+   "refund_count": 0,
+   "refunded": 0,
+   "net": 0,
+   "buyer_count": 0,
+   "seller_count": 0
+  },
+  {
+   "hour": 12,
+   "sales_count": 1,
+   "gross": 3,
+   "refund_count": 0,
+   "refunded": 0,
+   "net": 3,
+   "buyer_count": 1,
+   "seller_count": 1
+  },
+  {
+   "hour": 13,
+   "sales_count": 0,
+   "gross": 0,
+   "refund_count": 0,
+   "refunded": 0,
+   "net": 0,
+   "buyer_count": 0,
+   "seller_count": 0
+  },
+  {
+   "hour": 14,
+   "sales_count": 0,
+   "gross": 0,
+   "refund_count": 0,
+   "refunded": 0,
+   "net": 0,
+   "buyer_count": 0,
+   "seller_count": 0
+  },
+  {
+   "hour": 15,
+   "sales_count": 0,
+   "gross": 0,
+   "refund_count": 0,
+   "refunded": 0,
+   "net": 0,
+   "buyer_count": 0,
+   "seller_count": 0
+  },
+  {
+   "hour": 16,
+   "sales_count": 0,
+   "gross": 0,
+   "refund_count": 0,
+   "refunded": 0,
+   "net": 0,
+   "buyer_count": 0,
+   "seller_count": 0
+  },
+  {
+   "hour": 17,
+   "sales_count": 0,
+   "gross": 0,
+   "refund_count": 0,
+   "refunded": 0,
+   "net": 0,
+   "buyer_count": 0,
+   "seller_count": 0
+  },
+  {
+   "hour": 18,
+   "sales_count": 0,
+   "gross": 0,
+   "refund_count": 0,
+   "refunded": 0,
+   "net": 0,
+   "buyer_count": 0,
+   "seller_count": 0
+  },
+  {
+   "hour": 19,
+   "sales_count": 0,
+   "gross": 0,
+   "refund_count": 0,
+   "refunded": 0,
+   "net": 0,
+   "buyer_count": 0,
+   "seller_count": 0
+  },
+  {
+   "hour": 20,
+   "sales_count": 0,
+   "gross": 0,
+   "refund_count": 0,
+   "refunded": 0,
+   "net": 0,
+   "buyer_count": 0,
+   "seller_count": 0
+  },
+  {
+   "hour": 21,
+   "sales_count": 0,
+   "gross": 0,
+   "refund_count": 0,
+   "refunded": 0,
+   "net": 0,
+   "buyer_count": 0,
+   "seller_count": 0
+  },
+  {
+   "hour": 22,
+   "sales_count": 0,
+   "gross": 0,
+   "refund_count": 0,
+   "refunded": 0,
+   "net": 0,
+   "buyer_count": 0,
+   "seller_count": 0
+  },
+  {
+   "hour": 23,
+   "sales_count": 1,
+   "gross": 10,
+   "refund_count": 0,
+   "refunded": 0,
+   "net": 10,
+   "buyer_count": 1,
+   "seller_count": 1
+  }
+ ],
+ "weekdays": [
+  {
+   "weekday": 0,
+   "weekday_name": "Mon",
+   "sales_count": 1,
+   "gross": 10,
+   "refund_count": 0,
+   "refunded": 0,
+   "net": 10,
+   "buyer_count": 1,
+   "seller_count": 1
+  },
+  {
+   "weekday": 1,
+   "weekday_name": "Tue",
+   "sales_count": 2,
+   "gross": 13,
+   "refund_count": 0,
+   "refunded": 0,
+   "net": 13,
+   "buyer_count": 2,
+   "seller_count": 1
+  },
+  {
+   "weekday": 2,
+   "weekday_name": "Wed",
+   "sales_count": 0,
+   "gross": 0,
+   "refund_count": 0,
+   "refunded": 0,
+   "net": 0,
+   "buyer_count": 0,
+   "seller_count": 0
+  },
+  {
+   "weekday": 3,
+   "weekday_name": "Thu",
+   "sales_count": 0,
+   "gross": 0,
+   "refund_count": 0,
+   "refunded": 0,
+   "net": 0,
+   "buyer_count": 0,
+   "seller_count": 0
+  },
+  {
+   "weekday": 4,
+   "weekday_name": "Fri",
+   "sales_count": 0,
+   "gross": 0,
+   "refund_count": 1,
+   "refunded": 10,
+   "net": -10,
+   "buyer_count": 0,
+   "seller_count": 0
+  },
+  {
+   "weekday": 5,
+   "weekday_name": "Sat",
+   "sales_count": 0,
+   "gross": 0,
+   "refund_count": 1,
+   "refunded": 5,
+   "net": -5,
+   "buyer_count": 0,
+   "seller_count": 0
+  },
+  {
+   "weekday": 6,
+   "weekday_name": "Sun",
+   "sales_count": 1,
+   "gross": 5,
+   "refund_count": 0,
+   "refunded": 0,
+   "net": 5,
+   "buyer_count": 1,
+   "seller_count": 1
+  }
+ ],
+ "cells": [
+  {
+   "weekday": 0,
+   "hour": 0,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 0,
+   "hour": 1,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 0,
+   "hour": 2,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 0,
+   "hour": 3,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 0,
+   "hour": 4,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 0,
+   "hour": 5,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 0,
+   "hour": 6,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 0,
+   "hour": 7,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 0,
+   "hour": 8,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 0,
+   "hour": 9,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 0,
+   "hour": 10,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 0,
+   "hour": 11,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 0,
+   "hour": 12,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 0,
+   "hour": 13,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 0,
+   "hour": 14,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 0,
+   "hour": 15,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 0,
+   "hour": 16,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 0,
+   "hour": 17,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 0,
+   "hour": 18,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 0,
+   "hour": 19,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 0,
+   "hour": 20,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 0,
+   "hour": 21,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 0,
+   "hour": 22,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 0,
+   "hour": 23,
+   "sales_count": 1,
+   "refund_count": 0
+  },
+  {
+   "weekday": 1,
+   "hour": 0,
+   "sales_count": 1,
+   "refund_count": 0
+  },
+  {
+   "weekday": 1,
+   "hour": 1,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 1,
+   "hour": 2,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 1,
+   "hour": 3,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 1,
+   "hour": 4,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 1,
+   "hour": 5,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 1,
+   "hour": 6,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 1,
+   "hour": 7,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 1,
+   "hour": 8,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 1,
+   "hour": 9,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 1,
+   "hour": 10,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 1,
+   "hour": 11,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 1,
+   "hour": 12,
+   "sales_count": 1,
+   "refund_count": 0
+  },
+  {
+   "weekday": 1,
+   "hour": 13,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 1,
+   "hour": 14,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 1,
+   "hour": 15,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 1,
+   "hour": 16,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 1,
+   "hour": 17,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 1,
+   "hour": 18,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 1,
+   "hour": 19,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 1,
+   "hour": 20,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 1,
+   "hour": 21,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 1,
+   "hour": 22,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 1,
+   "hour": 23,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 2,
+   "hour": 0,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 2,
+   "hour": 1,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 2,
+   "hour": 2,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 2,
+   "hour": 3,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 2,
+   "hour": 4,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 2,
+   "hour": 5,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 2,
+   "hour": 6,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 2,
+   "hour": 7,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 2,
+   "hour": 8,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 2,
+   "hour": 9,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 2,
+   "hour": 10,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 2,
+   "hour": 11,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 2,
+   "hour": 12,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 2,
+   "hour": 13,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 2,
+   "hour": 14,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 2,
+   "hour": 15,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 2,
+   "hour": 16,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 2,
+   "hour": 17,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 2,
+   "hour": 18,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 2,
+   "hour": 19,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 2,
+   "hour": 20,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 2,
+   "hour": 21,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 2,
+   "hour": 22,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 2,
+   "hour": 23,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 3,
+   "hour": 0,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 3,
+   "hour": 1,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 3,
+   "hour": 2,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 3,
+   "hour": 3,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 3,
+   "hour": 4,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 3,
+   "hour": 5,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 3,
+   "hour": 6,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 3,
+   "hour": 7,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 3,
+   "hour": 8,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 3,
+   "hour": 9,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 3,
+   "hour": 10,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 3,
+   "hour": 11,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 3,
+   "hour": 12,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 3,
+   "hour": 13,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 3,
+   "hour": 14,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 3,
+   "hour": 15,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 3,
+   "hour": 16,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 3,
+   "hour": 17,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 3,
+   "hour": 18,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 3,
+   "hour": 19,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 3,
+   "hour": 20,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 3,
+   "hour": 21,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 3,
+   "hour": 22,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 3,
+   "hour": 23,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 4,
+   "hour": 0,
+   "sales_count": 0,
+   "refund_count": 1
+  },
+  {
+   "weekday": 4,
+   "hour": 1,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 4,
+   "hour": 2,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 4,
+   "hour": 3,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 4,
+   "hour": 4,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 4,
+   "hour": 5,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 4,
+   "hour": 6,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 4,
+   "hour": 7,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 4,
+   "hour": 8,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 4,
+   "hour": 9,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 4,
+   "hour": 10,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 4,
+   "hour": 11,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 4,
+   "hour": 12,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 4,
+   "hour": 13,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 4,
+   "hour": 14,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 4,
+   "hour": 15,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 4,
+   "hour": 16,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 4,
+   "hour": 17,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 4,
+   "hour": 18,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 4,
+   "hour": 19,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 4,
+   "hour": 20,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 4,
+   "hour": 21,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 4,
+   "hour": 22,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 4,
+   "hour": 23,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 5,
+   "hour": 0,
+   "sales_count": 0,
+   "refund_count": 1
+  },
+  {
+   "weekday": 5,
+   "hour": 1,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 5,
+   "hour": 2,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 5,
+   "hour": 3,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 5,
+   "hour": 4,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 5,
+   "hour": 5,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 5,
+   "hour": 6,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 5,
+   "hour": 7,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 5,
+   "hour": 8,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 5,
+   "hour": 9,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 5,
+   "hour": 10,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 5,
+   "hour": 11,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 5,
+   "hour": 12,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 5,
+   "hour": 13,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 5,
+   "hour": 14,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 5,
+   "hour": 15,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 5,
+   "hour": 16,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 5,
+   "hour": 17,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 5,
+   "hour": 18,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 5,
+   "hour": 19,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 5,
+   "hour": 20,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 5,
+   "hour": 21,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 5,
+   "hour": 22,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 5,
+   "hour": 23,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 6,
+   "hour": 0,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 6,
+   "hour": 1,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 6,
+   "hour": 2,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 6,
+   "hour": 3,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 6,
+   "hour": 4,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 6,
+   "hour": 5,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 6,
+   "hour": 6,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 6,
+   "hour": 7,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 6,
+   "hour": 8,
+   "sales_count": 1,
+   "refund_count": 0
+  },
+  {
+   "weekday": 6,
+   "hour": 9,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 6,
+   "hour": 10,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 6,
+   "hour": 11,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 6,
+   "hour": 12,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 6,
+   "hour": 13,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 6,
+   "hour": 14,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 6,
+   "hour": 15,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 6,
+   "hour": 16,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 6,
+   "hour": 17,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 6,
+   "hour": 18,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 6,
+   "hour": 19,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 6,
+   "hour": 20,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 6,
+   "hour": 21,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 6,
+   "hour": 22,
+   "sales_count": 0,
+   "refund_count": 0
+  },
+  {
+   "weekday": 6,
+   "hour": 23,
+   "sales_count": 0,
+   "refund_count": 0
+  }
+ ],
+ "report": "preview/market-hour-heatmap.html",
+ "sources": {
+  "driver": "3d9939906930a7c5",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 27204,
+  "json": 19565
+ }
+}
