@@ -1,0 +1,53 @@
+R3494 FOLD-CARRY CLASSIFICATION (read-only first, then one new tool)
+
+red face measured before any write
+  python src/os/test_ledger_archive.py -> SUITE FAIL 9/15
+  FAIL arms: AC-LGA9, AC-LGA10, AC-LGA11, AC-LGA12, AC-LGA13, AC-LGA15
+  python src/os/ledger_lines.py --archives logs --fold-carry
+    FOLD-CARRY FAIL E_LFC_CARRY since=2914 windows=145 gaps=6
+    gaps=R3436(w3438),R3458(w3460),R3459(w3460),R3436(w3460),R3458(w3465),R3459(w3465)
+    split=51 same_window=58 dup=11 exempt=1(R3112) prov=tracked=1/3
+
+root cause measured, neither an accounting nor a reading artefact
+  the six entries are 3 distinct rounds x 3 windows; every one of the three
+  carries complete narratives in the November archive:
+    R3436 11 narrative lines in window R3460, 1 in window R3438
+    R3458 1 narrative line in window R3460, 2 in window R3465
+    R3459 3 narrative lines in window R3460, 1 in window R3465
+  and none of the three has a ledger presence line anywhere:
+    grep over logs/state-log-archive-2026-09/10/11.md and src/os/state.json
+    for 'R3436 tokens:' / 'R3458 tokens:' / 'R3459 tokens:' -> 0 ledger lines
+    (the only textual match is a narrative that mentions the word tokens)
+  git history, both ring paths (src/os/state.json, logs/):
+    git log -S'R3436 tokens:' -> 0 commits: the line never entered the ring
+    git log -S'R3459 tokens:' -> only the R3459 narrative blob
+
+classification
+  class A left_behind (ledger still in the live ring, repairable): 0
+  class B nowhere (no ledger line in archives or live ring; archives are
+          frozen history no later round may rewrite): 3 rounds / 6 entries
+  class C exempted by the shipped named table, both halves re-proved: 1 (R3112)
+  so the law's six-arm red is a FROZEN-HOLE face, not the repairable
+  'ledger left behind' shape the law's own comment names.
+
+product increment landed this round
+  tools/fold_carry_census.py - the two-class split as a runnable reading
+  (two passes, borrowed from audit_fold_carry; a one-pass draft was measured
+  at 22 holes over 19 rounds where the audit answers 6 over 3, the whole
+  difference being archive file order)
+  FOLD-CARRY-CENSUS since=2914 windows=145 rounds=640 left_behind=0
+    nowhere=3(rounds=3 entries=6) exempt=1
+  preview/fold-carry-census.json 1995B derived from that same read
+  python tools/fold_carry_census.py --check -> FCC-CHECK VERDICT PASS
+
+not changed this round, on purpose
+  the FOLD-CARRY law itself is untouched: the six arms stay red, because the
+  three holes are real and the archives may not be rewritten. Whether the
+  response is a named exemption with recorded evidence or a rescope to the
+  era where the budget line was mandatory is a law decision, pinned for the
+  next window with criteria rather than taken here.
+
+carrier
+  python src/os/logs_toolkit.py fold --plan-only -> writes_nothing=true
+  python src/os/test_ledger_archive.py after the tool -> SUITE FAIL 9/15
+    (unchanged: this round added a reader, it did not touch a law)

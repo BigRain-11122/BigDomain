@@ -1,0 +1,89 @@
+{
+  "archive_ledger_rounds": 2260,
+  "clean": true,
+  "exempted": [
+    {
+      "class": "exempted",
+      "file": "state-log-archive-2026-11.md",
+      "file_ordinal": 241,
+      "line": 5790,
+      "narrative_lines": 1,
+      "round": 3112,
+      "why": "tick-alignment closeout: a replay probe was read as a new append, so the tick moved 3111 -> 3112 and no budget line was written",
+      "window": 3135
+    }
+  ],
+  "left_behind": [],
+  "live_ledger_rounds": 3,
+  "nowhere": [
+    {
+      "class": "nowhere",
+      "file": "state-log-archive-2026-11.md",
+      "file_ordinal": 304,
+      "line": 8442,
+      "narrative_lines": 1,
+      "round": 3436,
+      "why": "not-named",
+      "window": 3438
+    },
+    {
+      "class": "nowhere",
+      "file": "state-log-archive-2026-11.md",
+      "file_ordinal": 320,
+      "line": 8724,
+      "narrative_lines": 1,
+      "round": 3458,
+      "why": "not-named",
+      "window": 3460
+    },
+    {
+      "class": "nowhere",
+      "file": "state-log-archive-2026-11.md",
+      "file_ordinal": 320,
+      "line": 8724,
+      "narrative_lines": 3,
+      "round": 3459,
+      "why": "not-named",
+      "window": 3460
+    },
+    {
+      "class": "nowhere",
+      "file": "state-log-archive-2026-11.md",
+      "file_ordinal": 321,
+      "line": 8729,
+      "narrative_lines": 11,
+      "round": 3436,
+      "why": "not-named",
+      "window": 3460
+    },
+    {
+      "class": "nowhere",
+      "file": "state-log-archive-2026-11.md",
+      "file_ordinal": 327,
+      "line": 8797,
+      "narrative_lines": 2,
+      "round": 3458,
+      "why": "not-named",
+      "window": 3465
+    },
+    {
+      "class": "nowhere",
+      "file": "state-log-archive-2026-11.md",
+      "file_ordinal": 327,
+      "line": 8797,
+      "narrative_lines": 1,
+      "round": 3459,
+      "why": "not-named",
+      "window": 3465
+    }
+  ],
+  "nowhere_rounds": [
+    3436,
+    3458,
+    3459
+  ],
+  "rounds": 640,
+  "since": 2914,
+  "tool": "fold-carry-census",
+  "windows": 145
+}

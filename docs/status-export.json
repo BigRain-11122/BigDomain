@@ -1,21 +1,21 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-26 R3493 PRODUCT: the ledger self-check page publishes a coherent pair again - html and json are two halves of one derivation (html 8656B 5CC62D22, json 6151B 8D108D2F) and the shipped gate reads VERDICT PASS 6/6 instead of AC-LRC5 red.",
+    "current": "2026-11-26 R3494 PRODUCT: the fold-carry red stops being one undifferentiated number - tools/fold_carry_census.py splits every post-pin gap into repairable (a ledger presence line still in the live ring) and frozen (no ledger line anywhere), and reads the shipped tree as left_behind=0 nowhere=3(rounds=3 entries=6) exempt=1 with preview/fold-carry-census.json derived from the same read (FCC-CHECK VERDICT PASS).",
     "do": "2026-11-25 R3456 PRODUCT: the answer-revision question now has a door - api_answer_history (live with AC-AMAW1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so 'which answer was rewritten, what did it say before, what does it say now and how often did it change' could only be read by calling the sandbox from a shell - while api_seller_answers and api_listing_qna publish only the CURRENT wording.",
-    "last_artifact": "preview/ledger-reconcile-face.html (8656B) + preview/ledger-reconcile-face.json (6151B) [2026-11-26 mtime]",
-    "latest_artifact": "preview/ledger-reconcile-face.html (8656B) + preview/ledger-reconcile-face.json (6151B) [2026-11-26 mtime]",
+    "last_artifact": "preview/ledger-reconcile-face.html (8656B) + preview/ledger-reconcile-face.json (6151B) [2026-11-26 commit]",
+    "latest_artifact": "preview/ledger-reconcile-face.html (8656B) + preview/ledger-reconcile-face.json (6151B) [2026-11-26 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ledger-reconcile-face.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/ledger-reconcile-face-pair-R3493.log (2322B, 2026-11-26, sha256 5703bb55c65b)",
-    "latest_evidence": "qa/ledger-reconcile-face-pair-R3493.log (2322B, 2026-11-26, sha256 5703bb55c65b)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/fold-carry-census-R3494.log (2984B, 2026-11-26, sha256 75562974054f)",
+    "latest_evidence": "qa/fold-carry-census-R3494.log (2984B, 2026-11-26, sha256 75562974054f)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R3493] next window (<=48h): (1) **S4U 仍未落地**（第三十二次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回。(2) **本窗收敛后的真红只剩两套**：`os-ledger-archive` 六臂 AC-LGA9/10/11/12/13/15 与 `os-ledger-reconcile-face` AC-LRB2（`rc=2 findings=1`）——下窗先只读逐臂取红因，判「折窗/归档账目」与「对账面读数」二分类，再按最重一条立判据。(3) `battery-shard-report` 已重派生（4 绿 2 红）：下窗只在收口后再对读一次，若族读数有变则重跑产出者；产出者一律 `Start-Process -WindowStyle Hidden` 单跑并轮询读回，禁占前台（前台两次被 5 分钟静默上限杀）。(4) 载体余量 `64619B` 富余，下窗仍先跑 `python src/os/logs_toolkit.py fold --plan-only`。(5) 基准 2026-12-01 到期（48h 窗 2026-11-27）。(6) tick 口径：本轮 3491/3492，下轮 R3493。(7) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定「诊断不修」）、全量 battery 未实跑、Docker 缺位、backlog.md 体量、导出面 `latest_artifact` 槽写手债、三个 `qa/crawl-*` 改动件非本窗所写。",
-    "next_milestone_due": "2026-11-28T04:14:31+08:00",
-    "updated_at": "2026-11-26T04:14:31+08:00",
+    "next_milestone": "[R3495] next window (<=48h): (1) **S4U 仍未落地**（第三十四次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回。(2) **三洞决策（本窗只分类，未改法条）**：两条候选路径各自先立判据——A「具名豁免」须给出可机械复验的证物（`FOLD_CARRY_EXEMPT` 现在只认一个 `narrative_span`，而三轮的证物是**存储史缺席**，模块禁子进程/禁网络，故先答「证物能不能不靠 git 而由盘上复验」）；B「收窄射程」须先答「台账行强制令在哪一轮生效」（R3380 引 `E_ROUND_LOST`，须以归档原文定轮次），并验「收窄后不会放走任何可修形状」——负控＝造一条「叙述归档、台账留活体」的窗口必须仍红。判据未立前禁改 `ledger_lines.py`。(3) `battery-shard-report` 本轮未对读（族读数未变），下窗对读一次。(4) 载体余量：state `7560B`，`fold --plan-only` 本轮答 `writes_nothing=true`（post 上限 2827B），下窗仍先跑。(5) 基准 2026-12-01 到期（48h 窗 2026-11-27）。(6) tick 口径：本轮 3493→3494，下轮 R3495。(7) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定「诊断不修」）、全量 battery 未实跑、Docker 缺位、backlog.md 体量、导出面 `latest_artifact` 槽写手债、三个 `qa/crawl-*` 改动件非本窗所写。",
+    "next_milestone_due": "2026-11-28T04:26:32+08:00",
+    "updated_at": "2026-11-26T04:26:32+08:00",
     "heartbeat": {
       "tick": 3485,
-      "state_tick": 3493,
-      "lag": 8,
+      "state_tick": 3494,
+      "lag": 9,
       "verdict": "FLAG",
       "reason": "heartbeat_row_debt"
     },
@@ -27,7 +27,7 @@
       "over7": 0,
       "dup_rows": 0,
       "distinct": 11,
-      "collapsed": 0,
+      "collapsed": 1,
       "labels_refreshed": 0,
       "notes_stale": 0,
       "note_claims": 0,
@@ -35,8 +35,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-26 R3493 PRODUCT: the ledger self-check page publishes a coherent pair again - html and json are two halves of one derivation (html 8656B 5CC62D22, json 6151B 8D108D2F) and the shipped gate reads VERDICT PASS 6/6 instead of AC-LRC5 red.",
-  "claims": {"claimed": 41, "captured": 23, "contradicted": 0, "uncaptured": 18, "historic": 0, "rows": 103, "present": true, "census_ts": "2026-11-26T04:14:31+08:00"},
+  "current": "2026-11-26 R3494 PRODUCT: the fold-carry red stops being one undifferentiated number - tools/fold_carry_census.py splits every post-pin gap into repairable (a ledger presence line still in the live ring) and frozen (no ledger line anywhere), and reads the shipped tree as left_behind=0 nowhere=3(rounds=3 entries=6) exempt=1 with preview/fold-carry-census.json derived from the same read (FCC-CHECK VERDICT PASS).",
+  "claims": {"claimed": 41, "captured": 23, "contradicted": 0, "uncaptured": 18, "historic": 0, "rows": 103, "present": true, "census_ts": "2026-11-26T04:26:32+08:00"},
   "chain": {"present": true, "rows": 103, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -65,13 +65,13 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-26 R3493 PRODUCT: the ledger self-check page publishes a coherent pair again - html and json are two halves of one derivation (html 8656B 5CC62D22, json 6151B 8D108D2F) and the shipped gate reads VERDICT PASS 6/6 instead of AC-LRC5 red.",
-  "export_ts": "2026-11-26T04:14:31+08:00",
-  "latest_artifact": "preview/ledger-reconcile-face.html (8656B) + preview/ledger-reconcile-face.json (6151B) [2026-11-26 mtime]",
-  "latest_evidence": "qa/ledger-reconcile-face-pair-R3493.log (2322B, 2026-11-26, sha256 5703bb55c65b)",
-  "next_milestone": "[R3493] next window (<=48h): (1) **S4U 仍未落地**（第三十二次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回。(2) **本窗收敛后的真红只剩两套**：`os-ledger-archive` 六臂 AC-LGA9/10/11/12/13/15 与 `os-ledger-reconcile-face` AC-LRB2（`rc=2 findings=1`）——下窗先只读逐臂取红因，判「折窗/归档账目」与「对账面读数」二分类，再按最重一条立判据。(3) `battery-shard-report` 已重派生（4 绿 2 红）：下窗只在收口后再对读一次，若族读数有变则重跑产出者；产出者一律 `Start-Process -WindowStyle Hidden` 单跑并轮询读回，禁占前台（前台两次被 5 分钟静默上限杀）。(4) 载体余量 `64619B` 富余，下窗仍先跑 `python src/os/logs_toolkit.py fold --plan-only`。(5) 基准 2026-12-01 到期（48h 窗 2026-11-27）。(6) tick 口径：本轮 3491/3492，下轮 R3493。(7) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定「诊断不修」）、全量 battery 未实跑、Docker 缺位、backlog.md 体量、导出面 `latest_artifact` 槽写手债、三个 `qa/crawl-*` 改动件非本窗所写。",
+  "do": "2026-11-26 R3494 PRODUCT: the fold-carry red stops being one undifferentiated number - tools/fold_carry_census.py splits every post-pin gap into repairable (a ledger presence line still in the live ring) and frozen (no ledger line anywhere), and reads the shipped tree as left_behind=0 nowhere=3(rounds=3 entries=6) exempt=1 with preview/fold-carry-census.json derived from the same read (FCC-CHECK VERDICT PASS).",
+  "export_ts": "2026-11-26T04:26:32+08:00",
+  "latest_artifact": "preview/ledger-reconcile-face.html (8656B) + preview/ledger-reconcile-face.json (6151B) [2026-11-26 commit]",
+  "latest_evidence": "qa/fold-carry-census-R3494.log (2984B, 2026-11-26, sha256 75562974054f)",
+  "next_milestone": "[R3495] next window (<=48h): (1) **S4U 仍未落地**（第三十四次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回。(2) **三洞决策（本窗只分类，未改法条）**：两条候选路径各自先立判据——A「具名豁免」须给出可机械复验的证物（`FOLD_CARRY_EXEMPT` 现在只认一个 `narrative_span`，而三轮的证物是**存储史缺席**，模块禁子进程/禁网络，故先答「证物能不能不靠 git 而由盘上复验」）；B「收窄射程」须先答「台账行强制令在哪一轮生效」（R3380 引 `E_ROUND_LOST`，须以归档原文定轮次），并验「收窄后不会放走任何可修形状」——负控＝造一条「叙述归档、台账留活体」的窗口必须仍红。判据未立前禁改 `ledger_lines.py`。(3) `battery-shard-report` 本轮未对读（族读数未变），下窗对读一次。(4) 载体余量：state `7560B`，`fold --plan-only` 本轮答 `writes_nothing=true`（post 上限 2827B），下窗仍先跑。(5) 基准 2026-12-01 到期（48h 窗 2026-11-27）。(6) tick 口径：本轮 3493→3494，下轮 R3495。(7) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定「诊断不修」）、全量 battery 未实跑、Docker 缺位、backlog.md 体量、导出面 `latest_artifact` 槽写手债、三个 `qa/crawl-*` 改动件非本窗所写。",
   "outs": [
-    "preview/ledger-reconcile-face.html (8656B) + preview/ledger-reconcile-face.json (6151B) [2026-11-26 mtime]",
+    "preview/ledger-reconcile-face.html (8656B) + preview/ledger-reconcile-face.json (6151B) [2026-11-26 commit]",
     "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-26 commit] (halves differ: html [2026-11-26 commit] + json [2026-11-16 commit]; later=html)",
     "preview/lobby-protocol-map.html (29069B) + preview/lobby-protocol-map.json (27924B) [2026-11-26 commit]",
     "preview/merchant-onboard.html (23088B) + preview/merchant-onboard.json (8124B) [2026-11-26 commit]",
@@ -138,20 +138,20 @@
     "shortfall_total": 15,
     "verdict": "FLOOR-DEBT"
   },
-  "results": [["3493", "OSLoop 执行 tick"]],
+  "results": [["3494", "OSLoop 执行 tick"]],
   "results_archive": {
     "bytes": 336680,
     "count": 179,
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
-  "self_drive": {"window": "2026-11-20..2026-11-26", "window_days": 7, "log_lines_in_window": 21, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 3, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
-  "state_bytes": 16685,
-  "next_milestone_due": "2026-11-28T04:14:31+08:00",
+  "self_drive": {"window": "2026-11-20..2026-11-26", "window_days": 7, "log_lines_in_window": 27, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 4, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
+  "state_bytes": 19579,
+  "next_milestone_due": "2026-11-28T04:26:32+08:00",
   "heartbeat": {
     "tick": 3485,
-    "state_tick": 3493,
-    "lag": 8,
+    "state_tick": 3494,
+    "lag": 9,
     "verdict": "FLAG",
     "reason": "heartbeat_row_debt"
   },
@@ -163,7 +163,7 @@
     "over7": 0,
     "dup_rows": 0,
     "distinct": 11,
-    "collapsed": 0,
+    "collapsed": 1,
     "labels_refreshed": 0,
     "notes_stale": 0,
     "note_claims": 0,
