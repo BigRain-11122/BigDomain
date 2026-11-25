@@ -1,0 +1,47 @@
+R3493 ledger-reconcile-face pair repair - evidence
+date: 2026-11-26
+trigger (read-only first):
+  python tools/ledger_reconcile_face.py --check
+  -> VERDICT FAIL 1
+     - AC-LRC5 landed html is not a function of the landed json through the shipped post-render channel
+  rc=2
+cause measured on disk:
+  preview/ledger-reconcile-face.html  8656B  mtime 2026-11-25 09:xx
+  preview/ledger-reconcile-face.json  6151B  mtime 2026-11-24 1:xx
+  the html half was re-rendered by another window while the json half stayed at the
+  11-24 render, so the pair is no longer two halves of one derivation.
+before (sha256 first 8):
+  html 02935B5A
+  json 18F249E4
+repair (producer default write mode, three runs of the shipped reconcile.py per render):
+  python tools/ledger_reconcile_face.py
+  -> WROTE html (8656B) + json (6151B) checks=8 real=PASS empty=True seeded=PASS
+     control=FAIL flipped=double-entry-balance,materialized-vs-derived
+after (sha256 first 8):
+  html 5CC62D22
+  json 8D108D2F
+gate read back (read-only):
+  python tools/ledger_reconcile_face.py --check
+  -> VERDICT PASS 6/6 checks=8 real=PASS empty=True seeded=PASS control=FAIL flipped=2
+     html=8656B json=6151B
+  rc=0
+family read back:
+  python tools/battery_shard.py --match os-ledger
+  -> green=12/13 crit_mismatch=0 elapsed=10.5s (was 11/13)
+  -> red os-ledger-archive:rc=2 only
+suite read back:
+  python src/os/test_ledger_reconcile_face.py -> SUITE PASS 9/9 (was FAIL 8/9, AC-LRB2 red)
+per-arm red cause carried for the next window (read-only, not fixed here):
+  python src/os/ledger_lines.py --archives logs --fold-carry
+  -> FOLD-CARRY FAIL E_LFC_CARRY since=2914 windows=145
+     gaps R3436(w3438@state-log-archive-2026-11.md:304:8442),
+          R3458(w3460@...:320:8724), R3459(w3460@...:320:8724),
+          R3436(w3460@...:321:8729), R3458(w3465@...:327:8797),
+          R3459(w3465@...:327:8797)
+     split=51 same_window=58 dup=11 exempt=1(R3112) loc=file@line prov=tracked=1/3
+  this is the archive family's common face; the six red arms AC-LGA9/10/11/12/13/15
+  are next window's work, pinned before any edit.
+honest note:
+  zero code lines changed this window; this is a stale-pair procedural gap of the
+  same class as R3487..R3492, not a renderer logic defect.  Zero payment capability:
+  the five CEO physical pieces still gate every buyer.
