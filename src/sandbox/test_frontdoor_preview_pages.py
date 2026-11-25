@@ -116,7 +116,7 @@ RESULTS = []
 
 # R3475: one place states how many criteria the registry must
 # declare, so adding a criterion cannot leave eleven stale literals.
-DECLARED_TAG = "17)"
+DECLARED_TAG = "18)"
 
 
 def report(name, bad, detail=""):
@@ -2319,6 +2319,134 @@ def main():
             block17 = handle.read().split('"' + ROW + '"', 1)[-1][:220]
         if DECLARED_TAG not in block17:
             bad17.append("f-declared")
+        # R3477 measured before the edit (tmp/probe_range_merge.py): overlap,
+        # adjacency, reversed order and full containment each answered two
+        # parts, so the bytes inside an overlap travelled twice and the
+        # answer's byte set did not match the asked union.
+        bad18 = []
+        page18 = "/preview/index.html"
+        with io.open(os.path.join(PREVIEW, "index.html"), "rb") as handle:
+            disk18 = handle.read()
+        size18 = len(disk18)
+        plain18 = cond(port, "GET", page18)
+
+        def merged18(value):
+            """One list; the single-part answer the merge law predicts."""
+            return cond(port, "GET", page18, {"Range": value})
+
+        # ---- a: an overlapping pair becomes one slice ---------------------
+        over18 = merged18("bytes=0-9,5-14")
+        if over18["status"] != 206 or "multipart" in over18["ctype"]:
+            bad18.append("a-kind-%d-%r" % (over18["status"],
+                                           over18["ctype"]))
+        elif over18["crange"] != "bytes 0-14/%d" % size18:
+            bad18.append("a-crange-%r" % over18["crange"])
+        elif over18["body"] != disk18[0:15]:
+            bad18.append("a-bytes-%d" % len(over18["body"]))
+        # ---- b: two sides of one boundary become one slice ----------------
+        next18 = merged18("bytes=0-9,10-19")
+        if next18["status"] != 206 or "multipart" in next18["ctype"] or \
+                next18["crange"] != "bytes 0-19/%d" % size18 or \
+                next18["body"] != disk18[0:20]:
+            bad18.append("b-adjacent-%d-%r-%d" % (next18["status"],
+                                                   next18["crange"],
+                                                   len(next18["body"])))
+        # ---- c: a contained segment adds no byte, either order ------------
+        nest18 = merged18("bytes=0-9,0-4")
+        if nest18["status"] != 206 or "multipart" in nest18["ctype"] or \
+                nest18["crange"] != "bytes 0-9/%d" % size18 or \
+                nest18["body"] != disk18[:10]:
+            bad18.append("c-nested-%d-%r-%d" % (nest18["status"],
+                                                nest18["crange"],
+                                                len(nest18["body"])))
+        back18 = merged18("bytes=0-4,0-9")
+        if back18["status"] != 206 or "multipart" in back18["ctype"] or \
+                back18["crange"] != "bytes 0-9/%d" % size18 or \
+                back18["body"] != disk18[:10]:
+            bad18.append("c-nested-back-%d-%r-%d"
+                         % (back18["status"], back18["crange"],
+                            len(back18["body"])))
+        # ---- d: an unordered list merges and answers in byte order --------
+        mixed18 = merged18("bytes=20-29,0-9,25-40")
+        if mixed18["status"] != 206 or \
+                "multipart/byteranges; boundary=" not in mixed18["ctype"]:
+            bad18.append("d-kind-%d-%r" % (mixed18["status"],
+                                           mixed18["ctype"]))
+        else:
+            bound18 = mixed18["ctype"].split("boundary=", 1)[1].strip()
+            got18 = parts17(mixed18["body"], bound18)
+            wants18 = [("bytes 0-9/%d" % size18, disk18[0:10]),
+                       ("bytes 20-40/%d" % size18, disk18[20:41])]
+            if got18 is None:
+                bad18.append("d-framing")
+            elif len(got18) != 2:
+                bad18.append("d-parts-%d" % len(got18))
+            else:
+                for (fields, payload), (want, body18) in zip(got18, wants18):
+                    if fields.get("content-range") != want:
+                        bad18.append("d-crange-%r" % fields.get("content-range"))
+                    if payload != body18:
+                        bad18.append("d-bytes-%d" % len(payload))
+                if b"".join(pl for _f, pl in got18) != \
+                        disk18[0:10] + disk18[20:41]:
+                    bad18.append("d-union")
+        # ---- e: nothing already delivered moved --------------------------
+        two18 = cond(port, "GET", page18, {"Range": "bytes=0-9,20-29"})
+        if two18["status"] != 206 or \
+                "multipart/byteranges; boundary=" not in two18["ctype"]:
+            bad18.append("e-two-%d-%r" % (two18["status"], two18["ctype"]))
+        else:
+            b218 = two18["ctype"].split("boundary=", 1)[1].strip()
+            p218 = parts17(two18["body"], b218)
+            if p218 is None or [pl for _f, pl in p218] != \
+                    [disk18[0:10], disk18[20:30]]:
+                bad18.append("e-two-parts-%r"
+                             % (None if p218 is None else len(p218)))
+        four18 = merged18("bytes=0-9,20-29,40-49,60-69")
+        if four18["status"] != 200 or four18["body"] != disk18:
+            bad18.append("e-four-%d-%d" % (four18["status"],
+                                           len(four18["body"])))
+        drop18 = merged18("bytes=0-9,999999-")
+        if drop18["status"] != 206 or \
+                drop18["crange"] != "bytes 0-9/%d" % size18 or \
+                drop18["body"] != disk18[:10]:
+            bad18.append("e-drop-%d-%r" % (drop18["status"],
+                                           drop18["crange"]))
+        none18 = merged18("bytes=999999-,9999990-")
+        if none18["status"] != 416 or \
+                none18["crange"] != "bytes */%d" % size18:
+            bad18.append("e-416-%d-%r" % (none18["status"],
+                                          none18["crange"]))
+        stale18 = cond(port, "GET", page18,
+                       {"Range": "bytes=0-9,5-14",
+                        "If-Range": "Thu, 01 Jan 1970 00:00:00 GMT"})
+        if stale18["status"] != 200 or stale18["body"] != disk18:
+            bad18.append("e-stale-%d-%d" % (stale18["status"],
+                                            len(stale18["body"])))
+        head18 = cond(port, "HEAD", page18, {"Range": "bytes=0-9,5-14"})
+        if head18["status"] != 200 or head18["body"] or \
+                head18["length"] != str(size18):
+            bad18.append("e-head-%d-%r" % (head18["status"],
+                                           head18["length"]))
+        # ---- f: dialect, tokens on disk, declared count -------------------
+        with io.open(MODULE, "rb") as handle:
+            raw18 = handle.read()
+        if raw18[:3] == b"\xef\xbb\xbf" or b"\r\n" in raw18:
+            bad18.append("f-module-dialect")
+        try:
+            text18 = raw18.decode("utf-8")
+            text18.encode("ascii")
+        except (UnicodeDecodeError, UnicodeEncodeError):
+            bad18.append("f-module-not-ascii")
+            text18 = raw18.decode("utf-8", "replace")
+        for token18 in ("def _merge_spans(spans)",
+                        "RANGE_MAX_SEGMENTS = 3"):
+            if token18 not in text18:
+                bad18.append("f-missing-%s" % token18.split("(")[0].strip())
+        with io.open(REGISTRY, encoding="utf-8") as handle:
+            block18 = handle.read().split('"' + ROW + '"', 1)[-1][:220]
+        if DECLARED_TAG not in block18:
+            bad18.append("f-declared")
     finally:
         srv.shutdown()
         srv.server_close()
@@ -2340,6 +2468,7 @@ def main():
     report("AC-FDPV15", bool(bad15), ",".join(bad15))
     report("AC-FDPV16", bool(bad16), ",".join(bad16))
     report("AC-FDPV17", bool(bad17), ",".join(bad17))
+    report("AC-FDPV18", bool(bad18), ",".join(bad18))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:

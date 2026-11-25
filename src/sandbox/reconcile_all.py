@@ -8709,9 +8709,10 @@ SUITES = [
     # with a 10-byte count, and HEAD + Range + gzip answered the identity
     # count while GET under the same headers was gzip - AC-FDPV15. R3475 added
     # AC-FDPV16 (If-Range in both shapes RFC 9110 allows). R3476 added
-    # AC-FDPV17 (one Range header may name several segments).
+    # AC-FDPV17 (one Range header may name several segments). R3477 added
+    # AC-FDPV18 (an overlapping or adjacent list answers each byte once).
     ("frontdoor-preview-pages",
-     os.path.join("test_frontdoor_preview_pages.py"), 17),
+     os.path.join("test_frontdoor_preview_pages.py"), 18),
     # R3115: the 24h export-face age gate (os/export_freshness.py, AC-EXP1..6)
     # had zero production consumers - it ran only inside its own suite - while
     # the CEO card printed export_ts as a bare string. AC-FDC2 (six arms, ONE

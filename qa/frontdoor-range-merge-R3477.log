@@ -1,0 +1,17 @@
+R3477 evidence: one Range list, overlapping or adjacent, answers each byte once.
+Range bytes=0-9,5-14 -> 206 single part, Content-Range bytes 0-14/55185, body 15B
+Range bytes=0-9,10-19 -> 206 single part, bytes 0-19/55185, body 20B
+Range bytes=0-9,0-4 -> 206 single part, bytes 0-9/55185, body 10B
+Range bytes=0-4,0-9 -> 206 single part, bytes 0-9/55185, body 10B
+Range bytes=20-29,0-9,25-40 -> 206 two parts [0-9][20-40], union 31B, no repeat
+Range bytes=0-9,20-29 -> 206 two parts unchanged
+Range bytes=0-9,20-29,40-49,60-69 -> 200 whole 55185B (asked ceiling)
+Range bytes=0-9,999999- -> 206 bytes 0-9/55185
+Range bytes=999999-,9999990- -> 416 with bytes */55185
+If-Range stale + merged list -> 200 whole 55185B
+HEAD + merged list -> 200 whole, no body, Content-Length 55185
+SUITE PASS 18/18 (AC-FDPV18 six arms, first run)
+neighbour suites 4/4 5/5 6/6 1/1 1/1 4/4
+matrix 85220 bytes 826 rows
+census rows=826 readable=826 unparsed=0 silent=0
+frontdoor.py sha256 508cf9c2590b53b159b83bf8c21a9996af0b7b25886a79867e1026032908ee03

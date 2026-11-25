@@ -134,7 +134,8 @@
                 "2026-11-25 R3476 PRODUCT: the resumable shelf now answers a Range list - api-level multi-segment download had no door, so a reader that wanted two slices of one face could only fetch the whole thing twice, and RFC 9110 sec.14.1.1 defines exactly that answer as 206 multipart/byteranges.",
                 "R3476 measured, read-only first: tmp/probe_range_multi.py drove the shipped Handler over raw sockets with seven shapes (two segments, three, four, a suffix second segment, a second segment past the end, an all-past-end list, a malformed segment) and every one answered 200 with the whole 55185-byte face, a single text/html type and no Content-Range - _parse_range() saw a comma and returned None.",
                 "R3476 landed at the birth site (src/sandbox/frontdoor.py): _single_range() (one byte-range-spec, malformed -> None, first position past the last byte -> UNSATISFIABLE), _parse_ranges() (the whole header, at most RANGE_MAX_SEGMENTS=3 segments, a past-end segment dropped rather than poisoning its siblings, an all-past-end list -> 416), _range_boundary() (the token is derived from the face's own ETag and refused if it occurs inside the sliced bytes), _multipart_ranges() (per-part Content-Type and Content-Range, CRLF framing, closing boundary) and _serve_preview() routed through the list; _parse_range() stays as the single-segment law the earlier criteria pin.",
-                "fold 825 moved the R3476 Range-list block (nine lines) to the November archive verbatim; R3476 stays live and named. | tokens: AC-FDPV17,AC-FDPV3,AC-FDPV4,C-CURRENT"
+                "fold 826 (2026-11-25) moved the R3477 Range-merge block to the November archive verbatim; R3477 stays named here: overlapping or adjacent ranges answer each byte once, SUITE PASS 18/18. | tokens: AC-FDPV17,AC-FDPV18,AC-FDPV3,AC-FDPV4,C-CURRENT",
+                "2026-11-25 R3477 PRODUCT: an overlapping or adjacent Range list now answers each byte once (frontdoor _merge_spans; bytes=0-9,5-14 -> 206 bytes 0-14/55185; AC-FDPV18 six arms, SUITE PASS 18/18)."
   ],
-                "tick":3476
+  "tick":3477
 }

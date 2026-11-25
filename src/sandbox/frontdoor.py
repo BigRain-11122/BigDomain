@@ -9169,6 +9169,26 @@ def _single_range(spec, size):
     return start, min(end, size - 1)
 
 
+def _merge_spans(spans):
+    """R3477: the smallest set of disjoint slices naming the same bytes.
+
+    A list that overlaps itself or names two sides of one boundary asks for
+    bytes a neighbour already carries; answering both parts would send the
+    shared bytes twice and make the answer's byte set differ from the asked
+    union. Coalescing is the door's choice, so the merge is the identity on
+    an already disjoint, ascending list. The order is the byte order, which
+    keeps the answer stable no matter how the list was written.
+    """
+    merged = []
+    for start, end in sorted(spans):
+        if merged and start <= merged[-1][1] + 1:
+            if end > merged[-1][1]:
+                merged[-1] = (merged[-1][0], end)
+        else:
+            merged.append((start, end))
+    return merged
+
+
 def _parse_range(header, size):
     """R3463: exactly one byte range.
 
@@ -9212,7 +9232,10 @@ def _parse_ranges(header, size):
         spans.append(parsed)
     if not spans:
         return UNSATISFIABLE
-    return spans
+    # R3477: the segment ceiling above counts what the client asked for, not
+    # what the door assembles, so a coalesced list never grows past the same
+    # bound. The answer names each byte once, in byte order.
+    return _merge_spans(spans)
 
 
 def _range_boundary(etag, body):
