@@ -1,0 +1,10 @@
+===== DRIVER =====
+ANSWER-REVISION preview/answer-revision-board.html bytes=9240 answers=4 revisions=4 sellers=2
+===== SUITE =====
+PASS AC-ARHB1 payload_missing=[] payload_extra=[] answers=4 answer_shape=True row_shape=True seller_shape=True report=True sources=True
+PASS AC-ARHB2 answer_same=True disclaimer_same=True market_same=True sellers_same=True order_same=True answers=4
+PASS AC-ARHB3 driver_problems=0 forged_problems=4 identities=True chain=True revert=True retired=True unrevised=True bare_revisions=0
+PASS AC-ARHB4 answer_marked=True revisions=4 marked=True no_bare_none=True caption=True revert=True retired=True plain=True empty_landed=True empty_probe=True
+PASS AC-ARHB5 aigc=True disclaimer_verbatim=True notadvice=True zero_links=True no_script=True
+PASS AC-ARHB6 readonly=True check_rc=0 registered=True declared_hit=True face_suite=True
+SUITE PASS 6/6 declared=6 row=os-answer-revision-board

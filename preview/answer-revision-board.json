@@ -1,0 +1,139 @@
+{
+ "generated_utc": "2026-11-25 00:10:17Z",
+ "face": "api_answer_history",
+ "scope": "answers",
+ "market": {
+  "answer_count": 4,
+  "revised_answer_count": 3,
+  "unrevised_answer_count": 1,
+  "revision_count": 4,
+  "reverted_answer_count": 1,
+  "seller_count": 2,
+  "listing_count": 3,
+  "buyer_count": 3,
+  "latest_revised_utc": "2026-09-20T00:00:00Z",
+  "most_revised_answer": 1,
+  "longest_chain": 2
+ },
+ "sellers": [
+  {
+   "dev_account": "usr:dana",
+   "answered_count": 3,
+   "revised_count": 2,
+   "revision_count": 3,
+   "latest_revised_utc": "2026-09-20T00:00:00Z"
+  },
+  {
+   "dev_account": "usr:frank",
+   "answered_count": 1,
+   "revised_count": 1,
+   "revision_count": 1,
+   "latest_revised_utc": "2026-08-10T00:00:00Z"
+  }
+ ],
+ "answers": [
+  {
+   "answer_id": 1,
+   "dev_account": "usr:dana",
+   "listing_key": "data-a",
+   "buyer_id": "usr:bob",
+   "question_id": 1,
+   "listing_id": 4,
+   "question_text": "How many days does the first bundle take to ship?",
+   "base_text": "It ships in three working days.",
+   "effective_text": "It ships in three working days.",
+   "revision_count": 2,
+   "latest_revised_utc": "2026-09-20T00:00:00Z",
+   "reverted": true,
+   "retired": false,
+   "rows": [
+    {
+     "revision_id": 1,
+     "previous_text": "It ships in three working days.",
+     "answer_text": "It ships in two working days.",
+     "revised_utc": "2026-08-10T00:00:00Z"
+    },
+    {
+     "revision_id": 4,
+     "previous_text": "It ships in two working days.",
+     "answer_text": "It ships in three working days.",
+     "revised_utc": "2026-09-20T00:00:00Z"
+    }
+   ]
+  },
+  {
+   "answer_id": 2,
+   "dev_account": "usr:dana",
+   "listing_key": "data-a",
+   "buyer_id": "usr:carol",
+   "question_id": 2,
+   "listing_id": 4,
+   "question_text": "Is the export bundle shipped on a fixed weekday?",
+   "base_text": "It ships every Monday.",
+   "effective_text": "It ships every Monday.",
+   "revision_count": 0,
+   "latest_revised_utc": null,
+   "reverted": false,
+   "retired": false,
+   "rows": []
+  },
+  {
+   "answer_id": 3,
+   "dev_account": "usr:frank",
+   "listing_key": "tools-a",
+   "buyer_id": "usr:dave",
+   "question_id": 3,
+   "listing_id": 6,
+   "question_text": "Which licence does the toolkit ship under?",
+   "base_text": "The toolkit ships under the MIT licence.",
+   "effective_text": "The toolkit ships under the Apache-2.0 licence.",
+   "revision_count": 1,
+   "latest_revised_utc": "2026-08-10T00:00:00Z",
+   "reverted": false,
+   "retired": false,
+   "rows": [
+    {
+     "revision_id": 2,
+     "previous_text": "The toolkit ships under the MIT licence.",
+     "answer_text": "The toolkit ships under the Apache-2.0 licence.",
+     "revised_utc": "2026-08-10T00:00:00Z"
+    }
+   ]
+  },
+  {
+   "answer_id": 4,
+   "dev_account": "usr:dana",
+   "listing_key": "ops-a",
+   "buyer_id": "usr:dave",
+   "question_id": 4,
+   "listing_id": 7,
+   "question_text": "How often are the nightly batches refreshed?",
+   "base_text": "Batches refresh once a week.",
+   "effective_text": "Batches refresh every night.",
+   "revision_count": 1,
+   "latest_revised_utc": "2026-09-05T00:00:00Z",
+   "reverted": false,
+   "retired": true,
+   "rows": [
+    {
+     "revision_id": 3,
+     "previous_text": "Batches refresh once a week.",
+     "answer_text": "Batches refresh every night.",
+     "revised_utc": "2026-09-05T00:00:00Z"
+    }
+   ]
+  }
+ ],
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/answer-revision-board.html",
+ "sources": {
+  "driver": "1b13a13463696d45",
+  "copy": "f2a01d755463bd3b",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 9240,
+  "json": 3736
+ }
+}

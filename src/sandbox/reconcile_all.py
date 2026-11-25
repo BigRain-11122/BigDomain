@@ -8524,6 +8524,16 @@ SUITES = [
     # its own pinned clock.
     ("os-watch-category-mix-board",
      os.path.join("..", "os", "test_watch_category_mix_board.py"), 6),
+    # R3456: tools/answer_revision_board.py renders the per-answer revision
+    # chain (api_answer_history, AC-AMAW1..8) which had zero readers under
+    # tools/, preview/ and src/os; the page prints the market revision totals
+    # plus one card per answer with its base wording, effective wording, revert
+    # and retired badges and the append-only revision chain, and the suite
+    # re-reads every answer over its own throwaway world whose questions,
+    # answers, revisions and retirement are all made through the shipped doors
+    # under its own pinned clock.
+    ("os-answer-revision-board",
+     os.path.join("..", "os", "test_answer_revision_board.py"), 6),
     # R3455: tools/category_history_board.py renders the per-listing category
     # movement chain (api_category_history, AC-AMCG1..8) which had zero readers
     # under tools/, preview/ and src/os; the page prints one card per shelf with
