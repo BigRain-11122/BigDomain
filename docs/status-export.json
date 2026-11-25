@@ -12,8 +12,8 @@
     "latest_evidence": "qa/frontdoor-absolute-form-R3470.log (1992B, 2026-11-25, sha256 a31e78429355)",
     "newest_pair_on_disk_is_board": true,
     "next_milestone": "[R3470] next window (<=48h): (1) **S4U 仍未落地**：本会话仍未以提权身份运行，`BigDomain-OSLoop` 的 `LogonType` 需由**提权会话**跑 `src/os/register_loop_task.ps1` 并用 `$t.Principal.LogonType` 读回；**第十三次承账**，禁再以「未实测」或「无从下手」结账。(2) 门的第九层候选：`Host` 头面——本轮实测 absolute-form 已接受且 authority 被丢弃，但 `Host` 缺失、重复、或与 absolute-form 的 authority 冲突时的应答面尚未量（RFC 9112 §3.2：HTTP/1.1 请求必须有且只有一个 `Host`，缺失或重复应 400）；下窗先只读实测再立判据。(3) 收口序实证更新：各面写 → `first_yuan_chain.py` → `deliverable_index.py` → `index --check` → `face_sweep.py` → `--check` → `heartbeat.py --write <tick>` → `export_round.py` → `status_export_fresh.py --apply` → `check_export_consistency.py` → **导出面写后必须再跑一轮 index → index --check → sweep → sweep --check**（否则 `AC-CVL1` 与 `AC-FSW10` 按名红，本轮两次实证）→ `closeout_gate.py`；本窗终读 index de3def8ecf8ff8b5／sweep 80ab993794cf9d66／closeout PASS。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`（本窗 fold 820＋821 后载体 75420B／闸 78500／余 3080B）；**载体写后若出现 `E_STATE_LAYOUT`，正法＝`logs_toolkit.py eol --fix --execute` 再 `--fix-indent --execute`**（本轮写手以 `newline='\\\\n'` 写盘后连吃两拒，实锤在此）。(6) tick 口径：本窗 3469→3470。(7) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、backlog.md 体量闸、导出面 (truncated)",
-    "next_milestone_due": "2026-11-27T14:04:13+08:00",
-    "updated_at": "2026-11-25T14:04:13+08:00",
+    "next_milestone_due": "2026-11-27T14:07:08+08:00",
+    "updated_at": "2026-11-25T14:07:08+08:00",
     "heartbeat": {
       "tick": 3470,
       "state_tick": 3470,
@@ -38,7 +38,7 @@
     }
   },
   "current": "2026-11-25 R3470 PRODUCT: a request target in absolute form now opens the face it names - the form a client sends to a proxy, which RFC 9112 sec.3.2.2 requires a server to accept, answered 404 on every path before this landed, so a proxied reader could not tell a missing page from a door that only spoke origin-form.",
-  "claims": {"claimed": 36, "captured": 19, "contradicted": 0, "uncaptured": 17, "historic": 0, "rows": 101, "present": true, "census_ts": "2026-11-25T14:04:13+08:00"},
+  "claims": {"claimed": 36, "captured": 19, "contradicted": 0, "uncaptured": 17, "historic": 0, "rows": 101, "present": true, "census_ts": "2026-11-25T14:07:08+08:00"},
   "chain": {"present": true, "rows": 101, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -68,7 +68,7 @@
     }
   ],
   "do": "2026-11-25 R3470 PRODUCT: a request target in absolute form now opens the face it names - the form a client sends to a proxy, which RFC 9112 sec.3.2.2 requires a server to accept, answered 404 on every path before this landed, so a proxied reader could not tell a missing page from a door that only spoke origin-form.",
-  "export_ts": "2026-11-25T14:04:13+08:00",
+  "export_ts": "2026-11-25T14:07:08+08:00",
   "latest_artifact": "preview/apimarket-report.html (37201B) + preview/apimarket-report.json (59815B) [2026-11-25 commit]",
   "latest_evidence": "qa/frontdoor-absolute-form-R3470.log (1992B, 2026-11-25, sha256 a31e78429355)",
   "next_milestone": "[R3470] next window (<=48h): (1) **S4U 仍未落地**：本会话仍未以提权身份运行，`BigDomain-OSLoop` 的 `LogonType` 需由**提权会话**跑 `src/os/register_loop_task.ps1` 并用 `$t.Principal.LogonType` 读回；**第十三次承账**，禁再以「未实测」或「无从下手」结账。(2) 门的第九层候选：`Host` 头面——本轮实测 absolute-form 已接受且 authority 被丢弃，但 `Host` 缺失、重复、或与 absolute-form 的 authority 冲突时的应答面尚未量（RFC 9112 §3.2：HTTP/1.1 请求必须有且只有一个 `Host`，缺失或重复应 400）；下窗先只读实测再立判据。(3) 收口序实证更新：各面写 → `first_yuan_chain.py` → `deliverable_index.py` → `index --check` → `face_sweep.py` → `--check` → `heartbeat.py --write <tick>` → `export_round.py` → `status_export_fresh.py --apply` → `check_export_consistency.py` → **导出面写后必须再跑一轮 index → index --check → sweep → sweep --check**（否则 `AC-CVL1` 与 `AC-FSW10` 按名红，本轮两次实证）→ `closeout_gate.py`；本窗终读 index de3def8ecf8ff8b5／sweep 80ab993794cf9d66／closeout PASS。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`（本窗 fold 820＋821 后载体 75420B／闸 78500／余 3080B）；**载体写后若出现 `E_STATE_LAYOUT`，正法＝`logs_toolkit.py eol --fix --execute` 再 `--fix-indent --execute`**（本轮写手以 `newline='\\\\n'` 写盘后连吃两拒，实锤在此）。(6) tick 口径：本窗 3469→3470。(7) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、backlog.md 体量闸、导出面 (truncated)",
@@ -144,9 +144,9 @@
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
-  "self_drive": {"window": "2026-11-19..2026-11-25", "window_days": 7, "log_lines_in_window": 119, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 11, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
-  "state_bytes": 75420,
-  "next_milestone_due": "2026-11-27T14:04:13+08:00",
+  "self_drive": {"window": "2026-11-19..2026-11-25", "window_days": 7, "log_lines_in_window": 120, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 11, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
+  "state_bytes": 76048,
+  "next_milestone_due": "2026-11-27T14:07:08+08:00",
   "heartbeat": {
     "tick": 3470,
     "state_tick": 3470,
