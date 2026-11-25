@@ -9123,14 +9123,19 @@ __PAYWARN__</footer>
 
 
 class Handler(BaseHTTPRequestHandler):
-    def _send(self, code, ctype, body):
+    def _send(self, code, ctype, body, head_only=False):
+        # R3462: every answer is no-store. The preview faces are rebuilt under
+        # the same URL each round, so a cached page is a stale page and the
+        # reader would be looking at yesterday's numbers.
         self.send_response(code)
         self.send_header("Content-Type", ctype)
+        self.send_header("Cache-Control", "no-store")
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
-        self.wfile.write(body)
+        if not head_only:
+            self.wfile.write(body)
 
-    def _serve_preview(self, path):
+    def _serve_preview(self, path, head_only=False):
         """R3461: serve one shipped deliverable page from preview/.
 
         Only the whitelisted extensions leave the directory and every path
@@ -9143,47 +9148,39 @@ class Handler(BaseHTTPRequestHandler):
         if not rel:
             rel = "index.html"
         if "\\" in rel or ":" in rel:
-            return self._send(404, "text/plain", b"404 not found")
+            return self._send(404, "text/plain", b"404 not found", head_only)
         parts = rel.split("/")
         if any(part in ("", ".", "..") for part in parts):
-            return self._send(404, "text/plain", b"404 not found")
+            return self._send(404, "text/plain", b"404 not found", head_only)
         base = os.path.abspath(PREVIEW_DIR)
         full = os.path.abspath(os.path.join(base, *parts))
         if full != base and not full.startswith(base + os.sep):
-            return self._send(404, "text/plain", b"404 not found")
+            return self._send(404, "text/plain", b"404 not found", head_only)
         ctype = STATIC_EXTS.get(os.path.splitext(full)[1].lower())
         if ctype is None or not os.path.isfile(full):
-            return self._send(404, "text/plain", b"404 not found")
+            return self._send(404, "text/plain", b"404 not found", head_only)
         with open(full, "rb") as handle:
             body = handle.read()
-        return self._send(200, ctype, body)
+        return self._send(200, ctype, body, head_only)
+
+    def _route(self, head_only):
+        # R3462: one routing table for both verbs. HEAD answers the same
+        # status, type and length as GET and writes no body, so a standard
+        # probe (curl -I, a link checker, a CDN warmer) sees a working door.
+        if self.path in ("/", "/index.html"):
+            self._send(200, "text/html; charset=utf-8", render(), head_only)
+        elif self.path == "/healthz":
+            self._send(200, "text/plain", b"ok", head_only)
+        elif self.path == "/preview" or self.path.startswith("/preview/"):
+            self._serve_preview(self.path, head_only)
+        else:
+            self._send(404, "text/plain", b"404 not found", head_only)
 
     def do_GET(self):
-        if self.path in ("/", "/index.html"):
-            body = render()
-            self.send_response(200)
-            self.send_header("Content-Type",
-                             "text/html; charset=utf-8")
-            self.send_header("Cache-Control", "no-store")
-            self.send_header("Content-Length", str(len(body)))
-            self.end_headers()
-            self.wfile.write(body)
-        elif self.path == "/healthz":
-            body = b"ok"
-            self.send_response(200)
-            self.send_header("Content-Type", "text/plain")
-            self.send_header("Content-Length", str(len(body)))
-            self.end_headers()
-            self.wfile.write(body)
-        elif self.path == "/preview" or self.path.startswith("/preview/"):
-            self._serve_preview(self.path)
-        else:
-            body = b"404 not found"
-            self.send_response(404)
-            self.send_header("Content-Type", "text/plain")
-            self.send_header("Content-Length", str(len(body)))
-            self.end_headers()
-            self.wfile.write(body)
+        self._route(False)
+
+    def do_HEAD(self):
+        self._route(True)
 
     def log_message(self, *args):
         pass

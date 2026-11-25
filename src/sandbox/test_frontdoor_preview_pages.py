@@ -1,16 +1,11 @@
 """Suite for the door's deliverable shelf: the shipped pages get one URL.
 
-ONE criterion AC-FDPV1 with six arms, pinned in src/os/backlog.md in the
-round that lands this file (honest disclosure: the PIN row and the code
-landed in the same window; the six arms below were fixed before the driver
-was edited and the implementation was not allowed to move them).
-
-Measured before the code: the door answered exactly two paths ("/" and
-"/healthz") and every one of the 103 shipped preview/*.html faces answered
-404, so the "one openable URL" door could not reach a single deliverable
-page. The shelf is now served from the same door, and this suite proves
-both halves: the pages come back byte-identical to disk, and no path can
-turn the door into a filesystem reader.
+TWO criteria. AC-FDPV1 (six arms) pins the shelf itself: the pages come back
+byte-identical to disk and no path can turn the door into a filesystem
+reader. AC-FDPV2 (six arms, R3462) pins the door's manners: HEAD answers the
+same status, type and length as GET with an empty body (a standard probe must
+not see 501), and no answer on this door may be cached (a face rebuilt under
+the same URL is otherwise a stale face).
 
 Usage: python test_frontdoor_preview_pages.py
 Exit: 0 = SUITE PASS, 2 = FAIL.
@@ -50,6 +45,29 @@ def get(port, path):
         resp = conn.getresponse()
         return resp.status, resp.getheader("Content-Type", "") or "", \
             resp.read()
+    finally:
+        conn.close()
+
+
+def head(port, path):
+    conn = http.client.HTTPConnection("127.0.0.1", port, timeout=15)
+    try:
+        conn.request("HEAD", path)
+        resp = conn.getresponse()
+        return resp.status, resp.getheader("Content-Type", "") or "", \
+            resp.getheader("Content-Length", "") or "", resp.read()
+    finally:
+        conn.close()
+
+
+def cache_control(port, path):
+    conn = http.client.HTTPConnection("127.0.0.1", port, timeout=15)
+    try:
+        conn.request("GET", path)
+        resp = conn.getresponse()
+        value = resp.getheader("Cache-Control", "") or ""
+        resp.read()
+        return value
     finally:
         conn.close()
 
@@ -149,11 +167,89 @@ def main():
             rows = handle.read().count('"' + ROW + '"')
         if rows != 1:
             bad.append("f-registry-rows-%d" % rows)
+
+        # ===== AC-FDPV2: HEAD is a real probe and no face is cached ======
+        # R3462 measured before the code: HEAD answered 501 on every path
+        # (BaseHTTPRequestHandler default), so a link checker, a CDN warmer or
+        # `curl -I` saw a broken door while GET answered 200; and the preview
+        # answers carried no Cache-Control at all, so a rebuilt face stayed
+        # stale in the browser under the same URL.
+        bad2 = []
+
+        # ---- a: HEAD mirrors GET on the named faces, with no body ---------
+        for path in ("/", "/healthz", "/preview/index.html",
+                     "/preview/library-board.html",
+                     "/preview/face-sweep.html"):
+            g_status, g_type, g_body = get(port, path)
+            h_status, h_type, h_length, h_body = head(port, path)
+            if h_status != g_status:
+                bad2.append("a-status-%s-%d" % (path, h_status))
+            if h_type != g_type:
+                bad2.append("a-ctype-%s" % path)
+            if h_length != str(len(g_body)):
+                bad2.append("a-length-%s" % path)
+            if h_body != b"":
+                bad2.append("a-body-%s" % path)
+
+        # ---- b: HEAD refuses what GET refuses -----------------------------
+        for path in ("/nope", "/preview/nope.html"):
+            status, _t, _l, body = head(port, path)
+            if status != 404 or body != b"":
+                bad2.append("b-miss-%s-%d" % (path, status))
+
+        # ---- c: nothing on this door may be cached -------------------------
+        for path in ("/", "/healthz", "/preview/index.html",
+                     "/preview/library-board.html"):
+            if cache_control(port, path) != "no-store":
+                bad2.append("c-cache-%s" % path)
+
+        # ---- d: HEAD is not a way around the shelf guard -------------------
+        for path in ("/preview/../src/os/state.json",
+                     "/preview/%2e%2e/src/os/state.json",
+                     "/preview/%5c..%5csrc%5cos%5cstate.json",
+                     "/preview/frontdoor.py",
+                     "/preview/C:/Windows/win.ini"):
+            status, _t, _l, _b = head(port, path)
+            if status != 404:
+                bad2.append("d-escape-%s-%d" % (path, status))
+
+        # ---- e: one routing table, one HEAD handler -----------------------
+        with io.open(MODULE, "rb") as handle:
+            raw2 = handle.read()
+        if raw2[:3] == b"\xef\xbb\xbf":
+            bad2.append("e-module-bom")
+        if b"\r\n" in raw2:
+            bad2.append("e-module-crlf")
+        try:
+            raw2.decode("utf-8").encode("ascii")
+            text2 = raw2.decode("utf-8")
+        except (UnicodeDecodeError, UnicodeEncodeError):
+            bad2.append("e-module-not-ascii")
+            text2 = raw2.decode("utf-8", "replace")
+        if text2.count("def do_HEAD(") != 1:
+            bad2.append("e-head-count-%d" % text2.count("def do_HEAD("))
+        if "def _route(" not in text2:
+            bad2.append("e-route-table-missing")
+        if 'self.send_header("Cache-Control", "no-store")' not in text2:
+            bad2.append("e-no-store-missing")
+
+        # ---- f: the suite declares both criteria exactly once --------------
+        with io.open(REGISTRY, encoding="utf-8") as handle:
+            registry_text = handle.read()
+        if registry_text.count('"' + ROW + '"') != 1:
+            bad2.append("f-registry-rows")
+        if ('"' + ROW + '"') in registry_text:
+            block = registry_text.split('"' + ROW + '"', 1)[1][:160]
+            if "test_frontdoor_preview_pages.py" not in block:
+                bad2.append("f-row-file")
+            if "2)" not in block:
+                bad2.append("f-declared-%s" % block.split(")")[0].strip()[-3:])
     finally:
         srv.shutdown()
         srv.server_close()
 
     report("AC-FDPV1", bool(bad), ",".join(bad))
+    report("AC-FDPV2", bool(bad2), ",".join(bad2))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:

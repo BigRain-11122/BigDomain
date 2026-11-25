@@ -1,0 +1,16 @@
+RUNNER src/sandbox/test_frontdoor_preview_pages.py
+ROUND R3462
+PRODUCT the front door answers HEAD (the standard probe) and never serves a stale face
+MEASURED-BEFORE HEAD /preview/library-board.html -> 501, HEAD / -> 501, HEAD /healthz -> 501 (BaseHTTPRequestHandler default do_HEAD), while GET answered 200 on all three; and /preview/* plus /healthz carried no Cache-Control at all while only "/" set no-store
+LANDED src/sandbox/frontdoor.py: _send(code, ctype, body, head_only) sends Cache-Control: no-store on every answer and writes no body for HEAD; _serve_preview(path, head_only) threads the flag through all five 404 branches; _route(head_only) is one routing table for both verbs; do_GET routes with head_only=False and do_HEAD with head_only=True
+SUITE PASS 2/2 (AC-FDPV1 six arms + AC-FDPV2 six arms) rc=0
+ADJACENT suites: chain_card 4/4, claims_card 5/5, corpus_card 6/6, face_age 1/1, heartbeat_card 1/1, outs_age_card 4/4, preview_pages 2/2
+CONTROL-1 removed def do_HEAD -> FAIL AC-FDPV2 a-status-/-501,a-status-/healthz-501,a-status-/preview/*-501,a-length-*,b-miss-*-501,d-escape-*-501,e-head-count-0 rc=2, restored sha256 c098350d75fae1b0 identical
+CONTROL-2 Cache-Control no-store -> max-age=600 -> FAIL AC-FDPV2 c-cache-/,c-cache-/healthz,c-cache-/preview/*,e-no-store-missing rc=2, restored sha256 c098350d75fae1b0 identical
+CHAIN first_yuan_chain RENDER legs=2 html=4403B json=4806B reconcile_rc=0
+INDEX deliverable_index faces=9 defects=0 fingerprint=5f54538219c2ecbb index=55185B
+SWEEP face_sweep VERDICT PASS 13/13 fingerprint=ecaf7541412cc25c then --check PASS 21/21
+MATRIX suite_matrix_reconcile WRITTEN 85219 bytes 826 rows evidence=qa/reconcile-all-R2739.log then DOC-CURRENT
+CENSUS registry_counter_census rows=826 readable=826 unparsed=0 silent=0
+GATE closeout_gate CLOSEOUT-GATE PASS files=5001 flags=0 reader_refused=0 gating=flags round_main=OK census=PASS matrix=DOC-CURRENT
+HONEST zero new tables, zero new readings, zero business semantics - this fixes the door the CEO opens, it adds no page; the five physical pieces (merchant id, server, domain, filing plus ICP, miniprogram appid plus secret) are still missing so buyers still cannot pay
