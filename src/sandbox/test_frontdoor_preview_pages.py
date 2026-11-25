@@ -1,6 +1,6 @@
 """Suite for the door's deliverable shelf: the shipped pages get one URL.
 
-SIX criteria. AC-FDPV1 (six arms) pins the shelf itself: the pages come back
+SEVEN criteria. AC-FDPV1 (six arms) pins the shelf itself: the pages come back
 byte-identical to disk and no path can turn the door into a filesystem
 reader. AC-FDPV2 (six arms, R3462) pins the door's manners: HEAD answers the
 same status, type and length as GET with an empty body (a standard probe must
@@ -19,6 +19,11 @@ bytes, identity stays byte-identical, and every answer says it varies with
 Accept-Encoding. AC-FDPV6 (six arms, R3465) pins the write preconditions:
 If-Match and If-Unmodified-Since answer 412 when the reader's copy is not
 current, in the RFC 7232 sec.6 order, without bypassing the shelf guard.
+AC-FDPV7 (six arms, R3466) pins the shelf's policy: every answer on every verb
+names nosniff and no-referrer, an HTML face carries a policy that allows
+exactly what the shipped pages use (inline style, inline script, same-origin
+images) and closes everything else, a non-HTML face gets the tightest policy,
+and none of the headers changes a status, a type, a byte or a body.
 
 Usage: python test_frontdoor_preview_pages.py
 Exit: 0 = SUITE PASS, 2 = FAIL.
@@ -30,6 +35,7 @@ import hashlib
 import http.client
 import io
 import os
+import re
 import sys
 import threading
 from http.server import ThreadingHTTPServer
@@ -741,6 +747,155 @@ def main():
             bad6.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block6:
             bad6.append("f-row-file")
+
+        # ===== AC-FDPV7: the shelf publishes a policy ========================
+        # R3466 measured before the code: no answer carried
+        # X-Content-Type-Options, Referrer-Policy or Content-Security-Policy,
+        # so a browser was free to sniff a json face as a script and any site
+        # could frame this door.
+        bad7 = []
+
+        def sec(method, path, headers=None):
+            """One request naming every policy field this suite grades."""
+            conn = http.client.HTTPConnection("127.0.0.1", port, timeout=15)
+            try:
+                conn.request(method, path, headers=headers or {})
+                resp = conn.getresponse()
+                return {"status": resp.status,
+                        "ctype": resp.getheader("Content-Type", "") or "",
+                        "nosniff":
+                            resp.getheader("X-Content-Type-Options", "") or "",
+                        "referrer": resp.getheader("Referrer-Policy", "") or "",
+                        "csp": resp.getheader("Content-Security-Policy", "") or "",
+                        "xfo": resp.getheader("X-Frame-Options", "") or "",
+                        "etag": resp.getheader("ETag", "") or "",
+                        "encoding":
+                            resp.getheader("Content-Encoding", "") or "",
+                        "body": resp.read()}
+            finally:
+                conn.close()
+
+        ident7 = sec("GET", page_path)
+        ident_tag7 = ident7["etag"]
+        stale7 = '"0000000000000000"'
+        json_name = sorted(name for name in os.listdir(PREVIEW)
+                           if name.endswith(".json"))[0]
+
+        # ---- a: every answer on every verb carries the two base headers ----
+        probes = [("GET", "/"), ("HEAD", "/"), ("GET", "/healthz"),
+                  ("HEAD", "/healthz"), ("GET", page_path),
+                  ("HEAD", page_path), ("GET", "/preview/" + json_name),
+                  ("GET", "/nope"), ("HEAD", "/nope"),
+                  ("GET", page_path, {"Range": "bytes=0-9"}),
+                  ("GET", "/nope", {"Range": "bytes=0-9"}),
+                  ("GET", page_path, {"If-None-Match": ident_tag7}),
+                  ("GET", page_path, {"If-Match": stale7})]
+        for probe in probes:
+            reply = sec(*probe)
+            if reply["nosniff"] != "nosniff":
+                bad7.append("a-nosniff-%s-%s" % (probe[0], probe[1]))
+            if reply["referrer"] != "no-referrer":
+                bad7.append("a-referrer-%s-%s" % (probe[0], probe[1]))
+
+        # ---- b: an HTML face names what it allows and nothing else ---------
+        for path in ("/", page_path):
+            reply = sec("GET", path)
+            if reply["status"] != 200:
+                bad7.append("b-status-%s-%d" % (path, reply["status"]))
+            policy = reply["csp"]
+            for token in ("default-src 'none'", "script-src 'unsafe-inline'",
+                          "style-src 'unsafe-inline'", "img-src 'self'",
+                          "base-uri 'none'", "form-action 'none'",
+                          "frame-ancestors 'none'"):
+                if token not in policy:
+                    bad7.append("b-token-%s-%s" % (path, token.split()[0]))
+            if reply["xfo"] != "DENY":
+                bad7.append("b-xfo-%s-%r" % (path, reply["xfo"]))
+
+        # ---- c: a non-HTML face gets the tightest policy and its old type --
+        reply = sec("GET", "/preview/" + json_name)
+        if reply["ctype"] != "application/json; charset=utf-8":
+            bad7.append("c-json-ctype-%r" % reply["ctype"])
+        if "default-src 'none'" not in reply["csp"]:
+            bad7.append("c-json-default")
+        for token in ("script-src", "style-src", "img-src", "unsafe-inline"):
+            if token in reply["csp"]:
+                bad7.append("c-json-loose-%s" % token)
+        reply = sec("GET", "/healthz")
+        if reply["ctype"] != "text/plain" or reply["body"] != b"ok":
+            bad7.append("c-healthz-%r-%r" % (reply["ctype"], reply["body"]))
+
+        # ---- d: the policy covers what the shipped pages actually use ------
+        pages = sorted(name for name in os.listdir(PREVIEW)
+                       if name.endswith(".html"))
+        inline_style = 0
+        inline_script = 0
+        same_origin_img = 0
+        external = 0
+        for name in pages:
+            with io.open(os.path.join(PREVIEW, name), "rb") as handle:
+                text = handle.read().decode("utf-8", "replace")
+            if "<style" in text:
+                inline_style += 1
+            if re.search(r"<script(?![^>]*\bsrc=)", text):
+                inline_script += 1
+            if re.search(r"<img[^>]*\bsrc=['\"]live/", text):
+                same_origin_img += 1
+            if re.search(r"(?:src|href)=['\"]https?:", text):
+                external += 1
+        policy = sec("GET", page_path)["csp"]
+        if inline_style and "style-src 'unsafe-inline'" not in policy:
+            bad7.append("d-inline-style-%d" % inline_style)
+        if inline_script and "script-src 'unsafe-inline'" not in policy:
+            bad7.append("d-inline-script-%d" % inline_script)
+        if same_origin_img and "img-src 'self'" not in policy:
+            bad7.append("d-img-%d" % same_origin_img)
+        if external:
+            bad7.append("d-external-%d" % external)
+        if len(pages) < 100:
+            bad7.append("d-pages-%d" % len(pages))
+
+        # ---- e: the new headers change no existing semantics ---------------
+        reply = sec("GET", page_path, {"Accept-Encoding": "gzip"})
+        try:
+            plain7 = gzip.decompress(reply["body"])
+        except Exception:
+            plain7 = b""
+            bad7.append("e-not-gzip")
+        if plain7 != page_raw:
+            bad7.append("e-gzip-bytes")
+        reply = sec("GET", page_path, {"Range": "bytes=0-99"})
+        if reply["status"] != 206 or reply["body"] != page_raw[:100]:
+            bad7.append("e-range-%d" % reply["status"])
+        reply = sec("GET", page_path, {"If-None-Match": ident_tag7})
+        if reply["status"] != 304 or reply["body"] != b"":
+            bad7.append("e-304-%d" % reply["status"])
+        reply = sec("GET", page_path, {"If-Match": stale7})
+        if reply["status"] != 412 or len(reply["body"]) > 64:
+            bad7.append("e-412-%d" % reply["status"])
+
+        # ---- f: the module dialect and the declared count ------------------
+        with io.open(MODULE, "rb") as handle:
+            raw8 = handle.read()
+        if raw8[:3] == b"\xef\xbb\xbf" or b"\r\n" in raw8:
+            bad7.append("f-module-dialect")
+        try:
+            text8 = raw8.decode("utf-8")
+            text8.encode("ascii")
+        except (UnicodeDecodeError, UnicodeEncodeError):
+            bad7.append("f-module-not-ascii")
+            text8 = raw8.decode("utf-8", "replace")
+        for needle in ("SECURITY_HEADERS", "HTML_POLICY", "TEXT_POLICY",
+                       "def _security_headers("):
+            if needle not in text8:
+                bad7.append("f-missing-" + needle)
+        with io.open(REGISTRY, encoding="utf-8") as handle:
+            registry_text7 = handle.read()
+        block7 = registry_text7.split('"' + ROW + '"', 1)[-1][:200]
+        if "7)" not in block7:
+            bad7.append("f-declared")
+        if "test_frontdoor_preview_pages.py" not in block7:
+            bad7.append("f-row-file")
     finally:
         srv.shutdown()
         srv.server_close()
@@ -751,6 +906,7 @@ def main():
     report("AC-FDPV4", bool(bad4), ",".join(bad4))
     report("AC-FDPV5", bool(bad5), ",".join(bad5))
     report("AC-FDPV6", bool(bad6), ",".join(bad6))
+    report("AC-FDPV7", bool(bad7), ",".join(bad7))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:

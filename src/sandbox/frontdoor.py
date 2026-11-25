@@ -9236,6 +9236,42 @@ def _parse_http_date(value):
     return parsed.timestamp()
 
 
+# R3466: the shelf publishes a policy with its pages. Measured before this
+# landed: every answer went out with no X-Content-Type-Options, no
+# Referrer-Policy and no Content-Security-Policy at all, so a browser was free
+# to sniff a json face as a script and any embedding site could frame the door.
+# The HTML policy has to permit what the shipped pages actually use -- all 103
+# carry inline <style>, 9 carry inline <script> and 18 reference live/*.png by
+# a same-origin relative path, with zero external src/href -- so inline script
+# and style stay allowed while everything else (objects, connections, forms,
+# framing) is closed. Non-HTML answers get the tightest form, because no face
+# that is not a page needs to load anything at all.
+SECURITY_HEADERS = (
+    ("X-Content-Type-Options", "nosniff"),
+    ("Referrer-Policy", "no-referrer"),
+)
+HTML_POLICY = ("default-src 'none'; script-src 'unsafe-inline'; "
+               "style-src 'unsafe-inline'; img-src 'self' data:; "
+               "font-src data:; connect-src 'none'; base-uri 'none'; "
+               "form-action 'none'; frame-ancestors 'none'")
+TEXT_POLICY = "default-src 'none'; base-uri 'none'; frame-ancestors 'none'"
+
+
+def _security_headers(ctype):
+    """R3466: the policy every answer on this door carries.
+
+    One source for both verbs and every status: a 404 or a 412 is a page the
+    browser may also act on, so it names the same policy as a 200.
+    """
+    out = list(SECURITY_HEADERS)
+    is_html = ctype.startswith("text/html")
+    out.append(("Content-Security-Policy",
+                HTML_POLICY if is_html else TEXT_POLICY))
+    if is_html:
+        out.append(("X-Frame-Options", "DENY"))
+    return out
+
+
 class Handler(BaseHTTPRequestHandler):
     def _send(self, code, ctype, body, head_only=False, headers=(),
               etag=None, encoding=None):
@@ -9246,10 +9282,14 @@ class Handler(BaseHTTPRequestHandler):
         # still names the entity it is telling the reader to keep.
         # R3465: the answer varies with Accept-Encoding, so every reply says
         # so; a reply sent as gzip names the coding it applied.
+        # R3466: every reply also names the policy it is served under, so no
+        # status and no verb is left without one.
         self.send_response(code)
         self.send_header("Content-Type", ctype)
         self.send_header("Cache-Control", "no-store")
         self.send_header("Vary", "Accept-Encoding")
+        for name, value in _security_headers(ctype):
+            self.send_header(name, value)
         if encoding:
             self.send_header("Content-Encoding", encoding)
         if etag:

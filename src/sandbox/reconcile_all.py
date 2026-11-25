@@ -8683,9 +8683,11 @@ SUITES = [
     # or fetched in slices and concurrency was never pinned - AC-FDPV3.
     # R3465: every answer was the full identity body with no Content-Encoding
     # or Vary, and If-Match/If-Unmodified-Since were dropped, so AC-FDPV5 pins
-    # the coding negotiation and AC-FDPV6 the write preconditions.
+    # the coding negotiation and AC-FDPV6 the write preconditions. R3466 then
+    # measured zero policy headers on every answer, so AC-FDPV7 pins the
+    # security headers and the content policy the shipped pages ride under.
     ("frontdoor-preview-pages",
-     os.path.join("test_frontdoor_preview_pages.py"), 6),
+     os.path.join("test_frontdoor_preview_pages.py"), 7),
     # R3115: the 24h export-face age gate (os/export_freshness.py, AC-EXP1..6)
     # had zero production consumers - it ran only inside its own suite - while
     # the CEO card printed export_ts as a bare string. AC-FDC2 (six arms, ONE
