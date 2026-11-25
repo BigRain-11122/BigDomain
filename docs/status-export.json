@@ -3,20 +3,20 @@
     "board_pages_skipped": [
       "preview/face-sweep.html (8878B)"
     ],
-    "current": "2026-11-25 R3469 PRODUCT: a share link that carries a query string now opens the face it names - the door chose its route on the whole request target, so /?utm_source=share, /healthz?probe=1, /preview?x=1 and /index.html?x=1 each answered 404 while /preview/index.html?v=2 answered the page on the same door.",
+    "current": "2026-11-25 R3470 PRODUCT: a request target in absolute form now opens the face it names - the form a client sends to a proxy, which RFC 9112 sec.3.2.2 requires a server to accept, answered 404 on every path before this landed, so a proxied reader could not tell a missing page from a door that only spoke origin-form.",
     "do": "2026-11-25 R3456 PRODUCT: the answer-revision question now has a door - api_answer_history (live with AC-AMAW1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so 'which answer was rewritten, what did it say before, what does it say now and how often did it change' could only be read by calling the sandbox from a shell - while api_seller_answers and api_listing_qna publish only the CURRENT wording.",
     "last_artifact": "preview/apimarket-report.html (37201B) + preview/apimarket-report.json (59815B) [2026-11-25 commit]",
     "latest_artifact": "preview/apimarket-report.html (37201B) + preview/apimarket-report.json (59815B) [2026-11-25 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\apimarket-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/frontdoor-query-law-R3469.log (2065B, 2026-11-25, sha256 36566dbad2e3)",
-    "latest_evidence": "qa/frontdoor-query-law-R3469.log (2065B, 2026-11-25, sha256 36566dbad2e3)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/frontdoor-absolute-form-R3470.log (1992B, 2026-11-25, sha256 a31e78429355)",
+    "latest_evidence": "qa/frontdoor-absolute-form-R3470.log (1992B, 2026-11-25, sha256 a31e78429355)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3469] next window (<=48h): (1) **S4U 仍未落地**：本会话仍未以提权身份运行，`BigDomain-OSLoop` 的 `LogonType` 需由**提权会话**跑 `src/os/register_loop_task.ps1` 并用 `$t.Principal.LogonType` 读回；承账继续（R3468 收口未落板，本轮补记）。(2) 门的下一层候选：`_request_path` 只处理 origin-form 目标，**绝对形式目标**（`GET http://host/preview/index.html HTTP/1.1`）与 `//` 开头目标的应答面尚未量——下窗先只读实测再立判据（预期：绝对形式落 404，`//preview/index.html` 是否逃逸需实测）。(3) 收口序实证不变：各面写 → `tools/first_yuan_chain.py` → `tools/deliverable_index.py` → `chain --check` → `index --check` → `tools/face_sweep.py` → `--check` → `heartbeat.py --write <tick>` → `export_round.py` → `status_export_fresh.py --apply` → `check_export_consistency.py` → `tools/closeout_gate.py`；**导出面写后必须再收敛一轮**（本窗终读 index 2608041d83d77a44／sweep 1605d01e2cb3b0cd）。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`。(6) tick 口径：本窗 3468→3469。(7) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、backlog.md 体量闸。",
-    "next_milestone_due": "2026-11-27T13:37:13+08:00",
-    "updated_at": "2026-11-25T13:37:13+08:00",
+    "next_milestone": "[R3470] next window (<=48h): (1) **S4U 仍未落地**：本会话仍未以提权身份运行，`BigDomain-OSLoop` 的 `LogonType` 需由**提权会话**跑 `src/os/register_loop_task.ps1` 并用 `$t.Principal.LogonType` 读回；**第十三次承账**，禁再以「未实测」或「无从下手」结账。(2) 门的第九层候选：`Host` 头面——本轮实测 absolute-form 已接受且 authority 被丢弃，但 `Host` 缺失、重复、或与 absolute-form 的 authority 冲突时的应答面尚未量（RFC 9112 §3.2：HTTP/1.1 请求必须有且只有一个 `Host`，缺失或重复应 400）；下窗先只读实测再立判据。(3) 收口序实证更新：各面写 → `first_yuan_chain.py` → `deliverable_index.py` → `index --check` → `face_sweep.py` → `--check` → `heartbeat.py --write <tick>` → `export_round.py` → `status_export_fresh.py --apply` → `check_export_consistency.py` → **导出面写后必须再跑一轮 index → index --check → sweep → sweep --check**（否则 `AC-CVL1` 与 `AC-FSW10` 按名红，本轮两次实证）→ `closeout_gate.py`；本窗终读 index de3def8ecf8ff8b5／sweep 80ab993794cf9d66／closeout PASS。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`（本窗 fold 820＋821 后载体 75420B／闸 78500／余 3080B）；**载体写后若出现 `E_STATE_LAYOUT`，正法＝`logs_toolkit.py eol --fix --execute` 再 `--fix-indent --execute`**（本轮写手以 `newline='\\\\n'` 写盘后连吃两拒，实锤在此）。(6) tick 口径：本窗 3469→3470。(7) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、backlog.md 体量闸、导出面 (truncated)",
+    "next_milestone_due": "2026-11-27T14:04:13+08:00",
+    "updated_at": "2026-11-25T14:04:13+08:00",
     "heartbeat": {
-      "tick": 3469,
-      "state_tick": 3469,
+      "tick": 3470,
+      "state_tick": 3470,
       "lag": 0,
       "verdict": "PASS",
       "reason": "fresh"
@@ -37,8 +37,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-25 R3469 PRODUCT: a share link that carries a query string now opens the face it names - the door chose its route on the whole request target, so /?utm_source=share, /healthz?probe=1, /preview?x=1 and /index.html?x=1 each answered 404 while /preview/index.html?v=2 answered the page on the same door.",
-  "claims": {"claimed": 36, "captured": 20, "contradicted": 0, "uncaptured": 16, "historic": 0, "rows": 101, "present": true, "census_ts": "2026-11-25T13:37:13+08:00"},
+  "current": "2026-11-25 R3470 PRODUCT: a request target in absolute form now opens the face it names - the form a client sends to a proxy, which RFC 9112 sec.3.2.2 requires a server to accept, answered 404 on every path before this landed, so a proxied reader could not tell a missing page from a door that only spoke origin-form.",
+  "claims": {"claimed": 36, "captured": 19, "contradicted": 0, "uncaptured": 17, "historic": 0, "rows": 101, "present": true, "census_ts": "2026-11-25T14:04:13+08:00"},
   "chain": {"present": true, "rows": 101, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -67,11 +67,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-25 R3469 PRODUCT: a share link that carries a query string now opens the face it names - the door chose its route on the whole request target, so /?utm_source=share, /healthz?probe=1, /preview?x=1 and /index.html?x=1 each answered 404 while /preview/index.html?v=2 answered the page on the same door.",
-  "export_ts": "2026-11-25T13:37:13+08:00",
+  "do": "2026-11-25 R3470 PRODUCT: a request target in absolute form now opens the face it names - the form a client sends to a proxy, which RFC 9112 sec.3.2.2 requires a server to accept, answered 404 on every path before this landed, so a proxied reader could not tell a missing page from a door that only spoke origin-form.",
+  "export_ts": "2026-11-25T14:04:13+08:00",
   "latest_artifact": "preview/apimarket-report.html (37201B) + preview/apimarket-report.json (59815B) [2026-11-25 commit]",
-  "latest_evidence": "qa/frontdoor-query-law-R3469.log (2065B, 2026-11-25, sha256 36566dbad2e3)",
-  "next_milestone": "[R3469] next window (<=48h): (1) **S4U 仍未落地**：本会话仍未以提权身份运行，`BigDomain-OSLoop` 的 `LogonType` 需由**提权会话**跑 `src/os/register_loop_task.ps1` 并用 `$t.Principal.LogonType` 读回；承账继续（R3468 收口未落板，本轮补记）。(2) 门的下一层候选：`_request_path` 只处理 origin-form 目标，**绝对形式目标**（`GET http://host/preview/index.html HTTP/1.1`）与 `//` 开头目标的应答面尚未量——下窗先只读实测再立判据（预期：绝对形式落 404，`//preview/index.html` 是否逃逸需实测）。(3) 收口序实证不变：各面写 → `tools/first_yuan_chain.py` → `tools/deliverable_index.py` → `chain --check` → `index --check` → `tools/face_sweep.py` → `--check` → `heartbeat.py --write <tick>` → `export_round.py` → `status_export_fresh.py --apply` → `check_export_consistency.py` → `tools/closeout_gate.py`；**导出面写后必须再收敛一轮**（本窗终读 index 2608041d83d77a44／sweep 1605d01e2cb3b0cd）。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`。(6) tick 口径：本窗 3468→3469。(7) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、backlog.md 体量闸。",
+  "latest_evidence": "qa/frontdoor-absolute-form-R3470.log (1992B, 2026-11-25, sha256 a31e78429355)",
+  "next_milestone": "[R3470] next window (<=48h): (1) **S4U 仍未落地**：本会话仍未以提权身份运行，`BigDomain-OSLoop` 的 `LogonType` 需由**提权会话**跑 `src/os/register_loop_task.ps1` 并用 `$t.Principal.LogonType` 读回；**第十三次承账**，禁再以「未实测」或「无从下手」结账。(2) 门的第九层候选：`Host` 头面——本轮实测 absolute-form 已接受且 authority 被丢弃，但 `Host` 缺失、重复、或与 absolute-form 的 authority 冲突时的应答面尚未量（RFC 9112 §3.2：HTTP/1.1 请求必须有且只有一个 `Host`，缺失或重复应 400）；下窗先只读实测再立判据。(3) 收口序实证更新：各面写 → `first_yuan_chain.py` → `deliverable_index.py` → `index --check` → `face_sweep.py` → `--check` → `heartbeat.py --write <tick>` → `export_round.py` → `status_export_fresh.py --apply` → `check_export_consistency.py` → **导出面写后必须再跑一轮 index → index --check → sweep → sweep --check**（否则 `AC-CVL1` 与 `AC-FSW10` 按名红，本轮两次实证）→ `closeout_gate.py`；本窗终读 index de3def8ecf8ff8b5／sweep 80ab993794cf9d66／closeout PASS。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`（本窗 fold 820＋821 后载体 75420B／闸 78500／余 3080B）；**载体写后若出现 `E_STATE_LAYOUT`，正法＝`logs_toolkit.py eol --fix --execute` 再 `--fix-indent --execute`**（本轮写手以 `newline='\\\\n'` 写盘后连吃两拒，实锤在此）。(6) tick 口径：本窗 3469→3470。(7) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、backlog.md 体量闸、导出面 (truncated)",
   "outs": [
     "preview/apimarket-report.html (37201B) + preview/apimarket-report.json (59815B) [2026-11-25 commit]",
     "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 commit] (halves differ: html [2026-11-25 commit] + json [2026-11-16 commit]; later=html)",
@@ -137,19 +137,19 @@
     "shortfall_total": 15,
     "verdict": "FLOOR-DEBT"
   },
-  "results": [["3469", "OSLoop 执行 tick"]],
+  "results": [["3470", "OSLoop 执行 tick"]],
   "results_archive": {
     "bytes": 336680,
     "count": 179,
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
-  "self_drive": {"window": "2026-11-19..2026-11-25", "window_days": 7, "log_lines_in_window": 130, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 12, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
-  "state_bytes": 81522,
-  "next_milestone_due": "2026-11-27T13:37:13+08:00",
+  "self_drive": {"window": "2026-11-19..2026-11-25", "window_days": 7, "log_lines_in_window": 119, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 11, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
+  "state_bytes": 75420,
+  "next_milestone_due": "2026-11-27T14:04:13+08:00",
   "heartbeat": {
-    "tick": 3469,
-    "state_tick": 3469,
+    "tick": 3470,
+    "state_tick": 3470,
     "lag": 0,
     "verdict": "PASS",
     "reason": "fresh"

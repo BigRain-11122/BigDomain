@@ -1,6 +1,6 @@
 """Suite for the door's deliverable shelf: the shipped pages get one URL.
 
-TEN criteria. AC-FDPV1 (six arms) pins the shelf itself: the pages come back
+ELEVEN criteria. AC-FDPV1 (six arms) pins the shelf itself: the pages come back
 byte-identical to disk and no path can turn the door into a filesystem
 reader. AC-FDPV2 (six arms, R3462) pins the door's manners: HEAD answers the
 same status, type and length as GET with an empty body (a standard probe must
@@ -38,6 +38,13 @@ AC-FDPV10 (six arms, R3469) pins the route: the path alone picks the face, so
 a share link carrying a query string opens the root, the health face and the
 bare shelf exactly as the bare path does, a query never turns an unknown path
 or a path escape into a page, and a query changes no header law.
+AC-FDPV11 (six arms, R3470) pins the target form: an absolute-form target --
+the form a client sends to a proxy, which RFC 9112 sec.3.2.2 requires a server
+to accept -- answers exactly like its origin-form twin, an absolute target with
+no path is the root, a scheme this door does not implement is refused 501 by
+name rather than read as a path, the escape law still holds inside an absolute
+target, and a protocol-relative target is folded by this door instead of by
+the stdlib.
 
 Usage: python test_frontdoor_preview_pages.py
 Exit: 0 = SUITE PASS, 2 = FAIL.
@@ -350,7 +357,7 @@ def main():
             block = registry_text.split('"' + ROW + '"', 1)[1][:160]
             if "test_frontdoor_preview_pages.py" not in block:
                 bad2.append("f-row-file")
-            if "10)" not in block:
+            if "11)" not in block:
                 bad2.append("f-declared-%s" % block.split(")")[0].strip()[-3:])
 
         # ===== AC-FDPV3: the shelf is resumable and concurrent ============
@@ -579,7 +586,7 @@ def main():
         with io.open(REGISTRY, encoding="utf-8") as handle:
             registry_text4 = handle.read()
         block4 = registry_text4.split('"' + ROW + '"', 1)[-1][:160]
-        if "10)" not in block4:
+        if "11)" not in block4:
             bad4.append("f-declared-%r" % block4.split(")")[0][-8:])
 
         # ===== AC-FDPV5: the shelf negotiates a coding ======================
@@ -717,7 +724,7 @@ def main():
         with io.open(REGISTRY, encoding="utf-8") as handle:
             registry_text5 = handle.read()
         block5 = registry_text5.split('"' + ROW + '"', 1)[-1][:160]
-        if "10)" not in block5:
+        if "11)" not in block5:
             bad5.append("f-declared-%r" % block5.split(")")[0][-8:])
 
         # ===== AC-FDPV6: the shelf honours the write preconditions ==========
@@ -795,7 +802,7 @@ def main():
         with io.open(REGISTRY, encoding="utf-8") as handle:
             registry_text6 = handle.read()
         block6 = registry_text6.split('"' + ROW + '"', 1)[-1][:200]
-        if "10)" not in block6:
+        if "11)" not in block6:
             bad6.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block6:
             bad6.append("f-row-file")
@@ -944,7 +951,7 @@ def main():
         with io.open(REGISTRY, encoding="utf-8") as handle:
             registry_text7 = handle.read()
         block7 = registry_text7.split('"' + ROW + '"', 1)[-1][:200]
-        if "10)" not in block7:
+        if "11)" not in block7:
             bad7.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block7:
             bad7.append("f-row-file")
@@ -1074,7 +1081,7 @@ def main():
                 bad8.append("f-missing-" + needle)
         with io.open(REGISTRY, encoding="utf-8") as handle:
             block8r = handle.read().split('"' + ROW + '"', 1)[-1][:200]
-        if "10)" not in block8r:
+        if "11)" not in block8r:
             bad8.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block8r:
             bad8.append("f-row-file")
@@ -1217,7 +1224,7 @@ def main():
                 bad9.append("f-missing-" + needle)
         with io.open(REGISTRY, encoding="utf-8") as handle:
             block9r = handle.read().split('"' + ROW + '"', 1)[-1][:200]
-        if "10)" not in block9r:
+        if "11)" not in block9r:
             bad9.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block9r:
             bad9.append("f-row-file")
@@ -1336,10 +1343,129 @@ def main():
             bad10.append("f-missing-_request_path")
         with io.open(REGISTRY, encoding="utf-8") as handle:
             block10r = handle.read().split('"' + ROW + '"', 1)[-1][:200]
-        if "10)" not in block10r:
+        if "11)" not in block10r:
             bad10.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block10r:
             bad10.append("f-row-file")
+
+        # ===== AC-FDPV11: the target may be absolute-form ==================
+        # R3470 measured before the code: every absolute-form target -- the
+        # form a client sends to a proxy, which RFC 9112 sec.3.2.2 requires a
+        # server to accept -- answered 404 on this door, the same answer as a
+        # missing face. The authority is dropped (one shelf, never selected by
+        # host), a scheme this door does not implement is refused by name, and
+        # a protocol-relative target is folded by this door instead of by the
+        # stdlib.
+        bad11 = []
+        with io.open(os.path.join(PREVIEW, "index.html"), "rb") as handle:
+            disk_index11 = handle.read()
+        base11 = "http://127.0.0.1:%d" % port
+
+        def abs_get11(target11, method11="GET"):
+            return wire_reply(raw_request(
+                port, ("%s %s HTTP/1.1\r\nHost: door\r\n\r\n"
+                       % (method11, target11)).encode("ascii")))
+
+        # ---- a: absolute-form answers like its origin-form twin -----------
+        for twin11 in ("/healthz", "/preview", "/preview/index.html"):
+            status11, ctype11, body11 = get(port, twin11)
+            line11, headers11, abs_body11 = abs_get11(base11 + twin11)
+            label11 = twin11.replace("/", "-").strip("-")
+            if " 200 " not in line11:
+                bad11.append("a-status-%s-%r" % (label11, line11))
+                continue
+            if abs_body11 != body11:
+                bad11.append("a-bytes-%s-%d-%d" % (label11, len(abs_body11),
+                                                   len(body11)))
+            if headers11.get("content-type") != ctype11:
+                bad11.append("a-ctype-%s" % label11)
+        bare_root11 = get(port, "/")
+        line11, headers11, body11 = abs_get11(base11 + "/")
+        if " 200 " not in line11 or \
+                headers11.get("content-type") != bare_root11[1] or \
+                len(body11) != len(bare_root11[2]) or \
+                not body11.startswith(b"<!DOCTYPE html>"):
+            bad11.append("a-root-%r-%d-%d" % (line11, len(body11),
+                                              len(bare_root11[2])))
+
+        # ---- b: the query and fragment law survives the authority ---------
+        line11, _headers11, body11 = abs_get11(
+            base11 + "/preview/index.html?v=2")
+        if " 200 " not in line11 or body11 != disk_index11:
+            bad11.append("b-query-%r-%d" % (line11, len(body11)))
+        line11, _headers11, body11 = abs_get11(base11 + "/healthz?probe=1")
+        if " 200 " not in line11 or body11 != b"ok":
+            bad11.append("b-health-%r-%r" % (line11, body11))
+
+        # ---- c: the escape law holds inside an absolute target ------------
+        for escape11 in (base11 + "/preview/../frontdoor.py",
+                         base11 + "/preview/%2e%2e/frontdoor.py",
+                         base11 + "/../frontdoor.py"):
+            line11, _headers11, _body11 = abs_get11(escape11)
+            if " 404 " not in line11:
+                bad11.append("c-escape-%r" % line11)
+
+        # ---- d: an absolute target with no path is the root ---------------
+        for empty11 in (base11, base11 + "?x=1"):
+            line11, headers11, body11 = abs_get11(empty11)
+            if " 200 " not in line11 or \
+                    headers11.get("content-type") != bare_root11[1] or \
+                    len(body11) != len(bare_root11[2]) or \
+                    not body11.startswith(b"<!DOCTYPE html>"):
+                bad11.append("d-empty-%r-%d" % (line11, len(body11)))
+
+        # ---- e: a scheme this door does not implement is refused by name --
+        for scheme11 in ("file:///preview/index.html",
+                         "ftp://127.0.0.1/preview/index.html"):
+            line11, headers11, body11 = abs_get11(scheme11)
+            if " 501 " not in line11:
+                bad11.append("e-status-%r" % line11)
+            if not body11.startswith(b"501 unsupported scheme"):
+                bad11.append("e-body-%r" % body11[:24])
+            if headers11.get("x-content-type-options") != "nosniff":
+                bad11.append("e-nosniff")
+            if headers11.get("cross-origin-resource-policy") != "same-origin":
+                bad11.append("e-corp")
+            if "camera=()" not in headers11.get("permissions-policy", ""):
+                bad11.append("e-perm")
+            if headers11.get("server") != "BigDomain":
+                bad11.append("e-server-%r" % headers11.get("server"))
+        line11, _headers11, body11 = abs_get11(
+            "HTTP://127.0.0.1:%d/healthz" % port)
+        if " 200 " not in line11 or body11 != b"ok":
+            bad11.append("e-upper-%r-%r" % (line11, body11))
+
+        # ---- f: nothing delivered moved, and the count is 11 --------------
+        for path11 in ("/", "/healthz", "/preview", "/preview/index.html",
+                       "//healthz", "//preview/index.html"):
+            status11, _ctype11, _body11 = get(port, path11)
+            if status11 != 200:
+                bad11.append("f-%s-%r" % (path11, status11))
+        line11, _headers11, body11 = abs_get11(
+            base11 + "/preview/index.html", method11="HEAD")
+        if " 200 " not in line11 or body11 != b"":
+            bad11.append("f-head-%r-%d" % (line11, len(body11)))
+        with io.open(MODULE, "rb") as handle:
+            raw12 = handle.read()
+        if raw12[:3] == b"\xef\xbb\xbf" or b"\r\n" in raw12:
+            bad11.append("f-module-dialect")
+        try:
+            text12 = raw12.decode("utf-8")
+            text12.encode("ascii")
+        except (UnicodeDecodeError, UnicodeEncodeError):
+            bad11.append("f-module-not-ascii")
+            text12 = raw12.decode("utf-8", "replace")
+        for token12 in ("ABSOLUTE_FORM", "def _resolve_target(",
+                        "def _request_path("):
+            if token12 not in text12:
+                bad11.append("f-missing-" + token12.split("(")[0].strip()
+                             .replace(" ", "-"))
+        with io.open(REGISTRY, encoding="utf-8") as handle:
+            block11r = handle.read().split('"' + ROW + '"', 1)[-1][:200]
+        if "11)" not in block11r:
+            bad11.append("f-declared")
+        if "test_frontdoor_preview_pages.py" not in block11r:
+            bad11.append("f-row-file")
     finally:
         srv.shutdown()
         srv.server_close()
@@ -1354,6 +1480,7 @@ def main():
     report("AC-FDPV8", bool(bad8), ",".join(bad8))
     report("AC-FDPV9", bool(bad9), ",".join(bad9))
     report("AC-FDPV10", bool(bad10), ",".join(bad10))
+    report("AC-FDPV11", bool(bad11), ",".join(bad11))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:

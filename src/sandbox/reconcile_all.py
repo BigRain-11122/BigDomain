@@ -8694,7 +8694,7 @@ SUITES = [
     # request target, so a share link carrying a query answered 404 there and
     # 200 on the next route - AC-FDPV10.
     ("frontdoor-preview-pages",
-     os.path.join("test_frontdoor_preview_pages.py"), 10),
+     os.path.join("test_frontdoor_preview_pages.py"), 11),
     # R3115: the 24h export-face age gate (os/export_freshness.py, AC-EXP1..6)
     # had zero production consumers - it ran only inside its own suite - while
     # the CEO card printed export_ts as a bare string. AC-FDC2 (six arms, ONE

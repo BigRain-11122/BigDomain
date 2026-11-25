@@ -9527,6 +9527,36 @@ class Handler(BaseHTTPRequestHandler):
         """
         return self.path.split("?", 1)[0].split("#", 1)[0] or "/"
 
+    # R3470: the absolute-form target a client sends to a proxy.
+    ABSOLUTE_FORM = re.compile("^([A-Za-z][A-Za-z0-9+.\\-]*)://")
+
+    def _resolve_target(self):
+        """R3470: (path, refusal) for one request target.
+
+        Measured before this landed: every absolute-form target answered 404 on
+        this door -- the same answer as a missing page -- while RFC 9112
+        sec.3.2.2 requires a server to accept the absolute-form a client sends
+        to a proxy. The authority is dropped because this door serves one shelf
+        and never selects by host; a scheme it does not implement is refused by
+        name instead of being read as a path, and an absolute target with no
+        path is the root. Repeated leading slashes are collapsed here so the
+        answer no longer depends on what the stdlib does with a
+        protocol-relative target (3.14 folds them before this handler sees
+        them; nothing in this door promised that).
+        """
+        target = self._request_path()
+        match = self.ABSOLUTE_FORM.match(target)
+        if match is not None:
+            scheme = match.group(1).lower()
+            if scheme not in ("http", "https"):
+                return None, (501, b"501 unsupported scheme\n")
+            rest = target[match.end():]
+            slash = rest.find("/")
+            target = "/" if slash < 0 else rest[slash:]
+        while target.startswith("//"):
+            target = target[1:]
+        return target or "/", None
+
     def _route(self, head_only):
         # R3462: one routing table for both verbs. HEAD answers the same
         # status, type and length as GET and writes no body, so a standard
@@ -9535,7 +9565,14 @@ class Handler(BaseHTTPRequestHandler):
         # the exact bytes they serve.
         # R3465: the root page is a face like any other, so it negotiates too.
         # R3469: the route is chosen on the path alone, as the shelf always was.
-        path = self._request_path()
+        # R3470: the target may be absolute-form; a scheme this door does not
+        # implement is refused by name instead of being read as a path.
+        path, refusal = self._resolve_target()
+        if refusal is not None:
+            code, body = refusal
+            self._send(code, "text/plain; charset=utf-8", body, head_only,
+                       close=True)
+            return
         if path in ("/", "/index.html"):
             body, coding = self._negotiate(render())
             self._send(200, "text/html; charset=utf-8", body, head_only,
