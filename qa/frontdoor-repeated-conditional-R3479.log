@@ -1,0 +1,26 @@
+R3479 evidence - repeated conditional header lines (2026-11-25)
+scope: src/sandbox/frontdoor.py, src/sandbox/test_frontdoor_preview_pages.py, src/sandbox/reconcile_all.py
+criterion: AC-FDPV20 (a/b/c/d/e/f), PIN row in src/os/backlog.md written before any edit
+before: every conditional field read through self.headers.get, so only the first line spoke
+  measured: If-Match miss-then-hit 412 (current tag was on the second line)
+  measured: If-None-Match miss-then-hit 200 with all 55185 bytes (reader already held it)
+  measured: If-Modified-Since current,1970 304 ; If-Unmodified-Since 1970,current 412
+  measured: If-Range current,1970 plus Range: bytes=0-9 206 ten bytes
+after: If-Match and If-None-Match joined with commas (RFC 9110 sec.5.3), dates dropped whole,
+  a repeated If-Range refuses the range so no slice splices onto an unknown prefix
+  a: If-Match miss,hit 200 whole / hit,miss 200 whole / hit,hit 200 whole / miss,miss 412
+  b: If-None-Match miss,hit 304 / hit,miss 304 / hit,hit 304 / miss,miss 200 whole
+  c: repeated If-Modified-Since and If-Unmodified-Since 200 whole in both orders
+  d: repeated If-Range plus Range: bytes=0-9 200 whole, no Content-Range, no multipart
+  e: single-line five fields unchanged; Range: bytes=0-9,20-29 still 206 two parts
+  f: module ASCII / bare LF / no BOM; four tokens on disk; registry declared 19->20
+suite: SUITE PASS 20/20, AC-FDPV20 green on its first accepted run
+controls, each alone and restored byte-identically (frontdoor.py sha256 271bfa66e926901a):
+  m1 first-line list reader -> a-miss-hit red plus the f token arm
+  m2 first-line single-value reader -> c-ims-mod-old 304, c-ius-old-mod 412
+  m3 repeated If-Range authorises again -> d-hit-old and d-hit-hit 206 ten bytes
+  restored module re-read SUITE PASS 20/20 after every control
+closeout: matrix 85220 bytes 826 rows DOC-CURRENT; chain legs=2 entries=2 tx=1 reconcile_rc=0;
+  index 23/23 fingerprint af56d8df78e8bd35; sweep VERDICT PASS 13/13 then --check 21/21
+honest: adds no page, no reading, no business semantics; the five physical pieces are still
+  missing, so buyers still cannot pay, and the door answers loopback traffic only

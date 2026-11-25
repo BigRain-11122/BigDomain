@@ -116,7 +116,7 @@ RESULTS = []
 
 # R3475: one place states how many criteria the registry must
 # declare, so adding a criterion cannot leave eleven stale literals.
-DECLARED_TAG = "19)"
+DECLARED_TAG = "20)"
 
 
 def report(name, bad, detail=""):
@@ -2560,6 +2560,151 @@ def main():
             block19 = handle.read().split('"' + ROW + '"', 1)[-1][:220]
         if DECLARED_TAG not in block19:
             bad19.append("f-declared")
+        # R3479 measured before the edit (tmp/probe-R3479.py, thirteen raw
+        # shapes): every conditional field reached the door through
+        # self.headers.get, so only the first line spoke. If-Match lined up as
+        # miss-then-hit answered 412 while the reader's second tag was current;
+        # If-None-Match as miss-then-hit sent all 55185 bytes the reader
+        # already held; a repeated If-Modified-Since answered 304 and a
+        # repeated If-Unmodified-Since answered 412 on the first line alone;
+        # a repeated If-Range still authorised a 10-byte slice. The list fields
+        # (If-Match, If-None-Match) are now combined into one comma value, the
+        # single-value fields are dropped whole, and a repeated If-Range
+        # refuses the range so no slice is spliced onto an unknown prefix.
+        bad20 = []
+        page20 = "/preview/index.html"
+        with io.open(os.path.join(PREVIEW, "index.html"), "rb") as handle:
+            disk20 = handle.read()
+        size20 = len(disk20)
+        base20 = cond(port, "GET", page20)
+        etag20 = base20["etag"]
+        mod20 = base20["last_modified"]
+        old20 = "Thu, 01 Jan 1970 00:00:00 GMT"
+        miss20 = '"notthisone"'
+
+        def repeat20(lines, extra=()):
+            """One raw request carrying several conditional lines, in order."""
+            payload = ["GET " + page20 + " HTTP/1.1", "Host: 127.0.0.1"]
+            payload.extend(lines)
+            payload.extend(extra)
+            payload.extend(["Connection: close", "", ""])
+            blob = raw_request(port, "\r\n".join(payload).encode("latin-1"))
+            return wire_reply(blob)
+
+        if not etag20 or not mod20 or base20["status"] != 200 or \
+                base20["body"] != disk20:
+            bad20.append("base-%r" % base20["status"])
+        # ---- a: If-Match is a list field, so the lines are one list -------
+        for tag20, lines20, want20 in (
+                ("a-miss-hit", ["If-Match: " + miss20, "If-Match: " + etag20],
+                 "200"),
+                ("a-hit-miss", ["If-Match: " + etag20, "If-Match: " + miss20],
+                 "200"),
+                ("a-hit-hit", ["If-Match: " + etag20, "If-Match: " + etag20],
+                 "200"),
+                ("a-miss-miss", ["If-Match: " + miss20,
+                                 "If-Match: " + miss20], "412")):
+            status20, fields20, body20 = repeat20(lines20)
+            got20 = status20.split(" ")[1]
+            if got20 != want20:
+                bad20.append("%s-%s" % (tag20, got20))
+            elif want20 == "200" and body20 != disk20:
+                bad20.append("%s-body-%d" % (tag20, len(body20)))
+        # ---- b: If-None-Match is a list field too -------------------------
+        for tag20, lines20, want20 in (
+                ("b-miss-hit", ["If-None-Match: " + miss20,
+                                "If-None-Match: " + etag20], "304"),
+                ("b-hit-miss", ["If-None-Match: " + etag20,
+                                "If-None-Match: " + miss20], "304"),
+                ("b-hit-hit", ["If-None-Match: " + etag20,
+                               "If-None-Match: " + etag20], "304"),
+                ("b-miss-miss", ["If-None-Match: " + miss20,
+                                 "If-None-Match: " + miss20], "200")):
+            status20, fields20, body20 = repeat20(lines20)
+            got20 = status20.split(" ")[1]
+            if got20 != want20:
+                bad20.append("%s-%s" % (tag20, got20))
+            elif want20 == "304" and body20:
+                bad20.append("%s-body-%d" % (tag20, len(body20)))
+            elif want20 == "200" and body20 != disk20:
+                bad20.append("%s-body-%d" % (tag20, len(body20)))
+        # ---- c: a repeated date is dropped whole, never half-executed -----
+        for tag20, lines20 in (
+                ("c-ims-mod-old", ["If-Modified-Since: " + mod20,
+                                   "If-Modified-Since: " + old20]),
+                ("c-ims-old-mod", ["If-Modified-Since: " + old20,
+                                   "If-Modified-Since: " + mod20]),
+                ("c-ius-old-mod", ["If-Unmodified-Since: " + old20,
+                                   "If-Unmodified-Since: " + mod20]),
+                ("c-ius-mod-old", ["If-Unmodified-Since: " + mod20,
+                                   "If-Unmodified-Since: " + old20])):
+            status20, fields20, body20 = repeat20(lines20)
+            if status20.split(" ")[1] != "200" or body20 != disk20:
+                bad20.append("%s-%r-%d" % (tag20, status20, len(body20)))
+        # ---- d: a repeated If-Range refuses the range ---------------------
+        for tag20, lines20 in (
+                ("d-hit-old", ["If-Range: " + etag20, "If-Range: " + old20,
+                               "Range: bytes=0-9"]),
+                ("d-old-hit", ["If-Range: " + old20, "If-Range: " + etag20,
+                               "Range: bytes=0-9"]),
+                ("d-hit-hit", ["If-Range: " + etag20, "If-Range: " + etag20,
+                               "Range: bytes=0-9"])):
+            status20, fields20, body20 = repeat20(lines20)
+            if status20.split(" ")[1] != "200" or body20 != disk20 or \
+                    fields20.get("content-range") or \
+                    "multipart" in (fields20.get("content-type") or ""):
+                bad20.append("%s-%r-%d" % (tag20, status20, len(body20)))
+        # ---- e: every single-line answer still reads as it did ------------
+        single20 = (
+                ("e-im-hit", {"If-Match": etag20}, 200, size20),
+                ("e-im-miss", {"If-Match": miss20}, 412, None),
+                ("e-inm-hit", {"If-None-Match": etag20}, 304, 0),
+                ("e-inm-miss", {"If-None-Match": miss20}, 200, size20),
+                ("e-ims-mod", {"If-Modified-Since": mod20}, 304, 0),
+                ("e-ims-old", {"If-Modified-Since": old20}, 200, size20),
+                ("e-ius-old", {"If-Unmodified-Since": old20}, 412, None),
+                ("e-ius-mod", {"If-Unmodified-Since": mod20}, 200, size20),
+                ("e-ir-hit", {"If-Range": etag20, "Range": "bytes=0-9"},
+                 206, 10),
+                ("e-ir-old", {"If-Range": old20, "Range": "bytes=0-9"},
+                 200, size20))
+        for tag20, headers20, want20, size_want in single20:
+            got20 = cond(port, "GET", page20, headers20)
+            if got20["status"] != want20:
+                bad20.append("%s-%d" % (tag20, got20["status"]))
+            elif size_want is not None and len(got20["body"]) != size_want:
+                bad20.append("%s-len-%d" % (tag20, len(got20["body"])))
+            elif tag20 == "e-ir-hit" and \
+                    got20["crange"] != "bytes 0-9/%d" % size20:
+                bad20.append("%s-crange-%r" % (tag20, got20["crange"]))
+        two20 = cond(port, "GET", page20, {"Range": "bytes=0-9,20-29"})
+        if two20["status"] != 206 or \
+                "multipart/byteranges; boundary=" not in two20["ctype"]:
+            bad20.append("e-two-%d-%r" % (two20["status"], two20["ctype"]))
+        # ---- f: dialect, tokens on disk, declared count -------------------
+        with io.open(MODULE, "rb") as handle:
+            raw20h = handle.read()
+        if raw20h[:3] == b"\xef\xbb\xbf" or b"\r\n" in raw20h:
+            bad20.append("f-module-dialect")
+        try:
+            text20 = raw20h.decode("utf-8")
+            text20.encode("ascii")
+        except (UnicodeDecodeError, UnicodeEncodeError):
+            bad20.append("f-module-not-ascii")
+            text20 = raw20h.decode("utf-8", "replace")
+        for token20 in ("def _list_header(headers, name)",
+                        "def _single_line(headers, name)",
+                        '_list_header(self.headers, "If-Match")',
+                        '_list_header(self.headers, "If-None-Match")',
+                        '_single_line(self.headers,\n                                             "If-Modified-Since")',
+                        '_single_line(self.headers,\n                                             "If-Unmodified-Since")',
+                        'self.headers.get_all("If-Range")'):
+            if token20 not in text20:
+                bad20.append("f-missing-%s" % token20.split("(")[0].strip()[:18])
+        with io.open(REGISTRY, encoding="utf-8") as handle:
+            block20r = handle.read().split('"' + ROW + '"', 1)[-1][:220]
+        if DECLARED_TAG not in block20r:
+            bad20.append("f-declared")
     finally:
         srv.shutdown()
         srv.server_close()
@@ -2583,6 +2728,7 @@ def main():
     report("AC-FDPV17", bool(bad17), ",".join(bad17))
     report("AC-FDPV18", bool(bad18), ",".join(bad18))
     report("AC-FDPV19", bool(bad19), ",".join(bad19))
+    report("AC-FDPV20", bool(bad20), ",".join(bad20))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:

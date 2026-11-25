@@ -9238,6 +9238,36 @@ def _parse_ranges(header, size):
     return _merge_spans(spans)
 
 
+def _list_header(headers, name):
+    """R3479: a comma-separated list field, with every line it arrived on.
+
+    If-Match and If-None-Match are defined as lists of entity tags, and RFC
+    9110 sec.5.3 lets a recipient combine repeated lines of such a field by
+    joining them with commas. Reading only the first line answered a subset
+    of the tags the reader sent, which turns a matching second line into a
+    412 or into a full body the reader already held.
+    """
+    values = headers.get_all(name)
+    if not values:
+        return None
+    return ",".join(values)
+
+
+def _single_line(headers, name):
+    """R3479: a single-value field, or None when it arrived more than once.
+
+    An HTTP-date or a validator names one instant or one tag, so repeated
+    lines cannot be joined the way a list field can. Reading the first line
+    half-executed a message this door could not interpret; the condition is
+    dropped whole instead, and the answer is the one it would send without
+    the field.
+    """
+    values = headers.get_all(name)
+    if not values or len(values) > 1:
+        return None
+    return values[0]
+
+
 def _range_header(headers):
     """R3478: the one Range line this request may carry, or None.
 
@@ -9733,7 +9763,7 @@ class Handler(BaseHTTPRequestHandler):
         answer 412: the reader asked for the answer to be withheld unless its
         own copy is still current, and it is not.
         """
-        match = self.headers.get("If-Match")
+        match = _list_header(self.headers, "If-Match")
         if match is not None:
             tokens = [token.strip() for token in match.split(",")]
             if "*" in tokens:
@@ -9744,7 +9774,8 @@ class Handler(BaseHTTPRequestHandler):
                 if token == etag:
                     return False
             return True
-        since = _parse_http_date(self.headers.get("If-Unmodified-Since"))
+        since = _parse_http_date(_single_line(self.headers,
+                                             "If-Unmodified-Since"))
         if since is None:
             return False
         stamp = _parse_http_date(last_modified)
@@ -9758,7 +9789,7 @@ class Handler(BaseHTTPRequestHandler):
         when it is absent, and only answers 304 when the face has not moved
         since the reader's copy was stamped.
         """
-        match = self.headers.get("If-None-Match")
+        match = _list_header(self.headers, "If-None-Match")
         if match is not None:
             tokens = [token.strip() for token in match.split(",")]
             if "*" in tokens:
@@ -9768,7 +9799,8 @@ class Handler(BaseHTTPRequestHandler):
                 if (token[2:] if token.startswith("W/") else token) == bare:
                     return True
             return False
-        since = _parse_http_date(self.headers.get("If-Modified-Since"))
+        since = _parse_http_date(_single_line(self.headers,
+                                             "If-Modified-Since"))
         if since is None:
             return False
         stamp = _parse_http_date(last_modified)
@@ -9787,7 +9819,15 @@ class Handler(BaseHTTPRequestHandler):
         version's slice onto an old version's prefix produces a file that
         exists nowhere.
         """
-        value = self.headers.get("If-Range")
+        values = self.headers.get_all("If-Range") or []
+        if not values:
+            return True
+        if len(values) > 1:
+            # R3479: two validators cannot be reconciled into one, and a slice
+            # spliced onto the wrong prefix is a file that exists nowhere, so a
+            # repeated If-Range refuses the range instead of guessing.
+            return False
+        value = values[0]
         if value is None:
             return True
         value = value.strip()
