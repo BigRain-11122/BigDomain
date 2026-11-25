@@ -59,7 +59,7 @@
  "seam": "The two sandboxes keep separate databases. The receipt event id is the only thing joining them: the ledger pays a content reward solely when its own gate record says pass, which is why row 1 of the ledger trace is REFUSED and row 3 is not.",
  "sources": [
   {
-   "bytes": 44841,
+   "bytes": 50067,
    "path": "src/sandbox/ugc/pipeline.py"
   },
   {

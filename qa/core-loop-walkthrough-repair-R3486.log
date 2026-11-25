@@ -1,0 +1,13 @@
+R3486 core-loop-walkthrough read-repair (2026-11-26)
+claim: the oldest shipped page whose cited readings are no longer the fresh derivation is repaired; its published numbers are again a pure function of the current sandbox sources.
+census (read-only, 12 oldest pages, each producer run with --check):
+  PASS ship-checklist, filing-checklist, journey-19.9, membership-face, market-hour-heatmap, market-price-percentiles
+  RED  core-loop-walkthrough (oldest, mtime 2026-11-15 14:30)
+  RED  money-path-demo, buyer-trial, lobby-protocol-map, merchant-onboard, battery-shard-report (left for later windows)
+defect 1 measured: preview/core-loop-walkthrough.json published sources[0].bytes=44841 while src/sandbox/ugc/pipeline.py is 50067 bytes.
+defect 2 measured (negative control): a leftover src/sandbox/ugc/export-clw-walkthrough directory from an interrupted run made --check answer "VERDICT FAIL 1 json is not the fresh derivation" at rc=2 although the sources were correct, because build() read world.export_dir_removed from ambient state.
+fix: build() clears EXPORT_DIR before the run, so the published "removed" reading measures only this run (AC-CLW5 stays true under any leftover).
+before: json sha256 F1B2B1225E57822AB1255A62EC8C193719ADDEC0618446D4FC84D98E6317EE26 (4056B), html B6287FD7CA8DF4D831091687B4613C6478F57D7279382E97F82E50FB7E6DD459 (5433B)
+after:  json sha256 F80188896E62F353A50EBC5E966FC08E25CAB4568EB65BEA45DBCF9653999ABF (4056B), html 1A0D39C499272AA3B3A19E36932CEEEFA0C1FAAE45F6306C2D67BE86BDAC1274 (5433B)
+gates: --check VERDICT PASS ugc_steps=9 ledger_steps=5 entries=4 delta=0 html=5433B (rc=0); control with leftover dir rc=0 after fix (rc=2 before); registry census rows=828 readable=828 unparsed=0 silent=0; first-yuan chain VERDICT PASS legs=2 entries=2 tx=1; deliverable index faces=9 defects=0; face sweep 13/13 then --check 21/21; closeout gate rc=0.
+honest: no new table, no new reading, no new business semantics - the page now shows the numbers the current sources actually produce; the five physical items are still missing and a buyer still cannot pay.

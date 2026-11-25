@@ -177,6 +177,12 @@ def run_ledger(tmp, evt_id):
 
 
 def build():
+    # A leftover export from an interrupted run is not this run's evidence, so
+    # clear it before the run: the published "removed" reading then measures
+    # only what this run left behind (AC-CLW5: a second render, under any
+    # ambient leftover, stays byte identical).
+    if os.path.isdir(EXPORT_DIR):
+        shutil.rmtree(EXPORT_DIR, ignore_errors=True)
     tmp = tempfile.mkdtemp(prefix="clw-")
     try:
         ugc = run_ugc(tmp)
