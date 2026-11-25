@@ -1,0 +1,9 @@
+R3488 buyer-trial + merchant-onboard read-repair evidence
+before: buyer-trial AC-BT1 source sha256 971f4cab... != disk 6a5f112c... (page rendered 2026-11-22 10:57, payment-gate-report.json regenerated 19:22 same day)
+before: merchant-onboard AC-MO1 same stale sha 971f4cab... (second face on the same cascade gap; both --check runs red exactly one arm)
+after: buyer-trial VERDICT PASS criteria=7 products=5 route_hops=4 external_refs=0 html=22382B json=6574B
+after: merchant-onboard VERDICT PASS criteria=7 items=8 ceo=6 proven=2 external_refs=0 route_hops=4 html=23088B json=8124B
+hashes: buyer-trial html 76B579A7..->8C8DE975.. json C8B538E7..->0B2B4A3C..; merchant-onboard html D1A0EFD6..->784D95B2.. json F1F2A00D..->5145D5EB..
+census: 174 preview/*.json scanned, 3 declaring payloads / 4 legs, stale 1 -> 0 (buyer-trial and merchant-onboard both name the live 7177B payment-gate-report.json)
+gates: first-yuan chain PASS legs=2 entries=2 tx=1 read_only=True html=4403B json=4806B; deliverable index 23/23 fingerprint 0c07d5a157ac74f1
+honest: no new table, no new reading, no business semantics - two pages that published a stale source hash now publish the live one; the five physical pieces are still missing, so buyers still cannot pay

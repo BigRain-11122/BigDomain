@@ -50,7 +50,7 @@
   }
  ],
  "face": "merchant-onboard",
- "generated_utc": "2026-11-22T10:57:19Z",
+ "generated_utc": "2026-11-25T18:57:50Z",
  "honest": "诚实边界：自述完成 ≠ 验证完成。6 项物理件由 CEO 下发，本页无法代为验证；标准通道真正开门还需要一条真实回调验签与一笔对公结算对账。零支付、零外网，买家仍付不了钱。",
  "items": [
   {
@@ -174,7 +174,7 @@
   "last_actionable": 2,
   "last_sentence": "本机不接服务器时，这条路最远走到第 2 跳（money-path-demo.html，3 个控件）；再往后只有读数，没有可操作控件。"
  },
- "payload_sha256": "cdc54d558395ff6638163a17efdc5b5e53aac5da4d067afd36c8a18715d241c6",
+ "payload_sha256": "b185b6c683246ca7240cd9774b2c87d5319c4c5e9e2807dc63234ef7f757c3db",
  "secret_rule": "密钥面红线：本页只收名字与勾选。appkey / secret / 私钥只进 .env（不入 git），不在浏览器、不在聊天、不在这张单上出现。",
  "sizes": {
   "html_bytes": 23088,
@@ -182,7 +182,7 @@
  },
  "source": {
   "path": "preview/payment-gate-report.json",
-  "sha256": "971f4cabbbff074702208a8d453a0c11cd0d5b7be6df69eca35569a39249217b"
+  "sha256": "6a5f112cf930788cbc382bedd1b5a5909ddcea6ce6e99e6f80ce0958ec2d3cbe"
  },
  "standard_products": [
   {

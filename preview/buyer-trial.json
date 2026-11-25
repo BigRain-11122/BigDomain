@@ -46,7 +46,7 @@
   }
  ],
  "face": "buyer-trial",
- "generated_utc": "2026-11-22T10:57:19Z",
+ "generated_utc": "2026-11-25T18:57:02Z",
  "products": [
   {
    "blocked": false,
@@ -321,7 +321,7 @@
  },
  "source": {
   "path": "preview/payment-gate-report.json",
-  "sha256": "971f4cabbbff074702208a8d453a0c11cd0d5b7be6df69eca35569a39249217b"
+  "sha256": "6a5f112cf930788cbc382bedd1b5a5909ddcea6ce6e99e6f80ce0958ec2d3cbe"
  },
  "title": "买家试用镜 · 本地演示",
  "verdict": "PASS"
