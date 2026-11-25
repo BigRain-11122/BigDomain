@@ -9239,13 +9239,17 @@ def _parse_ranges(header, size):
 
 
 def _list_header(headers, name):
-    """R3479: a comma-separated list field, with every line it arrived on.
+    """R3479/R3480: a comma-separated list field, with every line it arrived on.
 
     If-Match and If-None-Match are defined as lists of entity tags, and RFC
     9110 sec.5.3 lets a recipient combine repeated lines of such a field by
     joining them with commas. Reading only the first line answered a subset
     of the tags the reader sent, which turns a matching second line into a
     412 or into a full body the reader already held.
+    R3480: Accept-Encoding is the same kind of field (a list of codings with
+    weights), so two lines are one list. Reading only the first line refused
+    gzip a reader had named on the second line, and could send gzip a reader
+    had refused with q=0 on the second line.
     """
     values = headers.get_all(name)
     if not values:
@@ -9751,7 +9755,7 @@ class Handler(BaseHTTPRequestHandler):
         """
         if (ignore_range or _range_header(self.headers) is None) and \
                 len(identity) >= GZIP_MIN_BYTES and \
-                _accepts_gzip(self.headers.get("Accept-Encoding")):
+                _accepts_gzip(_list_header(self.headers, "Accept-Encoding")):
             return gzip.compress(identity, mtime=0), "gzip"
         return identity, None
 

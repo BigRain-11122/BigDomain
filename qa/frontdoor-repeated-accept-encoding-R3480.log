@@ -1,0 +1,33 @@
+R3480 evidence - a repeated Accept-Encoding line is one coding list (2026-11-26)
+scope: src/sandbox/frontdoor.py, src/sandbox/test_frontdoor_preview_pages.py, src/sandbox/reconcile_all.py
+criterion: AC-FDPV21 (a/b/c/d/e/f), PIN row in src/os/backlog.md written before any edit
+before: _negotiate read self.headers.get("Accept-Encoding"), so only the first line spoke
+  measured (tmp/probe-R3480.py, eight raw shapes):
+  identity,gzip -> 200 identity 55185B (gzip was named on line two)
+  br,gzip -> 200 identity
+  *,gzip;q=0 -> 200 gzip 15054B (line two refused gzip with q=0)
+  gzip;q=0,gzip -> 200 identity (the same coding twice should take the heaviest weight)
+  identity,* -> 200 identity (the wildcard on line two was ignored)
+  gzip,identity 200 gzip / gzip,gzip 200 gzip / identity,gzip;q=0 200 identity were right by accident
+after: _list_header(headers, name) joins every line of a comma-list field (RFC 9110 sec.5.3)
+  and _negotiate grades the joined list once
+  a: identity,gzip / br,gzip / gzip,identity all 200 gzip, gunzip equals the 55185 disk bytes
+  b: *,gzip;q=0 -> 200 identity (explicit token beats the wildcard); gzip;q=0,gzip -> gzip
+  c: identity,* -> 200 gzip, gunzip equals disk
+  d: identity,gzip;q=0 and gzip;q=0,gzip;q=0 and single gzip;q=0 -> 200 identity
+  e: single gzip / gzip;q=0.5 / * still gzip; identity / br / no header still identity;
+     every 200 carries Vary: Accept-Encoding; Range: bytes=0-9 with two coding lines 206 ten bytes
+  f: module ASCII / bare LF / no BOM; _list_header(self.headers, "Accept-Encoding") on disk,
+     the old self.headers.get reader gone; registry declared 20->21
+suite: SUITE PASS 21/21, AC-FDPV21 green after one arm fix (the e arm compared a missing
+  header (None) against an empty string; the fix is in the arm, no criterion or threshold moved)
+controls, each run alone and restored byte-identically (frontdoor.py sha256
+  4acf4e3921bba2cc3f553e02f609bb1ec63210bb9833d267e6ecd7cbc3842ae4 before and after):
+  m1 first-line reader -> a-id-gz, a-br-gz, b-star, b-heaviest, c-star plus the f tokens red
+  m2 q=0 connected refusal (min instead of max) -> b-heaviest alone red
+  restored module re-read SUITE PASS 21/21 after every control
+closeout: matrix 85220 bytes 826 rows DOC-CURRENT; census readable 826/826;
+  entry index 23/23 fingerprint 2d9f99f99e25e2c6; chain legs=2 tx=1 reconcile_rc=0;
+  sweep VERDICT PASS 13/13 before the export refresh
+honest: adds no page, no reading, no business semantics; the five physical pieces are still
+  missing, so buyers still cannot pay, and the door answers loopback traffic only

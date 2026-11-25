@@ -1,6 +1,6 @@
 """Suite for the door's deliverable shelf: the shipped pages get one URL.
 
-SEVENTEEN criteria. AC-FDPV1 (six arms) pins the shelf itself: the pages come back
+TWENTY-ONE criteria. AC-FDPV1 (six arms) pins the shelf itself: the pages come back
 byte-identical to disk and no path can turn the door into a filesystem
 reader. AC-FDPV2 (six arms, R3462) pins the door's manners: HEAD answers the
 same status, type and length as GET with an empty body (a standard probe must
@@ -85,6 +85,22 @@ whole face rather than a spliced multipart, a segment past the end is dropped
 while an all-past-end list answers 416 carrying the total (a malformed segment
 ignores the header instead), and the single-range, whole-face, HEAD and module
 dialect laws that were already delivered did not move.
+AC-FDPV18 (six arms, R3477) pins the Range list's arithmetic: overlapping,
+adjacent and fully contained segments are merged into one part before any
+byte is written, a merged list is ordered by start, and the delivered
+single-range, past-end and four-segment laws did not move.
+AC-FDPV19 (six arms, R3478) pins a repeated Range line: two Range lines are
+not a comma list, so the door answers the whole face instead of half-
+executing the first line, and every single-line range answer did not move.
+AC-FDPV20 (six arms, R3479) pins the repeated conditional fields: If-Match
+and If-None-Match arrive as one comma list, a repeated HTTP-date is dropped
+whole rather than half-executed, a repeated If-Range refuses the range, and
+every single-line conditional answer did not move.
+AC-FDPV21 (six arms, R3480) pins a repeated Accept-Encoding line: the lines
+are one coding list, so gzip named only on the second line is served (200
+was the measured bug -- identity came back), a q=0 on any line refuses that
+coding, a wildcard on any line accepts gzip, and every single-line coding
+answer did not move.
 
 Usage: python test_frontdoor_preview_pages.py
 Exit: 0 = SUITE PASS, 2 = FAIL.
@@ -116,7 +132,7 @@ RESULTS = []
 
 # R3475: one place states how many criteria the registry must
 # declare, so adding a criterion cannot leave eleven stale literals.
-DECLARED_TAG = "20)"
+DECLARED_TAG = "21)"
 
 
 def report(name, bad, detail=""):
@@ -2705,6 +2721,123 @@ def main():
             block20r = handle.read().split('"' + ROW + '"', 1)[-1][:220]
         if DECLARED_TAG not in block20r:
             bad20.append("f-declared")
+        # R3480 measured before the edit (tmp/probe-R3480.py, eight raw
+        # shapes): Accept-Encoding reached the door through
+        # self.headers.get, so only the first line spoke. gzip named only on
+        # the second line answered identity; a q=0 on the second line still
+        # answered gzip the reader had refused; a wildcard on the second line
+        # was ignored. The lines are one coding list (RFC 9110 sec.5.3), so
+        # the door joins them and grades the joined list once.
+        bad21 = []
+        page21 = "/preview/index.html"
+        with io.open(os.path.join(PREVIEW, "index.html"), "rb") as handle:
+            disk21 = handle.read()
+        size21 = len(disk21)
+
+        def coding21(lines, extra=()):
+            """One raw request carrying its own Accept-Encoding lines."""
+            payload = ["GET " + page21 + " HTTP/1.1", "Host: 127.0.0.1"]
+            payload.extend(lines)
+            payload.extend(extra)
+            payload.extend(["Connection: close", "", ""])
+            blob = raw_request(port, "\r\n".join(payload).encode("latin-1"))
+            status21, fields21, body21 = wire_reply(blob)
+            return status21, fields21, body21
+
+        def lines21(*values):
+            return ["Accept-Encoding: " + value for value in values]
+
+        def graded21(tag21, status21, fields21, body21):
+            """A 200 body that is either the gzip of disk or the disk bytes."""
+            if status21.split(" ")[1] != "200":
+                bad21.append("%s-%s" % (tag21, status21.split(" ")[1]))
+                return
+            if fields21.get("content-encoding") == "gzip":
+                try:
+                    if gzip.decompress(body21) != disk21:
+                        bad21.append("%s-gunzip-bytes" % tag21)
+                except Exception:  # noqa: BLE001
+                    bad21.append("%s-gunzip" % tag21)
+            elif body21 != disk21:
+                bad21.append("%s-bytes-%d" % (tag21, len(body21)))
+
+        # ---- a: two coding lines are one list -----------------------------
+        for tag21, values21 in (("a-id-gz", ("identity", "gzip")),
+                                ("a-br-gz", ("br", "gzip")),
+                                ("a-gz-id", ("gzip", "identity"))):
+            status21, fields21, body21 = coding21(lines21(*values21))
+            if fields21.get("content-encoding") != "gzip":
+                bad21.append("%s-coding-%r" % (tag21,
+                                               fields21.get("content-encoding")))
+            graded21(tag21, status21, fields21, body21)
+        # ---- b: an explicit token beats the wildcard, q=0 included --------
+        status21, fields21, body21 = coding21(lines21("*", "gzip;q=0"))
+        if status21.split(" ")[1] != "200" or body21 != disk21 or \
+                fields21.get("content-encoding"):
+            bad21.append("b-star-refused-%s-%d" % (status21.split(" ")[1],
+                                                   len(body21)))
+        status21, fields21, body21 = coding21(lines21("gzip;q=0", "gzip"))
+        if status21.split(" ")[1] != "200" or \
+                fields21.get("content-encoding") != "gzip":
+            bad21.append("b-heaviest-gzip-%r" % fields21.get("content-encoding"))
+        graded21("b-heaviest", status21, fields21, body21)
+        # ---- c: a wildcard on any line accepts gzip ------------------------
+        status21, fields21, body21 = coding21(lines21("identity", "*"))
+        if status21.split(" ")[1] != "200" or \
+                fields21.get("content-encoding") != "gzip":
+            bad21.append("c-star-%r" % fields21.get("content-encoding"))
+        graded21("c-star", status21, fields21, body21)
+        # ---- d: a refusal is still a refusal, on any line ------------------
+        for tag21, values21 in (("d-id-gz0", ("identity", "gzip;q=0")),
+                                ("d-gz0-gz0", ("gzip;q=0", "gzip;q=0")),
+                                ("d-single-gz0", ("gzip;q=0",))):
+            status21, fields21, body21 = coding21(lines21(*values21))
+            if status21.split(" ")[1] != "200" or body21 != disk21 or \
+                    fields21.get("content-encoding"):
+                bad21.append("%s-%s-%r-%d" % (tag21, status21.split(" ")[1],
+                                              fields21.get("content-encoding"),
+                                              len(body21)))
+        # ---- e: every single-line answer still reads as it did ------------
+        for tag21, values21, want21 in (("e-gz", ("gzip",), "gzip"),
+                                        ("e-gz-half", ("gzip;q=0.5",), "gzip"),
+                                        ("e-star", ("*",), "gzip"),
+                                        ("e-id", ("identity",), ""),
+                                        ("e-br", ("br",), ""),
+                                        ("e-none", (), "")):
+            status21, fields21, body21 = coding21(lines21(*values21))
+            if status21.split(" ")[1] != "200" or \
+                    (fields21.get("content-encoding") or "") != want21:
+                bad21.append("%s-%r-%r" % (tag21, status21.split(" ")[1],
+                                           fields21.get("content-encoding")))
+            elif "accept-encoding" not in (fields21.get("vary") or "").lower():
+                bad21.append("%s-vary" % tag21)
+            graded21(tag21, status21, fields21, body21)
+        status21, fields21, body21 = coding21(
+            lines21("gzip", "identity"), ("Range: bytes=0-9",))
+        if status21.split(" ")[1] != "206" or body21 != disk21[:10] or \
+                fields21.get("content-encoding"):
+            bad21.append("e-range-%s-%d-%r" % (status21.split(" ")[1],
+                                               len(body21),
+                                               fields21.get("content-encoding")))
+        # ---- f: dialect, tokens on disk, declared count -------------------
+        with io.open(MODULE, "rb") as handle:
+            raw21 = handle.read()
+        if raw21[:3] == b"\xef\xbb\xbf" or b"\r\n" in raw21:
+            bad21.append("f-module-dialect")
+        try:
+            text21 = raw21.decode("utf-8")
+            text21.encode("ascii")
+        except (UnicodeDecodeError, UnicodeEncodeError):
+            bad21.append("f-module-not-ascii")
+            text21 = raw21.decode("utf-8", "replace")
+        if '_list_header(self.headers, "Accept-Encoding")' not in text21:
+            bad21.append("f-missing-listreader")
+        if 'self.headers.get("Accept-Encoding")' in text21:
+            bad21.append("f-old-reader")
+        with io.open(REGISTRY, encoding="utf-8") as handle:
+            block21r = handle.read().split('"' + ROW + '"', 1)[-1][:220]
+        if DECLARED_TAG not in block21r:
+            bad21.append("f-declared")
     finally:
         srv.shutdown()
         srv.server_close()
@@ -2729,6 +2862,7 @@ def main():
     report("AC-FDPV18", bool(bad18), ",".join(bad18))
     report("AC-FDPV19", bool(bad19), ",".join(bad19))
     report("AC-FDPV20", bool(bad20), ",".join(bad20))
+    report("AC-FDPV21", bool(bad21), ",".join(bad21))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:
