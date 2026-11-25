@@ -11,9 +11,9 @@
     "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/export-face-writer-R3460.log (2049B, 2026-11-25, sha256 382f79606674)",
     "latest_evidence": "qa/export-face-writer-R3460.log (2049B, 2026-11-25, sha256 382f79606674)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3459] next window (<=48h): (1) **S4U 仍未落地**：`BigDomain-OSLoop` 存在且 state=Running，但 `LogonType=Interactive`；本会话未提权，`register_loop_task.ps1` 重注册需提权会话执行，落地后必须 `$t.Principal.LogonType` 读回验证并保留既有触发器——本项已连承三窗，禁止再以「未实测」结账。(2) 新增一条**回归护栏**：任何新轮若先写 `docs/status-export.json` 再跑面扫，`board_pages_skipped` 会重新变空——收口序固定为「面扫 → 导出 → 两个判分器」，此序写进收口检查单。(3) 抽一个已开门面做回归复核（面自带套件在盘、tools/＋preview/＋src/os 实测零命中才动手；已开门面不重开）。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`（本窗收口后 state 载体 76379B／闸 78500／余 2121B，本窗未折）。(6) tick 口径：本窗 3458→3459。(7) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、backlog.md 体量闸。",
-    "next_milestone_due": "2026-11-27T09:26:15+08:00",
-    "updated_at": "2026-11-25T09:26:15+08:00",
+    "next_milestone": "[R3460] next window (<=48h): (1) **S4U 已实测未落地**：`BigDomain-OSLoop` State=Running、`LogonType=Interactive`、`UserId=sjs20`，本会话非管理员——处置已钉死＝由**提权会话**跑 `src/os/register_loop_task.ps1` 并用 `$t.Principal.LogonType` 读回，保留既有触发器；本项第五次承账，禁再以「未实测」或「无从下手」结账。(2) **收口序升级为实证序**（本轮实测出第二处，故从「面扫→导出→两判分器」扩写）：面扫 → `heartbeat.py --write <tick>` → `export_round.py`（写）→ `status_export_fresh.py --apply` → 两个判分器 + `check_export_consistency` ——心跳块与 self_drive 块分属两个写入器，顺序错则任一块自洽地陈旧。(3) 抽一个已开门面做回归复核（面自带套件在盘、`git grep -F` 于 tools/＋preview/＋src/os 零命中才动手；已开门面不重开）。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`（本窗两次折叠后载体 73526B／闸 78500／余 4974B）。(6) tick 口径：本窗 3459→3460。(7) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、backlog.md 体量闸。",
+    "next_milestone_due": "2026-11-27T09:28:06+08:00",
+    "updated_at": "2026-11-25T09:28:06+08:00",
     "heartbeat": {
       "tick": 3460,
       "state_tick": 3460,
@@ -38,7 +38,7 @@
     }
   },
   "current": "2026-11-25 R3460 PRODUCT: the export face stops needing a human pen - tools/status_export_fresh.py --apply now publishes the self_drive block and the results tick row from the shipped checker own recount, so no window has to type those numbers into the CEO face again (AC-SXF38).",
-  "claims": {"claimed": 27, "captured": 16, "contradicted": 0, "uncaptured": 11, "historic": 0, "rows": 101, "present": true, "census_ts": "2026-11-25T09:26:15+08:00"},
+  "claims": {"claimed": 27, "captured": 16, "contradicted": 0, "uncaptured": 11, "historic": 0, "rows": 101, "present": true, "census_ts": "2026-11-25T09:28:06+08:00"},
   "chain": {"present": true, "rows": 101, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -68,10 +68,10 @@
     }
   ],
   "do": "2026-11-25 R3460 PRODUCT: the export face stops needing a human pen - tools/status_export_fresh.py --apply now publishes the self_drive block and the results tick row from the shipped checker own recount, so no window has to type those numbers into the CEO face again (AC-SXF38).",
-  "export_ts": "2026-11-25T09:26:15+08:00",
+  "export_ts": "2026-11-25T09:28:06+08:00",
   "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 commit] (halves differ: html [2026-11-25 commit] + json [2026-11-16 commit]; later=html)",
   "latest_evidence": "qa/export-face-writer-R3460.log (2049B, 2026-11-25, sha256 382f79606674)",
-  "next_milestone": "[R3459] next window (<=48h): (1) **S4U 仍未落地**：`BigDomain-OSLoop` 存在且 state=Running，但 `LogonType=Interactive`；本会话未提权，`register_loop_task.ps1` 重注册需提权会话执行，落地后必须 `$t.Principal.LogonType` 读回验证并保留既有触发器——本项已连承三窗，禁止再以「未实测」结账。(2) 新增一条**回归护栏**：任何新轮若先写 `docs/status-export.json` 再跑面扫，`board_pages_skipped` 会重新变空——收口序固定为「面扫 → 导出 → 两个判分器」，此序写进收口检查单。(3) 抽一个已开门面做回归复核（面自带套件在盘、tools/＋preview/＋src/os 实测零命中才动手；已开门面不重开）。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`（本窗收口后 state 载体 76379B／闸 78500／余 2121B，本窗未折）。(6) tick 口径：本窗 3458→3459。(7) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、backlog.md 体量闸。",
+  "next_milestone": "[R3460] next window (<=48h): (1) **S4U 已实测未落地**：`BigDomain-OSLoop` State=Running、`LogonType=Interactive`、`UserId=sjs20`，本会话非管理员——处置已钉死＝由**提权会话**跑 `src/os/register_loop_task.ps1` 并用 `$t.Principal.LogonType` 读回，保留既有触发器；本项第五次承账，禁再以「未实测」或「无从下手」结账。(2) **收口序升级为实证序**（本轮实测出第二处，故从「面扫→导出→两判分器」扩写）：面扫 → `heartbeat.py --write <tick>` → `export_round.py`（写）→ `status_export_fresh.py --apply` → 两个判分器 + `check_export_consistency` ——心跳块与 self_drive 块分属两个写入器，顺序错则任一块自洽地陈旧。(3) 抽一个已开门面做回归复核（面自带套件在盘、`git grep -F` 于 tools/＋preview/＋src/os 零命中才动手；已开门面不重开）。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`（本窗两次折叠后载体 73526B／闸 78500／余 4974B）。(6) tick 口径：本窗 3459→3460。(7) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、backlog.md 体量闸。",
   "outs": [
     "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 commit] (halves differ: html [2026-11-25 commit] + json [2026-11-16 commit]; later=html)",
     "preview/buyer-answer-wait-board.html (8364B) + preview/buyer-answer-wait-board.json (3107B) [2026-11-25 mtime]",
@@ -143,9 +143,9 @@
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
-  "self_drive": {"window": "2026-11-19..2026-11-25", "window_days": 7, "log_lines_in_window": 108, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 11, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
-  "state_bytes": 73526,
-  "next_milestone_due": "2026-11-27T09:26:15+08:00",
+  "self_drive": {"window": "2026-11-19..2026-11-25", "window_days": 7, "log_lines_in_window": 110, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 11, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
+  "state_bytes": 74111,
+  "next_milestone_due": "2026-11-27T09:28:06+08:00",
   "heartbeat": {
     "tick": 3460,
     "state_tick": 3460,
