@@ -1,0 +1,47 @@
+R3473 frontdoor connection-law evidence
+===== leg 1: read-only probe BEFORE the edit (tmp/probe-R3473.py, 8 raw shapes)
+status line and connection, measured on the shipped door:
+  GET /healthz HTTP/1.0            -> HTTP/1.0 200, no Connection field, socket EOF
+  GET /healthz HTTP/1.1 + Host     -> HTTP/1.0 200, no Connection field, socket EOF
+  1.0 + Connection: keep-alive     -> answered, no Connection field, 2nd request aborted
+  1.1 default, 2nd request         -> 2nd request ConnectionAbortedError
+  1.1 Connection: close, 2nd       -> 2nd request aborted (expected)
+  1.1 GET + Expect + CL            -> 200 ok, no 100 Continue (hook unreachable in 1.0 mode)
+  1.0 GET + Expect + CL            -> 200 ok, no 100 Continue
+  two pipelined 1.1 requests       -> 1 status line, 1 "ok": the second request was lost
+  1.1 POST                         -> 405 + Connection: close (already correct)
+===== leg 2: the same probe AFTER the edit
+  GET /healthz HTTP/1.0            -> HTTP/1.0 200 + Connection: close + EOF
+  GET /healthz HTTP/1.1 + Host     -> HTTP/1.1 200, no close, socket reused
+  1.0 + Connection: keep-alive     -> Connection: keep-alive, 2nd request answered
+  1.1 default, 2nd request         -> answered HTTP/1.1 200
+  1.1 Connection: close            -> Connection: close, 2nd request aborted
+  1.1 GET + Expect + CL            -> 417 Expectation Failed + close, no 100 Continue
+  1.0 GET + Expect + CL            -> 200 ok + close, no 100 Continue
+  two pipelined 1.1 requests       -> 2 status lines, 2 "ok"
+  1.1 POST                         -> 405 + Allow: GET, HEAD + close
+===== leg 3: suite
+SUITE PASS 14/14 (AC-FDPV1..AC-FDPV14, six arms each, AC-FDPV14 green on its
+first accepted run; 63s wall). Registry frontdoor-preview-pages declared
+13 -> 14; ten older arms re-pinned to the same count.
+===== leg 4: measured controls (byte-identical restore, frontdoor.py sha256
+2daf0d8fd4ddbd4f... both before and after every control)
+  b  (parse_request always closes)        -> SUITE FAIL 1/14 failed=AC-FDPV14
+  c  (1.0 and 1.1 persistence collapsed)  -> SUITE FAIL 1/14 failed=AC-FDPV14
+  d  (_send belt removed alone)           -> SUITE PASS 14/14  (finding: the law
+     is enforced twice; parse_request carries it, so this single-site removal
+     cannot move the wire -- recorded, not claimed)
+  d2 (_send and parse_request belts both) -> SUITE FAIL 3/14 failed=AC-FDPV9,
+     AC-FDPV13,AC-FDPV14  (wide: three arms depend on a declared body closing)
+  e  (Expect left to the stock hook)      -> SUITE FAIL 1/14 failed=AC-FDPV14
+===== honest notes
+0. This round adds no business face: it makes one door tell the truth about the
+   version it speaks and the connection it will keep. 100 Continue is still
+   never invited -- the door refuses with 417 instead of stocking the hook.
+1. The suite's raw probe now reads with a 0.4s idle grace after the first
+   bytes, because a live 1.1 connection no longer ends its answer with EOF; a
+   second answer the door writes immediately is still seen (measured by d).
+2. d2 reddens three arms: AC-FDPV9's declared-body close and AC-FDPV13's equal
+   duplicate Content-Length close ride on the same law. Reported wide, not
+   trimmed.
+3. The five physical pieces are still missing; a buyer still cannot pay.

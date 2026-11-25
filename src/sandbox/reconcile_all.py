@@ -8700,8 +8700,12 @@ SUITES = [
     # status line and no policy, an obs-fold and an illegal field
     # name were accepted, and conflicting Content-Length values
     # answered 200 - AC-FDPV13.
+    # R3473: the door answered HTTP/1.0 to a 1.1 request, no 200 named a
+    # Connection field, a 1.1 peer's second request met a reset, a 1.0
+    # peer's keep-alive was ignored, Expect was unreachable and a
+    # pipelined second request was lost - AC-FDPV14.
     ("frontdoor-preview-pages",
-     os.path.join("test_frontdoor_preview_pages.py"), 13),
+     os.path.join("test_frontdoor_preview_pages.py"), 14),
     # R3115: the 24h export-face age gate (os/export_freshness.py, AC-EXP1..6)
     # had zero production consumers - it ran only inside its own suite - while
     # the CEO card printed export_ts as a bare string. AC-FDC2 (six arms, ONE

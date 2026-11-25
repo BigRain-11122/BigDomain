@@ -9321,6 +9321,29 @@ HOST_NAME = re.compile("^[A-Za-z0-9._\\-]+$")
 HOST_LITERAL = "0123456789abcdefABCDEF:."
 
 
+# R3473: the door's wire version and who may reuse a connection.
+# Measured before this landed (tmp/probe-R3473.py, eight raw shapes): every
+# answer named HTTP/1.0 -- a 1.1 request and a 1.0 request alike -- while the
+# door had been judging the message by HTTP/1.1 duties since R3471, so the
+# version it published and the grammar it enforced disagreed. No 200 answer
+# named a Connection field and the socket closed after every one: an HTTP/1.1
+# client assumes persistence (RFC 9112 sec.9.3), so its second request met
+# ConnectionAbortedError with nothing on the wire to warn it; an HTTP/1.0
+# client that asked for keep-alive was answered exactly the same way and lost
+# the request it had been told it could send. Expect: 100-continue was
+# unreachable in 1.0 mode -- Python never consults the hook -- so a 1.1 GET
+# carrying a body was answered 200 with the body's bytes left unread on a
+# closing socket; and two pipelined 1.1 requests got one status line and one
+# "ok", the second request silently consumed. The door now answers in the
+# highest version it conforms to that is not newer than the request
+# (RFC 9110 sec.6.1), keeps a 1.1 connection unless the peer said close, and
+# still closes every connection that declared a body, because this door reads
+# no body and the unread bytes would otherwise be taken for the next request
+# line.
+PROTOCOL_10 = "HTTP/1.0"
+PROTOCOL_11 = "HTTP/1.1"
+
+
 def _speaks_11(version):
     """True for HTTP/1.1 and later, the versions the Host duty covers."""
     try:
@@ -9328,6 +9351,19 @@ def _speaks_11(version):
         return (int(major), int(minor)) >= (1, 1)
     except (IndexError, ValueError):
         return False
+
+
+def _persistent(version, conntype):
+    """R3473: may this connection carry another request?
+
+    HTTP/1.1 is persistent unless the peer said close (RFC 9112 sec.9.3);
+    HTTP/1.0 is persistent only when the peer asked for it and the answer
+    says so (RFC 7230 sec.6.3). A request that declared a body closes in
+    both cases -- see _send -- because this door never reads one.
+    """
+    if _speaks_11(version):
+        return conntype != "close"
+    return conntype == "keep-alive"
 
 
 def _host_value_ok(value):
@@ -9468,9 +9504,27 @@ class Handler(BaseHTTPRequestHandler):
     # itself and nothing else.
     server_version = "BigDomain"
     sys_version = ""
+    # R3473: the highest version this door conforms to. An answer names the
+    # lower one when the request was written in HTTP/1.0 (_wire_version).
+    protocol_version = PROTOCOL_11
 
     def version_string(self):
         return "BigDomain"
+
+    def _wire_version(self):
+        """R3473: the version this answer names on the wire.
+
+        A request line the stdlib read as 0.9 is lifted to 1.0 first, because
+        in 0.9 mode the status line and every header are suppressed -- the one
+        answer shape that would drop the policy this door promises. Every
+        other answer names the highest version the door conforms to that is
+        not newer than the request (RFC 9110 sec.6.1), never 0.9.
+        """
+        if self.request_version == "HTTP/0.9":
+            self.request_version = PROTOCOL_10
+        if _speaks_11(self.request_version):
+            return PROTOCOL_11
+        return PROTOCOL_10
 
     def _send(self, code, ctype, body, head_only=False, headers=(),
               etag=None, encoding=None, close=False):
@@ -9489,31 +9543,43 @@ class Handler(BaseHTTPRequestHandler):
         # the one answer shape on this door with no policy and no framing.
         # The version is lifted to the door's own dialect before the answer,
         # so a malformed request line cannot downgrade the door's answer.
-        if self.request_version == "HTTP/0.9":
-            self.request_version = "HTTP/1.0"
-        self.send_response(code)
-        self.send_header("Content-Type", ctype)
-        self.send_header("Cache-Control", "no-store")
-        self.send_header("Vary", "Accept-Encoding")
-        for name, value in _security_headers(ctype):
-            self.send_header(name, value)
-        if encoding:
-            self.send_header("Content-Encoding", encoding)
-        if etag:
-            self.send_header("ETag", etag)
-        for name, value in headers:
-            self.send_header(name, value)
-        # R3468: every refusal closes, and so does any answer to a request
-        # that declared a body. This door never reads a request body, so the
-        # unread bytes must not stay on a live connection where they would be
-        # parsed as the next request line.
-        if close or getattr(self, "_request_body_declared", False):
-            self.close_connection = True
-            self.send_header("Connection", "close")
-        self.send_header("Content-Length", str(len(body)))
-        self.end_headers()
-        if not head_only:
-            self.wfile.write(body)
+        # R3473: the answer also names the version it was written in, and says
+        # on the wire whether this connection will carry another request. A
+        # peer that is about to lose its connection is told so, instead of
+        # discovering it as a reset; an HTTP/1.0 peer that asked for
+        # keep-alive is told the answer honours it (RFC 7230 sec.6.3).
+        saved_version = self.protocol_version
+        self.protocol_version = self._wire_version()
+        try:
+            self.send_response(code)
+            self.send_header("Content-Type", ctype)
+            self.send_header("Cache-Control", "no-store")
+            self.send_header("Vary", "Accept-Encoding")
+            for name, value in _security_headers(ctype):
+                self.send_header(name, value)
+            if encoding:
+                self.send_header("Content-Encoding", encoding)
+            if etag:
+                self.send_header("ETag", etag)
+            for name, value in headers:
+                self.send_header(name, value)
+            # R3468: every refusal closes, and so does any answer to a request
+            # that declared a body. This door never reads a request body, so
+            # the unread bytes must not stay on a live connection where they
+            # would be parsed as the next request line.
+            if close or getattr(self, "_request_body_declared", False):
+                self.close_connection = True
+            if self.close_connection:
+                self.send_header("Connection", "close")
+            elif not _speaks_11(self.request_version):
+                self.send_header("Connection", "keep-alive")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            if not head_only:
+                self.wfile.write(body)
+        finally:
+            self.protocol_version = saved_version
+
 
     def _negotiate(self, identity):
         """R3465: pick the representation this request is answered with.
@@ -9845,6 +9911,15 @@ class Handler(BaseHTTPRequestHandler):
         self._request_body_declared = (
             transfer is not None or
             (length is not None and length.strip() not in ("", "0")))
+        # R3473: persistence is this door's decision, stated exactly once here
+        # instead of inherited from whichever stdlib release parsed the head.
+        # A 1.1 peer keeps the connection unless it said close; a 1.0 peer
+        # keeps it only when it asked; and any request that declared a body
+        # closes, because the bytes it promised were never read.
+        conntype = (self.headers.get("Connection") or "").strip().lower()
+        self.close_connection = (
+            self._request_body_declared or
+            not _persistent(self.request_version, conntype))
         return True
 
     # R3468: every standard verb this door does not implement is refused by

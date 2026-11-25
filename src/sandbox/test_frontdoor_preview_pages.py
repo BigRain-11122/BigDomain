@@ -32,8 +32,8 @@ and the Server header names the door instead of the interpreter version.
 AC-FDPV9 (six arms, R3468) pins the shelf's refusal: every verb this door does
 not implement answers through the door's own policy (405 plus Allow for a
 standard verb, 501 for an unknown one, 400 for a request that names both
-framings), the connection always closes, no 100 Continue is ever invited, and
-nothing already delivered moved.
+framings), every refusal closes its connection, no 100 Continue is ever
+invited, and nothing already delivered moved.
 AC-FDPV10 (six arms, R3469) pins the route: the path alone picks the face, so
 a share link carrying a query string opens the root, the health face and the
 bare shelf exactly as the bare path does, a query never turns an unknown path
@@ -49,6 +49,18 @@ AC-FDPV12 (six arms, R3471) pins the Host field: an HTTP/1.1 message that
 lacks Host, names Host twice, or carries an invalid value is refused 400 by
 name with the door's policy, an absolute-form target has its Host ignored for
 routing but still judged as a value, HTTP/1.0 stays exempt from the duty, and
+nothing already delivered moved.
+AC-FDPV13 (six arms, R3472) pins the head as a message: the request line
+carries three tokens and an origin, absolute or asterisk target, no answer may
+drop to HTTP/0.9 framing, the field block may not fold or carry a non-token
+name, a colonless line or a control byte in a value, and conflicting
+Content-Length values are refused 400 while equal duplicates stay legal.
+AC-FDPV14 (six arms, R3473) pins the wire version and the connection law: an
+answer names HTTP/1.1 to a 1.1 request and HTTP/1.0 to a 1.0 one, a 1.1
+connection carries three requests, a 1.0 peer is told close when it did not ask
+for keep-alive and gets keep-alive when it did, a request that declared a body
+closes so its bytes are never parsed as a request line, Expect: 100-continue is
+refused 417 (or the verb's own refusal) without ever sending 100 Continue, and
 nothing already delivered moved.
 
 Usage: python test_frontdoor_preview_pages.py
@@ -182,6 +194,13 @@ def raw_request(port, payload, timeout=10):
             if not piece:
                 break
             chunks.append(piece)
+            # R3473: the door now keeps an HTTP/1.1 connection open, so an idle
+            # read is no longer proof that the answer ended. After the first
+            # bytes a short grace is long enough for a second answer this suite
+            # must still see (the door writes it in the same segment), and
+            # short enough that a live connection is not waited on for the
+            # whole timeout.
+            sock.settimeout(0.4)
         return b"".join(chunks)
     finally:
         sock.close()
@@ -362,7 +381,7 @@ def main():
             block = registry_text.split('"' + ROW + '"', 1)[1][:160]
             if "test_frontdoor_preview_pages.py" not in block:
                 bad2.append("f-row-file")
-            if "13)" not in block:
+            if "14)" not in block:
                 bad2.append("f-declared-%s" % block.split(")")[0].strip()[-3:])
 
         # ===== AC-FDPV3: the shelf is resumable and concurrent ============
@@ -591,7 +610,7 @@ def main():
         with io.open(REGISTRY, encoding="utf-8") as handle:
             registry_text4 = handle.read()
         block4 = registry_text4.split('"' + ROW + '"', 1)[-1][:160]
-        if "13)" not in block4:
+        if "14)" not in block4:
             bad4.append("f-declared-%r" % block4.split(")")[0][-8:])
 
         # ===== AC-FDPV5: the shelf negotiates a coding ======================
@@ -729,7 +748,7 @@ def main():
         with io.open(REGISTRY, encoding="utf-8") as handle:
             registry_text5 = handle.read()
         block5 = registry_text5.split('"' + ROW + '"', 1)[-1][:160]
-        if "13)" not in block5:
+        if "14)" not in block5:
             bad5.append("f-declared-%r" % block5.split(")")[0][-8:])
 
         # ===== AC-FDPV6: the shelf honours the write preconditions ==========
@@ -807,7 +826,7 @@ def main():
         with io.open(REGISTRY, encoding="utf-8") as handle:
             registry_text6 = handle.read()
         block6 = registry_text6.split('"' + ROW + '"', 1)[-1][:200]
-        if "13)" not in block6:
+        if "14)" not in block6:
             bad6.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block6:
             bad6.append("f-row-file")
@@ -956,7 +975,7 @@ def main():
         with io.open(REGISTRY, encoding="utf-8") as handle:
             registry_text7 = handle.read()
         block7 = registry_text7.split('"' + ROW + '"', 1)[-1][:200]
-        if "13)" not in block7:
+        if "14)" not in block7:
             bad7.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block7:
             bad7.append("f-row-file")
@@ -1086,7 +1105,7 @@ def main():
                 bad8.append("f-missing-" + needle)
         with io.open(REGISTRY, encoding="utf-8") as handle:
             block8r = handle.read().split('"' + ROW + '"', 1)[-1][:200]
-        if "13)" not in block8r:
+        if "14)" not in block8r:
             bad8.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block8r:
             bad8.append("f-row-file")
@@ -1229,7 +1248,7 @@ def main():
                 bad9.append("f-missing-" + needle)
         with io.open(REGISTRY, encoding="utf-8") as handle:
             block9r = handle.read().split('"' + ROW + '"', 1)[-1][:200]
-        if "13)" not in block9r:
+        if "14)" not in block9r:
             bad9.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block9r:
             bad9.append("f-row-file")
@@ -1348,7 +1367,7 @@ def main():
             bad10.append("f-missing-_request_path")
         with io.open(REGISTRY, encoding="utf-8") as handle:
             block10r = handle.read().split('"' + ROW + '"', 1)[-1][:200]
-        if "13)" not in block10r:
+        if "14)" not in block10r:
             bad10.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block10r:
             bad10.append("f-row-file")
@@ -1467,7 +1486,7 @@ def main():
                              .replace(" ", "-"))
         with io.open(REGISTRY, encoding="utf-8") as handle:
             block11r = handle.read().split('"' + ROW + '"', 1)[-1][:200]
-        if "13)" not in block11r:
+        if "14)" not in block11r:
             bad11.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block11r:
             bad11.append("f-row-file")
@@ -1585,7 +1604,7 @@ def main():
                              .replace(" ", "-"))
         with io.open(REGISTRY, encoding="utf-8") as handle:
             block12r = handle.read().split('"' + ROW + '"', 1)[-1][:220]
-        if "13)" not in block12r:
+        if "14)" not in block12r:
             bad12.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block12r:
             bad12.append("f-row-file")
@@ -1695,7 +1714,7 @@ def main():
         if " 200 " not in line13 or body13 != b"ok":
             bad13.append("e-value-tab-%r-%r" % (line13, body13[:12]))
 
-        # ---- f: nothing delivered moved, and the count is 13 --------------
+        # ---- f: nothing delivered moved, and the count is 14 --------------
         for path13 in ("/", "/healthz", "/preview", "/preview/index.html"):
             status13, _ctype13, _body13 = get(port, path13)
             if status13 != 200:
@@ -1725,10 +1744,186 @@ def main():
                              .replace(" ", "-"))
         with io.open(REGISTRY, encoding="utf-8") as handle:
             block13 = handle.read().split('"' + ROW + '"', 1)[-1][:220]
-        if "13)" not in block13:
+        if "14)" not in block13:
             bad13.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block13:
             bad13.append("f-row-file")
+
+        # ===== AC-FDPV14: the wire version and the connection law ==========
+        # R3473 measured before the code (tmp/probe-R3473.py, eight raw
+        # shapes). Every answer named HTTP/1.0, even to an HTTP/1.1 request
+        # the door judged by 1.1 duties; no 200 named a Connection field and
+        # the socket closed, so a 1.1 peer's second request met a reset with
+        # nothing on the wire to warn it; a 1.0 peer that asked keep-alive got
+        # the same silent close; Expect: 100-continue was unreachable (1.0
+        # mode never consults the hook) and a 1.1 GET carrying a body was
+        # answered 200 with its bytes left unread; two pipelined 1.1
+        # requests got one status line and one "ok".
+        bad14 = []
+
+        def dialog14(payloads, timeout=6.0):
+            """One socket, several writes, one framed answer read per write.
+
+            A connection that dies mid-dialog is a READING, not a crash: the
+            transport name is appended so the arm reddens by name instead of
+            taking the whole suite down with it.
+            """
+            sock = socket.create_connection(("127.0.0.1", port), timeout=timeout)
+            sock.settimeout(timeout)
+            got = []
+            try:
+                for piece in payloads:
+                    try:
+                        sock.sendall(piece)
+                        buf = b""
+                        while b"\r\n\r\n" not in buf:
+                            chunk = sock.recv(65536)
+                            if not chunk:
+                                break
+                            buf += chunk
+                        if b"\r\n\r\n" in buf:
+                            head14, _, rest14 = buf.partition(b"\r\n\r\n")
+                            length14 = 0
+                            for line14 in head14.split(b"\r\n")[1:]:
+                                name14, _, value14 = line14.partition(b":")
+                                if name14.strip().lower() == b"content-length":
+                                    length14 = int(value14.strip())
+                            while len(rest14) < length14:
+                                chunk = sock.recv(65536)
+                                if not chunk:
+                                    break
+                                rest14 += chunk
+                            buf = head14 + b"\r\n\r\n" + rest14
+                    except OSError as exc:
+                        got.append(b"transport:" +
+                                   exc.__class__.__name__.encode("ascii"))
+                        break
+                    got.append(buf)
+            finally:
+                sock.close()
+            return got
+
+        # ---- a: the answer names the version it was written in ------------
+        ans14 = dialog14([b"GET /healthz HTTP/1.1\r\nHost: door\r\n"
+                          b"Connection: close\r\n\r\n"])
+        if not ans14[0].startswith(b"HTTP/1.1 200 "):
+            bad14.append("a-11-%r" % ans14[0][:18])
+        ans14 = dialog14([b"GET /healthz HTTP/1.0\r\n\r\n"])
+        if not ans14[0].startswith(b"HTTP/1.0 200 "):
+            bad14.append("a-10-%r" % ans14[0][:18])
+        ans14 = dialog14([b"GET /healthz\r\n\r\n"])
+        if not ans14[0].startswith(b"HTTP/1.0 400 "):
+            bad14.append("a-lift-%r" % ans14[0][:22])
+
+        # ---- b: a 1.1 connection carries three requests -------------------
+        trio14 = dialog14([b"GET /healthz HTTP/1.1\r\nHost: door\r\n\r\n"] * 3)
+        if len(trio14) != 3:
+            bad14.append("b-count-%d" % len(trio14))
+        for idx14, one14 in enumerate(trio14):
+            head14 = one14.split(b"\r\n\r\n", 1)[0]
+            if not one14.startswith(b"HTTP/1.1 200 OK"):
+                bad14.append("b-status%d-%r" % (idx14, one14[:18]))
+            if one14.split(b"\r\n\r\n", 1)[-1] != b"ok":
+                bad14.append("b-body%d-%r" % (idx14,
+                                              one14.split(b"\r\n\r\n", 1)[-1]))
+            if b"connection: close" in head14.lower():
+                bad14.append("b-closed%d" % idx14)
+
+        # ---- c: HTTP/1.0 -- told when closed, honoured when asked ---------
+        blob14 = raw_request(port, b"GET /healthz HTTP/1.0\r\n\r\n")
+        line14, headers14, body14 = wire_reply(blob14)
+        if " 200 " not in line14 or body14 != b"ok":
+            bad14.append("c10-status-%r-%r" % (line14, body14[:10]))
+        if headers14.get("connection") != "close":
+            bad14.append("c10-silent-%r" % headers14.get("connection"))
+        ka14 = dialog14([b"GET /healthz HTTP/1.0\r\nConnection: keep-alive\r\n"
+                         b"\r\n"] * 2)
+        if len(ka14) != 2:
+            bad14.append("c10-keep-count-%d" % len(ka14))
+        elif b"connection: keep-alive" not in ka14[0].lower():
+            bad14.append("c10-keep-header")
+        elif not ka14[1].startswith(b"HTTP/1.0 200 "):
+            bad14.append("c10-second-%r" % ka14[1][:18])
+
+        # ---- d: a declared body closes and its bytes are never parsed -----
+        blob14 = raw_request(port, b"GET /healthz HTTP/1.1\r\nHost: door\r\n"
+                                  b"Content-Length: 5\r\n\r\nhello"
+                                  b"GET /healthz HTTP/1.1\r\nHost: door\r\n\r\n")
+        line14, headers14, body14 = wire_reply(blob14)
+        if " 200 " not in line14 or body14 != b"ok":
+            bad14.append("d-status-%r-%r" % (line14, body14[:10]))
+        if headers14.get("connection") != "close":
+            bad14.append("d-close-%r" % headers14.get("connection"))
+        if blob14.count(b"HTTP/1.") != 1:
+            bad14.append("d-status-lines-%d" % blob14.count(b"HTTP/1."))
+
+        # ---- e: Expect is reachable and never invites a body --------------
+        blob14 = raw_request(port, b"GET /healthz HTTP/1.1\r\nHost: door\r\n"
+                                  b"Expect: 100-continue\r\n"
+                                  b"Content-Length: 5\r\n\r\n")
+        line14, headers14, _body14 = wire_reply(blob14)
+        if " 417 " not in line14:
+            bad14.append("e-get-%r" % line14)
+        if headers14.get("connection") != "close":
+            bad14.append("e-get-close-%r" % headers14.get("connection"))
+        if b"100 Continue" in blob14:
+            bad14.append("e-get-invited")
+        blob14 = raw_request(port, b"POST /healthz HTTP/1.1\r\nHost: door\r\n"
+                                  b"Expect: 100-continue\r\n"
+                                  b"Content-Length: 5\r\n\r\nhello")
+        line14, headers14, _body14 = wire_reply(blob14)
+        if " 405 " not in line14 or headers14.get("allow") != "GET, HEAD":
+            bad14.append("e-post-%r-%r" % (line14, headers14.get("allow")))
+        if b"100 Continue" in blob14:
+            bad14.append("e-post-invited")
+        blob14 = raw_request(port, b"GET /healthz HTTP/1.0\r\n"
+                                  b"Expect: 100-continue\r\n"
+                                  b"Content-Length: 5\r\n\r\n")
+        line14, headers14, body14 = wire_reply(blob14)
+        if " 200 " not in line14 or body14 != b"ok":
+            bad14.append("e-10-%r-%r" % (line14, body14[:10]))
+        if headers14.get("connection") != "close":
+            bad14.append("e-10-close-%r" % headers14.get("connection"))
+        if b"100 Continue" in blob14:
+            bad14.append("e-10-invited")
+
+        # ---- f: nothing delivered moved, and the count is 14 --------------
+        for path14 in ("/", "/healthz", "/preview", "/preview/index.html"):
+            status14, _ctype14, _body14 = get(port, path14)
+            if status14 != 200:
+                bad14.append("f-%s-%r" % (path14, status14))
+        status14, _ctype14, body14 = get(port, "/nope")
+        if status14 != 404 or body14 != b"404 not found":
+            bad14.append("f-404-%r-%r" % (status14, body14[:12]))
+        line14, headers14, _body14 = wire_reply(raw_request(
+            port, b"POST /healthz HTTP/1.1\r\nHost: door\r\n\r\n"))
+        if " 405 " not in line14 or headers14.get("allow") != "GET, HEAD":
+            bad14.append("f-post-%r-%r" % (line14, headers14.get("allow")))
+        line14, headers14, _body14 = wire_reply(raw_request(
+            port, b"FOO /healthz HTTP/1.1\r\nHost: door\r\n\r\n"))
+        if " 501 " not in line14 or "allow" in headers14:
+            bad14.append("f-foo-%r" % line14)
+        with io.open(MODULE, "rb") as handle:
+            raw14 = handle.read()
+        if raw14[:3] == b"\xef\xbb\xbf" or b"\r\n" in raw14:
+            bad14.append("f-module-dialect")
+        try:
+            text14 = raw14.decode("utf-8")
+            text14.encode("ascii")
+        except (UnicodeDecodeError, UnicodeEncodeError):
+            bad14.append("f-module-not-ascii")
+            text14 = raw14.decode("utf-8", "replace")
+        for token14 in ("PROTOCOL_11", "def _persistent(",
+                        "def _wire_version(", "def handle_expect_100("):
+            if token14 not in text14:
+                bad14.append("f-missing-" + token14.split("(")[0]
+                             .replace(" ", "-"))
+        with io.open(REGISTRY, encoding="utf-8") as handle:
+            block14 = handle.read().split('"' + ROW + '"', 1)[-1][:220]
+        if "14)" not in block14:
+            bad14.append("f-declared")
+        if "test_frontdoor_preview_pages.py" not in block14:
+            bad14.append("f-row-file")
     finally:
         srv.shutdown()
         srv.server_close()
@@ -1746,6 +1941,7 @@ def main():
     report("AC-FDPV11", bool(bad11), ",".join(bad11))
     report("AC-FDPV12", bool(bad12), ",".join(bad12))
     report("AC-FDPV13", bool(bad13), ",".join(bad13))
+    report("AC-FDPV14", bool(bad14), ",".join(bad14))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:
