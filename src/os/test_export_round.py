@@ -826,8 +826,12 @@ def main():
         os.utime(pj, (now_v - 5, now_v - 5))
         sv = json.loads(read(os.path.join(wv, 'src', 'os', 'state.json')))
         dv = mod.derive(wv, sv, 'TV')
-        ev_line = 'qa/zz-evidence-new.log (40B, %s)' % time.strftime(
-            '%Y-%m-%d', time.localtime(now_v - ev_age))
+        # R3459 AC-EXPE1: the line is a snapshot, so the sha256 prefix the
+        # writer freezes is part of the expected text.
+        ev_line = 'qa/zz-evidence-new.log (40B, %s, sha256 %s)' % (
+            time.strftime('%Y-%m-%d', time.localtime(now_v - ev_age)),
+            mod._sha_prefix(os.path.join(qa_dir, 'zz-evidence-new.log'),
+                            mod.EVIDENCE_SHA_WIDTH))
         ok('AC-EXPE1 the evidence line names the newest qa/*.log with its own '
            'bytes and date', dv['evidence'] == ev_line, dv['evidence'][:48])
         ok('AC-EXPE1 a newer non-log fixture and an older log do not move it',

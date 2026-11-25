@@ -352,10 +352,19 @@ def newest_pair(repo):
 EVIDENCE_DIR = 'qa'
 EVIDENCE_EXT = '.log'
 NO_EVIDENCE = '(no qa evidence on disk)'
-# The line this module writes, read back by --check so a published name can be
-# verified against the file instead of trusted.
+# R3459 AC-EXPE1: the evidence line is a SNAPSHOT. R3458 measured the defect
+# that forced this: the face claimed 728B for a qa log that read 1523B on disk,
+# because a battery leg appends to its own log WHILE the suite runs - so a
+# writer-frozen byte count and the current file can never be graded for
+# equality without reddening every leg that produces evidence (the R2895
+# shape, one layer down). The write now freezes size AND a sha256 prefix, and
+# the grader asks only what a snapshot may be asked: the shape parses, the file
+# still exists, and the file never SHRANK below the frozen size (a qa log is
+# append-only; a smaller file means the claim was never true).
+EVIDENCE_SHA_WIDTH = 12
 EVIDENCE_LINE_RE = re.compile(
-    r'^(qa/[^\s]+\.log) \((\d+)B, (\d{4}-\d{2}-\d{2})\)$')
+    r'^(qa/[^\s]+\.log) \((\d+)B, (\d{4}-\d{2}-\d{2}), '
+    r'sha256 ([0-9a-f]{%d})\)$' % EVIDENCE_SHA_WIDTH)
 
 
 def _evidence_rows(repo):
@@ -377,17 +386,21 @@ def _evidence_rows(repo):
 
 
 def newest_evidence(repo):
-    """The newest top-level qa/*.log as (rel, bytes, date, mtime), or None.
+    """The newest top-level qa/*.log as (rel, bytes, date, mtime, sha12).
 
     The date is rendered from the file's OWN mtime rather than from a clock, so
-    a private world with fixed stamps reads the same line every run.
+    a private world with fixed stamps reads the same line every run. The sha256
+    prefix is the SNAPSHOT half of AC-EXPE1: it is frozen with the byte count at
+    write time, so a later append cannot make the published line a lie.
     """
     rows = _evidence_rows(repo)
     if not rows:
         return None
     mtime, rel, size = rows[0]
     stamp = datetime.datetime.fromtimestamp(mtime, TZ).strftime('%Y-%m-%d')
-    return (rel, size, stamp, mtime)
+    sha = _sha_prefix(os.path.join(repo, rel.replace('/', os.sep)),
+                      EVIDENCE_SHA_WIDTH)
+    return (rel, size, stamp, mtime, sha)
 
 
 def newest_product_mtime(repo):
@@ -399,7 +412,9 @@ def newest_product_mtime(repo):
 
 
 def _fmt_evidence(ev):
-    return '%s (%dB, %s)' % (ev[0], ev[1], ev[2])
+    # R3459 AC-EXPE1: size, date and sha256 all describe the snapshot the writer
+    # took, never "whatever the file reads now".
+    return '%s (%dB, %s, sha256 %s)' % (ev[0], ev[1], ev[2], ev[4])
 
 
 def newest_artifact(repo):
@@ -906,6 +921,10 @@ def next_window_row(repo):
     return ''
 
 
+HEARTBEAT_REASONS = ('fresh', 'heartbeat_ahead', 'heartbeat_row_debt',
+                     'heartbeat_missing_or_unparsed', 'state_not_asked')
+
+
 def heartbeat_block(repo, state):
     """The heartbeat birth site's own verdict, PUBLISHED instead of printed.
 
@@ -1343,9 +1362,19 @@ def check(repo):
     # tree here would redden every round - a gate that cannot pass is not a gate.
     hb = data.get('heartbeat')
     if isinstance(hb, dict):
+        # AC-EXPR1a (R3459): the published verdict must speak heartbeat.verify's
+        # OWN vocabulary. R3458 measured a landed face carrying verdict 'OK'
+        # with an EMPTY reason - two words the birth site never emits - so the
+        # face was not a derivation at all. The law is pinned to the module's
+        # words (no export-layer synonym table), and a reason from outside the
+        # module's set is a second kind of typing.
         if hb.get('verdict') not in ('PASS', 'FLAG'):
-            fails.append('AC-EXPR1 heartbeat verdict %r is not PASS/FLAG'
+            fails.append('AC-EXPR1a heartbeat verdict %r is not PASS/FLAG'
                          % (hb.get('verdict'),))
+        if hb.get('reason') not in HEARTBEAT_REASONS:
+            fails.append('AC-EXPR1a heartbeat reason %r is not one of the '
+                         'birth site reasons %s'
+                         % (hb.get('reason'), '/'.join(HEARTBEAT_REASONS)))
         if hb.get('tick') is not None and hb.get('state_tick') is not None:
             try:
                 want = int(hb['state_tick']) - int(hb['tick'])
@@ -1419,24 +1448,35 @@ def check(repo):
         m = EVIDENCE_LINE_RE.match(named)
         if not m:
             fails.append('AC-EXPE1 latest_evidence is not in the derived line '
-                         'shape: %r' % named[:60])
+                         'shape (path, bytes, date, sha256): %r'
+                         % named[:60])
         else:
-            rel, size, date = m.group(1), int(m.group(2)), m.group(3)
+            rel, size, date, sha = (m.group(1), int(m.group(2)), m.group(3),
+                                    m.group(4))
             path = os.path.join(repo, rel.replace('/', os.sep))
             if not os.path.isfile(path):
                 fails.append('AC-EXPE1 latest_evidence names a file that is not '
                              'on disk: %s' % rel)
             else:
                 real_m = os.path.getmtime(path)
-                real_date = datetime.datetime.fromtimestamp(real_m, TZ) \
-                    .strftime('%Y-%m-%d')
                 real_size = os.path.getsize(path)
-                if real_size != size or real_date != date:
-                    fails.append('AC-EXPE1 latest_evidence lies about %s '
-                                 '(claims %dB/%s, disk %dB/%s)'
-                                 % (rel, size, date, real_size, real_date))
-                else:
-                    ev_ref = (rel, real_size, real_date, real_m)
+                # AC-EXPE1b: the frozen snapshot may be older than the file (a
+                # running leg appends), but it can never claim MORE bytes than
+                # the file holds - a qa log only grows. And the moment the two
+                # are equal the frozen sha256 must be the file's own, so an
+                # unchanged file cannot carry an invented digest.
+                if real_size < size:
+                    fails.append('AC-EXPE1b latest_evidence claims %dB for %s '
+                                 'but the file holds %dB - a qa log never '
+                                 'shrinks, so the frozen claim was never true'
+                                 % (size, rel, real_size))
+                elif real_size == size:
+                    real_sha = _sha_prefix(path, EVIDENCE_SHA_WIDTH)
+                    if real_sha != sha:
+                        fails.append('AC-EXPE1b latest_evidence freezes sha256 '
+                                     '%s for %s at %dB but the file hashes %s'
+                                     % (sha, rel, size, real_sha))
+                ev_ref = (rel, size, date, real_m)
     prod_m = newest_product_mtime(repo)
     want_note = bool(ev_ref and (prod_m is None or ev_ref[3] > prod_m))
     have_note = str(cur.get('latest_artifact_note') or '').strip()

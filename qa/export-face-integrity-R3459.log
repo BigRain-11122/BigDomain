@@ -1,0 +1,18 @@
+R3459 export-face integrity repair (AC-EXPR1a / AC-EXPR1b / AC-EXPW9 / AC-EXPE1b / AC-SXF37)
+BEFORE (HEAD 56d49bca, clean tree): export_round.py --check -> VERDICT FAIL 4
+  - AC-EXPR1 heartbeat verdict 'OK' is not PASS/FLAG
+  - AC-EXPR1 the two heartbeat copies disagree
+  - AC-EXPW9 newest pair on disk is a board page but the skipped audit is empty
+  - AC-EXPE1 latest_evidence lies about qa/buyer-answer-wait-board-R3449.log (claims 728B, disk 1523B)
+  same tree: tools/status_export_fresh.py --check -> VERDICT R3458 PASS (two graders, one document, opposite verdicts)
+AFTER: export_round.py --check -> VERDICT PASS tick=2026-11-25 R3459
+       tools/status_export_fresh.py --check -> VERDICT R3459 PASS (no E_SXF_EXPORT_ROUND)
+       heartbeat.py -> HEARTBEAT PASS tick=3459 state=3459 lag=0 reason=fresh
+       suite src/os/test_export_round.py -> SUITE PASS 185/185 over 55 criteria
+LANDED FACE: heartbeat {"tick":3459,"state_tick":3459,"lag":0,"verdict":"PASS","reason":"fresh"} in both copies
+             board_pages_skipped ["preview/face-sweep.html (8878B)"]
+             latest_evidence "qa/export-face-integrity-R3459.log (<bytes>B, <date>, sha256 <12hex>)" (frozen snapshot)
+CONTROL A (verdict 'OK' + empty reason): rc=2, AC-EXPR1a x2 + AC-EXPR1 x1
+CONTROL B (frozen bytes +7 above the file): rc=2, AC-EXPE1b names the claims/holds pair
+BOTH CONTROLS RESTORED BYTE-IDENTICALLY (export sha256 unchanged; post-restore --check PASS)
+NOT DONE, HONEST: S4U re-register still needs an elevated session (IsInRole(Administrator)=False measured this window)

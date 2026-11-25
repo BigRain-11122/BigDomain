@@ -732,6 +732,27 @@ def check(export_path, state_path):
             problems.extend(self_drive_problems(
                 doc.get("self_drive"), derived_sd, cec_state.get("tick"),
                 doc.get(LEGACY_KEY), cec_pat.get("tick_row_label")))
+    # AC-SXF37 (R3459): one document, one verdict. R3458 measured this tool
+    # answering PASS over a docs/status-export.json that
+    # `src/os/export_round.py --check` called FAIL 4 on a clean tree - two
+    # shipped graders contradicting each other about one file, and the CEO reads
+    # whichever he opens. This face may ADD laws (the AC-SXF* family) but it can
+    # no longer certify a document the export grader refuses: that grader is
+    # imported, never re-implemented.
+    live_export = os.path.join(REAL_ROOT, "docs", "status-export.json")
+    if os.path.abspath(export_path) == os.path.abspath(live_export):
+        try:
+            outside = export_round_module().check(REAL_ROOT)
+        except (ValueError, KeyError, OSError) as exc:
+            problems.append(("E_SXF_EXPORT_ROUND",
+                             "the export grader refused to read the live tree: "
+                             "%s: %s" % (type(exc).__name__, exc)))
+        else:
+            for one in outside:
+                problems.append(("E_SXF_EXPORT_ROUND", one))
+    else:
+        print("export_round graded=0 skipped=private-world: %s is not the live "
+              "docs/status-export.json" % export_path)
     if problems:
         print("VERDICT %s FAIL" % tag)
         for code, problem in problems:
