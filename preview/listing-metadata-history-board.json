@@ -1,0 +1,120 @@
+{
+ "generated_utc": "2026-11-25 17:14:26Z",
+ "face": "api_metadata_history",
+ "scope": "listing",
+ "listings": [
+  {
+   "listing_id": 1,
+   "base_title": "Risk Scan API",
+   "base_description": "portfolio risk scan endpoint",
+   "title": "Risk Scan API Pro",
+   "description": "portfolio risk scan, exposure and drilldown",
+   "revision_count": 3,
+   "latest_revision_utc": "2026-11-14T00:00:00Z",
+   "delisted": false,
+   "delisted_utc": null,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "shelf": "risk-scan",
+   "owner": "usr:dana",
+   "steps": [
+    {
+     "revision_id": 1,
+     "dev_account": "usr:dana",
+     "title": "Risk Scan API v2",
+     "description": "portfolio risk scan endpoint",
+     "revised_utc": "2026-09-12T00:00:00Z",
+     "changed": [
+      "title"
+     ]
+    },
+    {
+     "revision_id": 2,
+     "dev_account": "usr:dana",
+     "title": "Risk Scan API v2",
+     "description": "portfolio risk scan with sector drilldown",
+     "revised_utc": "2026-10-06T00:00:00Z",
+     "changed": [
+      "description"
+     ]
+    },
+    {
+     "revision_id": 3,
+     "dev_account": "usr:dana",
+     "title": "Risk Scan API Pro",
+     "description": "portfolio risk scan, exposure and drilldown",
+     "revised_utc": "2026-11-14T00:00:00Z",
+     "changed": [
+      "title",
+      "description"
+     ]
+    }
+   ]
+  },
+  {
+   "listing_id": 2,
+   "base_title": "Macro Feed API",
+   "base_description": "daily macro data feed",
+   "title": "Macro Feed API v2",
+   "description": "daily macro data feed",
+   "revision_count": 1,
+   "latest_revision_utc": "2026-10-23T00:00:00Z",
+   "delisted": false,
+   "delisted_utc": null,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "shelf": "macro-feed",
+   "owner": "usr:dana",
+   "steps": [
+    {
+     "revision_id": 4,
+     "dev_account": "usr:dana",
+     "title": "Macro Feed API v2",
+     "description": "daily macro data feed",
+     "revised_utc": "2026-10-23T00:00:00Z",
+     "changed": [
+      "title"
+     ]
+    }
+   ]
+  },
+  {
+   "listing_id": 3,
+   "base_title": "Chart Render API",
+   "base_description": "chart image render endpoint",
+   "title": "Chart Render API",
+   "description": "chart image render endpoint",
+   "revision_count": 0,
+   "latest_revision_utc": null,
+   "delisted": false,
+   "delisted_utc": null,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "shelf": "chart-render",
+   "owner": "usr:frank",
+   "steps": []
+  }
+ ],
+ "market": {
+  "listing_count": 3,
+  "revision_count": 4,
+  "title_changes": 3,
+  "description_changes": 2,
+  "both_changes": 1,
+  "peak_month": "2026-10",
+  "peak_month_revisions": 2,
+  "busiest_listing": 1,
+  "busiest_revisions": 3,
+  "latest_revision_utc": "2026-11-14T00:00:00Z",
+  "unrevisioned_count": 1
+ },
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/listing-metadata-history-board.html",
+ "sources": {
+  "driver": "87dadfc2c19b4568",
+  "copy": "cee9a5344e078e7b",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 6485,
+  "json": 3327
+ }
+}

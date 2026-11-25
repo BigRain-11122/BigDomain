@@ -1,0 +1,19 @@
+R3483 evidence - listing metadata history board (api_metadata_history)
+round: 2026-11-26 R3483 (tick 3482 -> 3483)
+product: tools/listing_metadata_history_board.py -> preview/listing-metadata-history-board.html + .json + copy
+face: api_metadata_history (zero readers at open; factory world answers 0 revisions on all three shelves)
+world: risk-scan three edits (title / description / both), macro-feed one title edit, chart-render never edited
+cmd: python tools/listing_metadata_history_board.py
+out: LISTING-METADATA-HISTORY preview/listing-metadata-history-board.html bytes=6485 listings=3 revisions=4 title=3 desc=2 both=1
+cmd: python tools/listing_metadata_history_board.py --check
+out: LISTING-METADATA-HISTORY CHECK PASS fails=0 html=6485B json=3327B
+cmd: python src/os/test_listing_metadata_history_board.py
+out: SUITE PASS 6/6 declared=6 row=os-listing-metadata-history-board (AC-LMHB1..6, first full run green)
+control m1: json current title forced to base_title -> AC-LMHB1 FAIL ['1 replay','2 replay'] and AC-LMHB6 FAIL ['1 current','2 current']; restored, driver sha256 87dadfc2c19b4568 re-reads 6/6
+control m2: json changed fields flattened to ['title'] -> AC-LMHB3 FAIL (1 2 ['title'] != ['description'], 1 3 ['title'] != ['title','description']); restored byte-identically
+matrix: WRITTEN docs/sandbox-suite-matrix.md 85440 bytes 828 rows, then DOC-CURRENT
+census: PIN CENSUS files=830 pins=13 unreadable=0 bom=0
+index: DELIVERABLE INDEX faces=9 defects=0, VERDICT PASS 23/23 fingerprint=9d35ef0c21414b63
+chain: RENDER legs=2 entries=2 tx=1 reconcile_rc=0 zero_delta=True html=4403B; VERDICT PASS read_only=True
+sweep: VERDICT PASS 13/13 fingerprint=0a1c1c74cc519c16, check 21/21
+honest: no new table, no new reading, no business semantics; four revisions made through the shipped edit_listing door under a pinned clock; five physical pieces still missing so buyers still cannot pay

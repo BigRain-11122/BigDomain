@@ -8725,6 +8725,16 @@ SUITES = [
     # shelf shape, the ASCII/registry dialect and the landed pair's own check.
     ("os-listing-price-history-board",
      os.path.join("..", "os", "test_listing_price_history_board.py"), 6),
+    # R3483: tools/listing_metadata_history_board.py renders the SHIPPED
+    # api_metadata_history envelopes (one shelf's base title/description,
+    # every append-only revision, the current effective pair and the revision
+    # count) as one openable page - the copy-repair trail the price history
+    # page does not show, with which field moved, to what text and when. Six
+    # arms AC-LMHB1..6: the replay law, the order law, the change law, the
+    # unedited shelf shape, the ASCII/registry dialect and the landed pair's
+    # own agreement with its json.
+    ("os-listing-metadata-history-board",
+     os.path.join("..", "os", "test_listing_metadata_history_board.py"), 6),
     # R3115: the 24h export-face age gate (os/export_freshness.py, AC-EXP1..6)
     # had zero production consumers - it ran only inside its own suite - while
     # the CEO card printed export_ts as a bare string. AC-FDC2 (six arms, ONE

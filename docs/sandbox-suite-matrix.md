@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 827 | 6924 | 675/675 | R2739 |
+| 828 | 6930 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -855,16 +855,17 @@
 | 816 | frontdoor-heartbeat-card | test_frontdoor_heartbeat_card.py | 1 | no-evidence | - |
 | 817 | frontdoor-preview-pages | test_frontdoor_preview_pages.py | 22 | no-evidence | - |
 | 818 | os-listing-price-history-board | ../os/test_listing_price_history_board.py | 6 | no-evidence | - |
-| 819 | frontdoor-face-age | test_frontdoor_face_age.py | 1 | no-evidence | - |
-| 820 | frontdoor-corpus-card | test_frontdoor_corpus_card.py | 6 | no-evidence | - |
-| 821 | frontdoor-outs-age-card | test_frontdoor_outs_age_card.py | 4 | no-evidence | - |
-| 822 | frontdoor-chain-card | test_frontdoor_chain_card.py | 4 | no-evidence | - |
-| 823 | frontdoor-claims-card | test_frontdoor_claims_card.py | 5 | no-evidence | - |
-| 824 | claims-view-parity | test_claims_view_parity.py | 3 | no-evidence | - |
-| 825 | claim-census | test_claim_census.py | 10 | no-evidence | - |
-| 826 | os-stage-residue | ../os/test_stage_residue.py | 4 | no-evidence | - |
-| 827 | os-corpus-supply-chain | ../os/test_corpus_supply_chain.py | 7 | no-evidence | - |
-|  | 合计 |  | 6924 | green 675 / FAIL 0 / no-evidence 152 |  |
+| 819 | os-listing-metadata-history-board | ../os/test_listing_metadata_history_board.py | 6 | no-evidence | - |
+| 820 | frontdoor-face-age | test_frontdoor_face_age.py | 1 | no-evidence | - |
+| 821 | frontdoor-corpus-card | test_frontdoor_corpus_card.py | 6 | no-evidence | - |
+| 822 | frontdoor-outs-age-card | test_frontdoor_outs_age_card.py | 4 | no-evidence | - |
+| 823 | frontdoor-chain-card | test_frontdoor_chain_card.py | 4 | no-evidence | - |
+| 824 | frontdoor-claims-card | test_frontdoor_claims_card.py | 5 | no-evidence | - |
+| 825 | claims-view-parity | test_claims_view_parity.py | 3 | no-evidence | - |
+| 826 | claim-census | test_claim_census.py | 10 | no-evidence | - |
+| 827 | os-stage-residue | ../os/test_stage_residue.py | 4 | no-evidence | - |
+| 828 | os-corpus-supply-chain | ../os/test_corpus_supply_chain.py | 7 | no-evidence | - |
+|  | 合计 |  | 6930 | green 675 / FAIL 0 / no-evidence 153 |  |
 
 ## 证据出处
 

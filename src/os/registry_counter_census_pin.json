@@ -522,6 +522,7 @@
     "os-leg-watch",
     "os-library-board",
     "os-library-declaration-dialect-sweep",
+    "os-listing-metadata-history-board",
     "os-listing-position-board",
     "os-listing-price-history-board",
     "os-listing-velocity-board",
