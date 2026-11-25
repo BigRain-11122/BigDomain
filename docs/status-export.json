@@ -3,23 +3,23 @@
     "board_pages_skipped": [
       "preview/face-sweep.html (8878B)"
     ],
-    "current": "2026-11-25 R3475 PRODUCT: the door's resumable shelf now honours If-Range in both shapes RFC 9110 sec.13.1.5 allows - the published Last-Modified, or any later date, authorises a range while a weak tag still never does.",
+    "current": "2026-11-25 R3476 PRODUCT: the resumable shelf now answers a Range list - api-level multi-segment download had no door, so a reader that wanted two slices of one face could only fetch the whole thing twice, and RFC 9110 sec.14.1.1 defines exactly that answer as 206 multipart/byteranges.",
     "do": "2026-11-25 R3456 PRODUCT: the answer-revision question now has a door - api_answer_history (live with AC-AMAW1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so 'which answer was rewritten, what did it say before, what does it say now and how often did it change' could only be read by calling the sandbox from a shell - while api_seller_answers and api_listing_qna publish only the CURRENT wording.",
     "last_artifact": "preview/apimarket-report.html (37201B) + preview/apimarket-report.json (59815B) [2026-11-25 commit]",
     "latest_artifact": "preview/apimarket-report.html (37201B) + preview/apimarket-report.json (59815B) [2026-11-25 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\apimarket-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/frontdoor-if-range-date-R3475.log (2897B, 2026-11-25, sha256 9f5d64d5952d)",
-    "latest_evidence": "qa/frontdoor-if-range-date-R3475.log (2897B, 2026-11-25, sha256 9f5d64d5952d)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/frontdoor-range-list-R3476.log (1064B, 2026-11-25, sha256 743eccb5a51e)",
+    "latest_evidence": "qa/frontdoor-range-list-R3476.log (1064B, 2026-11-25, sha256 743eccb5a51e)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3475] next window (<=48h): (1) **S4U 仍未落地**：本会话仍未以提权身份运行，`BigDomain-OSLoop` 的 `LogonType` 需由**提权会话**跑 `src/os/register_loop_task.ps1` 并用 `$t.Principal.LogonType` 读回；**第十八次承账**，禁再以「未实测」或「无从下手」结账。(2) 门的第十四层候选：**多段 `Range`**——`_parse_range()` 只认单段，`Range: bytes=0-9,20-29` 被当作语法非法一律忽略回 200 整份（RFC 9110 §14.2 允许忽略，但真正可用的货架应回 `206` + `multipart/byteranges`），下窗先立判据（两段各回 206 且每段体等于磁盘切片、`Content-Type: multipart/byteranges; boundary=…`、段数/段头/结束边界齐全、三段上限与超限回整份、多段遇上 `If-Range` 不匹配仍回整份、源纯 ASCII/LF）再动。(3) 载体余量：本轮 fold 824 后 73852B／阈 78500／余 4648B，下窗**先跑 `python src/os/logs_toolkit.py fold --plan-only`** 再干产品活，禁手改 state 文件。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) tick 口径：本轮 3474→3475。(6) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定「诊断不修」）、全量 battery 未实跑、Docker 缺位、backlog.md 体量问题。",
-    "next_milestone_due": "2026-11-27T17:06:37+08:00",
-    "updated_at": "2026-11-25T17:06:37+08:00",
+    "next_milestone": "[R3476] next window (<=48h): (1) **S4U 仍未落地**：本会话仍未以提权身份运行，`BigDomain-OSLoop` 的 `LogonType` 需由**提权会话**跑 `src/os/register_loop_task.ps1` 并用 `$t.Principal.LogonType` 读回；**第十九次承账**，禁再以「未实测」或「无从下手」结账。(2) 门的第十五层候选：**重叠／相邻段的合并**——RFC 9110 §14.2 允许并建议服务端合并重叠或相邻区段，本门今日对 `bytes=0-9,5-14` 回两个重叠 part（同一字节发两次）、对 `bytes=0-9,10-19` 回两个相邻 part；下窗先只读实测「重叠、相邻、逆序、完全包含」四形状的线上段数与体，再立判据（合并后字节集合不变、每段 `Content-Range` 自洽、完全包含只回一段）。(3) 载体余量：本轮 fold 825 后 75478B／阈 78500／余 3022B，下窗**先跑 `python src/os/logs_toolkit.py fold --plan-only`** 再干产品活，禁手改 state 文件（若见 `E_STATE_LAYOUT` 先 `python src/os/logs_toolkit.py eol --fix --execute`）。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) tick 口径：本轮 3475→3476。(6) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定「诊断不修」）、全量 battery 未实跑、Docker 缺位、backlog.md 体量问题、导出面 `latest_artifact` 槽仍指旧件（写手债）。",
+    "next_milestone_due": "2026-11-27T17:54:34+08:00",
+    "updated_at": "2026-11-25T17:54:34+08:00",
     "heartbeat": {
-      "tick": 3473,
-      "state_tick": 3475,
-      "lag": 2,
-      "verdict": "FLAG",
-      "reason": "heartbeat_row_debt"
+      "tick": 3476,
+      "state_tick": 3476,
+      "lag": 0,
+      "verdict": "PASS",
+      "reason": "fresh"
     },
     "outs_age": {
       "rows": 8,
@@ -37,8 +37,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-25 R3475 PRODUCT: the door's resumable shelf now honours If-Range in both shapes RFC 9110 sec.13.1.5 allows - the published Last-Modified, or any later date, authorises a range while a weak tag still never does.",
-  "claims": {"claimed": 37, "captured": 21, "contradicted": 0, "uncaptured": 16, "historic": 0, "rows": 101, "present": true, "census_ts": "2026-11-25T17:06:37+08:00"},
+  "current": "2026-11-25 R3476 PRODUCT: the resumable shelf now answers a Range list - api-level multi-segment download had no door, so a reader that wanted two slices of one face could only fetch the whole thing twice, and RFC 9110 sec.14.1.1 defines exactly that answer as 206 multipart/byteranges.",
+  "claims": {"claimed": 38, "captured": 22, "contradicted": 0, "uncaptured": 16, "historic": 0, "rows": 101, "present": true, "census_ts": "2026-11-25T17:54:34+08:00"},
   "chain": {"present": true, "rows": 101, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -67,11 +67,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-25 R3475 PRODUCT: the door's resumable shelf now honours If-Range in both shapes RFC 9110 sec.13.1.5 allows - the published Last-Modified, or any later date, authorises a range while a weak tag still never does.",
-  "export_ts": "2026-11-25T17:06:37+08:00",
+  "do": "2026-11-25 R3476 PRODUCT: the resumable shelf now answers a Range list - api-level multi-segment download had no door, so a reader that wanted two slices of one face could only fetch the whole thing twice, and RFC 9110 sec.14.1.1 defines exactly that answer as 206 multipart/byteranges.",
+  "export_ts": "2026-11-25T17:54:34+08:00",
   "latest_artifact": "preview/apimarket-report.html (37201B) + preview/apimarket-report.json (59815B) [2026-11-25 commit]",
-  "latest_evidence": "qa/frontdoor-if-range-date-R3475.log (2897B, 2026-11-25, sha256 9f5d64d5952d)",
-  "next_milestone": "[R3475] next window (<=48h): (1) **S4U 仍未落地**：本会话仍未以提权身份运行，`BigDomain-OSLoop` 的 `LogonType` 需由**提权会话**跑 `src/os/register_loop_task.ps1` 并用 `$t.Principal.LogonType` 读回；**第十八次承账**，禁再以「未实测」或「无从下手」结账。(2) 门的第十四层候选：**多段 `Range`**——`_parse_range()` 只认单段，`Range: bytes=0-9,20-29` 被当作语法非法一律忽略回 200 整份（RFC 9110 §14.2 允许忽略，但真正可用的货架应回 `206` + `multipart/byteranges`），下窗先立判据（两段各回 206 且每段体等于磁盘切片、`Content-Type: multipart/byteranges; boundary=…`、段数/段头/结束边界齐全、三段上限与超限回整份、多段遇上 `If-Range` 不匹配仍回整份、源纯 ASCII/LF）再动。(3) 载体余量：本轮 fold 824 后 73852B／阈 78500／余 4648B，下窗**先跑 `python src/os/logs_toolkit.py fold --plan-only`** 再干产品活，禁手改 state 文件。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) tick 口径：本轮 3474→3475。(6) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定「诊断不修」）、全量 battery 未实跑、Docker 缺位、backlog.md 体量问题。",
+  "latest_evidence": "qa/frontdoor-range-list-R3476.log (1064B, 2026-11-25, sha256 743eccb5a51e)",
+  "next_milestone": "[R3476] next window (<=48h): (1) **S4U 仍未落地**：本会话仍未以提权身份运行，`BigDomain-OSLoop` 的 `LogonType` 需由**提权会话**跑 `src/os/register_loop_task.ps1` 并用 `$t.Principal.LogonType` 读回；**第十九次承账**，禁再以「未实测」或「无从下手」结账。(2) 门的第十五层候选：**重叠／相邻段的合并**——RFC 9110 §14.2 允许并建议服务端合并重叠或相邻区段，本门今日对 `bytes=0-9,5-14` 回两个重叠 part（同一字节发两次）、对 `bytes=0-9,10-19` 回两个相邻 part；下窗先只读实测「重叠、相邻、逆序、完全包含」四形状的线上段数与体，再立判据（合并后字节集合不变、每段 `Content-Range` 自洽、完全包含只回一段）。(3) 载体余量：本轮 fold 825 后 75478B／阈 78500／余 3022B，下窗**先跑 `python src/os/logs_toolkit.py fold --plan-only`** 再干产品活，禁手改 state 文件（若见 `E_STATE_LAYOUT` 先 `python src/os/logs_toolkit.py eol --fix --execute`）。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) tick 口径：本轮 3475→3476。(6) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定「诊断不修」）、全量 battery 未实跑、Docker 缺位、backlog.md 体量问题、导出面 `latest_artifact` 槽仍指旧件（写手债）。",
   "outs": [
     "preview/apimarket-report.html (37201B) + preview/apimarket-report.json (59815B) [2026-11-25 commit]",
     "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 commit] (halves differ: html [2026-11-25 commit] + json [2026-11-16 commit]; later=html)",
@@ -137,22 +137,22 @@
     "shortfall_total": 15,
     "verdict": "FLOOR-DEBT"
   },
-  "results": [["3475", "OSLoop 执行 tick"]],
+  "results": [["3476", "OSLoop 执行 tick"]],
   "results_archive": {
     "bytes": 336680,
     "count": 179,
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
-  "self_drive": {"window": "2026-11-19..2026-11-25", "window_days": 7, "log_lines_in_window": 120, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 12, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
-  "state_bytes": 73869,
-  "next_milestone_due": "2026-11-27T17:06:37+08:00",
+  "self_drive": {"window": "2026-11-19..2026-11-25", "window_days": 7, "log_lines_in_window": 124, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 13, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
+  "state_bytes": 75478,
+  "next_milestone_due": "2026-11-27T17:54:34+08:00",
   "heartbeat": {
-    "tick": 3473,
-    "state_tick": 3475,
-    "lag": 2,
-    "verdict": "FLAG",
-    "reason": "heartbeat_row_debt"
+    "tick": 3476,
+    "state_tick": 3476,
+    "lag": 0,
+    "verdict": "PASS",
+    "reason": "fresh"
   },
   "outs_age": {
     "rows": 8,

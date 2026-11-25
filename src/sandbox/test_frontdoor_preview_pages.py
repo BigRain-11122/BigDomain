@@ -1,6 +1,6 @@
 """Suite for the door's deliverable shelf: the shipped pages get one URL.
 
-SIXTEEN criteria. AC-FDPV1 (six arms) pins the shelf itself: the pages come back
+SEVENTEEN criteria. AC-FDPV1 (six arms) pins the shelf itself: the pages come back
 byte-identical to disk and no path can turn the door into a filesystem
 reader. AC-FDPV2 (six arms, R3462) pins the door's manners: HEAD answers the
 same status, type and length as GET with an empty body (a standard probe must
@@ -75,6 +75,16 @@ change still answers the whole face, a strong tag still resumes while a weak
 one never does, a value in neither shape is ignored rather than 500, "not
 modified since" is a <= test and If-None-Match still wins the order, and the
 module stays ASCII/LF with both shapes wired to one call site.
+AC-FDPV17 (six arms, R3476) pins the Range list: two segments answer 206 as
+multipart/byteranges with each part carrying its own Content-Range and its
+exact disk slice (the measured bug -- a multi-segment header was answered as
+the whole 55KB face), the framing is complete from the opening boundary to the
+closing one with no trailing byte, three segments still answer while a fourth
+falls back to the whole face, an If-Range that no longer matches answers the
+whole face rather than a spliced multipart, a segment past the end is dropped
+while an all-past-end list answers 416 carrying the total (a malformed segment
+ignores the header instead), and the single-range, whole-face, HEAD and module
+dialect laws that were already delivered did not move.
 
 Usage: python test_frontdoor_preview_pages.py
 Exit: 0 = SUITE PASS, 2 = FAIL.
@@ -106,7 +116,7 @@ RESULTS = []
 
 # R3475: one place states how many criteria the registry must
 # declare, so adding a criterion cannot leave eleven stale literals.
-DECLARED_TAG = "16)"
+DECLARED_TAG = "17)"
 
 
 def report(name, bad, detail=""):
@@ -2129,6 +2139,186 @@ def main():
             block16 = handle.read().split('"' + ROW + '"', 1)[-1][:220]
         if DECLARED_TAG not in block16:
             bad16.append("f-declared")
+
+        # ===== AC-FDPV17: one Range header may name several segments ======
+        # R3476 measured before the edit (tmp/probe_range_multi.py): seven
+        # shapes -- two segments, three, four, a suffix second segment, a
+        # second segment past the end, an all-past-end list and a malformed
+        # segment -- all answered 200 with the whole 55185-byte face, so no
+        # reader could take two slices in one answer.
+        bad17 = []
+        page17 = "/preview/index.html"
+        with io.open(os.path.join(PREVIEW, "index.html"), "rb") as handle:
+            disk17 = handle.read()
+        size17 = len(disk17)
+        plain17 = cond(port, "GET", page17)
+
+        def parts17(blob, boundary):
+            """Split one multipart/byteranges body into (fields, payload)."""
+            edge = b"--" + boundary.encode("ascii")
+            if not blob.startswith(edge + b"\r\n"):
+                return None
+            if not blob.endswith(b"\r\n" + edge + b"--\r\n"):
+                return None
+            inner = blob[len(edge) + 2:-(len(edge) + 6)]
+            out = []
+            for raw in inner.split(b"\r\n" + edge + b"\r\n"):
+                head, _, payload = raw.partition(b"\r\n\r\n")
+                fields = {}
+                for line in head.decode("latin-1").split("\r\n"):
+                    name, _, value = line.partition(":")
+                    fields[name.strip().lower()] = value.strip()
+                out.append((fields, payload))
+            return out
+
+        # ---- a: two segments answer 206 with their exact disk slices ------
+        two17 = cond(port, "GET", page17,
+                     {"Range": "bytes=0-9,20-29"})
+        if two17["status"] != 206:
+            bad17.append("a-status-%d" % two17["status"])
+        elif "multipart/byteranges; boundary=" not in two17["ctype"]:
+            bad17.append("a-ctype-%r" % two17["ctype"])
+        else:
+            bound17 = two17["ctype"].split("boundary=", 1)[1].strip()
+            got17 = parts17(two17["body"], bound17)
+            if got17 is None:
+                bad17.append("a-framing")
+            elif len(got17) != 2:
+                bad17.append("a-parts-%d" % len(got17))
+            else:
+                wants17 = [("0-9", disk17[0:10]), ("20-29", disk17[20:30])]
+                for (fields, payload), (span, want) in zip(got17, wants17):
+                    if fields.get("content-range") != \
+                            "bytes %s/%d" % (span, size17):
+                        bad17.append("a-crange-%s-%r"
+                                     % (span, fields.get("content-range")))
+                    if fields.get("content-type") != plain17["ctype"]:
+                        bad17.append("a-part-ctype-%s-%r"
+                                     % (span, fields.get("content-type")))
+                    if payload != want:
+                        bad17.append("a-part-bytes-%s-%d"
+                                     % (span, len(payload)))
+            # ---- b: the framing is complete and the 206 names no total ----
+            if two17["crange"]:
+                bad17.append("b-top-crange-%r" % two17["crange"])
+            expect17 = (b"--" + bound17.encode("ascii") + b"\r\n")
+            expect17 += ("Content-Type: " + plain17["ctype"] + "\r\n"
+                         ).encode("ascii")
+            expect17 += ("Content-Range: bytes 0-9/%d\r\n\r\n" % size17
+                         ).encode("ascii")
+            expect17 += disk17[0:10]
+            expect17 += b"\r\n--" + bound17.encode("ascii") + b"\r\n"
+            expect17 += ("Content-Type: " + plain17["ctype"] + "\r\n"
+                         ).encode("ascii")
+            expect17 += ("Content-Range: bytes 20-29/%d\r\n\r\n" % size17
+                         ).encode("ascii")
+            expect17 += disk17[20:30]
+            expect17 += b"\r\n--" + bound17.encode("ascii") + b"--\r\n"
+            if two17["body"] != expect17:
+                bad17.append("b-wire-%d-%d" % (len(two17["body"]),
+                                               len(expect17)))
+            if bound17.encode("ascii") in disk17:
+                bad17.append("b-boundary-in-payload")
+        # ---- c: three segments answer, a fourth falls back ----------------
+        three17 = cond(port, "GET", page17,
+                       {"Range": "bytes=0-9,20-29,40-49"})
+        if three17["status"] != 206 or \
+                "multipart/byteranges; boundary=" not in three17["ctype"]:
+            bad17.append("c-three-%d-%r" % (three17["status"],
+                                            three17["ctype"]))
+        else:
+            b317 = three17["ctype"].split("boundary=", 1)[1].strip()
+            p317 = parts17(three17["body"], b317)
+            if p317 is None or len(p317) != 3:
+                bad17.append("c-three-parts-%r"
+                             % (None if p317 is None else len(p317)))
+            elif [payload for _fields, payload in p317] != \
+                    [disk17[0:10], disk17[20:30], disk17[40:50]]:
+                bad17.append("c-three-bytes")
+        four17 = cond(port, "GET", page17,
+                      {"Range": "bytes=0-9,20-29,40-49,60-69"})
+        if four17["status"] != 200 or four17["body"] != disk17 or \
+                "multipart" in four17["ctype"]:
+            bad17.append("c-four-%d-%r-%d" % (four17["status"],
+                                              four17["ctype"],
+                                              len(four17["body"])))
+        # ---- d: If-Range still guards the list ---------------------------
+        stale17 = cond(port, "GET", page17,
+                       {"Range": "bytes=0-9,20-29",
+                        "If-Range": "Thu, 01 Jan 1970 00:00:00 GMT"})
+        if stale17["status"] != 200 or stale17["body"] != disk17 or \
+                "multipart" in stale17["ctype"]:
+            bad17.append("d-stale-%d-%d" % (stale17["status"],
+                                            len(stale17["body"])))
+        weak17 = cond(port, "GET", page17,
+                      {"Range": "bytes=0-9,20-29",
+                       "If-Range": "W/" + plain17["etag"]})
+        if weak17["status"] != 200 or weak17["body"] != disk17:
+            bad17.append("d-weak-%d-%d" % (weak17["status"],
+                                           len(weak17["body"])))
+        fresh17 = cond(port, "GET", page17,
+                       {"Range": "bytes=0-9,20-29",
+                        "If-Range": plain17["last_modified"]})
+        if fresh17["status"] != 206:
+            bad17.append("d-fresh-%d" % fresh17["status"])
+        # ---- e: a past-end segment is dropped, all-past-end is 416 -------
+        drop17 = cond(port, "GET", page17,
+                      {"Range": "bytes=0-9,999999-"})
+        if drop17["status"] != 206 or \
+                drop17["crange"] != "bytes 0-9/%d" % size17 or \
+                drop17["body"] != disk17[:10]:
+            bad17.append("e-drop-%d-%r-%d" % (drop17["status"],
+                                               drop17["crange"],
+                                               len(drop17["body"])))
+        none17 = cond(port, "GET", page17,
+                      {"Range": "bytes=999999-,9999990-"})
+        if none17["status"] != 416 or \
+                none17["crange"] != "bytes */%d" % size17 or none17["body"]:
+            bad17.append("e-416-%d-%r-%d" % (none17["status"],
+                                             none17["crange"],
+                                             len(none17["body"])))
+        junk17 = cond(port, "GET", page17,
+                      {"Range": "bytes=0-9,zz"})
+        if junk17["status"] != 200 or junk17["body"] != disk17:
+            bad17.append("e-junk-%d-%d" % (junk17["status"],
+                                           len(junk17["body"])))
+        # ---- f: nothing already delivered moved, dialect holds -----------
+        single17 = cond(port, "GET", page17, {"Range": "bytes=0-9"})
+        if single17["status"] != 206 or single17["body"] != disk17[:10] or \
+                single17["crange"] != "bytes 0-9/%d" % size17:
+            bad17.append("f-single-%d-%r" % (single17["status"],
+                                             single17["crange"]))
+        whole17 = cond(port, "GET", page17)
+        if whole17["status"] != 200 or whole17["body"] != disk17:
+            bad17.append("f-whole-%d-%d" % (whole17["status"],
+                                            len(whole17["body"])))
+        head17 = cond(port, "HEAD", page17,
+                      {"Range": "bytes=0-9,20-29"})
+        if head17["status"] != 200 or head17["body"] or \
+                head17["length"] != str(size17):
+            bad17.append("f-head-%d-%r-%d" % (head17["status"],
+                                              head17["length"],
+                                              len(head17["body"])))
+        with io.open(MODULE, "rb") as handle:
+            raw17 = handle.read()
+        if raw17[:3] == b"\xef\xbb\xbf" or b"\r\n" in raw17:
+            bad17.append("f-module-dialect")
+        try:
+            text17 = raw17.decode("utf-8")
+            text17.encode("ascii")
+        except (UnicodeDecodeError, UnicodeEncodeError):
+            bad17.append("f-module-not-ascii")
+            text17 = raw17.decode("utf-8", "replace")
+        for token17 in ("RANGE_MAX_SEGMENTS = 3",
+                        "def _parse_ranges(header, size)",
+                        "def _multipart_ranges(spans, ctype, size, boundary, "
+                        "body)"):
+            if token17 not in text17:
+                bad17.append("f-missing-%s" % token17.split("(")[0].strip())
+        with io.open(REGISTRY, encoding="utf-8") as handle:
+            block17 = handle.read().split('"' + ROW + '"', 1)[-1][:220]
+        if DECLARED_TAG not in block17:
+            bad17.append("f-declared")
     finally:
         srv.shutdown()
         srv.server_close()
@@ -2149,6 +2339,7 @@ def main():
     report("AC-FDPV14", bool(bad14), ",".join(bad14))
     report("AC-FDPV15", bool(bad15), ",".join(bad15))
     report("AC-FDPV16", bool(bad16), ",".join(bad16))
+    report("AC-FDPV17", bool(bad17), ",".join(bad17))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:

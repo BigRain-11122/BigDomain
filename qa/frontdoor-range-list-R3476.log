@@ -1,0 +1,14 @@
+R3476 frontdoor Range list (multipart/byteranges)
+suite SUITE PASS 17/17 (AC-FDPV17 six arms a-f; green after one part-framing fix)
+neighbours chain 4/4 claims 5/5 corpus 6/6 face-age 1/1 heartbeat 1/1 outs-age 4/4
+registry frontdoor-preview-pages 16->17 (reconcile_all.py)
+matrix WRITTEN docs/sandbox-suite-matrix.md 85220 bytes 826 rows evidence-source=walk-leg
+census rows=826 readable=826 unparsed=0 silent=0 VERDICT PASS pinned=826
+chain RENDER legs=2 tx=1 reconcile_rc=0 html=4403B json=4806B
+index faces=9 defects=0 fingerprint=457d9732a2c14993 then --check 23/23
+sweep VERDICT PASS 13/13 then --check 21/21
+controls four, each restored byte-identically (frontdoor.py sha256 7b6a5ac82ab2a92ac11601d464d22018bb5bf231fb71032b6c162ac4c8b38493 before and after; suite 17/17 after restore)
+control a slice one byte long: a-part-bytes x2, b-wire 265-263, c-three-bytes red
+control c cap two: c-three-200, f-missing red
+control d If-Range always current: d-stale red (AC-FDPV4/16 also red)
+control e past end falls back: e-drop-200, e-416-200 red (AC-FDPV3 d red)

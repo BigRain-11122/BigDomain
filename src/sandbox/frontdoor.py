@@ -9124,23 +9124,22 @@ __PAYWARN__</footer>
     return _fill_template(page, repl).encode("utf-8")
 
 
-def _parse_range(header, size):
-    """R3463: one single byte range, per RFC 7233 sec.2.1.
+# R3476: RFC 9110 sec.14.1.1 lets one Range header carry a list. This door
+# serves at most three segments; a longer list falls back to the whole
+# representation, which the same section always permits and which keeps a
+# hostile header from making the door assemble unbounded bytes.
+RANGE_MAX_SEGMENTS = 3
+MULTIPART_BOUNDARY_PREFIX = "bd-r3476-"
+UNSATISFIABLE = "unsatisfiable"
 
-    Returns None when the header is absent OR must be ignored (syntactically
-    invalid, non-bytes unit, or multi-part -- serving the whole body is always
-    legal and a 500 never is), ("unsatisfiable", None, None) when the range
-    starts past the last byte, and (start, end) inclusive otherwise. Only this
-    door's own static faces use it, so one range is the whole law here.
+
+def _single_range(spec, size):
+    """R3463: one byte-range-spec, per RFC 9110 sec.14.1.1.
+
+    Returns None when the spec is malformed (the caller then ignores the whole
+    header -- a 500 never is an answer), UNSATISFIABLE when the first position
+    is at or past the last byte, and (start, end) inclusive otherwise.
     """
-    if not header:
-        return None
-    value = header.strip()
-    if not value.lower().startswith("bytes="):
-        return None
-    spec = value[len("bytes="):].strip()
-    if "," in spec:  # multi-range: fall back to the full body
-        return None
     if "-" not in spec:
         return None
     first, _, last = spec.partition("-")
@@ -9160,14 +9159,95 @@ def _parse_range(header, size):
         return None
     if start < 0:
         return None
-    # RFC 7233 sec.2.1: a first-byte position at or past the last byte is
+    # RFC 9110 sec.14.1.1: a first-byte position at or past the last byte is
     # unsatisfiable (416), not malformed -- checked before the inverted-range
     # rule, because an open-ended range past the end only looks inverted.
     if start >= size:
-        return ("unsatisfiable", None, None)
+        return UNSATISFIABLE
     if end < start:
         return None
     return start, min(end, size - 1)
+
+
+def _parse_range(header, size):
+    """R3463: exactly one byte range.
+
+    Kept as the single-segment law the earlier criteria pin: a multi-segment
+    header is not this function's business and answers None (the whole face).
+    """
+    spans = _parse_ranges(header, size)
+    if spans is None or len(spans) != 1:
+        return None
+    return spans[0]
+
+
+def _parse_ranges(header, size):
+    """R3476: the whole Range header, one segment or several.
+
+    Returns None when the header is absent or must be ignored (non-bytes
+    unit, empty list, a malformed segment, or more segments than this door
+    serves), UNSATISFIABLE when every segment starts past the last byte, and
+    otherwise the list of inclusive (start, end) slices in the order asked.
+    A segment past the end is dropped rather than poisoning its siblings, per
+    RFC 9110 sec.14.1.1.
+    """
+    if not header:
+        return None
+    value = header.strip()
+    if not value.lower().startswith("bytes="):
+        return None
+    spec = value[len("bytes="):].strip()
+    if not spec:
+        return None
+    pieces = [piece.strip() for piece in spec.split(",")]
+    if len(pieces) > RANGE_MAX_SEGMENTS:
+        return None
+    spans = []
+    for piece in pieces:
+        parsed = _single_range(piece, size)
+        if parsed is None:
+            return None
+        if parsed == UNSATISFIABLE:
+            continue
+        spans.append(parsed)
+    if not spans:
+        return UNSATISFIABLE
+    return spans
+
+
+def _range_boundary(etag, body):
+    """R3476: a boundary no payload byte can be mistaken for.
+
+    Derived from the face's own validator, so the same face always frames the
+    same way; if the token happened to occur inside the bytes being sliced,
+    None is returned and the caller serves the whole representation instead of
+    an ambiguous multipart body.
+    """
+    boundary = MULTIPART_BOUNDARY_PREFIX + etag.strip('"')
+    if boundary.encode("ascii") in body:
+        return None
+    return boundary
+
+
+def _multipart_ranges(spans, ctype, size, boundary, body):
+    """R3476: the multipart/byteranges payload for the asked segments.
+
+    Each part names the representation's type and its own Content-Range, and
+    the body closes with the boundary. CRLF is the wire dialect of this
+    framing (RFC 9110 sec.14.6), independent of the LF-only source files.
+    """
+    edge = ("--" + boundary).encode("ascii")
+    chunks = []
+    for start, end in spans:
+        chunks.append(edge + b"\r\n")
+        chunks.append(("Content-Type: " + ctype + "\r\n").encode("ascii"))
+        chunks.append(("Content-Range: bytes %d-%d/%d\r\n\r\n"
+                       % (start, end, size)).encode("ascii"))
+        # a part's body is closed by the CRLF that precedes the next
+        # boundary, and the last part carries it before the closing boundary
+        chunks.append(body[start:end + 1] + b"\r\n")
+    chunks.append(edge + b"--\r\n")
+    return b"".join(chunks)
 
 
 GZIP_MIN_BYTES = 64
@@ -9739,19 +9819,32 @@ class Handler(BaseHTTPRequestHandler):
         # before this landed: HEAD + Range answered 206 with a 10-byte count,
         # which describes a body a HEAD never has.
         size = len(body)
-        rng = None if head_only else _parse_range(
+        spans = None if head_only else _parse_ranges(
             self.headers.get("Range"), size)
-        if isinstance(rng, tuple) and rng[0] == "unsatisfiable":
+        if spans == UNSATISFIABLE:
             return self._send(416, "text/plain", b"", head_only,
                               (("Content-Range", "bytes */%d" % size),
                                ("Last-Modified", last_modified)), etag)
-        if rng is not None:
-            start, end = rng
+        if spans is not None and len(spans) == 1:
+            start, end = spans[0]
             return self._send(
                 206, ctype, body[start:end + 1], head_only,
                 (("Content-Range",
                   "bytes %d-%d/%d" % (start, end, size)),
                  ("Last-Modified", last_modified)), etag)
+        # R3476: two or three segments answer as multipart/byteranges, each
+        # part carrying its own Content-Range; a 206 of that type must not
+        # name a top-level Content-Range (RFC 9110 sec.15.3.7), so only the
+        # total-bearing fields stay at the message level.
+        if spans is not None:
+            boundary = _range_boundary(etag, body)
+            if boundary is not None:
+                return self._send(
+                    206, "multipart/byteranges; boundary=" + boundary,
+                    _multipart_ranges(spans, ctype, size, boundary, body),
+                    head_only,
+                    (("Accept-Ranges", "bytes"),
+                     ("Last-Modified", last_modified)), etag)
         return self._send(200, ctype, body, head_only,
                           (("Accept-Ranges", "bytes"),
                            ("Last-Modified", last_modified)), etag, coding)
