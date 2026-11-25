@@ -1,0 +1,29 @@
+R3478 frontdoor repeated Range header lines
+date: 2026-11-25
+measured before the edit (tmp/probe-R3478.py, raw socket, nine shapes):
+  two lines bytes=0-9 + bytes=20-29 -> 206 bytes 0-9 (10B), second line dropped
+  two lines bytes=0-9 + bytes=5-14  -> 206 bytes 0-9 (10B)
+  one line  bytes=0-9,20-29         -> 206 multipart two parts (263B)
+  two lines with four segments      -> 206 two parts (263B)
+  two lines bytes=0-9 + bytes=999999- -> 206 bytes 0-9
+  two lines all past end            -> 416
+  two lines bytes=0-9 + bytes=zz    -> 206 bytes 0-9
+landed: frontdoor.py _range_header(headers) reads every Range line; more than
+one line is ignored, because Range is one ranges-specifier rather than a list
+field, so the lines cannot be joined. _negotiate reads through the same helper
+so an ignored range still negotiates gzip.
+criteria: AC-FDPV19 six arms (a apart, b overlap, c four segments, d past-end,
+malformed and all-past, e single-line shapes and negotiation, f dialect and
+declared count).
+suite: SUITE PASS 19/19 (first accepted run).
+controls (each mutation alone, byte-identical restore, module sha256
+a02666dda2090f98d8a85d0d845035090b862527974fbb0a9868f0fd83d0f683):
+  m1 first-line-only -> AC-FDPV19 FAIL a-apart,b-overlap,c-four,d-past,d-bad,
+  d-none,e-gzip; m2 negotiate old reader -> AC-FDPV19 FAIL e-gzip.
+restored run: SUITE PASS 19/19.
+chain: RENDER legs=2 entries=2 tx=1 reconcile_rc=0 html=4403B json=4806B.
+index: 23/23 fingerprint c451508218240094.
+sweep: VERDICT PASS 13/13 fingerprint 0f0ff1c004814d72 then --check 21/21.
+honest: no new page, no new reading; a repeated Range now answers the whole
+face instead of half of a message the door could not interpret; zero payment
+capability, the five physical pieces are still missing.

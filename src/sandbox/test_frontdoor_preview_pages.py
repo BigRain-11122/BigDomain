@@ -116,7 +116,7 @@ RESULTS = []
 
 # R3475: one place states how many criteria the registry must
 # declare, so adding a criterion cannot leave eleven stale literals.
-DECLARED_TAG = "18)"
+DECLARED_TAG = "19)"
 
 
 def report(name, bad, detail=""):
@@ -2447,6 +2447,119 @@ def main():
             block18 = handle.read().split('"' + ROW + '"', 1)[-1][:220]
         if DECLARED_TAG not in block18:
             bad18.append("f-declared")
+        # R3478 measured before the edit (tmp/probe-R3478.py): two Range lines
+        # answered only the first line's slice -- lines naming 0-9 and 20-29
+        # returned 206 bytes 0-9 while the same-shaped single line returned
+        # two parts, and a 4-segment pair returned 206 two parts. Range is a
+        # single ranges-specifier, not a list field, so two lines cannot be
+        # joined; the door now ignores a repeated Range and serves the whole
+        # representation instead of executing half of a message it could not
+        # interpret.
+        bad19 = []
+        page19 = "/preview/index.html"
+        with io.open(os.path.join(PREVIEW, "index.html"), "rb") as handle:
+            disk19 = handle.read()
+        size19 = len(disk19)
+
+        def repeat19(lines, extra=()):
+            """One raw request carrying several Range lines, in order."""
+            payload = ["GET " + page19 + " HTTP/1.1", "Host: 127.0.0.1"]
+            payload.extend(lines)
+            payload.extend(extra)
+            payload.extend(["Connection: close", "", ""])
+            blob = raw_request(port, "\r\n".join(payload).encode("latin-1"))
+            return wire_reply(blob)
+
+        # ---- a: two lines naming different spans answer the whole face ----
+        for tag19, lines19 in (
+                ("a-apart", ["Range: bytes=0-9", "Range: bytes=20-29"]),
+                ("b-overlap", ["Range: bytes=0-9", "Range: bytes=5-14"]),
+                ("c-four", ["Range: bytes=0-9,20-29",
+                            "Range: bytes=40-49,60-69"]),
+                ("d-past", ["Range: bytes=0-9", "Range: bytes=999999-"]),
+                ("d-bad", ["Range: bytes=0-9", "Range: bytes=zz"]),
+                ("d-none", ["Range: bytes=999999-", "Range: bytes=999998-"])):
+            status19, fields19, body19 = repeat19(lines19)
+            if status19.split(" ")[1] != "200" or body19 != disk19 or \
+                    fields19.get("content-range") or \
+                    "multipart" in (fields19.get("content-type") or ""):
+                bad19.append("%s-%r-%d" % (tag19, status19, len(body19)))
+        # ---- e: nothing already delivered moved --------------------------
+        single19 = cond(port, "GET", page19, {"Range": "bytes=0-9"})
+        if single19["status"] != 206 or single19["body"] != disk19[:10] or \
+                single19["crange"] != "bytes 0-9/%d" % size19:
+            bad19.append("e-single-%d-%r" % (single19["status"],
+                                             single19["crange"]))
+        two19 = cond(port, "GET", page19, {"Range": "bytes=0-9,20-29"})
+        if two19["status"] != 206 or \
+                "multipart/byteranges; boundary=" not in two19["ctype"]:
+            bad19.append("e-two-%d-%r" % (two19["status"], two19["ctype"]))
+        else:
+            b19 = two19["ctype"].split("boundary=", 1)[1].strip()
+            p19 = parts17(two19["body"], b19)
+            if p19 is None or [pl for _f, pl in p19] != \
+                    [disk19[0:10], disk19[20:30]]:
+                bad19.append("e-two-parts")
+        over19 = cond(port, "GET", page19, {"Range": "bytes=0-9,5-14"})
+        if over19["status"] != 206 or \
+                over19["crange"] != "bytes 0-14/%d" % size19 or \
+                over19["body"] != disk19[:15]:
+            bad19.append("e-overlap-%d-%r" % (over19["status"],
+                                              over19["crange"]))
+        four19 = cond(port, "GET", page19,
+                      {"Range": "bytes=0-9,20-29,40-49,60-69"})
+        if four19["status"] != 200 or four19["body"] != disk19:
+            bad19.append("e-four-%d-%d" % (four19["status"],
+                                           len(four19["body"])))
+        none19 = cond(port, "GET", page19,
+                      {"Range": "bytes=999999-,9999990-"})
+        if none19["status"] != 416 or \
+                none19["crange"] != "bytes */%d" % size19:
+            bad19.append("e-416-%d-%r" % (none19["status"],
+                                          none19["crange"]))
+        stale19 = cond(port, "GET", page19,
+                       {"Range": "bytes=0-9",
+                        "If-Range": "Thu, 01 Jan 1970 00:00:00 GMT"})
+        if stale19["status"] != 200 or stale19["body"] != disk19:
+            bad19.append("e-stale-%d-%d" % (stale19["status"],
+                                            len(stale19["body"])))
+        head19 = cond(port, "HEAD", page19, {"Range": "bytes=0-9"})
+        if head19["status"] != 200 or head19["body"] or \
+                head19["length"] != str(size19):
+            bad19.append("e-head-%d-%r" % (head19["status"],
+                                           head19["length"]))
+        # a repeated Range must not silently disable negotiation either
+        gz19 = repeat19(["Range: bytes=0-9", "Range: bytes=20-29"],
+                        ["Accept-Encoding: gzip"])
+        if gz19[0].split(" ")[1] != "200" or \
+                (gz19[1].get("content-encoding") or "") != "gzip":
+            bad19.append("e-gzip-%r-%r" % (gz19[0],
+                                           gz19[1].get("content-encoding")))
+        onegz19 = cond(port, "GET", page19,
+                       {"Range": "bytes=0-9", "Accept-Encoding": "gzip"})
+        if onegz19["status"] != 206 or onegz19["body"] != disk19[:10]:
+            bad19.append("e-one-gzip-%d-%d" % (onegz19["status"],
+                                               len(onegz19["body"])))
+        # ---- f: dialect, tokens on disk, declared count -------------------
+        with io.open(MODULE, "rb") as handle:
+            raw19 = handle.read()
+        if raw19[:3] == b"\xef\xbb\xbf" or b"\r\n" in raw19:
+            bad19.append("f-module-dialect")
+        try:
+            text19 = raw19.decode("utf-8")
+            text19.encode("ascii")
+        except (UnicodeDecodeError, UnicodeEncodeError):
+            bad19.append("f-module-not-ascii")
+            text19 = raw19.decode("utf-8", "replace")
+        for token19 in ("def _range_header(headers)",
+                        "RANGE_MAX_SEGMENTS = 3",
+                        "_range_header(self.headers)"):
+            if token19 not in text19:
+                bad19.append("f-missing-%s" % token19.split("(")[0].strip())
+        with io.open(REGISTRY, encoding="utf-8") as handle:
+            block19 = handle.read().split('"' + ROW + '"', 1)[-1][:220]
+        if DECLARED_TAG not in block19:
+            bad19.append("f-declared")
     finally:
         srv.shutdown()
         srv.server_close()
@@ -2469,6 +2582,7 @@ def main():
     report("AC-FDPV16", bool(bad16), ",".join(bad16))
     report("AC-FDPV17", bool(bad17), ",".join(bad17))
     report("AC-FDPV18", bool(bad18), ",".join(bad18))
+    report("AC-FDPV19", bool(bad19), ",".join(bad19))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:

@@ -9238,6 +9238,22 @@ def _parse_ranges(header, size):
     return _merge_spans(spans)
 
 
+def _range_header(headers):
+    """R3478: the one Range line this request may carry, or None.
+
+    RFC 9112 sec.5.2 lets a recipient join repeated field lines only when the
+    field is defined as a comma-separated list. Range is a single
+    ranges-specifier, not such a field, so two Range lines cannot be combined
+    without changing what was asked. Reading only the first line silently
+    executed half of a message the door could not interpret; the honest
+    answer is to ignore the range and serve the whole representation.
+    """
+    values = headers.get_all("Range")
+    if not values or len(values) > 1:
+        return None
+    return values[0]
+
+
 def _range_boundary(etag, body):
     """R3476: a boundary no payload byte can be mistaken for.
 
@@ -9703,7 +9719,7 @@ class Handler(BaseHTTPRequestHandler):
         GET only), so a HEAD must describe the representation a plain GET would
         send -- not the identity bytes a range would have selected.
         """
-        if (ignore_range or self.headers.get("Range") is None) and \
+        if (ignore_range or _range_header(self.headers) is None) and \
                 len(identity) >= GZIP_MIN_BYTES and \
                 _accepts_gzip(self.headers.get("Accept-Encoding")):
             return gzip.compress(identity, mtime=0), "gzip"
@@ -9843,7 +9859,7 @@ class Handler(BaseHTTPRequestHandler):
         # which describes a body a HEAD never has.
         size = len(body)
         spans = None if head_only else _parse_ranges(
-            self.headers.get("Range"), size)
+            _range_header(self.headers), size)
         if spans == UNSATISFIABLE:
             return self._send(416, "text/plain", b"", head_only,
                               (("Content-Range", "bytes */%d" % size),
