@@ -112,7 +112,7 @@
   ],
   "sources": {
     "blockers": {
-      "bytes": 6755,
+      "bytes": 6931,
       "path": "preview/ceo-blockers.json"
     },
     "journey": {
@@ -120,7 +120,7 @@
       "path": "preview/journey-19.9.json"
     },
     "payment": {
-      "bytes": 6959,
+      "bytes": 7177,
       "path": "preview/payment-gate-report.json"
     }
   },

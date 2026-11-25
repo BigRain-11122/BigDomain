@@ -1,0 +1,7 @@
+R3487 money-path-demo read-repair evidence
+before: value-domain FAIL 2 (products=5 tiers=0) html/json not the fresh derivation
+root cause: rendered 2026-11-22 18:57; upstream payment-gate-report.json 6959->7177 and ceo-blockers.json 6755->6931 regenerated 19:22 same day, no cascade
+after: value-domain PASS products=5 tiers=0; VERDICT PASS products=5 steps=8 physical=3 decision=5 html=13359B json=6141B
+sources: payment 7177=disk, journey 8012=disk, blockers 6931=disk (3/3 match)
+census: 31 preview/*.json scanned for declared sources, stale=1 (this page, now green)
+recheck: python tools/money_path_demo.py --check -> VERDICT PASS rc=0 (evidence re-written after the final render so the note is newer than the product pair)
