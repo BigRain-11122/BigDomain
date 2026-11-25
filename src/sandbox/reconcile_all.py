@@ -8686,8 +8686,10 @@ SUITES = [
     # the coding negotiation and AC-FDPV6 the write preconditions. R3466 then
     # measured zero policy headers on every answer, so AC-FDPV7 pins the
     # security headers and the content policy the shipped pages ride under.
+    # R3467: no answer named who may read it or which capabilities it refuses,
+    # and the Server header handed out the interpreter version - AC-FDPV8.
     ("frontdoor-preview-pages",
-     os.path.join("test_frontdoor_preview_pages.py"), 7),
+     os.path.join("test_frontdoor_preview_pages.py"), 8),
     # R3115: the 24h export-face age gate (os/export_freshness.py, AC-EXP1..6)
     # had zero production consumers - it ran only inside its own suite - while
     # the CEO card printed export_ts as a bare string. AC-FDC2 (six arms, ONE

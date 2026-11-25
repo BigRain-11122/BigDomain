@@ -9257,22 +9257,64 @@ HTML_POLICY = ("default-src 'none'; script-src 'unsafe-inline'; "
 TEXT_POLICY = "default-src 'none'; base-uri 'none'; frame-ancestors 'none'"
 
 
+# R3467: the shelf also says who may read it and what it may do. Measured
+# before this landed: no answer carried Cross-Origin-Resource-Policy,
+# Cross-Origin-Opener-Policy or Permissions-Policy, so any origin could take a
+# face as a subresource and no capability the browser offers was refused.
+# Measured over the 103 shipped pages as well: zero PaymentRequest, zero
+# geolocation, zero getUserMedia, zero clipboard, zero usb, zero inline event
+# handler -- so a deny-everything capability list breaks no delivered face.
+# What this round does NOT do is tighten style-src or script-src: 100 pages
+# carry 659 inline style= attributes and 103 pages carry inline <style>, which
+# only 'unsafe-inline' (or per-attribute 'unsafe-hashes') can permit. That
+# measurement is why the policy still names 'unsafe-inline', and it is stated
+# here rather than claimed away.
+CROSS_ORIGIN_HEADERS = (
+    ("Cross-Origin-Resource-Policy", "same-origin"),
+)
+COOP_POLICY = "same-origin"
+PERMISSIONS_POLICY = (
+    "accelerometer=(), autoplay=(), camera=(), clipboard-read=(), "
+    "clipboard-write=(), display-capture=(), encrypted-media=(), "
+    "fullscreen=(), geolocation=(), gyroscope=(), hid=(), "
+    "idle-detection=(), magnetometer=(), microphone=(), midi=(), "
+    "payment=(), picture-in-picture=(), publickey-credentials-get=(), "
+    "screen-wake-lock=(), serial=(), sync-xhr=(), usb=(), web-share=(), "
+    "xr-spatial-tracking=()"
+)
+
+
 def _security_headers(ctype):
     """R3466: the policy every answer on this door carries.
 
     One source for both verbs and every status: a 404 or a 412 is a page the
     browser may also act on, so it names the same policy as a 200.
+    R3467: every answer also says which origins may read it and which
+    capabilities are refused; only a document names an opener policy, because
+    a json face is not a document and this door does not claim otherwise.
     """
     out = list(SECURITY_HEADERS)
     is_html = ctype.startswith("text/html")
     out.append(("Content-Security-Policy",
                 HTML_POLICY if is_html else TEXT_POLICY))
+    out.extend(CROSS_ORIGIN_HEADERS)
+    out.append(("Permissions-Policy", PERMISSIONS_POLICY))
     if is_html:
         out.append(("X-Frame-Options", "DENY"))
+        out.append(("Cross-Origin-Opener-Policy", COOP_POLICY))
     return out
 
 
 class Handler(BaseHTTPRequestHandler):
+    # R3467: the default version_string() answers "BaseHTTP/0.6 Python/3.x",
+    # so every reader was told which interpreter to target. The door names
+    # itself and nothing else.
+    server_version = "BigDomain"
+    sys_version = ""
+
+    def version_string(self):
+        return "BigDomain"
+
     def _send(self, code, ctype, body, head_only=False, headers=(),
               etag=None, encoding=None):
         # R3462: every answer is no-store. The preview faces are rebuilt under

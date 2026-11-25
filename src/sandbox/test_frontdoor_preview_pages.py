@@ -1,6 +1,6 @@
 """Suite for the door's deliverable shelf: the shipped pages get one URL.
 
-SEVEN criteria. AC-FDPV1 (six arms) pins the shelf itself: the pages come back
+EIGHT criteria. AC-FDPV1 (six arms) pins the shelf itself: the pages come back
 byte-identical to disk and no path can turn the door into a filesystem
 reader. AC-FDPV2 (six arms, R3462) pins the door's manners: HEAD answers the
 same status, type and length as GET with an empty body (a standard probe must
@@ -24,6 +24,11 @@ names nosniff and no-referrer, an HTML face carries a policy that allows
 exactly what the shipped pages use (inline style, inline script, same-origin
 images) and closes everything else, a non-HTML face gets the tightest policy,
 and none of the headers changes a status, a type, a byte or a body.
+AC-FDPV8 (six arms, R3467) pins the shelf's reach: every answer names who may
+read it (Cross-Origin-Resource-Policy same-origin) and which capabilities are
+refused (Permissions-Policy), a document also names its opener policy while a
+json face does not claim to be one, no shipped page uses a refused capability,
+and the Server header names the door instead of the interpreter version.
 
 Usage: python test_frontdoor_preview_pages.py
 Exit: 0 = SUITE PASS, 2 = FAIL.
@@ -298,7 +303,7 @@ def main():
             block = registry_text.split('"' + ROW + '"', 1)[1][:160]
             if "test_frontdoor_preview_pages.py" not in block:
                 bad2.append("f-row-file")
-            if "6)" not in block:
+            if "8)" not in block:
                 bad2.append("f-declared-%s" % block.split(")")[0].strip()[-3:])
 
         # ===== AC-FDPV3: the shelf is resumable and concurrent ============
@@ -527,7 +532,7 @@ def main():
         with io.open(REGISTRY, encoding="utf-8") as handle:
             registry_text4 = handle.read()
         block4 = registry_text4.split('"' + ROW + '"', 1)[-1][:160]
-        if "6)" not in block4:
+        if "8)" not in block4:
             bad4.append("f-declared-%r" % block4.split(")")[0][-8:])
 
         # ===== AC-FDPV5: the shelf negotiates a coding ======================
@@ -665,7 +670,7 @@ def main():
         with io.open(REGISTRY, encoding="utf-8") as handle:
             registry_text5 = handle.read()
         block5 = registry_text5.split('"' + ROW + '"', 1)[-1][:160]
-        if "6)" not in block5:
+        if "8)" not in block5:
             bad5.append("f-declared-%r" % block5.split(")")[0][-8:])
 
         # ===== AC-FDPV6: the shelf honours the write preconditions ==========
@@ -743,7 +748,7 @@ def main():
         with io.open(REGISTRY, encoding="utf-8") as handle:
             registry_text6 = handle.read()
         block6 = registry_text6.split('"' + ROW + '"', 1)[-1][:200]
-        if "6)" not in block6:
+        if "8)" not in block6:
             bad6.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block6:
             bad6.append("f-row-file")
@@ -892,10 +897,140 @@ def main():
         with io.open(REGISTRY, encoding="utf-8") as handle:
             registry_text7 = handle.read()
         block7 = registry_text7.split('"' + ROW + '"', 1)[-1][:200]
-        if "7)" not in block7:
+        if "8)" not in block7:
             bad7.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block7:
             bad7.append("f-row-file")
+
+        # ===== AC-FDPV8: who may read the shelf and what it may do =========
+        # R3467 measured before the code: no answer carried
+        # Cross-Origin-Resource-Policy, Cross-Origin-Opener-Policy or
+        # Permissions-Policy, so any origin could take a face as a subresource
+        # and no capability was refused; the Server header handed out the
+        # interpreter version. The capability list denies everything because
+        # measurement found no shipped page using any of it.
+        bad8 = []
+
+        def reach(method, path, headers=None):
+            """One request naming every reach field this suite grades."""
+            conn = http.client.HTTPConnection("127.0.0.1", port, timeout=15)
+            try:
+                conn.request(method, path, headers=headers or {})
+                resp = conn.getresponse()
+                return {"status": resp.status,
+                        "server": resp.getheader("Server", "") or "",
+                        "corp":
+                            resp.getheader("Cross-Origin-Resource-Policy", "")
+                            or "",
+                        "coop":
+                            resp.getheader("Cross-Origin-Opener-Policy", "")
+                            or "",
+                        "perms":
+                            resp.getheader("Permissions-Policy", "") or "",
+                        "etag": resp.getheader("ETag", "") or "",
+                        "body": resp.read()}
+            finally:
+                conn.close()
+
+        ident8 = reach("GET", page_path)
+        ident_tag8 = ident8["etag"]
+        stale8 = '"1111111111111111"'
+        probes8 = [("GET", "/"), ("HEAD", "/"), ("GET", "/healthz"),
+                   ("HEAD", "/healthz"), ("GET", page_path),
+                   ("HEAD", page_path), ("GET", "/preview/" + json_name),
+                   ("GET", "/nope"), ("HEAD", "/nope"),
+                   ("GET", page_path, {"Range": "bytes=0-9"}),
+                   ("GET", page_path, {"If-None-Match": ident_tag8}),
+                   ("GET", page_path, {"If-Match": stale8})]
+
+        # ---- a: every answer names which origins may read it --------------
+        for probe in probes8:
+            reply = reach(*probe)
+            if reply["corp"] != "same-origin":
+                bad8.append("a-corp-%s-%s" % (probe[0], probe[1]))
+
+        # ---- b: a document names an opener policy, a json face does not ---
+        for path in ("/", page_path):
+            reply = reach("GET", path)
+            if reply["coop"] != "same-origin":
+                bad8.append("b-coop-%s-%r" % (path, reply["coop"]))
+        for path in ("/preview/" + json_name, "/healthz", "/nope"):
+            if reach("GET", path)["coop"]:
+                bad8.append("b-nondoc-coop-%s" % path)
+
+        # ---- c: the capability list refuses what the shipped pages never use
+        denied = ("camera=()", "microphone=()", "geolocation=()", "payment=()",
+                  "usb=()", "display-capture=()",
+                  "publickey-credentials-get=()", "fullscreen=()")
+        for probe in probes8:
+            policy = reach(*probe)["perms"]
+            if not policy:
+                bad8.append("c-missing-%s" % probe[1])
+                continue
+            for token in denied:
+                if token not in policy:
+                    bad8.append("c-%s-%s" % (probe[1],
+                                             token.split("=")[0]))
+
+        # ---- d: no shipped page uses a refused capability -----------------
+        refused = ("PaymentRequest", "requestPayment", "navigator.payment",
+                   "geolocation", "getUserMedia", "getDisplayMedia",
+                   "clipboard", "usb.")
+        pages8 = sorted(name for name in os.listdir(PREVIEW)
+                        if name.endswith(".html"))
+        if len(pages8) < 100:
+            bad8.append("d-pages-%d" % len(pages8))
+        for name in pages8:
+            with io.open(os.path.join(PREVIEW, name), "rb") as handle:
+                page_text = handle.read().decode("utf-8", "replace")
+            for token in refused:
+                if token in page_text:
+                    bad8.append("d-used-%s-%s" % (name, token))
+
+        # ---- e: the Server header names the door, and nothing else moved ---
+        for probe in probes8:
+            server = reach(*probe)["server"]
+            if server != "BigDomain":
+                bad8.append("e-server-%s-%r" % (probe[1], server))
+        reply = reach("GET", page_path, {"Accept-Encoding": "gzip"})
+        try:
+            plain8 = gzip.decompress(reply["body"])
+        except Exception:
+            plain8 = b""
+            bad8.append("e-not-gzip")
+        if plain8 != page_raw:
+            bad8.append("e-gzip-bytes")
+        reply = reach("GET", page_path, {"Range": "bytes=0-99"})
+        if reply["status"] != 206 or reply["body"] != page_raw[:100]:
+            bad8.append("e-range-%d" % reply["status"])
+        reply = reach("GET", page_path, {"If-None-Match": ident_tag8})
+        if reply["status"] != 304 or reply["body"] != b"":
+            bad8.append("e-304-%d" % reply["status"])
+        reply = reach("GET", page_path, {"If-Match": stale8})
+        if reply["status"] != 412 or len(reply["body"]) > 64:
+            bad8.append("e-412-%d" % reply["status"])
+
+        # ---- f: the module dialect and the declared count ------------------
+        with io.open(MODULE, "rb") as handle:
+            raw9 = handle.read()
+        if raw9[:3] == b"\xef\xbb\xbf" or b"\r\n" in raw9:
+            bad8.append("f-module-dialect")
+        try:
+            text9 = raw9.decode("utf-8")
+            text9.encode("ascii")
+        except (UnicodeDecodeError, UnicodeEncodeError):
+            bad8.append("f-module-not-ascii")
+            text9 = raw9.decode("utf-8", "replace")
+        for needle in ("CROSS_ORIGIN_HEADERS", "COOP_POLICY",
+                       "PERMISSIONS_POLICY", "def version_string("):
+            if needle not in text9:
+                bad8.append("f-missing-" + needle)
+        with io.open(REGISTRY, encoding="utf-8") as handle:
+            block8r = handle.read().split('"' + ROW + '"', 1)[-1][:200]
+        if "8)" not in block8r:
+            bad8.append("f-declared")
+        if "test_frontdoor_preview_pages.py" not in block8r:
+            bad8.append("f-row-file")
     finally:
         srv.shutdown()
         srv.server_close()
@@ -907,6 +1042,7 @@ def main():
     report("AC-FDPV5", bool(bad5), ",".join(bad5))
     report("AC-FDPV6", bool(bad6), ",".join(bad6))
     report("AC-FDPV7", bool(bad7), ",".join(bad7))
+    report("AC-FDPV8", bool(bad8), ",".join(bad8))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:
