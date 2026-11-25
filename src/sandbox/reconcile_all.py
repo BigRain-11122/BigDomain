@@ -8524,6 +8524,16 @@ SUITES = [
     # its own pinned clock.
     ("os-watch-category-mix-board",
      os.path.join("..", "os", "test_watch_category_mix_board.py"), 6),
+    # R3455: tools/category_history_board.py renders the per-listing category
+    # movement chain (api_category_history, AC-AMCG1..8) which had zero readers
+    # under tools/, preview/ and src/os; the page prints one card per shelf with
+    # its base declaration, effective bucket, append-only revision chain and
+    # delisted badge, plus the market bucket ledger whose base + gained - lost =
+    # current conservation holds on every world, and the suite re-reads every
+    # shelf over its own throwaway world whose re-filings are all made through
+    # the shipped publish and revise_category doors under its own pinned clock.
+    ("os-category-history-board",
+     os.path.join("..", "os", "test_category_history_board.py"), 6),
     # R3443: tools/ticket_size_board.py renders the achieved ticket size
     # (api_market_ticket_size and api_market_ticket_size_months, AC-MTM1..8)
     # which had zero readers under tools/, preview/ and src/os; the page prints

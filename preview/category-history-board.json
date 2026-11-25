@@ -1,0 +1,265 @@
+{
+ "generated_utc": "2026-11-24 23:51:39Z",
+ "face": "api_category_history",
+ "scope": "listings",
+ "market": {
+  "listing_count": 11,
+  "moved_listing_count": 5,
+  "unchanged_listing_count": 6,
+  "revision_count": 8,
+  "seller_count": 2,
+  "bucket_count": 5,
+  "delisted_count": 1,
+  "latest_revision_utc": "2026-09-15T00:00:00Z",
+  "most_moved_listing": 1,
+  "buckets": [
+   {
+    "category": "data",
+    "base_count": 2,
+    "gained_count": 2,
+    "lost_count": 1,
+    "net_count": 1,
+    "current_count": 3
+   },
+   {
+    "category": "media",
+    "base_count": 1,
+    "gained_count": 1,
+    "lost_count": 1,
+    "net_count": 0,
+    "current_count": 1
+   },
+   {
+    "category": "ops",
+    "base_count": 2,
+    "gained_count": 0,
+    "lost_count": 1,
+    "net_count": -1,
+    "current_count": 1
+   },
+   {
+    "category": "tools",
+    "base_count": 2,
+    "gained_count": 3,
+    "lost_count": 2,
+    "net_count": 1,
+    "current_count": 3
+   },
+   {
+    "category": null,
+    "base_count": 4,
+    "gained_count": 2,
+    "lost_count": 3,
+    "net_count": -1,
+    "current_count": 3
+   }
+  ]
+ },
+ "listings": [
+  {
+   "listing_id": 1,
+   "listing_key": "risk-scan",
+   "dev_account": "usr:dana",
+   "base_category": null,
+   "category": "media",
+   "revision_count": 3,
+   "latest_revision_utc": "2026-09-15T00:00:00Z",
+   "delisted": false,
+   "delisted_utc": null,
+   "rows": [
+    {
+     "revision_id": 1,
+     "dev_account": "usr:dana",
+     "previous_category": null,
+     "category": "data",
+     "revised_utc": "2026-07-10T00:00:00Z"
+    },
+    {
+     "revision_id": 5,
+     "dev_account": "usr:dana",
+     "previous_category": "data",
+     "category": "tools",
+     "revised_utc": "2026-08-03T00:00:00Z"
+    },
+    {
+     "revision_id": 8,
+     "dev_account": "usr:dana",
+     "previous_category": "tools",
+     "category": "media",
+     "revised_utc": "2026-09-15T00:00:00Z"
+    }
+   ]
+  },
+  {
+   "listing_id": 2,
+   "listing_key": "macro-feed",
+   "dev_account": "usr:dana",
+   "base_category": null,
+   "category": null,
+   "revision_count": 0,
+   "latest_revision_utc": null,
+   "delisted": false,
+   "delisted_utc": null,
+   "rows": []
+  },
+  {
+   "listing_id": 3,
+   "listing_key": "chart-render",
+   "dev_account": "usr:frank",
+   "base_category": null,
+   "category": null,
+   "revision_count": 2,
+   "latest_revision_utc": "2026-08-03T00:00:00Z",
+   "delisted": false,
+   "delisted_utc": null,
+   "rows": [
+    {
+     "revision_id": 2,
+     "dev_account": "usr:frank",
+     "previous_category": null,
+     "category": "tools",
+     "revised_utc": "2026-07-10T00:00:00Z"
+    },
+    {
+     "revision_id": 6,
+     "dev_account": "usr:frank",
+     "previous_category": "tools",
+     "category": null,
+     "revised_utc": "2026-08-03T00:00:00Z"
+    }
+   ]
+  },
+  {
+   "listing_id": 4,
+   "listing_key": "data-a",
+   "dev_account": "usr:dana",
+   "base_category": "data",
+   "category": "data",
+   "revision_count": 0,
+   "latest_revision_utc": null,
+   "delisted": false,
+   "delisted_utc": null,
+   "rows": []
+  },
+  {
+   "listing_id": 5,
+   "listing_key": "data-b",
+   "dev_account": "usr:dana",
+   "base_category": "data",
+   "category": "data",
+   "revision_count": 0,
+   "latest_revision_utc": null,
+   "delisted": false,
+   "delisted_utc": null,
+   "rows": []
+  },
+  {
+   "listing_id": 6,
+   "listing_key": "tools-a",
+   "dev_account": "usr:frank",
+   "base_category": "tools",
+   "category": "tools",
+   "revision_count": 0,
+   "latest_revision_utc": null,
+   "delisted": false,
+   "delisted_utc": null,
+   "rows": []
+  },
+  {
+   "listing_id": 7,
+   "listing_key": "tools-b",
+   "dev_account": "usr:frank",
+   "base_category": "tools",
+   "category": "tools",
+   "revision_count": 0,
+   "latest_revision_utc": null,
+   "delisted": false,
+   "delisted_utc": null,
+   "rows": []
+  },
+  {
+   "listing_id": 8,
+   "listing_key": "misc-a",
+   "dev_account": "usr:dana",
+   "base_category": null,
+   "category": "data",
+   "revision_count": 1,
+   "latest_revision_utc": "2026-07-10T00:00:00Z",
+   "delisted": false,
+   "delisted_utc": null,
+   "rows": [
+    {
+     "revision_id": 3,
+     "dev_account": "usr:dana",
+     "previous_category": null,
+     "category": "data",
+     "revised_utc": "2026-07-10T00:00:00Z"
+    }
+   ]
+  },
+  {
+   "listing_id": 9,
+   "listing_key": "media-a",
+   "dev_account": "usr:frank",
+   "base_category": "media",
+   "category": null,
+   "revision_count": 1,
+   "latest_revision_utc": "2026-07-10T00:00:00Z",
+   "delisted": false,
+   "delisted_utc": null,
+   "rows": [
+    {
+     "revision_id": 4,
+     "dev_account": "usr:frank",
+     "previous_category": "media",
+     "category": null,
+     "revised_utc": "2026-07-10T00:00:00Z"
+    }
+   ]
+  },
+  {
+   "listing_id": 10,
+   "listing_key": "ops-a",
+   "dev_account": "usr:dana",
+   "base_category": "ops",
+   "category": "tools",
+   "revision_count": 1,
+   "latest_revision_utc": "2026-09-01T00:00:00Z",
+   "delisted": true,
+   "delisted_utc": "2026-09-15T00:00:00Z",
+   "rows": [
+    {
+     "revision_id": 7,
+     "dev_account": "usr:dana",
+     "previous_category": "ops",
+     "category": "tools",
+     "revised_utc": "2026-09-01T00:00:00Z"
+    }
+   ]
+  },
+  {
+   "listing_id": 11,
+   "listing_key": "ops-b",
+   "dev_account": "usr:frank",
+   "base_category": "ops",
+   "category": "ops",
+   "revision_count": 0,
+   "latest_revision_utc": null,
+   "delisted": false,
+   "delisted_utc": null,
+   "rows": []
+  }
+ ],
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/category-history-board.html",
+ "sources": {
+  "driver": "1936fdf46d74fddc",
+  "copy": "731705197729470f",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 14475,
+  "json": 5779
+ }
+}

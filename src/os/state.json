@@ -2,9 +2,12 @@
  "benchmarks_refreshed": "2026-11-24",
  "last_dec_tokens": [
   "D-20261026-22",
+  "D-20261026-24",
+  "D-20261101-19",
   "D-20261104-10",
   "D-20261105-06",
   "D-20261106-03",
+  "D-20261106-04",
   "D-20261106-05",
   "D-20261108-01",
   "D-20261108-02",
@@ -62,6 +65,7 @@
   "D-20261112-14",
   "D-20261112-15",
   "D-20261112-16",
+  "D-20261114-0",
   "D-20261114-01",
   "D-20261114-02",
   "D-20261114-03",
@@ -140,10 +144,7 @@
   "D-20261119-06",
   "D-20261119-07",
   "D-20261119-08",
-  "D-20261119-09",
-  "D-20261026-24",
-  "D-20261101-19",
-  "D-20261106-04"
+  "D-20261119-09"
  ],
  "last_decision_rows": 438,
  "last_gord_tbl_rows": 4,
@@ -266,7 +267,17 @@
   "R3454 tick: 3453 -> 3454.",
   "R3454 closeout: tick advanced to 3454; the buyer watch-intent category mix face that shipped with its AC-BWCM criteria now has one openable page whose bucket order with the uncategorized tie-break, purchased/open/delisted splits, share and cumulative share, herfindahl, integer pareto count, top1/top3, seller axis and market baseline are graded by six named arms.",
   "R3454 tokens: local=~33k api=0 api_reason=no cloud call: one five-still scan, one content-addressed decision diff, one ledger scan, one orders head read, one four-face zero-reader re-measure, one face implementation read, one factory-world probe, one pinned-clock story probe, one driver plus one label copy rendered twice, one six-arm suite green after the bar-caption fix, two measured controls with byte-identical restore, one registry row, one matrix write, one no-cache census re-pin, one chain and index and chain convergence pair, one face sweep and its check, one closeout ring, one evidence log through the shipped writer, and the state ring; zero cloud calls and zero external API touches",
-  "R3454 export refresh: docs/status-export.json was refreshed through tools/status_export_fresh.py --apply and the three keys the writer still does not publish (self_drive log_lines_in_window, self_drive substantive_non_idle_mention_lines and the results tick row) were patched from the shipped checker's own derivation, after which status_export_fresh.py --check and check_export_consistency both read PASS (22/22 at tick 3454); the entry index and the first-yuan chain are re-rendered after this write so the pair converges on the live bytes."
+  "R3454 export refresh: docs/status-export.json was refreshed through tools/status_export_fresh.py --apply and the three keys the writer still does not publish (self_drive log_lines_in_window, self_drive substantive_non_idle_mention_lines and the results tick row) were patched from the shipped checker's own derivation, after which status_export_fresh.py --check and check_export_consistency both read PASS (22/22 at tick 3454); the entry index and the first-yuan chain are re-rendered after this write so the pair converges on the live bytes.",
+  "2026-11-25 R3455 PRODUCT: the per-listing category movement history now has a door - api_category_history (live with AC-AMCG1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so how one shelf moved between buckets, from where to where, how many times and what the market's buckets gained and lost could only be read by calling the sandbox from a shell.",
+  "R3455 measured, read-only first: the three remaining zero-reader faces were re-measured by name with git grep -F against HEAD under tools/, preview/ and src/os and every hit was this board's own list row or state.json, so all three still answered zero real readers; the face taken carries one declaration per shelf and no revision at all in the factory world, so every re-filing on the page was made through the shipped publish_api and revise_category doors under a pinned clock - no sqlite rewrite, no typed ids, no padded rows.",
+  "R3455 landed at the birth site: tools/category_history_board.py renders preview/category-history-board.html (14475B) and its json (5779B) from the shipped face - one market strip with nine KPI cells (shelves, moved, never revised, revisions, sellers, buckets, delisted, latest revision, most-moved shelf) plus one row per bucket with the base count, the gained count, the lost count, the net, the current count and a bar the page states is a width, then one card per shelf carrying six KPI cells (revisions, latest stamp, base bucket, current bucket, delisted, seller) and one row per revision with the ordinal, the previous bucket, the new bucket, the seller and the stamp; fourteen law sentences, the AIGC label and the face own disclaimer; a never-revised shelf prints a named quiet sentence and an absent number prints the dash. Chinese labels live in preview/category-history-board-copy.json so the driver stays ASCII.",
+  "R3455 measured readings: 11 shelves, 5 moved, 6 never revised, 8 revisions, 2 sellers, 5 buckets, 1 delisted, latest revision 2026-09-15T00:00:00Z, most-moved shelf listing 1 (risk-scan, three revisions from the uncategorized declaration to data, then tools, then media).",
+  "R3455 bucket readings: data base 2 + gained 2 - lost 1 = current 3; media 1 + 1 - 1 = 1; ops 2 + 0 - 1 = 1; tools 2 + 3 - 2 = 3; uncategorized 4 + 2 - 3 = 3; base total 11 and current total 11, so the conservation law holds with a net-negative bucket and a bucket that only ever lost rows.",
+  "R3455 evidence: CATEGORY-HISTORY CHECK PASS fails=0 html=14475B json=5779B; suite src/os/test_category_history_board.py SUITE PASS 6/6 (AC-CGHB1..6) green on its first accepted run, with AC-CGHB2 rebuilding the same movement story through the shipped publish and revise_category doors over the suite own throwaway world under its own pinned clock (envelope_same=True disclaimer_same=True market_same=True order_same=True) and AC-CGHB3 refusing a forged chain and a forged bucket at five named problems; registry os-category-history-board(6); matrix WRITTEN 84935 bytes 823 rows then DOC-CURRENT through the walk-leg; census re-pinned readable 823/823 VERDICT PASS pinned=823; deliverable index 54765B fingerprint 327d78f49a0f0c8e; first-yuan chain PASS legs=2 read_only=True html=4403B; face sweep VERDICT PASS 21/21; closeout CLOSEOUT-GATE PASS files=4996 census=PASS matrix=DOC-CURRENT carrier 69391B margin 9109; qa/category-history-board-R3455.log 1988B/8 lines sha256 08beec603bba2e3e read back QA-LOG OK carried=0 bare_proofs=0.",
+  "R3455 two measured controls, both restored byte-identically: deleting the law_bar label copy key refuses the render by name rc=3 E_CGHB_FACE with the page sha256 unchanged and the copy restored byte for byte so --check re-reads PASS; forcing the first bucket current_count up by seven reddens AC-CGHB1 (the recorded json byte count no longer matches), AC-CGHB2 (market_same=False) and AC-CGHB6 (check_rc=2) at SUITE FAIL 3/6 rc=2 while the restored json re-reads SUITE PASS 6/6 and --check PASS - only three arms moved because AC-CGHB3 grades the live envelopes the suite rebuilds off the shipped doors, recorded rather than inflated.",
+  "R3455 GROUP SCAN (content-addressed, read before any work): the ledger carried 0 @BigDomain lines so no dispatch was owed; docs/decisions.md answered 438 rows and 144 distinct ids against the stored 143-token baseline and the single apparent newcomer D-20261114-0 is the same truncated wildcard mention earlier rounds recorded as a regex artifact rather than a decision, so 0 real decisions entered and the baseline now carries the 144-token set; the company orders head is unchanged at the 2026-11-20 22:5x row; benchmarks_refreshed 2026-11-24 falls due 2026-12-01; git status was clean at open with no index.lock; the board head was the R3454 item (1) zero-reader re-measure and WAS pullable, so this is a work round; BigDomain-OSLoop was not re-measured this window and its S4U item still carries.",
+  "R3455 fold plan read first, as the board ordered: the carrier stood at 69391B against the 78500B gate with margin 9109 and minimal_window_lines=0, so no fold was executed before the work and every byte count quoted above is the live carrier before this write.",
+  "fold 807 moved the R3455 category-history tail to the November archive verbatim; R3455 stays named here and AC-AMCG, C-CURRENT and D-LEG now live only there."
  ],
- "tick": 3454
+ "tick": 3455
 }
