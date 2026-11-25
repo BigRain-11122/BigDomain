@@ -28,17 +28,46 @@
       "spliced_html_sha256": "89bb2928d6297f5d43b98e77f0ef107d7e52ff3d0f837ca83d8b011bb8e3f719",
       "verdict": "version-drift",
       "why": "oldest survivor of the twelve splits: html last committed at 700dd89a (the R3288 back-hop channel), json at 6fb6c40b (the R2111 producer)"
+    },
+    {
+      "channel_block_bytes": 714,
+      "channel_how": "inserted",
+      "current_schema_version": 17,
+      "detail": "landed page is a schema 11 render and the renderer is at schema 17, so no re-render at HEAD can reproduce it; explained, not excused: first difference at byte 1652",
+      "first_diff_context": "d from the read faces</div>\n<div class=\"marker\">AIGC / sandbox artifact: synthet",
+      "first_diff_offset": 1652,
+      "json_same_as_render": false,
+      "landed_carries_schema_badge": false,
+      "landed_html": "preview/apimarket-report-questions.html",
+      "landed_html_bytes": 32309,
+      "landed_html_sha256": "40343bcf5f09e9e056e276b94d445ccee610ae30ea0959677f30a5e2d1c4e3f1",
+      "landed_json": "preview/apimarket-report-questions.json",
+      "landed_json_bytes": 51808,
+      "landed_json_sha256": "72c5b99b02dfdff21ef794d3d62d21b99b3a9e1b13ef578996eee7ab6cc47556",
+      "landed_schema_version": 11,
+      "producer": "src/os/preview_R2118.py",
+      "raw_first_diff_offset": 1652,
+      "rendered_html_bytes": 39020,
+      "rendered_html_sha256": "9211bd54e8f332907dd1981855d3c9b787fb8f18f8c5d1bf2b984c874b788be9",
+      "rendered_json_bytes": 62552,
+      "rendered_json_sha256": "9b5360897aa0788e805ae47946eccd77e4d74cf4dabcf05b538fddd8606aa60f",
+      "slug": "apimarket-report-questions",
+      "splice_offset": 39006,
+      "spliced_html_bytes": 39734,
+      "spliced_html_sha256": "02d4d4b32b5dddf1091b75dda701a2f554295bdff71098cc9c994be9e2e5b2b2",
+      "verdict": "version-drift",
+      "why": "next oldest of the twelve splits (743.8h): html last committed at 700dd89a (the same R3288 back-hop channel), json at e0fd7251 (the R2118 pre-purchase Q&A producer)"
     }
   ],
-  "generated_at": "2026-11-26T06:27:16+08:00",
+  "generated_at": "2026-11-26T06:36:21+08:00",
   "law": "a history split is excused for one face only when the producer's own html, plus the shipped post-render channel, reproduces the landed html byte for byte",
   "round": 3500,
   "source": "tools/face_pair_receipt.py",
   "totals": {
     "drift": 0,
-    "faces": 1,
+    "faces": 2,
     "one_derivation": 0,
     "unreproducible": 0,
-    "version_drift": 1
+    "version_drift": 2
   }
 }

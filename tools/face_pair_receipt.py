@@ -20,6 +20,7 @@ directory and is removed; the only files this tool writes are its own pair
 Source discipline: ASCII only, stdlib only, no clock read beyond the page stamp.
 """
 
+import ast
 import hashlib
 import importlib.util
 import io
@@ -51,6 +52,13 @@ FACES = [
                 "700dd89a (the R3288 back-hop channel), json at 6fb6c40b (the "
                 "R2111 producer)"),
     },
+    {
+        "slug": "apimarket-report-questions",
+        "producer": os.path.join("src", "os", "preview_R2118.py"),
+        "why": ("next oldest of the twelve splits (743.8h): html last committed at "
+                "700dd89a (the same R3288 back-hop channel), json at e0fd7251 (the "
+                "R2118 pre-purchase Q&A producer)"),
+    },
 ]
 
 VOLATILE = ("generated_at", "round")
@@ -77,6 +85,44 @@ def first_diff(a, b):
 def context(data, offset, width=40):
     start = max(0, offset - width)
     return data[start:offset + width].decode("utf-8", "replace")
+
+
+def evaluate_output_discipline(source, slug):
+    """AC-PPR7: can this producer render somewhere other than preview/?
+
+    A receipt may only be taken into a scratch directory, so the producer's
+    module-level main must accept exactly two defaulted output paths, and its
+    own defaults must still name this face's landed halves - so a no-argument
+    run keeps writing exactly the same files it always wrote.
+    """
+    problems = []
+    try:
+        tree = ast.parse(source)
+    except SyntaxError as exc:
+        return ["producer does not parse: %s" % exc]
+    mains = [n for n in tree.body
+             if isinstance(n, ast.FunctionDef) and n.name == "main"]
+    if not mains:
+        return ["producer has no module-level main"]
+    args = mains[0].args
+    if len(args.args) != 2 or len(args.defaults) != 2:
+        problems.append("main takes %d positional args with %d defaults, not two outputs"
+                        % (len(args.args), len(args.defaults)))
+    for half in ("%s.html" % slug, "%s.json" % slug):
+        if half not in source:
+            problems.append("producer never names its own half %s" % half)
+    if "preview" not in source:
+        problems.append("producer never names the preview directory")
+    return problems
+
+
+def output_discipline(face):
+    path = os.path.join(REPO, face["producer"])
+    try:
+        source = io.open(path, encoding="utf-8").read()
+    except OSError as exc:
+        return ["producer source is unreadable: %s" % exc]
+    return evaluate_output_discipline(source, face["slug"])
 
 
 def render(face, workdir):
@@ -118,6 +164,13 @@ def measure(face):
         "landed_html": "preview/%s.html" % slug,
         "landed_json": "preview/%s.json" % slug,
     }
+    problems = output_discipline(face)
+    if problems:
+        row["verdict"] = "unreproducible"
+        row["error"] = ("producer cannot render into a scratch directory: "
+                        + "; ".join(problems))
+        return row
+
     work = tempfile.mkdtemp(prefix="face-pair-receipt-")
     try:
         try:

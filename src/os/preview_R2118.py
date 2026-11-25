@@ -24,13 +24,20 @@ import apimarket as A         # noqa: E402
 import apimarket_report as R  # noqa: E402
 
 
-def main():
+def main(out_html=None, out_json=None):
+    """Render the pair, by default into preview/.
+
+    R3501: the pair-receipt tool renders this producer into a scratch directory
+    so the landed html can be compared with the render plus the shipped
+    post-render channel, so both output paths are arguments instead of
+    literals. Called with no arguments the shipped behaviour is unchanged.
+    """
     tmp = tempfile.mkdtemp(prefix="apimarket-preview-questions-")
     db = os.path.join(tmp, "ledger.db")
-    out_html = os.path.join(BASE, "preview",
-                            "apimarket-report-questions.html")
-    out_json = os.path.join(BASE, "preview",
-                            "apimarket-report-questions.json")
+    out_html = out_html or os.path.join(BASE, "preview",
+                                        "apimarket-report-questions.html")
+    out_json = out_json or os.path.join(BASE, "preview",
+                                        "apimarket-report-questions.json")
     try:
         led, mtr, dk, am = R.build_stack(db)
         try:

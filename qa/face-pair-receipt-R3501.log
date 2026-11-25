@@ -1,0 +1,60 @@
+R3501 evidence: second per-face pair receipt (apimarket-report-questions)
+Date: 2026-11-26
+Tool: tools/face_pair_receipt.py (faces=2, AC-PPR1..AC-PPR7)
+
+Why this face
+-------------
+preview-pair-census.json named apimarket-report-questions as the next-oldest
+history split at 743.8h: html last committed at 700dd89a (R3288 post-render
+back-hop channel), json at e0fd7251 (R2118 pre-purchase Q&A producer). One face
+per window, by design.
+
+Measurement (read-only before any write)
+----------------------------------------
+producer            src/os/preview_R2118.py
+producer html       39020 B  sha256 9211bd54e8f33290...
+channel             face_backhop.inject_text -> spliced html
+landed html         19293 B  schema 11 (no data-report-schema badge)
+renderer schema     17
+first difference    byte 1652 (page head, before the splice offset)
+
+Verdict: version-drift - explained, NOT excused.
+A page rendered at schema 11 cannot be reproduced by a renderer at schema 17,
+so the twelve history splits stand at 12 and the census explained count moves
+from 1 to 2. No preview page was re-derived and no history was rewritten.
+
+New criterion AC-PPR7 (pinned in src/os/backlog.md before any code moved)
+------------------------------------------------------------------------
+tools/face_pair_receipt.py gained evaluate_output_discipline()/output_discipline():
+a registered face's module-level main must take exactly two defaulted output
+paths, and its source must name its own preview directory and <slug>.html /
+<slug>.json halves. measure() now refuses such a producer as `unreproducible`
+BEFORE it renders, so a receipt can never be taken by writing into preview/.
+Negative control: a synthetic "def main(): return 0" source is refused
+(stub_refused=True).
+
+Producer change (surgical, additive)
+------------------------------------
+src/os/preview_R2118.py: main(out_html=None, out_json=None); called with no
+arguments the output paths are exactly the previous literals, so the shipped
+behaviour is byte-identical.
+
+Gates read back
+---------------
+FPR-CHECK VERDICT PASS read_only=True faces=2 one_derivation=0 drift=0
+SUITE PASS 7/7  (src/os/test_face_pair_receipt.py, AC-PPR1..AC-PPR7)
+SHARD face-pair-receipt green=1 criteria=7 crit_mismatch=0
+CENSUS PPC history_split=12 channel_receipt=0 frozen_excused=11 explained=2
+MATRIX DOC-CURRENT 830 suites / 6947 criteria (85612 B)
+BSR-CHECK VERDICT PASS  html 16416 B / json 17987 B (page verdict=RED by design)
+EXPORT VERDICT PASS tick=3501
+
+Honest notes
+------------
+(a) No payment capability and no network beyond loopback: the five physical
+    pieces still gate every buyer.
+(b) The two receipts both read version-drift, so nothing is excused yet; the
+    difference is that each split now carries a nameable cause a reader can
+    re-check instead of an undifferentiated count.
+(c) The producer signature change is the same additive shape R3500 used for
+    preview_R2111.py; AC-PPR7 now pins it so the next face cannot regress it.

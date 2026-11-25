@@ -1,21 +1,23 @@
 {
   "ceo_face": {
-    "board_pages_skipped": [],
-    "current": "2026-11-26 R3500 PRODUCT: the census's open question gets a per-face receipt - tools/face_pair_receipt.py re-renders the producer into a scratch directory, applies the shipped post-render channel (face_backhop.inject_text), and compares the result with the landed html byte for byte; preview/face-pair-receipt.json (6.5KB) and .html (5.9KB) are one derivation and the shipped gate reads FPR-CHECK VERDICT PASS.",
+    "board_pages_skipped": [
+      "preview/battery-shard-report.html (16416B)"
+    ],
+    "current": "2026-11-26 R3501 PRODUCT: the second of the twelve history splits now carries a per-face receipt - apimarket-report-questions (next oldest at 743.8h) re-renders at HEAD as a 39020B schema 17 page while the landed html is a schema 11 render, so the split is explained and still counted; the census reads explained=2 and history_split stays 12.",
     "do": "2026-11-25 R3456 PRODUCT: the answer-revision question now has a door - api_answer_history (live with AC-AMAW1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so 'which answer was rewritten, what did it say before, what does it say now and how often did it change' could only be read by calling the sandbox from a shell - while api_seller_answers and api_listing_qna publish only the CURRENT wording.",
-    "last_artifact": "preview/preview-pair-census.html (8078B) + preview/preview-pair-census.json (51707B) [2026-11-26 mtime]",
-    "latest_artifact": "preview/preview-pair-census.html (8078B) + preview/preview-pair-census.json (51707B) [2026-11-26 mtime]",
+    "last_artifact": "preview/preview-pair-census.html (8103B) + preview/preview-pair-census.json (51982B) [2026-11-26 mtime]",
+    "latest_artifact": "preview/preview-pair-census.html (8103B) + preview/preview-pair-census.json (51982B) [2026-11-26 mtime]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\preview-pair-census.html",
     "latest_artifact_note": "",
     "latest_evidence": "qa/face-pair-receipt-R3500.log (2119B, 2026-11-26, sha256 7eaee02e986f)",
-    "newest_pair_on_disk_is_board": false,
+    "newest_pair_on_disk_is_board": true,
     "next_milestone": "[R3501] next window (<=48h): (1) **S4U 仍未落地**（第四十次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回；非提权注册只得 InteractiveToken，违 S4U 律，宁缺不错。(2) **剩余 11 条历史分裂的逐面凭据（每窗只动一条）**：本窗已把最老一条量成 version-drift，判据与工具在役——下一条建议取 delta 次老者，做法＝在 `tools/face_pair_receipt.py` 的 FACES 登记册加一行（产出者＋理由），跑出 `one-derivation` 或 `version-drift` 二者之一；**若某面判 `one-derivation` 则清点面 12→11 分裂＋1 放行（通道类）**，若仍 version-drift 则继续只解释不放行。禁一次登记全部 11 条。(3) **`status_export_fresh.py --apply` 不写 `board_pages_skipped` 的缺陷未修**（本窗绕走正身 `src/os/export_round.py`；下窗若要修须先立判据，别顺手改）。(4) `battery-shard-report` 本窗已重派生（html 16413B／json 18075B，`--check PASS`），下窗仅在族读数变化时重跑；产出者一律 detached＋轮询日志。(5) 载体余量：state `~38KB`／阈 78500（`fold --plan-only` 报 `writes_nothing=true`），下窗仍先跑 plan-only；写 state 后必须 `eol --fix --execute` ＋ `eol --fix-indent --execute`（本窗两次踩到）。 (6) 基准 `benchmarks_refreshed=2026-11-24`，**2026-12-01 到期（48h 窗 2026-11-27）**——下窗跨过 11-27 则先排刷新轮。(7) tick 口径：本轮 3499→3500，下轮 R3501。(8) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定「诊断不修」）、全量 battery 未实跑（只跑族分片）、Docker 缺位、backlog.md 体量、三个 `qa/crawl-*` 改动件非本窗所写；新增清点面 `face-pair-receipt` 已入册（830 套／6946 判据）。",
-    "next_milestone_due": "2026-11-28T06:29:19+08:00",
-    "updated_at": "2026-11-26T06:29:19+08:00",
+    "next_milestone_due": "2026-11-28T06:45:23+08:00",
+    "updated_at": "2026-11-26T06:45:23+08:00",
     "heartbeat": {
       "tick": 3497,
-      "state_tick": 3500,
-      "lag": 3,
+      "state_tick": 3501,
+      "lag": 4,
       "verdict": "FLAG",
       "reason": "heartbeat_row_debt"
     },
@@ -35,8 +37,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-26 R3500 PRODUCT: the census's open question gets a per-face receipt - tools/face_pair_receipt.py re-renders the producer into a scratch directory, applies the shipped post-render channel (face_backhop.inject_text), and compares the result with the landed html byte for byte; preview/face-pair-receipt.json (6.5KB) and .html (5.9KB) are one derivation and the shipped gate reads FPR-CHECK VERDICT PASS.",
-  "claims": {"claimed": 41, "captured": 23, "contradicted": 0, "uncaptured": 18, "historic": 0, "rows": 103, "present": true, "census_ts": "2026-11-26T06:29:19+08:00"},
+  "current": "2026-11-26 R3501 PRODUCT: the second of the twelve history splits now carries a per-face receipt - apimarket-report-questions (next oldest at 743.8h) re-renders at HEAD as a 39020B schema 17 page while the landed html is a schema 11 render, so the split is explained and still counted; the census reads explained=2 and history_split stays 12.",
+  "claims": {"claimed": 41, "captured": 23, "contradicted": 0, "uncaptured": 18, "historic": 0, "rows": 103, "present": true, "census_ts": "2026-11-26T06:45:23+08:00"},
   "chain": {"present": true, "rows": 103, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -65,13 +67,13 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-26 R3500 PRODUCT: the census's open question gets a per-face receipt - tools/face_pair_receipt.py re-renders the producer into a scratch directory, applies the shipped post-render channel (face_backhop.inject_text), and compares the result with the landed html byte for byte; preview/face-pair-receipt.json (6.5KB) and .html (5.9KB) are one derivation and the shipped gate reads FPR-CHECK VERDICT PASS.",
-  "export_ts": "2026-11-26T06:29:19+08:00",
-  "latest_artifact": "preview/preview-pair-census.html (8078B) + preview/preview-pair-census.json (51707B) [2026-11-26 mtime]",
+  "do": "2026-11-26 R3501 PRODUCT: the second of the twelve history splits now carries a per-face receipt - apimarket-report-questions (next oldest at 743.8h) re-renders at HEAD as a 39020B schema 17 page while the landed html is a schema 11 render, so the split is explained and still counted; the census reads explained=2 and history_split stays 12.",
+  "export_ts": "2026-11-26T06:45:23+08:00",
+  "latest_artifact": "preview/preview-pair-census.html (8103B) + preview/preview-pair-census.json (51982B) [2026-11-26 mtime]",
   "latest_evidence": "qa/face-pair-receipt-R3500.log (2119B, 2026-11-26, sha256 7eaee02e986f)",
   "next_milestone": "[R3501] next window (<=48h): (1) **S4U 仍未落地**（第四十次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回；非提权注册只得 InteractiveToken，违 S4U 律，宁缺不错。(2) **剩余 11 条历史分裂的逐面凭据（每窗只动一条）**：本窗已把最老一条量成 version-drift，判据与工具在役——下一条建议取 delta 次老者，做法＝在 `tools/face_pair_receipt.py` 的 FACES 登记册加一行（产出者＋理由），跑出 `one-derivation` 或 `version-drift` 二者之一；**若某面判 `one-derivation` 则清点面 12→11 分裂＋1 放行（通道类）**，若仍 version-drift 则继续只解释不放行。禁一次登记全部 11 条。(3) **`status_export_fresh.py --apply` 不写 `board_pages_skipped` 的缺陷未修**（本窗绕走正身 `src/os/export_round.py`；下窗若要修须先立判据，别顺手改）。(4) `battery-shard-report` 本窗已重派生（html 16413B／json 18075B，`--check PASS`），下窗仅在族读数变化时重跑；产出者一律 detached＋轮询日志。(5) 载体余量：state `~38KB`／阈 78500（`fold --plan-only` 报 `writes_nothing=true`），下窗仍先跑 plan-only；写 state 后必须 `eol --fix --execute` ＋ `eol --fix-indent --execute`（本窗两次踩到）。 (6) 基准 `benchmarks_refreshed=2026-11-24`，**2026-12-01 到期（48h 窗 2026-11-27）**——下窗跨过 11-27 则先排刷新轮。(7) tick 口径：本轮 3499→3500，下轮 R3501。(8) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定「诊断不修」）、全量 battery 未实跑（只跑族分片）、Docker 缺位、backlog.md 体量、三个 `qa/crawl-*` 改动件非本窗所写；新增清点面 `face-pair-receipt` 已入册（830 套／6946 判据）。",
   "outs": [
-    "preview/preview-pair-census.html (8078B) + preview/preview-pair-census.json (51707B) [2026-11-26 mtime]",
+    "preview/preview-pair-census.html (8103B) + preview/preview-pair-census.json (51982B) [2026-11-26 mtime]",
     "preview/ledger-reconcile-face.html (8656B) + preview/ledger-reconcile-face.json (6151B) [2026-11-26 commit]",
     "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-26 commit] (halves differ: html [2026-11-26 commit] + json [2026-11-16 commit]; later=html)",
     "preview/lobby-protocol-map.html (29069B) + preview/lobby-protocol-map.json (27924B) [2026-11-26 commit]",
@@ -139,20 +141,20 @@
     "shortfall_total": 15,
     "verdict": "FLOOR-DEBT"
   },
-  "results": [["3500", "OSLoop 执行 tick"]],
+  "results": [["3501", "OSLoop 执行 tick"]],
   "results_archive": {
     "bytes": 336680,
     "count": 179,
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
-  "self_drive": {"window": "2026-11-20..2026-11-26", "window_days": 7, "log_lines_in_window": 65, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 11, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
-  "state_bytes": 39278,
-  "next_milestone_due": "2026-11-28T06:29:19+08:00",
+  "self_drive": {"window": "2026-11-20..2026-11-26", "window_days": 7, "log_lines_in_window": 69, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 12, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
+  "state_bytes": 40921,
+  "next_milestone_due": "2026-11-28T06:45:23+08:00",
   "heartbeat": {
     "tick": 3497,
-    "state_tick": 3500,
-    "lag": 3,
+    "state_tick": 3501,
+    "lag": 4,
     "verdict": "FLAG",
     "reason": "heartbeat_row_debt"
   },

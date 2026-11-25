@@ -1,10 +1,12 @@
-"""Battery suite for the per-face pair receipt - AC-PPR1..AC-PPR6 (R3500).
+"""Battery suite for the per-face pair receipt - AC-PPR1..AC-PPR7 (R3500, R3501).
 
 Six arms were pinned in src/os/backlog.md at R3500 BEFORE tools/face_pair_receipt.py
-existed. The suite exists because the board's question ("is this pair one
-derivation, or must it be re-derived?") can only be answered by three readings
-a reader can re-check: the producer's own html, that html plus the shipped
-post-render channel, and the landed bytes.
+existed, and AC-PPR7 was pinned at R3501 before the second face was registered:
+a producer may only be receipted when it can render into a scratch directory
+without touching the tree. The suite exists because the board's question ("is
+this pair one derivation, or must it be re-derived?") can only be answered by
+three readings a reader can re-check: the producer's own html, that html plus
+the shipped post-render channel, and the landed bytes.
 
 Nothing here rewrites a preview page. The tool renders into the system temp
 directory; --check re-derives both receipt halves in memory and compares.
@@ -176,6 +178,18 @@ def main():
     ok("AC-PPR6", unreach["verdict"] == "unreproducible" and pair_ok
        and re.search(r"\d+\s*B", read_bytes(HTML_HALF).decode("utf-8")) is not None,
        "unreproducible=%s pair=%s" % (unreach["verdict"], pair_ok))
+
+    # AC-PPR7: every registered producer can be rendered into a scratch
+    # directory (two defaulted outputs) and its own defaults still name the
+    # landed halves, so a no-argument run is unchanged; the negative control is
+    # a synthetic producer that can only write where it likes.
+    discipline = {f["slug"]: FPR.output_discipline(f) for f in FPR.FACES}
+    stub = "import os\n\n\ndef main():\n    return 0\n"
+    stub_problems = FPR.evaluate_output_discipline(stub, "apimarket-report-questions")
+    ok("AC-PPR7",
+       all(not v for v in discipline.values()) and len(discipline) == len(FPR.FACES)
+       and bool(stub_problems),
+       "faces=%s stub_refused=%s" % (sorted(discipline), bool(stub_problems)))
 
     total = len(CHECKS)
     passed = total - len(FAILS)

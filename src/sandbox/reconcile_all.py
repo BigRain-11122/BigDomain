@@ -5036,9 +5036,11 @@ SUITES = [
     # landed html byte for byte. A pair is excused only when that comparison
     # is exact; a page older than the renderer is explained and still counted
     # as a split (AC-PPR1..AC-PPR6 pinned in src/os/backlog.md before
-    # tools/face_pair_receipt.py existed).
+    # tools/face_pair_receipt.py existed; AC-PPR7 pinned at R3501 before the
+    # second face was registered, so a producer that cannot render into a
+    # scratch directory is refused at registration time).
     ("face-pair-receipt",
-     os.path.join("..", "os", "test_face_pair_receipt.py"), 6),
+     os.path.join("..", "os", "test_face_pair_receipt.py"), 7),
     ("os-ledger-archive",
      os.path.join("..", "os", "test_ledger_archive.py"), 16),
     # R3091: the archive's own provenance is now readable WITHOUT a child
