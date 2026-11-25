@@ -8679,8 +8679,10 @@ SUITES = [
     # was pinned in src/os/backlog.md in the landing window.
     # R3462: the same door answered 501 to every HEAD probe and cached the
     # rebuilt preview faces, so AC-FDPV2 (six arms) pins its manners too.
+    # R3463: Range was ignored outright, so a 55KB face could not be resumed
+    # or fetched in slices and concurrency was never pinned - AC-FDPV3.
     ("frontdoor-preview-pages",
-     os.path.join("test_frontdoor_preview_pages.py"), 2),
+     os.path.join("test_frontdoor_preview_pages.py"), 3),
     # R3115: the 24h export-face age gate (os/export_freshness.py, AC-EXP1..6)
     # had zero production consumers - it ran only inside its own suite - while
     # the CEO card printed export_ts as a bare string. AC-FDC2 (six arms, ONE

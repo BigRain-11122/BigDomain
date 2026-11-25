@@ -3,23 +3,23 @@
     "board_pages_skipped": [
       "preview/face-sweep.html (8878B)"
     ],
-    "current": "2026-11-25 R3462 PRODUCT: the front door now answers the standard probe - HEAD returned 501 on /, /healthz and every /preview/* face (BaseHTTPRequestHandler's default do_HEAD) while GET answered 200 on all three, so a link checker, a CDN warmer or curl -I saw a broken door; and the rebuilt preview faces carried no Cache-Control at all, so a face regenerated under the same URL stayed stale in the browser.",
+    "current": "2026-11-25 R3463 PRODUCT: the door's deliverable shelf is resumable - every answer used to be the whole body, so a Range request was silently ignored (no Accept-Ranges, no 206, no 416) and a 55185B index.html or an 8619B face-sweep.json could be neither resumed nor fetched in slices, while concurrency had never been pinned by any arm.",
     "do": "2026-11-25 R3456 PRODUCT: the answer-revision question now has a door - api_answer_history (live with AC-AMAW1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so 'which answer was rewritten, what did it say before, what does it say now and how often did it change' could only be read by calling the sandbox from a shell - while api_seller_answers and api_listing_qna publish only the CURRENT wording.",
     "last_artifact": "preview/apimarket-report.html (37201B) + preview/apimarket-report.json (59815B) [2026-11-25 commit]",
     "latest_artifact": "preview/apimarket-report.html (37201B) + preview/apimarket-report.json (59815B) [2026-11-25 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\apimarket-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/frontdoor-head-R3462.log (2178B, 2026-11-25, sha256 0ef6622f3021)",
-    "latest_evidence": "qa/frontdoor-head-R3462.log (2178B, 2026-11-25, sha256 0ef6622f3021)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/frontdoor-range-R3463.log (2278B, 2026-11-25, sha256 df51a3b44a77)",
+    "latest_evidence": "qa/frontdoor-range-R3463.log (2278B, 2026-11-25, sha256 df51a3b44a77)",
     "newest_pair_on_disk_is_board": true,
     "next_milestone": "[R3462] next window (<=48h): (1) **S4U 已实测未落地**：`BigDomain-OSLoop` State=Running、`LogonType=Interactive`、`UserId=sjs20`，本会话 `IsInRole(Administrator)=False`——处置已钉死＝由**提权会话**跑 `src/os/register_loop_task.ps1` 并用 `$t.Principal.LogonType` 读回，保留既有触发器；第七次承账，禁再以「未实测」或「无从下手」结账。(2) 门的第二层还没测：同一条 `/preview/*` 通道目前只证明「能服务」，未证明「大文件/并发下的行尾与编码不漂」——下窗可抽一个 json 面（如 `preview/face-sweep.json`）做 Range/并发读的只读复核（面自带套件在盘、`git grep -F` 于 tools/＋preview/＋src/os 零命中才动手）。(3) 收口序实证再确认一次：各面写 → `first_yuan_chain.py` → `deliverable_index.py` → `face_sweep.py` → `face_sweep.py --check` → `export_round.py` → `status_export_fresh.py --apply` → 三判分器 → `closeout_gate.py`；本窗实测「导出面写后索引指纹变」会再红一次 `AC-CVL1`，需整链重跑一轮才收敛。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`（本窗 fold 813 后载体 74851B／闸 78500／余 3649B）。(6) tick 口径：本窗 3461→3462。(7) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、backlog.md 体量闸。",
-    "next_milestone_due": "2026-11-27T10:42:51+08:00",
-    "updated_at": "2026-11-25T10:42:51+08:00",
+    "next_milestone_due": "2026-11-27T11:09:26+08:00",
+    "updated_at": "2026-11-25T11:09:26+08:00",
     "heartbeat": {
       "tick": 3462,
-      "state_tick": 3462,
-      "lag": 0,
-      "verdict": "PASS",
-      "reason": "fresh"
+      "state_tick": 3463,
+      "lag": 1,
+      "verdict": "FLAG",
+      "reason": "heartbeat_row_debt"
     },
     "outs_age": {
       "rows": 8,
@@ -37,8 +37,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-25 R3462 PRODUCT: the front door now answers the standard probe - HEAD returned 501 on /, /healthz and every /preview/* face (BaseHTTPRequestHandler's default do_HEAD) while GET answered 200 on all three, so a link checker, a CDN warmer or curl -I saw a broken door; and the rebuilt preview faces carried no Cache-Control at all, so a face regenerated under the same URL stayed stale in the browser.",
-  "claims": {"claimed": 29, "captured": 18, "contradicted": 0, "uncaptured": 11, "historic": 0, "rows": 101, "present": true, "census_ts": "2026-11-25T10:42:51+08:00"},
+  "current": "2026-11-25 R3463 PRODUCT: the door's deliverable shelf is resumable - every answer used to be the whole body, so a Range request was silently ignored (no Accept-Ranges, no 206, no 416) and a 55185B index.html or an 8619B face-sweep.json could be neither resumed nor fetched in slices, while concurrency had never been pinned by any arm.",
+  "claims": {"claimed": 30, "captured": 18, "contradicted": 0, "uncaptured": 12, "historic": 0, "rows": 101, "present": true, "census_ts": "2026-11-25T11:09:26+08:00"},
   "chain": {"present": true, "rows": 101, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -67,10 +67,10 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-25 R3462 PRODUCT: the front door now answers the standard probe - HEAD returned 501 on /, /healthz and every /preview/* face (BaseHTTPRequestHandler's default do_HEAD) while GET answered 200 on all three, so a link checker, a CDN warmer or curl -I saw a broken door; and the rebuilt preview faces carried no Cache-Control at all, so a face regenerated under the same URL stayed stale in the browser.",
-  "export_ts": "2026-11-25T10:42:51+08:00",
+  "do": "2026-11-25 R3463 PRODUCT: the door's deliverable shelf is resumable - every answer used to be the whole body, so a Range request was silently ignored (no Accept-Ranges, no 206, no 416) and a 55185B index.html or an 8619B face-sweep.json could be neither resumed nor fetched in slices, while concurrency had never been pinned by any arm.",
+  "export_ts": "2026-11-25T11:09:26+08:00",
   "latest_artifact": "preview/apimarket-report.html (37201B) + preview/apimarket-report.json (59815B) [2026-11-25 commit]",
-  "latest_evidence": "qa/frontdoor-head-R3462.log (2178B, 2026-11-25, sha256 0ef6622f3021)",
+  "latest_evidence": "qa/frontdoor-range-R3463.log (2278B, 2026-11-25, sha256 df51a3b44a77)",
   "next_milestone": "[R3462] next window (<=48h): (1) **S4U 已实测未落地**：`BigDomain-OSLoop` State=Running、`LogonType=Interactive`、`UserId=sjs20`，本会话 `IsInRole(Administrator)=False`——处置已钉死＝由**提权会话**跑 `src/os/register_loop_task.ps1` 并用 `$t.Principal.LogonType` 读回，保留既有触发器；第七次承账，禁再以「未实测」或「无从下手」结账。(2) 门的第二层还没测：同一条 `/preview/*` 通道目前只证明「能服务」，未证明「大文件/并发下的行尾与编码不漂」——下窗可抽一个 json 面（如 `preview/face-sweep.json`）做 Range/并发读的只读复核（面自带套件在盘、`git grep -F` 于 tools/＋preview/＋src/os 零命中才动手）。(3) 收口序实证再确认一次：各面写 → `first_yuan_chain.py` → `deliverable_index.py` → `face_sweep.py` → `face_sweep.py --check` → `export_round.py` → `status_export_fresh.py --apply` → 三判分器 → `closeout_gate.py`；本窗实测「导出面写后索引指纹变」会再红一次 `AC-CVL1`，需整链重跑一轮才收敛。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`（本窗 fold 813 后载体 74851B／闸 78500／余 3649B）。(6) tick 口径：本窗 3461→3462。(7) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、backlog.md 体量闸。",
   "outs": [
     "preview/apimarket-report.html (37201B) + preview/apimarket-report.json (59815B) [2026-11-25 commit]",
@@ -137,22 +137,22 @@
     "shortfall_total": 15,
     "verdict": "FLOOR-DEBT"
   },
-  "results": [["3462", "OSLoop 执行 tick"]],
+  "results": [["3463", "OSLoop 执行 tick"]],
   "results_archive": {
     "bytes": 336680,
     "count": 179,
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
-  "self_drive": {"window": "2026-11-19..2026-11-25", "window_days": 7, "log_lines_in_window": 109, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 10, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
-  "state_bytes": 75575,
-  "next_milestone_due": "2026-11-27T10:42:51+08:00",
+  "self_drive": {"window": "2026-11-19..2026-11-25", "window_days": 7, "log_lines_in_window": 121, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 11, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
+  "state_bytes": 75922,
+  "next_milestone_due": "2026-11-27T11:09:26+08:00",
   "heartbeat": {
     "tick": 3462,
-    "state_tick": 3462,
-    "lag": 0,
-    "verdict": "PASS",
-    "reason": "fresh"
+    "state_tick": 3463,
+    "lag": 1,
+    "verdict": "FLAG",
+    "reason": "heartbeat_row_debt"
   },
   "outs_age": {
     "rows": 8,

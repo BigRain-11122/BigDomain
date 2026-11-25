@@ -9122,14 +9122,62 @@ __PAYWARN__</footer>
     return _fill_template(page, repl).encode("utf-8")
 
 
+def _parse_range(header, size):
+    """R3463: one single byte range, per RFC 7233 sec.2.1.
+
+    Returns None when the header is absent OR must be ignored (syntactically
+    invalid, non-bytes unit, or multi-part -- serving the whole body is always
+    legal and a 500 never is), ("unsatisfiable", None, None) when the range
+    starts past the last byte, and (start, end) inclusive otherwise. Only this
+    door's own static faces use it, so one range is the whole law here.
+    """
+    if not header:
+        return None
+    value = header.strip()
+    if not value.lower().startswith("bytes="):
+        return None
+    spec = value[len("bytes="):].strip()
+    if "," in spec:  # multi-range: fall back to the full body
+        return None
+    if "-" not in spec:
+        return None
+    first, _, last = spec.partition("-")
+    first, last = first.strip(), last.strip()
+    try:
+        if not first:
+            if not last:
+                return None
+            suffix = int(last)
+            if suffix <= 0 or size == 0:
+                return None
+            start = max(0, size - suffix)
+            return start, size - 1
+        start = int(first)
+        end = int(last) if last else size - 1
+    except ValueError:
+        return None
+    if start < 0:
+        return None
+    # RFC 7233 sec.2.1: a first-byte position at or past the last byte is
+    # unsatisfiable (416), not malformed -- checked before the inverted-range
+    # rule, because an open-ended range past the end only looks inverted.
+    if start >= size:
+        return ("unsatisfiable", None, None)
+    if end < start:
+        return None
+    return start, min(end, size - 1)
+
+
 class Handler(BaseHTTPRequestHandler):
-    def _send(self, code, ctype, body, head_only=False):
+    def _send(self, code, ctype, body, head_only=False, headers=()):
         # R3462: every answer is no-store. The preview faces are rebuilt under
         # the same URL each round, so a cached page is a stale page and the
         # reader would be looking at yesterday's numbers.
         self.send_response(code)
         self.send_header("Content-Type", ctype)
         self.send_header("Cache-Control", "no-store")
+        for name, value in headers:
+            self.send_header(name, value)
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
         if not head_only:
@@ -9161,7 +9209,24 @@ class Handler(BaseHTTPRequestHandler):
             return self._send(404, "text/plain", b"404 not found", head_only)
         with open(full, "rb") as handle:
             body = handle.read()
-        return self._send(200, ctype, body, head_only)
+        # R3463: the shelf is resumable. A single byte range answers 206 with
+        # the exact slice, a range past the last byte answers 416 with the
+        # total in Content-Range, and every other shape falls back to the
+        # whole body (RFC 7233 lets a server ignore Range; it never lets it
+        # answer 500 for a bad header).
+        size = len(body)
+        rng = _parse_range(self.headers.get("Range"), size)
+        if isinstance(rng, tuple) and rng[0] == "unsatisfiable":
+            return self._send(416, "text/plain", b"", head_only,
+                              (("Content-Range", "bytes */%d" % size),))
+        if rng is not None:
+            start, end = rng
+            return self._send(
+                206, ctype, body[start:end + 1], head_only,
+                (("Content-Range",
+                  "bytes %d-%d/%d" % (start, end, size)),))
+        return self._send(200, ctype, body, head_only,
+                          (("Accept-Ranges", "bytes"),))
 
     def _route(self, head_only):
         # R3462: one routing table for both verbs. HEAD answers the same

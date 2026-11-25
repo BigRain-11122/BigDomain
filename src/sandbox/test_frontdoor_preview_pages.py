@@ -1,11 +1,14 @@
 """Suite for the door's deliverable shelf: the shipped pages get one URL.
 
-TWO criteria. AC-FDPV1 (six arms) pins the shelf itself: the pages come back
+THREE criteria. AC-FDPV1 (six arms) pins the shelf itself: the pages come back
 byte-identical to disk and no path can turn the door into a filesystem
 reader. AC-FDPV2 (six arms, R3462) pins the door's manners: HEAD answers the
 same status, type and length as GET with an empty body (a standard probe must
 not see 501), and no answer on this door may be cached (a face rebuilt under
-the same URL is otherwise a stale face).
+the same URL is otherwise a stale face). AC-FDPV3 (six arms, R3463) pins the
+shelf's resumability: one byte range answers 206 with exactly that slice, a
+range past the last byte answers 416 carrying the total, a malformed range is
+ignored rather than 500, and eight concurrent readers all get the same bytes.
 
 Usage: python test_frontdoor_preview_pages.py
 Exit: 0 = SUITE PASS, 2 = FAIL.
@@ -68,6 +71,21 @@ def cache_control(port, path):
         value = resp.getheader("Cache-Control", "") or ""
         resp.read()
         return value
+    finally:
+        conn.close()
+
+
+def request(port, method, path, headers=None):
+    """One request carrying its own headers; every reply field this suite
+    grades comes back together so no arm can silently skip one."""
+    conn = http.client.HTTPConnection("127.0.0.1", port, timeout=15)
+    try:
+        conn.request(method, path, headers=headers or {})
+        resp = conn.getresponse()
+        return (resp.status, resp.getheader("Content-Type", "") or "",
+                resp.getheader("Content-Length", "") or "",
+                resp.getheader("Content-Range", "") or "",
+                resp.getheader("Accept-Ranges", "") or "", resp.read())
     finally:
         conn.close()
 
@@ -242,14 +260,135 @@ def main():
             block = registry_text.split('"' + ROW + '"', 1)[1][:160]
             if "test_frontdoor_preview_pages.py" not in block:
                 bad2.append("f-row-file")
-            if "2)" not in block:
+            if "3)" not in block:
                 bad2.append("f-declared-%s" % block.split(")")[0].strip()[-3:])
+
+        # ===== AC-FDPV3: the shelf is resumable and concurrent ============
+        # R3463 measured before the code: every answer was the whole body, so
+        # Range was silently ignored (no Accept-Ranges, no 206, no 416) and a
+        # 55KB face could be neither resumed nor fetched in slices; and
+        # concurrency had never been pinned by any arm.
+        bad3 = []
+        json_name = "face-sweep.json"
+        json_disk = os.path.join(PREVIEW, json_name)
+        with io.open(json_disk, "rb") as handle:
+            raw = handle.read()
+        size = len(raw)
+        path = "/preview/" + json_name
+
+        # ---- a: without Range the whole face comes back, byte for byte ----
+        status, ctype, length, crange, rngs, body = request(port, "GET", path)
+        if status != 200:
+            bad3.append("a-status-%d" % status)
+        if "application/json" not in ctype:
+            bad3.append("a-ctype")
+        if rngs != "bytes":
+            bad3.append("a-accept-ranges-%r" % rngs)
+        if crange != "":
+            bad3.append("a-crange-on-200-%r" % crange)
+        if length != str(size):
+            bad3.append("a-length-%s-vs-%d" % (length, size))
+        if body != raw:
+            bad3.append("a-bytes")
+
+        # ---- b: a closed range answers 206 with exactly that slice --------
+        status, _t, length, crange, _r, body = request(
+            port, "GET", path, {"Range": "bytes=0-99"})
+        if status != 206:
+            bad3.append("b-status-%d" % status)
+        if crange != "bytes 0-99/%d" % size:
+            bad3.append("b-crange-%r" % crange)
+        if length != "100":
+            bad3.append("b-length-%s" % length)
+        if body != raw[0:100]:
+            bad3.append("b-bytes")
+
+        # ---- c: suffix and open-ended ranges -----------------------------
+        status, _t, _l, crange, _r, body = request(
+            port, "GET", path, {"Range": "bytes=-50"})
+        if status != 206 or crange != "bytes %d-%d/%d" % (
+                size - 50, size - 1, size):
+            bad3.append("c-suffix-%d-%r" % (status, crange))
+        if body != raw[-50:]:
+            bad3.append("c-suffix-bytes")
+        status, _t, _l, crange, _r, body = request(
+            port, "GET", path, {"Range": "bytes=100-"})
+        if status != 206 or crange != "bytes 100-%d/%d" % (size - 1, size):
+            bad3.append("c-open-%d-%r" % (status, crange))
+        if body != raw[100:]:
+            bad3.append("c-open-bytes")
+
+        # ---- d: a range past the last byte is 416 carrying the total -----
+        status, _t, _l, crange, _r, body = request(
+            port, "GET", path, {"Range": "bytes=%d-" % size})
+        if status != 416:
+            bad3.append("d-status-%d" % status)
+        if crange != "bytes */%d" % size:
+            bad3.append("d-crange-%r" % crange)
+        if body != b"":
+            bad3.append("d-body")
+
+        # ---- e: a malformed Range is ignored, never a 500 ----------------
+        for header in ("bytes=abc", "items=0-9", "bytes=9-3", "bytes="):
+            status, _t, _l, _c, _r, body = request(
+                port, "GET", path, {"Range": header})
+            if status != 200:
+                bad3.append("e-%s-%d" % (header, status))
+            elif body != raw:
+                bad3.append("e-%s-bytes" % header)
+
+        # ---- f: HEAD keeps the range contract and eight readers agree ----
+        status, _t, length, crange, _r, body = request(
+            port, "HEAD", path, {"Range": "bytes=0-9"})
+        if status != 206 or length != "10" or body != b"" or \
+                crange != "bytes 0-9/%d" % size:
+            bad3.append("f-head-%d-%s-%r" % (status, length, crange))
+        answers = []
+        lock = threading.Lock()
+
+        def read_once():
+            try:
+                reply = request(port, "GET", path)
+            except Exception as exc:  # honest failure, never a silent pass
+                reply = ("error", repr(exc))
+            with lock:
+                answers.append(reply)
+
+        threads = [threading.Thread(target=read_once) for _ in range(8)]
+        for thread in threads:
+            thread.start()
+        for thread in threads:
+            thread.join(60)
+        if len(answers) != 8:
+            bad3.append("f-concurrent-%d" % len(answers))
+        for reply in answers:
+            if not isinstance(reply, tuple) or reply[0] != 200:
+                bad3.append("f-concurrent-status")
+                break
+            if reply[5] != raw or reply[2] != str(size):
+                bad3.append("f-concurrent-bytes")
+                break
+        with io.open(MODULE, "rb") as handle:
+            raw3 = handle.read()
+        try:
+            text3 = raw3.decode("utf-8")
+            text3.encode("ascii")
+        except (UnicodeDecodeError, UnicodeEncodeError):
+            bad3.append("f-module-not-ascii")
+            text3 = raw3.decode("utf-8", "replace")
+        if b"\r\n" in raw3 or raw3[:3] == b"\xef\xbb\xbf":
+            bad3.append("f-module-dialect")
+        if "def _parse_range(" not in text3:
+            bad3.append("f-range-parser-missing")
+        if text3.count("def do_HEAD(") != 1:
+            bad3.append("f-head-count")
     finally:
         srv.shutdown()
         srv.server_close()
 
     report("AC-FDPV1", bool(bad), ",".join(bad))
     report("AC-FDPV2", bool(bad2), ",".join(bad2))
+    report("AC-FDPV3", bool(bad3), ",".join(bad3))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:
