@@ -1,0 +1,39 @@
+R3474 frontdoor frame-semantics evidence
+===== leg 1: read-only probe BEFORE the edit (tmp/probe-R3474.py, shipped Handler on an ephemeral port)
+frame fields measured on the door as R3473 left it:
+  GET  /preview/index.html                      -> 200 len 55185, ETag "f2f5718368674748"
+  HEAD /preview/index.html                      -> 200 len 55185, empty body (matches GET)
+  GET  + If-None-Match (the ETag above)          -> 304 len 0  <-- a 200 of 55185 bytes stands behind it
+  HEAD + Range: bytes=0-9                       -> 206 len 10, Content-Range bytes 0-9/55185
+  GET  + Range: bytes=0-9                       -> 206 len 10, Content-Range bytes 0-9/55185
+  HEAD + Range + Accept-Encoding: gzip          -> 206 len 10, no Content-Encoding
+  GET  + Accept-Encoding: gzip                  -> 200 len 15051, Content-Encoding gzip
+  HEAD + Accept-Encoding: gzip                  -> 200 len 15051, Content-Encoding gzip
+  GET  /            + If-None-Match (its ETag)  -> 200 len 207340 (validator never read)
+  GET  /healthz     + If-None-Match (its ETag)  -> 200 len 2      (validator never read)
+  GET  / twice                                  -> ETag "1b0cb81b71953e22" then "ad0fabd69db6767d"
+                                                   (the root body is rebuilt per request)
+===== leg 2: read-only probe AFTER the edit, same script
+  GET  + If-None-Match (shelf page)             -> 304 len 55185, empty body
+  HEAD + Range: bytes=0-9                       -> 200 len 55185, no Content-Range
+  GET  + Range: bytes=0-9                       -> 206 len 10, Content-Range bytes 0-9/55185 (unchanged)
+  HEAD + Range + Accept-Encoding: gzip          -> 200 len 15051, Content-Encoding gzip
+  GET  /healthz + If-None-Match                 -> 304 len 2, empty body
+  GET  /healthz + If-Match: "deadbeef"          -> 412
+  GET  /            + If-None-Match (its ETag)  -> 200 (the body moved again: no false 304)
+  GET  /            + If-Match: "deadbeef"      -> 412
+===== leg 3: suite
+  SUITE PASS 15/15 (AC-FDPV1..AC-FDPV15, six arms each, AC-FDPV15 green on its first accepted run)
+  registry frontdoor-preview-pages declared 14 -> 15
+===== leg 4: two measured controls, both restored byte-identically
+  a  304 sends len(body) again (Content-Length 0)  -> SUITE FAIL 2/15 failed=AC-FDPV4,AC-FDPV15
+      (a-length-'0'-'55185', c-304-304-'0'-0)
+  b  HEAD honours Range again (206 / 10 bytes)     -> SUITE FAIL 2/15 failed=AC-FDPV3,AC-FDPV15
+      (f-head-206-10-'bytes 0-9/8618', d-status-206, e-head-206)
+  frontdoor.py restored identical=True sha256 24b4ed619c4a0fe1... then SUITE PASS 15/15
+===== leg 5: derived faces
+  matrix WRITTEN 85220 bytes 826 rows, DOC-CURRENT
+  registry census readable 826/826 unparsed=0 silent=0 VERDICT PASS pinned=826
+  first-yuan chain VERDICT PASS legs=2 entries=2 tx=1 reconcile_rc=0
+  deliverable index VERDICT PASS 23/23
+  face sweep VERDICT PASS 13/13 then --check 21/21

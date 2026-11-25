@@ -9527,7 +9527,7 @@ class Handler(BaseHTTPRequestHandler):
         return PROTOCOL_10
 
     def _send(self, code, ctype, body, head_only=False, headers=(),
-              etag=None, encoding=None, close=False):
+              etag=None, encoding=None, close=False, content_length=None):
         # R3462: every answer is no-store. The preview faces are rebuilt under
         # the same URL each round, so a cached page is a stale page and the
         # reader would be looking at yesterday's numbers.
@@ -9548,6 +9548,10 @@ class Handler(BaseHTTPRequestHandler):
         # peer that is about to lose its connection is told so, instead of
         # discovering it as a reset; an HTTP/1.0 peer that asked for
         # keep-alive is told the answer honours it (RFC 7230 sec.6.3).
+        # R3474: a no-body answer still has to state a true count. A 304
+        # stands in for a 200 whose content it just told the reader to
+        # keep, so it publishes that 200's length (RFC 9110 sec.8.6); it
+        # must never say zero, because zero names a different entity.
         saved_version = self.protocol_version
         self.protocol_version = self._wire_version()
         try:
@@ -9573,7 +9577,9 @@ class Handler(BaseHTTPRequestHandler):
                 self.send_header("Connection", "close")
             elif not _speaks_11(self.request_version):
                 self.send_header("Connection", "keep-alive")
-            self.send_header("Content-Length", str(len(body)))
+            self.send_header("Content-Length",
+                             str(len(body) if content_length is None
+                                 else content_length))
             self.end_headers()
             if not head_only:
                 self.wfile.write(body)
@@ -9581,7 +9587,7 @@ class Handler(BaseHTTPRequestHandler):
             self.protocol_version = saved_version
 
 
-    def _negotiate(self, identity):
+    def _negotiate(self, identity, ignore_range=False):
         """R3465: pick the representation this request is answered with.
 
         gzip is offered only for a whole-body answer of at least
@@ -9590,8 +9596,11 @@ class Handler(BaseHTTPRequestHandler):
         a two-byte answer costs more than it saves. The compressed bytes are
         reproducible (mtime pinned to zero), so the same face always yields
         the same tag.
+        R3474: HEAD ignores Range (RFC 9110 sec.14.2 defines range handling for
+        GET only), so a HEAD must describe the representation a plain GET would
+        send -- not the identity bytes a range would have selected.
         """
-        if self.headers.get("Range") is None and \
+        if (ignore_range or self.headers.get("Range") is None) and \
                 len(identity) >= GZIP_MIN_BYTES and \
                 _accepts_gzip(self.headers.get("Accept-Encoding")):
             return gzip.compress(identity, mtime=0), "gzip"
@@ -9619,7 +9628,8 @@ class Handler(BaseHTTPRequestHandler):
         since = _parse_http_date(self.headers.get("If-Unmodified-Since"))
         if since is None:
             return False
-        return _parse_http_date(last_modified) > since
+        stamp = _parse_http_date(last_modified)
+        return stamp is not None and stamp > since
 
     def _not_modified(self, etag, last_modified):
         """R3464: the two preconditions, in the RFC 7232 sec.6 order.
@@ -9642,7 +9652,8 @@ class Handler(BaseHTTPRequestHandler):
         since = _parse_http_date(self.headers.get("If-Modified-Since"))
         if since is None:
             return False
-        return _parse_http_date(last_modified) <= since
+        stamp = _parse_http_date(last_modified)
+        return stamp is not None and stamp <= since
 
     def _if_range_ok(self, etag):
         """R3464: If-Range must match under STRONG comparison.
@@ -9687,7 +9698,7 @@ class Handler(BaseHTTPRequestHandler):
         # exactly the bytes this answer carries; a range always addresses the
         # identity representation, and a 304 names whichever one the reader
         # already holds.
-        body, coding = self._negotiate(identity)
+        body, coding = self._negotiate(identity, ignore_range=head_only)
         etag = _etag(body)
         last_modified = email.utils.formatdate(os.path.getmtime(full),
                                                usegmt=True)
@@ -9700,7 +9711,8 @@ class Handler(BaseHTTPRequestHandler):
                               etag)
         if self._not_modified(etag, last_modified):
             return self._send(304, ctype, b"", head_only,
-                              (("Last-Modified", last_modified),), etag)
+                              (("Last-Modified", last_modified),), etag,
+                              content_length=len(body))
         if not self._if_range_ok(etag):
             return self._send(200, ctype, body, head_only,
                               (("Accept-Ranges", "bytes"),
@@ -9710,8 +9722,13 @@ class Handler(BaseHTTPRequestHandler):
         # total in Content-Range, and every other shape falls back to the
         # whole body (RFC 7233 lets a server ignore Range; it never lets it
         # answer 500 for a bad header).
+        # R3474: only GET carries range semantics, so a HEAD that names a range
+        # is answered as the whole representation it stands in for -- measured
+        # before this landed: HEAD + Range answered 206 with a 10-byte count,
+        # which describes a body a HEAD never has.
         size = len(body)
-        rng = _parse_range(self.headers.get("Range"), size)
+        rng = None if head_only else _parse_range(
+            self.headers.get("Range"), size)
         if isinstance(rng, tuple) and rng[0] == "unsatisfiable":
             return self._send(416, "text/plain", b"", head_only,
                               (("Content-Range", "bytes */%d" % size),
@@ -9769,6 +9786,25 @@ class Handler(BaseHTTPRequestHandler):
             target = target[1:]
         return target or "/", None
 
+    def _face(self, ctype, body, coding, head_only):
+        """R3474: an in-memory face reads back the validator it publishes.
+
+        Measured before this landed: the root page and /healthz sent an ETag
+        that no answer ever consulted, so a reader revalidating the 207340B
+        root page was handed the whole body again on every round, while a
+        shelf page answered 304. Both faces now follow the same conditional
+        order as the shelf. Neither publishes a date, so If-Modified-Since and
+        If-Unmodified-Since never move an answer on them.
+        """
+        etag = _etag(body)
+        if self._precondition_failed(etag, None):
+            return self._send(412, "text/plain", b"precondition failed",
+                              head_only, (), etag)
+        if self._not_modified(etag, None):
+            return self._send(304, ctype, b"", head_only, (), etag,
+                              content_length=len(body))
+        return self._send(200, ctype, body, head_only, (), etag, coding)
+
     def _route(self, head_only):
         # R3462: one routing table for both verbs. HEAD answers the same
         # status, type and length as GET and writes no body, so a standard
@@ -9787,11 +9823,9 @@ class Handler(BaseHTTPRequestHandler):
             return
         if path in ("/", "/index.html"):
             body, coding = self._negotiate(render())
-            self._send(200, "text/html; charset=utf-8", body, head_only,
-                       (), _etag(body), coding)
+            self._face("text/html; charset=utf-8", body, coding, head_only)
         elif path == "/healthz":
-            body = b"ok"
-            self._send(200, "text/plain", body, head_only, (), _etag(body))
+            self._face("text/plain", b"ok", None, head_only)
         elif path == "/preview" or path.startswith("/preview/"):
             self._serve_preview(path, head_only)
         else:

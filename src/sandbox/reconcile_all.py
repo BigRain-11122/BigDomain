@@ -8704,8 +8704,12 @@ SUITES = [
     # Connection field, a 1.1 peer's second request met a reset, a 1.0
     # peer's keep-alive was ignored, Expect was unreachable and a
     # pipelined second request was lost - AC-FDPV14.
+    # R3474: a 304 for a 55KB page declared Content-Length: 0, the root and
+    # /healthz sent an ETag they never read back, HEAD + Range answered 206
+    # with a 10-byte count, and HEAD + Range + gzip answered the identity
+    # count while GET under the same headers was gzip - AC-FDPV15.
     ("frontdoor-preview-pages",
-     os.path.join("test_frontdoor_preview_pages.py"), 14),
+     os.path.join("test_frontdoor_preview_pages.py"), 15),
     # R3115: the 24h export-face age gate (os/export_freshness.py, AC-EXP1..6)
     # had zero production consumers - it ran only inside its own suite - while
     # the CEO card printed export_ts as a bare string. AC-FDC2 (six arms, ONE

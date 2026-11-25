@@ -1,6 +1,6 @@
 """Suite for the door's deliverable shelf: the shipped pages get one URL.
 
-TWELVE criteria. AC-FDPV1 (six arms) pins the shelf itself: the pages come back
+FIFTEEN criteria. AC-FDPV1 (six arms) pins the shelf itself: the pages come back
 byte-identical to disk and no path can turn the door into a filesystem
 reader. AC-FDPV2 (six arms, R3462) pins the door's manners: HEAD answers the
 same status, type and length as GET with an empty body (a standard probe must
@@ -62,6 +62,12 @@ for keep-alive and gets keep-alive when it did, a request that declared a body
 closes so its bytes are never parsed as a request line, Expect: 100-continue is
 refused 417 (or the verb's own refusal) without ever sending 100 Continue, and
 nothing already delivered moved.
+AC-FDPV15 (six arms, R3474) pins the frame of a no-body answer: a 304 states
+the content length of the 200 it stands in for (never zero), a face whose bytes
+move on every render answers no false 304, a stable in-memory face answers its
+own validator, HEAD ignores Range and keeps the whole-face count, the same HEAD
+under gzip describes the gzip representation, and GET keeps its range
+semantics and its disk bytes.
 
 Usage: python test_frontdoor_preview_pages.py
 Exit: 0 = SUITE PASS, 2 = FAIL.
@@ -162,6 +168,23 @@ def cond(port, method, path, headers=None):
                 "crange": resp.getheader("Content-Range", "") or "",
                 "ranges": resp.getheader("Accept-Ranges", "") or "",
                 "cache": resp.getheader("Cache-Control", "") or "",
+                "body": resp.read()}
+    finally:
+        conn.close()
+
+
+def frame(port, method, path, headers=None):
+    """R3474: the fields a no-body answer is judged on, coding included."""
+    conn = http.client.HTTPConnection("127.0.0.1", port, timeout=15)
+    try:
+        conn.request(method, path, headers=headers or {})
+        resp = conn.getresponse()
+        return {"status": resp.status,
+                "ctype": resp.getheader("Content-Type", "") or "",
+                "length": resp.getheader("Content-Length") or "",
+                "etag": resp.getheader("ETag") or "",
+                "crange": resp.getheader("Content-Range") or "",
+                "coding": resp.getheader("Content-Encoding") or "",
                 "body": resp.read()}
     finally:
         conn.close()
@@ -381,7 +404,7 @@ def main():
             block = registry_text.split('"' + ROW + '"', 1)[1][:160]
             if "test_frontdoor_preview_pages.py" not in block:
                 bad2.append("f-row-file")
-            if "14)" not in block:
+            if "15)" not in block:
                 bad2.append("f-declared-%s" % block.split(")")[0].strip()[-3:])
 
         # ===== AC-FDPV3: the shelf is resumable and concurrent ============
@@ -458,11 +481,14 @@ def main():
             elif body != raw:
                 bad3.append("e-%s-bytes" % header)
 
-        # ---- f: HEAD keeps the range contract and eight readers agree ----
+        # ---- f: HEAD keeps the whole-face contract and eight readers agree --
+        # R3474 re-pinned: HEAD ignores Range (RFC 9110 sec.14.2 defines range
+        # handling for GET alone), so the probe answers 200 with the whole-face
+        # count and no Content-Range; the range face itself stays graded in
+        # AC-FDPV15 d and f.
         status, _t, length, crange, _r, body = request(
             port, "HEAD", path, {"Range": "bytes=0-9"})
-        if status != 206 or length != "10" or body != b"" or \
-                crange != "bytes 0-9/%d" % size:
+        if status != 200 or length != str(size) or body != b"" or crange != "":
             bad3.append("f-head-%d-%s-%r" % (status, length, crange))
         answers = []
         lock = threading.Lock()
@@ -540,7 +566,7 @@ def main():
                 bad4.append("b-status-%s-%d" % (header, reply["status"]))
             if reply["body"] != b"":
                 bad4.append("b-body-%s" % header)
-            if reply["length"] != "0":
+            if reply["length"] != str(size4):
                 bad4.append("b-length-%s" % header)
             if reply["etag"] != etag4:
                 bad4.append("b-etag-%s" % header)
@@ -610,7 +636,7 @@ def main():
         with io.open(REGISTRY, encoding="utf-8") as handle:
             registry_text4 = handle.read()
         block4 = registry_text4.split('"' + ROW + '"', 1)[-1][:160]
-        if "14)" not in block4:
+        if "15)" not in block4:
             bad4.append("f-declared-%r" % block4.split(")")[0][-8:])
 
         # ===== AC-FDPV5: the shelf negotiates a coding ======================
@@ -748,7 +774,7 @@ def main():
         with io.open(REGISTRY, encoding="utf-8") as handle:
             registry_text5 = handle.read()
         block5 = registry_text5.split('"' + ROW + '"', 1)[-1][:160]
-        if "14)" not in block5:
+        if "15)" not in block5:
             bad5.append("f-declared-%r" % block5.split(")")[0][-8:])
 
         # ===== AC-FDPV6: the shelf honours the write preconditions ==========
@@ -826,7 +852,7 @@ def main():
         with io.open(REGISTRY, encoding="utf-8") as handle:
             registry_text6 = handle.read()
         block6 = registry_text6.split('"' + ROW + '"', 1)[-1][:200]
-        if "14)" not in block6:
+        if "15)" not in block6:
             bad6.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block6:
             bad6.append("f-row-file")
@@ -975,7 +1001,7 @@ def main():
         with io.open(REGISTRY, encoding="utf-8") as handle:
             registry_text7 = handle.read()
         block7 = registry_text7.split('"' + ROW + '"', 1)[-1][:200]
-        if "14)" not in block7:
+        if "15)" not in block7:
             bad7.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block7:
             bad7.append("f-row-file")
@@ -1105,7 +1131,7 @@ def main():
                 bad8.append("f-missing-" + needle)
         with io.open(REGISTRY, encoding="utf-8") as handle:
             block8r = handle.read().split('"' + ROW + '"', 1)[-1][:200]
-        if "14)" not in block8r:
+        if "15)" not in block8r:
             bad8.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block8r:
             bad8.append("f-row-file")
@@ -1248,7 +1274,7 @@ def main():
                 bad9.append("f-missing-" + needle)
         with io.open(REGISTRY, encoding="utf-8") as handle:
             block9r = handle.read().split('"' + ROW + '"', 1)[-1][:200]
-        if "14)" not in block9r:
+        if "15)" not in block9r:
             bad9.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block9r:
             bad9.append("f-row-file")
@@ -1367,7 +1393,7 @@ def main():
             bad10.append("f-missing-_request_path")
         with io.open(REGISTRY, encoding="utf-8") as handle:
             block10r = handle.read().split('"' + ROW + '"', 1)[-1][:200]
-        if "14)" not in block10r:
+        if "15)" not in block10r:
             bad10.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block10r:
             bad10.append("f-row-file")
@@ -1486,7 +1512,7 @@ def main():
                              .replace(" ", "-"))
         with io.open(REGISTRY, encoding="utf-8") as handle:
             block11r = handle.read().split('"' + ROW + '"', 1)[-1][:200]
-        if "14)" not in block11r:
+        if "15)" not in block11r:
             bad11.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block11r:
             bad11.append("f-row-file")
@@ -1604,7 +1630,7 @@ def main():
                              .replace(" ", "-"))
         with io.open(REGISTRY, encoding="utf-8") as handle:
             block12r = handle.read().split('"' + ROW + '"', 1)[-1][:220]
-        if "14)" not in block12r:
+        if "15)" not in block12r:
             bad12.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block12r:
             bad12.append("f-row-file")
@@ -1744,7 +1770,7 @@ def main():
                              .replace(" ", "-"))
         with io.open(REGISTRY, encoding="utf-8") as handle:
             block13 = handle.read().split('"' + ROW + '"', 1)[-1][:220]
-        if "14)" not in block13:
+        if "15)" not in block13:
             bad13.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block13:
             bad13.append("f-row-file")
@@ -1920,10 +1946,95 @@ def main():
                              .replace(" ", "-"))
         with io.open(REGISTRY, encoding="utf-8") as handle:
             block14 = handle.read().split('"' + ROW + '"', 1)[-1][:220]
-        if "14)" not in block14:
+        if "15)" not in block14:
             bad14.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block14:
             bad14.append("f-row-file")
+
+        # ===== AC-FDPV15: the frame of a no-body answer ====================
+        # R3474 measured before the edit: a shelf 304 declared Content-Length:
+        # 0 against a 55185-byte representation, the root and /healthz sent an
+        # ETag they never read, HEAD + Range answered 206 with a 10-byte count,
+        # and HEAD + Range + gzip answered 206 with the identity count while a
+        # GET under the same headers was gzip. RFC 9110 sec.8.6 lets a 304
+        # carry only the count its 200 content has, and sec.14.2 defines range
+        # handling for GET alone.
+        bad15 = []
+        # ---- a: a shelf 304 states the length of the 200 it stands in for --
+        page15 = "/preview/index.html"
+        plain15 = frame(port, "GET", page15)
+        stale15 = frame(port, "GET", page15,
+                        {"If-None-Match": plain15["etag"]})
+        if stale15["status"] != 304:
+            bad15.append("a-status-%d" % stale15["status"])
+        if stale15["length"] != plain15["length"]:
+            bad15.append("a-length-%r-%r" % (stale15["length"],
+                                            plain15["length"]))
+        if stale15["body"] != b"":
+            bad15.append("a-body-%d" % len(stale15["body"]))
+        # ---- b: a face whose bytes move every render answers no false 304 --
+        first15 = frame(port, "GET", "/")
+        second15 = frame(port, "GET", "/")
+        if first15["status"] != 200 or second15["status"] != 200:
+            bad15.append("b-status-%d-%d" % (first15["status"],
+                                             second15["status"]))
+        if first15["etag"] == second15["etag"]:
+            bad15.append("b-stable-etag-%r" % first15["etag"])
+        again15 = frame(port, "GET", "/", {"If-None-Match": first15["etag"]})
+        if again15["status"] != 200:
+            bad15.append("b-false-304-%d" % again15["status"])
+        # ---- c: /healthz is stable, so it answers its own validator --------
+        hz15 = frame(port, "GET", "/healthz")
+        hz304 = frame(port, "GET", "/healthz",
+                      {"If-None-Match": hz15["etag"]})
+        if hz304["status"] != 304 or hz304["length"] != "2" or hz304["body"]:
+            bad15.append("c-304-%d-%r-%d" % (hz304["status"], hz304["length"],
+                                             len(hz304["body"])))
+        # ---- d: HEAD ignores Range and keeps the whole-face count ----------
+        head_rng = frame(port, "HEAD", page15, {"Range": "bytes=0-9"})
+        if head_rng["status"] != 200:
+            bad15.append("d-status-%d" % head_rng["status"])
+        if head_rng["length"] != plain15["length"]:
+            bad15.append("d-length-%r-%r" % (head_rng["length"],
+                                            plain15["length"]))
+        if head_rng["crange"] or head_rng["body"]:
+            bad15.append("d-crange-%r-body-%d" % (head_rng["crange"],
+                                                  len(head_rng["body"])))
+        # ---- e: the same HEAD under gzip describes the gzip representation -
+        gz15 = frame(port, "GET", page15, {"Accept-Encoding": "gzip"})
+        head_gz = frame(port, "HEAD", page15,
+                        {"Range": "bytes=0-9", "Accept-Encoding": "gzip"})
+        if gz15["coding"] != "gzip":
+            bad15.append("e-get-coding-%r" % gz15["coding"])
+        if head_gz["status"] != 200 or head_gz["crange"]:
+            bad15.append("e-head-%d-%r" % (head_gz["status"],
+                                           head_gz["crange"]))
+        if head_gz["length"] != gz15["length"] or \
+                head_gz["coding"] != "gzip":
+            bad15.append("e-head-%r-%r" % (head_gz["length"],
+                                           head_gz["coding"]))
+        # ---- f: GET keeps its range semantics and its bytes ---------------
+        got_rng = frame(port, "GET", page15, {"Range": "bytes=0-9"})
+        if got_rng["status"] != 206 or got_rng["length"] != "10":
+            bad15.append("f-range-%d-%r" % (got_rng["status"],
+                                            got_rng["length"]))
+        if got_rng["crange"] != "bytes 0-9/%s" % plain15["length"]:
+            bad15.append("f-crange-%r" % got_rng["crange"])
+        with io.open(os.path.join(PREVIEW, "index.html"), "rb") as handle:
+            disk15 = handle.read()
+        if plain15["body"] != disk15:
+            bad15.append("f-bytes-%d-%d" % (len(plain15["body"]),
+                                           len(disk15)))
+        with io.open(MODULE, "rb") as handle:
+            text15 = handle.read().decode("utf-8")
+        for token15 in ("def _face(", "ignore_range", "content_length"):
+            if token15 not in text15:
+                bad15.append("f-missing-" + token15.split("(")[0]
+                             .replace(" ", "-"))
+        with io.open(REGISTRY, encoding="utf-8") as handle:
+            block15 = handle.read().split('"' + ROW + '"', 1)[-1][:220]
+        if "15)" not in block15:
+            bad15.append("f-declared")
     finally:
         srv.shutdown()
         srv.server_close()
@@ -1942,6 +2053,7 @@ def main():
     report("AC-FDPV12", bool(bad12), ",".join(bad12))
     report("AC-FDPV13", bool(bad13), ",".join(bad13))
     report("AC-FDPV14", bool(bad14), ",".join(bad14))
+    report("AC-FDPV15", bool(bad15), ",".join(bad15))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:
