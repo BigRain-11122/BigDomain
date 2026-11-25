@@ -5023,6 +5023,13 @@ SUITES = [
     # refusal arms (a receipt that names the budget part, an entry narrower
     # than the archive summary, a receipt or payload on a round the table
     # does not name, an entry with no evidence kind), so 15 -> 16.
+    # R3499: the preview page-pair census - an mtime gap is published as a
+    # bucket, a split is claimed only when the two halves' last commits
+    # differ, and a freeze register excuses one only while BOTH halves still
+    # match their registered sha256 (AC-PPC1..AC-PPC7 were pinned in
+    # src/os/backlog.md before tools/preview_pair_census.py existed).
+    ("preview-pair-census",
+     os.path.join("..", "os", "test_preview_pair_census.py"), 7),
     ("os-ledger-archive",
      os.path.join("..", "os", "test_ledger_archive.py"), 16),
     # R3091: the archive's own provenance is now readable WITHOUT a child

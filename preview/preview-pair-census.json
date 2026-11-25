@@ -1,0 +1,2016 @@
+{
+  "generated_at": "2026-11-26T05:43:39+08:00",
+  "law": "a split is claimed only when the two halves' last commits differ; an mtime gap alone is published as a bucket, never as a split",
+  "oldest_split": {
+    "delta_hours": 749.7,
+    "html_commit": "700dd89a",
+    "html_mtime": "2026-11-25T09:58:04+08:00",
+    "json_commit": "6fb6c40b",
+    "json_mtime": "2026-10-25T04:16:26+08:00",
+    "name": "apimarket-report-refunds"
+  },
+  "pairs": [
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 9240,
+        "commit": "01fe1f2b",
+        "mtime": "2026-11-25T08:10:17+08:00",
+        "mtime_epoch": 1795565417,
+        "sha": "82266F5D"
+      },
+      "json": {
+        "bytes": 3736,
+        "commit": "01fe1f2b",
+        "mtime": "2026-11-25T08:10:17+08:00",
+        "mtime_epoch": 1795565417,
+        "sha": "3647A7BB"
+      },
+      "name": "answer-revision-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 81313,
+      "html": {
+        "bytes": 10589,
+        "commit": "89830475",
+        "mtime": "2026-11-25T09:58:04+08:00",
+        "mtime_epoch": 1795571884,
+        "sha": "CCFA294B"
+      },
+      "json": {
+        "bytes": 21540,
+        "commit": "89830475",
+        "mtime": "2026-11-24T11:22:51+08:00",
+        "mtime_epoch": 1795490571,
+        "sha": "2CC39F6D"
+      },
+      "name": "apimarket-monthly-faces",
+      "verdict": "same-commit"
+    },
+    {
+      "delta_seconds": 2706226,
+      "html": {
+        "bytes": 16192,
+        "commit": "42bc9ed6",
+        "mtime": "2026-11-25T09:58:04+08:00",
+        "mtime_epoch": 1795571884,
+        "sha": "C206305B"
+      },
+      "json": {
+        "bytes": 21777,
+        "commit": "41596faf",
+        "mtime": "2026-10-25T02:14:18+08:00",
+        "mtime_epoch": 1792865658,
+        "sha": "54962E42"
+      },
+      "name": "apimarket-report-activity",
+      "receipt": "sha256-both",
+      "verdict": "frozen-excused"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 14102,
+        "commit": "42bc9ed6",
+        "mtime": "2026-11-25T09:58:04+08:00",
+        "mtime_epoch": 1795571884,
+        "sha": "0515CA8A"
+      },
+      "json": null,
+      "name": "apimarket-report-attention",
+      "verdict": "no-json"
+    },
+    {
+      "delta_seconds": 2672799,
+      "html": {
+        "bytes": 18840,
+        "commit": "700dd89a",
+        "mtime": "2026-11-25T09:58:04+08:00",
+        "mtime_epoch": 1795571884,
+        "sha": "3813D05C"
+      },
+      "json": {
+        "bytes": 30303,
+        "commit": "d3faa192",
+        "mtime": "2026-10-25T11:31:25+08:00",
+        "mtime_epoch": 1792899085,
+        "sha": "D547877D"
+      },
+      "name": "apimarket-report-buyerquestions",
+      "verdict": "history-split"
+    },
+    {
+      "delta_seconds": 2701195,
+      "html": {
+        "bytes": 25911,
+        "commit": "42bc9ed6",
+        "mtime": "2026-11-25T09:58:04+08:00",
+        "mtime_epoch": 1795571884,
+        "sha": "8DCF54D2"
+      },
+      "json": {
+        "bytes": 38330,
+        "commit": "1c8ebdb9",
+        "mtime": "2026-10-25T03:38:09+08:00",
+        "mtime_epoch": 1792870689,
+        "sha": "07E7686F"
+      },
+      "name": "apimarket-report-buyers",
+      "receipt": "sha256-both",
+      "verdict": "frozen-excused"
+    },
+    {
+      "delta_seconds": 2618425,
+      "html": {
+        "bytes": 47383,
+        "commit": "42bc9ed6",
+        "mtime": "2026-11-25T09:58:04+08:00",
+        "mtime_epoch": 1795571884,
+        "sha": "314955FA"
+      },
+      "json": {
+        "bytes": 76032,
+        "commit": "b6f99a35",
+        "mtime": "2026-10-26T02:37:39+08:00",
+        "mtime_epoch": 1792953459,
+        "sha": "156E09E8"
+      },
+      "name": "apimarket-report-claims-demo",
+      "receipt": "sha256-both",
+      "verdict": "frozen-excused"
+    },
+    {
+      "delta_seconds": 2618458,
+      "html": {
+        "bytes": 37358,
+        "commit": "42bc9ed6",
+        "mtime": "2026-11-25T09:58:04+08:00",
+        "mtime_epoch": 1795571884,
+        "sha": "3DEA21AD"
+      },
+      "json": {
+        "bytes": 59148,
+        "commit": "b6f99a35",
+        "mtime": "2026-10-26T02:37:06+08:00",
+        "mtime_epoch": 1792953426,
+        "sha": "6D8AC3CC"
+      },
+      "name": "apimarket-report-claims",
+      "receipt": "sha256-both",
+      "verdict": "frozen-excused"
+    },
+    {
+      "delta_seconds": 2665036,
+      "html": {
+        "bytes": 32942,
+        "commit": "42bc9ed6",
+        "mtime": "2026-11-25T09:58:04+08:00",
+        "mtime_epoch": 1795571884,
+        "sha": "264C8269"
+      },
+      "json": {
+        "bytes": 52261,
+        "commit": "fb6bc13c",
+        "mtime": "2026-10-25T13:40:48+08:00",
+        "mtime_epoch": 1792906848,
+        "sha": "3D512563"
+      },
+      "name": "apimarket-report-csv",
+      "receipt": "sha256-both",
+      "verdict": "frozen-excused"
+    },
+    {
+      "delta_seconds": 2683700,
+      "html": {
+        "bytes": 30061,
+        "commit": "42bc9ed6",
+        "mtime": "2026-11-25T09:58:04+08:00",
+        "mtime_epoch": 1795571884,
+        "sha": "0EDB5ED8"
+      },
+      "json": {
+        "bytes": 47526,
+        "commit": "2c917c6c",
+        "mtime": "2026-10-25T08:29:44+08:00",
+        "mtime_epoch": 1792888184,
+        "sha": "15435CB5"
+      },
+      "name": "apimarket-report-demand",
+      "receipt": "sha256-both",
+      "verdict": "frozen-excused"
+    },
+    {
+      "delta_seconds": 2703478,
+      "html": {
+        "bytes": 21589,
+        "commit": "42bc9ed6",
+        "mtime": "2026-11-25T09:58:04+08:00",
+        "mtime_epoch": 1795571884,
+        "sha": "DD40BA05"
+      },
+      "json": {
+        "bytes": 32688,
+        "commit": "06926b93",
+        "mtime": "2026-10-25T03:00:06+08:00",
+        "mtime_epoch": 1792868406,
+        "sha": "0CB55877"
+      },
+      "name": "apimarket-report-dossiers",
+      "receipt": "sha256-both",
+      "verdict": "frozen-excused"
+    },
+    {
+      "delta_seconds": 2657119,
+      "html": {
+        "bytes": 34503,
+        "commit": "42bc9ed6",
+        "mtime": "2026-11-25T09:58:04+08:00",
+        "mtime_epoch": 1795571884,
+        "sha": "41001624"
+      },
+      "json": {
+        "bytes": 54733,
+        "commit": "f94e1883",
+        "mtime": "2026-10-25T15:52:45+08:00",
+        "mtime_epoch": 1792914765,
+        "sha": "159F913B"
+      },
+      "name": "apimarket-report-duty",
+      "receipt": "sha256-both",
+      "verdict": "frozen-excused"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 14092,
+        "commit": "42bc9ed6",
+        "mtime": "2026-11-25T09:58:04+08:00",
+        "mtime_epoch": 1795571884,
+        "sha": "0A49EC0A"
+      },
+      "json": null,
+      "name": "apimarket-report-json",
+      "verdict": "no-json"
+    },
+    {
+      "delta_seconds": 2679781,
+      "html": {
+        "bytes": 39890,
+        "commit": "42bc9ed6",
+        "mtime": "2026-11-25T09:58:04+08:00",
+        "mtime_epoch": 1795571884,
+        "sha": "8ADB7F2D"
+      },
+      "json": {
+        "bytes": 67667,
+        "commit": "d9835229",
+        "mtime": "2026-10-25T09:35:03+08:00",
+        "mtime_epoch": 1792892103,
+        "sha": "11F69A99"
+      },
+      "name": "apimarket-report-quality",
+      "receipt": "sha256-both",
+      "verdict": "frozen-excused"
+    },
+    {
+      "delta_seconds": 2677749,
+      "html": {
+        "bytes": 32309,
+        "commit": "700dd89a",
+        "mtime": "2026-11-25T09:58:04+08:00",
+        "mtime_epoch": 1795571884,
+        "sha": "1D5138EB"
+      },
+      "json": {
+        "bytes": 51808,
+        "commit": "e0fd7251",
+        "mtime": "2026-10-25T10:08:55+08:00",
+        "mtime_epoch": 1792894135,
+        "sha": "5EFB0343"
+      },
+      "name": "apimarket-report-questions",
+      "verdict": "history-split"
+    },
+    {
+      "delta_seconds": 2698898,
+      "html": {
+        "bytes": 25966,
+        "commit": "700dd89a",
+        "mtime": "2026-11-25T09:58:04+08:00",
+        "mtime_epoch": 1795571884,
+        "sha": "7254AD89"
+      },
+      "json": {
+        "bytes": 39928,
+        "commit": "6fb6c40b",
+        "mtime": "2026-10-25T04:16:26+08:00",
+        "mtime_epoch": 1792872986,
+        "sha": "84878841"
+      },
+      "name": "apimarket-report-refunds",
+      "verdict": "history-split"
+    },
+    {
+      "delta_seconds": 2672065,
+      "html": {
+        "bytes": 19612,
+        "commit": "700dd89a",
+        "mtime": "2026-11-25T09:58:04+08:00",
+        "mtime_epoch": 1795571884,
+        "sha": "43D9E645"
+      },
+      "json": {
+        "bytes": 31520,
+        "commit": "ce3583ca",
+        "mtime": "2026-10-25T11:43:39+08:00",
+        "mtime_epoch": 1792899819,
+        "sha": "30421534"
+      },
+      "name": "apimarket-report-selleranswers",
+      "verdict": "history-split"
+    },
+    {
+      "delta_seconds": 2666969,
+      "html": {
+        "bytes": 13022,
+        "commit": "42bc9ed6",
+        "mtime": "2026-11-25T09:58:04+08:00",
+        "mtime_epoch": 1795571884,
+        "sha": "CE3E3A7F"
+      },
+      "json": {
+        "bytes": 18381,
+        "commit": "0dffe033",
+        "mtime": "2026-10-25T13:08:35+08:00",
+        "mtime_epoch": 1792904915,
+        "sha": "9D1F6BF3"
+      },
+      "name": "apimarket-report-slowanswer",
+      "receipt": "sha256-both",
+      "verdict": "frozen-excused"
+    },
+    {
+      "delta_seconds": 2708570,
+      "html": {
+        "bytes": 15665,
+        "commit": "42bc9ed6",
+        "mtime": "2026-11-25T09:58:04+08:00",
+        "mtime_epoch": 1795571884,
+        "sha": "AA76B30F"
+      },
+      "json": {
+        "bytes": 18474,
+        "commit": "bd191e7d",
+        "mtime": "2026-10-25T01:35:14+08:00",
+        "mtime_epoch": 1792863314,
+        "sha": "5A1B7E55"
+      },
+      "name": "apimarket-report-workbench",
+      "receipt": "sha256-both",
+      "verdict": "frozen-excused"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 37201,
+        "commit": "897e0f99",
+        "mtime": "2026-11-25T10:02:38+08:00",
+        "mtime_epoch": 1795572158,
+        "sha": "B52F7217"
+      },
+      "json": {
+        "bytes": 59815,
+        "commit": "897e0f99",
+        "mtime": "2026-11-25T10:02:38+08:00",
+        "mtime_epoch": 1795572158,
+        "sha": "FCCD7412"
+      },
+      "name": "apimarket-report",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 16424,
+        "commit": "466f4fcb",
+        "mtime": "2026-11-26T05:26:14+08:00",
+        "mtime_epoch": 1795641974,
+        "sha": "DCA8949E"
+      },
+      "json": {
+        "bytes": 17890,
+        "commit": "466f4fcb",
+        "mtime": "2026-11-26T05:26:14+08:00",
+        "mtime_epoch": 1795641974,
+        "sha": "3BF9A66C"
+      },
+      "name": "battery-shard-report",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 13,
+      "html": {
+        "bytes": 8364,
+        "commit": "35b972d1",
+        "mtime": "2026-11-25T05:53:46+08:00",
+        "mtime_epoch": 1795557226,
+        "sha": "5525C2C5"
+      },
+      "json": {
+        "bytes": 3107,
+        "commit": "35b972d1",
+        "mtime": "2026-11-25T05:53:59+08:00",
+        "mtime_epoch": 1795557239,
+        "sha": "9B5E9BFB"
+      },
+      "name": "buyer-answer-wait-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 4956,
+        "commit": "70275420",
+        "mtime": "2026-11-24T18:03:57+08:00",
+        "mtime_epoch": 1795514637,
+        "sha": "38706172"
+      },
+      "json": {
+        "bytes": 1111,
+        "commit": "70275420",
+        "mtime": "2026-11-24T18:03:57+08:00",
+        "mtime_epoch": 1795514637,
+        "sha": "E477488D"
+      },
+      "name": "buyer-cohort",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 14,
+      "html": {
+        "bytes": 11808,
+        "commit": "6c8cadcc",
+        "mtime": "2026-11-24T23:06:47+08:00",
+        "mtime_epoch": 1795532807,
+        "sha": "4B3FCE8E"
+      },
+      "json": {
+        "bytes": 4182,
+        "commit": "6c8cadcc",
+        "mtime": "2026-11-24T23:07:01+08:00",
+        "mtime_epoch": 1795532821,
+        "sha": "62E4C36C"
+      },
+      "name": "buyer-concentration-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 68,
+      "html": {
+        "bytes": 8614,
+        "commit": "64bace53",
+        "mtime": "2026-11-25T04:55:24+08:00",
+        "mtime_epoch": 1795553724,
+        "sha": "AD0C9FDE"
+      },
+      "json": {
+        "bytes": 3350,
+        "commit": "64bace53",
+        "mtime": "2026-11-25T04:56:32+08:00",
+        "mtime_epoch": 1795553792,
+        "sha": "D87069DB"
+      },
+      "name": "buyer-gap-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 115,
+      "html": {
+        "bytes": 7734,
+        "commit": "578f00ec",
+        "mtime": "2026-11-24T18:46:09+08:00",
+        "mtime_epoch": 1795517169,
+        "sha": "53CAF1C1"
+      },
+      "json": {
+        "bytes": 4231,
+        "commit": "578f00ec",
+        "mtime": "2026-11-24T18:48:04+08:00",
+        "mtime_epoch": 1795517284,
+        "sha": "9B5509E1"
+      },
+      "name": "buyer-ledger-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 8287,
+        "commit": "ceddff0d",
+        "mtime": "2026-11-24T19:12:01+08:00",
+        "mtime_epoch": 1795518721,
+        "sha": "9192BFB1"
+      },
+      "json": {
+        "bytes": 3375,
+        "commit": "ceddff0d",
+        "mtime": "2026-11-24T19:12:01+08:00",
+        "mtime_epoch": 1795518721,
+        "sha": "6273ECA0"
+      },
+      "name": "buyer-months-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 11045,
+        "commit": "dd2085c4",
+        "mtime": "2026-11-24T23:41:13+08:00",
+        "mtime_epoch": 1795534873,
+        "sha": "13A2D57C"
+      },
+      "json": {
+        "bytes": 2690,
+        "commit": "dd2085c4",
+        "mtime": "2026-11-24T23:41:13+08:00",
+        "mtime_epoch": 1795534873,
+        "sha": "A162591D"
+      },
+      "name": "buyer-profile-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 5542,
+        "commit": "abab9bb3",
+        "mtime": "2026-11-24T15:16:38+08:00",
+        "mtime_epoch": 1795504598,
+        "sha": "29D07CEF"
+      },
+      "json": {
+        "bytes": 1869,
+        "commit": "abab9bb3",
+        "mtime": "2026-11-24T15:16:38+08:00",
+        "mtime_epoch": 1795504598,
+        "sha": "BBB5D4CF"
+      },
+      "name": "buyer-rating-pattern-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 61,
+      "html": {
+        "bytes": 7101,
+        "commit": "507b09e4",
+        "mtime": "2026-11-24T19:30:15+08:00",
+        "mtime_epoch": 1795519815,
+        "sha": "89826D63"
+      },
+      "json": {
+        "bytes": 3010,
+        "commit": "507b09e4",
+        "mtime": "2026-11-24T19:31:16+08:00",
+        "mtime_epoch": 1795519876,
+        "sha": "2DEF47F7"
+      },
+      "name": "buyer-refund-months-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 22382,
+        "commit": "57d51f97",
+        "mtime": "2026-11-26T02:57:02+08:00",
+        "mtime_epoch": 1795633022,
+        "sha": "6F7462A5"
+      },
+      "json": {
+        "bytes": 6574,
+        "commit": "57d51f97",
+        "mtime": "2026-11-26T02:57:02+08:00",
+        "mtime_epoch": 1795633022,
+        "sha": "12200AC3"
+      },
+      "name": "buyer-trial",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 10013,
+        "commit": "624fd09c",
+        "mtime": "2026-11-25T05:20:31+08:00",
+        "mtime_epoch": 1795555231,
+        "sha": "1A142984"
+      },
+      "json": {
+        "bytes": 4552,
+        "commit": "624fd09c",
+        "mtime": "2026-11-25T05:20:31+08:00",
+        "mtime_epoch": 1795555231,
+        "sha": "F8BAC40D"
+      },
+      "name": "buyer-watch-months-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 54,
+      "html": {
+        "bytes": 14475,
+        "commit": "a8a19284",
+        "mtime": "2026-11-25T07:51:39+08:00",
+        "mtime_epoch": 1795564299,
+        "sha": "58F3C651"
+      },
+      "json": {
+        "bytes": 5779,
+        "commit": "a8a19284",
+        "mtime": "2026-11-25T07:52:33+08:00",
+        "mtime_epoch": 1795564353,
+        "sha": "D216DF87"
+      },
+      "name": "category-history-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 55,
+      "html": {
+        "bytes": 5548,
+        "commit": "bad3f3e0",
+        "mtime": "2026-11-25T02:49:45+08:00",
+        "mtime_epoch": 1795546185,
+        "sha": "AA1BD3C5"
+      },
+      "json": {
+        "bytes": 1025,
+        "commit": "bad3f3e0",
+        "mtime": "2026-11-25T02:50:40+08:00",
+        "mtime_epoch": 1795546240,
+        "sha": "630E369F"
+      },
+      "name": "category-price-months-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 75,
+      "html": {
+        "bytes": 11545,
+        "commit": "6f2f02d2",
+        "mtime": "2026-11-25T06:27:49+08:00",
+        "mtime_epoch": 1795559269,
+        "sha": "69A09489"
+      },
+      "json": {
+        "bytes": 4726,
+        "commit": "6f2f02d2",
+        "mtime": "2026-11-25T06:29:04+08:00",
+        "mtime_epoch": 1795559344,
+        "sha": "F31B0441"
+      },
+      "name": "category-question-months-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 4529,
+        "commit": "0020f802",
+        "mtime": "2026-11-24T13:42:47+08:00",
+        "mtime_epoch": 1795498967,
+        "sha": "ADD43FC2"
+      },
+      "json": {
+        "bytes": 1354,
+        "commit": "0020f802",
+        "mtime": "2026-11-24T13:42:47+08:00",
+        "mtime_epoch": 1795498967,
+        "sha": "653DC3C8"
+      },
+      "name": "category-refund-months",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 104,
+      "html": {
+        "bytes": 6449,
+        "commit": "c525aef4",
+        "mtime": "2026-11-25T03:19:10+08:00",
+        "mtime_epoch": 1795547950,
+        "sha": "46DE6F77"
+      },
+      "json": {
+        "bytes": 1302,
+        "commit": "c525aef4",
+        "mtime": "2026-11-25T03:20:54+08:00",
+        "mtime_epoch": 1795548054,
+        "sha": "19D6C24C"
+      },
+      "name": "category-velocity-months-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 14,
+      "html": {
+        "bytes": 10726,
+        "commit": "efb2385d",
+        "mtime": "2026-11-25T06:12:05+08:00",
+        "mtime_epoch": 1795558325,
+        "sha": "CC63F9D3"
+      },
+      "json": {
+        "bytes": 3667,
+        "commit": "efb2385d",
+        "mtime": "2026-11-25T06:12:19+08:00",
+        "mtime_epoch": 1795558339,
+        "sha": "3EAB256E"
+      },
+      "name": "category-watch-months-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 8454,
+        "commit": "466f4fcb",
+        "mtime": "2026-11-26T05:31:48+08:00",
+        "mtime_epoch": 1795642308,
+        "sha": "9555D6D1"
+      },
+      "json": {
+        "bytes": 6755,
+        "commit": "466f4fcb",
+        "mtime": "2026-11-26T05:31:48+08:00",
+        "mtime_epoch": 1795642308,
+        "sha": "D1869423"
+      },
+      "name": "ceo-blockers",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 225342,
+      "html": {
+        "bytes": 7988,
+        "commit": "897e0f99",
+        "mtime": "2026-11-25T09:58:04+08:00",
+        "mtime_epoch": 1795571884,
+        "sha": "8FF0D212"
+      },
+      "json": {
+        "bytes": 5197,
+        "commit": "700dd89a",
+        "mtime": "2026-11-22T19:22:22+08:00",
+        "mtime_epoch": 1795346542,
+        "sha": "70E51021"
+      },
+      "name": "city-face-report",
+      "verdict": "history-split"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 5433,
+        "commit": "02b1732f",
+        "mtime": "2026-11-26T02:31:09+08:00",
+        "mtime_epoch": 1795631469,
+        "sha": "859F5BC4"
+      },
+      "json": {
+        "bytes": 4056,
+        "commit": "02b1732f",
+        "mtime": "2026-11-26T02:31:09+08:00",
+        "mtime_epoch": 1795631469,
+        "sha": "32591E8C"
+      },
+      "name": "core-loop-walkthrough",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 8878,
+        "commit": "69453e99",
+        "mtime": "2026-11-26T03:42:22+08:00",
+        "mtime_epoch": 1795635742,
+        "sha": "46CB4367"
+      },
+      "json": {
+        "bytes": 8618,
+        "commit": "69453e99",
+        "mtime": "2026-11-26T03:42:22+08:00",
+        "mtime_epoch": 1795635742,
+        "sha": "EB99FF41"
+      },
+      "name": "face-sweep",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 12893,
+        "commit": "7b22cfab",
+        "mtime": "2026-11-18T11:51:18+08:00",
+        "mtime_epoch": 1794973878,
+        "sha": "F0184F3B"
+      },
+      "json": {
+        "bytes": 8138,
+        "commit": "7b22cfab",
+        "mtime": "2026-11-18T11:51:18+08:00",
+        "mtime_epoch": 1794973878,
+        "sha": "54C83C40"
+      },
+      "name": "filing-checklist",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 4403,
+        "commit": "69453e99",
+        "mtime": "2026-11-26T05:19:46+08:00",
+        "mtime_epoch": 1795641586,
+        "sha": "36BA619F"
+      },
+      "json": {
+        "bytes": 4806,
+        "commit": "35f13f63",
+        "mtime": "2026-11-26T05:19:46+08:00",
+        "mtime_epoch": 1795641586,
+        "sha": "E814CA9D"
+      },
+      "name": "first-yuan-chain",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 225342,
+      "html": {
+        "bytes": 4593,
+        "commit": "897e0f99",
+        "mtime": "2026-11-25T09:58:04+08:00",
+        "mtime_epoch": 1795571884,
+        "sha": "85DB31B1"
+      },
+      "json": {
+        "bytes": 2701,
+        "commit": "700dd89a",
+        "mtime": "2026-11-22T19:22:22+08:00",
+        "mtime_epoch": 1795346542,
+        "sha": "3CCD8DB3"
+      },
+      "name": "first-yuan",
+      "verdict": "history-split"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 55645,
+        "commit": "f2bc2847",
+        "mtime": "2026-11-26T05:19:32+08:00",
+        "mtime_epoch": 1795641572,
+        "sha": "783D5926"
+      },
+      "json": null,
+      "name": "index",
+      "verdict": "no-json"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 12907,
+        "commit": "dbaa9fa2",
+        "mtime": "2026-11-22T18:57:18+08:00",
+        "mtime_epoch": 1795345038,
+        "sha": "CC1FACA4"
+      },
+      "json": {
+        "bytes": 8012,
+        "commit": "dbaa9fa2",
+        "mtime": "2026-11-22T18:57:18+08:00",
+        "mtime_epoch": 1795345038,
+        "sha": "B508B418"
+      },
+      "name": "journey-19.9",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 225342,
+      "html": {
+        "bytes": 5970,
+        "commit": "897e0f99",
+        "mtime": "2026-11-25T09:58:04+08:00",
+        "mtime_epoch": 1795571884,
+        "sha": "1B081126"
+      },
+      "json": {
+        "bytes": 1233,
+        "commit": "700dd89a",
+        "mtime": "2026-11-22T19:22:22+08:00",
+        "mtime_epoch": 1795346542,
+        "sha": "2E00C8DF"
+      },
+      "name": "ledger-business-report",
+      "verdict": "history-split"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 8656,
+        "commit": "af4cc914",
+        "mtime": "2026-11-26T04:12:20+08:00",
+        "mtime_epoch": 1795637540,
+        "sha": "B7664311"
+      },
+      "json": {
+        "bytes": 6151,
+        "commit": "af4cc914",
+        "mtime": "2026-11-26T04:12:20+08:00",
+        "mtime_epoch": 1795637540,
+        "sha": "35FCF112"
+      },
+      "name": "ledger-reconcile-face",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 54,
+      "html": {
+        "bytes": 9654,
+        "commit": "b9d429ed",
+        "mtime": "2026-11-25T01:21:30+08:00",
+        "mtime_epoch": 1795540890,
+        "sha": "772BD405"
+      },
+      "json": {
+        "bytes": 4388,
+        "commit": "b9d429ed",
+        "mtime": "2026-11-25T01:22:24+08:00",
+        "mtime_epoch": 1795540944,
+        "sha": "5B6BCFE4"
+      },
+      "name": "library-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 6485,
+        "commit": "947f58d9",
+        "mtime": "2026-11-26T01:14:26+08:00",
+        "mtime_epoch": 1795626866,
+        "sha": "FA8B9674"
+      },
+      "json": {
+        "bytes": 3327,
+        "commit": "947f58d9",
+        "mtime": "2026-11-26T01:14:26+08:00",
+        "mtime_epoch": 1795626866,
+        "sha": "B13A7CC0"
+      },
+      "name": "listing-metadata-history-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 6006,
+        "commit": "dfbe4d49",
+        "mtime": "2026-11-24T14:04:20+08:00",
+        "mtime_epoch": 1795500260,
+        "sha": "C963BC1C"
+      },
+      "json": {
+        "bytes": 5671,
+        "commit": "dfbe4d49",
+        "mtime": "2026-11-24T14:04:20+08:00",
+        "mtime_epoch": 1795500260,
+        "sha": "3C0FFE45"
+      },
+      "name": "listing-position-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 6231,
+        "commit": "99c6ccac",
+        "mtime": "2026-11-26T01:05:16+08:00",
+        "mtime_epoch": 1795626316,
+        "sha": "77C3A404"
+      },
+      "json": {
+        "bytes": 2269,
+        "commit": "99c6ccac",
+        "mtime": "2026-11-26T01:05:16+08:00",
+        "mtime_epoch": 1795626316,
+        "sha": "BEDC1200"
+      },
+      "name": "listing-price-history-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 96,
+      "html": {
+        "bytes": 6347,
+        "commit": "75a0c2c0",
+        "mtime": "2026-11-24T20:37:01+08:00",
+        "mtime_epoch": 1795523821,
+        "sha": "64438549"
+      },
+      "json": {
+        "bytes": 2671,
+        "commit": "75a0c2c0",
+        "mtime": "2026-11-24T20:38:37+08:00",
+        "mtime_epoch": 1795523917,
+        "sha": "34095CFC"
+      },
+      "name": "listing-velocity-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 10,
+      "html": {
+        "bytes": 7401,
+        "commit": "9d4c6de6",
+        "mtime": "2026-11-25T02:35:32+08:00",
+        "mtime_epoch": 1795545332,
+        "sha": "E5E78309"
+      },
+      "json": {
+        "bytes": 3622,
+        "commit": "9d4c6de6",
+        "mtime": "2026-11-25T02:35:42+08:00",
+        "mtime_epoch": 1795545342,
+        "sha": "0B8DBD48"
+      },
+      "name": "listing-view-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 530459,
+      "html": {
+        "bytes": 6450,
+        "commit": "897e0f99",
+        "mtime": "2026-11-25T09:58:04+08:00",
+        "mtime_epoch": 1795571884,
+        "sha": "3B371758"
+      },
+      "json": {
+        "bytes": 4772,
+        "commit": "8092eff8",
+        "mtime": "2026-11-19T06:37:05+08:00",
+        "mtime_epoch": 1795041425,
+        "sha": "CEA7D21A"
+      },
+      "name": "live-sandbox",
+      "verdict": "history-split"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 29069,
+        "commit": "b8b1c655",
+        "mtime": "2026-11-26T03:15:43+08:00",
+        "mtime_epoch": 1795634143,
+        "sha": "DAE241D2"
+      },
+      "json": {
+        "bytes": 27924,
+        "commit": "b8b1c655",
+        "mtime": "2026-11-26T03:15:43+08:00",
+        "mtime_epoch": 1795634143,
+        "sha": "50BC0141"
+      },
+      "name": "lobby-protocol-map",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 835661,
+      "html": {
+        "bytes": 9092,
+        "commit": "700dd89a",
+        "mtime": "2026-11-25T09:58:04+08:00",
+        "mtime_epoch": 1795571884,
+        "sha": "B8938673"
+      },
+      "json": {
+        "bytes": 8008,
+        "commit": "b0b07b2b",
+        "mtime": "2026-11-15T17:50:23+08:00",
+        "mtime_epoch": 1794736223,
+        "sha": "C84A3456"
+      },
+      "name": "lobby-session-trace",
+      "verdict": "history-split"
+    },
+    {
+      "delta_seconds": 225342,
+      "html": {
+        "bytes": 6693,
+        "commit": "700dd89a",
+        "mtime": "2026-11-25T09:58:04+08:00",
+        "mtime_epoch": 1795571884,
+        "sha": "FCD8EDE8"
+      },
+      "json": {
+        "bytes": 3144,
+        "commit": "700dd89a",
+        "mtime": "2026-11-22T19:22:22+08:00",
+        "mtime_epoch": 1795346542,
+        "sha": "C38785C4"
+      },
+      "name": "lobby-ws-report",
+      "verdict": "same-commit"
+    },
+    {
+      "delta_seconds": 1,
+      "html": {
+        "bytes": 15367,
+        "commit": "2b49328e",
+        "mtime": "2026-11-24T16:20:28+08:00",
+        "mtime_epoch": 1795508428,
+        "sha": "9A051190"
+      },
+      "json": {
+        "bytes": 10426,
+        "commit": "2b49328e",
+        "mtime": "2026-11-24T16:20:29+08:00",
+        "mtime_epoch": 1795508429,
+        "sha": "7DFEAC16"
+      },
+      "name": "market-daily",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 27204,
+        "commit": "b4e4ff3a",
+        "mtime": "2026-11-24T12:57:42+08:00",
+        "mtime_epoch": 1795496262,
+        "sha": "6BB0361B"
+      },
+      "json": {
+        "bytes": 19565,
+        "commit": "b4e4ff3a",
+        "mtime": "2026-11-24T12:57:42+08:00",
+        "mtime_epoch": 1795496262,
+        "sha": "1643813C"
+      },
+      "name": "market-hour-heatmap",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 4888,
+        "commit": "4a7d1349",
+        "mtime": "2026-11-24T13:11:40+08:00",
+        "mtime_epoch": 1795497100,
+        "sha": "30219772"
+      },
+      "json": {
+        "bytes": 1374,
+        "commit": "4a7d1349",
+        "mtime": "2026-11-24T13:11:40+08:00",
+        "mtime_epoch": 1795497100,
+        "sha": "BC0DE53E"
+      },
+      "name": "market-price-percentiles",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 14,
+      "html": {
+        "bytes": 7707,
+        "commit": "9bf67bb1",
+        "mtime": "2026-11-25T07:04:43+08:00",
+        "mtime_epoch": 1795561483,
+        "sha": "3AFF66FE"
+      },
+      "json": {
+        "bytes": 2343,
+        "commit": "9bf67bb1",
+        "mtime": "2026-11-25T07:04:57+08:00",
+        "mtime_epoch": 1795561497,
+        "sha": "E965E115"
+      },
+      "name": "market-provider-months-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 7287,
+        "commit": "309ee094",
+        "mtime": "2026-11-25T06:45:09+08:00",
+        "mtime_epoch": 1795560309,
+        "sha": "F2B76C1E"
+      },
+      "json": {
+        "bytes": 2281,
+        "commit": "309ee094",
+        "mtime": "2026-11-25T06:45:09+08:00",
+        "mtime_epoch": 1795560309,
+        "sha": "6DB75853"
+      },
+      "name": "market-relist-months-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 225342,
+      "html": {
+        "bytes": 10915,
+        "commit": "897e0f99",
+        "mtime": "2026-11-25T09:58:04+08:00",
+        "mtime_epoch": 1795571884,
+        "sha": "3B5CA06A"
+      },
+      "json": {
+        "bytes": 10099,
+        "commit": "700dd89a",
+        "mtime": "2026-11-22T19:22:22+08:00",
+        "mtime_epoch": 1795346542,
+        "sha": "EEE6AB2D"
+      },
+      "name": "membership-benefit-report",
+      "verdict": "history-split"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 10881,
+        "commit": "700dd89a",
+        "mtime": "2026-11-22T19:24:52+08:00",
+        "mtime_epoch": 1795346692,
+        "sha": "949BD629"
+      },
+      "json": {
+        "bytes": 7051,
+        "commit": "700dd89a",
+        "mtime": "2026-11-22T19:24:52+08:00",
+        "mtime_epoch": 1795346692,
+        "sha": "0FFC3E6D"
+      },
+      "name": "membership-face",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 23088,
+        "commit": "57d51f97",
+        "mtime": "2026-11-26T02:57:50+08:00",
+        "mtime_epoch": 1795633070,
+        "sha": "C0C7014F"
+      },
+      "json": {
+        "bytes": 8124,
+        "commit": "57d51f97",
+        "mtime": "2026-11-26T02:57:50+08:00",
+        "mtime_epoch": 1795633070,
+        "sha": "CAC9416A"
+      },
+      "name": "merchant-onboard",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 13359,
+        "commit": "da4e48e5",
+        "mtime": "2026-11-26T02:41:13+08:00",
+        "mtime_epoch": 1795632073,
+        "sha": "8762DB4C"
+      },
+      "json": {
+        "bytes": 6141,
+        "commit": "da4e48e5",
+        "mtime": "2026-11-26T02:41:13+08:00",
+        "mtime_epoch": 1795632073,
+        "sha": "ADF82646"
+      },
+      "name": "money-path-demo",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 225342,
+      "html": {
+        "bytes": 7682,
+        "commit": "897e0f99",
+        "mtime": "2026-11-25T09:58:04+08:00",
+        "mtime_epoch": 1795571884,
+        "sha": "EB54B053"
+      },
+      "json": {
+        "bytes": 7177,
+        "commit": "700dd89a",
+        "mtime": "2026-11-22T19:22:22+08:00",
+        "mtime_epoch": 1795346542,
+        "sha": "41DF5313"
+      },
+      "name": "payment-gate-report",
+      "verdict": "history-split"
+    },
+    {
+      "delta_seconds": 182815,
+      "html": {
+        "bytes": 8621,
+        "commit": "897e0f99",
+        "mtime": "2026-11-25T09:58:04+08:00",
+        "mtime_epoch": 1795571884,
+        "sha": "83F1FB44"
+      },
+      "json": {
+        "bytes": 6228,
+        "commit": "7e3a6f9c",
+        "mtime": "2026-11-23T07:11:09+08:00",
+        "mtime_epoch": 1795389069,
+        "sha": "D0C180BC"
+      },
+      "name": "platform-live-report",
+      "verdict": "history-split"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 13308,
+        "commit": "1a0d5b1a",
+        "mtime": "2026-11-25T02:08:11+08:00",
+        "mtime_epoch": 1795543691,
+        "sha": "5BD5460B"
+      },
+      "json": {
+        "bytes": 9611,
+        "commit": "1a0d5b1a",
+        "mtime": "2026-11-25T02:08:11+08:00",
+        "mtime_epoch": 1795543691,
+        "sha": "E3908D8A"
+      },
+      "name": "price-reaction-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 7193,
+        "commit": "daa9bec5",
+        "mtime": "2026-11-25T08:31:30+08:00",
+        "mtime_epoch": 1795566690,
+        "sha": "1194AB5E"
+      },
+      "json": {
+        "bytes": 1893,
+        "commit": "daa9bec5",
+        "mtime": "2026-11-25T08:31:30+08:00",
+        "mtime_epoch": 1795566690,
+        "sha": "CFC91F5E"
+      },
+      "name": "provider-identity-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 85,
+      "html": {
+        "bytes": 5515,
+        "commit": "0dd72069",
+        "mtime": "2026-11-24T21:18:19+08:00",
+        "mtime_epoch": 1795526299,
+        "sha": "409752B9"
+      },
+      "json": {
+        "bytes": 1761,
+        "commit": "0dd72069",
+        "mtime": "2026-11-24T21:19:44+08:00",
+        "mtime_epoch": 1795526384,
+        "sha": "8982ACF4"
+      },
+      "name": "public-listings-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 26,
+      "html": {
+        "bytes": 10842,
+        "commit": "b54fae10",
+        "mtime": "2026-11-24T19:52:21+08:00",
+        "mtime_epoch": 1795521141,
+        "sha": "63219EE7"
+      },
+      "json": {
+        "bytes": 3678,
+        "commit": "b54fae10",
+        "mtime": "2026-11-24T19:52:47+08:00",
+        "mtime_epoch": 1795521167,
+        "sha": "D5E5DCFB"
+      },
+      "name": "purchase-dossier-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 4965,
+        "commit": "938e0f06",
+        "mtime": "2026-11-24T17:41:28+08:00",
+        "mtime_epoch": 1795513288,
+        "sha": "59AE6BA7"
+      },
+      "json": {
+        "bytes": 1230,
+        "commit": "938e0f06",
+        "mtime": "2026-11-24T17:41:28+08:00",
+        "mtime_epoch": 1795513288,
+        "sha": "78CAED69"
+      },
+      "name": "refund-exposure",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 7033,
+        "commit": "11097648",
+        "mtime": "2026-11-25T03:04:29+08:00",
+        "mtime_epoch": 1795547069,
+        "sha": "7F1FFC5D"
+      },
+      "json": {
+        "bytes": 2842,
+        "commit": "11097648",
+        "mtime": "2026-11-25T03:04:29+08:00",
+        "mtime_epoch": 1795547069,
+        "sha": "5A2BC185"
+      },
+      "name": "refund-latency-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 88,
+      "html": {
+        "bytes": 6229,
+        "commit": "15811b97",
+        "mtime": "2026-11-24T20:14:01+08:00",
+        "mtime_epoch": 1795522441,
+        "sha": "8114ECD0"
+      },
+      "json": {
+        "bytes": 2323,
+        "commit": "15811b97",
+        "mtime": "2026-11-24T20:15:29+08:00",
+        "mtime_epoch": 1795522529,
+        "sha": "3A951346"
+      },
+      "name": "refund-propensity-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 5003,
+        "commit": "32acf8bf",
+        "mtime": "2026-11-24T15:39:56+08:00",
+        "mtime_epoch": 1795505996,
+        "sha": "9EBD9D9B"
+      },
+      "json": {
+        "bytes": 1053,
+        "commit": "32acf8bf",
+        "mtime": "2026-11-24T15:39:56+08:00",
+        "mtime_epoch": 1795505996,
+        "sha": "9FEE2532"
+      },
+      "name": "refund-reasons",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 5536,
+        "commit": "85a4bbe2",
+        "mtime": "2026-11-24T14:48:04+08:00",
+        "mtime_epoch": 1795502884,
+        "sha": "F1041F2C"
+      },
+      "json": {
+        "bytes": 2255,
+        "commit": "85a4bbe2",
+        "mtime": "2026-11-24T14:48:04+08:00",
+        "mtime_epoch": 1795502884,
+        "sha": "7FF3C833"
+      },
+      "name": "repeat-purchase-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 9,
+      "html": {
+        "bytes": 9100,
+        "commit": "55db20a3",
+        "mtime": "2026-11-24T22:19:22+08:00",
+        "mtime_epoch": 1795529962,
+        "sha": "F419C41F"
+      },
+      "json": {
+        "bytes": 3369,
+        "commit": "55db20a3",
+        "mtime": "2026-11-24T22:19:31+08:00",
+        "mtime_epoch": 1795529971,
+        "sha": "15D34C99"
+      },
+      "name": "reply-latency-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 339,
+      "html": {
+        "bytes": 12170,
+        "commit": "5b9c411a",
+        "mtime": "2026-11-24T21:39:43+08:00",
+        "mtime_epoch": 1795527583,
+        "sha": "2C697A71"
+      },
+      "json": {
+        "bytes": 8135,
+        "commit": "5b9c411a",
+        "mtime": "2026-11-24T21:45:22+08:00",
+        "mtime_epoch": 1795527922,
+        "sha": "5FFBA221"
+      },
+      "name": "search-board",
+      "verdict": "same-commit"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 7529,
+        "commit": "35e8bf0c",
+        "mtime": "2026-11-25T05:33:16+08:00",
+        "mtime_epoch": 1795555996,
+        "sha": "1284456D"
+      },
+      "json": {
+        "bytes": 2734,
+        "commit": "35e8bf0c",
+        "mtime": "2026-11-25T05:33:16+08:00",
+        "mtime_epoch": 1795555996,
+        "sha": "422D0688"
+      },
+      "name": "seller-answer-months-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 8,
+      "html": {
+        "bytes": 5413,
+        "commit": "70b814a0",
+        "mtime": "2026-11-24T18:24:23+08:00",
+        "mtime_epoch": 1795515863,
+        "sha": "F54E60E5"
+      },
+      "json": {
+        "bytes": 1178,
+        "commit": "70b814a0",
+        "mtime": "2026-11-24T18:24:31+08:00",
+        "mtime_epoch": 1795515871,
+        "sha": "5CDDA44A"
+      },
+      "name": "seller-cohort",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 25,
+      "html": {
+        "bytes": 6256,
+        "commit": "93631e41",
+        "mtime": "2026-11-24T16:44:47+08:00",
+        "mtime_epoch": 1795509887,
+        "sha": "13357D14"
+      },
+      "json": {
+        "bytes": 1505,
+        "commit": "93631e41",
+        "mtime": "2026-11-24T16:45:12+08:00",
+        "mtime_epoch": 1795509912,
+        "sha": "D4317A52"
+      },
+      "name": "seller-concentration",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 5912,
+        "commit": "3d463ea2",
+        "mtime": "2026-11-24T17:21:47+08:00",
+        "mtime_epoch": 1795512107,
+        "sha": "8141AC63"
+      },
+      "json": {
+        "bytes": 3122,
+        "commit": "3d463ea2",
+        "mtime": "2026-11-24T17:21:47+08:00",
+        "mtime_epoch": 1795512107,
+        "sha": "D253E37A"
+      },
+      "name": "seller-ledger-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 10447,
+        "commit": "c1692d7f",
+        "mtime": "2026-11-25T03:46:51+08:00",
+        "mtime_epoch": 1795549611,
+        "sha": "9DE6F699"
+      },
+      "json": {
+        "bytes": 3810,
+        "commit": "c1692d7f",
+        "mtime": "2026-11-25T03:46:51+08:00",
+        "mtime_epoch": 1795549611,
+        "sha": "B15EC593"
+      },
+      "name": "seller-price-cadence-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 171,
+      "html": {
+        "bytes": 10865,
+        "commit": "6beab947",
+        "mtime": "2026-11-25T04:14:44+08:00",
+        "mtime_epoch": 1795551284,
+        "sha": "4DC763D0"
+      },
+      "json": {
+        "bytes": 4733,
+        "commit": "6beab947",
+        "mtime": "2026-11-25T04:17:35+08:00",
+        "mtime_epoch": 1795551455,
+        "sha": "A05A62E0"
+      },
+      "name": "seller-price-demand-board",
+      "verdict": "same-commit"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 4643,
+        "commit": "a468d943",
+        "mtime": "2026-11-24T13:27:21+08:00",
+        "mtime_epoch": 1795498041,
+        "sha": "C4F2A09E"
+      },
+      "json": {
+        "bytes": 1762,
+        "commit": "a468d943",
+        "mtime": "2026-11-24T13:27:21+08:00",
+        "mtime_epoch": 1795498041,
+        "sha": "D23F0327"
+      },
+      "name": "seller-quality-scorecard",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 221,
+      "html": {
+        "bytes": 8186,
+        "commit": "8f750ca1",
+        "mtime": "2026-11-24T22:50:20+08:00",
+        "mtime_epoch": 1795531820,
+        "sha": "2FA73BB4"
+      },
+      "json": {
+        "bytes": 3046,
+        "commit": "8f750ca1",
+        "mtime": "2026-11-24T22:54:01+08:00",
+        "mtime_epoch": 1795532041,
+        "sha": "CC590342"
+      },
+      "name": "seller-rating-months-board",
+      "verdict": "same-commit"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 8218,
+        "commit": "7e4f5a45",
+        "mtime": "2026-11-24T20:59:38+08:00",
+        "mtime_epoch": 1795525178,
+        "sha": "7FEAC7FC"
+      },
+      "json": {
+        "bytes": 3940,
+        "commit": "7e4f5a45",
+        "mtime": "2026-11-24T20:59:38+08:00",
+        "mtime_epoch": 1795525178,
+        "sha": "F869FB16"
+      },
+      "name": "seller-refund-months-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 93,
+      "html": {
+        "bytes": 8229,
+        "commit": "e7f762f3",
+        "mtime": "2026-11-24T22:04:02+08:00",
+        "mtime_epoch": 1795529042,
+        "sha": "C1D295DA"
+      },
+      "json": {
+        "bytes": 3076,
+        "commit": "e7f762f3",
+        "mtime": "2026-11-24T22:05:35+08:00",
+        "mtime_epoch": 1795529135,
+        "sha": "C990DBC2"
+      },
+      "name": "seller-refund-reasons-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 31,
+      "html": {
+        "bytes": 6957,
+        "commit": "08a691a4",
+        "mtime": "2026-11-24T23:23:28+08:00",
+        "mtime_epoch": 1795533808,
+        "sha": "BBB11621"
+      },
+      "json": {
+        "bytes": 1970,
+        "commit": "08a691a4",
+        "mtime": "2026-11-24T23:23:59+08:00",
+        "mtime_epoch": 1795533839,
+        "sha": "874DF1E0"
+      },
+      "name": "seller-repeat-months-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 123,
+      "html": {
+        "bytes": 9810,
+        "commit": "6f2ca132",
+        "mtime": "2026-11-25T04:38:11+08:00",
+        "mtime_epoch": 1795552691,
+        "sha": "22D326F8"
+      },
+      "json": {
+        "bytes": 4681,
+        "commit": "6f2ca132",
+        "mtime": "2026-11-25T04:40:14+08:00",
+        "mtime_epoch": 1795552814,
+        "sha": "93B3635F"
+      },
+      "name": "seller-reply-months-board",
+      "verdict": "same-commit"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 5797,
+        "commit": "22207d8f",
+        "mtime": "2026-11-24T17:05:22+08:00",
+        "mtime_epoch": 1795511122,
+        "sha": "C11521C8"
+      },
+      "json": {
+        "bytes": 2386,
+        "commit": "22207d8f",
+        "mtime": "2026-11-24T17:05:22+08:00",
+        "mtime_epoch": 1795511122,
+        "sha": "DF5815DA"
+      },
+      "name": "seller-revenue-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 6308,
+        "commit": "f0e79f5e",
+        "mtime": "2026-11-25T00:13:59+08:00",
+        "mtime_epoch": 1795536839,
+        "sha": "F12FFFF8"
+      },
+      "json": {
+        "bytes": 1974,
+        "commit": "f0e79f5e",
+        "mtime": "2026-11-25T00:13:59+08:00",
+        "mtime_epoch": 1795536839,
+        "sha": "217A09A0"
+      },
+      "name": "seller-reviews-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 58,
+      "html": {
+        "bytes": 9477,
+        "commit": "ca60930f",
+        "mtime": "2026-11-25T00:28:34+08:00",
+        "mtime_epoch": 1795537714,
+        "sha": "FD11045A"
+      },
+      "json": {
+        "bytes": 3301,
+        "commit": "ca60930f",
+        "mtime": "2026-11-25T00:29:32+08:00",
+        "mtime_epoch": 1795537772,
+        "sha": "26070EE2"
+      },
+      "name": "seller-supply-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 37,
+      "html": {
+        "bytes": 6870,
+        "commit": "58c10124",
+        "mtime": "2026-11-25T00:45:32+08:00",
+        "mtime_epoch": 1795538732,
+        "sha": "0C335AFD"
+      },
+      "json": {
+        "bytes": 2588,
+        "commit": "58c10124",
+        "mtime": "2026-11-25T00:46:09+08:00",
+        "mtime_epoch": 1795538769,
+        "sha": "524784A0"
+      },
+      "name": "seller-todo-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 9182,
+        "commit": "15fc3c8b",
+        "mtime": "2026-11-15T12:27:11+08:00",
+        "mtime_epoch": 1794716831,
+        "sha": "B494F0B3"
+      },
+      "json": {
+        "bytes": 4983,
+        "commit": "15fc3c8b",
+        "mtime": "2026-11-15T12:27:11+08:00",
+        "mtime_epoch": 1794716831,
+        "sha": "0C0DAF9B"
+      },
+      "name": "ship-checklist",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 5298,
+        "commit": "062244cb",
+        "mtime": "2026-11-24T14:31:34+08:00",
+        "mtime_epoch": 1795501894,
+        "sha": "1F94D387"
+      },
+      "json": {
+        "bytes": 3639,
+        "commit": "062244cb",
+        "mtime": "2026-11-24T14:31:34+08:00",
+        "mtime_epoch": 1795501894,
+        "sha": "D212C754"
+      },
+      "name": "similar-listing-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 41366,
+        "commit": "dd2085c4",
+        "mtime": "2026-11-24T23:47:15+08:00",
+        "mtime_epoch": 1795535235,
+        "sha": "8FAB0E30"
+      },
+      "json": {
+        "bytes": 3298,
+        "commit": "dd2085c4",
+        "mtime": "2026-11-24T23:47:15+08:00",
+        "mtime_epoch": 1795535235,
+        "sha": "1B904D5F"
+      },
+      "name": "start-here",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 103,
+      "html": {
+        "bytes": 10591,
+        "commit": "b0b0cba7",
+        "mtime": "2026-11-25T03:59:20+08:00",
+        "mtime_epoch": 1795550360,
+        "sha": "C50AD021"
+      },
+      "json": {
+        "bytes": 6260,
+        "commit": "b0b0cba7",
+        "mtime": "2026-11-25T04:01:03+08:00",
+        "mtime_epoch": 1795550463,
+        "sha": "04226C5D"
+      },
+      "name": "ticket-size-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 28799,
+        "commit": "897e0f99",
+        "mtime": "2026-11-25T09:58:04+08:00",
+        "mtime_epoch": 1795571884,
+        "sha": "718A115B"
+      },
+      "json": {
+        "bytes": 20170,
+        "commit": "897e0f99",
+        "mtime": "2026-11-25T09:58:04+08:00",
+        "mtime_epoch": 1795571884,
+        "sha": "B010EE16"
+      },
+      "name": "ugc-gate-report",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 1,
+      "html": {
+        "bytes": 9758,
+        "commit": "c3c3b491",
+        "mtime": "2026-11-25T01:04:52+08:00",
+        "mtime_epoch": 1795539892,
+        "sha": "C78C0181"
+      },
+      "json": {
+        "bytes": 3660,
+        "commit": "c3c3b491",
+        "mtime": "2026-11-25T01:04:53+08:00",
+        "mtime_epoch": 1795539893,
+        "sha": "F68A1DCD"
+      },
+      "name": "watch-alerts-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 28,
+      "html": {
+        "bytes": 10926,
+        "commit": "a10cb7ac",
+        "mtime": "2026-11-25T07:25:09+08:00",
+        "mtime_epoch": 1795562709,
+        "sha": "70B3D3BF"
+      },
+      "json": {
+        "bytes": 3919,
+        "commit": "a10cb7ac",
+        "mtime": "2026-11-25T07:25:37+08:00",
+        "mtime_epoch": 1795562737,
+        "sha": "3A691564"
+      },
+      "name": "watch-category-mix-board",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 1,
+      "html": {
+        "bytes": 9813,
+        "commit": "0f46a512",
+        "mtime": "2026-11-25T01:50:19+08:00",
+        "mtime_epoch": 1795542619,
+        "sha": "2F7B4346"
+      },
+      "json": {
+        "bytes": 4590,
+        "commit": "0f46a512",
+        "mtime": "2026-11-25T01:50:20+08:00",
+        "mtime_epoch": 1795542620,
+        "sha": "47C09D17"
+      },
+      "name": "watch-conversion-board",
+      "verdict": "same-run"
+    }
+  ],
+  "round": 3498,
+  "same_run_seconds": 120,
+  "self_excluded": "preview-pair-census",
+  "source": "tools/preview_pair_census.py",
+  "totals": {
+    "frozen-excused": 11,
+    "history-split": 12,
+    "html": 105,
+    "no-json": 3,
+    "paired": 102,
+    "same-commit": 6,
+    "same-run": 73,
+    "untracked": 0
+  }
+}

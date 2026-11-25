@@ -1,0 +1,59 @@
+R3499 preview page-pair census - evidence log (2026-11-26)
+
+READ-ONLY FIRST PASS (measured before any tool existed)
+  preview html halves           105
+  with a same-stem json half    102
+  without one                     3
+  mtime gap buckets   <=60s 63 | <=600s 14 | <=1d 1 | >1d 24
+  worst gap          752.4h  apimarket-report-workbench  html 2026-11-25 09:58 / json 2026-10-25 01:35
+
+WHY MTIME ALONE IS NOT A VERDICT
+  The fifteen worst apimarket report faces all carry the SAME html mtime
+  (2026-11-25 09:58) while their json halves date from 2026-10-25, and
+  git status is clean. A bulk rewrite or restore of identical bytes leaves
+  exactly that trace. So the census classifies on committed history instead:
+  a split is claimed only when the two halves' last commits differ.
+
+CLASSIFICATION ON THE SHIPPED TREE
+  same-run 73 | same-commit 6 | history-split 23 | untracked 0 | no-json 3
+
+FREEZE CROSS-CHECK (AC-PPC6)
+  state/apimarket-face-freeze.json names faces with a sha256 per half.
+  11 of the 23 splits match BOTH registered digests -> frozen-excused
+  (their halves differ in commit because the freeze said so, not because the
+  pair landed half-derived). The 12 remaining splits:
+
+    749.7h  apimarket-report-refunds        html 700dd89a / json 6fb6c40b  generator-backed
+    743.8h  apimarket-report-questions      html 700dd89a / json e0fd7251  generator-backed
+    742.4h  apimarket-report-buyerquestions html 700dd89a / json d3faa192  generator-backed
+    742.2h  apimarket-report-selleranswers  html 700dd89a / json ce3583ca  generator-backed
+    232.1h  lobby-session-trace             html 700dd89a / json b0b07b2b
+    147.3h  live-sandbox                    html 897e0f99 / json 8092eff8
+     62.6h  city-face-report                html 897e0f99 / json 700dd89a
+     62.6h  first-yuan                      html 897e0f99 / json 700dd89a
+     62.6h  ledger-business-report          html 897e0f99 / json 700dd89a
+     62.6h  membership-benefit-report       html 897e0f99 / json 700dd89a
+     62.6h  payment-gate-report             html 897e0f99 / json 700dd89a
+     50.8h  platform-live-report            html 897e0f99 / json 7e3a6f9c
+
+  Two shapes, named but NOT excused this window:
+  (1) the four slug faces sit in the register's own excluded_generator_backed
+      list, so their excuse kind is a different receipt that is not pinned yet;
+  (2) eight faces share html commit 897e0f99 (R3461, the front-door round that
+      touched 29 files) over json halves from four earlier commits - one commit
+      rewrote html halves without re-deriving their json, exactly the class this
+      page exists to show.
+  Neither shape may be healed by mass re-derivation: re-rendering html from an
+  older json would delete the channel additions 897e0f99 and 700dd89a made.
+  The receipt each needs is a per-face post-render proof (render in memory and
+  compare modulo the declared channel), which is the next window's first item.
+
+GATES READ BACK
+  python tools/preview_pair_census.py --check  -> PPC-CHECK VERDICT PASS read_only=True
+  python src/os/test_preview_pair_census.py    -> SUITE PASS 7/7 (AC-PPC1..AC-PPC7)
+  python src/os/suite_matrix_reconcile.py --check -> DOC-CURRENT 829 suites 85528B
+
+NOT TOUCHED
+  no preview page re-derived, no freeze register written, no threshold moved,
+  zero payment capability and no network beyond loopback - the five physical
+  pieces still gate every buyer.
