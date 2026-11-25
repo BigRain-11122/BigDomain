@@ -11,9 +11,9 @@
     "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/frontdoor-security-headers-R3466.log (2594B, 2026-11-25, sha256 b2b62d31a812)",
     "latest_evidence": "qa/frontdoor-security-headers-R3466.log (2594B, 2026-11-25, sha256 b2b62d31a812)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3465] next window (<=48h): (1) **S4U 仍未落地**：本会话 `IsInRole(Administrator)=False`，`BigDomain-OSLoop` 仍是 `LogonType=Interactive`——处置已钉死＝由**提权会话**跑 `src/os/register_loop_task.ps1` 并用 `$t.Principal.LogonType` 读回，保留既有触发器；**第十次承账**，禁再以「未实测」或「无从下手」结账。(2) 门的第五层候选：安全响应头（`X-Content-Type-Options: nosniff`／`Content-Security-Policy`／`Referrer-Policy`）尚未发布，面无任何策略约束；下窗先立判据再动（每个 200 带 `nosniff`；`/preview/*.html` 的内联样式在 CSP 下仍渲染；`Content-Type` 不被嗅探；`/preview/*.json` 与 `/healthz` 类型不变）。(3) 收口序实证不变：`first_yuan_chain.py` → `deliverable_index.py` → `face_sweep.py` → `--check` → `heartbeat.py --write` → `export_round.py` → `status_export_fresh.py --apply` → 三判分器 → `tools/closeout_gate.py`；本窗实测「导出面写后索引指纹变」需再跑一轮链面收敛（5dc6ca77fd0d3e07／48d633fc9e8c320e 为收敛后读数）。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`（本窗 fold 817 后载体 69283B／闸 78500／余 9217B）。(6) tick 口径：本窗 3464→3465。(7) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、backlog.md 体量闸。",
-    "next_milestone_due": "2026-11-27T12:13:06+08:00",
-    "updated_at": "2026-11-25T12:13:06+08:00",
+    "next_milestone": "[R3466] next window (<=48h): (1) **S4U 仍未落地**：本会话 `IsInRole(Administrator)=False`，`BigDomain-OSLoop` 仍是 `LogonType=Interactive`——处置已钉死＝由**提权会话**跑 `src/os/register_loop_task.ps1` 并用 `$t.Principal.LogonType` 读回，保留既有触发器；**第十次承账**，禁再以「未实测」或「无从下手」结账。(2) 门的第六层候选：CSP 已发布但**跨源与能力约束仍空白**（无 `Cross-Origin-Resource-Policy`／`Cross-Origin-Opener-Policy`／`Permissions-Policy`），且内联脚本只能靠 `'unsafe-inline'`——下窗先量「服务端自产 nonce／内容 hash 是否可落地」再立判据；另 `Server` 头仍暴露解释器版本，可作同窗收敛项。(3) 收口序实证不变：各面写 → `first_yuan_chain.py` → `deliverable_index.py` → `chain --check` → `index --check` → `face_sweep.py` → `--check` → `heartbeat.py --write <tick>` → `export_round.py` → `status_export_fresh.py --apply` → `check_export_consistency.py` → `closeout_gate.py`；**导出面写后必须再收敛一轮**（本窗终读 index 2b91d9d85e65f042／sweep 68297a26646e6aea）。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`（本窗末载体 75292B／闸 78500／余 3208B）。(6) tick 口径：本窗 3465→3466。(7) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、backlog.md 体量闸。",
+    "next_milestone_due": "2026-11-27T12:15:46+08:00",
+    "updated_at": "2026-11-25T12:15:46+08:00",
     "heartbeat": {
       "tick": 3466,
       "state_tick": 3466,
@@ -38,7 +38,7 @@
     }
   },
   "current": "2026-11-25 R3466 PRODUCT: the door's deliverable shelf now publishes a policy with every answer - measured before the edit, no answer on any status or verb carried X-Content-Type-Options, Referrer-Policy, Content-Security-Policy or X-Frame-Options, so a browser was free to sniff a json face as a script, any embedding site could frame the door, and a reader following a link handed the face URL to a third party.",
-  "claims": {"claimed": 33, "captured": 19, "contradicted": 0, "uncaptured": 14, "historic": 0, "rows": 101, "present": true, "census_ts": "2026-11-25T12:13:06+08:00"},
+  "claims": {"claimed": 34, "captured": 19, "contradicted": 0, "uncaptured": 15, "historic": 0, "rows": 101, "present": true, "census_ts": "2026-11-25T12:15:46+08:00"},
   "chain": {"present": true, "rows": 101, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -68,10 +68,10 @@
     }
   ],
   "do": "2026-11-25 R3466 PRODUCT: the door's deliverable shelf now publishes a policy with every answer - measured before the edit, no answer on any status or verb carried X-Content-Type-Options, Referrer-Policy, Content-Security-Policy or X-Frame-Options, so a browser was free to sniff a json face as a script, any embedding site could frame the door, and a reader following a link handed the face URL to a third party.",
-  "export_ts": "2026-11-25T12:13:06+08:00",
+  "export_ts": "2026-11-25T12:15:46+08:00",
   "latest_artifact": "preview/apimarket-report.html (37201B) + preview/apimarket-report.json (59815B) [2026-11-25 commit]",
   "latest_evidence": "qa/frontdoor-security-headers-R3466.log (2594B, 2026-11-25, sha256 b2b62d31a812)",
-  "next_milestone": "[R3465] next window (<=48h): (1) **S4U 仍未落地**：本会话 `IsInRole(Administrator)=False`，`BigDomain-OSLoop` 仍是 `LogonType=Interactive`——处置已钉死＝由**提权会话**跑 `src/os/register_loop_task.ps1` 并用 `$t.Principal.LogonType` 读回，保留既有触发器；**第十次承账**，禁再以「未实测」或「无从下手」结账。(2) 门的第五层候选：安全响应头（`X-Content-Type-Options: nosniff`／`Content-Security-Policy`／`Referrer-Policy`）尚未发布，面无任何策略约束；下窗先立判据再动（每个 200 带 `nosniff`；`/preview/*.html` 的内联样式在 CSP 下仍渲染；`Content-Type` 不被嗅探；`/preview/*.json` 与 `/healthz` 类型不变）。(3) 收口序实证不变：`first_yuan_chain.py` → `deliverable_index.py` → `face_sweep.py` → `--check` → `heartbeat.py --write` → `export_round.py` → `status_export_fresh.py --apply` → 三判分器 → `tools/closeout_gate.py`；本窗实测「导出面写后索引指纹变」需再跑一轮链面收敛（5dc6ca77fd0d3e07／48d633fc9e8c320e 为收敛后读数）。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`（本窗 fold 817 后载体 69283B／闸 78500／余 9217B）。(6) tick 口径：本窗 3464→3465。(7) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、backlog.md 体量闸。",
+  "next_milestone": "[R3466] next window (<=48h): (1) **S4U 仍未落地**：本会话 `IsInRole(Administrator)=False`，`BigDomain-OSLoop` 仍是 `LogonType=Interactive`——处置已钉死＝由**提权会话**跑 `src/os/register_loop_task.ps1` 并用 `$t.Principal.LogonType` 读回，保留既有触发器；**第十次承账**，禁再以「未实测」或「无从下手」结账。(2) 门的第六层候选：CSP 已发布但**跨源与能力约束仍空白**（无 `Cross-Origin-Resource-Policy`／`Cross-Origin-Opener-Policy`／`Permissions-Policy`），且内联脚本只能靠 `'unsafe-inline'`——下窗先量「服务端自产 nonce／内容 hash 是否可落地」再立判据；另 `Server` 头仍暴露解释器版本，可作同窗收敛项。(3) 收口序实证不变：各面写 → `first_yuan_chain.py` → `deliverable_index.py` → `chain --check` → `index --check` → `face_sweep.py` → `--check` → `heartbeat.py --write <tick>` → `export_round.py` → `status_export_fresh.py --apply` → `check_export_consistency.py` → `closeout_gate.py`；**导出面写后必须再收敛一轮**（本窗终读 index 2b91d9d85e65f042／sweep 68297a26646e6aea）。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`（本窗末载体 75292B／闸 78500／余 3208B）。(6) tick 口径：本窗 3465→3466。(7) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、backlog.md 体量闸。",
   "outs": [
     "preview/apimarket-report.html (37201B) + preview/apimarket-report.json (59815B) [2026-11-25 commit]",
     "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 commit] (halves differ: html [2026-11-25 commit] + json [2026-11-16 commit]; later=html)",
@@ -144,9 +144,9 @@
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
-  "self_drive": {"window": "2026-11-19..2026-11-25", "window_days": 7, "log_lines_in_window": 120, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 11, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
-  "state_bytes": 75292,
-  "next_milestone_due": "2026-11-27T12:13:06+08:00",
+  "self_drive": {"window": "2026-11-19..2026-11-25", "window_days": 7, "log_lines_in_window": 121, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 11, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
+  "state_bytes": 75708,
+  "next_milestone_due": "2026-11-27T12:15:46+08:00",
   "heartbeat": {
     "tick": 3466,
     "state_tick": 3466,
