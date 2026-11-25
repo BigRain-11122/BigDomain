@@ -1,0 +1,17 @@
+R3482 EVIDENCE listing-price-history-board
+artifacts preview/listing-price-history-board.html 6231B / preview/listing-price-history-board.json 2269B / preview/listing-price-history-board-copy.json
+driver tools/listing_price_history_board.py sha256 247bef8cbd1d589f4f78e0e641e22b42efa18f574c7c15f6366af36eabbdeb8b
+face api_price_history (shipped); census 124 faces, 3 zero readers, 1 taken, 1 refused (R3389 empty section), 1 left for the next window
+fixture four revisions landed through the shipped revise_price door under a pinned clock: risk-scan 10->12->9->15, macro-feed 3->4, chart-render quiet at 5
+suite SUITE PASS 6/6 AC-LPHB1..6 declared=6 row=os-listing-price-history-board
+check LISTING-PRICE-HISTORY CHECK PASS fails=0
+registry os-listing-price-history-board in src/sandbox/reconcile_all.py SUITES
+matrix WRITTEN 85327 bytes 827 rows then DOC-CURRENT
+census re-pinned rows=827 readable=827 unparsed=0 silent=0
+entry index VERDICT PASS 23/23 fingerprint 0c17049bad48ea52
+first-yuan chain VERDICT PASS legs=2 entries=2 tx=1 reconcile_rc=0 html=4403B read_only=True
+face sweep VERDICT PASS 13/13 then --check 21/21
+closeout CLOSEOUT-GATE PASS files=5020 flags=0 reader_refused=0 census=PASS matrix=DOC-CURRENT
+control m1 current_price answered from base_price -> AC-LPHB1 FAIL (listing 1 replay 15 != 10, listing 2 replay 4 != 3); restored
+control m2 down count folded into up -> AC-LPHB3 FAIL (market 4/0 against 3/1); restored, driver sha256 unchanged
+decisions docs/decisions.md 438 rows, 0 new ids against the stored baseline, 5 ids rotated out of the live file

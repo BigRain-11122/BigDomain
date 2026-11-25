@@ -8716,6 +8716,15 @@ SUITES = [
     # AC-FDPV22 (two Transfer-Encoding or Connection lines are one list).
     ("frontdoor-preview-pages",
      os.path.join("test_frontdoor_preview_pages.py"), 22),
+    # R3482: tools/listing_price_history_board.py renders the SHIPPED
+    # api_price_history envelopes (one shelf's base price, every append-only
+    # revision, the current price and the revision count) as one openable
+    # page - the shelf-level trail the seller cadence page does not show,
+    # with who moved the price, by how much and in which direction. Six arms
+    # AC-LPHB1..6: the replay law, the order law, the direction law, the quiet
+    # shelf shape, the ASCII/registry dialect and the landed pair's own check.
+    ("os-listing-price-history-board",
+     os.path.join("..", "os", "test_listing_price_history_board.py"), 6),
     # R3115: the 24h export-face age gate (os/export_freshness.py, AC-EXP1..6)
     # had zero production consumers - it ran only inside its own suite - while
     # the CEO card printed export_ts as a bare string. AC-FDC2 (six arms, ONE

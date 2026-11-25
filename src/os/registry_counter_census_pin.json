@@ -523,6 +523,7 @@
     "os-library-board",
     "os-library-declaration-dialect-sweep",
     "os-listing-position-board",
+    "os-listing-price-history-board",
     "os-listing-velocity-board",
     "os-listing-view-board",
     "os-live-proof",

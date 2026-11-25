@@ -1,0 +1,92 @@
+{
+ "generated_utc": "2026-11-25 17:05:16Z",
+ "face": "api_price_history",
+ "scope": "listing",
+ "listings": [
+  {
+   "listing_id": 1,
+   "base_price": 10,
+   "current_price": 15,
+   "revision_count": 3,
+   "delisted": false,
+   "delisted_utc": null,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "shelf": "risk-scan",
+   "revisions": [
+    {
+     "revision_id": 1,
+     "dev_account": "usr:dana",
+     "token_price": 12,
+     "revised_utc": "2026-09-05T00:00:00Z"
+    },
+    {
+     "revision_id": 2,
+     "dev_account": "usr:dana",
+     "token_price": 9,
+     "revised_utc": "2026-10-02T00:00:00Z"
+    },
+    {
+     "revision_id": 3,
+     "dev_account": "usr:dana",
+     "token_price": 15,
+     "revised_utc": "2026-11-08T00:00:00Z"
+    }
+   ]
+  },
+  {
+   "listing_id": 2,
+   "base_price": 3,
+   "current_price": 4,
+   "revision_count": 1,
+   "delisted": false,
+   "delisted_utc": null,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "shelf": "macro-feed",
+   "revisions": [
+    {
+     "revision_id": 4,
+     "dev_account": "usr:dana",
+     "token_price": 4,
+     "revised_utc": "2026-10-20T00:00:00Z"
+    }
+   ]
+  },
+  {
+   "listing_id": 3,
+   "base_price": 5,
+   "current_price": 5,
+   "revision_count": 0,
+   "delisted": false,
+   "delisted_utc": null,
+   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+   "shelf": "chart-render",
+   "revisions": []
+  }
+ ],
+ "market": {
+  "listing_count": 3,
+  "revision_count": 4,
+  "up_count": 3,
+  "down_count": 1,
+  "max_step_delta": 6,
+  "max_step_listing": 1,
+  "max_step_revision": 3,
+  "max_step_pct": 66.67,
+  "peak_month": "2026-10",
+  "peak_month_revisions": 2,
+  "busiest_listing": 1,
+  "busiest_revisions": 3
+ },
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/listing-price-history-board.html",
+ "sources": {
+  "driver": "247bef8cbd1d589f",
+  "copy": "fafd24215d77bbdb",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 6231,
+  "json": 2269
+ }
+}
