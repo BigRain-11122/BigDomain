@@ -594,6 +594,47 @@ def run():
         real_carry3 = LL.audit_fold_carry(LL.archive_files(real_logs3))
         real_scope3 = LL.audit_scope(
             LL.load_archive_lines(real_logs3), live)
+
+        # R3496: an independent recount of the same_window diagnostic, so the
+        # published pairs cannot be self-certified. A round's narrative sits
+        # in a post-pin window while its presence line is not in THAT window;
+        # several rounds may share one window (a fold moves a range), so the
+        # reading is a list of pairs, never one entry per window.
+        def same_window_recount(paths):
+            archive_rounds = set()
+            for path in paths:
+                for window in LL.load_archive_windows(path):
+                    for line in window["lines"]:
+                        hit = LL.LEDGER_PRESENCE_RE.match(line)
+                        if hit is not None:
+                            archive_rounds.add(int(hit.group(1)))
+            receipts = LL.block_receipts(paths)
+            out = []
+            seen_narrative = {}
+            for path in paths:
+                for window in LL.load_archive_windows(path):
+                    if window["round"] < LL.FOLD_CARRY_PIN:
+                        continue
+                    here = set()
+                    narratives = {}
+                    for line in window["lines"]:
+                        hit = LL.LEDGER_PRESENCE_RE.match(line)
+                        if hit is not None:
+                            here.add(int(hit.group(1)))
+                        if LL.classify(line) == "round":
+                            round_no = int(
+                                LL.NARRATIVE_RE.match(line).group(1))
+                            narratives.setdefault(round_no, []).append(line)
+                            seen_narrative.setdefault(
+                                round_no, []).append(line)
+                    for round_no in sorted(narratives):
+                        verdict, _why = LL.fold_carry_exemption(
+                            round_no, seen_narrative.get(round_no, []),
+                            archive_rounds, receipts)
+                        if verdict or round_no in here:
+                            continue
+                        out.append((window["round"], round_no))
+            return sorted(out)
         # AC-LGA12 is ONE criterion with six arms, as pinned: a..c the
         # locatable cross-window diagnostics, d..e the published payload
         # reading with its negative control, f the live identities.
@@ -638,9 +679,17 @@ def run():
               == real_payload["dated_ledger_lines"]
               and real_scope3["archive_unshaped_ledger_lines"]
               == real_payload["unshaped_ledger_lines"]
-              and len({item["window_index"] for item
-                       in real_carry3["same_window_gaps"]})
-              == len(real_carry3["same_window_gaps"]),
+              # R3496: this arm used to demand one same-window gap per
+              # window, which no healthy archive can satisfy - a fold moves a
+              # contiguous range, so several rounds whose ledger lines stayed
+              # live share one window (measured: 27 entries over 7 shared
+              # windows, window R3491 alone hosting 13). The clause is
+              # replaced by an independent recount of the published pairs,
+              # which is stricter than a count and blind to how many rounds
+              # one window holds.
+              and sorted((item["window"], item["round"]) for item
+                         in real_carry3["same_window_gaps"])
+              == same_window_recount(LL.archive_files(real_logs3)),
               "AC-LGA12 the cross-window diagnostics locate their window, "
               "and the archive payload reading is published without gating")
 

@@ -3,18 +3,38 @@
   "clean": true,
   "exempted": [
     {
-      "class": "exempted",
-      "file": "state-log-archive-2026-11.md",
-      "file_ordinal": 241,
-      "line": 5790,
-      "narrative_lines": 1,
-      "round": 3112,
-      "why": "tick-alignment closeout: a replay probe was read as a new append, so the tick moved 3111 -> 3112 and no budget line was written",
-      "window": 3135
+      "round": 3436,
+      "why": "frozen hole: the fold summary for this block enumerates all eleven parts and names no budget part, so no budget line existed when the block was folded",
+      "window": 3438
+    },
+    {
+      "round": 3458,
+      "why": "frozen hole: the round appended its budget payload to its own last narrative line instead of emitting a presence line, and no presence line exists anywhere",
+      "window": 3460
+    },
+    {
+      "round": 3459,
+      "why": "frozen hole: the fold summary for this block enumerates all four parts and names no budget part, so no budget line existed when the block was folded",
+      "window": 3460
+    },
+    {
+      "round": 3436,
+      "why": "frozen hole: the fold summary for this block enumerates all eleven parts and names no budget part, so no budget line existed when the block was folded",
+      "window": 3460
+    },
+    {
+      "round": 3458,
+      "why": "frozen hole: the round appended its budget payload to its own last narrative line instead of emitting a presence line, and no presence line exists anywhere",
+      "window": 3465
+    },
+    {
+      "round": 3459,
+      "why": "frozen hole: the fold summary for this block enumerates all four parts and names no budget part, so no budget line existed when the block was folded",
+      "window": 3465
     }
   ],
   "left_behind": [],
-  "live_ledger_rounds": 4,
+  "live_ledger_rounds": 5,
   "nowhere": [
     {
       "class": "nowhere",
@@ -23,7 +43,7 @@
       "line": 8442,
       "narrative_lines": 1,
       "round": 3436,
-      "why": "not-named",
+      "why": "no ledger line in the archives or the live ring",
       "window": 3438
     },
     {
@@ -33,7 +53,7 @@
       "line": 8724,
       "narrative_lines": 1,
       "round": 3458,
-      "why": "not-named",
+      "why": "no ledger line in the archives or the live ring",
       "window": 3460
     },
     {
@@ -43,7 +63,7 @@
       "line": 8724,
       "narrative_lines": 3,
       "round": 3459,
-      "why": "not-named",
+      "why": "no ledger line in the archives or the live ring",
       "window": 3460
     },
     {
@@ -53,7 +73,7 @@
       "line": 8729,
       "narrative_lines": 11,
       "round": 3436,
-      "why": "not-named",
+      "why": "no ledger line in the archives or the live ring",
       "window": 3460
     },
     {
@@ -63,7 +83,7 @@
       "line": 8797,
       "narrative_lines": 2,
       "round": 3458,
-      "why": "not-named",
+      "why": "no ledger line in the archives or the live ring",
       "window": 3465
     },
     {
@@ -73,7 +93,7 @@
       "line": 8797,
       "narrative_lines": 1,
       "round": 3459,
-      "why": "not-named",
+      "why": "no ledger line in the archives or the live ring",
       "window": 3465
     }
   ],

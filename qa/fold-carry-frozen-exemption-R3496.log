@@ -1,0 +1,65 @@
+2026-11-26 R3496 evidence - FOLD-CARRY frozen holes, named exemption (read-only after the edit)
+
+BEFORE (R3495 shipped tree)
+  python src/os/ledger_lines.py --archives logs --fold-carry
+    FOLD-CARRY FAIL E_LFC_CARRY since=2914 windows=145 gaps=6
+    (R3436 w3438, R3458 w3460, R3459 w3460, R3436 w3460, R3458 w3465, R3459 w3465)
+    exempt=1(R3112)
+  python src/os/test_ledger_archive.py -> SUITE FAIL 9/15 (AC-LGA9/10/11/12/13/15)
+  python tools/battery_shard.py --match os-ledger -> green=12 of 13, crit_mismatch=0
+
+EVIDENCE READ FROM DISK (unchanged by this round)
+  FOLD-CARRY-EVIDENCE since=2914 frozen=3 block_receipt=2 no_receipt=1
+    earliest_budget=265 e_round_lost=3380 narrowing_releases=0 refused=1 left_behind=0
+  R3436 block receipt state-log-archive-2026-11.md:8778 parts=11 omits_budget=True
+  R3459 block receipt state-log-archive-2026-11.md:8800 parts=4 omits_budget=True
+  R3458 no enumeration; its own narrative carries the payload inline
+  R3421 refused by name (its parts list names 'tokens')
+
+PARTIAL-TABLE MEASUREMENT (the board's honesty question)
+  with R3436+R3459 only (R3458 entry removed in-process):
+    FOLD-CARRY clean=False gap_rounds=[3458]
+  => exempting 2 of 3 buys ZERO green arms: every arm that asserts the live
+     reading clean (AC-LGA9 f, AC-LGA10, AC-LGA12, AC-LGA13, AC-LGA15 f)
+     goes red again on that one remaining gap, so 2/3 is not a partial win.
+
+AFTER
+  python src/os/ledger_lines.py --archives logs --fold-carry
+    FOLD-CARRY OK since=2914 windows=145 rounds=640 skipped=725 split=51
+    same_window=52 dup=11 exempt=4(R3112,R3436,R3458,R3459) loc=file@line
+    prov=tracked=1/3   rc=0
+  python src/os/test_ledger_archive.py -> SUITE PASS 15/15
+  python src/os/test_fold_carry_evidence.py -> SUITE PASS 7/7
+  python tools/fold_carry_census.py --check -> FCC-CHECK VERDICT PASS read_only=True
+    FOLD-CARRY-CENSUS since=2914 windows=145 rounds=640 left_behind=0
+    nowhere=3(rounds=3 entries=6) law_excused=3(R3436,R3458,R3459)
+  python tools/fold_carry_census.py --evidence --check -> FCE-CHECK VERDICT PASS
+  python tools/battery_shard.py --match os-ledger
+    SHARD rc=0 selected=13 executed=13 green=13 criteria=101 crit_mismatch=0
+
+SECOND RED INSIDE AC-LGA12 (found, not hidden)
+  The arm demanded one same-window gap per window. A fold moves a contiguous
+  range, so several rounds whose ledger lines stayed live share one window:
+  measured 27 same_window entries over 7 shared windows, window R3491 alone
+  hosting 13. No healthy archive satisfies that clause. It is replaced by an
+  independent recount of the published (window, round) pairs, which is
+  stricter than a count and blind to how many rounds one window holds.
+
+HONEST NOTES
+  (a) zero archives rewritten, zero history edited; the three frozen holes
+      stay published by name in the census page (nowhere=3) while the law
+      excuses them by name (exempt=4).
+  (b) the law is still red on any round NOT in the table: an unnamed round
+      with the same prose, a receipt that gained or lost a part, a payload
+      missing from the round's own words, and a round that gained a ledger
+      line all still red.
+  (c) the exemption reader moved into ledger_lines.py so the law and the
+      census share one definition of a receipt (tools/fold_carry_census.py
+      now delegates), and it still spawns no child process and opens no
+      socket.
+  (d) ZERO payment capability and no network beyond loopback: the five
+      physical pieces still gate every buyer.
+  (e) not done this window: no new criterion arm (AC-LGA16) was registered,
+      so the "entry pointing at a budget-naming receipt" refusal is covered
+      by AC-FCE1's refused=R3421 reading rather than by a pinned arm; that
+      is the first next-window item.

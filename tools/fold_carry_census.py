@@ -52,43 +52,14 @@ LABEL = "fold-carry-census"
 # without git and without trusting this tool's own gap reading. The negative
 # shape is the same sentence WITH a budget part (measured: the R3437 receipt
 # lists tokens), which must never be admitted.
-RECEIPT_RE = re.compile(r"moved\s+the\s+whole\s+R(\d{3,5})\b[^()]*\(([^()]*)\)")
-PARTS_ITEM_RE = re.compile(r"^[a-z][a-z \-]*$")
+# R3496: the reader itself moved to the law module so the exemption and this
+# census share one definition; this name is kept for its callers.
 LOSS_RE = re.compile(r"refuses\s+by\s+name\s+\(E_ROUND_LOST\)")
 
 
 def receipt_index(paths):
-    """Every block-part receipt in the archives, keyed by round.
-
-    A parenthetical that is not a part list (measured: a fold-execution line
-    writes 'R3459 CEO-face block (lines 122:125)', a line RANGE) is refused
-    here rather than read as an enumeration - a receipt must name parts in
-    words, and every item is checked against that shape.
-    """
-    out = {}
-    for path in paths:
-        handle = io.open(path, "r", encoding="utf-8")
-        try:
-            for line_no, raw in enumerate(handle, 1):
-                text = raw.rstrip("\n").rstrip("\r")
-                for match in RECEIPT_RE.finditer(text):
-                    parts = [item.strip() for item in match.group(2).split(",")
-                             if item.strip()]
-                    if len(parts) < 2:
-                        continue
-                    if not all(PARTS_ITEM_RE.match(item) for item in parts):
-                        continue
-                    lowered = [item.lower() for item in parts]
-                    out.setdefault(int(match.group(1)), []).append({
-                        "file": os.path.basename(path),
-                        "line": line_no,
-                        "parts": parts,
-                        "omits_budget": "tokens" not in lowered,
-                        "span": text[:200],
-                    })
-        finally:
-            handle.close()
-    return out
+    """Every block-part receipt in the archives, keyed by round."""
+    return LL.block_receipts(paths)
 
 
 def budget_line_bounds(paths, live_lines):
@@ -204,18 +175,23 @@ def presence_rounds(lines):
 
 
 def classify_round(round_no, archive_rounds, live_rounds, narratives):
-    """One round's FOLD-CARRY class: None when clean (R3495).
+    """One round's FOLD-CARRY class: None when clean (R3495, R3496).
 
-    Hoisted out of census so the decision has ONE home: the suite feeds it a
-    synthetic world to prove the repairable shape still reddens, without
-    copying the three-branch rule into the suite.
+    R3496: the class is a MEASUREMENT, never a gate decision. Whether the law
+    excuses a frozen hole by name is asked separately, so this page can keep
+    publishing the holes while the law reads OK - otherwise the excuse table
+    would empty the very reading that justified it.
     """
     if round_no in archive_rounds:
         return None
-    verdict, _why = LL.fold_carry_exemption(round_no, narratives,
-                                            archive_rounds)
-    if verdict:
-        return "exempted"
+    entry = LL.FOLD_CARRY_EXEMPT.get(round_no) or {}
+    if "narrative_span" in entry:
+        # The round's own words prove it was never a work round, so it is not
+        # a hole at all - the pre-R3496 class, unchanged.
+        verdict, _why = LL.fold_carry_exemption(round_no, narratives,
+                                                archive_rounds)
+        if verdict:
+            return "exempted"
     if round_no in live_rounds:
         return "left_behind"
     return "nowhere"
@@ -232,6 +208,7 @@ def census(min_round=None):
     windows = 0
     rounds = 0
     rows = []
+    round_narrative = {}
     # Two passes, borrowed from audit_fold_carry: the archive ledger set must
     # be complete before ANY window is judged, or a round whose ledger line
     # sits in a later file reads as a hole. Measured while writing this: a
@@ -252,27 +229,41 @@ def census(min_round=None):
             if LL.classify(line) == "round":
                 round_no = int(LL.NARRATIVE_RE.match(line).group(1))
                 narratives.setdefault(round_no, []).append(line)
+                round_narrative.setdefault(round_no, []).append(line)
         for round_no in sorted(narratives):
             rounds += 1
             kind = classify_round(round_no, archive_rounds, live_rounds,
                                   narratives[round_no])
             if kind is None:
                 continue
-            _verdict, why = LL.fold_carry_exemption(
-                round_no, narratives[round_no], archive_rounds)
             rows.append({
                 "class": kind,
                 "round": round_no,
                 "window": window["round"],
                 "narrative_lines": len(narratives[round_no]),
-                "why": why,
+                "why": ("ledger line still in the live ring" if kind
+                        == "left_behind" else
+                        "no ledger line in the archives or the live ring"),
                 "file": os.path.basename(window["path"]),
                 "file_ordinal": window["ordinal"],
                 "line": window["line"],
             })
     left = [row for row in rows if row["class"] == "left_behind"]
     nowhere = [row for row in rows if row["class"] == "nowhere"]
-    exempted = [row for row in rows if row["class"] == "exempted"]
+    # R3496: the law's excuse is a SECOND reading over the same holes, asked
+    # with the receipts this page just read, so the page can say both "three
+    # frozen holes" and "the law excuses all three by name" without either
+    # number swallowing the other.
+    receipts = LL.block_receipts(paths)
+    exempted = []
+    for row in nowhere:
+        verdict, why = LL.fold_carry_exemption(
+            row["round"], round_narrative.get(row["round"], []),
+            archive_rounds | live_rounds, receipts)
+        if verdict:
+            exempted.append({"round": row["round"],
+                             "window": row["window"],
+                             "why": why})
     return {
         "tool": LABEL,
         "since": since,
@@ -291,11 +282,14 @@ def census(min_round=None):
 def verdict_line(report):
     """One ASCII line: the classes apart, the repairable count as the gate."""
     return ("FOLD-CARRY-CENSUS since=%d windows=%d rounds=%d "
-            "left_behind=%d nowhere=%d(rounds=%d entries=%d) exempt=%d"
+            "left_behind=%d nowhere=%d(rounds=%d entries=%d) "
+            "law_excused=%d(%s)"
             % (report["since"], report["windows"], report["rounds"],
                len(report["left_behind"]), len(report["nowhere_rounds"]),
                len(report["nowhere_rounds"]), len(report["nowhere"]),
-               len(report["exempted"])))
+               len(set(item["round"] for item in report["exempted"])),
+               ",".join("R%d" % item for item in sorted(set(
+                   item["round"] for item in report["exempted"]))) or "-"))
 
 
 def render():

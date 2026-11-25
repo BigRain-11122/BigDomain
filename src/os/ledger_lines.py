@@ -710,22 +710,144 @@ FOLD_CARRY_EXEMPT = {
                 "was written"),
         "narrative_span": "tick moved 3111 -> 3112",
     },
+    # R3496: the FROZEN class measured by R3494/R3495 - three rounds whose
+    # narratives sit whole in the November archive while no budget line for
+    # them exists anywhere. They are not repairable (the archives are frozen
+    # history), and each one carries a different disk-reproducible receipt,
+    # so each entry names its own kind and is re-proved on every read:
+    #   block receipt - the fold summary written at fold time enumerated the
+    #     block part by part and its list names no budget part. The table
+    #     records the exact parts, so a rewritten summary that gained (or
+    #     lost) a part refuses the exemption instead of passing on prose.
+    #     Measured: R3436 has 11 parts, R3459 has 4, both without 'tokens';
+    #     the negative shape R3421 lists 'tokens' and must never be admitted.
+    #   inline payload - the round appended its budget payload to its LAST
+    #     narrative line instead of emitting a presence line, so the payload
+    #     survived the fold but not in the shape the presence law reads.
+    #     Measured: R3458's own narrative ends 'tokens: local=~24k api=0
+    #     api_reason=no cloud call', and no presence line for it exists in
+    #     the archives or the live ring.
+    # Neither kind is a licence: an unnamed round with the same prose, a
+    # receipt that names a budget part, a payload missing from the round's
+    # own words, and any round that gained a ledger line all still red.
+    3436: {
+        "why": ("frozen hole: the fold summary for this block enumerates all "
+                "eleven parts and names no budget part, so no budget line "
+                "existed when the block was folded"),
+        "receipt": {
+            "file": "state-log-archive-2026-11.md",
+            "parts": ["product", "measured", "landed", "readings",
+                      "evidence", "controls", "group scan", "fold note",
+                      "deviations", "honest", "tick"],
+        },
+    },
+    3458: {
+        "why": ("frozen hole: the round appended its budget payload to its "
+                "own last narrative line instead of emitting a presence "
+                "line, and no presence line exists anywhere"),
+        "inline_payload": "tokens: local=~24k api=0 api_reason=no cloud call",
+    },
+    3459: {
+        "why": ("frozen hole: the fold summary for this block enumerates all "
+                "four parts and names no budget part, so no budget line "
+                "existed when the block was folded"),
+        "receipt": {
+            "file": "state-log-archive-2026-11.md",
+            "parts": ["product", "landed", "two measured controls", "honest"],
+        },
+    },
 }
 
+# R3496: the receipt reader lives beside the law, not in a tool, so the
+# exemption and the census cannot disagree about what a receipt is.
+BLOCK_RECEIPT_RE = re.compile(
+    r"moved\s+the\s+whole\s+R(\d{3,5})\b[^()]*\(([^()]*)\)")
+RECEIPT_PART_RE = re.compile(r"^[a-z][a-z \-]*$")
 
-def fold_carry_exemption(round_no, narrative_texts, ledger_rounds):
+
+def block_receipts(paths):
+    """Every block-part receipt in the archives, keyed by round (R3496).
+
+    A parenthetical that is not a part list (measured: a fold-execution line
+    writes 'R3459 CEO-face block (lines 122:125)', a line RANGE) is refused
+    here rather than read as an enumeration - a receipt must name parts in
+    words, and every item is checked against that shape.
+    """
+    out = {}
+    for path in paths:
+        try:
+            handle = io.open(path, "r", encoding="utf-8")
+        except (IOError, OSError):
+            continue
+        try:
+            for line_no, raw in enumerate(handle, 1):
+                text = raw.rstrip("\n").rstrip("\r")
+                for match in BLOCK_RECEIPT_RE.finditer(text):
+                    parts = [item.strip()
+                             for item in match.group(2).split(",")
+                             if item.strip()]
+                    if len(parts) < 2:
+                        continue
+                    if not all(RECEIPT_PART_RE.match(item)
+                               for item in parts):
+                        continue
+                    out.setdefault(int(match.group(1)), []).append({
+                        "file": os.path.basename(path),
+                        "line": line_no,
+                        "parts": parts,
+                        "omits_budget": receipt_admissible(parts),
+                        "span": text[:200],
+                    })
+        finally:
+            handle.close()
+    return out
+
+
+def receipt_admissible(parts):
+    """A block receipt excuses a round only when it names no budget part."""
+    lowered = [item.strip().lower() for item in parts]
+    return bool(lowered) and "tokens" not in lowered
+
+
+def fold_carry_exemption(round_no, narrative_texts, ledger_rounds,
+                         receipts=None):
     """Admit or refuse ONE named exemption; it never widens on its own.
 
     Returns (verdict, why). verdict is True only when the round is in the
-    table, has no ledger line among `ledger_rounds`, and its own narrative
-    text carries the recorded span. Every other shape answers False with a
-    named reason so a caller can tell a refusal from a missing entry.
+    table, has no ledger line among `ledger_rounds`, and the evidence its
+    entry names still holds on the tree it is handed. Every other shape
+    answers False with a named reason so a caller can tell a refusal from a
+    missing entry.
     """
     entry = FOLD_CARRY_EXEMPT.get(round_no)
     if entry is None:
         return False, "not-named"
     if round_no in ledger_rounds:
         return False, "ledger-exists"
+    receipt = entry.get("receipt")
+    if receipt is not None:
+        if receipts is None:
+            return False, "no-receipt-provided"
+        wanted = [item.strip() for item in receipt.get("parts") or []]
+        name = os.path.basename(receipt.get("file") or "")
+        seen = receipts.get(round_no, [])
+        for candidate in seen:
+            if candidate["file"] != name:
+                continue
+            if [item.strip() for item in candidate["parts"]] != wanted:
+                continue
+            if not receipt_admissible(candidate["parts"]):
+                return False, "receipt-has-budget"
+            return True, entry.get("why", "block receipt")
+        if any(not item["omits_budget"] for item in seen):
+            return False, "receipt-has-budget"
+        return False, "receipt-lacks-span"
+    payload = entry.get("inline_payload")
+    if payload is not None:
+        for text in narrative_texts:
+            if payload in text:
+                return True, entry.get("why", "inline budget payload")
+        return False, "narrative-lacks-payload"
     span = entry.get("narrative_span")
     if not span:
         return False, "no-span-recorded"
@@ -860,6 +982,12 @@ def audit_fold_carry(paths, min_round=None, provenance=None):
     examined = []
     skipped = 0
     archive_rounds = set()
+    # R3496: the frozen-class entries are re-proved against receipts read
+    # from the same archive files this call was handed, so an exemption can
+    # never pass on a summary the caller never showed the law.
+    receipts = None
+    if any("receipt" in entry for entry in FOLD_CARRY_EXEMPT.values()):
+        receipts = block_receipts(paths)
     for path in paths:
         for window in load_archive_windows(path):
             for line in window["lines"]:
@@ -916,7 +1044,7 @@ def audit_fold_carry(paths, min_round=None, provenance=None):
             if round_no not in archive_rounds:
                 verdict, why = fold_carry_exemption(
                     round_no, narrative_text.get(round_no, []),
-                    archive_rounds)
+                    archive_rounds, receipts)
                 if verdict:
                     exemptions.append({"window": window["round"],
                                        "round": round_no,
@@ -1052,9 +1180,12 @@ def format_fold_carry(report):
         entries = report.get("exemptions") or []
         if not entries:
             return ""
+        # R3496: one round can sit in two post-pin windows, which is why the
+        # list repeats it; the reader wants the NAMES, so the token counts
+        # distinct rounds and prints them once, sorted.
+        rounds = sorted(set(int(item["round"]) for item in entries))
         return " exempt=%d(%s)" % (
-            len(entries),
-            ",".join("R%d" % item["round"] for item in entries))
+            len(rounds), ",".join("R%d" % item for item in rounds))
 
     if report["vacuous"]:
         return ("FOLD-CARRY VACUOUS since=%d windows=0 skipped=%d "
