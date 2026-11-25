@@ -99,3 +99,5 @@
 {"event": "REPLACED", "name": "watch-conversion-board-R3436.log", "new_bytes": 4629, "new_sha16": "c009759b25f6b83b", "old_bytes": 2603, "old_sha16": "ae3d598fd30e1132", "prev_kind": "evidence", "ts": "2026-11-24T17:52:18Z"}
 {"event": "REPLACED", "name": "seller-price-cadence-board-R3442.log", "new_bytes": 578, "new_sha16": "bdd6bce2ba4e0530", "old_bytes": 578, "old_sha16": "bdd6bce2ba4e0530", "prev_kind": "evidence", "ts": "2026-11-24T19:46:52Z"}
 {"event": "REPLACED", "name": "buyer-answer-wait-board-R3449.log", "new_bytes": 1523, "new_sha16": "41ebfca2019c4443", "old_bytes": 728, "old_sha16": "74d3491cf4ee4bb9", "prev_kind": "evidence", "ts": "2026-11-24T22:02:22Z"}
+{"event": "REPLACED", "name": "frontdoor-expect-field-R3484.log", "new_bytes": 2354, "new_sha16": "94c8d3463705d620", "old_bytes": 2018, "old_sha16": "1cd4b17d56cc3c1d", "prev_kind": "evidence", "ts": "2026-11-25T17:44:47Z"}
+{"event": "REPLACED", "name": "frontdoor-expect-field-R3484.log", "new_bytes": 2496, "new_sha16": "bfaa00c61c5931ec", "old_bytes": 2354, "old_sha16": "94c8d3463705d620", "prev_kind": "evidence", "ts": "2026-11-25T17:46:11Z"}

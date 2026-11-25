@@ -10047,19 +10047,20 @@ class Handler(BaseHTTPRequestHandler):
                    ("%d %s\n" % (code, text)).encode("utf-8"), close=True)
 
     def handle_expect_100(self):
-        """R3468: this door never reads a body, so it never invites one.
+        """R3484: the interim is never sent, and the field is judged later.
 
-        Measured: the door speaks HTTP/1.0, so Python never reaches this hook
-        and no 100 Continue is sent today. The guard is installed anyway so a
-        later protocol bump cannot silently start inviting bodies this door
-        will not read; the suite pins the wire and this method together.
+        R3468 installed this hook to answer 417 without inviting a body. The
+        hook could only see what the stdlib read -- the first field line, and
+        only when the whole value equalled "100-continue" -- so a list whose
+        second member was an extension, or a second line carrying the token,
+        was silently answered 200: the door claimed to meet an expectation it
+        never implements. Expect is a comma list (RFC 9110 sec.5.3), so the
+        whole field is joined and judged once in _expect_refusal, after the
+        framing and Host duties and before dispatch. This hook now only
+        refuses to send the interim: the door reads no request body, so it
+        never invites one.
         """
-        if self.command in ALLOWED_METHODS:
-            self._send(417, "text/plain; charset=utf-8",
-                       b"417 this door reads no request body\n", close=True)
-        else:
-            self._method_refused()
-        return False
+        return True
 
     def _host_refusal(self):
         """R3471: the 400 answer for a malformed Host, or None.
@@ -10079,6 +10080,37 @@ class Handler(BaseHTTPRequestHandler):
         if not _host_value_ok(values[0].strip()):
             return b"400 invalid host field\n"
         return None
+
+    def _expect_refusal(self):
+        """R3484: the 417 answer for an Expect this door cannot meet, or None.
+
+        Expect carries a list of expectations (RFC 9110 sec.5.3 and
+        sec.10.1.1), so every line and every member is judged, not just the
+        first. This door reads no request body at all and implements no
+        extension, so it meets no expectation: 100-continue is refused with
+        the body that says why, any other member with the body that says it is
+        not supported. Empty members are ignored as the list grammar requires
+        (sec.5.6.1), so a field of nothing but commas carries no expectation.
+        An HTTP/1.0 request ignores the field whole (sec.10.1.1 writes that
+        duty for 100-continue, and the field is not defined in 1.0), and a
+        verb this door does not implement is refused by name first, so the
+        method answer keeps precedence over the expectation answer.
+        """
+        if not _speaks_11(self.request_version):
+            return None
+        if self.command not in ALLOWED_METHODS:
+            return None
+        joined = _list_header(self.headers, "Expect")
+        if not joined:
+            return None
+        members = [piece.strip() for piece in joined.split(",")
+                   if piece.strip()]
+        if not members:
+            return None
+        for member in members:
+            if member.lower() != "100-continue":
+                return b"417 expectation not supported\n"
+        return b"417 this door reads no request body\n"
 
     def parse_request(self):
         """R3468: a request naming both a transfer coding and a length.
@@ -10154,6 +10186,14 @@ class Handler(BaseHTTPRequestHandler):
         refused = self._host_refusal()
         if refused is not None:
             self._send(400, "text/plain; charset=utf-8", refused, close=True)
+            return False
+        # R3484: Expect is judged over the whole joined field, once, after the
+        # framing and Host duties and before dispatch. The interim answer is
+        # never sent (handle_expect_100), so an invited body cannot be left
+        # unread on this connection.
+        refused = self._expect_refusal()
+        if refused is not None:
+            self._send(417, "text/plain; charset=utf-8", refused, close=True)
             return False
         self._request_body_declared = (
             transfer is not None or

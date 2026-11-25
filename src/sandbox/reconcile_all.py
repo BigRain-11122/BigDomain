@@ -8714,8 +8714,9 @@ SUITES = [
     # AC-FDPV20 (a repeated conditional line is never half-executed).
     # AC-FDPV21 (two Accept-Encoding lines are one coding list).
     # AC-FDPV22 (two Transfer-Encoding or Connection lines are one list).
+    # AC-FDPV23 (the whole Expect field is one list and meets no expectation).
     ("frontdoor-preview-pages",
-     os.path.join("test_frontdoor_preview_pages.py"), 22),
+     os.path.join("test_frontdoor_preview_pages.py"), 23),
     # R3482: tools/listing_price_history_board.py renders the SHIPPED
     # api_price_history envelopes (one shelf's base price, every append-only
     # revision, the current price and the revision count) as one openable

@@ -138,7 +138,7 @@ RESULTS = []
 
 # R3475: one place states how many criteria the registry must
 # declare, so adding a criterion cannot leave eleven stale literals.
-DECLARED_TAG = "22)"
+DECLARED_TAG = "23)"
 
 
 def report(name, bad, detail=""):
@@ -3033,6 +3033,138 @@ def main():
             block22r = handle.read().split('"' + ROW + '"', 1)[-1][:220]
         if DECLARED_TAG not in block22r:
             bad22.append("f-declared")
+        # R3484 measured before the edit (tmp/probe-R3484.py, seventeen raw
+        # shapes): Expect was judged only by the stdlib hook -- the first field
+        # line, and only when the whole value equalled "100-continue". An
+        # extension expectation answered 200, a list naming one answered 200,
+        # and a second line carrying the token was invisible. Expect is a
+        # comma list (RFC 9110 sec.5.3), so the door now joins every line,
+        # ignores empty members (sec.5.6.1) and answers 417 once, after the
+        # framing and Host duties.
+        bad23 = []
+        page23 = "/preview/index.html"
+        with io.open(os.path.join(PREVIEW, "index.html"), "rb") as handle:
+            disk23 = handle.read()
+
+        def expect23(tag, expect_lines=(), version="HTTP/1.1",
+                     body=b"abc", method="GET", extra=(), host="127.0.0.1"):
+            """One raw request carrying Expect lines, graded on the wire."""
+            payload = ["%s %s %s" % (method, page23, version)]
+            if host is not None:
+                payload.append("Host: " + host)
+            for item in expect_lines:
+                payload.append("Expect: " + item)
+            payload.extend(extra)
+            if body is not None:
+                payload.append("Content-Length: %d" % len(body))
+            payload.extend(["Connection: close", ""])
+            blob23 = raw_request(
+                port, ("\r\n".join(payload) + "\r\n").encode("latin-1")
+                + (body or b""))
+            return blob23, wire_reply(blob23)
+
+        def graded23(tag, expect_lines, want_body, version="HTTP/1.1",
+                     body=b"abc", method="GET", extra=(), host="127.0.0.1"):
+            blob23, (status23, fields23, body23) = expect23(
+                tag, expect_lines, version=version, body=body,
+                method=method, extra=extra, host=host)
+            if " 417 " not in status23:
+                bad23.append("%s-%r" % (tag, status23))
+                return
+            if body23 != want_body:
+                bad23.append("%s-body-%r" % (tag, body23[:26]))
+            if fields23.get("connection", "").lower() != "close":
+                bad23.append("%s-close-%r" % (tag,
+                                              fields23.get("connection")))
+            if b"100 Continue" in blob23:
+                bad23.append("%s-invited" % tag)
+            # ---- e: the refusal names its policy like every other answer ---
+            for name23 in ("x-content-type-options", "permissions-policy",
+                           "content-security-policy", "server"):
+                if not fields23.get(name23):
+                    bad23.append("%s-policy-%s" % (tag, name23))
+
+        reads_no_body = b"417 this door reads no request body\n"
+        not_supported = b"417 expectation not supported\n"
+
+        # ---- a: the one expectation this door names keeps its answer -------
+        for tag23, body23 in (("a-with-body", b"abc"), ("a-no-body", None)):
+            graded23(tag23, ["100-continue"], reads_no_body, body=body23)
+        # ---- b: every extension member is refused by name -----------------
+        for tag23 in ("b-extension", "b-list-tail", "b-list-head",
+                      "b-parameter"):
+            lines23 = {
+                "b-extension": ["spam"],
+                "b-list-tail": ["100-continue, spam"],
+                "b-list-head": ["spam, 100-continue"],
+                "b-parameter": ["100-continue;x=1"],
+            }[tag23]
+            graded23(tag23, lines23, not_supported)
+        # ---- c: every line is one list, empty members ignored --------------
+        graded23("c-lines-tail", ["spam", "100-continue"], not_supported)
+        graded23("c-lines-head", ["100-continue", "spam"], not_supported)
+        graded23("c-empty-elements", [", ,100-continue"], reads_no_body)
+        graded23("c-lines-twice", ["100-continue", "100-continue"],
+                 reads_no_body)
+        graded23("c-upper", ["100-CONTINUE"], reads_no_body)
+        # ---- d: HTTP/1.0 ignores the field whole --------------------------
+        for tag23, lines23 in (("d-continue", ["100-continue"]),
+                               ("d-extension", ["spam"]),
+                               ("d-mixed", ["100-continue", "spam"])):
+            blob23, (status23, fields23, body23) = expect23(
+                tag23, lines23, version="HTTP/1.0")
+            if " 200 " not in status23 or not status23.startswith("HTTP/1.0"):
+                bad23.append("%s-%r" % (tag23, status23))
+            elif body23 != disk23:
+                bad23.append("%s-bytes" % tag23)
+            elif fields23.get("connection", "").lower() != "close":
+                bad23.append("%s-close-%r" % (tag23,
+                                              fields23.get("connection")))
+            if b"100 Continue" in blob23:
+                bad23.append("%s-invited" % tag23)
+        # ---- e: the earlier duties keep their precedence ------------------
+        blob23, (status23, _f23, body23) = expect23(
+            "e-framing", ["100-continue"],
+            extra=("Transfer-Encoding: chunked",))
+        if " 400 " not in status23 or b"conflicting body framing" not in body23:
+            bad23.append("e-framing-%r-%r" % (status23, body23[:24]))
+        blob23, (status23, _f23, body23) = expect23(
+            "e-host", ["spam"], host="bad host")
+        if " 400 " not in status23 or b"host" not in body23:
+            bad23.append("e-host-%r-%r" % (status23, body23[:24]))
+        blob23, (status23, fields23, _b23) = expect23(
+            "e-method", ["spam"], method="POST", body=None)
+        if " 405 " not in status23 or fields23.get("allow") != "GET, HEAD":
+            bad23.append("e-method-%r-%r" % (status23, fields23.get("allow")))
+        blob23, (status23, _f23, body23) = expect23("e-no-expect")
+        if " 200 " not in status23 or body23 != disk23:
+            bad23.append("e-no-expect-%r" % status23)
+        blob23, (status23, _f23, body23) = expect23("e-empty", [""])
+        if " 200 " not in status23 or body23 != disk23:
+            bad23.append("e-empty-%r" % status23)
+        # ---- f: dialect, tokens on disk, declared count -------------------
+        with io.open(MODULE, "rb") as handle:
+            raw23 = handle.read()
+        if raw23[:3] == b"\xef\xbb\xbf" or b"\r\n" in raw23:
+            bad23.append("f-module-dialect")
+        try:
+            text23 = raw23.decode("utf-8")
+            text23.encode("ascii")
+        except (UnicodeDecodeError, UnicodeEncodeError):
+            bad23.append("f-module-not-ascii")
+            text23 = raw23.decode("utf-8", "replace")
+        for token23 in ("def _expect_refusal",
+                        'def handle_expect_100',
+                        '_list_header(self.headers, "Expect")'):
+            if token23 not in text23:
+                bad23.append("f-missing-%s" % token23.split()[-1])
+        for token23 in ('self.headers.get("Expect")',):
+            if token23 in text23:
+                bad23.append("f-old-reader")
+        with io.open(REGISTRY, encoding="utf-8") as handle:
+            block23r = handle.read().split('"' + ROW + '"', 1)[-1][:220]
+        if DECLARED_TAG not in block23r:
+            bad23.append("f-declared")
     finally:
         srv.shutdown()
         srv.server_close()
@@ -3059,6 +3191,7 @@ def main():
     report("AC-FDPV20", bool(bad20), ",".join(bad20))
     report("AC-FDPV21", bool(bad21), ",".join(bad21))
     report("AC-FDPV22", bool(bad22), ",".join(bad22))
+    report("AC-FDPV23", bool(bad23), ",".join(bad23))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:

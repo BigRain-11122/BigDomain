@@ -1,0 +1,17 @@
+R3484 Expect field layer (RFC 9110 sec.10.1.1) - every reading below was taken before any edit
+probe tmp/probe-R3484.py, seventeen raw shapes over the factory Handler on a temporary port
+before the edit (gaps): Expect spam 200; 100-continue, spam 200; spam, 100-continue 200; two lines spam + 100-continue 200; , ,100-continue 200; two lines 100-continue + spam 417 but with the reads-no-body body
+correct before and kept: single 100-continue 417 with no interim 100; HTTP/1.0 ignores the field 200; empty value 200; framing conflict 400; bad Host 400; POST 405
+landed src/sandbox/frontdoor.py: handle_expect_100 returns True (no interim, no answer); _expect_refusal joins every Expect line through _list_header, ignores empty members (sec.5.6.1), answers 417 after the framing and Host duties, HTTP/1.0 ignores the field whole, an unimplemented verb keeps its own refusal first
+answer bodies: every member is 100-continue -> 417 this door reads no request body; any other member -> 417 expectation not supported
+SUITE PASS 23/23 (AC-FDPV23 six arms green on their first full run)
+control m1 (first line only, exact token): FAIL AC-FDPV23 b-extension, b-list-tail, b-list-head, b-parameter, c-lines-tail, c-lines-head, c-empty-elements, SUITE FAIL 1/23
+control m2 (extension folded into the 100-continue body): FAIL AC-FDPV23 b-extension-body, b-list-tail-body, b-list-head-body, b-parameter-body, c-lines-tail-body, c-lines-head-body, SUITE FAIL 1/23
+frontdoor.py sha256 4379376ca32cfcdd050bbac5b175c209d8e05306c88d9b275bba025941aef35f restored byte-identically after both controls; suite re-read SUITE PASS 23/23
+matrix WRITTEN 85440 bytes 828 rows 6931 criteria, then DOC-CURRENT
+census files=830 pins=13 unreadable=0 VERDICT PASS
+first yuan chain VERDICT PASS legs=2 entries=2 tx=1 reconcile_rc=0 read_only=True html=4403B
+deliverable index 23/23 fingerprint 8ea16c8c4bbd1623
+face sweep VERDICT PASS 13/13 fingerprint 7cee34ff5788ff0e then --check 21/21
+registry frontdoor-preview-pages declared criteria 22 -> 23
+after the export refresh every ring converged and was re-read: entry index 23/23, face sweep VERDICT PASS 13/13 and --check 21/21, src/os/export_round.py --check PASS, tools/status_export_fresh.py --check PASS, closeout CLOSEOUT-GATE PASS files=5023 carrier inside the 78500B gate with fold_needed=false; the pair was re-rendered once more after this line was first stored, so the fingerprints printed by the last gate run are the current ones and every re-render answered PASS
