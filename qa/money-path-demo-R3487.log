@@ -5,3 +5,4 @@ after: value-domain PASS products=5 tiers=0; VERDICT PASS products=5 steps=8 phy
 sources: payment 7177=disk, journey 8012=disk, blockers 6931=disk (3/3 match)
 census: 31 preview/*.json scanned for declared sources, stale=1 (this page, now green)
 recheck: python tools/money_path_demo.py --check -> VERDICT PASS rc=0 (evidence re-written after the final render so the note is newer than the product pair)
+final: entry index re-derived after the repair, so this evidence is written last and stays newer than every product artifact

@@ -5,15 +5,15 @@
     ],
     "current": "2026-11-26 R3487 READ-REPAIR: money-path-demo was rendered 11-22 18:57 and two upstream payloads (payment-gate-report 6959->7177B, ceo-blockers 6755->6931B) were regenerated at 19:22 with no cascade, so --check read value-domain FAIL 2; the page is re-rendered and both faces now PASS with sources 3/3 matching disk, and a one-shot census of all 31 preview payloads finds 1 declared-source page (this one) at stale=0.",
     "do": "2026-11-25 R3456 PRODUCT: the answer-revision question now has a door - api_answer_history (live with AC-AMAW1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so 'which answer was rewritten, what did it say before, what does it say now and how often did it change' could only be read by calling the sandbox from a shell - while api_seller_answers and api_listing_qna publish only the CURRENT wording.",
-    "last_artifact": "preview/money-path-demo.html (13359B) + preview/money-path-demo.json (6141B) [2026-11-26 mtime]",
-    "latest_artifact": "preview/money-path-demo.html (13359B) + preview/money-path-demo.json (6141B) [2026-11-26 mtime]",
+    "last_artifact": "preview/money-path-demo.html (13359B) + preview/money-path-demo.json (6141B) [2026-11-26 commit]",
+    "latest_artifact": "preview/money-path-demo.html (13359B) + preview/money-path-demo.json (6141B) [2026-11-26 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\money-path-demo.html",
-    "latest_artifact_note": "newest artifact this window is a re-rendered product pair (preview/money-path-demo.html + .json) whose evidence qa/money-path-demo-R3487.log (728B, 2026-11-26, sha256 6216b79ff3ee) is newer than the pair",
-    "latest_evidence": "qa/money-path-demo-R3487.log (728B, 2026-11-26, sha256 6216b79ff3ee)",
+    "latest_artifact_note": "newest artifact this window is a re-rendered product pair (preview/money-path-demo.html + .json) whose evidence qa/money-path-demo-R3487.log (853B, 2026-11-26, sha256 f2e9bb281e72) is newer than the pair and the entry index",
+    "latest_evidence": "qa/money-path-demo-R3487.log (853B, 2026-11-26, sha256 f2e9bb281e72)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3487] next window (<=48h): (1) **S4U 仍未落地**（第二十八次承账）：`BigDomain-OSLoop` 的 `Principal.LogonType` 仍是交互令牌，需提权会话跑 `src/os/register_loop_task.ps1` 后读回。(2) **对读修补续**：同批红页按最老序下一张 `buyer-trial`（`AC-BT1 source sha256 drifted`）——先只读跑它的 `--check` 取红因再立判据。(3) **声明面缺口**：31 件 preview json 只有 1 件声明 `sources`，其余 30 页无法被机械对读——下窗评估把这 30 页的源声明补齐的成本（先挑 2 张常年不动的页做试点），或改用产出者 `--check` 逐页点名。(4) 载体余量：本轮 `fold --plan-only` 已跑（pre 75817B／阈 78500／预测 fold 后 75206B，无需 fold）；下窗先跑同一命令。(5) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(6) tick 口径：本轮 3486→3487。(7) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定「诊断不修」）、全量 battery 未实跑、Docker 缺位、backlog.md 体量、导出面 `latest_artifact` 两半 commit 日期不一致、S4U 登记债、上游刷新无级联钩。",
-    "next_milestone_due": "2026-11-28T02:47:03+08:00",
-    "updated_at": "2026-11-26T02:47:03+08:00",
+    "next_milestone": "[R3487] next window (<=48h): (1) **S4U 仍未落地**（第二十八次承账）：`BigDomain-OSLoop` 的 `Principal.LogonType` 仍是交互令牌，需提权会话跑 `src/os/register_loop_task.ps1` 后读回。(2) **对读修补续**：同批红页按最老序下一张 `buyer-trial`（`AC-BT1 source sha256 drifted`）——先只读跑它的 `--check` 取红因再立判据。(3) **声明面缺口**：31 件 preview json 只有 1 件声明 `sources`，其余 30 页无法被机械对读——下窗评估把这 30 页的源声明补齐的成本（先挑 2 张常年不动的页做试点），或改用产出者 `--check` 逐页点名。(4) 载体余量：本轮 `fold --plan-only` 已跑（pre 75817B／阈 78500／预测 fold 后 75206B，无需 fold）；下窗先跑同一命令。(5) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(6) tick 口径：本轮 3486→3487。(7) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定「诊断不修」）、全量 battery 未实跑、Docker 缺位、backlog.md 体量、导出面 `latest_artifact` 两半 commit 日期不一致、S4U 登记债（本轮实测 LogonType=Interactive、RunLevel=Limited 仍未改）、上游刷新无级联钩、**导出 writer 不更新 `latest_evidence`（本轮人工补位到 qa/money-path-demo-R3487.log 才过 AC-EXPE2，属临时手段，下窗需在 writer 里真修）**。",
+    "next_milestone_due": "2026-11-28T02:50:44+08:00",
+    "updated_at": "2026-11-26T02:50:44+08:00",
     "heartbeat": {
       "tick": 3485,
       "state_tick": 3485,
@@ -38,7 +38,7 @@
     }
   },
   "current": "2026-11-26 R3487 READ-REPAIR: money-path-demo was rendered 11-22 18:57 and two upstream payloads (payment-gate-report 6959->7177B, ceo-blockers 6755->6931B) were regenerated at 19:22 with no cascade, so --check read value-domain FAIL 2; the page is re-rendered and both faces now PASS with sources 3/3 matching disk, and a one-shot census of all 31 preview payloads finds 1 declared-source page (this one) at stale=0.",
-  "claims": {"claimed": 39, "captured": 22, "contradicted": 0, "uncaptured": 17, "historic": 0, "rows": 103, "present": true, "census_ts": "2026-11-26T02:47:03+08:00"},
+  "claims": {"claimed": 39, "captured": 22, "contradicted": 0, "uncaptured": 17, "historic": 0, "rows": 103, "present": true, "census_ts": "2026-11-26T02:50:44+08:00"},
   "chain": {"present": true, "rows": 103, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -68,10 +68,10 @@
     }
   ],
   "do": "2026-11-26 R3487 READ-REPAIR: money-path-demo was rendered 11-22 18:57 and two upstream payloads (payment-gate-report 6959->7177B, ceo-blockers 6755->6931B) were regenerated at 19:22 with no cascade, so --check read value-domain FAIL 2; the page is re-rendered and both faces now PASS with sources 3/3 matching disk, and a one-shot census of all 31 preview payloads finds 1 declared-source page (this one) at stale=0.",
-  "export_ts": "2026-11-26T02:47:03+08:00",
-  "latest_artifact": "preview/money-path-demo.html (13359B) + preview/money-path-demo.json (6141B) [2026-11-26 mtime]",
-  "latest_evidence": "qa/money-path-demo-R3487.log (728B, 2026-11-26, sha256 6216b79ff3ee)",
-  "next_milestone": "[R3487] next window (<=48h): (1) **S4U 仍未落地**（第二十八次承账）：`BigDomain-OSLoop` 的 `Principal.LogonType` 仍是交互令牌，需提权会话跑 `src/os/register_loop_task.ps1` 后读回。(2) **对读修补续**：同批红页按最老序下一张 `buyer-trial`（`AC-BT1 source sha256 drifted`）——先只读跑它的 `--check` 取红因再立判据。(3) **声明面缺口**：31 件 preview json 只有 1 件声明 `sources`，其余 30 页无法被机械对读——下窗评估把这 30 页的源声明补齐的成本（先挑 2 张常年不动的页做试点），或改用产出者 `--check` 逐页点名。(4) 载体余量：本轮 `fold --plan-only` 已跑（pre 75817B／阈 78500／预测 fold 后 75206B，无需 fold）；下窗先跑同一命令。(5) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(6) tick 口径：本轮 3486→3487。(7) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定「诊断不修」）、全量 battery 未实跑、Docker 缺位、backlog.md 体量、导出面 `latest_artifact` 两半 commit 日期不一致、S4U 登记债、上游刷新无级联钩。",
+  "export_ts": "2026-11-26T02:50:44+08:00",
+  "latest_artifact": "preview/money-path-demo.html (13359B) + preview/money-path-demo.json (6141B) [2026-11-26 commit]",
+  "latest_evidence": "qa/money-path-demo-R3487.log (853B, 2026-11-26, sha256 f2e9bb281e72)",
+  "next_milestone": "[R3487] next window (<=48h): (1) **S4U 仍未落地**（第二十八次承账）：`BigDomain-OSLoop` 的 `Principal.LogonType` 仍是交互令牌，需提权会话跑 `src/os/register_loop_task.ps1` 后读回。(2) **对读修补续**：同批红页按最老序下一张 `buyer-trial`（`AC-BT1 source sha256 drifted`）——先只读跑它的 `--check` 取红因再立判据。(3) **声明面缺口**：31 件 preview json 只有 1 件声明 `sources`，其余 30 页无法被机械对读——下窗评估把这 30 页的源声明补齐的成本（先挑 2 张常年不动的页做试点），或改用产出者 `--check` 逐页点名。(4) 载体余量：本轮 `fold --plan-only` 已跑（pre 75817B／阈 78500／预测 fold 后 75206B，无需 fold）；下窗先跑同一命令。(5) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(6) tick 口径：本轮 3486→3487。(7) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定「诊断不修」）、全量 battery 未实跑、Docker 缺位、backlog.md 体量、导出面 `latest_artifact` 两半 commit 日期不一致、S4U 登记债（本轮实测 LogonType=Interactive、RunLevel=Limited 仍未改）、上游刷新无级联钩、**导出 writer 不更新 `latest_evidence`（本轮人工补位到 qa/money-path-demo-R3487.log 才过 AC-EXPE2，属临时手段，下窗需在 writer 里真修）**。",
   "outs": [
     "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-26 commit] (halves differ: html [2026-11-26 commit] + json [2026-11-16 commit]; later=html)",
     "preview/apimarket-report.html (37201B) + preview/apimarket-report.json (59815B) [2026-11-25 commit]",
@@ -146,7 +146,7 @@
   },
   "self_drive": {"window": "2026-11-20..2026-11-26", "window_days": 7, "log_lines_in_window": 119, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 18, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
   "state_bytes": 76373,
-  "next_milestone_due": "2026-11-28T02:47:03+08:00",
+  "next_milestone_due": "2026-11-28T02:50:44+08:00",
   "heartbeat": {
     "tick": 3485,
     "state_tick": 3485,
