@@ -864,7 +864,7 @@
     "href": "lobby-session-trace.html",
     "label": "同一套大厅协议在一次会话里怎么走（只读）",
     "labelled": true,
-    "bytes": 8347,
+    "bytes": 9092,
     "controls": 0,
     "readonly": true,
     "exists": true

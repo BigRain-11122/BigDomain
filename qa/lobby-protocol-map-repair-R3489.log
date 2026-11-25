@@ -1,0 +1,11 @@
+R3489 evidence - lobby-protocol-map read-along repair (read-only cause first)
+RUNNER-BEFORE: python tools/lobby_protocol_map.py --check -> rc=2 FAIL criteria=32 fails=2 html=29069B
+RED-1: html is not the fresh derivation
+RED-2: lobby-protocol-map: hop measure drifted lobby-session-trace.html json=8347/0 disk=9092/0
+CAUSE: the declared onward hop preview/lobby-session-trace.html was re-rendered by another window at 2026-11-25 09:58 (8347 -> 9092B) after this page landed at 2026-11-22 18:57; no renderer logic changed.
+RUNNER-WRITE: python tools/lobby_protocol_map.py -> wrote html 29069B json 27924B criteria=32 messages=17 uncovered=0 rc=0
+HASH-BEFORE: html 79581F06CFCC3F5C json 0437173C82296342
+HASH-AFTER:  html 10E109E927909C99 json 78ED323E154168B0
+RUNNER-AFTER: python tools/lobby_protocol_map.py --check -> VERDICT PASS criteria=32 messages=17 uncovered=0 file_refs=13 route_hops=4 html=29069B fails=0 rc=0
+GATES: matrix DOC-CURRENT; census rows=828 readable=828 unparsed=0 silent=0; first-yuan-chain VERDICT PASS legs=2 read_only=True html=4403B json=4806B; entry index 23/23 fingerprint=edfdfbf8814c5df2; face sweep VERDICT PASS 13/13 fingerprint=8524003be05589a9 then --check 21/21; closeout CLOSEOUT-GATE PASS files=5027 census=PASS matrix=DOC-CURRENT carrier 74261B margin 4239
+HONEST: zero new tables, zero new readings, zero business semantics - the page publishes the real hop size again; five physical pieces still missing so buyers still cannot pay.
