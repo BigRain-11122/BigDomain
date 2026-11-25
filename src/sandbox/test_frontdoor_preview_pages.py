@@ -1,6 +1,6 @@
 """Suite for the door's deliverable shelf: the shipped pages get one URL.
 
-THREE criteria. AC-FDPV1 (six arms) pins the shelf itself: the pages come back
+FOUR criteria. AC-FDPV1 (six arms) pins the shelf itself: the pages come back
 byte-identical to disk and no path can turn the door into a filesystem
 reader. AC-FDPV2 (six arms, R3462) pins the door's manners: HEAD answers the
 same status, type and length as GET with an empty body (a standard probe must
@@ -9,11 +9,17 @@ the same URL is otherwise a stale face). AC-FDPV3 (six arms, R3463) pins the
 shelf's resumability: one byte range answers 206 with exactly that slice, a
 range past the last byte answers 416 carrying the total, a malformed range is
 ignored rather than 500, and eight concurrent readers all get the same bytes.
+AC-FDPV4 (six arms, R3464) pins the shelf's conditionals: every 200 carries a
+strong content ETag and a Last-Modified, If-None-Match and If-Modified-Since
+answer 304 with no body, and an If-Range that no longer matches answers the
+whole face instead of splicing a new version onto an old prefix.
 
 Usage: python test_frontdoor_preview_pages.py
 Exit: 0 = SUITE PASS, 2 = FAIL.
 """
 
+import email.utils
+import hashlib
 import http.client
 import io
 import os
@@ -86,6 +92,25 @@ def request(port, method, path, headers=None):
                 resp.getheader("Content-Length", "") or "",
                 resp.getheader("Content-Range", "") or "",
                 resp.getheader("Accept-Ranges", "") or "", resp.read())
+    finally:
+        conn.close()
+
+
+def cond(port, method, path, headers=None):
+    """R3464: every conditional-request field, named so no arm skips one."""
+    conn = http.client.HTTPConnection("127.0.0.1", port, timeout=15)
+    try:
+        conn.request(method, path, headers=headers or {})
+        resp = conn.getresponse()
+        return {"status": resp.status,
+                "ctype": resp.getheader("Content-Type", "") or "",
+                "length": resp.getheader("Content-Length", "") or "",
+                "etag": resp.getheader("ETag", "") or "",
+                "last_modified": resp.getheader("Last-Modified", "") or "",
+                "crange": resp.getheader("Content-Range", "") or "",
+                "ranges": resp.getheader("Accept-Ranges", "") or "",
+                "cache": resp.getheader("Cache-Control", "") or "",
+                "body": resp.read()}
     finally:
         conn.close()
 
@@ -260,7 +285,7 @@ def main():
             block = registry_text.split('"' + ROW + '"', 1)[1][:160]
             if "test_frontdoor_preview_pages.py" not in block:
                 bad2.append("f-row-file")
-            if "3)" not in block:
+            if "4)" not in block:
                 bad2.append("f-declared-%s" % block.split(")")[0].strip()[-3:])
 
         # ===== AC-FDPV3: the shelf is resumable and concurrent ============
@@ -382,6 +407,115 @@ def main():
             bad3.append("f-range-parser-missing")
         if text3.count("def do_HEAD(") != 1:
             bad3.append("f-head-count")
+        # ===== AC-FDPV4: the shelf publishes a validator ===================
+        # R3464 measured before the code: every answer was unconditional --
+        # no ETag, no Last-Modified, If-None-Match and If-Modified-Since
+        # ignored -- so a reader could not prove its copy was current, and a
+        # resumer that spliced a new version's slice onto an old version's
+        # prefix would build a file that exists nowhere.
+        bad4 = []
+        json_disk4 = os.path.join(PREVIEW, json_name)
+        with io.open(json_disk4, "rb") as handle:
+            raw4 = handle.read()
+        size4 = len(raw4)
+        path4 = "/preview/" + json_name
+        etag4 = '"%s"' % hashlib.sha256(raw4).hexdigest()[:16]
+        lm4 = email.utils.formatdate(os.path.getmtime(json_disk4), usegmt=True)
+
+        # ---- a: every 200 names its entity ---------------------------------
+        reply = cond(port, "GET", path4)
+        if reply["etag"] != etag4:
+            bad4.append("a-etag-%r" % reply["etag"])
+        if reply["last_modified"] != lm4:
+            bad4.append("a-last-modified-%r" % reply["last_modified"])
+        if reply["cache"] != "no-store":
+            bad4.append("a-cache")
+        for in_memory in ("/", "/healthz"):
+            reply = cond(port, "GET", in_memory)
+            tag = reply["etag"]
+            if not (tag.startswith('"') and tag.endswith('"')) or \
+                    len(tag) != 18:
+                bad4.append("a-tag-shape-%s-%r" % (in_memory, tag))
+
+        # ---- b: If-None-Match answers 304 with no body ---------------------
+        for header in (etag4, "W/" + etag4, "*"):
+            reply = cond(port, "GET", path4, {"If-None-Match": header})
+            if reply["status"] != 304:
+                bad4.append("b-status-%s-%d" % (header, reply["status"]))
+            if reply["body"] != b"":
+                bad4.append("b-body-%s" % header)
+            if reply["length"] != "0":
+                bad4.append("b-length-%s" % header)
+            if reply["etag"] != etag4:
+                bad4.append("b-etag-%s" % header)
+            if reply["cache"] != "no-store":
+                bad4.append("b-cache-%s" % header)
+        reply = cond(port, "GET", path4,
+                     {"If-None-Match": '"0000000000000000"'})
+        if reply["status"] != 200 or reply["body"] != raw4:
+            bad4.append("b-stale-%d" % reply["status"])
+
+        # ---- c: the slice carries the full representation's tag ------------
+        reply = cond(port, "GET", path4, {"Range": "bytes=0-99"})
+        if reply["status"] != 206 or reply["etag"] != etag4:
+            bad4.append("c-tag-%d-%r" % (reply["status"], reply["etag"]))
+        if reply["body"] != raw4[:100]:
+            bad4.append("c-bytes")
+        reply = cond(port, "GET", path4,
+                     {"Range": "bytes=0-99", "If-Range": etag4})
+        if reply["status"] != 206 or reply["body"] != raw4[:100]:
+            bad4.append("c-match-%d" % reply["status"])
+        if reply["crange"] != "bytes 0-99/%d" % size4:
+            bad4.append("c-crange-%r" % reply["crange"])
+
+        # ---- d: a validator that no longer matches serves the whole face ---
+        for header in ('"0000000000000000"', "W/" + etag4,
+                       "Wed, 21 Oct 2015 07:28:00 GMT"):
+            reply = cond(port, "GET", path4,
+                         {"Range": "bytes=0-99", "If-Range": header})
+            if reply["status"] != 200:
+                bad4.append("d-status-%s-%d" % (header, reply["status"]))
+            if reply["body"] != raw4:
+                bad4.append("d-body-%s" % header)
+            if reply["crange"] != "":
+                bad4.append("d-crange-%s" % header)
+            if reply["ranges"] != "bytes":
+                bad4.append("d-ranges-%s" % header)
+
+        # ---- e: If-Modified-Since is a real condition ----------------------
+        reply = cond(port, "GET", path4, {"If-Modified-Since": lm4})
+        if reply["status"] != 304 or reply["body"] != b"":
+            bad4.append("e-equal-%d" % reply["status"])
+        reply = cond(port, "GET", path4,
+                     {"If-Modified-Since":
+                      email.utils.formatdate(0, usegmt=True)})
+        if reply["status"] != 200 or reply["body"] != raw4:
+            bad4.append("e-older-%d" % reply["status"])
+
+        # ---- f: the module dialect and the declared count -------------------
+        with io.open(MODULE, "rb") as handle:
+            raw5 = handle.read()
+        if raw5[:3] == b"\xef\xbb\xbf":
+            bad4.append("f-module-bom")
+        if b"\r\n" in raw5:
+            bad4.append("f-module-crlf")
+        try:
+            text5 = raw5.decode("utf-8")
+            text5.encode("ascii")
+        except (UnicodeDecodeError, UnicodeEncodeError):
+            bad4.append("f-module-not-ascii")
+            text5 = raw5.decode("utf-8", "replace")
+        if text5.count("def do_HEAD(") != 1:
+            bad4.append("f-head-count")
+        for needle in ("def _etag(", "def _parse_http_date(",
+                       "def _not_modified(", "def _if_range_ok("):
+            if needle not in text5:
+                bad4.append("f-missing-" + needle)
+        with io.open(REGISTRY, encoding="utf-8") as handle:
+            registry_text4 = handle.read()
+        block4 = registry_text4.split('"' + ROW + '"', 1)[-1][:160]
+        if "4)" not in block4:
+            bad4.append("f-declared-%r" % block4.split(")")[0][-8:])
     finally:
         srv.shutdown()
         srv.server_close()
@@ -389,6 +523,7 @@ def main():
     report("AC-FDPV1", bool(bad), ",".join(bad))
     report("AC-FDPV2", bool(bad2), ",".join(bad2))
     report("AC-FDPV3", bool(bad3), ",".join(bad3))
+    report("AC-FDPV4", bool(bad4), ",".join(bad4))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:

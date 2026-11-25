@@ -125,6 +125,7 @@ are loaded from the ugc config at runtime; this source stays ASCII.
 """
 
 import contextlib
+import email.utils
 import glob
 import hashlib
 import html
@@ -9168,20 +9169,90 @@ def _parse_range(header, size):
     return start, min(end, size - 1)
 
 
+def _etag(body):
+    """R3464: one strong validator for the bytes this door serves.
+
+    Content-derived, so a face rebuilt with the same bytes keeps its tag and a
+    face rebuilt with new bytes cannot: the first sixteen hex digits of the
+    body's sha256, quoted the way RFC 7232 entities are.
+    """
+    return '"%s"' % hashlib.sha256(body).hexdigest()[:16]
+
+
+def _parse_http_date(value):
+    """R3464: an IMF-fixdate back to a POSIX timestamp, or None.
+
+    A header the door cannot read is not a failed condition (RFC 7232 sec.3.3:
+    an invalid If-Modified-Since is ignored), so the caller falls through to a
+    normal 200 rather than guessing.
+    """
+    if not value:
+        return None
+    try:
+        parsed = email.utils.parsedate_to_datetime(value.strip())
+    except (TypeError, ValueError, IndexError):
+        return None
+    if parsed is None:
+        return None
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed.timestamp()
+
+
 class Handler(BaseHTTPRequestHandler):
-    def _send(self, code, ctype, body, head_only=False, headers=()):
+    def _send(self, code, ctype, body, head_only=False, headers=(), etag=None):
         # R3462: every answer is no-store. The preview faces are rebuilt under
         # the same URL each round, so a cached page is a stale page and the
         # reader would be looking at yesterday's numbers.
+        # R3464: an answer that has a validator publishes it -- and a 304
+        # still names the entity it is telling the reader to keep.
         self.send_response(code)
         self.send_header("Content-Type", ctype)
         self.send_header("Cache-Control", "no-store")
+        if etag:
+            self.send_header("ETag", etag)
         for name, value in headers:
             self.send_header(name, value)
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
         if not head_only:
             self.wfile.write(body)
+
+    def _not_modified(self, etag, last_modified):
+        """R3464: the two preconditions, in the RFC 7232 sec.6 order.
+
+        If-None-Match uses weak comparison (a W/ prefix on either side still
+        matches) and wins outright when present; If-Modified-Since only speaks
+        when it is absent, and only answers 304 when the face has not moved
+        since the reader's copy was stamped.
+        """
+        match = self.headers.get("If-None-Match")
+        if match is not None:
+            tokens = [token.strip() for token in match.split(",")]
+            if "*" in tokens:
+                return True
+            bare = etag[2:] if etag.startswith("W/") else etag
+            for token in tokens:
+                if (token[2:] if token.startswith("W/") else token) == bare:
+                    return True
+            return False
+        since = _parse_http_date(self.headers.get("If-Modified-Since"))
+        if since is None:
+            return False
+        return _parse_http_date(last_modified) <= since
+
+    def _if_range_ok(self, etag):
+        """R3464: If-Range must match under STRONG comparison.
+
+        RFC 7233 sec.3.2: a weak validator never authorises a range, and a
+        date this door does not publish cannot match either -- both answer the
+        whole face, because splicing a new version's slice onto an old
+        version's prefix produces a file that exists nowhere.
+        """
+        value = self.headers.get("If-Range")
+        if value is None:
+            return True
+        return value.strip() == etag
 
     def _serve_preview(self, path, head_only=False):
         """R3461: serve one shipped deliverable page from preview/.
@@ -9209,6 +9280,22 @@ class Handler(BaseHTTPRequestHandler):
             return self._send(404, "text/plain", b"404 not found", head_only)
         with open(full, "rb") as handle:
             body = handle.read()
+        # R3464: the shelf publishes a validator, and the preconditions run
+        # before any range decision. A reader whose copy still matches is
+        # answered 304 with no body; a reader whose If-Range no longer matches
+        # is answered the WHOLE face, never a slice of a version they do not
+        # hold. The ETag is derived from the full representation, so it stays
+        # the same on a 200, a 206 and a 416 alike.
+        etag = _etag(body)
+        last_modified = email.utils.formatdate(os.path.getmtime(full),
+                                               usegmt=True)
+        if self._not_modified(etag, last_modified):
+            return self._send(304, ctype, b"", head_only,
+                              (("Last-Modified", last_modified),), etag)
+        if not self._if_range_ok(etag):
+            return self._send(200, ctype, body, head_only,
+                              (("Accept-Ranges", "bytes"),
+                               ("Last-Modified", last_modified)), etag)
         # R3463: the shelf is resumable. A single byte range answers 206 with
         # the exact slice, a range past the last byte answers 416 with the
         # total in Content-Range, and every other shape falls back to the
@@ -9218,24 +9305,32 @@ class Handler(BaseHTTPRequestHandler):
         rng = _parse_range(self.headers.get("Range"), size)
         if isinstance(rng, tuple) and rng[0] == "unsatisfiable":
             return self._send(416, "text/plain", b"", head_only,
-                              (("Content-Range", "bytes */%d" % size),))
+                              (("Content-Range", "bytes */%d" % size),
+                               ("Last-Modified", last_modified)), etag)
         if rng is not None:
             start, end = rng
             return self._send(
                 206, ctype, body[start:end + 1], head_only,
                 (("Content-Range",
-                  "bytes %d-%d/%d" % (start, end, size)),))
+                  "bytes %d-%d/%d" % (start, end, size)),
+                 ("Last-Modified", last_modified)), etag)
         return self._send(200, ctype, body, head_only,
-                          (("Accept-Ranges", "bytes"),))
+                          (("Accept-Ranges", "bytes"),
+                           ("Last-Modified", last_modified)), etag)
 
     def _route(self, head_only):
         # R3462: one routing table for both verbs. HEAD answers the same
         # status, type and length as GET and writes no body, so a standard
         # probe (curl -I, a link checker, a CDN warmer) sees a working door.
+        # R3464: the two in-memory faces publish a validator too, derived from
+        # the exact bytes they serve.
         if self.path in ("/", "/index.html"):
-            self._send(200, "text/html; charset=utf-8", render(), head_only)
+            body = render()
+            self._send(200, "text/html; charset=utf-8", body, head_only,
+                       (), _etag(body))
         elif self.path == "/healthz":
-            self._send(200, "text/plain", b"ok", head_only)
+            body = b"ok"
+            self._send(200, "text/plain", body, head_only, (), _etag(body))
         elif self.path == "/preview" or self.path.startswith("/preview/"):
             self._serve_preview(self.path, head_only)
         else:

@@ -8682,7 +8682,7 @@ SUITES = [
     # R3463: Range was ignored outright, so a 55KB face could not be resumed
     # or fetched in slices and concurrency was never pinned - AC-FDPV3.
     ("frontdoor-preview-pages",
-     os.path.join("test_frontdoor_preview_pages.py"), 3),
+     os.path.join("test_frontdoor_preview_pages.py"), 4),
     # R3115: the 24h export-face age gate (os/export_freshness.py, AC-EXP1..6)
     # had zero production consumers - it ran only inside its own suite - while
     # the CEO card printed export_ts as a bare string. AC-FDC2 (six arms, ONE
