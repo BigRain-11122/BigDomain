@@ -1,0 +1,10 @@
+RUNNER frontdoor-preview-pages R3469
+PIN AC-FDPV10 six arms landed in src/os/backlog.md before the code edit; the same row records that R3468 closed out with no next-window row on the board
+MEASURED before this landed (tmp/probe-R3469.py, ephemeral loopback port): GET / -> 200 207067B; GET /?utm_source=share -> 404 13B; GET /healthz -> 200 2B; GET /healthz?probe=1 -> 404 13B; GET /preview -> 200 55185B; GET /preview?x=1 -> 404 13B; GET /index.html?x=1 -> 404 13B; GET /preview/index.html?v=2 -> 200 55185B; GET /nope?x=1 -> 404
+FIX src/sandbox/frontdoor.py: Handler._request_path drops the query and the fragment once, and _route chooses on that path alone, so the shelf and the two in-memory faces share one query law instead of two
+SUITE PASS 10/10 (AC-FDPV1..AC-FDPV10). AC-FDPV10 green after two drafts were corrected: the a/c arms first compared whole root bodies, which cannot be equal because render() books a live probe transaction id per call (first difference at offset 11603, identical length), so the arm now pins status, type, length and the page head and says why bytes cannot be compared
+REGISTRY frontdoor-preview-pages 9 -> 10; MATRIX WRITTEN 85220 bytes 826 rows; CENSUS rows=826 readable=826 unparsed=0 silent=0
+CONTROL 1 (_request_path returns self.path) -> AC-FDPV10 red by name: a-status-200-404, a-ctype, a-length-13-207067, a-query-not-page, a-query-404, b-health-404, c-shelf-404, c-root-alias-404, e-root, e-head; module restored byte-identically
+CONTROL 2 (non-shelf paths forced to the root) -> AC-FDPV10 b-health red and AC-FDPV1 d-unknown-not-404 red, with collateral AC-FDPV2/6/7/8/9 arms because this mutation also moved /healthz and /nope; module restored byte-identically
+RESTORE src/sandbox/frontdoor.py sha256 6bf87a5679a2397072b11b6fd710096b6897f5ccdea6b8de20de35ebf730c20a
+HONEST this adds no page and no reading: the door's three in-memory routes now treat a query the way the shelf always did, so a share link carrying a tracking parameter opens the face it names instead of answering 404; nothing else on the door moved

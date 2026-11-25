@@ -9515,6 +9515,18 @@ class Handler(BaseHTTPRequestHandler):
                           (("Accept-Ranges", "bytes"),
                            ("Last-Modified", last_modified)), etag, coding)
 
+    def _request_path(self):
+        """R3469: the request target without its query string.
+
+        Measured before this landed: _serve_preview already dropped a query,
+        so /preview/index.html?v=2 answered the page -- but the root,
+        /index.html, /healthz and the bare /preview compared self.path whole,
+        so the same share link carrying a tracking parameter answered 404 on
+        one route and 200 on the next. No face on this door selects by query,
+        so the query is dropped once, for every route, instead of per route.
+        """
+        return self.path.split("?", 1)[0].split("#", 1)[0] or "/"
+
     def _route(self, head_only):
         # R3462: one routing table for both verbs. HEAD answers the same
         # status, type and length as GET and writes no body, so a standard
@@ -9522,15 +9534,17 @@ class Handler(BaseHTTPRequestHandler):
         # R3464: the two in-memory faces publish a validator too, derived from
         # the exact bytes they serve.
         # R3465: the root page is a face like any other, so it negotiates too.
-        if self.path in ("/", "/index.html"):
+        # R3469: the route is chosen on the path alone, as the shelf always was.
+        path = self._request_path()
+        if path in ("/", "/index.html"):
             body, coding = self._negotiate(render())
             self._send(200, "text/html; charset=utf-8", body, head_only,
                        (), _etag(body), coding)
-        elif self.path == "/healthz":
+        elif path == "/healthz":
             body = b"ok"
             self._send(200, "text/plain", body, head_only, (), _etag(body))
-        elif self.path == "/preview" or self.path.startswith("/preview/"):
-            self._serve_preview(self.path, head_only)
+        elif path == "/preview" or path.startswith("/preview/"):
+            self._serve_preview(path, head_only)
         else:
             self._send(404, "text/plain", b"404 not found", head_only)
 
