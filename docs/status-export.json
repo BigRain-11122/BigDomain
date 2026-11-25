@@ -10,8 +10,8 @@
     "latest_evidence": "qa/fold-carry-census-R3494.log (2984B, 2026-11-26, sha256 75562974054f)",
     "newest_pair_on_disk_is_board": false,
     "next_milestone": "[R3495] next window (<=48h): (1) **S4U 仍未落地**（第三十四次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回。(2) **三洞决策（本窗只分类，未改法条）**：两条候选路径各自先立判据——A「具名豁免」须给出可机械复验的证物（`FOLD_CARRY_EXEMPT` 现在只认一个 `narrative_span`，而三轮的证物是**存储史缺席**，模块禁子进程/禁网络，故先答「证物能不能不靠 git 而由盘上复验」）；B「收窄射程」须先答「台账行强制令在哪一轮生效」（R3380 引 `E_ROUND_LOST`，须以归档原文定轮次），并验「收窄后不会放走任何可修形状」——负控＝造一条「叙述归档、台账留活体」的窗口必须仍红。判据未立前禁改 `ledger_lines.py`。(3) `battery-shard-report` 本轮未对读（族读数未变），下窗对读一次。(4) 载体余量：state `7560B`，`fold --plan-only` 本轮答 `writes_nothing=true`（post 上限 2827B），下窗仍先跑。(5) 基准 2026-12-01 到期（48h 窗 2026-11-27）。(6) tick 口径：本轮 3493→3494，下轮 R3495。(7) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定「诊断不修」）、全量 battery 未实跑、Docker 缺位、backlog.md 体量、导出面 `latest_artifact` 槽写手债、三个 `qa/crawl-*` 改动件非本窗所写。",
-    "next_milestone_due": "2026-11-28T04:26:32+08:00",
-    "updated_at": "2026-11-26T04:26:32+08:00",
+    "next_milestone_due": "2026-11-28T04:27:27+08:00",
+    "updated_at": "2026-11-26T04:27:27+08:00",
     "heartbeat": {
       "tick": 3485,
       "state_tick": 3494,
@@ -27,7 +27,7 @@
       "over7": 0,
       "dup_rows": 0,
       "distinct": 11,
-      "collapsed": 1,
+      "collapsed": 0,
       "labels_refreshed": 0,
       "notes_stale": 0,
       "note_claims": 0,
@@ -36,7 +36,7 @@
     }
   },
   "current": "2026-11-26 R3494 PRODUCT: the fold-carry red stops being one undifferentiated number - tools/fold_carry_census.py splits every post-pin gap into repairable (a ledger presence line still in the live ring) and frozen (no ledger line anywhere), and reads the shipped tree as left_behind=0 nowhere=3(rounds=3 entries=6) exempt=1 with preview/fold-carry-census.json derived from the same read (FCC-CHECK VERDICT PASS).",
-  "claims": {"claimed": 41, "captured": 23, "contradicted": 0, "uncaptured": 18, "historic": 0, "rows": 103, "present": true, "census_ts": "2026-11-26T04:26:32+08:00"},
+  "claims": {"claimed": 41, "captured": 23, "contradicted": 0, "uncaptured": 18, "historic": 0, "rows": 103, "present": true, "census_ts": "2026-11-26T04:27:27+08:00"},
   "chain": {"present": true, "rows": 103, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -66,7 +66,7 @@
     }
   ],
   "do": "2026-11-26 R3494 PRODUCT: the fold-carry red stops being one undifferentiated number - tools/fold_carry_census.py splits every post-pin gap into repairable (a ledger presence line still in the live ring) and frozen (no ledger line anywhere), and reads the shipped tree as left_behind=0 nowhere=3(rounds=3 entries=6) exempt=1 with preview/fold-carry-census.json derived from the same read (FCC-CHECK VERDICT PASS).",
-  "export_ts": "2026-11-26T04:26:32+08:00",
+  "export_ts": "2026-11-26T04:27:27+08:00",
   "latest_artifact": "preview/ledger-reconcile-face.html (8656B) + preview/ledger-reconcile-face.json (6151B) [2026-11-26 commit]",
   "latest_evidence": "qa/fold-carry-census-R3494.log (2984B, 2026-11-26, sha256 75562974054f)",
   "next_milestone": "[R3495] next window (<=48h): (1) **S4U 仍未落地**（第三十四次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回。(2) **三洞决策（本窗只分类，未改法条）**：两条候选路径各自先立判据——A「具名豁免」须给出可机械复验的证物（`FOLD_CARRY_EXEMPT` 现在只认一个 `narrative_span`，而三轮的证物是**存储史缺席**，模块禁子进程/禁网络，故先答「证物能不能不靠 git 而由盘上复验」）；B「收窄射程」须先答「台账行强制令在哪一轮生效」（R3380 引 `E_ROUND_LOST`，须以归档原文定轮次），并验「收窄后不会放走任何可修形状」——负控＝造一条「叙述归档、台账留活体」的窗口必须仍红。判据未立前禁改 `ledger_lines.py`。(3) `battery-shard-report` 本轮未对读（族读数未变），下窗对读一次。(4) 载体余量：state `7560B`，`fold --plan-only` 本轮答 `writes_nothing=true`（post 上限 2827B），下窗仍先跑。(5) 基准 2026-12-01 到期（48h 窗 2026-11-27）。(6) tick 口径：本轮 3493→3494，下轮 R3495。(7) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定「诊断不修」）、全量 battery 未实跑、Docker 缺位、backlog.md 体量、导出面 `latest_artifact` 槽写手债、三个 `qa/crawl-*` 改动件非本窗所写。",
@@ -147,7 +147,7 @@
   },
   "self_drive": {"window": "2026-11-20..2026-11-26", "window_days": 7, "log_lines_in_window": 27, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 4, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
   "state_bytes": 19579,
-  "next_milestone_due": "2026-11-28T04:26:32+08:00",
+  "next_milestone_due": "2026-11-28T04:27:27+08:00",
   "heartbeat": {
     "tick": 3485,
     "state_tick": 3494,
@@ -163,7 +163,7 @@
     "over7": 0,
     "dup_rows": 0,
     "distinct": 11,
-    "collapsed": 1,
+    "collapsed": 0,
     "labels_refreshed": 0,
     "notes_stale": 0,
     "note_claims": 0,

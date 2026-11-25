@@ -141,10 +141,15 @@ def render():
 
 
 def landed(path):
+    # Line endings are not part of the claim: the repository normalises text
+    # on checkout (measured: this page lands with CRLF on a re-checkout), and
+    # a pair gate that reddens on the checkout filter would be measuring the
+    # filter rather than the derivation.
     try:
-        return io.open(path, "rb").read()
+        raw = io.open(path, "rb").read().decode("utf-8", "replace")
     except (IOError, OSError):
         return None
+    return raw.replace("\r\n", "\n")
 
 
 def main(argv):
@@ -177,7 +182,7 @@ def main(argv):
         if was is None:
             print("FCC-CHECK VERDICT MISSING")
             return 2
-        if was.decode("utf-8", "replace") != fresh:
+        if was != fresh:
             print("FCC-CHECK VERDICT STALE")
             return 2
         print("FCC-CHECK VERDICT PASS read_only=True")
