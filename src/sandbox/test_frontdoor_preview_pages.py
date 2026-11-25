@@ -1,6 +1,6 @@
 """Suite for the door's deliverable shelf: the shipped pages get one URL.
 
-EIGHT criteria. AC-FDPV1 (six arms) pins the shelf itself: the pages come back
+NINE criteria. AC-FDPV1 (six arms) pins the shelf itself: the pages come back
 byte-identical to disk and no path can turn the door into a filesystem
 reader. AC-FDPV2 (six arms, R3462) pins the door's manners: HEAD answers the
 same status, type and length as GET with an empty body (a standard probe must
@@ -29,6 +29,11 @@ read it (Cross-Origin-Resource-Policy same-origin) and which capabilities are
 refused (Permissions-Policy), a document also names its opener policy while a
 json face does not claim to be one, no shipped page uses a refused capability,
 and the Server header names the door instead of the interpreter version.
+AC-FDPV9 (six arms, R3468) pins the shelf's refusal: every verb this door does
+not implement answers through the door's own policy (405 plus Allow for a
+standard verb, 501 for an unknown one, 400 for a request that names both
+framings), the connection always closes, no 100 Continue is ever invited, and
+nothing already delivered moved.
 
 Usage: python test_frontdoor_preview_pages.py
 Exit: 0 = SUITE PASS, 2 = FAIL.
@@ -41,6 +46,7 @@ import http.client
 import io
 import os
 import re
+import socket
 import sys
 import threading
 from http.server import ThreadingHTTPServer
@@ -138,6 +144,43 @@ def serve():
     thread = threading.Thread(target=srv.serve_forever, daemon=True)
     thread.start()
     return srv, srv.server_address[1]
+
+
+def raw_request(port, payload, timeout=10):
+    """R3468: one raw request, read to end-of-stream.
+
+    Several refusals this suite grades are only visible on the wire: a 100
+    Continue and a second answer on the same connection are both invisible to
+    http.client, which stops at the first response it likes.
+    """
+    sock = socket.create_connection(("127.0.0.1", port), timeout=timeout)
+    sock.settimeout(timeout)
+    try:
+        sock.sendall(payload)
+        chunks = []
+        while True:
+            try:
+                piece = sock.recv(65536)
+            except (socket.timeout, ConnectionResetError):
+                break
+            if not piece:
+                break
+            chunks.append(piece)
+        return b"".join(chunks)
+    finally:
+        sock.close()
+
+
+def wire_reply(blob):
+    """R3468: split one raw answer into its status line, headers and body."""
+    head, _, body = blob.partition(b"\r\n\r\n")
+    lines = head.decode("latin-1").split("\r\n") if head else []
+    status = lines[0] if lines else ""
+    headers = {}
+    for line in lines[1:]:
+        name, _, value = line.partition(":")
+        headers[name.strip().lower()] = value.strip()
+    return status, headers, body
 
 
 def main():
@@ -303,7 +346,7 @@ def main():
             block = registry_text.split('"' + ROW + '"', 1)[1][:160]
             if "test_frontdoor_preview_pages.py" not in block:
                 bad2.append("f-row-file")
-            if "8)" not in block:
+            if "9)" not in block:
                 bad2.append("f-declared-%s" % block.split(")")[0].strip()[-3:])
 
         # ===== AC-FDPV3: the shelf is resumable and concurrent ============
@@ -532,7 +575,7 @@ def main():
         with io.open(REGISTRY, encoding="utf-8") as handle:
             registry_text4 = handle.read()
         block4 = registry_text4.split('"' + ROW + '"', 1)[-1][:160]
-        if "8)" not in block4:
+        if "9)" not in block4:
             bad4.append("f-declared-%r" % block4.split(")")[0][-8:])
 
         # ===== AC-FDPV5: the shelf negotiates a coding ======================
@@ -670,7 +713,7 @@ def main():
         with io.open(REGISTRY, encoding="utf-8") as handle:
             registry_text5 = handle.read()
         block5 = registry_text5.split('"' + ROW + '"', 1)[-1][:160]
-        if "8)" not in block5:
+        if "9)" not in block5:
             bad5.append("f-declared-%r" % block5.split(")")[0][-8:])
 
         # ===== AC-FDPV6: the shelf honours the write preconditions ==========
@@ -748,7 +791,7 @@ def main():
         with io.open(REGISTRY, encoding="utf-8") as handle:
             registry_text6 = handle.read()
         block6 = registry_text6.split('"' + ROW + '"', 1)[-1][:200]
-        if "8)" not in block6:
+        if "9)" not in block6:
             bad6.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block6:
             bad6.append("f-row-file")
@@ -897,7 +940,7 @@ def main():
         with io.open(REGISTRY, encoding="utf-8") as handle:
             registry_text7 = handle.read()
         block7 = registry_text7.split('"' + ROW + '"', 1)[-1][:200]
-        if "8)" not in block7:
+        if "9)" not in block7:
             bad7.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block7:
             bad7.append("f-row-file")
@@ -1027,10 +1070,153 @@ def main():
                 bad8.append("f-missing-" + needle)
         with io.open(REGISTRY, encoding="utf-8") as handle:
             block8r = handle.read().split('"' + ROW + '"', 1)[-1][:200]
-        if "8)" not in block8r:
+        if "9)" not in block8r:
             bad8.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block8r:
             bad8.append("f-row-file")
+
+        # ===== AC-FDPV9: the door refuses what it does not implement =======
+        # R3468 measured before the code: every verb other than GET/HEAD fell
+        # through to the stock 501 page, which carried no nosniff, no
+        # Referrer-Policy, no Content-Security-Policy, no
+        # Cross-Origin-Resource-Policy and no Permissions-Policy at all -- the
+        # only answer on this door with no policy -- and never named Allow. A
+        # request naming both Transfer-Encoding and Content-Length answered
+        # 501 rather than the 400 the smuggling shape deserves, and the door
+        # speaks HTTP/1.0, so no 100 Continue was invited.
+        bad9 = []
+
+        def refusal(payload):
+            """One raw request, split into the three fields this arm grades."""
+            return wire_reply(raw_request(port, payload))
+
+        # ---- a: a standard verb this door does not implement is a 405 ----
+        for method in ("POST", "PUT", "DELETE", "PATCH", "OPTIONS", "TRACE",
+                       "CONNECT"):
+            status, headers, body = refusal(
+                ("%s /preview/index.html HTTP/1.1\r\nHost: door\r\n"
+                 "Content-Length: 0\r\n\r\n" % method).encode("ascii"))
+            if " 405 " not in status:
+                bad9.append("a-status-%s-%r" % (method, status))
+            if headers.get("allow") != "GET, HEAD":
+                bad9.append("a-allow-%s-%r" % (method, headers.get("allow")))
+            if headers.get("content-type") != "text/plain; charset=utf-8":
+                bad9.append("a-ctype-%s-%r" % (method,
+                                                headers.get("content-type")))
+            if headers.get("connection", "").lower() != "close":
+                bad9.append("a-close-%s-%r" % (method,
+                                               headers.get("connection")))
+            if b"405" not in body:
+                bad9.append("a-body-%s" % method)
+
+        # ---- b: an unknown verb is a 501 and must not pretend to be a 405 --
+        status, headers, _body = refusal(
+            b"FOO /preview/index.html HTTP/1.1\r\nHost: door\r\n\r\n")
+        if " 501 " not in status:
+            bad9.append("b-status-%r" % status)
+        if "allow" in headers:
+            bad9.append("b-allow-on-501-%r" % headers.get("allow"))
+        if headers.get("connection", "").lower() != "close":
+            bad9.append("b-close-%r" % headers.get("connection"))
+
+        # ---- c: every refusal carries the full policy, and no document one -
+        denied9 = ("camera=()", "microphone=()", "geolocation=()", "payment=()",
+                   "usb=()", "display-capture=()",
+                   "publickey-credentials-get=()", "fullscreen=()")
+        refusals9 = (
+            b"POST /preview/index.html HTTP/1.1\r\nHost: door\r\n\r\n",
+            b"FOO /preview/index.html HTTP/1.1\r\nHost: door\r\n\r\n",
+            b"POST /preview/index.html HTTP/1.1\r\nHost: door\r\n"
+            b"Transfer-Encoding: chunked\r\nContent-Length: 5\r\n\r\n"
+            b"5\r\nhello\r\n0\r\n\r\n",
+        )
+        for payload in refusals9:
+            status, headers, _body = refusal(payload)
+            if headers.get("x-content-type-options") != "nosniff":
+                bad9.append("c-nosniff-%r" % status)
+            if headers.get("referrer-policy") != "no-referrer":
+                bad9.append("c-referrer-%r" % status)
+            if headers.get("content-security-policy") != \
+                    frontdoor.TEXT_POLICY:
+                bad9.append("c-csp-%r" % status)
+            if headers.get("cross-origin-resource-policy") != "same-origin":
+                bad9.append("c-corp-%r" % status)
+            policy9 = headers.get("permissions-policy", "")
+            for token in denied9:
+                if token not in policy9:
+                    bad9.append("c-perm-%r-%s" % (status,
+                                                   token.split("=")[0]))
+            if headers.get("server") != "BigDomain":
+                bad9.append("c-server-%r-%r" % (status,
+                                                 headers.get("server")))
+            if "cross-origin-opener-policy" in headers:
+                bad9.append("c-coop-%r" % status)
+            if "x-frame-options" in headers:
+                bad9.append("c-xfo-%r" % status)
+
+        # ---- d: both framings at once is a 400, answered exactly once ------
+        blob9 = raw_request(port, b"POST /preview/index.html HTTP/1.1\r\nHost: door\r\n"
+                          b"Transfer-Encoding: chunked\r\nContent-Length: 5\r\n"
+                          b"\r\n5\r\nhello\r\n0\r\n\r\n")
+        status, headers, body = wire_reply(blob9)
+        if " 400 " not in status:
+            bad9.append("d-status-%r" % status)
+        if headers.get("connection", "").lower() != "close":
+            bad9.append("d-close-%r" % headers.get("connection"))
+        answers9 = blob9.count(b"HTTP/1.0 ") + blob9.count(b"HTTP/1.1 ")
+        if answers9 != 1:
+            bad9.append("d-answers-%d" % answers9)
+        if b"400" not in body:
+            bad9.append("d-body")
+
+        # ---- e: the door never invites a body it will not read ------------
+        blob9 = raw_request(port, b"POST /preview/index.html HTTP/1.1\r\nHost: door\r\n"
+                          b"Expect: 100-continue\r\nContent-Length: 5\r\n"
+                          b"\r\nhello")
+        status, _headers, _body = wire_reply(blob9)
+        if b"100 Continue" in blob9:
+            bad9.append("e-invited")
+        if " 405 " not in status:
+            bad9.append("e-status-%r" % status)
+        blob9 = raw_request(port, b"GET /healthz HTTP/1.1\r\nHost: door\r\n"
+                          b"Content-Length: 5\r\n\r\nhello")
+        status, headers, body = wire_reply(blob9)
+        if " 200 " not in status or body != b"ok":
+            bad9.append("e-get-%r" % status)
+        if headers.get("connection", "").lower() != "close":
+            bad9.append("e-get-close-%r" % headers.get("connection"))
+        if b"100 Continue" in blob9:
+            bad9.append("e-get-invited")
+
+        # ---- f: nothing already delivered moved, and the count is 9 -------
+        for method in ("GET", "HEAD"):
+            status, headers, _body = refusal(
+                ("%s /preview/index.html HTTP/1.1\r\nHost: door\r\n\r\n"
+                 % method).encode("ascii"))
+            if " 200 " not in status:
+                bad9.append("f-%s-%r" % (method, status))
+            if headers.get("x-content-type-options") != "nosniff":
+                bad9.append("f-%s-policy" % method)
+        with io.open(MODULE, "rb") as handle:
+            raw10 = handle.read()
+        if raw10[:3] == b"\xef\xbb\xbf" or b"\r\n" in raw10:
+            bad9.append("f-module-dialect")
+        try:
+            text10 = raw10.decode("utf-8")
+            text10.encode("ascii")
+        except (UnicodeDecodeError, UnicodeEncodeError):
+            bad9.append("f-module-not-ascii")
+            text10 = raw10.decode("utf-8", "replace")
+        for needle in ("ALLOWED_METHODS", "def send_error(",
+                       "def handle_expect_100(", "def _method_refused("):
+            if needle not in text10:
+                bad9.append("f-missing-" + needle)
+        with io.open(REGISTRY, encoding="utf-8") as handle:
+            block9r = handle.read().split('"' + ROW + '"', 1)[-1][:200]
+        if "9)" not in block9r:
+            bad9.append("f-declared")
+        if "test_frontdoor_preview_pages.py" not in block9r:
+            bad9.append("f-row-file")
     finally:
         srv.shutdown()
         srv.server_close()
@@ -1043,6 +1229,7 @@ def main():
     report("AC-FDPV6", bool(bad6), ",".join(bad6))
     report("AC-FDPV7", bool(bad7), ",".join(bad7))
     report("AC-FDPV8", bool(bad8), ",".join(bad8))
+    report("AC-FDPV9", bool(bad9), ",".join(bad9))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:

@@ -9284,6 +9284,25 @@ PERMISSIONS_POLICY = (
 )
 
 
+# R3468: the door refuses every verb it does not implement, and it refuses
+# through its own answer path. Measured before this landed (raw probe over a
+# thread server): POST, PUT, DELETE, PATCH, OPTIONS, TRACE and any extension
+# verb fell through to BaseHTTPRequestHandler.send_error, whose stock 501 page
+# carries Server, Date, Content-Type, Content-Length and Connection -- and not
+# one of nosniff, Referrer-Policy, Content-Security-Policy,
+# Cross-Origin-Resource-Policy or Permissions-Policy. That made the answer to a
+# method typo the only answer on this door with no policy at all, and it never
+# named an Allow header. Two further readings shaped the fix: a request naming
+# both Transfer-Encoding and Content-Length answered 501 rather than the 400
+# the smuggling shape deserves (RFC 9112 sec.6.3), and this door speaks
+# HTTP/1.0, so Python never consults Expect and no 100 Continue is invited
+# today (the guard below keeps it that way). Every refusal names its status,
+# its policy and Connection: close, because this door reads no request body
+# and an unread body left on a live connection is exactly the seam that lets
+# the next bytes be parsed as a request line.
+ALLOWED_METHODS = ("GET", "HEAD")
+
+
 def _security_headers(ctype):
     """R3466: the policy every answer on this door carries.
 
@@ -9316,7 +9335,7 @@ class Handler(BaseHTTPRequestHandler):
         return "BigDomain"
 
     def _send(self, code, ctype, body, head_only=False, headers=(),
-              etag=None, encoding=None):
+              etag=None, encoding=None, close=False):
         # R3462: every answer is no-store. The preview faces are rebuilt under
         # the same URL each round, so a cached page is a stale page and the
         # reader would be looking at yesterday's numbers.
@@ -9338,6 +9357,13 @@ class Handler(BaseHTTPRequestHandler):
             self.send_header("ETag", etag)
         for name, value in headers:
             self.send_header(name, value)
+        # R3468: every refusal closes, and so does any answer to a request
+        # that declared a body. This door never reads a request body, so the
+        # unread bytes must not stay on a live connection where they would be
+        # parsed as the next request line.
+        if close or getattr(self, "_request_body_declared", False):
+            self.close_connection = True
+            self.send_header("Connection", "close")
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
         if not head_only:
@@ -9507,6 +9533,77 @@ class Handler(BaseHTTPRequestHandler):
             self._serve_preview(self.path, head_only)
         else:
             self._send(404, "text/plain", b"404 not found", head_only)
+
+    def _method_refused(self, head_only=False):
+        """R3468: 405 for a verb this door knows and does not allow.
+
+        The Allow header is the machine-readable half of the answer (RFC 9110
+        sec.15.5.6): a client learns which verbs this door implements without
+        guessing, and a reader gets the same fact in the body.
+        """
+        self._send(405, "text/plain; charset=utf-8",
+                   b"405 method not allowed\n", head_only,
+                   (("Allow", ", ".join(ALLOWED_METHODS)),), close=True)
+
+    def send_error(self, code, message=None, explain=None):
+        """R3468: the stock error page was the one answer with no policy.
+
+        Every stock error -- an unimplemented verb, a malformed request line,
+        an over-long URI, too many headers, an unsupported version -- is
+        answered here through the same _send path as every other face, and
+        the connection always closes because this door reads no request body.
+        """
+        short = (self.responses.get(code) or ("error", ""))[0]
+        text = message or short
+        self._send(code, "text/plain; charset=utf-8",
+                   ("%d %s\n" % (code, text)).encode("utf-8"), close=True)
+
+    def handle_expect_100(self):
+        """R3468: this door never reads a body, so it never invites one.
+
+        Measured: the door speaks HTTP/1.0, so Python never reaches this hook
+        and no 100 Continue is sent today. The guard is installed anyway so a
+        later protocol bump cannot silently start inviting bodies this door
+        will not read; the suite pins the wire and this method together.
+        """
+        if self.command in ALLOWED_METHODS:
+            self._send(417, "text/plain; charset=utf-8",
+                       b"417 this door reads no request body\n", close=True)
+        else:
+            self._method_refused()
+        return False
+
+    def parse_request(self):
+        """R3468: a request naming both a transfer coding and a length.
+
+        That is the classic smuggling shape (RFC 9112 sec.6.3) and this door
+        reads no body at all, so it is refused by name before any dispatch
+        instead of being answered as a method error. Every other request that
+        declares a body is answered normally and then closed, so the unread
+        bytes can never be taken for a second request.
+        """
+        if not super().parse_request():
+            return False
+        transfer = self.headers.get("Transfer-Encoding")
+        length = self.headers.get("Content-Length")
+        if transfer is not None and length is not None:
+            self._send(400, "text/plain; charset=utf-8",
+                       b"400 conflicting body framing\n", close=True)
+            return False
+        self._request_body_declared = (
+            transfer is not None or
+            (length is not None and length.strip() not in ("", "0")))
+        return True
+
+    # R3468: every standard verb this door does not implement is refused by
+    # name rather than falling through to the stock 501 page.
+    do_POST = _method_refused
+    do_PUT = _method_refused
+    do_DELETE = _method_refused
+    do_PATCH = _method_refused
+    do_OPTIONS = _method_refused
+    do_TRACE = _method_refused
+    do_CONNECT = _method_refused
 
     def do_GET(self):
         self._route(False)
