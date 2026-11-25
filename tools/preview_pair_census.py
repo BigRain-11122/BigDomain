@@ -66,7 +66,13 @@ HTML_OUT = os.path.join(PREVIEW, LABEL + ".html")
 # minute; 120s keeps a margin for a slow render and still separates every pair
 # the boards cared about (the smallest drifted case measured was 3.6h).
 SAME_RUN_SECONDS = 120
-VOLATILE = ("generated_at",)
+# generated_at is the clock, and round is the label of the window that derived
+# the page. Neither is a measurement: the measurement is the per-pair byte size,
+# digest and mtime, and those must match exactly or the gate refuses. Treating
+# the label as volatile is what keeps a page honest for a whole window instead of
+# going red the moment the tick it was derived under advances - the stale-pair
+# trap this page itself exists to expose.
+VOLATILE = ("generated_at", "round")
 FREEZE_REGISTER = os.path.join(REPO, "state", "apimarket-face-freeze.json")
 
 

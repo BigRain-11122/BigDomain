@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-26T05:43:39+08:00",
+  "generated_at": "2026-11-26T05:56:13+08:00",
   "law": "a split is claimed only when the two halves' last commits differ; an mtime gap alone is published as a bucket, never as a split",
   "oldest_split": {
     "delta_hours": 749.7,
@@ -392,18 +392,18 @@
     {
       "delta_seconds": 0,
       "html": {
-        "bytes": 16424,
-        "commit": "466f4fcb",
-        "mtime": "2026-11-26T05:26:14+08:00",
-        "mtime_epoch": 1795641974,
-        "sha": "DCA8949E"
+        "bytes": 16417,
+        "commit": "6594e0a6",
+        "mtime": "2026-11-26T05:51:18+08:00",
+        "mtime_epoch": 1795643478,
+        "sha": "6D084898"
       },
       "json": {
-        "bytes": 17890,
-        "commit": "466f4fcb",
-        "mtime": "2026-11-26T05:26:14+08:00",
-        "mtime_epoch": 1795641974,
-        "sha": "3BF9A66C"
+        "bytes": 17952,
+        "commit": "6594e0a6",
+        "mtime": "2026-11-26T05:51:18+08:00",
+        "mtime_epoch": 1795643478,
+        "sha": "9F2400B9"
       },
       "name": "battery-shard-report",
       "verdict": "same-run"
@@ -1999,7 +1999,7 @@
       "verdict": "same-run"
     }
   ],
-  "round": 3498,
+  "round": 3499,
   "same_run_seconds": 120,
   "self_excluded": "preview-pair-census",
   "source": "tools/preview_pair_census.py",

@@ -115,10 +115,11 @@ def main():
                                        ensure_ascii=False)) != PPC.normalized(fresh_json)
     stamp_only = json.loads(PPC.dumps(payload))
     stamp_only["generated_at"] = "1999-01-01T00:00:00+08:00"
+    stamp_only["round"] = 1
     volatile_ignored = PPC.normalized(json.dumps(stamp_only, indent=2, sort_keys=True,
                                                  ensure_ascii=False)) == PPC.normalized(fresh_json)
     ok("AC-PPC4", landed_ok and caught and volatile_ignored,
-       "landed_pair=%s tamper_caught=%s stamp_ignored=%s"
+       "landed_pair=%s tamper_caught=%s label_and_stamp_ignored=%s"
        % (landed_ok, caught, volatile_ignored))
 
     # AC-PPC5: the page does not describe itself, so committing it cannot flip
