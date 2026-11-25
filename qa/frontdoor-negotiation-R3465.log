@@ -1,0 +1,31 @@
+R3465 frontdoor negotiation and write preconditions (AC-FDPV5 + AC-FDPV6)
+Measured before the code: every preview answer was the whole identity body with
+no Content-Encoding and no Vary, so a client naming gzip still paid 55185B for
+preview/index.html and an intermediate cache could not tell the two
+representations apart; If-Match and If-Unmodified-Since were dropped entirely,
+so a reader could not demand "only if this is still the version I hold".
+Landed: _accepts_gzip (explicit token beats the wildcard, q=0 refuses, an
+unreadable q falls back to the token default), Handler._negotiate (gzip only
+for a whole-body answer of at least 64 bytes; a range always addresses the
+identity bytes), Handler._precondition_failed (If-Match strong comparison first,
+If-Unmodified-Since only when If-Match is absent), Vary: Accept-Encoding on
+every reply, 412 with a named body, and gzip negotiation on the root page too.
+SUITE PASS 6/6 (AC-FDPV1..AC-FDPV6, six arms each) green on its first run.
+Seven frontdoor suites green: 6/6, 1/1, 6/6, 4/4, 5/5, 1/1, 4/4.
+Two measured controls, both restored byte-identically: forcing _accepts_gzip to
+answer False reddens AC-FDPV5 at a-encoding, a-not-gzip, a-bytes,
+b-tag-collision, the three c-gzip arms, e-cross and f-root at rc=2; making
+_precondition_failed answer False reddens AC-FDPV6 at a-weak, b-status, b-body,
+c-old, d-match-fails and e-head at rc=2. Both restores re-read SUITE PASS 6/6.
+Registry frontdoor-preview-pages declared 4 -> 6.
+Matrix WRITTEN 85219 bytes 826 rows then DOC-CURRENT. Census rows=826
+readable=826 unparsed=0 silent=0 with VERDICT PASS pinned=826.
+First-yuan chain RENDER legs=2 read_only=True html=4403B json=4806B.
+Deliverable index faces=9 defects=0 fingerprint=45771322eb442550 index=55185B.
+Face sweep VERDICT PASS 13/13 fingerprint=06309216d6cde35c then --check 21/21.
+Honest: this adds no page - it makes the door that serves the deliverable shelf
+negotiate a coding and honour the write preconditions. Zero new tables, zero
+new readings, zero business semantics. ZERO payment capability and no network
+beyond loopback: the five physical pieces are still missing, so buyers still
+cannot pay.
+Dialect: written through tools/qa_log.py, utf-8 without BOM, LF only.

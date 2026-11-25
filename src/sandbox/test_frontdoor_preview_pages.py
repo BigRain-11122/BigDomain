@@ -1,6 +1,6 @@
 """Suite for the door's deliverable shelf: the shipped pages get one URL.
 
-FOUR criteria. AC-FDPV1 (six arms) pins the shelf itself: the pages come back
+SIX criteria. AC-FDPV1 (six arms) pins the shelf itself: the pages come back
 byte-identical to disk and no path can turn the door into a filesystem
 reader. AC-FDPV2 (six arms, R3462) pins the door's manners: HEAD answers the
 same status, type and length as GET with an empty body (a standard probe must
@@ -13,12 +13,19 @@ AC-FDPV4 (six arms, R3464) pins the shelf's conditionals: every 200 carries a
 strong content ETag and a Last-Modified, If-None-Match and If-Modified-Since
 answer 304 with no body, and an If-Range that no longer matches answers the
 whole face instead of splicing a new version onto an old prefix.
+AC-FDPV5 (six arms, R3465) pins the shelf's negotiation: an Accept-Encoding
+that names gzip gets a gzip representation that decompresses to the disk
+bytes, identity stays byte-identical, and every answer says it varies with
+Accept-Encoding. AC-FDPV6 (six arms, R3465) pins the write preconditions:
+If-Match and If-Unmodified-Since answer 412 when the reader's copy is not
+current, in the RFC 7232 sec.6 order, without bypassing the shelf guard.
 
 Usage: python test_frontdoor_preview_pages.py
 Exit: 0 = SUITE PASS, 2 = FAIL.
 """
 
 import email.utils
+import gzip
 import hashlib
 import http.client
 import io
@@ -285,7 +292,7 @@ def main():
             block = registry_text.split('"' + ROW + '"', 1)[1][:160]
             if "test_frontdoor_preview_pages.py" not in block:
                 bad2.append("f-row-file")
-            if "4)" not in block:
+            if "6)" not in block:
                 bad2.append("f-declared-%s" % block.split(")")[0].strip()[-3:])
 
         # ===== AC-FDPV3: the shelf is resumable and concurrent ============
@@ -514,8 +521,226 @@ def main():
         with io.open(REGISTRY, encoding="utf-8") as handle:
             registry_text4 = handle.read()
         block4 = registry_text4.split('"' + ROW + '"', 1)[-1][:160]
-        if "4)" not in block4:
+        if "6)" not in block4:
             bad4.append("f-declared-%r" % block4.split(")")[0][-8:])
+
+        # ===== AC-FDPV5: the shelf negotiates a coding ======================
+        # R3465 measured before the code: every answer was the whole identity
+        # body with no Content-Encoding and no Vary, so a browser or downloader
+        # that named gzip still paid the full 55KB for index.html, and an
+        # intermediate cache had no way to tell the two representations apart.
+        bad5 = []
+        page = "index.html"
+        page_path = "/preview/" + page
+        with io.open(os.path.join(PREVIEW, page), "rb") as handle:
+            page_raw = handle.read()
+
+        def neg(method, path, headers=None):
+            """One request naming every negotiation field this suite grades."""
+            conn = http.client.HTTPConnection("127.0.0.1", port, timeout=15)
+            try:
+                conn.request(method, path, headers=headers or {})
+                resp = conn.getresponse()
+                return {"status": resp.status,
+                        "ctype": resp.getheader("Content-Type", "") or "",
+                        "length": resp.getheader("Content-Length", "") or "",
+                        "encoding":
+                            resp.getheader("Content-Encoding", "") or "",
+                        "vary": resp.getheader("Vary", "") or "",
+                        "etag": resp.getheader("ETag", "") or "",
+                        "last_modified":
+                            resp.getheader("Last-Modified", "") or "",
+                        "crange": resp.getheader("Content-Range", "") or "",
+                        "ranges": resp.getheader("Accept-Ranges", "") or "",
+                        "body": resp.read()}
+            finally:
+                conn.close()
+
+        # ---- a: a gzip request gets a gzip representation ------------------
+        reply = neg("GET", page_path, {"Accept-Encoding": "gzip"})
+        if reply["status"] != 200:
+            bad5.append("a-status-%d" % reply["status"])
+        if reply["encoding"] != "gzip":
+            bad5.append("a-encoding-%r" % reply["encoding"])
+        if "accept-encoding" not in reply["vary"].lower():
+            bad5.append("a-vary-%r" % reply["vary"])
+        try:
+            plain = gzip.decompress(reply["body"])
+        except Exception:
+            plain = b""
+            bad5.append("a-not-gzip")
+        if plain != page_raw:
+            bad5.append("a-bytes")
+        gzip_tag = reply["etag"]
+
+        # ---- b: identity is untouched and the two tags differ --------------
+        reply = neg("GET", page_path)
+        if reply["status"] != 200 or reply["body"] != page_raw:
+            bad5.append("b-identity-%d" % reply["status"])
+        if reply["encoding"]:
+            bad5.append("b-encoding-%r" % reply["encoding"])
+        if "accept-encoding" not in reply["vary"].lower():
+            bad5.append("b-vary")
+        ident_tag = reply["etag"]
+        for tag in (gzip_tag, ident_tag):
+            if not (tag.startswith('"') and tag.endswith('"')) or \
+                    len(tag) != 18:
+                bad5.append("b-tag-shape-%r" % tag)
+        if gzip_tag == ident_tag:
+            bad5.append("b-tag-collision")
+
+        # ---- c: the negotiation lexicon ------------------------------------
+        for header in ("gzip;q=0", "deflate", "identity"):
+            reply = neg("GET", page_path, {"Accept-Encoding": header})
+            if reply["encoding"]:
+                bad5.append("c-identity-%s-%r" % (header, reply["encoding"]))
+            if reply["body"] != page_raw:
+                bad5.append("c-identity-bytes-%s" % header)
+        for header in ("*", "GZIP", "gzip;q=0.5, identity;q=0"):
+            reply = neg("GET", page_path, {"Accept-Encoding": header})
+            if reply["encoding"] != "gzip":
+                bad5.append("c-gzip-%s-%r" % (header, reply["encoding"]))
+
+        # ---- d: HEAD mirrors the negotiated GET ----------------------------
+        got = neg("GET", page_path, {"Accept-Encoding": "gzip"})
+        said = neg("HEAD", page_path, {"Accept-Encoding": "gzip"})
+        if said["status"] != got["status"]:
+            bad5.append("d-status")
+        if said["encoding"] != got["encoding"]:
+            bad5.append("d-encoding")
+        if said["length"] != got["length"]:
+            bad5.append("d-length")
+        if said["body"] != b"":
+            bad5.append("d-body")
+
+        # ---- e: a range always addresses the identity bytes ----------------
+        reply = neg("GET", page_path,
+                    {"Accept-Encoding": "gzip", "Range": "bytes=0-99"})
+        if reply["status"] != 206:
+            bad5.append("e-status-%d" % reply["status"])
+        if reply["encoding"]:
+            bad5.append("e-encoding-%r" % reply["encoding"])
+        if reply["body"] != page_raw[:100]:
+            bad5.append("e-bytes")
+        if reply["etag"] != ident_tag:
+            bad5.append("e-tag-%r" % reply["etag"])
+        reply = neg("GET", page_path,
+                    {"Accept-Encoding": "gzip", "Range": "bytes=0-99",
+                     "If-Range": gzip_tag})
+        if reply["status"] != 200 or reply["body"] != page_raw:
+            bad5.append("e-cross-%d" % reply["status"])
+        if reply["encoding"]:
+            bad5.append("e-cross-encoding")
+
+        # ---- f: the module dialect, the root face and the declared count ---
+        with io.open(MODULE, "rb") as handle:
+            raw6 = handle.read()
+        if raw6[:3] == b"\xef\xbb\xbf":
+            bad5.append("f-module-bom")
+        if b"\r\n" in raw6:
+            bad5.append("f-module-crlf")
+        try:
+            text6 = raw6.decode("utf-8")
+            text6.encode("ascii")
+        except (UnicodeDecodeError, UnicodeEncodeError):
+            bad5.append("f-module-not-ascii")
+            text6 = raw6.decode("utf-8", "replace")
+        if "import gzip" not in text6:
+            bad5.append("f-gzip-import")
+        if "def _accepts_gzip(" not in text6:
+            bad5.append("f-gzip-parser")
+        if 'self.send_header("Vary", "Accept-Encoding")' not in text6:
+            bad5.append("f-vary-header")
+        root = neg("GET", "/", {"Accept-Encoding": "gzip"})
+        if root["status"] != 200 or root["encoding"] != "gzip":
+            bad5.append("f-root-%d-%r" % (root["status"], root["encoding"]))
+        elif b"/preview/index.html" not in gzip.decompress(root["body"]):
+            bad5.append("f-root-bytes")
+        with io.open(REGISTRY, encoding="utf-8") as handle:
+            registry_text5 = handle.read()
+        block5 = registry_text5.split('"' + ROW + '"', 1)[-1][:160]
+        if "6)" not in block5:
+            bad5.append("f-declared-%r" % block5.split(")")[0][-8:])
+
+        # ===== AC-FDPV6: the shelf honours the write preconditions ==========
+        # R3465 measured before the code: If-Match and If-Unmodified-Since
+        # were dropped on the floor, so a reader could not say "answer only if
+        # this is still the version I hold".
+        bad6 = []
+        lm6 = email.utils.formatdate(
+            os.path.getmtime(os.path.join(PREVIEW, page)), usegmt=True)
+        stale = '"0000000000000000"'
+
+        # ---- a: If-Match compares strongly ---------------------------------
+        for header in (ident_tag, "*"):
+            reply = neg("GET", page_path, {"If-Match": header})
+            if reply["status"] != 200 or reply["body"] != page_raw:
+                bad6.append("a-match-%s-%d" % (header, reply["status"]))
+        reply = neg("GET", page_path, {"If-Match": "W/" + ident_tag})
+        if reply["status"] != 412:
+            bad6.append("a-weak-%d" % reply["status"])
+
+        # ---- b: a stale If-Match is refused with a small named body --------
+        reply = neg("GET", page_path, {"If-Match": stale})
+        if reply["status"] != 412:
+            bad6.append("b-status-%d" % reply["status"])
+        if len(reply["body"]) > 64:
+            bad6.append("b-body-%d" % len(reply["body"]))
+        if reply["etag"] != ident_tag:
+            bad6.append("b-etag")
+        if reply["last_modified"] != lm6:
+            bad6.append("b-last-modified")
+        if "accept-encoding" not in reply["vary"].lower():
+            bad6.append("b-vary")
+
+        # ---- c: If-Unmodified-Since is a real condition --------------------
+        reply = neg("GET", page_path,
+                    {"If-Unmodified-Since":
+                     email.utils.formatdate(0, usegmt=True)})
+        if reply["status"] != 412:
+            bad6.append("c-old-%d" % reply["status"])
+        for stamp in (lm6, email.utils.formatdate(4102444800, usegmt=True)):
+            reply = neg("GET", page_path, {"If-Unmodified-Since": stamp})
+            if reply["status"] != 200 or reply["body"] != page_raw:
+                bad6.append("c-fresh-%d" % reply["status"])
+
+        # ---- d: If-Match wins, and its absence lets the date speak ---------
+        reply = neg("GET", page_path,
+                    {"If-Match": ident_tag,
+                     "If-Unmodified-Since":
+                     email.utils.formatdate(0, usegmt=True)})
+        if reply["status"] != 200 or reply["body"] != page_raw:
+            bad6.append("d-match-wins-%d" % reply["status"])
+        reply = neg("GET", page_path,
+                    {"If-Match": stale,
+                     "If-Unmodified-Since":
+                     email.utils.formatdate(4102444800, usegmt=True)})
+        if reply["status"] != 412:
+            bad6.append("d-match-fails-%d" % reply["status"])
+
+        # ---- e: 412 never bypasses the shelf guard -------------------------
+        for path in ("/preview/../src/os/state.json", "/nope"):
+            reply = neg("GET", path, {"If-Match": stale})
+            if reply["status"] != 404:
+                bad6.append("e-guard-%s-%d" % (path, reply["status"]))
+        reply = neg("HEAD", page_path, {"If-Match": stale})
+        if reply["status"] != 412 or reply["body"] != b"":
+            bad6.append("e-head-%d" % reply["status"])
+
+        # ---- f: the module dialect and the declared count ------------------
+        if "def _precondition_failed(" not in text6:
+            bad6.append("f-precondition")
+        with io.open(MODULE, "rb") as handle:
+            raw7 = handle.read()
+        if raw7[:3] == b"\xef\xbb\xbf" or b"\r\n" in raw7:
+            bad6.append("f-module-dialect")
+        with io.open(REGISTRY, encoding="utf-8") as handle:
+            registry_text6 = handle.read()
+        block6 = registry_text6.split('"' + ROW + '"', 1)[-1][:200]
+        if "6)" not in block6:
+            bad6.append("f-declared")
+        if "test_frontdoor_preview_pages.py" not in block6:
+            bad6.append("f-row-file")
     finally:
         srv.shutdown()
         srv.server_close()
@@ -524,6 +749,8 @@ def main():
     report("AC-FDPV2", bool(bad2), ",".join(bad2))
     report("AC-FDPV3", bool(bad3), ",".join(bad3))
     report("AC-FDPV4", bool(bad4), ",".join(bad4))
+    report("AC-FDPV5", bool(bad5), ",".join(bad5))
+    report("AC-FDPV6", bool(bad6), ",".join(bad6))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:

@@ -127,6 +127,7 @@ are loaded from the ugc config at runtime; this source stays ASCII.
 import contextlib
 import email.utils
 import glob
+import gzip
 import hashlib
 import html
 import io
@@ -9169,6 +9170,42 @@ def _parse_range(header, size):
     return start, min(end, size - 1)
 
 
+GZIP_MIN_BYTES = 64
+
+
+def _accepts_gzip(value):
+    """R3465: does Accept-Encoding name gzip with a positive quality?
+
+    Explicit tokens beat the wildcard, a q=0 token refuses the coding, and an
+    unreadable q falls back to the token's default weight rather than
+    guessing a refusal. A request with no header at all accepts identity only.
+    """
+    if not value:
+        return False
+    explicit = None
+    wildcard = None
+    for piece in value.split(","):
+        name, _, params = piece.strip().partition(";")
+        name = name.strip().lower()
+        if not name:
+            continue
+        weight = 1.0
+        for param in params.split(";"):
+            param = param.strip()
+            if param.lower().startswith("q="):
+                try:
+                    weight = float(param[2:].strip())
+                except ValueError:
+                    weight = 1.0
+        if name in ("gzip", "x-gzip"):
+            explicit = weight if explicit is None else max(explicit, weight)
+        elif name == "*" and wildcard is None:
+            wildcard = weight
+    if explicit is not None:
+        return explicit > 0
+    return wildcard is not None and wildcard > 0
+
+
 def _etag(body):
     """R3464: one strong validator for the bytes this door serves.
 
@@ -9200,15 +9237,21 @@ def _parse_http_date(value):
 
 
 class Handler(BaseHTTPRequestHandler):
-    def _send(self, code, ctype, body, head_only=False, headers=(), etag=None):
+    def _send(self, code, ctype, body, head_only=False, headers=(),
+              etag=None, encoding=None):
         # R3462: every answer is no-store. The preview faces are rebuilt under
         # the same URL each round, so a cached page is a stale page and the
         # reader would be looking at yesterday's numbers.
         # R3464: an answer that has a validator publishes it -- and a 304
         # still names the entity it is telling the reader to keep.
+        # R3465: the answer varies with Accept-Encoding, so every reply says
+        # so; a reply sent as gzip names the coding it applied.
         self.send_response(code)
         self.send_header("Content-Type", ctype)
         self.send_header("Cache-Control", "no-store")
+        self.send_header("Vary", "Accept-Encoding")
+        if encoding:
+            self.send_header("Content-Encoding", encoding)
         if etag:
             self.send_header("ETag", etag)
         for name, value in headers:
@@ -9217,6 +9260,46 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
         if not head_only:
             self.wfile.write(body)
+
+    def _negotiate(self, identity):
+        """R3465: pick the representation this request is answered with.
+
+        gzip is offered only for a whole-body answer of at least
+        GZIP_MIN_BYTES: a byte range always addresses the identity bytes (a
+        slice of a compressed stream is not a slice of the file), and zipping
+        a two-byte answer costs more than it saves. The compressed bytes are
+        reproducible (mtime pinned to zero), so the same face always yields
+        the same tag.
+        """
+        if self.headers.get("Range") is None and \
+                len(identity) >= GZIP_MIN_BYTES and \
+                _accepts_gzip(self.headers.get("Accept-Encoding")):
+            return gzip.compress(identity, mtime=0), "gzip"
+        return identity, None
+
+    def _precondition_failed(self, etag, last_modified):
+        """R3465: If-Match, then If-Unmodified-Since (RFC 7232 sec.6).
+
+        If-Match uses strong comparison only -- a W/ tag never satisfies it --
+        and when it is present If-Unmodified-Since does not speak at all. Both
+        answer 412: the reader asked for the answer to be withheld unless its
+        own copy is still current, and it is not.
+        """
+        match = self.headers.get("If-Match")
+        if match is not None:
+            tokens = [token.strip() for token in match.split(",")]
+            if "*" in tokens:
+                return False
+            for token in tokens:
+                if token.startswith("W/"):
+                    continue
+                if token == etag:
+                    return False
+            return True
+        since = _parse_http_date(self.headers.get("If-Unmodified-Since"))
+        if since is None:
+            return False
+        return _parse_http_date(last_modified) > since
 
     def _not_modified(self, etag, last_modified):
         """R3464: the two preconditions, in the RFC 7232 sec.6 order.
@@ -9279,23 +9362,29 @@ class Handler(BaseHTTPRequestHandler):
         if ctype is None or not os.path.isfile(full):
             return self._send(404, "text/plain", b"404 not found", head_only)
         with open(full, "rb") as handle:
-            body = handle.read()
-        # R3464: the shelf publishes a validator, and the preconditions run
-        # before any range decision. A reader whose copy still matches is
-        # answered 304 with no body; a reader whose If-Range no longer matches
-        # is answered the WHOLE face, never a slice of a version they do not
-        # hold. The ETag is derived from the full representation, so it stays
-        # the same on a 200, a 206 and a 416 alike.
+            identity = handle.read()
+        # R3465: negotiation runs before any condition, so the validator names
+        # exactly the bytes this answer carries; a range always addresses the
+        # identity representation, and a 304 names whichever one the reader
+        # already holds.
+        body, coding = self._negotiate(identity)
         etag = _etag(body)
         last_modified = email.utils.formatdate(os.path.getmtime(full),
                                                usegmt=True)
+        # R3465: the write preconditions run first (RFC 7232 sec.6 order). A
+        # reader that demands "only if this is still the version I hold" is
+        # answered 412 rather than a body it must not act on.
+        if self._precondition_failed(etag, last_modified):
+            return self._send(412, "text/plain", b"precondition failed",
+                              head_only, (("Last-Modified", last_modified),),
+                              etag)
         if self._not_modified(etag, last_modified):
             return self._send(304, ctype, b"", head_only,
                               (("Last-Modified", last_modified),), etag)
         if not self._if_range_ok(etag):
             return self._send(200, ctype, body, head_only,
                               (("Accept-Ranges", "bytes"),
-                               ("Last-Modified", last_modified)), etag)
+                               ("Last-Modified", last_modified)), etag, coding)
         # R3463: the shelf is resumable. A single byte range answers 206 with
         # the exact slice, a range past the last byte answers 416 with the
         # total in Content-Range, and every other shape falls back to the
@@ -9316,7 +9405,7 @@ class Handler(BaseHTTPRequestHandler):
                  ("Last-Modified", last_modified)), etag)
         return self._send(200, ctype, body, head_only,
                           (("Accept-Ranges", "bytes"),
-                           ("Last-Modified", last_modified)), etag)
+                           ("Last-Modified", last_modified)), etag, coding)
 
     def _route(self, head_only):
         # R3462: one routing table for both verbs. HEAD answers the same
@@ -9324,10 +9413,11 @@ class Handler(BaseHTTPRequestHandler):
         # probe (curl -I, a link checker, a CDN warmer) sees a working door.
         # R3464: the two in-memory faces publish a validator too, derived from
         # the exact bytes they serve.
+        # R3465: the root page is a face like any other, so it negotiates too.
         if self.path in ("/", "/index.html"):
-            body = render()
+            body, coding = self._negotiate(render())
             self._send(200, "text/html; charset=utf-8", body, head_only,
-                       (), _etag(body))
+                       (), _etag(body), coding)
         elif self.path == "/healthz":
             body = b"ok"
             self._send(200, "text/plain", body, head_only, (), _etag(body))
