@@ -1,0 +1,51 @@
+EVIDENCE CAPTURE round=R3471 suite=src/sandbox/test_frontdoor_preview_pages.py legs=2
+== LEG A rc=0 digest=66FD94024F31D0C7
+[ WARN:0@0.355] global loadsave.cpp:1089 cv::imwrite_ Unsupported depth image for selected encoder is fallbacked to CV_8U.
+
+Welcome to use blind-watermark, version = 0.4.4
+Make sure the version is the same when encode and decode
+Your star means a lot: https://github.com/guofei9987/blind_watermark
+This message only show once. To close it: `blind_watermark.bw_notes.close()`
+            
+PASS AC-FDPV1
+PASS AC-FDPV2
+PASS AC-FDPV3
+PASS AC-FDPV4
+PASS AC-FDPV5
+PASS AC-FDPV6
+PASS AC-FDPV7
+PASS AC-FDPV8
+PASS AC-FDPV9
+PASS AC-FDPV10
+PASS AC-FDPV11
+PASS AC-FDPV12
+SUITE PASS 12/12
+== LEG B rc=0 digest=66FD94024F31D0C7
+[ WARN:0@0.287] global loadsave.cpp:1089 cv::imwrite_ Unsupported depth image for selected encoder is fallbacked to CV_8U.
+
+Welcome to use blind-watermark, version = 0.4.4
+Make sure the version is the same when encode and decode
+Your star means a lot: https://github.com/guofei9987/blind_watermark
+This message only show once. To close it: `blind_watermark.bw_notes.close()`
+            
+PASS AC-FDPV1
+PASS AC-FDPV2
+PASS AC-FDPV3
+PASS AC-FDPV4
+PASS AC-FDPV5
+PASS AC-FDPV6
+PASS AC-FDPV7
+PASS AC-FDPV8
+PASS AC-FDPV9
+PASS AC-FDPV10
+PASS AC-FDPV11
+PASS AC-FDPV12
+SUITE PASS 12/12
+== ADJACENT 6
+== src/sandbox/test_frontdoor_chain_card.py rc=0 SUITE PASS 4/4
+== src/sandbox/test_frontdoor_claims_card.py rc=0 SUITE PASS 5/5
+== src/sandbox/test_frontdoor_corpus_card.py rc=0 SUITE PASS 6/6
+== src/sandbox/test_frontdoor_face_age.py rc=0 SUITE PASS 1/1
+== src/sandbox/test_frontdoor_heartbeat_card.py rc=0 SUITE PASS 1/1
+== src/sandbox/test_frontdoor_outs_age_card.py rc=0 SUITE PASS 4/4
+EVIDENCE identical=True adjacent=6 fails=0 digest=66FD94024F31D0C7

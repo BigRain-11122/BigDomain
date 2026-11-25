@@ -3,20 +3,20 @@
     "board_pages_skipped": [
       "preview/face-sweep.html (8878B)"
     ],
-    "current": "2026-11-25 R3470 PRODUCT: a request target in absolute form now opens the face it names - the form a client sends to a proxy, which RFC 9112 sec.3.2.2 requires a server to accept, answered 404 on every path before this landed, so a proxied reader could not tell a missing page from a door that only spoke origin-form.",
+    "current": "2026-11-25 R3471 CLOSEOUT: tick advanced to 3471; the door now reads the Host field of every HTTP/1.1 message - a missing, duplicated or malformed Host answers 400 by name through the door's own policy path while the absolute-form authority stays ignored for routing and HTTP/1.0 stays exempt - graded by six named arms.",
     "do": "2026-11-25 R3456 PRODUCT: the answer-revision question now has a door - api_answer_history (live with AC-AMAW1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so 'which answer was rewritten, what did it say before, what does it say now and how often did it change' could only be read by calling the sandbox from a shell - while api_seller_answers and api_listing_qna publish only the CURRENT wording.",
     "last_artifact": "preview/apimarket-report.html (37201B) + preview/apimarket-report.json (59815B) [2026-11-25 commit]",
     "latest_artifact": "preview/apimarket-report.html (37201B) + preview/apimarket-report.json (59815B) [2026-11-25 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\apimarket-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/frontdoor-absolute-form-R3470.log (1992B, 2026-11-25, sha256 a31e78429355)",
-    "latest_evidence": "qa/frontdoor-absolute-form-R3470.log (1992B, 2026-11-25, sha256 a31e78429355)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/frontdoor-host-field-R3471.log (1786B, 2026-11-25, sha256 397207fe22d0)",
+    "latest_evidence": "qa/frontdoor-host-field-R3471.log (1786B, 2026-11-25, sha256 397207fe22d0)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3470] next window (<=48h): (1) **S4U 仍未落地**：本会话仍未以提权身份运行，`BigDomain-OSLoop` 的 `LogonType` 需由**提权会话**跑 `src/os/register_loop_task.ps1` 并用 `$t.Principal.LogonType` 读回；**第十三次承账**，禁再以「未实测」或「无从下手」结账。(2) 门的第九层候选：`Host` 头面——本轮实测 absolute-form 已接受且 authority 被丢弃，但 `Host` 缺失、重复、或与 absolute-form 的 authority 冲突时的应答面尚未量（RFC 9112 §3.2：HTTP/1.1 请求必须有且只有一个 `Host`，缺失或重复应 400）；下窗先只读实测再立判据。(3) 收口序实证更新：各面写 → `first_yuan_chain.py` → `deliverable_index.py` → `index --check` → `face_sweep.py` → `--check` → `heartbeat.py --write <tick>` → `export_round.py` → `status_export_fresh.py --apply` → `check_export_consistency.py` → **导出面写后必须再跑一轮 index → index --check → sweep → sweep --check**（否则 `AC-CVL1` 与 `AC-FSW10` 按名红，本轮两次实证）→ `closeout_gate.py`；本窗终读 index de3def8ecf8ff8b5／sweep 80ab993794cf9d66／closeout PASS。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`（本窗 fold 820＋821 后载体 75420B／闸 78500／余 3080B）；**载体写后若出现 `E_STATE_LAYOUT`，正法＝`logs_toolkit.py eol --fix --execute` 再 `--fix-indent --execute`**（本轮写手以 `newline='\\\\n'` 写盘后连吃两拒，实锤在此）。(6) tick 口径：本窗 3469→3470。(7) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、backlog.md 体量闸、导出面 (truncated)",
-    "next_milestone_due": "2026-11-27T14:07:08+08:00",
-    "updated_at": "2026-11-25T14:07:08+08:00",
+    "next_milestone": "[R3471] next window (<=48h): (1) **S4U 仍未落地**：本会话仍未以提权身份运行，`BigDomain-OSLoop` 的 `LogonType` 需由**提权会话**跑 `src/os/register_loop_task.ps1` 并用 `$t.Principal.LogonType` 读回；**第十四次承账**，禁再以「未实测」或「无从下手」结账。(2) 门的第十层候选：**请求行与头部各面的余量**——本窗只判了 Host 字段的存在/重复/值法，**尚未量**：请求目标为空串、字段名含空格或控制字符、字段行数/单行长度上限、以及 `Host` 与 `Connection`/`Expect` 的交互；下窗先只读实测再立判据，禁先改后测。(3) 收口序实证不变：各面写 → `tools/first_yuan_chain.py` → `tools/deliverable_index.py` → `chain --check` → `index --check` → `tools/face_sweep.py` → `--check` → `src/os/heartbeat.py --write <tick>` → `src/os/export_round.py` → `tools/status_export_fresh.py --apply` → `src/os/check_export_consistency.py` → **导出面写后必须再收敛一轮**（index → index --check → sweep → sweep --check）→ `tools/closeout_gate.py`；本窗两次收敛读数：导出前 index 4faff9fadafe9cb5／sweep 47519a618451613a，导出后 index 77d87a8ba4eed1e6／sweep d40fee31b7f69b0d／consistency pass=22 fail=0。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`（本窗 tokens 行后载体 76243B／闸 78500／余 2257B，settled 行后需复核）。(6) tick 口径：本窗 3470→3471。(7) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、backlog.md 体量闸、导出面 `latest_artifact` 槽仍指旧件（写手债）。",
+    "next_milestone_due": "2026-11-27T14:32:42+08:00",
+    "updated_at": "2026-11-25T14:32:42+08:00",
     "heartbeat": {
-      "tick": 3470,
-      "state_tick": 3470,
+      "tick": 3471,
+      "state_tick": 3471,
       "lag": 0,
       "verdict": "PASS",
       "reason": "fresh"
@@ -37,8 +37,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-25 R3470 PRODUCT: a request target in absolute form now opens the face it names - the form a client sends to a proxy, which RFC 9112 sec.3.2.2 requires a server to accept, answered 404 on every path before this landed, so a proxied reader could not tell a missing page from a door that only spoke origin-form.",
-  "claims": {"claimed": 36, "captured": 19, "contradicted": 0, "uncaptured": 17, "historic": 0, "rows": 101, "present": true, "census_ts": "2026-11-25T14:07:08+08:00"},
+  "current": "2026-11-25 R3471 CLOSEOUT: tick advanced to 3471; the door now reads the Host field of every HTTP/1.1 message - a missing, duplicated or malformed Host answers 400 by name through the door's own policy path while the absolute-form authority stays ignored for routing and HTTP/1.0 stays exempt - graded by six named arms.",
+  "claims": {"claimed": 36, "captured": 19, "contradicted": 0, "uncaptured": 17, "historic": 0, "rows": 101, "present": true, "census_ts": "2026-11-25T14:32:42+08:00"},
   "chain": {"present": true, "rows": 101, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -67,11 +67,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-25 R3470 PRODUCT: a request target in absolute form now opens the face it names - the form a client sends to a proxy, which RFC 9112 sec.3.2.2 requires a server to accept, answered 404 on every path before this landed, so a proxied reader could not tell a missing page from a door that only spoke origin-form.",
-  "export_ts": "2026-11-25T14:07:08+08:00",
+  "do": "2026-11-25 R3471 CLOSEOUT: tick advanced to 3471; the door now reads the Host field of every HTTP/1.1 message - a missing, duplicated or malformed Host answers 400 by name through the door's own policy path while the absolute-form authority stays ignored for routing and HTTP/1.0 stays exempt - graded by six named arms.",
+  "export_ts": "2026-11-25T14:32:42+08:00",
   "latest_artifact": "preview/apimarket-report.html (37201B) + preview/apimarket-report.json (59815B) [2026-11-25 commit]",
-  "latest_evidence": "qa/frontdoor-absolute-form-R3470.log (1992B, 2026-11-25, sha256 a31e78429355)",
-  "next_milestone": "[R3470] next window (<=48h): (1) **S4U 仍未落地**：本会话仍未以提权身份运行，`BigDomain-OSLoop` 的 `LogonType` 需由**提权会话**跑 `src/os/register_loop_task.ps1` 并用 `$t.Principal.LogonType` 读回；**第十三次承账**，禁再以「未实测」或「无从下手」结账。(2) 门的第九层候选：`Host` 头面——本轮实测 absolute-form 已接受且 authority 被丢弃，但 `Host` 缺失、重复、或与 absolute-form 的 authority 冲突时的应答面尚未量（RFC 9112 §3.2：HTTP/1.1 请求必须有且只有一个 `Host`，缺失或重复应 400）；下窗先只读实测再立判据。(3) 收口序实证更新：各面写 → `first_yuan_chain.py` → `deliverable_index.py` → `index --check` → `face_sweep.py` → `--check` → `heartbeat.py --write <tick>` → `export_round.py` → `status_export_fresh.py --apply` → `check_export_consistency.py` → **导出面写后必须再跑一轮 index → index --check → sweep → sweep --check**（否则 `AC-CVL1` 与 `AC-FSW10` 按名红，本轮两次实证）→ `closeout_gate.py`；本窗终读 index de3def8ecf8ff8b5／sweep 80ab993794cf9d66／closeout PASS。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`（本窗 fold 820＋821 后载体 75420B／闸 78500／余 3080B）；**载体写后若出现 `E_STATE_LAYOUT`，正法＝`logs_toolkit.py eol --fix --execute` 再 `--fix-indent --execute`**（本轮写手以 `newline='\\\\n'` 写盘后连吃两拒，实锤在此）。(6) tick 口径：本窗 3469→3470。(7) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、backlog.md 体量闸、导出面 (truncated)",
+  "latest_evidence": "qa/frontdoor-host-field-R3471.log (1786B, 2026-11-25, sha256 397207fe22d0)",
+  "next_milestone": "[R3471] next window (<=48h): (1) **S4U 仍未落地**：本会话仍未以提权身份运行，`BigDomain-OSLoop` 的 `LogonType` 需由**提权会话**跑 `src/os/register_loop_task.ps1` 并用 `$t.Principal.LogonType` 读回；**第十四次承账**，禁再以「未实测」或「无从下手」结账。(2) 门的第十层候选：**请求行与头部各面的余量**——本窗只判了 Host 字段的存在/重复/值法，**尚未量**：请求目标为空串、字段名含空格或控制字符、字段行数/单行长度上限、以及 `Host` 与 `Connection`/`Expect` 的交互；下窗先只读实测再立判据，禁先改后测。(3) 收口序实证不变：各面写 → `tools/first_yuan_chain.py` → `tools/deliverable_index.py` → `chain --check` → `index --check` → `tools/face_sweep.py` → `--check` → `src/os/heartbeat.py --write <tick>` → `src/os/export_round.py` → `tools/status_export_fresh.py --apply` → `src/os/check_export_consistency.py` → **导出面写后必须再收敛一轮**（index → index --check → sweep → sweep --check）→ `tools/closeout_gate.py`；本窗两次收敛读数：导出前 index 4faff9fadafe9cb5／sweep 47519a618451613a，导出后 index 77d87a8ba4eed1e6／sweep d40fee31b7f69b0d／consistency pass=22 fail=0。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`（本窗 tokens 行后载体 76243B／闸 78500／余 2257B，settled 行后需复核）。(6) tick 口径：本窗 3470→3471。(7) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、backlog.md 体量闸、导出面 `latest_artifact` 槽仍指旧件（写手债）。",
   "outs": [
     "preview/apimarket-report.html (37201B) + preview/apimarket-report.json (59815B) [2026-11-25 commit]",
     "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 commit] (halves differ: html [2026-11-25 commit] + json [2026-11-16 commit]; later=html)",
@@ -137,19 +137,19 @@
     "shortfall_total": 15,
     "verdict": "FLOOR-DEBT"
   },
-  "results": [["3470", "OSLoop 执行 tick"]],
+  "results": [["3471", "OSLoop 执行 tick"]],
   "results_archive": {
     "bytes": 336680,
     "count": 179,
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
-  "self_drive": {"window": "2026-11-19..2026-11-25", "window_days": 7, "log_lines_in_window": 120, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 11, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
-  "state_bytes": 76048,
-  "next_milestone_due": "2026-11-27T14:07:08+08:00",
+  "self_drive": {"window": "2026-11-19..2026-11-25", "window_days": 7, "log_lines_in_window": 123, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 13, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
+  "state_bytes": 76658,
+  "next_milestone_due": "2026-11-27T14:32:42+08:00",
   "heartbeat": {
-    "tick": 3470,
-    "state_tick": 3470,
+    "tick": 3471,
+    "state_tick": 3471,
     "lag": 0,
     "verdict": "PASS",
     "reason": "fresh"

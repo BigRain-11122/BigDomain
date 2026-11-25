@@ -8693,8 +8693,11 @@ SUITES = [
     # R3469: the root, the health face and the bare shelf compared the whole
     # request target, so a share link carrying a query answered 404 there and
     # 200 on the next route - AC-FDPV10.
+    # R3471: the door never read the Host field, so a message with no Host,
+    # two Hosts, or an invalid value was answered 200 like any other - the
+    # 400 duty of RFC 9112 sec.3.2 had no exit on this door - AC-FDPV12.
     ("frontdoor-preview-pages",
-     os.path.join("test_frontdoor_preview_pages.py"), 11),
+     os.path.join("test_frontdoor_preview_pages.py"), 12),
     # R3115: the 24h export-face age gate (os/export_freshness.py, AC-EXP1..6)
     # had zero production consumers - it ran only inside its own suite - while
     # the CEO card printed export_ts as a bare string. AC-FDC2 (six arms, ONE

@@ -1,6 +1,6 @@
 """Suite for the door's deliverable shelf: the shipped pages get one URL.
 
-ELEVEN criteria. AC-FDPV1 (six arms) pins the shelf itself: the pages come back
+TWELVE criteria. AC-FDPV1 (six arms) pins the shelf itself: the pages come back
 byte-identical to disk and no path can turn the door into a filesystem
 reader. AC-FDPV2 (six arms, R3462) pins the door's manners: HEAD answers the
 same status, type and length as GET with an empty body (a standard probe must
@@ -45,6 +45,11 @@ no path is the root, a scheme this door does not implement is refused 501 by
 name rather than read as a path, the escape law still holds inside an absolute
 target, and a protocol-relative target is folded by this door instead of by
 the stdlib.
+AC-FDPV12 (six arms, R3471) pins the Host field: an HTTP/1.1 message that
+lacks Host, names Host twice, or carries an invalid value is refused 400 by
+name with the door's policy, an absolute-form target has its Host ignored for
+routing but still judged as a value, HTTP/1.0 stays exempt from the duty, and
+nothing already delivered moved.
 
 Usage: python test_frontdoor_preview_pages.py
 Exit: 0 = SUITE PASS, 2 = FAIL.
@@ -357,7 +362,7 @@ def main():
             block = registry_text.split('"' + ROW + '"', 1)[1][:160]
             if "test_frontdoor_preview_pages.py" not in block:
                 bad2.append("f-row-file")
-            if "11)" not in block:
+            if "12)" not in block:
                 bad2.append("f-declared-%s" % block.split(")")[0].strip()[-3:])
 
         # ===== AC-FDPV3: the shelf is resumable and concurrent ============
@@ -586,7 +591,7 @@ def main():
         with io.open(REGISTRY, encoding="utf-8") as handle:
             registry_text4 = handle.read()
         block4 = registry_text4.split('"' + ROW + '"', 1)[-1][:160]
-        if "11)" not in block4:
+        if "12)" not in block4:
             bad4.append("f-declared-%r" % block4.split(")")[0][-8:])
 
         # ===== AC-FDPV5: the shelf negotiates a coding ======================
@@ -724,7 +729,7 @@ def main():
         with io.open(REGISTRY, encoding="utf-8") as handle:
             registry_text5 = handle.read()
         block5 = registry_text5.split('"' + ROW + '"', 1)[-1][:160]
-        if "11)" not in block5:
+        if "12)" not in block5:
             bad5.append("f-declared-%r" % block5.split(")")[0][-8:])
 
         # ===== AC-FDPV6: the shelf honours the write preconditions ==========
@@ -802,7 +807,7 @@ def main():
         with io.open(REGISTRY, encoding="utf-8") as handle:
             registry_text6 = handle.read()
         block6 = registry_text6.split('"' + ROW + '"', 1)[-1][:200]
-        if "11)" not in block6:
+        if "12)" not in block6:
             bad6.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block6:
             bad6.append("f-row-file")
@@ -951,7 +956,7 @@ def main():
         with io.open(REGISTRY, encoding="utf-8") as handle:
             registry_text7 = handle.read()
         block7 = registry_text7.split('"' + ROW + '"', 1)[-1][:200]
-        if "11)" not in block7:
+        if "12)" not in block7:
             bad7.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block7:
             bad7.append("f-row-file")
@@ -1081,7 +1086,7 @@ def main():
                 bad8.append("f-missing-" + needle)
         with io.open(REGISTRY, encoding="utf-8") as handle:
             block8r = handle.read().split('"' + ROW + '"', 1)[-1][:200]
-        if "11)" not in block8r:
+        if "12)" not in block8r:
             bad8.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block8r:
             bad8.append("f-row-file")
@@ -1224,7 +1229,7 @@ def main():
                 bad9.append("f-missing-" + needle)
         with io.open(REGISTRY, encoding="utf-8") as handle:
             block9r = handle.read().split('"' + ROW + '"', 1)[-1][:200]
-        if "11)" not in block9r:
+        if "12)" not in block9r:
             bad9.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block9r:
             bad9.append("f-row-file")
@@ -1343,7 +1348,7 @@ def main():
             bad10.append("f-missing-_request_path")
         with io.open(REGISTRY, encoding="utf-8") as handle:
             block10r = handle.read().split('"' + ROW + '"', 1)[-1][:200]
-        if "11)" not in block10r:
+        if "12)" not in block10r:
             bad10.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block10r:
             bad10.append("f-row-file")
@@ -1462,10 +1467,128 @@ def main():
                              .replace(" ", "-"))
         with io.open(REGISTRY, encoding="utf-8") as handle:
             block11r = handle.read().split('"' + ROW + '"', 1)[-1][:200]
-        if "11)" not in block11r:
+        if "12)" not in block11r:
             bad11.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block11r:
             bad11.append("f-row-file")
+
+        # ===== AC-FDPV12: the Host field law ==============================
+        # R3471 measured before the code: fourteen Host shapes -- none at all,
+        # an empty value, two field lines, a space, a path character, a
+        # userinfo character, a comma list, a 300-byte name, an absolute-form
+        # target with a conflicting Host and one with no Host -- all answered
+        # 200 "ok". RFC 9112 sec.3.2 makes each malformed shape a 400.
+        bad12 = []
+        door12 = "127.0.0.1:%d" % port
+
+        def host12(lines12, verb12="GET", target12="/healthz"):
+            payload12 = ("%s %s HTTP/1.1\r\n%s\r\n\r\n"
+                         % (verb12, target12, lines12)).encode("ascii")
+            return wire_reply(raw_request(port, payload12))
+
+        # ---- a: a missing Host is a 400 on every message shape ------------
+        for label12, payload12 in (
+                ("plain", b"GET /healthz HTTP/1.1\r\n\r\n"),
+                ("absolute",
+                 b"GET http://elsewhere.example/healthz HTTP/1.1\r\n\r\n"),
+                ("refused-verb", b"POST /healthz HTTP/1.1\r\n\r\n")):
+            blob12 = raw_request(port, payload12)
+            line12, headers12, body12 = wire_reply(blob12)
+            if " 400 " not in line12:
+                bad12.append("a-status-%s-%r" % (label12, line12))
+            if body12 != b"400 host field required\n":
+                bad12.append("a-body-%s-%r" % (label12, body12[:26]))
+            if headers12.get("x-content-type-options") != "nosniff" or \
+                    headers12.get("cross-origin-resource-policy") != \
+                    "same-origin" or \
+                    headers12.get("server") != "BigDomain" or \
+                    headers12.get("connection") != "close":
+                bad12.append("a-policy-%s" % label12)
+            if blob12.count(b"HTTP/1.") != 1:
+                bad12.append("a-second-answer-%s" % label12)
+
+        # ---- b: two Host fields, and one field carrying a list -------------
+        blob12 = raw_request(
+            port, b"GET /healthz HTTP/1.1\r\nHost: a\r\nHost: b\r\n\r\n")
+        line12, _headers12, body12 = wire_reply(blob12)
+        if " 400 " not in line12 or body12 != b"400 duplicate host field\n":
+            bad12.append("b-dupe-%r-%r" % (line12, body12[:26]))
+        if blob12.count(b"HTTP/1.") != 1:
+            bad12.append("b-dupe-second-answer")
+        line12, _headers12, body12 = host12("Host: a, b")
+        if " 400 " not in line12 or body12 != b"400 invalid host field\n":
+            bad12.append("b-list-%r-%r" % (line12, body12[:26]))
+
+        # ---- c: the value law ---------------------------------------------
+        for value12 in ("", "bad host", "a/b", "u@h", "a:b:c", "[::1",
+                        "a" * 300):
+            line12, _headers12, body12 = host12("Host: " + value12)
+            if " 400 " not in line12 or \
+                    body12 != b"400 invalid host field\n":
+                bad12.append("c-bad-%r-%r-%r" % (value12[:8], line12,
+                                                 body12[:26]))
+        for value12 in ("door", "door:8080", door12, "[::1]", "[::1]:8080",
+                        "door."):
+            line12, _headers12, body12 = host12("Host: " + value12)
+            if " 200 " not in line12 or body12 != b"ok":
+                bad12.append("c-good-%r-%r-%r" % (value12, line12,
+                                                  body12[:12]))
+
+        # ---- d: absolute-form ignores Host for routing, not for judging ----
+        with io.open(os.path.join(PREVIEW, "index.html"), "rb") as handle:
+            disk_index12 = handle.read()
+        line12, _headers12, body12 = host12(
+            "Host: elsewhere.example",
+            target12="http://%s/preview/index.html" % door12)
+        if " 200 " not in line12 or body12 != disk_index12:
+            bad12.append("d-conflict-%r-%d" % (line12, len(body12)))
+        line12, _headers12, body12 = host12(
+            "Host: bad host", target12="http://%s/healthz" % door12)
+        if " 400 " not in line12 or body12 != b"400 invalid host field\n":
+            bad12.append("d-conflict-bad-%r-%r" % (line12, body12[:26]))
+
+        # ---- e: HTTP/1.0 is exempt from the duty --------------------------
+        line12, _headers12, body12 = wire_reply(raw_request(
+            port, b"GET /healthz HTTP/1.0\r\n\r\n"))
+        if " 200 " not in line12 or body12 != b"ok":
+            bad12.append("e-nohost-%r-%r" % (line12, body12[:12]))
+        line12, _headers12, body12 = wire_reply(raw_request(
+            port, b"GET /healthz HTTP/1.0\r\nHost: bad host\r\n\r\n"))
+        if " 200 " not in line12 or body12 != b"ok":
+            bad12.append("e-badhost-%r-%r" % (line12, body12[:12]))
+
+        # ---- f: nothing delivered moved, and the count is 12 --------------
+        for path12 in ("/", "/healthz", "/preview", "/preview/index.html"):
+            status12, _ctype12, _body12 = get(port, path12)
+            if status12 != 200:
+                bad12.append("f-%s-%r" % (path12, status12))
+        line12, headers12, _body12 = host12("Host: door", verb12="POST")
+        if " 405 " not in line12 or headers12.get("allow") != "GET, HEAD":
+            bad12.append("f-post-%r-%r" % (line12, headers12.get("allow")))
+        line12, headers12, _body12 = host12("Host: door", verb12="FOO")
+        if " 501 " not in line12 or "allow" in headers12:
+            bad12.append("f-foo-%r" % line12)
+        with io.open(MODULE, "rb") as handle:
+            raw12b = handle.read()
+        if raw12b[:3] == b"\xef\xbb\xbf" or b"\r\n" in raw12b:
+            bad12.append("f-module-dialect")
+        try:
+            text12b = raw12b.decode("utf-8")
+            text12b.encode("ascii")
+        except (UnicodeDecodeError, UnicodeEncodeError):
+            bad12.append("f-module-not-ascii")
+            text12b = raw12b.decode("utf-8", "replace")
+        for token12b in ("HOST_MAX", "def _host_value_ok(",
+                         "def _host_refusal("):
+            if token12b not in text12b:
+                bad12.append("f-missing-" + token12b.split("(")[0]
+                             .replace(" ", "-"))
+        with io.open(REGISTRY, encoding="utf-8") as handle:
+            block12r = handle.read().split('"' + ROW + '"', 1)[-1][:220]
+        if "12)" not in block12r:
+            bad12.append("f-declared")
+        if "test_frontdoor_preview_pages.py" not in block12r:
+            bad12.append("f-row-file")
     finally:
         srv.shutdown()
         srv.server_close()
@@ -1481,6 +1604,7 @@ def main():
     report("AC-FDPV9", bool(bad9), ",".join(bad9))
     report("AC-FDPV10", bool(bad10), ",".join(bad10))
     report("AC-FDPV11", bool(bad11), ",".join(bad11))
+    report("AC-FDPV12", bool(bad12), ",".join(bad12))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:

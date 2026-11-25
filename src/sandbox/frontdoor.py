@@ -9303,6 +9303,65 @@ PERMISSIONS_POLICY = (
 ALLOWED_METHODS = ("GET", "HEAD")
 
 
+# R3471: the door reads the Host field. Measured before this landed: a raw
+# probe of fourteen shapes -- no Host, an empty Host, two Host lines, a space
+# inside the value, a path character, a userinfo character, a comma list, a
+# 300-byte name, an absolute-form target with a conflicting Host, one with no
+# Host at all -- answered 200 "ok" on every one. RFC 9112 sec.3.2 states the
+# duty plainly: a server MUST answer 400 to an HTTP/1.1 message that lacks
+# Host, carries more than one Host field, or carries an invalid value. This
+# door publishes one shelf and never routes by host, so the field is read
+# only to judge the message, never to pick a face. An absolute-form target
+# keeps its authority and its Host is then ignored for routing (sec.3.2.2),
+# but the value must still be well formed, because "ignored" is not
+# "exempt". HTTP/1.0 stays exempt: the 400 duty is written for HTTP/1.1
+# messages and this door still answers 1.0 clients.
+HOST_MAX = 255
+HOST_NAME = re.compile("^[A-Za-z0-9._\\-]+$")
+HOST_LITERAL = "0123456789abcdefABCDEF:."
+
+
+def _speaks_11(version):
+    """True for HTTP/1.1 and later, the versions the Host duty covers."""
+    try:
+        major, minor = version.split("/", 1)[1].split(".")
+        return (int(major), int(minor)) >= (1, 1)
+    except (IndexError, ValueError):
+        return False
+
+
+def _host_value_ok(value):
+    """R3471: uri-host ["." port] as RFC 3986 sec.3.2.2 writes it.
+
+    An IPv6 literal is bracketed and may carry a port after the bracket; any
+    other name uses the unreserved-plus-sub-delims subset this door can judge
+    without a resolver, and a port is digits only. A bare "." is a legal
+    reg-name by the grammar and stays legal here. The 255-octet bound is the
+    DNS name limit (RFC 1035 sec.2.3.4), stated so the cap is not arbitrary.
+    """
+    if not value or len(value) > HOST_MAX:
+        return False
+    rest = value
+    if rest.startswith("["):
+        end = rest.find("]")
+        if end < 0:
+            return False
+        literal = rest[1:end]
+        if not literal or any(char not in HOST_LITERAL for char in literal):
+            return False
+        rest = rest[end + 1:]
+        if rest and not rest.startswith(":"):
+            return False
+        port = rest[1:]
+    else:
+        host, sep, port = rest.partition(":")
+        if not HOST_NAME.match(host):
+            return False
+        if sep and ":" in port:
+            return False
+    return not port or port.isdigit()
+
+
 def _security_headers(ctype):
     """R3466: the policy every answer on this door carries.
 
@@ -9624,6 +9683,25 @@ class Handler(BaseHTTPRequestHandler):
             self._method_refused()
         return False
 
+    def _host_refusal(self):
+        """R3471: the 400 answer for a malformed Host, or None.
+
+        The count is read from every field line, not from the first value, so
+        a second Host cannot hide behind the first; a single field carrying a
+        comma list is refused as an invalid value because Host is not a list
+        field and a reader cannot tell which name was meant.
+        """
+        if not _speaks_11(self.request_version):
+            return None
+        values = self.headers.get_all("Host") or []
+        if not values:
+            return b"400 host field required\n"
+        if len(values) > 1:
+            return b"400 duplicate host field\n"
+        if not _host_value_ok(values[0].strip()):
+            return b"400 invalid host field\n"
+        return None
+
     def parse_request(self):
         """R3468: a request naming both a transfer coding and a length.
 
@@ -9632,6 +9710,9 @@ class Handler(BaseHTTPRequestHandler):
         instead of being answered as a method error. Every other request that
         declares a body is answered normally and then closed, so the unread
         bytes can never be taken for a second request.
+        R3471: the Host duty runs here too, after the framing check and
+        before any dispatch, so a malformed message is a 400 no matter which
+        verb it names.
         """
         if not super().parse_request():
             return False
@@ -9640,6 +9721,10 @@ class Handler(BaseHTTPRequestHandler):
         if transfer is not None and length is not None:
             self._send(400, "text/plain; charset=utf-8",
                        b"400 conflicting body framing\n", close=True)
+            return False
+        refused = self._host_refusal()
+        if refused is not None:
+            self._send(400, "text/plain; charset=utf-8", refused, close=True)
             return False
         self._request_body_declared = (
             transfer is not None or
