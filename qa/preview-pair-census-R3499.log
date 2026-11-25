@@ -57,3 +57,12 @@ NOT TOUCHED
   no preview page re-derived, no freeze register written, no threshold moved,
   zero payment capability and no network beyond loopback - the five physical
   pieces still gate every buyer.
+
+ADDENDUM (this window, after the first commits): the gate reddened on its own
+  page the moment the tick advanced from 3498 to 3499, because the derivation
+  round was compared as if it were a measurement. That is the stale-pair trap
+  this page exists to expose, reproduced on the page itself. Fix: `round` and
+  `generated_at` are labels and are ignored by --check, while every per-pair
+  byte size, digest and mtime is still compared exactly; AC-PPC4 now pins the
+  label case alongside the tampered-field case. Re-read after the fix:
+  PPC-CHECK VERDICT PASS read_only=True, SUITE PASS 7/7.
