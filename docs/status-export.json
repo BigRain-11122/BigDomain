@@ -3,20 +3,20 @@
     "board_pages_skipped": [
       "preview/face-sweep.html (8878B)"
     ],
-    "current": "2026-11-25 R3459 PRODUCT: the CEO face stops lying - the four falsehoods R3458 measured are fixed at the birth site, not worked around. The published heartbeat now speaks heartbeat.verify's OWN words with a non-empty reason, its two copies are one derivation, the board-page audit carries the meta pair the closeout ring regenerates, and the evidence line is a frozen snapshot (bytes plus sha256) instead of a re-grade against a log a battery leg is still appending to.",
+    "current": "2026-11-25 R3460 PRODUCT: the export face stops needing a human pen - tools/status_export_fresh.py --apply now publishes the self_drive block and the results tick row from the shipped checker own recount, so no window has to type those numbers into the CEO face again (AC-SXF38).",
     "do": "2026-11-25 R3456 PRODUCT: the answer-revision question now has a door - api_answer_history (live with AC-AMAW1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so 'which answer was rewritten, what did it say before, what does it say now and how often did it change' could only be read by calling the sandbox from a shell - while api_seller_answers and api_listing_qna publish only the CURRENT wording.",
     "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 commit] (halves differ: html [2026-11-25 commit] + json [2026-11-16 commit]; later=html)",
     "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 commit] (halves differ: html [2026-11-25 commit] + json [2026-11-16 commit]; later=html)",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/export-face-integrity-R3459.log (1564B, 2026-11-25, sha256 de5d17172308)",
-    "latest_evidence": "qa/export-face-integrity-R3459.log (1564B, 2026-11-25, sha256 de5d17172308)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/export-face-writer-R3460.log (2049B, 2026-11-25, sha256 382f79606674)",
+    "latest_evidence": "qa/export-face-writer-R3460.log (2049B, 2026-11-25, sha256 382f79606674)",
     "newest_pair_on_disk_is_board": true,
     "next_milestone": "[R3459] next window (<=48h): (1) **S4U 仍未落地**：`BigDomain-OSLoop` 存在且 state=Running，但 `LogonType=Interactive`；本会话未提权，`register_loop_task.ps1` 重注册需提权会话执行，落地后必须 `$t.Principal.LogonType` 读回验证并保留既有触发器——本项已连承三窗，禁止再以「未实测」结账。(2) 新增一条**回归护栏**：任何新轮若先写 `docs/status-export.json` 再跑面扫，`board_pages_skipped` 会重新变空——收口序固定为「面扫 → 导出 → 两个判分器」，此序写进收口检查单。(3) 抽一个已开门面做回归复核（面自带套件在盘、tools/＋preview/＋src/os 实测零命中才动手；已开门面不重开）。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`（本窗收口后 state 载体 76379B／闸 78500／余 2121B，本窗未折）。(6) tick 口径：本窗 3458→3459。(7) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、backlog.md 体量闸。",
-    "next_milestone_due": "2026-11-27T09:09:18+08:00",
-    "updated_at": "2026-11-25T09:09:18+08:00",
+    "next_milestone_due": "2026-11-27T09:26:15+08:00",
+    "updated_at": "2026-11-25T09:26:15+08:00",
     "heartbeat": {
-      "tick": 3459,
-      "state_tick": 3459,
+      "tick": 3460,
+      "state_tick": 3460,
       "lag": 0,
       "verdict": "PASS",
       "reason": "fresh"
@@ -37,8 +37,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-25 R3459 PRODUCT: the CEO face stops lying - the four falsehoods R3458 measured are fixed at the birth site, not worked around. The published heartbeat now speaks heartbeat.verify's OWN words with a non-empty reason, its two copies are one derivation, the board-page audit carries the meta pair the closeout ring regenerates, and the evidence line is a frozen snapshot (bytes plus sha256) instead of a re-grade against a log a battery leg is still appending to.",
-  "claims": {"claimed": 27, "captured": 16, "contradicted": 0, "uncaptured": 11, "historic": 0, "rows": 101, "present": true, "census_ts": "2026-11-25T09:09:18+08:00"},
+  "current": "2026-11-25 R3460 PRODUCT: the export face stops needing a human pen - tools/status_export_fresh.py --apply now publishes the self_drive block and the results tick row from the shipped checker own recount, so no window has to type those numbers into the CEO face again (AC-SXF38).",
+  "claims": {"claimed": 27, "captured": 16, "contradicted": 0, "uncaptured": 11, "historic": 0, "rows": 101, "present": true, "census_ts": "2026-11-25T09:26:15+08:00"},
   "chain": {"present": true, "rows": 101, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -67,10 +67,10 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-25 R3459 PRODUCT: the CEO face stops lying - the four falsehoods R3458 measured are fixed at the birth site, not worked around. The published heartbeat now speaks heartbeat.verify's OWN words with a non-empty reason, its two copies are one derivation, the board-page audit carries the meta pair the closeout ring regenerates, and the evidence line is a frozen snapshot (bytes plus sha256) instead of a re-grade against a log a battery leg is still appending to.",
-  "export_ts": "2026-11-25T09:09:18+08:00",
+  "do": "2026-11-25 R3460 PRODUCT: the export face stops needing a human pen - tools/status_export_fresh.py --apply now publishes the self_drive block and the results tick row from the shipped checker own recount, so no window has to type those numbers into the CEO face again (AC-SXF38).",
+  "export_ts": "2026-11-25T09:26:15+08:00",
   "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 commit] (halves differ: html [2026-11-25 commit] + json [2026-11-16 commit]; later=html)",
-  "latest_evidence": "qa/export-face-integrity-R3459.log (1564B, 2026-11-25, sha256 de5d17172308)",
+  "latest_evidence": "qa/export-face-writer-R3460.log (2049B, 2026-11-25, sha256 382f79606674)",
   "next_milestone": "[R3459] next window (<=48h): (1) **S4U 仍未落地**：`BigDomain-OSLoop` 存在且 state=Running，但 `LogonType=Interactive`；本会话未提权，`register_loop_task.ps1` 重注册需提权会话执行，落地后必须 `$t.Principal.LogonType` 读回验证并保留既有触发器——本项已连承三窗，禁止再以「未实测」结账。(2) 新增一条**回归护栏**：任何新轮若先写 `docs/status-export.json` 再跑面扫，`board_pages_skipped` 会重新变空——收口序固定为「面扫 → 导出 → 两个判分器」，此序写进收口检查单。(3) 抽一个已开门面做回归复核（面自带套件在盘、tools/＋preview/＋src/os 实测零命中才动手；已开门面不重开）。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`（本窗收口后 state 载体 76379B／闸 78500／余 2121B，本窗未折）。(6) tick 口径：本窗 3458→3459。(7) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、backlog.md 体量闸。",
   "outs": [
     "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 commit] (halves differ: html [2026-11-25 commit] + json [2026-11-16 commit]; later=html)",
@@ -136,36 +136,19 @@
     "shortfall_total": 15,
     "verdict": "FLOOR-DEBT"
   },
-  "results": [
-    [
-      "3459",
-      "OSLoop 执行 tick"
-    ]
-  ],
+  "results": [["3460", "OSLoop 执行 tick"]],
   "results_archive": {
     "bytes": 336680,
     "count": 179,
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
-  "self_drive": {
-    "window": "2026-11-19..2026-11-25",
-    "window_days": 7,
-    "log_lines_in_window": 116,
-    "idle_fast_mention_lines": 0,
-    "no_pullable_mention_lines": 0,
-    "substantive_non_idle_mention_lines": 11,
-    "proposals_total": 11,
-    "proposals_open": 9,
-    "queue_main_open": 6,
-    "queue_tech_open": 5,
-    "queue_explore_open": 1
-  },
-  "state_bytes": 77891,
-  "next_milestone_due": "2026-11-27T09:09:18+08:00",
+  "self_drive": {"window": "2026-11-19..2026-11-25", "window_days": 7, "log_lines_in_window": 108, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 11, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
+  "state_bytes": 73526,
+  "next_milestone_due": "2026-11-27T09:26:15+08:00",
   "heartbeat": {
-    "tick": 3459,
-    "state_tick": 3459,
+    "tick": 3460,
+    "state_tick": 3460,
     "lag": 0,
     "verdict": "PASS",
     "reason": "fresh"

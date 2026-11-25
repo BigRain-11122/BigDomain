@@ -1,0 +1,13 @@
+R3460 export-face writer publication (AC-SXF38 / AC-SXFB40)
+SXF-CHECK: python src/os/test_status_export_fresh.py -> SUITE PASS 46/46 (AC-SXFB1..40), new arm AC-SXFB40 first=0 block=True tick=True idempotent=True repair=True ambiguous=True real_untouched=True
+SXF-BEFORE: measured on the same tree before the export refresh -> the same suite read 45/46 with AC-SXFB38 alone red (live=2, AC-EXPW1 current does not start with the live tick R3460); the green reading above is after the refresh
+EXPORT-ROUND: python src/os/export_round.py --check -> VERDICT PASS tick=2026-11-25 R3460 PRODUCT
+SXF-GRADER: python tools/status_export_fresh.py --check -> VERDICT R3460 PASS do, ceo_face.current and current all name R3460
+CEC: python src/os/check_export_consistency.py -> VERDICT PASS pass=22 fail=0 state_tick=3460 window=2026-11-19..2026-11-25 log_lines=108 idle=0 nop=0 sub=11 proposals=11/9 queues=6/5/1
+HEARTBEAT: python src/os/heartbeat.py -> HEARTBEAT PASS tick=3460 state=3460 lag=0 reason=fresh
+FACE-SWEEP: python tools/face_sweep.py -> VERDICT PASS 13/13 fingerprint=14f60308ce114ac5; --check -> VERDICT PASS 21/21
+CLOSEOUT: python tools/closeout_gate.py -> CLOSEOUT-GATE PASS files=4999 census=PASS matrix=DOC-CURRENT carrier=73526B margin=4974 ledger OK rows=101 broken=5 entry-index rc0 first-yuan-chain rc0
+CONTROL-A: self_drive line deleted from a temp copy -> apply answered rc=0 changed=True and rebuilt the block from the anchor (repaired, not refused), landed face sha256 unchanged
+CONTROL-B: two self_drive counts tampered (+7 log_lines_in_window, +3 queue_tech_open) on a temp copy -> apply answered rc=0 and the block re-read as the derived recount (repaired=True), landed face sha256 unchanged
+S4U: BigDomain-OSLoop State=Running Principal.LogonType=Interactive Principal.UserId=sjs20; this session IsInRole(Administrator)=False
+FOLD: fold 810 moved the whole R3459 block (lines 122:125) 77891B -> 75430B; fold 811 moved the whole R3436 block (lines 11:21) 77713B -> 71878B, token_ok=true round_pointer_lost=[] with the loss declared

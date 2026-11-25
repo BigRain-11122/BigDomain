@@ -1352,6 +1352,103 @@ def fixed_point_arms():
            "real export+state untouched by the fixed-point arms")
 
 
+def writer_arms():
+    """AC-SXFB40 (AC-SXF38, R3460): --apply publishes the two rows it skipped.
+
+    R3459 carried the debt by name: `--apply` republished the clock, the
+    narrative, the artifact, the milestone, the chain and the census, so a
+    freshly applied face still answered E_SXF_SELF_DRIVE_STALE and
+    E_SXF_TICK_ROW_STALE and every window typed those numbers in by hand.
+
+    This world is date-anchored and carries all six files the recount reads,
+    because that recount is the shipped checker's own and refuses to borrow the
+    real tree. Three facts are graded: the block lands from the derivation, the
+    tick row is refreshed (never invented), and a tampered block is repaired by
+    the next apply. Everything private; the real faces must stay untouched.
+    """
+    real_before = (snapshot(REAL_EXPORT), snapshot(REAL_STATE))
+    root = tempfile.mkdtemp(prefix="sxf-writer-R3460-")
+    saved = rebind(root)
+    try:
+        export, doc = build_world(root)
+        for rel in (("src", "os", "export_consistency_patterns.json"),
+                    ("docs", "proposals.md"),
+                    ("state", "queue", "main.md"),
+                    ("state", "queue", "tech.md"),
+                    ("state", "queue", "explore.md")):
+            dst = os.path.join(root, *rel)
+            folder = os.path.dirname(dst)
+            if not os.path.isdir(folder):
+                os.makedirs(folder)
+            shutil.copyfile(os.path.join(REPO, *rel), dst)
+        write_json(os.path.join(root, "src", "os", "state.json"),
+                   {"tick": 3460,
+                    "log": ["2026-11-23 R3460 PRODUCT: writer arm narrative"]})
+        derived, state_now, _export_doc, pat = sx._cec_module().recompute(root)
+        label = pat["tick_row_label"]
+        doc["self_drive"] = {}
+        doc["results"] = [["9999", label, "fixture"]]
+        write_json(export, doc)
+
+        rc_first = sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
+        first = json.loads(io.open(export, encoding="utf-8").read())
+        landed_sd = first.get("self_drive") or {}
+        arm_block = all(landed_sd.get(key) == value
+                        for key, value in derived.items())
+        rows_first = [row for row in first.get("results") or []
+                      if isinstance(row, list) and len(row) >= 2 and row[1] == label]
+        arm_tick = (len(rows_first) == 1
+                    and str(rows_first[0][0]) == str(state_now.get("tick")))
+
+        real_clock = sx.now_local
+        pinned = dt.datetime(2026, 11, 23, 6, 0, 0,
+                             tzinfo=dt.timezone(dt.timedelta(hours=8)))
+        try:
+            sx.now_local = lambda: pinned
+            rc_once = sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
+            once = io.open(export, "rb").read()
+            rc_twice = sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
+            twice = io.open(export, "rb").read()
+
+            tampered = json.loads(twice.decode("utf-8"))
+            block = tampered.get("self_drive") or {}
+            block["log_lines_in_window"] = int(block.get("log_lines_in_window") or 0) + 7
+            tampered["self_drive"] = block
+            write_json(export, tampered)
+            rc_repair = sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
+            repaired = json.loads(io.open(export, encoding="utf-8").read())
+            arm_repair = (rc_repair == 0
+                          and (repaired.get("self_drive") or {}) == derived)
+
+            # Two labelled rows are a shape question this writer cannot see: it
+            # refreshes what it finds and never picks one, so `results` stays
+            # exactly as landed and check() is the surface that names the shape.
+            ambiguous = json.loads(io.open(export, encoding="utf-8").read())
+            ambiguous["results"] = [["1", label, "a"], ["2", label, "b"]]
+            write_json(export, ambiguous)
+            rc_amb = sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
+            landed_amb = json.loads(io.open(export, encoding="utf-8").read())
+            arm_amb = (rc_amb == 0
+                       and landed_amb.get("results") ==
+                       [["1", label, "a"], ["2", label, "b"]]
+                       and (landed_amb.get("self_drive") or {}) == derived)
+        finally:
+            sx.now_local = real_clock
+    finally:
+        restore(saved)
+        shutil.rmtree(root, ignore_errors=True)
+    real_after = (snapshot(REAL_EXPORT), snapshot(REAL_STATE))
+    record("AC-SXFB40",
+           rc_first == 0 and arm_block and arm_tick
+           and rc_once == 0 and rc_twice == 0 and once == twice
+           and arm_repair and arm_amb and real_before == real_after,
+           "first=%d block=%s tick=%s idempotent=%s repair=%s ambiguous=%s "
+           "real_untouched=%s"
+           % (rc_first, arm_block, arm_tick, once == twice, arm_repair,
+              arm_amb, real_before == real_after))
+    return real_before == real_after
+
+
 def main():
     real_before = (snapshot(REAL_EXPORT), snapshot(REAL_STATE))
     root = tempfile.mkdtemp(prefix="sxf-R2821-")
@@ -1363,6 +1460,7 @@ def main():
         shutil.rmtree(root, ignore_errors=True)
     wire_arms()
     fixed_point_arms()
+    writer_arms()
     real_after = (snapshot(REAL_EXPORT), snapshot(REAL_STATE))
     record("ISOLATION", real_before == real_after, "real export+state untouched")
     bad = [name for name, ok, _ in results if not ok]

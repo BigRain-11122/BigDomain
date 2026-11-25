@@ -1027,6 +1027,70 @@ def _ensure_block(text, key, mapping, indent="  "):
     return text, False
 
 
+def _ensure_json_list(text, key, rows, indent="  "):
+    """Publish a derived list value, replacing whatever shape is on disk.
+
+    The same seam as `_ensure_block`, one bracket type wider: the tick row lives
+    inside `results`, which a landed face may keep on one line (this writer) or
+    spread over several (a fixture), so the replacement walks bracket depth to
+    its closing line instead of assuming a single line.
+    """
+    payload = json.dumps(rows, ensure_ascii=False)
+    prefix = "%s\"%s\": " % (indent, key)
+    lines = text.split("\n")
+    for index, line in enumerate(lines):
+        if not line.startswith(prefix):
+            continue
+        end = index
+        rest = line[len(prefix):]
+        if "[" in rest:
+            depth = rest.count("[") - rest.count("]")
+            while depth > 0 and end + 1 < len(lines):
+                end += 1
+                depth += lines[end].count("[") - lines[end].count("]")
+        comma = "," if lines[end].rstrip().endswith(",") else ""
+        lines[index:end + 1] = [prefix + payload + comma]
+        return "\n".join(lines), True
+    return text, False
+
+
+def publish_self_drive(text, derived, tick, results, label):
+    """AC-SXF38 (R3460): the rows this writer used to leave for the round hand.
+
+    R3459 carried the debt by name: `--apply` republished the clock, the
+    narrative, the artifact, the milestone, the chain and the census, yet a
+    freshly applied face still answered `E_SXF_SELF_DRIVE_STALE` and
+    `E_SXF_TICK_ROW_STALE`, so every window typed those numbers in by hand - and
+    a hand-typed number is exactly what this face exists to stop.
+
+    The derivation is the shipped checker's own `recompute`, asked through the
+    loader the gate uses, because publishing from a second recount would create
+    the second authority AC-SXF36 removed. The tick row is REFRESHED, never
+    invented: a document with zero or two labelled rows is graded
+    `E_SXF_TICK_ROW_SHAPE` at check time, and minting one here would decide a
+    shape question this writer cannot see.
+    """
+    notes = []
+    tick_published = False
+    text, ok = _ensure_block(text, "self_drive", derived, "  ")
+    if not ok:
+        notes.append("self_drive")
+    if isinstance(results, list):
+        stamped = [row for row in results
+                   if isinstance(row, list) and len(row) >= 2 and row[1] == label]
+        if len(stamped) == 1:
+            fresh = json.loads(json.dumps(results))
+            for row in fresh:
+                if isinstance(row, list) and len(row) >= 2 and row[1] == label:
+                    row[0] = str(tick)
+            text, ok = _ensure_json_list(text, "results", fresh, "  ")
+            if not ok:
+                notes.append("results")
+            else:
+                tick_published = True
+    return text, notes, tick_published
+
+
 def apply(export_path, state_path, backlog_path, preview_dir, dry_run=False):
     state = load_state(state_path)
     round_int, narrative = newest_round(state)
@@ -1074,6 +1138,27 @@ def apply(export_path, state_path, backlog_path, preview_dir, dry_run=False):
     text, ok = _ensure_block(text, CHAIN_KEY, chain, "  ")
     if not ok:
         missing.append(CHAIN_KEY)
+    # AC-SXF38 (R3460): the two rows the round hand used to patch are published
+    # from the shipped checker's recount, before the census settles (the
+    # self_drive block carries no `rows=` token, so it cannot move that census).
+    derived_sd = None
+    sd_tick = None
+    sd_label = None
+    tick_published = False
+    try:
+        derived_sd, sd_state, _sd_export, sd_pat = _cec_module().recompute(ROOT)
+        sd_tick = sd_state.get("tick")
+        sd_label = sd_pat["tick_row_label"]
+        text, sd_notes, tick_published = publish_self_drive(
+            text, derived_sd, sd_tick, json.loads(text).get("results"), sd_label)
+    except Exception as exc:  # the derivation is graded by check(), not invented here
+        print("E_SXF_SELF_DRIVE_UNDERIVED: %s" % (exc,))
+        derived_sd = None
+        sd_notes = []
+    if sd_notes:
+        print("E_SXF_NO_KEY: export has no line-anchored key for %s@self_drive"
+              % ",".join(sd_notes))
+        return 6
     # AC-SXF28 (R3228): the census reading is published from the same derivation
     # the grader uses. Landing it adds zero `rows=` tokens (JSON shape), so the
     # value it publishes is not moved by publishing it - the second --apply is
@@ -1100,6 +1185,23 @@ def apply(export_path, state_path, backlog_path, preview_dir, dry_run=False):
         print("E_SXF_NO_KEY: export has no line-anchored key for %s" % ",".join(missing))
         return 6
     parsed = json.loads(text)
+    # AC-SXF38 (R3460): the rows just published are graded here the way check()
+    # will grade them a moment later - one derivation, two callers, so the writer
+    # cannot land a face its own gate refuses.
+    if derived_sd is not None:
+        if parsed.get("self_drive") != derived_sd:
+            print("E_SXF_WRITE: self_drive block is not the derived recount "
+                  "(landed=%r derived=%r)"
+                  % (json.dumps(parsed.get("self_drive"), sort_keys=True),
+                     json.dumps(derived_sd, sort_keys=True)))
+            return 7
+        if tick_published:
+            rows = [row for row in (parsed.get("results") or [])
+                    if isinstance(row, list) and len(row) >= 2 and row[1] == sd_label]
+            if len(rows) != 1 or str(rows[0][0]) != str(sd_tick):
+                print("E_SXF_WRITE: results tick row did not land the derived "
+                      "round (rows=%r tick=%r)" % (len(rows), sd_tick))
+                return 7
     if parsed.get("do") != narrative or (parsed.get("ceo_face") or {}).get("current") != narrative:
         print("E_SXF_WRITE: parsed values moved away from the derived narrative")
         return 7
