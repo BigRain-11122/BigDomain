@@ -362,7 +362,7 @@ def main():
             block = registry_text.split('"' + ROW + '"', 1)[1][:160]
             if "test_frontdoor_preview_pages.py" not in block:
                 bad2.append("f-row-file")
-            if "12)" not in block:
+            if "13)" not in block:
                 bad2.append("f-declared-%s" % block.split(")")[0].strip()[-3:])
 
         # ===== AC-FDPV3: the shelf is resumable and concurrent ============
@@ -591,7 +591,7 @@ def main():
         with io.open(REGISTRY, encoding="utf-8") as handle:
             registry_text4 = handle.read()
         block4 = registry_text4.split('"' + ROW + '"', 1)[-1][:160]
-        if "12)" not in block4:
+        if "13)" not in block4:
             bad4.append("f-declared-%r" % block4.split(")")[0][-8:])
 
         # ===== AC-FDPV5: the shelf negotiates a coding ======================
@@ -729,7 +729,7 @@ def main():
         with io.open(REGISTRY, encoding="utf-8") as handle:
             registry_text5 = handle.read()
         block5 = registry_text5.split('"' + ROW + '"', 1)[-1][:160]
-        if "12)" not in block5:
+        if "13)" not in block5:
             bad5.append("f-declared-%r" % block5.split(")")[0][-8:])
 
         # ===== AC-FDPV6: the shelf honours the write preconditions ==========
@@ -807,7 +807,7 @@ def main():
         with io.open(REGISTRY, encoding="utf-8") as handle:
             registry_text6 = handle.read()
         block6 = registry_text6.split('"' + ROW + '"', 1)[-1][:200]
-        if "12)" not in block6:
+        if "13)" not in block6:
             bad6.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block6:
             bad6.append("f-row-file")
@@ -956,7 +956,7 @@ def main():
         with io.open(REGISTRY, encoding="utf-8") as handle:
             registry_text7 = handle.read()
         block7 = registry_text7.split('"' + ROW + '"', 1)[-1][:200]
-        if "12)" not in block7:
+        if "13)" not in block7:
             bad7.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block7:
             bad7.append("f-row-file")
@@ -1086,7 +1086,7 @@ def main():
                 bad8.append("f-missing-" + needle)
         with io.open(REGISTRY, encoding="utf-8") as handle:
             block8r = handle.read().split('"' + ROW + '"', 1)[-1][:200]
-        if "12)" not in block8r:
+        if "13)" not in block8r:
             bad8.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block8r:
             bad8.append("f-row-file")
@@ -1229,7 +1229,7 @@ def main():
                 bad9.append("f-missing-" + needle)
         with io.open(REGISTRY, encoding="utf-8") as handle:
             block9r = handle.read().split('"' + ROW + '"', 1)[-1][:200]
-        if "12)" not in block9r:
+        if "13)" not in block9r:
             bad9.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block9r:
             bad9.append("f-row-file")
@@ -1348,7 +1348,7 @@ def main():
             bad10.append("f-missing-_request_path")
         with io.open(REGISTRY, encoding="utf-8") as handle:
             block10r = handle.read().split('"' + ROW + '"', 1)[-1][:200]
-        if "12)" not in block10r:
+        if "13)" not in block10r:
             bad10.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block10r:
             bad10.append("f-row-file")
@@ -1467,7 +1467,7 @@ def main():
                              .replace(" ", "-"))
         with io.open(REGISTRY, encoding="utf-8") as handle:
             block11r = handle.read().split('"' + ROW + '"', 1)[-1][:200]
-        if "12)" not in block11r:
+        if "13)" not in block11r:
             bad11.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block11r:
             bad11.append("f-row-file")
@@ -1585,10 +1585,150 @@ def main():
                              .replace(" ", "-"))
         with io.open(REGISTRY, encoding="utf-8") as handle:
             block12r = handle.read().split('"' + ROW + '"', 1)[-1][:220]
-        if "12)" not in block12r:
+        if "13)" not in block12r:
             bad12.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block12r:
             bad12.append("f-row-file")
+        # ===== AC-FDPV13: the request line and header block grammar =======
+        # R3472 measured before the code: a two-word request line was answered
+        # in HTTP/0.9 mode -- no status line, no policy header, no
+        # Content-Length, no Server; a target that was not origin-form
+        # ("?x=1") answered the root page; a field name with a space or a
+        # control byte, an empty name, a colonless line, an obs-fold and a NUL
+        # inside a value all answered 200; and two Content-Length fields with
+        # different values answered 200. RFC 9112 gives each of those a 400.
+        bad13 = []
+
+        def refuse13(label13, payload13, body13):
+            blob13 = raw_request(port, payload13)
+            line13, headers13, got13 = wire_reply(blob13)
+            if " 400 " not in line13:
+                bad13.append("%s-status-%r" % (label13, line13))
+            if got13 != body13:
+                bad13.append("%s-body-%r" % (label13, got13[:26]))
+            if blob13.count(b"HTTP/1.") != 1:
+                bad13.append("%s-status-line-count" % label13)
+            if headers13.get("x-content-type-options") != "nosniff" or \
+                    headers13.get("cross-origin-resource-policy") != \
+                    "same-origin" or \
+                    "camera=()" not in headers13.get("permissions-policy",
+                                                     "") or \
+                    headers13.get("server") != "BigDomain" or \
+                    headers13.get("connection") != "close" or \
+                    not headers13.get("content-length"):
+                bad13.append("%s-policy" % label13)
+
+        # ---- a: no request line may be answered as HTTP/0.9 ----------------
+        for label13, payload13 in (
+                ("two-word-path", b"GET /healthz\r\n\r\n"),
+                ("two-word-root", b"GET /\r\n\r\n"),
+                ("two-word-version",
+                 b"GET HTTP/1.1\r\nHost: door\r\n\r\n"),
+                ("empty-target",
+                 b"GET  HTTP/1.1\r\nHost: door\r\n\r\n")):
+            refuse13("a-" + label13, payload13, b"400 bad request line\n")
+
+        # ---- b: the target grammar ----------------------------------------
+        refuse13("b-query-only",
+                 b"GET ?x=1 HTTP/1.1\r\nHost: door\r\n\r\n",
+                 b"400 bad request target\n")
+        blob13 = raw_request(port, b"GET * HTTP/1.1\r\nHost: door\r\n\r\n")
+        line13, _headers13, body13 = wire_reply(blob13)
+        if " 404 " not in line13 or body13 != b"404 not found":
+            bad13.append("b-star-%r-%r" % (line13, body13[:12]))
+        if blob13.count(b"HTTP/1.") != 1:
+            bad13.append("b-star-status-line-count")
+        status13, _ctype13, body13 = get(port, "/?utm=1")
+        if status13 != 200 or not body13.startswith(b"<!DOCTYPE html>"):
+            bad13.append("b-root-moved-%r" % status13)
+
+        # ---- c: the field-name token law ----------------------------------
+        for label13, line13raw in (
+                ("space", b"Bad Header: x"),
+                ("control", b"Bad\x01Header: x"),
+                ("empty", b": x")):
+            refuse13("c-" + label13,
+                     b"GET /healthz HTTP/1.1\r\nHost: door\r\n" +
+                     line13raw + b"\r\n\r\n",
+                     b"400 invalid header name\n")
+        line13, _headers13, body13 = wire_reply(raw_request(
+            port, b"GET /healthz HTTP/1.1\r\nHost: door\r\n"
+                  b"X-Fine_1: v\r\n\r\n"))
+        if " 200 " not in line13 or body13 != b"ok":
+            bad13.append("c-good-%r-%r" % (line13, body13[:12]))
+
+        # ---- d: obs-fold is refused ---------------------------------------
+        refuse13("d-fold-plain",
+                 b"GET /healthz HTTP/1.1\r\nHost: door\r\n"
+                 b"X-A: a\r\n b\r\n\r\n",
+                 b"400 folded header line\n")
+        refuse13("d-fold-host",
+                 b"GET /healthz HTTP/1.1\r\nHost: door\r\n more\r\n\r\n",
+                 b"400 folded header line\n")
+
+        # ---- e: colonless, control value, and conflicting lengths ---------
+        refuse13("e-no-colon",
+                 b"GET /healthz HTTP/1.1\r\nHost: door\r\nJUNKLINE\r\n\r\n",
+                 b"400 malformed header line\n")
+        refuse13("e-value-nul",
+                 b"GET /healthz HTTP/1.1\r\nHost: door\r\n"
+                 b"X-A: a\x00b\r\n\r\n",
+                 b"400 invalid header value\n")
+        refuse13("e-length-two-fields",
+                 b"GET /healthz HTTP/1.1\r\nHost: door\r\n"
+                 b"Content-Length: 5\r\nContent-Length: 6\r\n\r\n",
+                 b"400 conflicting content length\n")
+        refuse13("e-length-list",
+                 b"GET /healthz HTTP/1.1\r\nHost: door\r\n"
+                 b"Content-Length: 5, 6\r\n\r\n",
+                 b"400 conflicting content length\n")
+        line13, headers13, body13 = wire_reply(raw_request(
+            port, b"GET /healthz HTTP/1.1\r\nHost: door\r\n"
+                  b"Content-Length: 5\r\nContent-Length: 5\r\n\r\n"))
+        if " 200 " not in line13 or body13 != b"ok" or \
+                headers13.get("connection") != "close":
+            bad13.append("e-length-equal-%r-%r-%r" % (
+                line13, body13[:12], headers13.get("connection")))
+        line13, _headers13, body13 = wire_reply(raw_request(
+            port, b"GET /healthz HTTP/1.1\r\nHost: door\r\n"
+                  b"X-A: a\tb\r\n\r\n"))
+        if " 200 " not in line13 or body13 != b"ok":
+            bad13.append("e-value-tab-%r-%r" % (line13, body13[:12]))
+
+        # ---- f: nothing delivered moved, and the count is 13 --------------
+        for path13 in ("/", "/healthz", "/preview", "/preview/index.html"):
+            status13, _ctype13, _body13 = get(port, path13)
+            if status13 != 200:
+                bad13.append("f-%s-%r" % (path13, status13))
+        line13, headers13, _body13 = wire_reply(raw_request(
+            port, b"POST /healthz HTTP/1.1\r\nHost: door\r\n\r\n"))
+        if " 405 " not in line13 or headers13.get("allow") != "GET, HEAD":
+            bad13.append("f-post-%r-%r" % (line13, headers13.get("allow")))
+        line13, headers13, _body13 = wire_reply(raw_request(
+            port, b"FOO /healthz HTTP/1.1\r\nHost: door\r\n\r\n"))
+        if " 501 " not in line13 or "allow" in headers13:
+            bad13.append("f-foo-%r" % line13)
+        with io.open(MODULE, "rb") as handle:
+            raw13b = handle.read()
+        if raw13b[:3] == b"\xef\xbb\xbf" or b"\r\n" in raw13b:
+            bad13.append("f-module-dialect")
+        try:
+            text13 = raw13b.decode("utf-8")
+            text13.encode("ascii")
+        except (UnicodeDecodeError, UnicodeEncodeError):
+            bad13.append("f-module-not-ascii")
+            text13 = raw13b.decode("utf-8", "replace")
+        for token13 in ("HEADER_NAME", "def _head_refusal(", "class HeaderTap",
+                        "def parse_request("):
+            if token13 not in text13:
+                bad13.append("f-missing-" + token13.split("(")[0]
+                             .replace(" ", "-"))
+        with io.open(REGISTRY, encoding="utf-8") as handle:
+            block13 = handle.read().split('"' + ROW + '"', 1)[-1][:220]
+        if "13)" not in block13:
+            bad13.append("f-declared")
+        if "test_frontdoor_preview_pages.py" not in block13:
+            bad13.append("f-row-file")
     finally:
         srv.shutdown()
         srv.server_close()
@@ -1605,6 +1745,7 @@ def main():
     report("AC-FDPV10", bool(bad10), ",".join(bad10))
     report("AC-FDPV11", bool(bad11), ",".join(bad11))
     report("AC-FDPV12", bool(bad12), ",".join(bad12))
+    report("AC-FDPV13", bool(bad13), ",".join(bad13))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:

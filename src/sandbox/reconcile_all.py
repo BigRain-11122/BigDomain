@@ -8696,8 +8696,12 @@ SUITES = [
     # R3471: the door never read the Host field, so a message with no Host,
     # two Hosts, or an invalid value was answered 200 like any other - the
     # 400 duty of RFC 9112 sec.3.2 had no exit on this door - AC-FDPV12.
+    # R3472: a two-word request line was answered as HTTP/0.9 with no
+    # status line and no policy, an obs-fold and an illegal field
+    # name were accepted, and conflicting Content-Length values
+    # answered 200 - AC-FDPV13.
     ("frontdoor-preview-pages",
-     os.path.join("test_frontdoor_preview_pages.py"), 12),
+     os.path.join("test_frontdoor_preview_pages.py"), 13),
     # R3115: the 24h export-face age gate (os/export_freshness.py, AC-EXP1..6)
     # had zero production consumers - it ran only inside its own suite - while
     # the CEO card printed export_ts as a bare string. AC-FDC2 (six arms, ONE

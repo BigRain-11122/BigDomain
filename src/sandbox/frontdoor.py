@@ -9383,6 +9383,85 @@ def _security_headers(ctype):
     return out
 
 
+# R3472: the door reads the head as a message, not as a bag of fields.
+# Measured before this landed (31 raw shapes): a two-word request line was
+# answered in HTTP/0.9 mode -- "ok", "404 not found" or the whole root page
+# with no status line, no policy header, no Content-Length and no Server --
+# the only answer shape on this door that drops every guarantee; a target
+# that was not origin-form ("?x=1") answered the root page; a field name
+# carrying a space or a control byte, an empty name, a line with no colon, an
+# obs-fold continuation and a value carrying NUL were all answered 200; and
+# two Content-Length fields with different values answered 200. RFC 9112
+# gives the first three of those a 400 and forbids the folded field outright.
+# The block limits (line length, field count) are left to the stdlib, which
+# already answers 431 through this door's own policy path -- measured, not
+# assumed.
+HEADER_NAME = re.compile("^[!#$%&'*+.^_`|~0-9A-Za-z-]+$")
+
+
+class HeaderTap:
+    """R3472: the raw header lines the parser is about to normalize.
+
+    http.client.parse_headers reads through fp.readline only. The parser then
+    folds a continuation line into the previous value and keeps a field name
+    the grammar forbids, so the bytes RFC 9112 names can no longer be judged
+    from self.headers. This tap records what was read; parse_request restores
+    the real stream in a finally so no other reader sees the wrapper.
+    """
+
+    def __init__(self, fp):
+        self.fp = fp
+        self.lines = []
+
+    def readline(self, *args):
+        line = self.fp.readline(*args)
+        self.lines.append(line)
+        return line
+
+
+def _head_refusal(raw_line, header_lines):
+    """R3472: (status, body) for one request head, or None.
+
+    The word count is judged on the wire line because the stdlib reads a
+    two-word line as HTTP/0.9 and then suppresses the status line and every
+    header. The target must be origin-form, absolute-form or "*" (the last is
+    only grammar here -- which verbs and faces may use it is decided by the
+    existing 405 and 404 laws). Each header line is judged before the parser
+    normalizes it: no obs-fold, no colonless line, a token name, and a value
+    carrying no control byte except HTAB.
+    """
+    words = raw_line.split()
+    if len(words) != 3:
+        return 400, b"400 bad request line\n"
+    target = words[1]
+    if not target.startswith(b"/") and target != b"*" and \
+            not Handler.ABSOLUTE_FORM.match(target.decode("iso-8859-1")):
+        return 400, b"400 bad request target\n"
+    for line in header_lines:
+        if line in (b"\r\n", b"\n", b""):
+            continue
+        body = line
+        if body.endswith(b"\r\n"):
+            body = body[:-2]
+        elif body.endswith((b"\r", b"\n")):
+            body = body[:-1]
+        if not body:
+            continue
+        if body[:1] in (b" ", b"\t"):
+            return 400, b"400 folded header line\n"
+        if b":" not in body:
+            return 400, b"400 malformed header line\n"
+        name, _, value = body.partition(b":")
+        if not name or not HEADER_NAME.match(name.decode("iso-8859-1")):
+            return 400, b"400 invalid header name\n"
+        for byte in value:
+            if byte == 0x09:
+                continue
+            if byte < 0x20 or byte == 0x7F:
+                return 400, b"400 invalid header value\n"
+    return None
+
+
 class Handler(BaseHTTPRequestHandler):
     # R3467: the default version_string() answers "BaseHTTP/0.6 Python/3.x",
     # so every reader was told which interpreter to target. The door names
@@ -9404,6 +9483,14 @@ class Handler(BaseHTTPRequestHandler):
         # so; a reply sent as gzip names the coding it applied.
         # R3466: every reply also names the policy it is served under, so no
         # status and no verb is left without one.
+        # R3472: this door always names a status line. A request line the
+        # stdlib read as HTTP/0.9 leaves request_version at 0.9, and in that
+        # mode every send_header and the status line itself are suppressed --
+        # the one answer shape on this door with no policy and no framing.
+        # The version is lifted to the door's own dialect before the answer,
+        # so a malformed request line cannot downgrade the door's answer.
+        if self.request_version == "HTTP/0.9":
+            self.request_version = "HTTP/1.0"
         self.send_response(code)
         self.send_header("Content-Type", ctype)
         self.send_header("Cache-Control", "no-store")
@@ -9713,14 +9800,43 @@ class Handler(BaseHTTPRequestHandler):
         R3471: the Host duty runs here too, after the framing check and
         before any dispatch, so a malformed message is a 400 no matter which
         verb it names.
+        R3472: the head is read through a tap first, because a two-word line
+        would otherwise be answered in HTTP/0.9 mode with no status line and
+        no policy at all, and an obs-fold or an illegal field name is gone by
+        the time the parser hands the fields back. A single field carrying
+        differing Content-Length values is the same smuggling shape as the
+        Transfer-Encoding pair and is refused by name (RFC 9112 sec.6.3);
+        duplicate fields with the same value stay legal and the answer still
+        closes.
         """
-        if not super().parse_request():
+        tap = HeaderTap(self.rfile)
+        self.rfile = tap
+        try:
+            parsed = super().parse_request()
+        finally:
+            self.rfile = tap.fp
+        if not parsed:
+            return False
+        refused = _head_refusal(self.raw_requestline, tap.lines)
+        if refused is not None:
+            self._send(refused[0], "text/plain; charset=utf-8", refused[1],
+                       close=True)
             return False
         transfer = self.headers.get("Transfer-Encoding")
         length = self.headers.get("Content-Length")
         if transfer is not None and length is not None:
             self._send(400, "text/plain; charset=utf-8",
                        b"400 conflicting body framing\n", close=True)
+            return False
+        lengths = set()
+        for raw in (self.headers.get_all("Content-Length") or []):
+            for piece in raw.split(","):
+                value = piece.strip()
+                if value:
+                    lengths.add(value)
+        if len(lengths) > 1:
+            self._send(400, "text/plain; charset=utf-8",
+                       b"400 conflicting content length\n", close=True)
             return False
         refused = self._host_refusal()
         if refused is not None:

@@ -1,0 +1,57 @@
+R3472 frontdoor head-grammar evidence
+===== leg 1: read-only probe before the edit (31 shapes, tmp/probe-R3472.py + tmp/probe-R3472b.py)
+two-word request lines were answered in HTTP/0.9 mode with no header block at all:
+  GET /healthz                -> raw "ok"
+  GET /                       -> raw root HTML
+  GET HTTP/1.1 + Host         -> raw "404 not found"
+  GET  HTTP/1.1 + Host        -> raw "404 not found"
+a non-origin target was read as the root:
+  GET ?x=1 HTTP/1.1           -> 200 root page
+header grammar had no enforcement:
+  Bad Header: x               -> 200 ok
+  Bad\x01Header: x            -> 200 ok
+  : x                         -> 200 ok
+  JUNKLINE (no colon)         -> 200 ok
+  X-A: a then " b" (obs-fold) -> 200 ok
+  X-A: a\x00b                 -> 200 ok
+framing values:
+  Content-Length: 5 + 6       -> 200 ok
+  Content-Length: 5, 6        -> 200 ok
+block limits were already policed by the stdlib through this door:
+  70000-byte header line      -> 431 Line too long, policy, close
+  101 fields                  -> 431 Too many headers, policy, close
+===== leg 2: the same probe after the edit
+  four malformed request lines -> 400 "400 bad request line" with status line,
+                                  policy, Content-Length and Connection: close
+  ?x=1                         -> 400 "400 bad request target"
+  three bad field names        -> 400 "400 invalid header name"
+  obs-fold (two shapes)        -> 400 "400 folded header line"
+  colonless line               -> 400 "400 malformed header line"
+  NUL in a value               -> 400 "400 invalid header value"
+  CL 5/6 and CL "5, 6"         -> 400 "400 conflicting content length"
+  CL 5/5 (equal duplicates)    -> 200 ok with Connection: close
+  HTAB in a value              -> 200 ok
+  GET * HTTP/1.1               -> 404 not found with a status line (grammar only)
+  431 shapes                   -> unchanged, policy, close
+===== leg 3: the shipped suite
+AC-FDPV1..AC-FDPV13 all PASS; SUITE PASS 13/13 rc=0
+===== leg 4: adjacent suites, all rc=0
+chain_card 4/4; claims_card 5/5; corpus_card 6/6; face_age 1/1;
+heartbeat_card 1/1; outs_age_card 4/4
+===== leg 5: five measured controls, one per arm (tmp/controls-R3472.py)
+baseline PASS 13/13 rc=0
+a-word-count        rc=2 red AC-FDPV13
+b-target-grammar    rc=2 red AC-FDPV13
+c-name-token        rc=2 red AC-FDPV13
+d-obs-fold          rc=2 red AC-FDPV13
+e-colonless         rc=2 red AC-FDPV13
+restored sha256 88ff18b08600620e8a2a2980dd065649cec533033ea1c4c6e161b520e7210f34 identical=True
+final PASS 13/13 rc=0
+===== leg 6: dialect and wiring
+frontdoor.py 494048B ASCII bare-LF no-BOM
+test_frontdoor_preview_pages.py 86355B ASCII bare-LF no-BOM
+reconcile_all.py 597932B ASCII bare-LF no-BOM
+registry frontdoor-preview-pages declared 12 -> 13
+honest: no page was added and no new reading was introduced; this round only
+lets the door judge the message it was already being sent, and it adds no
+payment capability and no network beyond loopback.
