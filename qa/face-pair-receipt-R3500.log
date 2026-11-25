@@ -1,0 +1,39 @@
+R3500 per-face pair receipt - evidence (2026-11-26)
+
+Face: apimarket-report-refunds (oldest of the twelve history splits)
+  html last commit  700dd89a  (R3288 back-hop channel)
+  json last commit  6fb6c40b  (R2111 producer)
+
+Readings (tools/face_pair_receipt.py, one run):
+  producer render          36497 B  sha256 9b6ab05961b822a0...
+  + post-render channel    37209 B  sha256 89bb2928d629...  (inserted, 712 B block)
+  landed html              25966 B  (no data-report-schema badge at all)
+  landed json               schema_version 6   /  renderer REPORT_SCHEMA 17
+  first difference         byte 1652 (head, before the splice)
+  verdict                  version-drift - explained, NOT excused
+
+Decision: twelve splits stand. Re-derivation refused on purpose: re-rendering the
+pair would change the page's content (schema 6 -> 17 adds sections), which is a
+product change the freeze register declined, and the board forbade a blind mass
+re-derive. The census now carries a channel-receipt class that can only fire
+when a receipt reproduces the landed bytes, plus an 'explained' count.
+
+Gates:
+  FPR-CHECK VERDICT PASS read_only=True faces=1 one_derivation=0 drift=0
+  SUITE PASS 6/6  src/os/test_face_pair_receipt.py  (AC-PPR1..AC-PPR6)
+  shard face-pair-receipt  green=1 criteria=6 crit_mismatch=0
+  census  PPC-CHECK VERDICT PASS  html=106 paired=103 history_split=12
+          channel_receipt=0 frozen_excused=11 explained=1
+  matrix  DOC-CURRENT  830 suites / 6946 criteria (85612 B)
+  battery page  BSR-CHECK VERDICT PASS  html=16413 B / json=18075 B  (page RED by design)
+
+Corrections recorded rather than hidden:
+  AC-PPR3 first draft asserted the un-injected render differs from the landed
+  page AT the splice offset. False for a version-drift pair - the difference
+  sits in the head at byte 1652. The arm now asserts that the channel splices
+  exactly the block it measured, which is the property that makes "byte for
+  byte" mean something.
+
+Not done: no preview page re-derived, no history rewritten, ledger_lines.py
+untouched. ZERO payment capability; the five physical pieces still gate every
+buyer.

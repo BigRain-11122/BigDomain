@@ -5030,6 +5030,15 @@ SUITES = [
     # src/os/backlog.md before tools/preview_pair_census.py existed).
     ("preview-pair-census",
      os.path.join("..", "os", "test_preview_pair_census.py"), 7),
+    # R3500: the per-face receipt answers the census's open question one face
+    # at a time - the producer renders into a scratch directory, the shipped
+    # post-render channel is applied, and the result is compared with the
+    # landed html byte for byte. A pair is excused only when that comparison
+    # is exact; a page older than the renderer is explained and still counted
+    # as a split (AC-PPR1..AC-PPR6 pinned in src/os/backlog.md before
+    # tools/face_pair_receipt.py existed).
+    ("face-pair-receipt",
+     os.path.join("..", "os", "test_face_pair_receipt.py"), 6),
     ("os-ledger-archive",
      os.path.join("..", "os", "test_ledger_archive.py"), 16),
     # R3091: the archive's own provenance is now readable WITHOUT a child

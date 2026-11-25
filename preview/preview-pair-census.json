@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-26T05:56:13+08:00",
+  "generated_at": "2026-11-26T06:27:51+08:00",
   "law": "a split is claimed only when the two halves' last commits differ; an mtime gap alone is published as a bucket, never as a split",
   "oldest_split": {
     "delta_hours": 749.7,
@@ -309,6 +309,9 @@
         "sha": "84878841"
       },
       "name": "apimarket-report-refunds",
+      "pair_receipt": "version-drift",
+      "receipt_bound": true,
+      "receipt_detail": "landed page is a schema 6 render and the renderer is at schema 17, so no re-render at HEAD can reproduce it; explained, not excused: first difference at byte 1652",
       "verdict": "history-split"
     },
     {
@@ -392,18 +395,18 @@
     {
       "delta_seconds": 0,
       "html": {
-        "bytes": 16417,
+        "bytes": 16413,
         "commit": "6594e0a6",
-        "mtime": "2026-11-26T05:51:18+08:00",
-        "mtime_epoch": 1795643478,
-        "sha": "6D084898"
+        "mtime": "2026-11-26T06:19:27+08:00",
+        "mtime_epoch": 1795645167,
+        "sha": "19CB4BBD"
       },
       "json": {
-        "bytes": 17952,
+        "bytes": 18075,
         "commit": "6594e0a6",
-        "mtime": "2026-11-26T05:51:18+08:00",
-        "mtime_epoch": 1795643478,
-        "sha": "9F2400B9"
+        "mtime": "2026-11-26T06:19:27+08:00",
+        "mtime_epoch": 1795645167,
+        "sha": "D653525C"
       },
       "name": "battery-shard-report",
       "verdict": "same-run"
@@ -786,6 +789,25 @@
         "sha": "32591E8C"
       },
       "name": "core-loop-walkthrough",
+      "verdict": "same-run"
+    },
+    {
+      "delta_seconds": 0,
+      "html": {
+        "bytes": 2729,
+        "commit": "",
+        "mtime": "2026-11-26T06:27:16+08:00",
+        "mtime_epoch": 1795645636,
+        "sha": "22FA91C7"
+      },
+      "json": {
+        "bytes": 2101,
+        "commit": "",
+        "mtime": "2026-11-26T06:27:16+08:00",
+        "mtime_epoch": 1795645636,
+        "sha": "C406E9BD"
+      },
+      "name": "face-pair-receipt",
       "verdict": "same-run"
     },
     {
@@ -1999,18 +2021,20 @@
       "verdict": "same-run"
     }
   ],
-  "round": 3499,
+  "round": 3500,
   "same_run_seconds": 120,
   "self_excluded": "preview-pair-census",
   "source": "tools/preview_pair_census.py",
   "totals": {
+    "channel-receipt": 0,
+    "explained": 1,
     "frozen-excused": 11,
     "history-split": 12,
-    "html": 105,
+    "html": 106,
     "no-json": 3,
-    "paired": 102,
+    "paired": 103,
     "same-commit": 6,
-    "same-run": 73,
+    "same-run": 74,
     "untracked": 0
   }
 }

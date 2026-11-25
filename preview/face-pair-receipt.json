@@ -1,0 +1,44 @@
+{
+  "faces": [
+    {
+      "channel_block_bytes": 712,
+      "channel_how": "inserted",
+      "current_schema_version": 17,
+      "detail": "landed page is a schema 6 render and the renderer is at schema 17, so no re-render at HEAD can reproduce it; explained, not excused: first difference at byte 1652",
+      "first_diff_context": "d from the read faces</div>\n<div class=\"marker\">AIGC / sandbox artifact: synthet",
+      "first_diff_offset": 1652,
+      "json_same_as_render": false,
+      "landed_carries_schema_badge": false,
+      "landed_html": "preview/apimarket-report-refunds.html",
+      "landed_html_bytes": 25966,
+      "landed_html_sha256": "3d557fa82348f61e0681d0872dafa69fba6342da53ba84b6acb69c46e84a91cd",
+      "landed_json": "preview/apimarket-report-refunds.json",
+      "landed_json_bytes": 39928,
+      "landed_json_sha256": "6c96d0903068a45aabf8f823a8a74534e90c1928348a54ec5e47a793ababae70",
+      "landed_schema_version": 6,
+      "producer": "src/os/preview_R2111.py",
+      "raw_first_diff_offset": 1652,
+      "rendered_html_bytes": 36497,
+      "rendered_html_sha256": "9b6ab05961b822a043fccfba5264cecab9cdb7bd0522290a4b3194d97a5cf718",
+      "rendered_json_bytes": 59515,
+      "rendered_json_sha256": "42af21bc8b433edac3e2a37b5a4b9b878f91cd7fedb34a4628fdcf4f729d94e2",
+      "slug": "apimarket-report-refunds",
+      "splice_offset": 36483,
+      "spliced_html_bytes": 37209,
+      "spliced_html_sha256": "89bb2928d6297f5d43b98e77f0ef107d7e52ff3d0f837ca83d8b011bb8e3f719",
+      "verdict": "version-drift",
+      "why": "oldest survivor of the twelve splits: html last committed at 700dd89a (the R3288 back-hop channel), json at 6fb6c40b (the R2111 producer)"
+    }
+  ],
+  "generated_at": "2026-11-26T06:27:16+08:00",
+  "law": "a history split is excused for one face only when the producer's own html, plus the shipped post-render channel, reproduces the landed html byte for byte",
+  "round": 3500,
+  "source": "tools/face_pair_receipt.py",
+  "totals": {
+    "drift": 0,
+    "faces": 1,
+    "one_derivation": 0,
+    "unreproducible": 0,
+    "version_drift": 1
+  }
+}

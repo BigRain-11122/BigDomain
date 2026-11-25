@@ -24,11 +24,18 @@ for path in (LEDGER, LOBBY):
 import apimarket_report as R  # noqa: E402
 
 
-def main():
+def main(out_html=None, out_json=None):
+    """Render the pair, by default into preview/.
+
+    R3500: the pair-receipt tool renders the same producer into a scratch
+    directory to prove the landed html is this html plus the shipped
+    post-render channel, so both output paths are arguments instead of
+    literals. Called with no arguments the shipped behaviour is unchanged.
+    """
     tmp = tempfile.mkdtemp(prefix="apimarket-preview-refunds-")
     db = os.path.join(tmp, "ledger.db")
-    out_html = os.path.join(BASE, "preview", "apimarket-report-refunds.html")
-    out_json = os.path.join(BASE, "preview", "apimarket-report-refunds.json")
+    out_html = out_html or os.path.join(BASE, "preview", "apimarket-report-refunds.html")
+    out_json = out_json or os.path.join(BASE, "preview", "apimarket-report-refunds.json")
     try:
         led, mtr, dk, am = R.build_stack(db)
         try:

@@ -74,6 +74,10 @@ SAME_RUN_SECONDS = 120
 # trap this page itself exists to expose.
 VOLATILE = ("generated_at", "round")
 FREEZE_REGISTER = os.path.join(REPO, "state", "apimarket-face-freeze.json")
+# R3500: per-face receipts (tools/face_pair_receipt.py) say WHY a split exists.
+# Only a receipt that reproduces the landed html byte for byte may excuse it;
+# a version-drift receipt explains the split and leaves it standing.
+RECEIPT_FILE = os.path.join(PREVIEW, "face-pair-receipt.json")
 
 
 def rd_bytes(path):
@@ -172,8 +176,50 @@ def apply_freeze(row, html_path, json_path, register):
         row["freeze_bytes_match"] = ("html-only" if h_ok else "json-only" if j_ok else "neither")
 
 
+def pair_receipts():
+    """Per-face receipts keyed by html basename (read-only, R3500).
+
+    A receipt is evidence, never a thing this tool may rewrite. It is also
+    bound to bytes: a landed page that moved after the receipt is no longer
+    the page the receipt describes, so the excuse lapses.
+    """
+    try:
+        doc = json.load(io.open(RECEIPT_FILE, "r", encoding="utf-8"))
+    except Exception:
+        return {}
+    table = {}
+    for row in doc.get("faces", []):
+        slug = row.get("slug")
+        if slug:
+            table[slug + ".html"] = row
+    return table
+
+
+def apply_receipt(row, html_path, receipts):
+    """Excuse a split only for a receipt that reproduced the landed bytes.
+
+    Anything else still says something worth reading: the receipt's own verdict
+    is attached to the row so a split is explained instead of merely counted.
+    """
+    if row["verdict"] != "history-split":
+        return
+    rec = receipts.get(os.path.basename(html_path))
+    if not rec:
+        return
+    landed_now = sha256_hex(html_path)
+    bound = rec.get("landed_html_sha256") == landed_now
+    row["pair_receipt"] = rec.get("verdict") or "unknown"
+    if rec.get("verdict") == "one-derivation" and bound:
+        row["verdict"] = "channel-receipt"
+        row["receipt"] = "channel-splice"
+    else:
+        row["receipt_bound"] = bound
+        row["receipt_detail"] = rec.get("detail") or rec.get("error") or ""
+
+
 def census():
     register = freeze_register()
+    receipts = pair_receipts()
     rows = []
     for html in sorted(glob.glob(os.path.join(PREVIEW, "*.html"))):
         stem = os.path.basename(html)[:-5]
@@ -191,13 +237,15 @@ def census():
         row = {"name": stem, "verdict": classify(delta, h["commit"], j["commit"]),
                "delta_seconds": delta, "html": h, "json": j}
         apply_freeze(row, html, json_path, register)
+        apply_receipt(row, html, receipts)
         rows.append(row)
 
     totals = {"html": len(rows)}
-    for name in ("same-run", "same-commit", "history-split", "frozen-excused",
-                 "untracked", "no-json"):
+    for name in ("same-run", "same-commit", "history-split", "channel-receipt",
+                 "frozen-excused", "untracked", "no-json"):
         totals[name] = sum(1 for r in rows if r["verdict"] == name)
     totals["paired"] = totals["html"] - totals["no-json"]
+    totals["explained"] = sum(1 for r in rows if r.get("pair_receipt"))
 
     splits = [r for r in rows if r["verdict"] == "history-split"]
     splits.sort(key=lambda r: (-r["delta_seconds"], r["name"]))
@@ -256,6 +304,8 @@ def html_of(payload):
         note = p["verdict"]
         if p.get("receipt"):
             note = "%s (%s)" % (note, p["receipt"])
+        if p.get("pair_receipt") and not p.get("receipt"):
+            note = "%s (receipt: %s)" % (note, p["pair_receipt"])
         if p.get("freeze_bytes_match"):
             note = "%s (frozen bytes match %s)" % (note, p["freeze_bytes_match"])
         body.append(
@@ -283,21 +333,25 @@ def html_of(payload):
             'commits differ.</div>'
             '<div class="tally"><span>%d html</span><span>%d paired</span>'
             '<span>same-run %d</span><span>same-commit %d</span><span>history-split %d</span>'
-            '<span>frozen-excused %d</span><span>untracked %d</span><span>no-json %d</span></div>'
+            '<span>channel-receipt %d</span><span>frozen-excused %d</span>'
+            '<span>untracked %d</span><span>no-json %d</span><span>explained %d</span></div>'
             '<p class="sub">%s</p>'
             '<table><thead><tr><th>pair</th><th>html written</th><th>json written</th>'
             '<th>gap</th><th>verdict</th></tr></thead><tbody>%s</tbody></table>'
             '<footer>Pairs within %ds are counted as one run and not listed. A frozen-excused '
             'pair is named in state/apimarket-face-freeze.json and both of its halves still match '
-            'their registered sha256; a registered face whose bytes moved is NOT excused. '
+            'their registered sha256; a registered face whose bytes moved is NOT excused. A '
+            'channel-receipt pair is named in preview/face-pair-receipt.json AND the receipt '
+            'reproduced the landed html byte for byte; a receipt that explains a split without '
+            'reproducing it leaves the split standing. '
             'This page excludes its own pair by name, so committing it cannot change its own '
             'reading. Non-advisory notice: this is a build status page, not investment advice.'
             '</footer>'
             '</div></body></html>\n'
             % (STYLE, payload["round"], t["html"], t["paired"], payload["source"],
                t["html"], t["paired"], t["same-run"], t["same-commit"], t["history-split"],
-               t["frozen-excused"], t["untracked"], t["no-json"], oldest_line,
-               "\n".join(body), SAME_RUN_SECONDS))
+               t["channel-receipt"], t["frozen-excused"], t["untracked"], t["no-json"],
+               t["explained"], oldest_line, "\n".join(body), SAME_RUN_SECONDS))
 
 
 def dumps(payload):
@@ -344,9 +398,10 @@ def main(argv):
             return 2
         t = payload["totals"]
         print("PPC-CHECK VERDICT PASS read_only=True html=%d paired=%d "
-              "history_split=%d frozen_excused=%d same_commit=%d"
-              % (t["html"], t["paired"], t["history-split"], t["frozen-excused"],
-                 t["same-commit"]))
+              "history_split=%d channel_receipt=%d frozen_excused=%d same_commit=%d "
+              "explained=%d"
+              % (t["html"], t["paired"], t["history-split"], t["channel-receipt"],
+                 t["frozen-excused"], t["same-commit"], t["explained"]))
         return 0
 
     with io.open(JSON_OUT, "wb") as f:
