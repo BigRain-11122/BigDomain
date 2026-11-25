@@ -5,7 +5,7 @@
     "token": "ai_generated"
   },
   "call_sites": [
-    "src/sandbox/frontdoor.py:647",
+    "src/sandbox/frontdoor.py:661",
     "src/sandbox/journey_demo.py:90",
     "src/sandbox/lobby/msgsec_stub.py:40",
     "src/sandbox/lobby/msgsec_stub.py:123"
@@ -216,7 +216,7 @@
         "src/sandbox/ugc/test_sec_batch_rowpersist.py",
         "src/sandbox/ugc/test_sec_batch_rowsroll.py"
       ],
-      "files": 460,
+      "files": 461,
       "mentions": [],
       "parsed": true,
       "unparsed": []

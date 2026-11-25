@@ -8672,6 +8672,13 @@ SUITES = [
     # arms, ONE criterion) was pinned in src/os/backlog.md BEFORE the card.
     ("frontdoor-heartbeat-card",
      os.path.join("test_frontdoor_heartbeat_card.py"), 1),
+    # R3461: the door answered exactly two paths and every one of the 103
+    # shipped preview/*.html faces answered 404, so the "one openable URL"
+    # door could not reach a single deliverable page. The shelf is now served
+    # from the same door under /preview/. AC-FDPV1 (six arms, ONE criterion)
+    # was pinned in src/os/backlog.md in the landing window.
+    ("frontdoor-preview-pages",
+     os.path.join("test_frontdoor_preview_pages.py"), 1),
     # R3115: the 24h export-face age gate (os/export_freshness.py, AC-EXP1..6)
     # had zero production consumers - it ran only inside its own suite - while
     # the CEO card printed export_ts as a bare string. AC-FDC2 (six arms, ONE

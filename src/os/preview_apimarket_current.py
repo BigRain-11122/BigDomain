@@ -161,8 +161,65 @@ def record_provenance(path, stamp):
         fh.write(R.dump_payload(doc))
 
 
+def _render_pair_to(directory, stamp):
+    """Reproduce the write path inside `directory` and return its two files.
+
+    R3461: `--check` used to fall through to the write path, so a caller
+    asking the producer to prove the page was current got that page silently
+    rewritten (measured: deliverable_index --check moved both artifacts, which
+    then reddened face_sweep AC-FSW10 as stale). The whole chain -- render,
+    back-hop injection, provenance, size fixpoint -- now runs on a throwaway
+    directory, so the proof never touches the tree it judges.
+    """
+    out_html = os.path.join(directory, FACE)
+    out_json = os.path.join(directory, "apimarket-report.json")
+    render(out_html, out_json, stamp)
+    with io.open(out_html, "r", encoding="utf-8", newline="") as fh:
+        text = fh.read()
+    text, how = B.inject_text(text, FACE)
+    with io.open(out_html, "w", encoding="utf-8", newline="") as fh:
+        fh.write(text)
+    record_provenance(out_json, stamp)
+    B.patch_sizes(out_html)
+    return out_html, out_json, how
+
+
+def _check_only(stamp):
+    """Prove the landed pair is what this tree renders now, writing nothing."""
+    try:
+        with io.open(JSON, encoding="utf-8") as fh:
+            landed = json.load(fh)
+        landed_stamp = landed.get("rendered_on") or stamp
+    except (IOError, OSError, ValueError):
+        landed_stamp = stamp
+    tmp = tempfile.mkdtemp(prefix="apimarket-current-check-")
+    try:
+        out_html, out_json, how = _render_pair_to(tmp, landed_stamp)
+        problems = []
+        for live, mine in ((HTML, out_html), (JSON, out_json)):
+            with io.open(live, "rb") as fh:
+                have = fh.read()
+            with io.open(mine, "rb") as fh:
+                want = fh.read()
+            if have != want:
+                problems.append("%s disk=%dB expected=%dB"
+                                % (os.path.basename(live), len(have),
+                                   len(want)))
+        if problems:
+            print("FAIL E_APIMKT_STALE %s" % FACE)
+            for problem in problems:
+                print("  %s" % problem)
+            return 2
+        print("PASS %s check disk=expected bytes=%dB how=%s (nothing written)"
+              % (FACE, os.path.getsize(HTML), how))
+        return 0
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def main(argv):
     dry = "--dry-run" in argv
+    check = "--check" in argv
     stamp = local_day()
     for i, token in enumerate(argv):
         if token == "--stamp" and i + 1 < len(argv):
@@ -180,6 +237,8 @@ def main(argv):
         print("DRY %s %s bytes=%d stamp=%s (nothing written)"
               % (FACE, how, len(text.encode("utf-8")), stamp))
         return 0
+    if check:
+        return _check_only(stamp)
     render(HTML, JSON, stamp)
     with io.open(HTML, "r", encoding="utf-8", newline="") as fh:
         text = fh.read()

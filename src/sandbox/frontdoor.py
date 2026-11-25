@@ -139,6 +139,7 @@ import sys
 import tempfile
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from urllib.parse import unquote
 
 import reconcile_all  # suite inventory single source (reuse, no copy)
 import claims_view as claims_view_mod  # R3233: one claims reading, two faces
@@ -152,6 +153,19 @@ LOBBY_CFG = os.path.join(HERE, "lobby", "config.json")
 PAY_CFG = os.path.join(HERE, "pay", "config.json")
 MEMBER_CFG = os.path.join(HERE, "member", "config.json")
 LEDGER_CFG = os.path.join(HERE, "ledger", "config.json")
+# R3461: the door serves the shipped deliverable pages too. Every preview/*.html
+# face is reachable through one URL instead of only through file://, which is
+# the whole point of having a door. Only these extensions leave the directory.
+PREVIEW_DIR = os.path.join(ROOT, "preview")
+STATIC_EXTS = {
+    ".html": "text/html; charset=utf-8",
+    ".json": "application/json; charset=utf-8",
+    ".css": "text/css; charset=utf-8",
+    ".js": "application/javascript; charset=utf-8",
+    ".svg": "image/svg+xml",
+    ".png": "image/png",
+}
+PREVIEW_INDEX = "/preview/index.html"
 M1_JSON = os.path.join(ROOT, "preview", "m1-mount-nodes.json")
 CC_JSON = os.path.join(ROOT, "preview", "city-commerce-plan-nodes.json")
 CM_JSON = os.path.join(ROOT, "preview", "citymodel-scenario-nodes.json")
@@ -8143,6 +8157,14 @@ v0.26 visitor-end M4 three-state card
 (R1003) &middot; v0.29 resident growth-archive card
 (R1018) &middot; v0.30 live status self-drive card
 (R1224)</span></header>
+<div class="card"><h2>Deliverable Index (every shipped face, one door)</h2>
+<p class=kv>This door serves the preview directory too, so the whole
+deliverable shelf is one click away instead of a file path:<br>
+<a href="/preview/index.html">/preview/index.html</a> &middot;
+<a href="/preview/face-sweep.html">/preview/face-sweep.html</a></p>
+<p class=kv>Absolute paths under /preview/ are served only for static
+page assets (html, json, css, js, svg, png); everything else answers
+404 by name.</p></div>
 <div class="card"><h2>City Live (read-only census snapshot)</h2>
 <div class="grid">
 <div class="kpi"><b>__POP__</b>residents</div>
@@ -9101,6 +9123,41 @@ __PAYWARN__</footer>
 
 
 class Handler(BaseHTTPRequestHandler):
+    def _send(self, code, ctype, body):
+        self.send_response(code)
+        self.send_header("Content-Type", ctype)
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def _serve_preview(self, path):
+        """R3461: serve one shipped deliverable page from preview/.
+
+        Only the whitelisted extensions leave the directory and every path
+        that escapes it (a dot segment, a leading slash, a backslash, a drive
+        letter) answers 404 -- the door must not become a filesystem reader,
+        and an absent file must not leak whether a sibling exists.
+        """
+        rel = unquote(path[len("/preview"):]).lstrip("/")
+        rel = rel.split("?", 1)[0].split("#", 1)[0]
+        if not rel:
+            rel = "index.html"
+        if "\\" in rel or ":" in rel:
+            return self._send(404, "text/plain", b"404 not found")
+        parts = rel.split("/")
+        if any(part in ("", ".", "..") for part in parts):
+            return self._send(404, "text/plain", b"404 not found")
+        base = os.path.abspath(PREVIEW_DIR)
+        full = os.path.abspath(os.path.join(base, *parts))
+        if full != base and not full.startswith(base + os.sep):
+            return self._send(404, "text/plain", b"404 not found")
+        ctype = STATIC_EXTS.get(os.path.splitext(full)[1].lower())
+        if ctype is None or not os.path.isfile(full):
+            return self._send(404, "text/plain", b"404 not found")
+        with open(full, "rb") as handle:
+            body = handle.read()
+        return self._send(200, ctype, body)
+
     def do_GET(self):
         if self.path in ("/", "/index.html"):
             body = render()
@@ -9118,6 +9175,8 @@ class Handler(BaseHTTPRequestHandler):
             self.send_header("Content-Length", str(len(body)))
             self.end_headers()
             self.wfile.write(body)
+        elif self.path == "/preview" or self.path.startswith("/preview/"):
+            self._serve_preview(self.path)
         else:
             body = b"404 not found"
             self.send_response(404)

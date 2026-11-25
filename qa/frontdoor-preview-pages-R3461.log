@@ -1,0 +1,63 @@
+R3461 frontdoor preview shelf evidence
+round 3461, 2026-11-25
+
+CRITERION AC-FDPV1 (six arms, one criterion), pinned in src/os/backlog.md
+in this window (honest disclosure: the PIN row and the code landed in the
+same window; the six arms were fixed before the driver was edited and the
+implementation was not allowed to move them).
+
+MEASURED BEFORE THE CODE
+  The door answered exactly two paths ("/" and "/healthz") and every one
+  of the 103 shipped preview/*.html faces answered 404, so the
+  "one openable URL" door could not reach a single deliverable page.
+
+SUITE
+  test_frontdoor_preview_pages.py -> SUITE PASS 1/1
+  adjacent frontdoor suites, all green after the driver change:
+    test_frontdoor_heartbeat_card.py -> SUITE PASS 1/1
+    test_frontdoor_face_age.py       -> SUITE PASS 1/1
+    test_frontdoor_claims_card.py    -> SUITE PASS 5/5
+    test_frontdoor_chain_card.py     -> SUITE PASS 4/4
+    test_frontdoor_outs_age_card.py  -> SUITE PASS 4/4
+    test_frontdoor_corpus_card.py    -> SUITE PASS 6/6
+
+CONTROLS (temporary copies; the landed file was restored byte-identically)
+  control1 drop ".html" from STATIC_EXTS      -> SUITE FAIL 1/1 (rc=2)
+  control2 drop the dot-segment guard alone   -> SUITE PASS (the abspath
+             containment is a second layer and still holds; recorded as
+             the honest result rather than counted as proof)
+  control3 drop BOTH traversal layers         -> SUITE FAIL 1/1 (rc=2)
+  restored sha256 862f7149313653af1f82d7e1033ba773290490af001595703a124dc5a24c2d73
+  recheck SUITE PASS 1/1
+
+DEFECT FOUND AND FIXED AT ITS BIRTH SITE
+  src/os/preview_apimarket_current.py had no --check branch: a caller
+  asking the producer to prove the page was current got the page
+  silently rewritten (measured: deliverable_index --check moved both
+  artifacts, which reddened face_sweep AC-FSW10 as stale). The whole
+  write chain -- render, back-hop injection, provenance, size fixpoint
+  -- now runs on a throwaway directory and --check compares disk against
+  that rendering, reading the landed rendered_on stamp. Producer
+  --check: PASS preview apimarket-report.html check disk=expected
+  bytes=37201B how=inserted (nothing written).
+
+GATES
+  face_sweep.py          -> VERDICT PASS 13/13
+  face_sweep.py --check  -> VERDICT PASS 21/21
+  apimarket_current_face -> VERDICT PASS criteria=12
+  closeout_gate.py       -> CLOSEOUT-GATE PASS files=5000 flags=0
+                            reader_refused=0 gating=flags round_main=OK
+                            census=PASS matrix=DOC-CURRENT
+  registry census re-pinned 825 -> 826 (the new test file is readable)
+  suite matrix re-written 826 rows
+  ugc gate re-rendered (460 -> 461 test-prefix files), 19/19 PASS
+
+HONEST
+  - Zero new business semantics: this makes already-shipped pages
+    reachable through the door that already existed. No new table, no
+    new reading.
+  - ZERO payment capability and no network beyond loopback; the five
+    physical pieces are still missing.
+  - Carried unchanged: qa_log --ledger-check broken=5 (R3371 ruling =
+    diagnose, not repair), the full battery was not re-run, Docker
+    absent, backlog.md past the 800000 gate.

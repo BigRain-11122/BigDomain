@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 825 | 6896 | 675/675 | R2739 |
+| 826 | 6897 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -853,16 +853,17 @@
 | 814 | os-corpus-rewrite-audit | ../os/test_corpus_rewrite_audit.py | 1 | no-evidence | - |
 | 815 | os-heartbeat | ../os/test_heartbeat.py | 1 | no-evidence | - |
 | 816 | frontdoor-heartbeat-card | test_frontdoor_heartbeat_card.py | 1 | no-evidence | - |
-| 817 | frontdoor-face-age | test_frontdoor_face_age.py | 1 | no-evidence | - |
-| 818 | frontdoor-corpus-card | test_frontdoor_corpus_card.py | 6 | no-evidence | - |
-| 819 | frontdoor-outs-age-card | test_frontdoor_outs_age_card.py | 4 | no-evidence | - |
-| 820 | frontdoor-chain-card | test_frontdoor_chain_card.py | 4 | no-evidence | - |
-| 821 | frontdoor-claims-card | test_frontdoor_claims_card.py | 5 | no-evidence | - |
-| 822 | claims-view-parity | test_claims_view_parity.py | 3 | no-evidence | - |
-| 823 | claim-census | test_claim_census.py | 10 | no-evidence | - |
-| 824 | os-stage-residue | ../os/test_stage_residue.py | 4 | no-evidence | - |
-| 825 | os-corpus-supply-chain | ../os/test_corpus_supply_chain.py | 7 | no-evidence | - |
-|  | 合计 |  | 6896 | green 675 / FAIL 0 / no-evidence 150 |  |
+| 817 | frontdoor-preview-pages | test_frontdoor_preview_pages.py | 1 | no-evidence | - |
+| 818 | frontdoor-face-age | test_frontdoor_face_age.py | 1 | no-evidence | - |
+| 819 | frontdoor-corpus-card | test_frontdoor_corpus_card.py | 6 | no-evidence | - |
+| 820 | frontdoor-outs-age-card | test_frontdoor_outs_age_card.py | 4 | no-evidence | - |
+| 821 | frontdoor-chain-card | test_frontdoor_chain_card.py | 4 | no-evidence | - |
+| 822 | frontdoor-claims-card | test_frontdoor_claims_card.py | 5 | no-evidence | - |
+| 823 | claims-view-parity | test_claims_view_parity.py | 3 | no-evidence | - |
+| 824 | claim-census | test_claim_census.py | 10 | no-evidence | - |
+| 825 | os-stage-residue | ../os/test_stage_residue.py | 4 | no-evidence | - |
+| 826 | os-corpus-supply-chain | ../os/test_corpus_supply_chain.py | 7 | no-evidence | - |
+|  | 合计 |  | 6897 | green 675 / FAIL 0 / no-evidence 151 |  |
 
 ## 证据出处
 
