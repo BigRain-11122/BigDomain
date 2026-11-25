@@ -1157,6 +1157,33 @@ def cmd_fold_plan(args):
     return 0 if not would_fail else 2
 
 
+def ledger_drift(log_lines):
+    """Rounds named by a live narrative but carrying no live ledger line.
+
+    R3491: the fold moved whole contiguous windows out of state.json, and a
+    window boundary that fell inside a round block carried that round's
+    'R<n> tokens:' line into the archive while leaving its narratives live.
+    The live coverage law (ledger_lines.audit) then reported the round as
+    missing a ledger line, and eleven ledger suites read red although every
+    one of the thirteen folded rounds DOES carry its ledger line verbatim in
+    logs/state-log-archive-*.md. The shape law lives in ledger_lines, so this
+    reader borrows it instead of keeping a second copy that can drift.
+    """
+    here = os.path.dirname(os.path.abspath(__file__))
+    if here not in sys.path:
+        sys.path.insert(0, here)
+    import ledger_lines as _ll
+    narr = set()
+    led = set()
+    for line in log_lines:
+        text = line if isinstance(line, str) else str(line)
+        if _ll.classify(text) == 'ledger':
+            led.add(int(_ll.LEDGER_PREFIX_RE.match(text).group(1)))
+        elif _ll.NARRATIVE_RE.match(text) and not _ll.FOLD_SUMMARY_RE.match(text):
+            narr.add(int(_ll.NARRATIVE_RE.match(text).group(1)))
+    return narr - led
+
+
 def cmd_fold(args):
     # window selector: exactly one of --window-tail / --window-slice
     # (mid-window support; AC-LT20 pre-registered in tech.md R1690 claim)
@@ -1248,6 +1275,11 @@ def cmd_fold(args):
             print('error: ' + err, file=sys.stderr)
             return 2
     new_log = st['log'][:w_start - 1] + [summary] + st['log'][w_end:]
+    # R3491: a fold may not CREATE a round whose narratives stay live while its
+    # ledger line goes to the archive - that is the split that reddened eleven
+    # ledger suites for thirteen rounds. Legacy drift already on the tree is not
+    # this fold's business; the guard asks only for drift the window would add.
+    drift_new = sorted(ledger_drift(new_log) - ledger_drift(st['log']))
 
     # verifications (all BEFORE any write; R1157 write-before-verify lesson)
     missing = sorted(t for t in toks if t not in summary)
@@ -1294,6 +1326,7 @@ def cmd_fold(args):
         'token_ok': not missing,
         'round_pointer_lost': lost,
         'round_loss_declared': round_loss_declared,
+        'ledger_split_rounds': drift_new,
         'gate_ok': gate_ok,
         'predicted_bytes': predicted,
         'reserve_bytes': args.reserve_bytes,
@@ -1325,6 +1358,8 @@ def cmd_fold(args):
         fail.append('token-missing')
     if lost and not round_loss_declared:
         fail.append('round-lost')
+    if drift_new:
+        fail.append('ledger-split')
     if not gate_ok:
         fail.append('gate-exceed')
     if not archive_exists and not args.allow_create:
@@ -1335,6 +1370,12 @@ def cmd_fold(args):
         print('error: E_ROUND_LOST: %s named neither in the summary nor in the '
               'remaining live items (refusing; name them in --summary-sentence '
               'or declare with --allow-round-loss)' % ','.join(lost),
+              file=sys.stderr)
+    if drift_new:
+        print('error: E_LEDGER_SPLIT: the window would leave %s named by a live '
+              'narrative while its ledger line moves to the archive (refusing; '
+              'widen the window to the whole round block or move the boundary '
+              'to a round edge)' % ','.join(str(n) for n in drift_new),
               file=sys.stderr)
 
     if not args.execute:

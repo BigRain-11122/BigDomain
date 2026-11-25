@@ -1,0 +1,58 @@
+LEDGER FOLD-SPLIT REPAIR R3491/R3492 (2026-11-26)
+
+BEFORE
+python src/os/ledger_lines.py --check
+  lines: total=135 window=135 tail=all
+  kinds: ledger=8 round=103 other=24
+  rounds_without_ledger: 3449,3453,3464,3466,3467,3471,3475,3477,3478,3481,3484,3485,3489
+  new_missing: same thirteen
+  VERDICT DIRTY
+
+ROOT CAUSE (read-only)
+A fold window boundary fell inside thirteen round blocks: each round's
+"R<n> tokens:" line moved to logs/state-log-archive-2026-11.md while its
+narrative lines stayed live. A per-round classify plus an archive grep
+proved 13 of 13 tokens lines present in the archive, so no ledger line was
+ever lost - only split from its round.
+
+GUARD (birth site)
+src/os/logs_toolkit.py gains ledger_drift() (borrows the ledger_lines shape
+law) and cmd_fold refuses with E_LEDGER_SPLIT when the chosen window would
+leave a round named by a live narrative while its ledger line moves to the
+archive. The guard compares post-fold drift against pre-fold drift, so
+legacy drift is never blamed on a new fold.
+
+NEGATIVE CONTROL
+dry-run window over the single live ledger line 15:15 ->
+  error: E_LEDGER_SPLIT: the window would leave 3447 named by a live
+  narrative while its ledger line moves to the archive
+  "ledger_split_rounds": [3447], "would_fail": ["ledger-split"]
+
+HEAL
+fold 837 moved the whole older live prefix, lines 1 through 133, to the
+November archive verbatim with the round-loss declaration recorded in the
+archive header; state 75491B -> 7560B.
+
+AFTER
+python src/os/ledger_lines.py --check  ->  VERDICT CLEAN
+  baseline missing=0 orphan=0, shipped exemption list still empty
+
+FAMILY READINGS
+os-ledger   4 of 13 green -> 11 of 13 green (crit_mismatch=0)
+  still red: os-ledger-archive (AC-LGA9/10/11/12/13/15),
+             os-ledger-reconcile-face (AC-LRB2 rc=2 findings=1)
+os-export   20 of 20 green (after the export face was re-derived)
+os-queue    16 of 16 green
+
+CARRIED
+battery-shard-report was NOT re-derived: the producer answered zero bytes
+for five minutes twice (foreground capped, hidden process killed), so the
+page still prints its R3489 render.
+
+TICK NOTE
+The tokens line and the closing line each asked for a tick advance, so the
+counter reached 3492 for a round labelled 3491; the tick tool refuses to
+move backwards, so R3492 was closed with its own closeout and tokens line
+and carries no independent work.
+
+ZERO payment capability; no network beyond loopback.
