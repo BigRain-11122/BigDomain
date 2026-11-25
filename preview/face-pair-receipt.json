@@ -57,17 +57,46 @@
       "spliced_html_sha256": "02d4d4b32b5dddf1091b75dda701a2f554295bdff71098cc9c994be9e2e5b2b2",
       "verdict": "version-drift",
       "why": "next oldest of the twelve splits (743.8h): html last committed at 700dd89a (the same R3288 back-hop channel), json at e0fd7251 (the R2118 pre-purchase Q&A producer)"
+    },
+    {
+      "channel_block_bytes": 719,
+      "channel_how": "inserted",
+      "current_schema_version": 17,
+      "detail": "landed page is a schema 12 render and the renderer is at schema 17, so no re-render at HEAD can reproduce it; explained, not excused: first difference at byte 1652",
+      "first_diff_context": "d from the read faces</div>\n<div class=\"marker\">AIGC / sandbox artifact: synthet",
+      "first_diff_offset": 1652,
+      "json_same_as_render": false,
+      "landed_carries_schema_badge": false,
+      "landed_html": "preview/apimarket-report-buyerquestions.html",
+      "landed_html_bytes": 18840,
+      "landed_html_sha256": "eec871f68baaae15380c700876ace928e7556c557ced9b333c4bcae805317b0f",
+      "landed_json": "preview/apimarket-report-buyerquestions.json",
+      "landed_json_bytes": 30303,
+      "landed_json_sha256": "c86157d24bc9d3d48d7ed23ff9e86c8a71824dc51c8ea86cd413de7f9d94d010",
+      "landed_schema_version": 12,
+      "producer": "src/os/preview_R2119.py",
+      "raw_first_diff_offset": 1652,
+      "rendered_html_bytes": 21556,
+      "rendered_html_sha256": "afb57721c7420fc77a2fb6be2205e8704ad9af39d36649ece3ef6fa5a8318019",
+      "rendered_json_bytes": 34641,
+      "rendered_json_sha256": "e4986aebee6fb4d4d674bb4c412c7b701ceea70eee06a4812130c67581f5483b",
+      "slug": "apimarket-report-buyerquestions",
+      "splice_offset": 21542,
+      "spliced_html_bytes": 22275,
+      "spliced_html_sha256": "0658603dcdef78810c4863f34385eb0039b909e3a5a2831c3822272abb8ed6cb",
+      "verdict": "version-drift",
+      "why": "third oldest of the twelve splits (742.4h): html last committed at 700dd89a (the same R3288 back-hop channel), json at d3faa192 (the R2119 buyer-question-history producer)"
     }
   ],
-  "generated_at": "2026-11-26T06:36:21+08:00",
+  "generated_at": "2026-11-26T06:54:53+08:00",
   "law": "a history split is excused for one face only when the producer's own html, plus the shipped post-render channel, reproduces the landed html byte for byte",
-  "round": 3500,
+  "round": 3501,
   "source": "tools/face_pair_receipt.py",
   "totals": {
     "drift": 0,
-    "faces": 2,
+    "faces": 3,
     "one_derivation": 0,
     "unreproducible": 0,
-    "version_drift": 2
+    "version_drift": 3
   }
 }

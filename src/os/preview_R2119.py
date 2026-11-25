@@ -30,7 +30,7 @@ DISCLAIMER = ("sandbox stand-in disclaimer: developer API"
 PAYLOAD = {"kind": "backtest", "calls": 100, "docs": "api/v1"}
 
 
-def main():
+def main(out_html=None, out_json=None):
     tmp = tempfile.mkdtemp(prefix="amqbq-preview-")
     db_path = os.path.join(tmp, "preview.db")
     with open(os.path.join(BASE, "config.json"), "rb") as fh:
@@ -50,6 +50,12 @@ def main():
          "2026-10-25T09:30:00Z", "2026-10-25T09:40:00Z",
          "2026-10-25T10:00:00Z"] * 8)
     origin = A._now_utc
+    # The ledger fills ts_utc from its own clock when a caller passes none, and
+    # compute_tx_id hashes that ts - so a page rendered on two different seconds
+    # carried two different tx digests. Stamping both clocks keeps the render a
+    # function of its fixtures alone (R3502; no-argument output is unchanged
+    # apart from the tx digests now being reproducible).
+    origin_ledger = L.now_utc
 
     def stamp():
         try:
@@ -58,6 +64,7 @@ def main():
             return "2026-10-25T11:00:00Z"
 
     A._now_utc = stamp
+    L.now_utc = stamp
     try:
         led.mint_to_pool("pool:reserve", 20000, "PREV-A", "settlement")
         led.mint_to_pool("pool:share", 20000, "PREV-S", "settlement")
@@ -88,10 +95,10 @@ def main():
         am.delist_api("usr:dana", ids["gamma"])
         report = R.collect(am)
         html = R.render_html(report)
-        html_path = os.path.join(ROOT, "preview",
-                                 "apimarket-report-buyerquestions.html")
-        json_path = os.path.join(ROOT, "preview",
-                                 "apimarket-report-buyerquestions.json")
+        html_path = out_html or os.path.join(
+            ROOT, "preview", "apimarket-report-buyerquestions.html")
+        json_path = out_json or os.path.join(
+            ROOT, "preview", "apimarket-report-buyerquestions.json")
         with io.open(html_path, "w", encoding="utf-8",
                      newline="\n") as fh:
             fh.write(html)
@@ -109,6 +116,7 @@ def main():
                  "my questions" in html))
     finally:
         A._now_utc = origin
+        L.now_utc = origin_ledger
         am.close()
         dk.close()
         metered.close()

@@ -59,6 +59,13 @@ FACES = [
                 "700dd89a (the same R3288 back-hop channel), json at e0fd7251 (the "
                 "R2118 pre-purchase Q&A producer)"),
     },
+    {
+        "slug": "apimarket-report-buyerquestions",
+        "producer": os.path.join("src", "os", "preview_R2119.py"),
+        "why": ("third oldest of the twelve splits (742.4h): html last committed at "
+                "700dd89a (the same R3288 back-hop channel), json at d3faa192 (the "
+                "R2119 buyer-question-history producer)"),
+    },
 ]
 
 VOLATILE = ("generated_at", "round")

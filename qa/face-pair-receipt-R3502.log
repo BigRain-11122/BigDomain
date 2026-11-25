@@ -1,0 +1,52 @@
+R3502 evidence - third per-face receipt (apimarket-report-buyerquestions)
+================================================================================
+
+Board item: R3502 next-window (2), one face per round, AC-PPR1..7 unchanged.
+
+1. Producer ownership, read from history rather than guessed
+   git log -1 -- preview/apimarket-report-buyerquestions.json  -> d3faa192
+   git log -1 -- preview/apimarket-report-buyerquestions.html  -> 700dd89a
+   git show --stat d3faa192 names src/os/preview_R2119.py in the same commit,
+   so the producer is preview_R2119.py (R2119, REPORT_SCHEMA 11->12 additive).
+
+2. AC-PPR7 refused the producer first, by name
+   preview_R2119.py main() took zero arguments -> output_discipline() returns
+   "main takes 0 positional args with 0 defaults, not two outputs", which is
+   the unreproducible class. Two optional output paths were added (out_html,
+   out_json); a no-argument run still writes the two landed halves.
+
+3. Defect found at the source: the render was not reproducible
+   First receipt run: FPR-CHECK VERDICT FAIL, both halves "not this derivation".
+   Two renders of the SAME fixtures carried different tx digests:
+     run A  0ffc1013... / d38c729c...      run B  8e12184b... / be7eb5eb...
+   Cause: ledger._write_tx does `ts = ts_utc or now_utc()` and compute_tx_id
+   hashes that ts. The producer only stamped apimarket._now_utc, so ledger
+   filled the tx ts from the wall clock; two renders inside one second agreed
+   (measured: html equal True), renders seconds apart did not.
+   Fix, producer only: preview_R2119.py stamps apimarket._now_utc AND
+   ledger.now_utc from the same fixture list and restores both.
+   After the fix, two separate processes three seconds apart:
+     html equal True 21556B sha256 afb57721c7420fc7
+     json equal True 34641B
+
+4. Reading for the face (explained, NOT excused)
+   landed html = a schema 12 render; renderer at HEAD = REPORT_SCHEMA 17;
+   first difference at byte 1652 (page head, before the channel splice).
+   -> verdict version-drift. Nothing re-derived, nothing excused, the split is
+   still counted by the census.
+
+5. Gates read back in this round
+   python tools/face_pair_receipt.py            FPR-CHECK VERDICT PASS faces=3
+   python src/os/test_face_pair_receipt.py      SUITE PASS 7/7
+   python tools/preview_pair_census.py          explained=3 history_split=12
+   python src/os/suite_matrix_reconcile.py --check   DOC-CURRENT
+   python src/os/export_round.py                WROTE tick=3502 ok=True
+   python src/os/heartbeat.py --write 3502      tick=3502
+
+Carried, named limits:
+   - cross-process determinism is measured, not pinned by a criterion: the
+     receipt tool is barred from spawning a process (AC-PPR4) so it cannot
+     test its own cross-process stability; re-measured each window instead.
+   - the landed schema 12 page stays unreachable at HEAD; no re-render.
+   - ZERO payment capability, no network beyond loopback; the five physical
+     pieces still gate every buyer.
