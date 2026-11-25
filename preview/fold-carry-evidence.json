@@ -1,0 +1,76 @@
+{
+  "block_receipt": 2,
+  "boundaries": {
+    "e_round_lost": {
+      "releases": 0,
+      "round": 3380
+    },
+    "earliest_budget": {
+      "releases": 0,
+      "round": 265
+    }
+  },
+  "clean": true,
+  "frozen_rounds": [
+    3436,
+    3458,
+    3459
+  ],
+  "left_behind": 0,
+  "narrowing_releases": 0,
+  "no_receipt": 1,
+  "receipts_refused": [
+    3421
+  ],
+  "rows": [
+    {
+      "class": "block-receipt",
+      "receipt": {
+        "file": "state-log-archive-2026-11.md",
+        "line": 8778,
+        "omits_budget": true,
+        "parts": [
+          "product",
+          "measured",
+          "landed",
+          "readings",
+          "evidence",
+          "controls",
+          "group scan",
+          "fold note",
+          "deviations",
+          "honest",
+          "tick"
+        ],
+        "span": "fold 811 moved the whole R3436 watch-conversion block (product, measured, landed, readings, evidence, controls, group scan, fold note, deviations, honest, tick) to the November archive verbatim; R3436"
+      },
+      "receipts_total": 1,
+      "round": 3436
+    },
+    {
+      "class": "no-receipt",
+      "receipt": null,
+      "receipts_total": 0,
+      "round": 3458
+    },
+    {
+      "class": "block-receipt",
+      "receipt": {
+        "file": "state-log-archive-2026-11.md",
+        "line": 8800,
+        "omits_budget": true,
+        "parts": [
+          "product",
+          "landed",
+          "two measured controls",
+          "honest"
+        ],
+        "span": "fold 810 moved the whole R3459 CEO-face repair block (product, landed, two measured controls, honest) to the November archive verbatim; R3459 stays named here as the carried round pointer. | tokens: A"
+      },
+      "receipts_total": 1,
+      "round": 3459
+    }
+  ],
+  "since": 2914,
+  "tool": "fold-carry-census-evidence"
+}

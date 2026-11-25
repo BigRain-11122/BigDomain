@@ -1,0 +1,43 @@
+R3495 FOLD-CARRY evidence face - read-only measurements (2026-11-26)
+
+pin: six criteria AC-FCE1..AC-FCE6 pre-registered in src/os/backlog.md before any code change.
+
+measured, before any write:
+  FOLD-CARRY-EVIDENCE since=2914 frozen=3 block_receipt=2 no_receipt=1
+    earliest_budget=265 e_round_lost=3380 narrowing_releases=0 refused=1 left_behind=0
+  BLOCK-RECEIPT R3436 at state-log-archive-2026-11.md:8778 parts=11 omits_budget=True
+  NO-RECEIPT R3458 (enumerations seen: 0)
+  BLOCK-RECEIPT R3459 at state-log-archive-2026-11.md:8800 parts=4 omits_budget=True
+  BOUNDARY e_round_lost round=3380 releases=0
+  BOUNDARY earliest_budget round=265 releases=0
+  REFUSED-WITH-BUDGET R3421  (its enumeration names tokens, so it is not evidence)
+
+answers:
+  A) an exemption does NOT need git: the archive's own fold summaries enumerate a
+     block part by part, and two of the three frozen rounds carry one whose list has
+     no budget part - R3436 (11 parts) and R3459 (4 parts). R3458 carries none, so a
+     named exemption covering all three cannot yet be written from disk evidence.
+  B) narrowing cannot heal: the earliest surviving budget line is R265 and E_ROUND_LOST
+     entered at R3380, both older than every hole (oldest 3436), so a scope starting at
+     either boundary releases 0 holes. Negative control (AC-FCE4): a narrative archived
+     while its ledger line sits only in the live ring still answers left_behind, and a
+     probe window without its ledger line answers 1 gap while the same window WITH the
+     line answers 0.
+
+gates read back:
+  python tools/fold_carry_census.py --check            -> FCC-CHECK VERDICT PASS read_only=True
+  python tools/fold_carry_census.py --evidence --check  -> FCE-CHECK VERDICT PASS read_only=True
+  python src/os/test_fold_carry_evidence.py            -> SUITE PASS 7/7
+  python src/os/ledger_lines.py --check                -> VERDICT CLEAN (rounds_without_ledger none)
+  python tools/battery_shard_report.py --check         -> BSR-CHECK VERDICT PASS (page verdict=RED, as designed)
+
+landed:
+  tools/fold_carry_census.py       +classify_round, +receipt_index, +budget_line_bounds,
+                                   +evidence, +--evidence face (1820B page derived from one read)
+  preview/fold-carry-evidence.json 1820B
+  src/os/test_fold_carry_evidence.py  AC-FCE1..AC-FCE7
+
+not done, on purpose: ledger_lines.py untouched (no law change), the six archive arms
+(AC-LGA9/10/11/12/13/15) stay red on real frozen holes, archives never rewritten.
+ZERO payment capability, no network beyond loopback, the five physical pieces still gate
+every buyer.

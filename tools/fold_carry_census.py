@@ -31,6 +31,7 @@ Stdlib only, ASCII source, zero network, no child process.
 import io
 import json
 import os
+import re
 import sys
 
 BASE = os.path.dirname(os.path.abspath(__file__))
@@ -41,7 +42,155 @@ import ledger_lines as LL  # noqa: E402
 
 STATE = os.path.join(REPO, "src", "os", "state.json")
 PAGE = os.path.join(REPO, "preview", "fold-carry-census.json")
+EVIDENCE_PAGE = os.path.join(REPO, "preview", "fold-carry-evidence.json")
 LABEL = "fold-carry-census"
+
+# R3495: a fold summary that enumerates a block part by part is a receipt
+# written verbatim into the archive at fold time. If the enumeration has no
+# budget part while every other part of the round is named, the block had no
+# budget line when it was folded - evidence a reader can re-check from disk,
+# without git and without trusting this tool's own gap reading. The negative
+# shape is the same sentence WITH a budget part (measured: the R3437 receipt
+# lists tokens), which must never be admitted.
+RECEIPT_RE = re.compile(r"moved\s+the\s+whole\s+R(\d{3,5})\b[^()]*\(([^()]*)\)")
+PARTS_ITEM_RE = re.compile(r"^[a-z][a-z \-]*$")
+LOSS_RE = re.compile(r"refuses\s+by\s+name\s+\(E_ROUND_LOST\)")
+
+
+def receipt_index(paths):
+    """Every block-part receipt in the archives, keyed by round.
+
+    A parenthetical that is not a part list (measured: a fold-execution line
+    writes 'R3459 CEO-face block (lines 122:125)', a line RANGE) is refused
+    here rather than read as an enumeration - a receipt must name parts in
+    words, and every item is checked against that shape.
+    """
+    out = {}
+    for path in paths:
+        handle = io.open(path, "r", encoding="utf-8")
+        try:
+            for line_no, raw in enumerate(handle, 1):
+                text = raw.rstrip("\n").rstrip("\r")
+                for match in RECEIPT_RE.finditer(text):
+                    parts = [item.strip() for item in match.group(2).split(",")
+                             if item.strip()]
+                    if len(parts) < 2:
+                        continue
+                    if not all(PARTS_ITEM_RE.match(item) for item in parts):
+                        continue
+                    lowered = [item.lower() for item in parts]
+                    out.setdefault(int(match.group(1)), []).append({
+                        "file": os.path.basename(path),
+                        "line": line_no,
+                        "parts": parts,
+                        "omits_budget": "tokens" not in lowered,
+                        "span": text[:200],
+                    })
+        finally:
+            handle.close()
+    return out
+
+
+def budget_line_bounds(paths, live_lines):
+    """Earliest surviving budget-line round, and the E_ROUND_LOST round."""
+    earliest = None
+    for line in live_lines:
+        hit = LL.LEDGER_PRESENCE_RE.match(line)
+        if hit is not None:
+            round_no = int(hit.group(1))
+            earliest = round_no if earliest is None else min(earliest, round_no)
+    lost_at = None
+    for path in paths:
+        handle = io.open(path, "r", encoding="utf-8")
+        try:
+            for raw in handle:
+                text = raw.rstrip("\n").rstrip("\r")
+                hit = LL.LEDGER_PRESENCE_RE.match(text)
+                if hit is not None:
+                    round_no = int(hit.group(1))
+                    earliest = (round_no if earliest is None
+                                else min(earliest, round_no))
+                if not LOSS_RE.search(text):
+                    continue
+                hit = LL.NARRATIVE_RE.match(text)
+                if hit is None:
+                    continue
+                round_no = int(hit.group(1))
+                lost_at = round_no if lost_at is None else min(lost_at, round_no)
+        finally:
+            handle.close()
+    return earliest, lost_at
+
+
+def evidence(min_round=None):
+    """Answer both decision questions from disk alone (R3495).
+
+    A: does a named exemption need git? No - a fold summary written at fold
+       time enumerates the block and its missing budget part is readable.
+    B: can narrowing the range heal the red? Only if a candidate boundary
+       sits after the holes; the scope starts at the boundary, so a hole
+       BELOW the boundary is released. Both measured boundaries are older
+       than every hole, so nothing is released.
+    """
+    report = census(min_round)
+    paths = LL.archive_files(LL.default_logs_dir(STATE))
+    live = LL.load_state_log(STATE)
+    receipts = receipt_index(paths)
+    earliest, lost_at = budget_line_bounds(paths, live)
+    rows = []
+    for round_no in report["nowhere_rounds"]:
+        found = [item for item in receipts.get(round_no, [])
+                 if item["omits_budget"]]
+        # Strongest receipt first: the enumeration that names the most parts.
+        found.sort(key=lambda item: -len(item["parts"]))
+        rows.append({
+            "round": round_no,
+            "class": "block-receipt" if found else "no-receipt",
+            "receipt": found[0] if found else None,
+            "receipts_total": len(receipts.get(round_no, [])),
+        })
+    holes = list(report["nowhere_rounds"])
+    boundaries = {}
+    for name, value in (("earliest_budget", earliest), ("e_round_lost", lost_at)):
+        if value is None:
+            boundaries[name] = {"round": None, "releases": None}
+            continue
+        boundaries[name] = {
+            "round": value,
+            "releases": len([item for item in holes if item < value]),
+        }
+    refused = sorted(set(
+        round_no for round_no, items in receipts.items()
+        for item in items if not item["omits_budget"]))
+    return {
+        "tool": LABEL + "-evidence",
+        "since": report["since"],
+        "frozen_rounds": holes,
+        "rows": rows,
+        "block_receipt": len([row for row in rows
+                              if row["class"] == "block-receipt"]),
+        "no_receipt": len([row for row in rows
+                           if row["class"] == "no-receipt"]),
+        "boundaries": boundaries,
+        "narrowing_releases": sum(
+            item["releases"] or 0 for item in boundaries.values()),
+        "receipts_refused": refused,
+        "left_behind": len(report["left_behind"]),
+        "clean": report["clean"] and len(rows) == len(holes),
+    }
+
+
+def evidence_line(report):
+    """One ASCII line: what the receipts say and what narrowing would do."""
+    return ("FOLD-CARRY-EVIDENCE since=%d frozen=%d block_receipt=%d "
+            "no_receipt=%d earliest_budget=%s e_round_lost=%s "
+            "narrowing_releases=%d refused=%d left_behind=%d"
+            % (report["since"], len(report["frozen_rounds"]),
+               report["block_receipt"], report["no_receipt"],
+               report["boundaries"]["earliest_budget"]["round"],
+               report["boundaries"]["e_round_lost"]["round"],
+               report["narrowing_releases"], len(report["receipts_refused"]),
+               report["left_behind"]))
 
 
 def presence_rounds(lines):
@@ -52,6 +201,24 @@ def presence_rounds(lines):
         if hit is not None:
             out.add(int(hit.group(1)))
     return out
+
+
+def classify_round(round_no, archive_rounds, live_rounds, narratives):
+    """One round's FOLD-CARRY class: None when clean (R3495).
+
+    Hoisted out of census so the decision has ONE home: the suite feeds it a
+    synthetic world to prove the repairable shape still reddens, without
+    copying the three-branch rule into the suite.
+    """
+    if round_no in archive_rounds:
+        return None
+    verdict, _why = LL.fold_carry_exemption(round_no, narratives,
+                                            archive_rounds)
+    if verdict:
+        return "exempted"
+    if round_no in live_rounds:
+        return "left_behind"
+    return "nowhere"
 
 
 def census(min_round=None):
@@ -87,16 +254,12 @@ def census(min_round=None):
                 narratives.setdefault(round_no, []).append(line)
         for round_no in sorted(narratives):
             rounds += 1
-            if round_no in archive_rounds:
+            kind = classify_round(round_no, archive_rounds, live_rounds,
+                                  narratives[round_no])
+            if kind is None:
                 continue
-            verdict, why = LL.fold_carry_exemption(
+            _verdict, why = LL.fold_carry_exemption(
                 round_no, narratives[round_no], archive_rounds)
-            if verdict:
-                kind = "exempted"
-            elif round_no in live_rounds:
-                kind = "left_behind"
-            else:
-                kind = "nowhere"
             rows.append({
                 "class": kind,
                 "round": round_no,
@@ -155,37 +318,61 @@ def landed(path):
 def main(argv):
     write = "--write" in argv
     check = "--check" in argv
-    allowed = {"--write", "--check"}
+    want_evidence = "--evidence" in argv
+    allowed = {"--write", "--check", "--evidence"}
     unknown = [item for item in argv if item.startswith("--")
                and item not in allowed]
     if unknown:
         sys.stderr.write("E_FCC_ARGS unknown %s\n" % unknown[0])
         return 3
-    report = census()
+    page = EVIDENCE_PAGE if want_evidence else PAGE
+    if want_evidence:
+        report = evidence()
+        print(evidence_line(report))
+        for row in report["rows"]:
+            receipt = row["receipt"]
+            if receipt is None:
+                print("  NO-RECEIPT R%d (enumerations seen: %d)"
+                      % (row["round"], row["receipts_total"]))
+                continue
+            print("  BLOCK-RECEIPT R%d at %s:%d parts=%d omits_budget=%s"
+                  % (row["round"], receipt["file"], receipt["line"],
+                     len(receipt["parts"]), receipt["omits_budget"]))
+        for name in sorted(report["boundaries"]):
+            item = report["boundaries"][name]
+            print("  BOUNDARY %s round=%s releases=%s"
+                  % (name, item["round"], item["releases"]))
+        if report["receipts_refused"]:
+            print("  REFUSED-WITH-BUDGET %s"
+                  % ",".join("R%d" % item
+                             for item in report["receipts_refused"]))
+    else:
+        report = census()
+        print(verdict_line(report))
+        for row in report["left_behind"]:
+            print("  LEFT-BEHIND R%d in window R%d at %s:%d:%d"
+                  % (row["round"], row["window"], row["file"],
+                     row["file_ordinal"], row["line"]))
+        for row in report["nowhere"]:
+            print("  NOWHERE R%d in window R%d at %s:%d:%d (%d narrative lines)"
+                  % (row["round"], row["window"], row["file"],
+                     row["file_ordinal"], row["line"], row["narrative_lines"]))
     fresh = json.dumps(report, indent=2, sort_keys=True) + "\n"
-    print(verdict_line(report))
-    for row in report["left_behind"]:
-        print("  LEFT-BEHIND R%d in window R%d at %s:%d:%d"
-              % (row["round"], row["window"], row["file"],
-                 row["file_ordinal"], row["line"]))
-    for row in report["nowhere"]:
-        print("  NOWHERE R%d in window R%d at %s:%d:%d (%d narrative lines)"
-              % (row["round"], row["window"], row["file"],
-                 row["file_ordinal"], row["line"], row["narrative_lines"]))
     if write:
-        with io.open(PAGE, "wb") as handle:
+        with io.open(page, "wb") as handle:
             handle.write(fresh.encode("utf-8"))
-        print("WROTE %s %dB" % (os.path.relpath(PAGE, REPO),
+        print("WROTE %s %dB" % (os.path.relpath(page, REPO),
                                 len(fresh.encode("utf-8"))))
     if check:
-        was = landed(PAGE)
+        tag = "FCE-CHECK" if want_evidence else "FCC-CHECK"
+        was = landed(page)
         if was is None:
-            print("FCC-CHECK VERDICT MISSING")
+            print("%s VERDICT MISSING" % tag)
             return 2
         if was != fresh:
-            print("FCC-CHECK VERDICT STALE")
+            print("%s VERDICT STALE" % tag)
             return 2
-        print("FCC-CHECK VERDICT PASS read_only=True")
+        print("%s VERDICT PASS read_only=True" % tag)
     return 2 if report["left_behind"] else 0
 
 
