@@ -3,15 +3,15 @@
     "board_pages_skipped": [],
     "current": "2026-11-25 R3457 PRODUCT: the real-name disclosure question now has a door - api_provider_identity (live with AC-AMPI3 and its shipped suite on disk) had zero readers across tools/, preview/ and src/os at HEAD, so who is behind each shelf, since when they are registered, which developers are still undisclosed and how long the oldest undisclosed shop has been selling could only be read by walking every developer by hand - while api_public_listings carries the provider columns inside one shelf row and api_market_provider_months answers only the monthly churn.",
     "do": "2026-11-25 R3456 PRODUCT: the answer-revision question now has a door - api_answer_history (live with AC-AMAW1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so 'which answer was rewritten, what did it say before, what does it say now and how often did it change' could only be read by calling the sandbox from a shell - while api_seller_answers and api_listing_qna publish only the CURRENT wording.",
-    "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 mtime] (halves differ: html [2026-11-25 mtime] + json [2026-11-16 commit]; later=html)",
-    "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 mtime] (halves differ: html [2026-11-25 mtime] + json [2026-11-16 commit]; later=html)",
+    "last_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 commit] (halves differ: html [2026-11-25 commit] + json [2026-11-16 commit]; later=html)",
+    "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 commit] (halves differ: html [2026-11-25 commit] + json [2026-11-16 commit]; later=html)",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
     "latest_artifact_note": "",
     "latest_evidence": "qa/buyer-answer-wait-board-R3449.log (728B, 2026-11-25)",
     "newest_pair_on_disk_is_board": false,
     "next_milestone": "[R3457] next window (<=48h): (1) 零读者面清单已清空（本窗消 `api_provider_identity`），下窗起改为「每窗重测清单以防新增面漏记」＋抽一个已开门面做回归复核（面自带套件在盘、tools/＋preview/＋src/os 实测仍零命中才动手；出厂世界为空的面须经出厂写入门建行并显式声明；已开门面不重开）。(2) S4U 落地仍欠一次提权运行（本窗未实测 `BigDomain-OSLoop` LogonType）。(3) export 最新产物槽 writer 债务：本窗 `status_export_fresh.py --apply` 后实测 self_drive 两键与 results tick 行是否仍不发布；已修复则收口，未修复继续承账。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`（本窗收口后载体 68440B／闸 78500／余 10060B，本窗未折）。(6) tick 口径：本窗 3456→3457。(7) **实测补两条**：`qa_log.py` 按名回绝无 `.log` 后缀的证据名（正法=带后缀）；`api_search` 不发布 `listed_utc`，货架发布时间须经 `api_view(listing_id)` 逐件重读。(8) 承账不变：qa_log --ledger-check broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、backlog.md 体量闸。",
-    "next_milestone_due": "2026-11-27T08:38:44+08:00",
-    "updated_at": "2026-11-25T08:38:44+08:00",
+    "next_milestone_due": "2026-11-27T08:41:06+08:00",
+    "updated_at": "2026-11-25T08:41:06+08:00",
     "heartbeat": {
       "tick": 3449,
       "state_tick": 3449,
@@ -36,7 +36,7 @@
     }
   },
   "current": "2026-11-25 R3457 PRODUCT: the real-name disclosure question now has a door - api_provider_identity (live with AC-AMPI3 and its shipped suite on disk) had zero readers across tools/, preview/ and src/os at HEAD, so who is behind each shelf, since when they are registered, which developers are still undisclosed and how long the oldest undisclosed shop has been selling could only be read by walking every developer by hand - while api_public_listings carries the provider columns inside one shelf row and api_market_provider_months answers only the monthly churn.",
-  "claims": {"claimed": 27, "captured": 16, "contradicted": 0, "uncaptured": 11, "historic": 0, "rows": 101, "present": true, "census_ts": "2026-11-25T08:38:44+08:00"},
+  "claims": {"claimed": 27, "captured": 16, "contradicted": 0, "uncaptured": 11, "historic": 0, "rows": 101, "present": true, "census_ts": "2026-11-25T08:41:06+08:00"},
   "chain": {"present": true, "rows": 101, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -66,8 +66,8 @@
     }
   ],
   "do": "2026-11-25 R3457 PRODUCT: the real-name disclosure question now has a door - api_provider_identity (live with AC-AMPI3 and its shipped suite on disk) had zero readers across tools/, preview/ and src/os at HEAD, so who is behind each shelf, since when they are registered, which developers are still undisclosed and how long the oldest undisclosed shop has been selling could only be read by walking every developer by hand - while api_public_listings carries the provider columns inside one shelf row and api_market_provider_months answers only the monthly churn.",
-  "export_ts": "2026-11-25T08:38:44+08:00",
-  "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 mtime] (halves differ: html [2026-11-25 mtime] + json [2026-11-16 commit]; later=html)",
+  "export_ts": "2026-11-25T08:41:06+08:00",
+  "latest_artifact": "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 commit] (halves differ: html [2026-11-25 commit] + json [2026-11-16 commit]; later=html)",
   "latest_evidence": "qa/category-question-months-board-R3451.log (2339B, 2026-11-25)",
   "next_milestone": "[R3457] next window (<=48h): (1) 零读者面清单已清空（本窗消 `api_provider_identity`），下窗起改为「每窗重测清单以防新增面漏记」＋抽一个已开门面做回归复核（面自带套件在盘、tools/＋preview/＋src/os 实测仍零命中才动手；出厂世界为空的面须经出厂写入门建行并显式声明；已开门面不重开）。(2) S4U 落地仍欠一次提权运行（本窗未实测 `BigDomain-OSLoop` LogonType）。(3) export 最新产物槽 writer 债务：本窗 `status_export_fresh.py --apply` 后实测 self_drive 两键与 results tick 行是否仍不发布；已修复则收口，未修复继续承账。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) 下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`（本窗收口后载体 68440B／闸 78500／余 10060B，本窗未折）。(6) tick 口径：本窗 3456→3457。(7) **实测补两条**：`qa_log.py` 按名回绝无 `.log` 后缀的证据名（正法=带后缀）；`api_search` 不发布 `listed_utc`，货架发布时间须经 `api_view(listing_id)` 逐件重读。(8) 承账不变：qa_log --ledger-check broken=5（R3371 裁定＝诊断不修）、全量 battery 未实跑、Docker 缺位、backlog.md 体量闸。",
   "outs": [
@@ -160,7 +160,7 @@
     "queue_explore_open": 1
   },
   "state_bytes": 76653,
-  "next_milestone_due": "2026-11-27T08:38:44+08:00",
+  "next_milestone_due": "2026-11-27T08:41:06+08:00",
   "heartbeat": {
     "tick": 3457,
     "state_tick": 3457,
