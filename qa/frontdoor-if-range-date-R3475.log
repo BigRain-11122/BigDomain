@@ -1,0 +1,35 @@
+R3475 frontdoor if-range-date evidence
+===== leg 1: read-only probe BEFORE the edit (tmp/probe_if_range_date.py, shipped Handler on an ephemeral port)
+base face      GET  /preview/index.html                  -> 200 bytes 55185, ETag "59bbcb726331d791"
+               Last-Modified                             Wed, 25 Nov 2026 08:39:54 GMT
+  If-Range: <strong ETag>  + Range: bytes=0-9            -> 206 bytes 10  Content-Range bytes 0-9/55185
+  If-Range: <the published Last-Modified> + Range        -> 200 bytes 55185 Content-Range empty  <-- the bug
+  If-Range: Thu, 01 Jan 1970 00:00:00 GMT + Range        -> 200 bytes 55185 (refused for the wrong reason)
+  If-Range: W/<the ETag>   + Range                       -> 200 bytes 55185 (correct)
+  If-Range: not a validator + Range                      -> 200 bytes 55185 (correct)
+  the date shape was never parsed: _if_range_ok compared the header to the ETag as a literal
+===== leg 2: read-only probe AFTER the edit, same script
+  If-Range: <strong ETag>  + Range: bytes=0-9            -> 206 bytes 10  Content-Range bytes 0-9/55185
+  If-Range: <the published Last-Modified> + Range        -> 206 bytes 10  Content-Range bytes 0-9/55185
+  If-Range: Thu, 01 Jan 1970 00:00:00 GMT + Range        -> 200 bytes 55185 (older than the last change)
+  If-Range: W/<the ETag>   + Range                       -> 200 bytes 55185 (a weak tag never authorises)
+  If-Range: not a validator + Range                      -> 200 bytes 55185 (ignored, no 500)
+===== leg 3: suite and its declaration
+  SUITE PASS 16/16 (AC-FDPV1..AC-FDPV16, six arms each, AC-FDPV16 green on its first run)
+  registry frontdoor-preview-pages declared 15 -> 16
+  the declared-count literal was one variable name away from failing twice: AC-FDPV2..AC-FDPV13 each
+  carried their own "15)" literal, so adding a criterion reddened eleven green arms at once; they now
+  all read one module constant DECLARED_TAG = "16)" and the next criterion moves one line only
+  six neighbouring frontdoor suites re-read: 4/4, 5/5, 6/6, 1/1, 1/1, 4/4
+===== leg 4: two measured controls, both restored byte-identically
+  a  the date branch answers False again (pre-R3475)  -> SUITE FAIL 1/16 failed=AC-FDPV16
+     (a-status-200-'', a-bytes-55185, e-later-200)
+  b  "not modified since" tested as stamp == since     -> SUITE FAIL 1/16 failed=AC-FDPV16
+     (e-later-200: a date one minute later must still resume)
+  frontdoor.py restored identical=True sha256 85fd4328a88c7acd... then SUITE PASS 16/16
+===== leg 5: derived faces
+  matrix WRITTEN 85220 bytes 826 rows, DOC-CURRENT
+  registry census rows=826 readable=826 unparsed=0 silent=0 (cache reused 825/826)
+  first-yuan chain RENDER legs=2 entries=2 tx=1 reconcile_rc=0 zero_delta=True
+  deliverable index faces=9 defects=0 fingerprint=54592f4ed455bfc4 index=55185B
+  face sweep VERDICT PASS 13/13 fingerprint=394018d6a8929e31 then --check 21/21

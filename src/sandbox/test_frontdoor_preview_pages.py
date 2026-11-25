@@ -1,6 +1,6 @@
 """Suite for the door's deliverable shelf: the shipped pages get one URL.
 
-FIFTEEN criteria. AC-FDPV1 (six arms) pins the shelf itself: the pages come back
+SIXTEEN criteria. AC-FDPV1 (six arms) pins the shelf itself: the pages come back
 byte-identical to disk and no path can turn the door into a filesystem
 reader. AC-FDPV2 (six arms, R3462) pins the door's manners: HEAD answers the
 same status, type and length as GET with an empty body (a standard probe must
@@ -68,6 +68,13 @@ move on every render answers no false 304, a stable in-memory face answers its
 own validator, HEAD ignores Range and keeps the whole-face count, the same HEAD
 under gzip describes the gzip representation, and GET keeps its range
 semantics and its disk bytes.
+AC-FDPV16 (six arms, R3475) pins If-Range in both shapes RFC 9110 sec.13.1.5
+allows: the exact published Last-Modified authorises the range (200 was the
+measured bug -- the date shape was never parsed), a date older than the last
+change still answers the whole face, a strong tag still resumes while a weak
+one never does, a value in neither shape is ignored rather than 500, "not
+modified since" is a <= test and If-None-Match still wins the order, and the
+module stays ASCII/LF with both shapes wired to one call site.
 
 Usage: python test_frontdoor_preview_pages.py
 Exit: 0 = SUITE PASS, 2 = FAIL.
@@ -96,6 +103,10 @@ sys.path.insert(0, HERE)
 import frontdoor  # noqa: E402  (the page module, import-time journey)
 
 RESULTS = []
+
+# R3475: one place states how many criteria the registry must
+# declare, so adding a criterion cannot leave eleven stale literals.
+DECLARED_TAG = "16)"
 
 
 def report(name, bad, detail=""):
@@ -404,7 +415,7 @@ def main():
             block = registry_text.split('"' + ROW + '"', 1)[1][:160]
             if "test_frontdoor_preview_pages.py" not in block:
                 bad2.append("f-row-file")
-            if "15)" not in block:
+            if DECLARED_TAG not in block:
                 bad2.append("f-declared-%s" % block.split(")")[0].strip()[-3:])
 
         # ===== AC-FDPV3: the shelf is resumable and concurrent ============
@@ -636,7 +647,7 @@ def main():
         with io.open(REGISTRY, encoding="utf-8") as handle:
             registry_text4 = handle.read()
         block4 = registry_text4.split('"' + ROW + '"', 1)[-1][:160]
-        if "15)" not in block4:
+        if DECLARED_TAG not in block4:
             bad4.append("f-declared-%r" % block4.split(")")[0][-8:])
 
         # ===== AC-FDPV5: the shelf negotiates a coding ======================
@@ -774,7 +785,7 @@ def main():
         with io.open(REGISTRY, encoding="utf-8") as handle:
             registry_text5 = handle.read()
         block5 = registry_text5.split('"' + ROW + '"', 1)[-1][:160]
-        if "15)" not in block5:
+        if DECLARED_TAG not in block5:
             bad5.append("f-declared-%r" % block5.split(")")[0][-8:])
 
         # ===== AC-FDPV6: the shelf honours the write preconditions ==========
@@ -852,7 +863,7 @@ def main():
         with io.open(REGISTRY, encoding="utf-8") as handle:
             registry_text6 = handle.read()
         block6 = registry_text6.split('"' + ROW + '"', 1)[-1][:200]
-        if "15)" not in block6:
+        if DECLARED_TAG not in block6:
             bad6.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block6:
             bad6.append("f-row-file")
@@ -1001,7 +1012,7 @@ def main():
         with io.open(REGISTRY, encoding="utf-8") as handle:
             registry_text7 = handle.read()
         block7 = registry_text7.split('"' + ROW + '"', 1)[-1][:200]
-        if "15)" not in block7:
+        if DECLARED_TAG not in block7:
             bad7.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block7:
             bad7.append("f-row-file")
@@ -1131,7 +1142,7 @@ def main():
                 bad8.append("f-missing-" + needle)
         with io.open(REGISTRY, encoding="utf-8") as handle:
             block8r = handle.read().split('"' + ROW + '"', 1)[-1][:200]
-        if "15)" not in block8r:
+        if DECLARED_TAG not in block8r:
             bad8.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block8r:
             bad8.append("f-row-file")
@@ -1274,7 +1285,7 @@ def main():
                 bad9.append("f-missing-" + needle)
         with io.open(REGISTRY, encoding="utf-8") as handle:
             block9r = handle.read().split('"' + ROW + '"', 1)[-1][:200]
-        if "15)" not in block9r:
+        if DECLARED_TAG not in block9r:
             bad9.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block9r:
             bad9.append("f-row-file")
@@ -1393,7 +1404,7 @@ def main():
             bad10.append("f-missing-_request_path")
         with io.open(REGISTRY, encoding="utf-8") as handle:
             block10r = handle.read().split('"' + ROW + '"', 1)[-1][:200]
-        if "15)" not in block10r:
+        if DECLARED_TAG not in block10r:
             bad10.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block10r:
             bad10.append("f-row-file")
@@ -1512,7 +1523,7 @@ def main():
                              .replace(" ", "-"))
         with io.open(REGISTRY, encoding="utf-8") as handle:
             block11r = handle.read().split('"' + ROW + '"', 1)[-1][:200]
-        if "15)" not in block11r:
+        if DECLARED_TAG not in block11r:
             bad11.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block11r:
             bad11.append("f-row-file")
@@ -1630,7 +1641,7 @@ def main():
                              .replace(" ", "-"))
         with io.open(REGISTRY, encoding="utf-8") as handle:
             block12r = handle.read().split('"' + ROW + '"', 1)[-1][:220]
-        if "15)" not in block12r:
+        if DECLARED_TAG not in block12r:
             bad12.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block12r:
             bad12.append("f-row-file")
@@ -1770,7 +1781,7 @@ def main():
                              .replace(" ", "-"))
         with io.open(REGISTRY, encoding="utf-8") as handle:
             block13 = handle.read().split('"' + ROW + '"', 1)[-1][:220]
-        if "15)" not in block13:
+        if DECLARED_TAG not in block13:
             bad13.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block13:
             bad13.append("f-row-file")
@@ -1946,7 +1957,7 @@ def main():
                              .replace(" ", "-"))
         with io.open(REGISTRY, encoding="utf-8") as handle:
             block14 = handle.read().split('"' + ROW + '"', 1)[-1][:220]
-        if "15)" not in block14:
+        if DECLARED_TAG not in block14:
             bad14.append("f-declared")
         if "test_frontdoor_preview_pages.py" not in block14:
             bad14.append("f-row-file")
@@ -2033,8 +2044,91 @@ def main():
                              .replace(" ", "-"))
         with io.open(REGISTRY, encoding="utf-8") as handle:
             block15 = handle.read().split('"' + ROW + '"', 1)[-1][:220]
-        if "15)" not in block15:
+        if DECLARED_TAG not in block15:
             bad15.append("f-declared")
+
+        # ===== AC-FDPV16: If-Range in both shapes RFC 9110 allows =========
+        # R3475 measured before the edit (tmp/probe_if_range_date.py): the door
+        # published Last-Modified, but _if_range_ok compared the header to the
+        # ETag as a literal, so If-Range carrying the exact published date
+        # answered the whole 55185-byte face where a 206 slice was asked for.
+        bad16 = []
+        page16 = "/preview/index.html"
+        plain16 = cond(port, "GET", page16)
+        size16 = len(plain16["body"])
+        with io.open(os.path.join(PREVIEW, "index.html"), "rb") as handle:
+            disk16 = handle.read()
+        # ---- a: the published Last-Modified authorises the range ----------
+        date16 = cond(port, "GET", page16,
+                      {"Range": "bytes=0-9",
+                       "If-Range": plain16["last_modified"]})
+        if date16["status"] != 206 or \
+                date16["crange"] != "bytes 0-9/%d" % size16:
+            bad16.append("a-status-%d-%r" % (date16["status"],
+                                             date16["crange"]))
+        if date16["body"] != disk16[:10]:
+            bad16.append("a-bytes-%d" % len(date16["body"]))
+        # ---- b: a date older than the last change gives the whole face ----
+        old16 = cond(port, "GET", page16,
+                     {"Range": "bytes=0-9",
+                      "If-Range": "Thu, 01 Jan 1970 00:00:00 GMT"})
+        if old16["status"] != 200 or old16["crange"] or \
+                old16["body"] != disk16:
+            bad16.append("b-%d-%r-%d" % (old16["status"], old16["crange"],
+                                         len(old16["body"])))
+        # ---- c: a strong tag still resumes, a weak one never does ---------
+        strong16 = cond(port, "GET", page16,
+                        {"Range": "bytes=0-9",
+                         "If-Range": plain16["etag"]})
+        if strong16["status"] != 206 or strong16["body"] != disk16[:10]:
+            bad16.append("c-strong-%d" % strong16["status"])
+        weak16 = cond(port, "GET", page16,
+                      {"Range": "bytes=0-9",
+                       "If-Range": "W/" + plain16["etag"]})
+        if weak16["status"] != 200 or weak16["body"] != disk16:
+            bad16.append("c-weak-%d-%d" % (weak16["status"],
+                                           len(weak16["body"])))
+        # ---- d: a value in neither shape is ignored, never a 500 ----------
+        junk16 = cond(port, "GET", page16,
+                      {"Range": "bytes=0-9", "If-Range": "not a validator"})
+        if junk16["status"] != 200 or junk16["body"] != disk16 or \
+                junk16["ranges"] != "bytes":
+            bad16.append("d-%d-%r-%d" % (junk16["status"], junk16["ranges"],
+                                         len(junk16["body"])))
+        # ---- e: "not modified since" is a <= test, and the order holds ----
+        stamp16 = email.utils.parsedate_to_datetime(
+            plain16["last_modified"])
+        later16 = email.utils.formatdate(stamp16.timestamp() + 60,
+                                         usegmt=True)
+        soon16 = cond(port, "GET", page16,
+                      {"Range": "bytes=0-9", "If-Range": later16})
+        if soon16["status"] != 206 or soon16["body"] != disk16[:10]:
+            bad16.append("e-later-%d" % soon16["status"])
+        order16 = cond(port, "GET", page16,
+                       {"Range": "bytes=0-9", "If-Range": later16,
+                        "If-None-Match": plain16["etag"]})
+        if order16["status"] != 304 or order16["body"]:
+            bad16.append("e-order-%d-%d" % (order16["status"],
+                                            len(order16["body"])))
+        # ---- f: the module stays ASCII/LF, both shapes are wired ----------
+        with io.open(MODULE, "rb") as handle:
+            raw16 = handle.read()
+        if raw16[:3] == b"\xef\xbb\xbf" or b"\r\n" in raw16:
+            bad16.append("f-module-dialect")
+        try:
+            text16 = raw16.decode("utf-8")
+            text16.encode("ascii")
+        except (UnicodeDecodeError, UnicodeEncodeError):
+            bad16.append("f-module-not-ascii")
+            text16 = raw16.decode("utf-8", "replace")
+        for token16 in ("def _if_range_ok(self, etag, last_modified)",
+                        "self._if_range_ok(etag, last_modified)"):
+            if token16 not in text16:
+                bad16.append("f-missing-if-range-param")
+        with io.open(REGISTRY, encoding="utf-8") as handle:
+            block16 = handle.read().split('"' + ROW + '"', 1)[-1][:220]
+        if DECLARED_TAG not in block16:
+            bad16.append("f-declared")
     finally:
         srv.shutdown()
         srv.server_close()
@@ -2054,6 +2148,7 @@ def main():
     report("AC-FDPV13", bool(bad13), ",".join(bad13))
     report("AC-FDPV14", bool(bad14), ",".join(bad14))
     report("AC-FDPV15", bool(bad15), ",".join(bad15))
+    report("AC-FDPV16", bool(bad16), ",".join(bad16))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:

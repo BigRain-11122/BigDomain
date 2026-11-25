@@ -9655,18 +9655,30 @@ class Handler(BaseHTTPRequestHandler):
         stamp = _parse_http_date(last_modified)
         return stamp is not None and stamp <= since
 
-    def _if_range_ok(self, etag):
-        """R3464: If-Range must match under STRONG comparison.
+    def _if_range_ok(self, etag, last_modified):
+        """R3464/R3475: If-Range, in both of the shapes RFC 9110 sec.13.1.5 allows.
 
-        RFC 7233 sec.3.2: a weak validator never authorises a range, and a
-        date this door does not publish cannot match either -- both answer the
-        whole face, because splicing a new version's slice onto an old
-        version's prefix produces a file that exists nowhere.
+        The header names the copy the reader already holds, and a range is
+        authorised only while this face has not moved since. An entity-tag
+        matches by strong comparison alone -- a W/ tag never authorises a
+        range -- while an HTTP-date authorises a range only when the face was
+        not modified after it, so the published Last-Modified itself counts as
+        current and any later date still resumes. A value this door cannot
+        read as either shape falls back to the whole face: splicing a new
+        version's slice onto an old version's prefix produces a file that
+        exists nowhere.
         """
         value = self.headers.get("If-Range")
         if value is None:
             return True
-        return value.strip() == etag
+        value = value.strip()
+        if value.startswith('"') or value.startswith("W/"):
+            return value == etag
+        since = _parse_http_date(value)
+        if since is None:
+            return False
+        stamp = _parse_http_date(last_modified)
+        return stamp is not None and stamp <= since
 
     def _serve_preview(self, path, head_only=False):
         """R3461: serve one shipped deliverable page from preview/.
@@ -9713,7 +9725,7 @@ class Handler(BaseHTTPRequestHandler):
             return self._send(304, ctype, b"", head_only,
                               (("Last-Modified", last_modified),), etag,
                               content_length=len(body))
-        if not self._if_range_ok(etag):
+        if not self._if_range_ok(etag, last_modified):
             return self._send(200, ctype, body, head_only,
                               (("Accept-Ranges", "bytes"),
                                ("Last-Modified", last_modified)), etag, coding)
