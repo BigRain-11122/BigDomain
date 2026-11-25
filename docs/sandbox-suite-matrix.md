@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 824 | 6890 | 675/675 | R2739 |
+| 825 | 6896 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -836,32 +836,33 @@
 | 797 | os-market-relist-months-board | ../os/test_market_relist_months_board.py | 6 | no-evidence | - |
 | 798 | os-market-provider-months-board | ../os/test_market_provider_months_board.py | 6 | no-evidence | - |
 | 799 | os-watch-category-mix-board | ../os/test_watch_category_mix_board.py | 6 | no-evidence | - |
-| 800 | os-answer-revision-board | ../os/test_answer_revision_board.py | 6 | no-evidence | - |
-| 801 | os-category-history-board | ../os/test_category_history_board.py | 6 | no-evidence | - |
-| 802 | os-ticket-size-board | ../os/test_ticket_size_board.py | 6 | no-evidence | - |
-| 803 | os-watch-conversion-board | ../os/test_watch_conversion_board.py | 6 | no-evidence | - |
-| 804 | os-library-board | ../os/test_library_board.py | 6 | no-evidence | - |
-| 805 | os-seller-reviews-board | ../os/test_seller_reviews_board.py | 6 | no-evidence | - |
-| 806 | os-seller-supply-board | ../os/test_seller_supply_board.py | 6 | no-evidence | - |
-| 807 | os-seller-todo-board | ../os/test_seller_todo_board.py | 6 | no-evidence | - |
-| 808 | os-watch-alerts-board | ../os/test_watch_alerts_board.py | 6 | no-evidence | - |
-| 809 | os-seller-refund-reasons-board | ../os/test_seller_refund_reasons_board.py | 6 | no-evidence | - |
-| 810 | os-public-listings-board | ../os/test_public_listings_board.py | 6 | no-evidence | - |
-| 811 | os-search-board | ../os/test_search_board.py | 6 | no-evidence | - |
-| 812 | os-city-face-report | ../os/test_city_face_report.py | 7 | no-evidence | - |
-| 813 | os-corpus-rewrite-audit | ../os/test_corpus_rewrite_audit.py | 1 | no-evidence | - |
-| 814 | os-heartbeat | ../os/test_heartbeat.py | 1 | no-evidence | - |
-| 815 | frontdoor-heartbeat-card | test_frontdoor_heartbeat_card.py | 1 | no-evidence | - |
-| 816 | frontdoor-face-age | test_frontdoor_face_age.py | 1 | no-evidence | - |
-| 817 | frontdoor-corpus-card | test_frontdoor_corpus_card.py | 6 | no-evidence | - |
-| 818 | frontdoor-outs-age-card | test_frontdoor_outs_age_card.py | 4 | no-evidence | - |
-| 819 | frontdoor-chain-card | test_frontdoor_chain_card.py | 4 | no-evidence | - |
-| 820 | frontdoor-claims-card | test_frontdoor_claims_card.py | 5 | no-evidence | - |
-| 821 | claims-view-parity | test_claims_view_parity.py | 3 | no-evidence | - |
-| 822 | claim-census | test_claim_census.py | 10 | no-evidence | - |
-| 823 | os-stage-residue | ../os/test_stage_residue.py | 4 | no-evidence | - |
-| 824 | os-corpus-supply-chain | ../os/test_corpus_supply_chain.py | 7 | no-evidence | - |
-|  | 合计 |  | 6890 | green 675 / FAIL 0 / no-evidence 149 |  |
+| 800 | os-provider-identity-board | ../os/test_provider_identity_board.py | 6 | no-evidence | - |
+| 801 | os-answer-revision-board | ../os/test_answer_revision_board.py | 6 | no-evidence | - |
+| 802 | os-category-history-board | ../os/test_category_history_board.py | 6 | no-evidence | - |
+| 803 | os-ticket-size-board | ../os/test_ticket_size_board.py | 6 | no-evidence | - |
+| 804 | os-watch-conversion-board | ../os/test_watch_conversion_board.py | 6 | no-evidence | - |
+| 805 | os-library-board | ../os/test_library_board.py | 6 | no-evidence | - |
+| 806 | os-seller-reviews-board | ../os/test_seller_reviews_board.py | 6 | no-evidence | - |
+| 807 | os-seller-supply-board | ../os/test_seller_supply_board.py | 6 | no-evidence | - |
+| 808 | os-seller-todo-board | ../os/test_seller_todo_board.py | 6 | no-evidence | - |
+| 809 | os-watch-alerts-board | ../os/test_watch_alerts_board.py | 6 | no-evidence | - |
+| 810 | os-seller-refund-reasons-board | ../os/test_seller_refund_reasons_board.py | 6 | no-evidence | - |
+| 811 | os-public-listings-board | ../os/test_public_listings_board.py | 6 | no-evidence | - |
+| 812 | os-search-board | ../os/test_search_board.py | 6 | no-evidence | - |
+| 813 | os-city-face-report | ../os/test_city_face_report.py | 7 | no-evidence | - |
+| 814 | os-corpus-rewrite-audit | ../os/test_corpus_rewrite_audit.py | 1 | no-evidence | - |
+| 815 | os-heartbeat | ../os/test_heartbeat.py | 1 | no-evidence | - |
+| 816 | frontdoor-heartbeat-card | test_frontdoor_heartbeat_card.py | 1 | no-evidence | - |
+| 817 | frontdoor-face-age | test_frontdoor_face_age.py | 1 | no-evidence | - |
+| 818 | frontdoor-corpus-card | test_frontdoor_corpus_card.py | 6 | no-evidence | - |
+| 819 | frontdoor-outs-age-card | test_frontdoor_outs_age_card.py | 4 | no-evidence | - |
+| 820 | frontdoor-chain-card | test_frontdoor_chain_card.py | 4 | no-evidence | - |
+| 821 | frontdoor-claims-card | test_frontdoor_claims_card.py | 5 | no-evidence | - |
+| 822 | claims-view-parity | test_claims_view_parity.py | 3 | no-evidence | - |
+| 823 | claim-census | test_claim_census.py | 10 | no-evidence | - |
+| 824 | os-stage-residue | ../os/test_stage_residue.py | 4 | no-evidence | - |
+| 825 | os-corpus-supply-chain | ../os/test_corpus_supply_chain.py | 7 | no-evidence | - |
+|  | 合计 |  | 6896 | green 675 / FAIL 0 / no-evidence 150 |  |
 
 ## 证据出处
 

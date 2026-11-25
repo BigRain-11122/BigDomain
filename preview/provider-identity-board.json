@@ -1,0 +1,70 @@
+{
+ "generated_utc": "2026-11-25 00:31:30Z",
+ "face": "api_provider_identity",
+ "scope": "developers",
+ "market": {
+  "developer_count": 4,
+  "registered_count": 2,
+  "undisclosed_count": 2,
+  "disclosure_rate": 0.5,
+  "earliest_registered_utc": "2026-08-01T00:00:00Z",
+  "latest_registered_utc": "2026-08-05T00:00:00Z",
+  "oldest_undisclosed_dev": "usr:helen",
+  "oldest_undisclosed_listed_utc": "2026-08-12T00:00:00Z",
+  "distinct_credit_code_count": 2
+ },
+ "developers": [
+  {
+   "dev_account": "usr:dana",
+   "registered": true,
+   "provider_name": "Dana Labs Co., Ltd.",
+   "credit_code": "91310000MA1K3XYZ99",
+   "registered_utc": "2026-08-01T00:00:00Z",
+   "disclosure_ok": true,
+   "listing_count": 2,
+   "earliest_listed_utc": "2026-08-20T10:00:00Z"
+  },
+  {
+   "dev_account": "usr:frank",
+   "registered": false,
+   "provider_name": null,
+   "credit_code": null,
+   "registered_utc": null,
+   "disclosure_ok": false,
+   "listing_count": 1,
+   "earliest_listed_utc": "2026-08-20T10:00:00Z"
+  },
+  {
+   "dev_account": "usr:gina",
+   "registered": true,
+   "provider_name": "Gina Studio",
+   "credit_code": "91310000MA1K3ABC34",
+   "registered_utc": "2026-08-05T00:00:00Z",
+   "disclosure_ok": true,
+   "listing_count": 1,
+   "earliest_listed_utc": "2026-08-10T00:00:00Z"
+  },
+  {
+   "dev_account": "usr:helen",
+   "registered": false,
+   "provider_name": null,
+   "credit_code": null,
+   "registered_utc": null,
+   "disclosure_ok": false,
+   "listing_count": 1,
+   "earliest_listed_utc": "2026-08-12T00:00:00Z"
+  }
+ ],
+ "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
+ "report": "preview/provider-identity-board.html",
+ "sources": {
+  "driver": "c05940a0538de4da",
+  "copy": "df70b849f8dd1ba4",
+  "apimarket": "82a49194bef85737",
+  "report": "3a83dce99c9e2bd4"
+ },
+ "sizes": {
+  "html": 7193,
+  "json": 1893
+ }
+}

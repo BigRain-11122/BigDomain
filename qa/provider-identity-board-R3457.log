@@ -1,0 +1,11 @@
+===== DRIVER =====
+PROVIDER-IDENTITY preview/provider-identity-board.html bytes=7193 developers=4 registered=2 undisclosed=2
+
+===== SUITE =====
+PASS AC-PIDB1 payload_missing=[] payload_extra=[] developers=4 dev_shape=True report=True sources=True
+PASS AC-PIDB2 developer_same=True disclaimer_same=True market_same=True order_same=True developers=4
+PASS AC-PIDB3 driver_problems=0 forged_problems=3 registered=True undisclosed=True oldest='usr:helen'
+PASS AC-PIDB4 dev_marked=True no_bare_none=True caption=True disclosed=True undisclosed=True empty_landed=True empty_probe=True
+PASS AC-PIDB5 aigc=True disclaimer_verbatim=True notadvice=True zero_links=True no_script=True
+PASS AC-PIDB6 readonly=True check_rc=0 registered=True declared_hit=True face_suite=True
+SUITE PASS 6/6 declared=6 row=os-provider-identity-board

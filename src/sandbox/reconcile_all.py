@@ -8524,6 +8524,18 @@ SUITES = [
     # its own pinned clock.
     ("os-watch-category-mix-board",
      os.path.join("..", "os", "test_watch_category_mix_board.py"), 6),
+    # R3457: tools/provider_identity_board.py renders the per-developer
+    # real-name disclosure face (api_provider_identity, AC-AMPI3) which had
+    # zero readers under tools/, preview/ and src/os; the page prints the
+    # market disclosure strip plus one card per shelf-owning developer with
+    # the registration badge, the published name, the unified social credit
+    # code, the registration stamp and the shelf counts, and the suite
+    # re-reads every developer over its own throwaway world whose
+    # registrations, shelves and identity revision are all made through the
+    # shipped issue_key, publish_api, register_provider and revise_provider
+    # doors under its own pinned clock.
+    ("os-provider-identity-board",
+     os.path.join("..", "os", "test_provider_identity_board.py"), 6),
     # R3456: tools/answer_revision_board.py renders the per-answer revision
     # chain (api_answer_history, AC-AMAW1..8) which had zero readers under
     # tools/, preview/ and src/os; the page prints the market revision totals
