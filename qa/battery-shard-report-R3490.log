@@ -1,0 +1,10 @@
+R3490 battery-shard-report registry re-derivation
+BEFORE: --check rc=2 RED E_REGISTRY_DRIFT,E_REGISTRY_DRIFT:OS delivery,E_TOTALS_UNCOVERED,E_TOTALS_COVER
+BEFORE page recorded registry suites=766 criteria=6487; live registry suites=828 criteria=6932 (delta +62/+445)
+BEFORE hashes html 16424B FB15C73756CCC261 json 17890B 7369780D7A873408
+AFTER render: BSR landed json=18278B html=16408B verdict=RED families=6 selected=61 criteria=573 uncovered=767 cover_pct=7.4
+AFTER families: lobby 7/7 rc=0; os-export 18/20 rc=2 red=os-export-consistency-queue-face,os-export-round; os-queue 15/16 rc=2 red=os-queue-floor-export-face; os-ledger 5/13 rc=2 red=os-ledger-lines,os-ledger-archive,os-ledger-baseline,os-ledger-fold-kind,os-ledger-fold-kind-dateprefix,os-ledger-fold-kind-inflection,os-ledger-closeout,os-ledger-reconcile-face; os-battery 4/4; os-deliverable 1/1
+AFTER --check: BSR-CHECK name=battery-shard-report checks=8 html=16408B json=18278B verdict=RED read_only=True then BSR-CHECK VERDICT PASS (the gate grades the pair shape and the registry match, not the verdict itself)
+CONTROL: --control tampered=lobby real-time family field=selected_criteria delta=+7 named=E_REGISTRY_DRIFT:lobby,T_TOTALS_CRITERIA; VERDICT CONFIRMED (gate still reddens on a forged copy)
+TWO RED CAUSES SAMPLED: test_ledger_lines AC-LGR8 live gate clean on the coverage scope FAIL (SUITE FAIL 7/8); test_export_round AC-EXPW4 --check writes nothing and both bytes and mtime hold FAIL plus AC-EXPG4 live tree still grades clean FAIL (SUITE FAIL 183/185) - both are live-tree arms that settle only after the export refresh and the commit
+HONEST: zero code changed this round; the page now prints the live registry 828/6932 instead of the stale 766/6487 and prints the verdict it measures (RED) instead of a stale PASS; the eleven red suite names are published on the page and carried to the next window
