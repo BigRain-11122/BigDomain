@@ -21,7 +21,8 @@
                 "R3491 closeout: the fold can no longer split a round from its ledger line - a window that would do so is refused by name E_LEDGER_SPLIT - and the thirteen rounds it had already split now sit whole in the November archive, so the ledger gate reads CLEAN instead of accusing healed rounds.",
                 "R3491 correction: the tokens line and the closing line each asked for a tick advance, so the counter reached 3492 while the round label stayed R3491; the tick tool refuses to move backwards by design, so R3492 is consumed by that double advance and carries no narrative, and the next window opens at R3493 with tick 3493 - recorded rather than hidden.",
                 "2026-11-26 R3492 CLOSEOUT: this window consumes the second tick its own double advance created, so the round label and the live tick agree again; the work itself is the R3491 work - a fold may no longer split a round from its ledger line and the thirteen split rounds now sit whole in the November archive.",
-                "R3492 tokens: local=0 api=0 api_reason=no additional work: this line only closes the tick the R3491 window advanced twice"
+                "R3492 tokens: local=0 api=0 api_reason=no additional work: this line only closes the tick the R3491 window advanced twice",
+                "R3492 correction, read off the disk rather than assumed: the battery shard report page WAS re-derived after all - the hidden producer wrote preview/battery-shard-report.json 18040B and .html 16414B at 04:02:29, --check reads BSR-CHECK VERDICT PASS read_only=True checks=8, and the page now publishes round R3492 with 6 families, 4 green and 2 red against a live registry of 828 suites; the earlier R3491 line that said the page was not derived is corrected here."
   ],
   "tick":3492
 }
