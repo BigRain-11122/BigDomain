@@ -75,6 +75,16 @@ FACES = [
                 "preview_R2120.py in the same commit (seller answered-question "
                 "ledger, schema 12->13)"),
     },
+    {
+        "slug": "lobby-session-trace",
+        "producer": os.path.join("tools", "lobby_session_trace.py"),
+        "why": ("fifth of the twelve splits (232.1h): html last committed at 700dd89a "
+                "(the same R3288 back-hop channel), json at b0b07b2b, which shipped "
+                "tools/lobby_session_trace.py and both halves in one commit; this "
+                "producer is a live session (one sandbox server on loopback over a "
+                "temp database), not a pure function, and it applies the back-hop "
+                "channel itself"),
+    },
 ]
 
 VOLATILE = ("generated_at", "round")
@@ -158,6 +168,18 @@ def render(face, workdir):
     return read_bytes(html_path), read_bytes(json_path)
 
 
+def applied_channel_verdict(rendered, landed):
+    """AC-PPR8: a producer that applies the channel itself is compared directly.
+
+    There is no block for the receipt to splice in, so the reading cannot lean
+    on the channel at all: equal bytes are one derivation, anything else is a
+    drift with the first differing byte named.
+    """
+    if rendered == landed:
+        return "one-derivation", None
+    return "drift", first_diff(rendered, landed)
+
+
 def measure(face):
     """One receipt for one face: render, apply the channel, compare with disk.
 
@@ -238,8 +260,26 @@ def measure(face):
     })
 
     if splice is None:
-        row["verdict"] = "channel-noop"
-        row["detail"] = "the shipped channel changed nothing, so it cannot explain any gap"
+        # AC-PPR8: this producer already applies the shipped channel to its own
+        # page, so there is no block for the receipt to splice. The reading is
+        # then the strictest one available: the producer's own html must equal
+        # the landed page byte for byte, with no block surgery to hide a gap.
+        verdict, at = applied_channel_verdict(rendered, landed)
+        row["raw_first_diff_offset"] = at
+        row["channel_how"] = "producer-applied"
+        row["spliced_html_bytes"] = len(rendered)
+        row["spliced_html_sha256"] = sha256_hex(rendered)
+        if verdict == "one-derivation":
+            row["verdict"] = "one-derivation"
+            row["receipt"] = "producer-applies-channel"
+            row["detail"] = ("the producer carries the shipped channel block itself and its "
+                             "own html equals the landed page byte for byte (%d bytes)" % len(landed))
+        else:
+            row["verdict"] = "drift"
+            row["first_diff_offset"] = at
+            row["first_diff_context"] = context(landed, at)
+            row["detail"] = ("the producer carries the channel block itself, and its html "
+                             "differs from the landed page: first difference at byte %d" % at)
         return row
 
     delta = first_diff(injected, landed)
@@ -288,7 +328,9 @@ def receipt():
         "round": tick,
         "source": "tools/face_pair_receipt.py",
         "law": ("a history split is excused for one face only when the producer's own html, "
-                "plus the shipped post-render channel, reproduces the landed html byte for byte"),
+                "plus the shipped post-render channel, reproduces the landed html byte for byte "
+                "- and for a producer that applies the channel itself, when its own html equals "
+                "the landed page with no block surgery at all"),
         "faces": rows,
         "totals": {
             "faces": len(rows),

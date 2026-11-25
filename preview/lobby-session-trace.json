@@ -19,7 +19,7 @@
   "config": "src/sandbox/lobby/config.json",
   "config_bytes": 1712,
   "server": "src/sandbox/lobby/server.py",
-  "server_bytes": 31142
+  "server_bytes": 31986
  },
  "steps": [
   {

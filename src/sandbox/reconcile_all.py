@@ -5039,8 +5039,11 @@ SUITES = [
     # tools/face_pair_receipt.py existed; AC-PPR7 pinned at R3501 before the
     # second face was registered, so a producer that cannot render into a
     # scratch directory is refused at registration time).
+    # AC-PPR8 pinned at R3504 before the fifth face was registered: a producer
+    # that applies the channel itself is compared directly, with no block
+    # surgery to hide a gap).
     ("face-pair-receipt",
-     os.path.join("..", "os", "test_face_pair_receipt.py"), 7),
+     os.path.join("..", "os", "test_face_pair_receipt.py"), 8),
     ("os-ledger-archive",
      os.path.join("..", "os", "test_ledger_archive.py"), 16),
     # R3091: the archive's own provenance is now readable WITHOUT a child

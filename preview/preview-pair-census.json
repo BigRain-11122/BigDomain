@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-26T07:12:00+08:00",
+  "generated_at": "2026-11-26T07:25:17+08:00",
   "law": "a split is claimed only when the two halves' last commits differ; an mtime gap alone is published as a bucket, never as a split",
   "oldest_split": {
     "delta_hours": 749.7,
@@ -803,18 +803,18 @@
     {
       "delta_seconds": 0,
       "html": {
-        "bytes": 5950,
-        "commit": "d168ca47",
-        "mtime": "2026-11-26T07:11:24+08:00",
-        "mtime_epoch": 1795648284,
-        "sha": "2BB4D2B4"
+        "bytes": 7107,
+        "commit": "75f7dda2",
+        "mtime": "2026-11-26T07:23:39+08:00",
+        "mtime_epoch": 1795649019,
+        "sha": "A0BC000D"
       },
       "json": {
-        "bytes": 7343,
-        "commit": "d168ca47",
-        "mtime": "2026-11-26T07:11:24+08:00",
-        "mtime_epoch": 1795648284,
-        "sha": "6F23A1FB"
+        "bytes": 9211,
+        "commit": "75f7dda2",
+        "mtime": "2026-11-26T07:23:39+08:00",
+        "mtime_epoch": 1795649019,
+        "sha": "6B419FA1"
       },
       "name": "face-pair-receipt",
       "verdict": "same-run"
@@ -1118,23 +1118,23 @@
       "verdict": "same-run"
     },
     {
-      "delta_seconds": 835661,
+      "delta_seconds": 0,
       "html": {
         "bytes": 9092,
         "commit": "700dd89a",
-        "mtime": "2026-11-25T09:58:04+08:00",
-        "mtime_epoch": 1795571884,
-        "sha": "B8938673"
+        "mtime": "2026-11-26T07:22:29+08:00",
+        "mtime_epoch": 1795648949,
+        "sha": "E7B0E37F"
       },
       "json": {
         "bytes": 8008,
         "commit": "b0b07b2b",
-        "mtime": "2026-11-15T17:50:23+08:00",
-        "mtime_epoch": 1794736223,
-        "sha": "C84A3456"
+        "mtime": "2026-11-26T07:22:29+08:00",
+        "mtime_epoch": 1795648949,
+        "sha": "D39039F0"
       },
       "name": "lobby-session-trace",
-      "verdict": "history-split"
+      "verdict": "same-run"
     },
     {
       "delta_seconds": 225342,
@@ -2038,12 +2038,12 @@
     "channel-receipt": 0,
     "explained": 4,
     "frozen-excused": 11,
-    "history-split": 12,
+    "history-split": 11,
     "html": 106,
     "no-json": 3,
     "paired": 103,
     "same-commit": 6,
-    "same-run": 74,
+    "same-run": 75,
     "untracked": 0
   }
 }

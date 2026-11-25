@@ -1,0 +1,49 @@
+R3504 evidence - fifth face receipt: lobby-session-trace
+
+1. PRODUCER OWNERSHIP (git, not guessed)
+   git log -1 -- preview/lobby-session-trace.json   -> b0b07b2b 2026-11-15
+   that commit also shipped preview/lobby-session-trace.html and tools/lobby_session_trace.py
+   first appearance of the tool: 0852532b (R2790, same day)
+   -> producer = tools/lobby_session_trace.py, a LIVE session (one sandbox server on
+      loopback over a temp database), and it applies the back-hop channel itself.
+
+2. MEASURED BEFORE ANY EDIT (read-only, output into the system temp directory)
+   one fresh session vs the landed json (11-15): byte lengths both 8008, one leaf differs
+     source.server_bytes 31142 -> 31986
+   frames 17 / steps 11 / codes [E_CONTENT_REJECTED, E_TEXT_TOO_LONG, E_ROOM_UNKNOWN,
+   E_RATE_LIMIT] identical on both sides
+   -> the page's own gate was RED on AC-LST6 (E_SRC server size is stale), so a
+      re-render from the producer was the repair its own law demanded.
+
+3. DEFECT FOUND AT THE SOURCE (named, fixed)
+   tools/lobby_session_trace.py render_html() passed bytes to face_backhop.inject_text(),
+   which works on str -> TypeError: cannot use a string pattern on a bytes-like object.
+   The producer could not render at all at HEAD. Fixed by decoding once and encoding back.
+
+4. RE-RENDER (producer run, not a re-derivation from the old json)
+   RENDERED steps=11 frames=17 refusals=6 types=7 codes=4 html=9092B json=8008B
+   cap: sent=4000 outcome=REFUSED code=E_TEXT_TOO_LONG received=None
+   python tools/lobby_session_trace.py --check
+   -> VERDICT PASS steps=11 frames=17 refusals=6 types=7 codes=4 html=9092B json=8008B rc=0
+   (was: E_SRC config size is stale / E_SRC server size is stale + the render TypeError)
+
+5. RECEIPT (fifth face, AC-PPR7 shape + AC-PPR8 direct comparison)
+   python tools/face_pair_receipt.py
+   lobby-session-trace  one-derivation  the producer carries the shipped channel block
+   itself and its own html equals the landed page byte for byte (9092 bytes)
+   FPR (face-pair-receipt) round=3503 faces=5 one_derivation=1 drift=0 unreproducible=0
+   the four apimarket faces keep their reading: version-drift (schema 6/11/12/13 vs 17),
+   explained and NOT excused.
+
+6. GATES READ BACK
+   python src/os/test_face_pair_receipt.py            -> SUITE PASS 8/8 (AC-PPR1..8)
+   python tools/face_pair_receipt.py --check          -> FPR-CHECK VERDICT PASS faces=5
+   python tools/preview_pair_census.py --check        -> PPC-CHECK PASS html=106 paired=103
+     history_split=11 channel_receipt=0 frozen_excused=11 same_commit=6 explained=4
+   python tools/preview_pair_census.py                 -> PPC round=3503 same_run=75
+     history_split=11 (was 12), oldest split apimarket-report-refunds 749.7h
+   python src/os/suite_matrix_reconcile.py --check     -> DOC-CURRENT (830 suites / 6948 criteria)
+
+7. NOT TOUCHED
+   no other preview page re-derived, no freeze register written, no archive rewritten,
+   no AC-PPR1..7 threshold moved, no merchant / platform / cloud surface opened.

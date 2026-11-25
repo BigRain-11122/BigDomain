@@ -23,6 +23,10 @@ break render determinism.
 Usage:
     python tools/lobby_session_trace.py            # run the session, render
     python tools/lobby_session_trace.py --check    # read-only gate
+
+The two output paths are optional positional arguments so a receipt can render
+this live session into a scratch directory (AC-PPR7); a no-argument run still
+writes exactly the two landed halves, byte for byte.
 """
 
 import json
@@ -321,9 +325,11 @@ def _cells(payload):
 
 def render_html(payload):
     # The visible back-hop block is part of this page, so the fresh derivation
-    # compared by --check carries it too (AC-FBH1 holds by construction).
-    return face_backhop.inject_text(_render_html(payload),
-                                    "lobby-session-trace.html")[0]
+    # compared by --check carries it too (AC-FBH1 holds by construction). The
+    # channel works on text, so the page is decoded once here and encoded back.
+    text, _how = face_backhop.inject_text(_render_html(payload).decode("utf-8"),
+                                          "lobby-session-trace.html")
+    return text.encode("utf-8")
 
 
 def _render_html(payload):
@@ -536,7 +542,8 @@ def check(payload_bytes, html_bytes):
     return findings, (0 if not findings else 2)
 
 
-def main(argv):
+def main(out_html=OUT_HTML, out_json=OUT_JSON):
+    argv = sys.argv[1:]
     checking = "--check" in argv
     if checking:
         if not (os.path.exists(OUT_HTML) and os.path.exists(OUT_JSON)):
@@ -569,16 +576,16 @@ def main(argv):
 
     cfg = _load_json(CONFIG)
     payload = run_session(cfg)
-    if not os.path.isdir(os.path.dirname(OUT_HTML)):
-        os.makedirs(os.path.dirname(OUT_HTML))
-    write_file_atomic(OUT_JSON, dump_json(payload))
+    if not os.path.isdir(os.path.dirname(out_html)):
+        os.makedirs(os.path.dirname(out_html))
+    write_file_atomic(out_json, dump_json(payload))
     robot = render_html(payload)
-    write_file_atomic(OUT_HTML, robot)
+    write_file_atomic(out_html, robot)
     summary = payload["summary"]
     print("RENDERED steps=%d frames=%d refusals=%d types=%d codes=%d html=%dB json=%dB"
           % (summary["steps"], summary["frames"], summary["refusals"],
              len(summary["types"]), len(summary["codes"]),
-             os.path.getsize(OUT_HTML), os.path.getsize(OUT_JSON)))
+             os.path.getsize(out_html), os.path.getsize(out_json)))
     print("types: " + " ".join(summary["types"]))
     print("codes: " + " ".join(summary["codes"]))
     if summary.get("over_cap"):
@@ -593,4 +600,4 @@ def main(argv):
 
 
 if __name__ == "__main__":
-    sys.exit(main(sys.argv[1:]))
+    sys.exit(main())

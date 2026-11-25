@@ -191,6 +191,38 @@ def main():
        and bool(stub_problems),
        "faces=%s stub_refused=%s" % (sorted(discipline), bool(stub_problems)))
 
+    # AC-PPR8: a producer that applies the channel itself is compared directly.
+    # Measured on the fifth face (a live sandbox session): its own html must
+    # equal the landed page, and one byte changed OUTSIDE the block must still
+    # read drift at that exact offset - the direct comparison is not a formality.
+    applied = [r for r in rows if r.get("splice_offset") is None]
+    fifth = [r for r in rows if r["slug"] == "lobby-session-trace"]
+    verdict_a = offset_a = verdict_b = offset_b = None
+    if fifth:
+        landed5 = read_bytes(os.path.join(PREVIEW, "lobby-session-trace.html"))
+        work = tempfile.mkdtemp(prefix="fpr3504-")
+        try:
+            try:
+                rendered5, _ = FPR.render([f for f in FPR.FACES
+                                           if f["slug"] == "lobby-session-trace"][0], work)
+            finally:
+                shutil.rmtree(work, ignore_errors=True)
+        except Exception:
+            rendered5 = None
+        if rendered5 is not None:
+            verdict_a, offset_a = FPR.applied_channel_verdict(rendered5, landed5)
+            tampered = bytearray(landed5)
+            tampered[10] = tampered[10] ^ 0x01
+            verdict_b, offset_b = FPR.applied_channel_verdict(rendered5, bytes(tampered))
+    ok("AC-PPR8",
+       bool(applied) and fifth and fifth[0]["verdict"] == "one-derivation"
+       and fifth[0].get("receipt") == "producer-applies-channel"
+       and verdict_a == "one-derivation" and offset_a is None
+       and verdict_b == "drift" and offset_b == 10,
+       "applied_faces=%d fifth=%s direct=%s@%s tampered=%s@%s"
+       % (len(applied), fifth[0]["verdict"] if fifth else "-", verdict_a, offset_a,
+          verdict_b, offset_b))
+
     total = len(CHECKS)
     passed = total - len(FAILS)
     if FAILS:
