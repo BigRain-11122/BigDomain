@@ -1,0 +1,43 @@
+R3497 evidence - AC-LGA16: the exemption refusal arms, pinned (read-only after the edits)
+
+BEFORE
+  python src/os/test_ledger_archive.py        -> SUITE PASS 15/15 (EXPECTED_CRITERIA=15)
+  python src/os/suite_matrix_reconcile.py --check -> DOC-CURRENT (registry 828 suites / 6932 criteria)
+  python tools/battery_shard.py --match os-ledger -> green=13 of 13, criteria=101, crit_mismatch=0
+  python tools/battery_shard_report.py --check    -> BSR-CHECK VERDICT PASS
+
+PINNED (one criterion, six arms; ledger_lines.py thresholds untouched)
+  a entry whose recorded receipt parts are ["product","tokens"] -> refused receipt-has-budget
+  b entry ["product","landed"] while the archive summary names tokens  -> refused receipt-has-budget
+  c the same budget-free summary under an UN-NAMED round -> still a gap, exemptions []
+  d entry with no evidence kind (no receipt / payload / span) -> refused no-span-recorded
+  e inline payload prose under an UN-NAMED round -> still a gap, while the
+    NAMED round carrying the same prose IS excused (the table is the discriminator)
+  f probe entries removed, shipped table restored, real tree still clean
+
+AFTER
+  python src/os/test_ledger_archive.py        -> SUITE PASS 16/16 criteria
+  python src/os/ledger_lines.py --archives logs --fold-carry
+    FOLD-CARRY OK since=2914 windows=145 rounds=640 skipped=725 split=51
+    same_window=52 dup=11 exempt=4(R3112,R3436,R3458,R3459) loc=file@line
+    prov=tracked=1/3   rc=0
+  registry sync: src/sandbox/reconcile_all.py ("os-ledger-archive", 15 -> 16)
+  python src/os/suite_matrix_reconcile.py --write -> WRITTEN 85440B, 828 rows
+  python src/os/suite_matrix_reconcile.py --check -> DOC-CURRENT (828 rows / 6933 criteria)
+  python tools/battery_shard.py --match os-ledger
+    SHARD rc=0 selected=13 executed=13 green=13 criteria=102 crit_mismatch=0
+
+FIRST DRAFT MEASURED WRONG (recorded, not hidden)
+  The first version asked the "named round with the same payload is excused"
+  arm AFTER the finally block restored the shipped table, so the probe entry
+  was already gone and the arm could only answer not-named: SUITE FAIL 15/16.
+  The verdict is now captured while the probe entry is still in the table.
+
+HONEST
+  (a) no threshold moved and no archive was rewritten; the four shipped
+      exemption entries are byte-identical to R3496.
+  (b) the criterion count is now 16, so the registry, the matrix document and
+      the battery page are re-derived in this same round - a stale pair is
+      exactly the defect R3488 through R3496 kept repairing.
+  (c) ZERO payment capability and no network beyond loopback: the five
+      physical pieces still gate every buyer.

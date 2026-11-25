@@ -5019,8 +5019,12 @@ SUITES = [
     # R3356: AC-LGA15 added - a named fold-carry exemption whose two halves
     # (no ledger line anywhere / the round's own narrative carries the
     # recorded span) are re-proved on every read, so 14 -> 15.
+    # R3497: AC-LGA16 added - the three evidence kinds now carry their own
+    # refusal arms (a receipt that names the budget part, an entry narrower
+    # than the archive summary, a receipt or payload on a round the table
+    # does not name, an entry with no evidence kind), so 15 -> 16.
     ("os-ledger-archive",
-     os.path.join("..", "os", "test_ledger_archive.py"), 15),
+     os.path.join("..", "os", "test_ledger_archive.py"), 16),
     # R3091: the archive's own provenance is now readable WITHOUT a child
     # process - the tracked set comes from the repository index (DIRC v2
     # only; 3/4 and a bad magic are refused by name), so a reader of a

@@ -1,23 +1,25 @@
 {
   "ceo_face": {
-    "board_pages_skipped": [],
-    "current": "2026-11-26 R3496 PRODUCT: the three frozen FOLD-CARRY holes stop being an open argument - each now carries a named exemption with a disk-reproducible receipt (two block summaries that enumerate the whole block and name no budget part, one round whose own narrative carries the budget payload inline), and the os-ledger family reads 13 of 13 green for the first time.",
+    "board_pages_skipped": [
+      "preview/battery-shard-report.html (16419B)"
+    ],
+    "current": "2026-11-26 R3497 PRODUCT: the fold-carry exemption table's three evidence kinds each carry their own refusal arm now - a receipt that records the budget part, an entry narrower than the archive summary, a receipt or payload on a round the table does not name, and an entry with no evidence kind all red by name - and the archive suite moves from 15 to 16 criteria.",
     "do": "2026-11-25 R3456 PRODUCT: the answer-revision question now has a door - api_answer_history (live with AC-AMAW1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so 'which answer was rewritten, what did it say before, what does it say now and how often did it change' could only be read by calling the sandbox from a shell - while api_seller_answers and api_listing_qna publish only the CURRENT wording.",
     "last_artifact": "preview/ledger-reconcile-face.html (8656B) + preview/ledger-reconcile-face.json (6151B) [2026-11-26 commit]",
     "latest_artifact": "preview/ledger-reconcile-face.html (8656B) + preview/ledger-reconcile-face.json (6151B) [2026-11-26 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ledger-reconcile-face.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/fold-carry-census-R3494.log (2984B, 2026-11-26, sha256 75562974054f)",
-    "latest_evidence": "qa/fold-carry-census-R3494.log (2984B, 2026-11-26, sha256 75562974054f)",
-    "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R3497] next window (<=48h): (1) **S4U 仍未落地**（第三十六次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回。(2) **AC-LGA16 未注册（本窗诚实留白）**：拒绝面目前由 AC-FCE1 的 `refused=R3421` 读数覆盖，但「表项指到带 `tokens` 的摘要」「同名散文换到未具名轮」两条还没有自己的臂——下窗先立判据再登记一条 AC-LGA16（会动 EXPECTED_CRITERIA 15→16，须同步矩阵与电池页）。(3) `battery-shard-report` 族读数已变（os-ledger 12→13 绿），本窗已后台重派生，下窗先读回 `--check` 与页内verdict。(4) 载体余量：state 本窗未折叠，下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`。(5) 基准 2026-12-01 到期（48h 窗 2026-11-27）。(6) tick 口径：本轮 3495→3496，下轮 R3497。(7) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定「诊断不修」）、全量 battery 未实跑、Docker 缺位、backlog.md 体量、导出面 `latest_artifact` 槽写手债、三个 `qa/crawl-*` 改动件非本窗所写。",
-    "next_milestone_due": "2026-11-28T04:53:24+08:00",
-    "updated_at": "2026-11-26T04:53:24+08:00",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/fold-carry-exemption-arms-R3497.log (2656B, 2026-11-26, sha256 c6feebc898ca)",
+    "latest_evidence": "qa/fold-carry-exemption-arms-R3497.log (2656B, 2026-11-26, sha256 c6feebc898ca)",
+    "newest_pair_on_disk_is_board": true,
+    "next_milestone": "[R3498] next window (<=48h): (1) **S4U 仍未落地**（第三十七次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回。本窗**未试跑**并如实记因：非提权会话注册只会得到 InteractiveToken 车道任务，违反「本机一切车道任务一律 S4U」律（10-15 BM 仓坑），宁缺不错。(2) **AC-LGA16 已登记**（判据 15→16，套件 `SUITE PASS 16/16`），登记册/矩阵/电池页三处口径已同源 828 套 6933 判据——下窗只读对读一次确认未漂。(3) 电池页本窗按 828/6933 重派生并 `--check` 读回，下窗仅在族读数变化时重跑；产出者一律 detached+`CREATE_NO_WINDOW` 单跑并轮询日志（本窗实测 stdout 全程缓冲，日志到尾才落盘）。(4) 载体余量：state `25200B`／阈 78500，`fold --plan-only` 本窗答 `writes_nothing=true`（post 上限 2827B），下窗仍先跑 plan-only。(5) 基准 2026-12-01 到期（48h 窗 2026-11-27）——下窗若跨过 11-27 则先排刷新轮。(6) tick 口径：本轮 3496→3497，下轮 R3498。(7) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定「诊断不修」）、全量 battery 未实跑（本窗只跑 os-ledger 族 13 套）、Docker 缺位、backlog.md 体量、导出面 `latest_artifact` 槽写手债、三个 `qa/crawl-*` 改动件非本窗所写。",
+    "next_milestone_due": "2026-11-28T05:20:02+08:00",
+    "updated_at": "2026-11-26T05:20:02+08:00",
     "heartbeat": {
-      "tick": 3485,
-      "state_tick": 3494,
-      "lag": 9,
-      "verdict": "FLAG",
-      "reason": "heartbeat_row_debt"
+      "tick": 3497,
+      "state_tick": 3497,
+      "lag": 0,
+      "verdict": "PASS",
+      "reason": "fresh"
     },
     "outs_age": {
       "rows": 11,
@@ -35,8 +37,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-26 R3496 PRODUCT: the three frozen FOLD-CARRY holes stop being an open argument - each now carries a named exemption with a disk-reproducible receipt (two block summaries that enumerate the whole block and name no budget part, one round whose own narrative carries the budget payload inline), and the os-ledger family reads 13 of 13 green for the first time.",
-  "claims": {"claimed": 41, "captured": 23, "contradicted": 0, "uncaptured": 18, "historic": 0, "rows": 103, "present": true, "census_ts": "2026-11-26T04:53:24+08:00"},
+  "current": "2026-11-26 R3497 PRODUCT: the fold-carry exemption table's three evidence kinds each carry their own refusal arm now - a receipt that records the budget part, an entry narrower than the archive summary, a receipt or payload on a round the table does not name, and an entry with no evidence kind all red by name - and the archive suite moves from 15 to 16 criteria.",
+  "claims": {"claimed": 41, "captured": 23, "contradicted": 0, "uncaptured": 18, "historic": 0, "rows": 103, "present": true, "census_ts": "2026-11-26T05:20:02+08:00"},
   "chain": {"present": true, "rows": 103, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -65,11 +67,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-26 R3496 PRODUCT: the three frozen FOLD-CARRY holes stop being an open argument - each now carries a named exemption with a disk-reproducible receipt (two block summaries that enumerate the whole block and name no budget part, one round whose own narrative carries the budget payload inline), and the os-ledger family reads 13 of 13 green for the first time.",
-  "export_ts": "2026-11-26T04:53:24+08:00",
+  "do": "2026-11-26 R3497 PRODUCT: the fold-carry exemption table's three evidence kinds each carry their own refusal arm now - a receipt that records the budget part, an entry narrower than the archive summary, a receipt or payload on a round the table does not name, and an entry with no evidence kind all red by name - and the archive suite moves from 15 to 16 criteria.",
+  "export_ts": "2026-11-26T05:20:02+08:00",
   "latest_artifact": "preview/ledger-reconcile-face.html (8656B) + preview/ledger-reconcile-face.json (6151B) [2026-11-26 commit]",
-  "latest_evidence": "qa/fold-carry-census-R3494.log (2984B, 2026-11-26, sha256 75562974054f)",
-  "next_milestone": "[R3497] next window (<=48h): (1) **S4U 仍未落地**（第三十六次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回。(2) **AC-LGA16 未注册（本窗诚实留白）**：拒绝面目前由 AC-FCE1 的 `refused=R3421` 读数覆盖，但「表项指到带 `tokens` 的摘要」「同名散文换到未具名轮」两条还没有自己的臂——下窗先立判据再登记一条 AC-LGA16（会动 EXPECTED_CRITERIA 15→16，须同步矩阵与电池页）。(3) `battery-shard-report` 族读数已变（os-ledger 12→13 绿），本窗已后台重派生，下窗先读回 `--check` 与页内verdict。(4) 载体余量：state 本窗未折叠，下窗先跑 `python src/os/logs_toolkit.py fold --plan-only`。(5) 基准 2026-12-01 到期（48h 窗 2026-11-27）。(6) tick 口径：本轮 3495→3496，下轮 R3497。(7) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定「诊断不修」）、全量 battery 未实跑、Docker 缺位、backlog.md 体量、导出面 `latest_artifact` 槽写手债、三个 `qa/crawl-*` 改动件非本窗所写。",
+  "latest_evidence": "qa/fold-carry-exemption-arms-R3497.log (2656B, 2026-11-26, sha256 c6feebc898ca)",
+  "next_milestone": "[R3498] next window (<=48h): (1) **S4U 仍未落地**（第三十七次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回。本窗**未试跑**并如实记因：非提权会话注册只会得到 InteractiveToken 车道任务，违反「本机一切车道任务一律 S4U」律（10-15 BM 仓坑），宁缺不错。(2) **AC-LGA16 已登记**（判据 15→16，套件 `SUITE PASS 16/16`），登记册/矩阵/电池页三处口径已同源 828 套 6933 判据——下窗只读对读一次确认未漂。(3) 电池页本窗按 828/6933 重派生并 `--check` 读回，下窗仅在族读数变化时重跑；产出者一律 detached+`CREATE_NO_WINDOW` 单跑并轮询日志（本窗实测 stdout 全程缓冲，日志到尾才落盘）。(4) 载体余量：state `25200B`／阈 78500，`fold --plan-only` 本窗答 `writes_nothing=true`（post 上限 2827B），下窗仍先跑 plan-only。(5) 基准 2026-12-01 到期（48h 窗 2026-11-27）——下窗若跨过 11-27 则先排刷新轮。(6) tick 口径：本轮 3496→3497，下轮 R3498。(7) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定「诊断不修」）、全量 battery 未实跑（本窗只跑 os-ledger 族 13 套）、Docker 缺位、backlog.md 体量、导出面 `latest_artifact` 槽写手债、三个 `qa/crawl-*` 改动件非本窗所写。",
   "outs": [
     "preview/ledger-reconcile-face.html (8656B) + preview/ledger-reconcile-face.json (6151B) [2026-11-26 commit]",
     "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-26 commit] (halves differ: html [2026-11-26 commit] + json [2026-11-16 commit]; later=html)",
@@ -138,22 +140,22 @@
     "shortfall_total": 15,
     "verdict": "FLOOR-DEBT"
   },
-  "results": [["3496", "OSLoop 执行 tick"]],
+  "results": [["3497", "OSLoop 执行 tick"]],
   "results_archive": {
     "bytes": 336680,
     "count": 179,
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
-  "self_drive": {"window": "2026-11-20..2026-11-26", "window_days": 7, "log_lines_in_window": 39, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 6, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
-  "state_bytes": 25200,
-  "next_milestone_due": "2026-11-28T04:53:24+08:00",
+  "self_drive": {"window": "2026-11-20..2026-11-26", "window_days": 7, "log_lines_in_window": 46, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 8, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
+  "state_bytes": 28138,
+  "next_milestone_due": "2026-11-28T05:20:02+08:00",
   "heartbeat": {
-    "tick": 3485,
-    "state_tick": 3494,
-    "lag": 9,
-    "verdict": "FLAG",
-    "reason": "heartbeat_row_debt"
+    "tick": 3497,
+    "state_tick": 3497,
+    "lag": 0,
+    "verdict": "PASS",
+    "reason": "fresh"
   },
   "outs_age": {
     "rows": 11,

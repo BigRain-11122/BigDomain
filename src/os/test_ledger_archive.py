@@ -28,7 +28,7 @@ sys.path.insert(0, BASE)
 
 import ledger_lines as LL  # noqa: E402
 
-EXPECTED_CRITERIA = 15
+EXPECTED_CRITERIA = 16
 MODULE = os.path.join(BASE, "ledger_lines.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 STATE = os.path.join(BASE, "state.json")
@@ -976,13 +976,108 @@ def run():
             "excused only by name and only while its own narrative still "
             "carries the recorded span")
 
+        # AC-LGA16 (R3497): the table has three evidence kinds and each one
+        # carried a measured negative face that no arm pinned. Registered as
+        # ONE criterion with six arms on a fixture archive, never on history:
+        #   a: an entry whose receipt records a budget part is refused
+        #   b: an entry narrower than the archive's own summary is refused too
+        #   c: the same budget-free summary under an UN-NAMED round still reds
+        #   d: an entry recording no evidence kind at all is refused by name
+        #   e: inline payload prose under an UN-NAMED round still reds, while
+        #      the same prose on the NAMED round is excused
+        #   f: the shipped table is whole again and the real tree still clean
+        arms_dir = os.path.join(world, "logs-lga16")
+        os.makedirs(arms_dir)
+        arms_file = os.path.join(arms_dir, "state-log-archive-2026-12.md")
+
+        def arms_window(marker, body):
+            write_text(arms_file,
+                       "# state-log-archive fixture header\n"
+                       "# --- R%d fold append (fixture)\n" % marker
+                       + "".join(item + "\n" for item in body))
+            return LL.audit_fold_carry([arms_file], 3000)
+
+        budget_receipt = ("fold 9001 moved the whole R7002 block "
+                          "(product, tokens) verbatim")
+        clean_receipt = ("fold 9001 moved the whole R7002 block "
+                         "(product, landed) verbatim")
+        payload = "tokens: local=~24k api=0 api_reason=no cloud call"
+        shipped = dict(LL.FOLD_CARRY_EXEMPT)
+        try:
+            LL.FOLD_CARRY_EXEMPT[7002] = {
+                "why": "fixture: receipt that names the budget part",
+                "receipt": {"file": "state-log-archive-2026-12.md",
+                            "parts": ["product", "tokens"]}}
+            arm_a = arms_window(7001, [narrative(7002), budget_receipt])
+            LL.FOLD_CARRY_EXEMPT[7002] = {
+                "why": "fixture: part list narrower than the archive summary",
+                "receipt": {"file": "state-log-archive-2026-12.md",
+                            "parts": ["product", "landed"]}}
+            arm_b = arms_window(7001, [narrative(7002), budget_receipt])
+            arm_c = arms_window(7001, [narrative(7003), clean_receipt])
+            LL.FOLD_CARRY_EXEMPT[7004] = {
+                "why": "fixture: no evidence kind recorded"}
+            arm_d = arms_window(7001, [narrative(7004)])
+            LL.FOLD_CARRY_EXEMPT[7005] = {
+                "why": "fixture: inline payload", "inline_payload": payload}
+            arm_e = arms_window(7001, ["R7006 fixture %s" % payload])
+            # asked while the probe entry is still in the table: the SAME
+            # prose on the NAMED round must be admitted.
+            named_e = LL.fold_carry_exemption(
+                7005, ["R7005 fixture %s" % payload], set())
+        finally:
+            LL.FOLD_CARRY_EXEMPT.clear()
+            LL.FOLD_CARRY_EXEMPT.update(shipped)
+
+        check(
+            # a: the recorded list matches the archive's byte for byte, but it
+            #    names the budget part - the R3421 shape, refused by name
+            arm_a["clean"] is False
+            and [(item["round"], item["window"]) for item in arm_a["gaps"]]
+            == [(7002, 7001)]
+            and arm_a["exemptions"] == []
+            and [item["why"] for item in arm_a["exemption_refusals"]]
+            == ["receipt-has-budget"]
+            # b: narrowing the table's list does not help while the summary it
+            #    points at still names the budget part
+            and arm_b["clean"] is False
+            and [item["round"] for item in arm_b["gaps"]] == [7002]
+            and [item["why"] for item in arm_b["exemption_refusals"]]
+            == ["receipt-has-budget"]
+            # c: a receipt is evidence for ONE named round; the same summary
+            #    under an unnamed round excuses nothing
+            and arm_c["clean"] is False
+            and [item["round"] for item in arm_c["gaps"]] == [7003]
+            and arm_c["exemptions"] == []
+            and 7003 not in LL.FOLD_CARRY_EXEMPT
+            # d: no evidence kind is a refusal, not a free pass on prose
+            and arm_d["clean"] is False
+            and [item["why"] for item in arm_d["exemption_refusals"]]
+            == ["no-span-recorded"]
+            # e: the payload prose is not the discriminator - unnamed reds
+            and arm_e["clean"] is False
+            and [item["round"] for item in arm_e["gaps"]] == [7006]
+            and arm_e["exemptions"] == []
+            # f: ... and the NAMED round carrying the same prose is excused,
+            #    the probe entries are gone, and the real tree still reads
+            #    clean with exactly its shipped exemptions
+            and named_e[0] is True
+            and set(LL.FOLD_CARRY_EXEMPT) == set(shipped)
+            and not [key for key in LL.FOLD_CARRY_EXEMPT if key >= 7000]
+            and real_excused["clean"] is True
+            and real_excused["exemption_refusals"] == [],
+            "AC-LGA16 an exemption is refused by name when its receipt names "
+            "a budget part or when it records no evidence kind, and neither a "
+            "budget-free summary nor an inline payload excuses a round the "
+            "table does not name")
+
     finally:
         shutil.rmtree(world, ignore_errors=True)
 
 
 
 def main():
-    print("suite: archive-aware ledger coverage (R2224 AC-LGA1..AC-LGA15)")
+    print("suite: archive-aware ledger coverage (R2224 AC-LGA1..AC-LGA16)")
     run()
     total = PASSES + FAILS
     print("SUITE %s %d/%d criteria"
