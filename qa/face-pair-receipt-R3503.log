@@ -1,0 +1,57 @@
+R3503 face-pair receipt: fourth of the twelve preview history splits
+====================================================================
+face      : apimarket-report-selleranswers
+producer  : src/os/preview_R2120.py
+ownership : git log -1 -- preview/apimarket-report-selleranswers.json
+            -> ce3583ca 2026-10-25 "Add seller-side answered-question ledger
+               (api_seller_answers) ... schema 12->13", which shipped
+               preview_R2120.py + both halves + two qa logs in one commit.
+            html half last committed at 700dd89a (R3288 back-hop channel).
+
+read-only measurements before any edit
+--------------------------------------
+main() arg count   : 0  -> AC-PPR7 would refuse the face as unreproducible
+clock stamping     : only apimarket._now_utc pinned; ledger.now_utc still the
+                     wall clock, so _write_tx would hash a different ts per run
+                     (same defect class R3502 fixed on preview_R2119.py)
+
+change landed (additive only)
+-----------------------------
+src/os/preview_R2120.py
+  * main(out_html=None, out_json=None) - no-argument run still writes the two
+    landed halves
+  * both clocks stamped from the fixture Clock and restored in finally
+tools/face_pair_receipt.py
+  * FACES gains the fourth entry (slug + producer + why)
+
+receipt reading
+---------------
+landed html : 19612 B, schema 13 render
+HEAD render : 21779 B, REPORT_SCHEMA 17
+first diff  : byte 1652 (head, before the channel splice point)
+verdict     : version-drift - explained, NOT excused; history_split stays 12
+
+gates read back
+---------------
+FPR-CHECK VERDICT PASS read_only=True faces=4 one_derivation=0 drift=0
+SUITE PASS 7/7            (src/os/test_face_pair_receipt.py, AC-PPR1..7)
+PPC-CHECK VERDICT PASS    html=106 paired=103 history_split=12
+                          channel_receipt=0 frozen_excused=11 same_commit=6
+                          explained=4 (was 3)
+oldest history split      apimarket-report-refunds 749.7h
+                          (html 700dd89a / json 6fb6c40b)
+state size               44548 B against the 78500 gate
+fold --plan-only         writes_nothing=true
+
+cross-process note
+------------------
+face_pair_receipt --check re-renders every registered face in a fresh process
+and the shipped pair matched byte for byte, so determinism holds here too -
+still measured, not pinned by a criterion (AC-PPR4 bars the tool from
+spawning a process).
+
+untouched
+---------
+no preview page re-derived, no archive or freeze register written, no criterion
+threshold moved. Zero payment capability, no network beyond loopback: the five
+physical pieces still gate every buyer.

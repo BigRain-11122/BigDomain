@@ -26,6 +26,7 @@ import importlib.util
 import io
 import json
 import os
+import re
 import shutil
 import sys
 import tempfile
@@ -65,6 +66,14 @@ FACES = [
         "why": ("third oldest of the twelve splits (742.4h): html last committed at "
                 "700dd89a (the same R3288 back-hop channel), json at d3faa192 (the "
                 "R2119 buyer-question-history producer)"),
+    },
+    {
+        "slug": "apimarket-report-selleranswers",
+        "producer": os.path.join("src", "os", "preview_R2120.py"),
+        "why": ("fourth of the twelve splits: html last committed at 700dd89a (the "
+                "same R3288 back-hop channel), json at ce3583ca, which shipped "
+                "preview_R2120.py in the same commit (seller answered-question "
+                "ledger, schema 12->13)"),
     },
 ]
 
@@ -355,11 +364,19 @@ def dumps(payload):
     return json.dumps(payload, indent=2, sort_keys=True, ensure_ascii=False) + "\n"
 
 
+ROUND_LABEL = re.compile(r"Tick \d+")
+
+
 def normalized(data):
     text = data.decode("utf-8") if isinstance(data, bytes) else data
     try:
         obj = json.loads(text)
     except Exception:
+        # The page prints the round it was derived at; that label is not a
+        # measurement, so --check ignores it the same way the census page does
+        # (R3499 precedent) - every per-face size and digest is still compared
+        # byte for byte, so a tampered reading is never excused by this.
+        text = ROUND_LABEL.sub("Tick <volatile>", text)
         return "\n".join(line.rstrip() for line in text.replace("\r\n", "\n").split("\n"))
     for key in VOLATILE:
         if key in obj:

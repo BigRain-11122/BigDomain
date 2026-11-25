@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-26T06:56:22+08:00",
+  "generated_at": "2026-11-26T07:12:00+08:00",
   "law": "a split is claimed only when the two halves' last commits differ; an mtime gap alone is published as a bucket, never as a split",
   "oldest_split": {
     "delta_hours": 749.7,
@@ -337,6 +337,9 @@
         "sha": "30421534"
       },
       "name": "apimarket-report-selleranswers",
+      "pair_receipt": "version-drift",
+      "receipt_bound": true,
+      "receipt_detail": "landed page is a schema 13 render and the renderer is at schema 17, so no re-render at HEAD can reproduce it; explained, not excused: first difference at byte 1652",
       "verdict": "history-split"
     },
     {
@@ -800,18 +803,18 @@
     {
       "delta_seconds": 0,
       "html": {
-        "bytes": 4845,
-        "commit": "c6d88b3c",
-        "mtime": "2026-11-26T06:54:53+08:00",
-        "mtime_epoch": 1795647293,
-        "sha": "FDCC95E9"
+        "bytes": 5950,
+        "commit": "d168ca47",
+        "mtime": "2026-11-26T07:11:24+08:00",
+        "mtime_epoch": 1795648284,
+        "sha": "2BB4D2B4"
       },
       "json": {
-        "bytes": 5563,
-        "commit": "c6d88b3c",
-        "mtime": "2026-11-26T06:54:53+08:00",
-        "mtime_epoch": 1795647293,
-        "sha": "DFDBC00A"
+        "bytes": 7343,
+        "commit": "d168ca47",
+        "mtime": "2026-11-26T07:11:24+08:00",
+        "mtime_epoch": 1795648284,
+        "sha": "6F23A1FB"
       },
       "name": "face-pair-receipt",
       "verdict": "same-run"
@@ -2027,13 +2030,13 @@
       "verdict": "same-run"
     }
   ],
-  "round": 3501,
+  "round": 3503,
   "same_run_seconds": 120,
   "self_excluded": "preview-pair-census",
   "source": "tools/preview_pair_census.py",
   "totals": {
     "channel-receipt": 0,
-    "explained": 3,
+    "explained": 4,
     "frozen-excused": 11,
     "history-split": 12,
     "html": 106,

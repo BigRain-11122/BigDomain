@@ -86,17 +86,46 @@
       "spliced_html_sha256": "0658603dcdef78810c4863f34385eb0039b909e3a5a2831c3822272abb8ed6cb",
       "verdict": "version-drift",
       "why": "third oldest of the twelve splits (742.4h): html last committed at 700dd89a (the same R3288 back-hop channel), json at d3faa192 (the R2119 buyer-question-history producer)"
+    },
+    {
+      "channel_block_bytes": 718,
+      "channel_how": "inserted",
+      "current_schema_version": 17,
+      "detail": "landed page is a schema 13 render and the renderer is at schema 17, so no re-render at HEAD can reproduce it; explained, not excused: first difference at byte 1652",
+      "first_diff_context": "d from the read faces</div>\n<div class=\"marker\">AIGC / sandbox artifact: synthet",
+      "first_diff_offset": 1652,
+      "json_same_as_render": false,
+      "landed_carries_schema_badge": false,
+      "landed_html": "preview/apimarket-report-selleranswers.html",
+      "landed_html_bytes": 19612,
+      "landed_html_sha256": "380d1ead0976922ea8b042755bc74472fb66ee12750d9f3bbcfab58a1886c1ff",
+      "landed_json": "preview/apimarket-report-selleranswers.json",
+      "landed_json_bytes": 31520,
+      "landed_json_sha256": "5167bf23b97e5eca89f7391d00a8729d867e9bfce13dfeba785423e16a0a717b",
+      "landed_schema_version": 13,
+      "producer": "src/os/preview_R2120.py",
+      "raw_first_diff_offset": 1652,
+      "rendered_html_bytes": 21779,
+      "rendered_html_sha256": "9ce9718c9d2b519ba1d616b7cfb4c8e89909204dd791d4ece25918b49bd4abd9",
+      "rendered_json_bytes": 34967,
+      "rendered_json_sha256": "c5c9261120ae83eee5d12e2ed1c581285108237ebfb64ed954b10d8eb5a13234",
+      "slug": "apimarket-report-selleranswers",
+      "splice_offset": 21765,
+      "spliced_html_bytes": 22497,
+      "spliced_html_sha256": "a9731a9c5c896ce419927d7470e8be45ae1c18e1f57e4b0336fc41ec82f0e77d",
+      "verdict": "version-drift",
+      "why": "fourth of the twelve splits: html last committed at 700dd89a (the same R3288 back-hop channel), json at ce3583ca, which shipped preview_R2120.py in the same commit (seller answered-question ledger, schema 12->13)"
     }
   ],
-  "generated_at": "2026-11-26T06:54:53+08:00",
+  "generated_at": "2026-11-26T07:11:24+08:00",
   "law": "a history split is excused for one face only when the producer's own html, plus the shipped post-render channel, reproduces the landed html byte for byte",
-  "round": 3501,
+  "round": 3503,
   "source": "tools/face_pair_receipt.py",
   "totals": {
     "drift": 0,
-    "faces": 3,
+    "faces": 4,
     "one_derivation": 0,
     "unreproducible": 0,
-    "version_drift": 3
+    "version_drift": 4
   }
 }

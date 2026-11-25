@@ -41,7 +41,7 @@ class Clock(object):
         self.stamp = stamp
 
 
-def main():
+def main(out_html=None, out_json=None):
     tmp = tempfile.mkdtemp(prefix="amsa-preview-")
     db_path = os.path.join(tmp, "preview.db")
     with open(os.path.join(BASE, "config.json"), "rb") as fh:
@@ -56,7 +56,13 @@ def main():
 
     clock = Clock("2026-10-25T08:00:00Z")
     origin = A._now_utc
+    # The ledger fills ts_utc from its own clock when a caller passes none and
+    # compute_tx_id hashes that ts, so the page was a function of the wall clock
+    # rather than of its fixtures alone (R3502 precedent). Stamping both clocks
+    # keeps a no-argument run byte-identical apart from the reproducible digests.
+    origin_ledger = L.now_utc
     A._now_utc = clock.now_utc
+    L.now_utc = clock.now_utc
     try:
         led.mint_to_pool("pool:reserve", 20000, "PREV-A", "settlement")
         led.mint_to_pool("pool:share", 20000, "PREV-S", "settlement")
@@ -100,10 +106,10 @@ def main():
         am.delist_api("usr:dana", ids["gamma"])
         report = R.collect(am)
         html = R.render_html(report)
-        html_path = os.path.join(ROOT, "preview",
-                                 "apimarket-report-selleranswers.html")
-        json_path = os.path.join(ROOT, "preview",
-                                 "apimarket-report-selleranswers.json")
+        html_path = out_html or os.path.join(
+            ROOT, "preview", "apimarket-report-selleranswers.html")
+        json_path = out_json or os.path.join(
+            ROOT, "preview", "apimarket-report-selleranswers.json")
         with io.open(html_path, "w", encoding="utf-8",
                      newline="\n") as fh:
             fh.write(html)
@@ -122,6 +128,7 @@ def main():
                  "answered questions" in html))
     finally:
         A._now_utc = origin
+        L.now_utc = origin_ledger
         am.close()
         dk.close()
         metered.close()
