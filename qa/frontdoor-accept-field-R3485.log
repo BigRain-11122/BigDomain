@@ -1,0 +1,16 @@
+R3485 Accept field layer (RFC 9110 sec.12.5.1) - every reading below was taken before any edit
+probe tmp/probe-R3485.py, twenty-four raw shapes over the factory Handler on a temporary port
+before the edit (gaps): GET /preview/index.html with Accept: application/json answered 200 with all 55644B of HTML; text/html;q=0 answered 200 with the whole page the reader had just refused; */*;q=0 answered 200 "ok"; two Accept lines image/png + text/html answered 200 HTML without judging either
+measured and already legal, kept as they were: Upgrade websocket with Connection: Upgrade 200; Upgrade h2c alone 200; two Upgrade lines 200; an empty Upgrade 200; Connection: upgrade with no Upgrade field 200; HTTP/1.0 carrying Upgrade 200; two pipelined healthz both answered; Connection: Upgrade, close closes; Via single, list, two lines and the garbage (,) all 200 and never echoed; TE: trailers 200; a 417 closes and the pipelined second request is not answered, which is the door's reads-no-body law
+landed src/sandbox/frontdoor.py: _acceptable_type scores every media range in the joined list (exact 3, type wildcard 2, */* 1, most specific wins, q read with an unreadable q falling back to the range default) and _accept_refusal answers 406 by name; _face and _serve_preview judge it before any precondition or range, so no 304 and no 206 names a representation the reader refused; 404/405/400/417 keep their own precedence; the answer body is "406 not acceptable"; _send now names both selectors (Vary: Accept and Vary: Accept-Encoding), the older literal untouched
+SUITE PASS 24/24 (AC-FDPV24 six arms green on their first full run)
+control m1 (q=0 read as an acceptance): FAIL AC-FDPV24 a-q0, d-specific-wins, e-head, e-10, SUITE FAIL 1/24
+control m2 (first Accept line only): FAIL AC-FDPV24 d-both and f-missing, SUITE FAIL 1/24
+frontdoor.py sha256 a278453607edd9191b09cb656010cd5eb666cc65981080a80a3e3943139f4f3d restored byte-identically after both controls; suite re-read SUITE PASS 24/24
+registry frontdoor-preview-pages declared criteria 23 -> 24
+matrix WRITTEN 85440 bytes 828 rows, then DOC-CURRENT with the frontdoor row reading 24
+census files=830 pins=13 unreadable=0
+first yuan chain VERDICT PASS legs=2 entries=2 tx=1 reconcile_rc=0 read_only=True html=4403B
+deliverable index VERDICT PASS 23/23 fingerprint=26d1481e746394b3
+face sweep VERDICT PASS 13/13 fingerprint=78600cab52bd381e then --check 21/21
+honest: Upgrade and Via were measured and need no change - an origin server may ignore both - so this round adds no page and no reading; it closes one wire law: a reader that names only types this door does not serve is told 406 instead of being handed a page it refused

@@ -9359,6 +9359,59 @@ def _accepts_gzip(value):
     return wildcard is not None and wildcard > 0
 
 
+def _acceptable_type(value, ctype):
+    """R3485: does an Accept list admit the representation this face serves?
+
+    Measured before this landed: the door never read Accept at all, so a
+    reader that refused text/html with q=0, or that named only
+    application/json, was handed the whole page anyway (RFC 9110 sec.12.5.1
+    asks a 406 when no available representation is acceptable). A media range
+    matches by type/subtype, by type/*, or by */*; the most specific match
+    wins, so an explicit q=0 for this type beats a later */* that would
+    accept it. Media-range parameters other than q are not implemented by
+    this door -- it serves one representation per type -- and a q the door
+    cannot read falls back to the range's default weight rather than guessing
+    a refusal, the same law Accept-Encoding already follows. A field with no
+    member at all carries no range, and no range accepts everything.
+    """
+    if not value or not value.strip():
+        return True
+    base = ctype.split(";", 1)[0].strip().lower()
+    if "/" not in base:
+        return True
+    main = base.split("/", 1)[0]
+    best_spec = None
+    best_weight = 0.0
+    for piece in value.split(","):
+        span = piece.strip()
+        if not span:
+            continue
+        media, _, params = span.partition(";")
+        media = media.strip().lower()
+        weight = 1.0
+        for param in params.split(";"):
+            name, _, raw = param.partition("=")
+            if name.strip().lower() == "q":
+                try:
+                    weight = float(raw.strip())
+                except ValueError:
+                    weight = 1.0
+        if media == base:
+            spec = 3
+        elif media == main + "/*":
+            spec = 2
+        elif media == "*/*":
+            spec = 1
+        else:
+            continue
+        if best_spec is None or spec > best_spec:
+            best_spec = spec
+            best_weight = weight
+    if best_spec is None:
+        return False
+    return best_weight > 0
+
+
 def _etag(body):
     """R3464: one strong validator for the bytes this door serves.
 
@@ -9714,6 +9767,12 @@ class Handler(BaseHTTPRequestHandler):
             self.send_response(code)
             self.send_header("Content-Type", ctype)
             self.send_header("Cache-Control", "no-store")
+            # R3485: the door now selects on Accept as well, so every answer
+            # names both selectors and a shared cache cannot hand a reader the
+            # type it refused. The two lines are one comma list (RFC 9110
+            # sec.12.5.5); the older literal stays because the law it states
+            # is still true.
+            self.send_header("Vary", "Accept")
             self.send_header("Vary", "Accept-Encoding")
             for name, value in _security_headers(ctype):
                 self.send_header(name, value)
@@ -9870,6 +9929,14 @@ class Handler(BaseHTTPRequestHandler):
         ctype = STATIC_EXTS.get(os.path.splitext(full)[1].lower())
         if ctype is None or not os.path.isfile(full):
             return self._send(404, "text/plain", b"404 not found", head_only)
+        # R3485: the file exists and its type is known, so the shelf now has a
+        # representation to offer -- and refuses it 406 when the reader named
+        # no type it may be served as. 404 keeps precedence: a missing page is
+        # a missing page whatever the reader accepts.
+        refused = self._accept_refusal(ctype)
+        if refused is not None:
+            return self._send(406, "text/plain; charset=utf-8", refused,
+                              head_only)
         with open(full, "rb") as handle:
             identity = handle.read()
         # R3465: negotiation runs before any condition, so the validator names
@@ -9988,6 +10055,12 @@ class Handler(BaseHTTPRequestHandler):
         If-Unmodified-Since never move an answer on them.
         """
         etag = _etag(body)
+        # R3485: a representation the reader refused is never offered, and the
+        # in-memory faces answer the same 406 as the shelf.
+        refused = self._accept_refusal(ctype)
+        if refused is not None:
+            return self._send(406, "text/plain; charset=utf-8", refused,
+                              head_only)
         if self._precondition_failed(etag, None):
             return self._send(412, "text/plain", b"precondition failed",
                               head_only, (), etag)
@@ -10061,6 +10134,27 @@ class Handler(BaseHTTPRequestHandler):
         never invites one.
         """
         return True
+
+    def _accept_refusal(self, ctype):
+        """R3485: the 406 answer for a representation the reader refused, or None.
+
+        Accept names the media types a reader is willing to take (RFC 9110
+        sec.12.5.1), and this door never consulted it: a reader that refused
+        text/html with q=0, or that named only application/json, was handed
+        the whole page anyway. The field is a comma list like every other one
+        here, so it is read through _list_header and judged once, before any
+        condition or range -- a 304 or a 206 also names a representation, and
+        the door must not offer one the reader already refused. A message
+        error keeps its own answer first (400, 404, 405, 417), and a 406 is
+        not a message error, so it leaves the connection exactly as a 200
+        would: alive on 1.1, and closed only when the request declared a body.
+        """
+        joined = _list_header(self.headers, "Accept")
+        if joined is None:
+            return None
+        if _acceptable_type(joined, ctype):
+            return None
+        return b"406 not acceptable\n"
 
     def _host_refusal(self):
         """R3471: the 400 answer for a malformed Host, or None.

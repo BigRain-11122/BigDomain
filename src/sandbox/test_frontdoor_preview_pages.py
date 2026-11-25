@@ -107,6 +107,14 @@ answers 501 (200 was the measured bug -- a coding this door cannot decode)
 while chunked anywhere but last answers 400, a repeated Connection line that
 says close really closes, and every single-line framing and persistence
 answer did not move.
+AC-FDPV24 (six arms, R3485) pins the media-type negotiation: a type the
+reader refused with q=0, or any set of types that admits no shipped
+representation, answers 406 by name with the door's policy and no validator
+(200 was the measured bug -- the whole page came back anyway), wildcards,
+type wildcards, parameters and empty list members admit the page, two Accept
+lines are one list with the most specific range winning, and every delivered
+answer -- plus the message-error precedence and the 1.1 connection -- did not
+move.
 
 Usage: python test_frontdoor_preview_pages.py
 Exit: 0 = SUITE PASS, 2 = FAIL.
@@ -138,7 +146,7 @@ RESULTS = []
 
 # R3475: one place states how many criteria the registry must
 # declare, so adding a criterion cannot leave eleven stale literals.
-DECLARED_TAG = "23)"
+DECLARED_TAG = "24)"
 
 
 def report(name, bad, detail=""):
@@ -3165,6 +3173,155 @@ def main():
             block23r = handle.read().split('"' + ROW + '"', 1)[-1][:220]
         if DECLARED_TAG not in block23r:
             bad23.append("f-declared")
+        # R3485 measured before the edit (tmp/probe-R3485.py, twenty-four raw
+        # shapes): Accept was never read at all, so a reader that refused
+        # text/html with q=0, or that named only application/json, was handed
+        # the whole page (RFC 9110 sec.12.5.1 asks a 406 when no available
+        # representation is acceptable). Upgrade and Via were measured too and
+        # are already legal -- an origin server may ignore both. The field is
+        # now one joined list judged before any condition or range.
+        bad24 = []
+        page24 = "/preview/index.html"
+        refused24 = b"406 not acceptable\n"
+
+        def accept24(tag, accept_lines, path=page24, method="GET",
+                     version="HTTP/1.1", second=False, body=None):
+            """One raw request carrying Accept lines, graded on the wire."""
+            payload = ["%s %s %s" % (method, path, version),
+                       "Host: 127.0.0.1"]
+            for item in accept_lines:
+                payload.append("Accept: " + item)
+            if body is not None:
+                payload.append("Content-Length: %d" % len(body))
+                payload.append("Connection: close")
+            payload.append("")
+            message = ("\r\n".join(payload) + "\r\n").encode("latin-1")
+            message += body or b""
+            if second:
+                message += ("%s %s %s\r\nHost: 127.0.0.1\r\n"
+                            % (method, path, version)).encode("latin-1")
+                for item in accept_lines:
+                    message += ("Accept: " + item + "\r\n").encode("latin-1")
+                message += b"\r\n"
+            return raw_request(port, message)
+
+        def refused24_ok(tag, blob, expect_close):
+            status24, fields24, body24 = wire_reply(blob)
+            if " 406 " not in status24:
+                bad24.append("%s-%r" % (tag, status24))
+                return
+            if body24 != refused24:
+                bad24.append("%s-body-%r" % (tag, body24[:26]))
+            if fields24.get("content-length") != str(len(refused24)):
+                bad24.append("%s-length-%r" % (tag,
+                                               fields24.get("content-length")))
+            for name24 in ("etag", "last-modified", "content-range"):
+                if fields24.get(name24):
+                    bad24.append("%s-%s" % (tag, name24))
+            for name24 in ("x-content-type-options", "referrer-policy",
+                           "content-security-policy", "permissions-policy",
+                           "cross-origin-resource-policy"):
+                if not fields24.get(name24):
+                    bad24.append("%s-policy-%s" % (tag, name24))
+            if fields24.get("server") != "BigDomain":
+                bad24.append("%s-server-%r" % (tag, fields24.get("server")))
+            if b"Vary: Accept\r\n" not in blob:
+                bad24.append("%s-vary-accept" % tag)
+            if b"Vary: Accept-Encoding\r\n" not in blob:
+                bad24.append("%s-vary-coding" % tag)
+            closed = fields24.get("connection", "").lower() == "close"
+            if closed != expect_close:
+                bad24.append("%s-close-%r" % (tag, fields24.get("connection")))
+
+        # ---- a: a type the reader refused with q=0 is never offered --------
+        refused24_ok("a-q0", accept24("a-q0", ["text/html;q=0"]), False)
+        # ---- b: no acceptable representation at all -----------------------
+        refused24_ok("b-json", accept24("b-json", ["application/json"]), False)
+        refused24_ok("b-plain", accept24("b-plain", ["text/plain"]), False)
+        refused24_ok("b-health-plain",
+                     accept24("b-health-plain", ["application/json"],
+                              path="/healthz"), False)
+        # ---- c: wildcards and specific ranges admit the page ---------------
+        for tag24 in ("c-star", "c-type", "c-exact", "c-parameter",
+                      "c-empty-members", "c-tiny-q"):
+            blob24 = accept24(tag24, {
+                "c-star": ["*/*"],
+                "c-type": ["text/*"],
+                "c-exact": ["text/html"],
+                "c-parameter": ["text/html;level=1"],
+                "c-empty-members": [", ,text/html"],
+                "c-tiny-q": ["text/html;q=0.001"],
+            }[tag24])
+            status24, _f24, body24 = wire_reply(blob24)
+            if " 200 " not in status24 or body24 != disk23:
+                bad24.append("%s-%r-%d" % (tag24, status24, len(body24)))
+        # ---- d: two Accept lines are one list, most specific wins ----------
+        blob24 = accept24("d-both", ["image/png", "text/html"])
+        status24, _f24, body24 = wire_reply(blob24)
+        if " 200 " not in status24 or body24 != disk23:
+            bad24.append("d-both-%r" % status24)
+        refused24_ok("d-neither", accept24("d-neither",
+                                           ["image/png", "application/json"]),
+                     False)
+        # an explicit q=0 for the served type beats a wildcard that accepts it
+        refused24_ok("d-specific-wins",
+                     accept24("d-specific-wins", ["text/html;q=0", "*/*"]),
+                     False)
+        # ---- e: no field and the delivered answers did not move ------------
+        blob24 = accept24("e-none", [])
+        status24, _f24, body24 = wire_reply(blob24)
+        if " 200 " not in status24 or body24 != disk23:
+            bad24.append("e-none-%r" % status24)
+        blob24 = accept24("e-empty", [""])
+        status24, _f24, body24 = wire_reply(blob24)
+        if " 200 " not in status24 or body24 != disk23:
+            bad24.append("e-empty-%r" % status24)
+        # a message error keeps its own answer first, whatever Accept says
+        blob24 = accept24("e-404", ["application/json"],
+                           path="/preview/no-such-face.html")
+        status24, _f24, _b24 = wire_reply(blob24)
+        if " 404 " not in status24:
+            bad24.append("e-404-%r" % status24)
+        blob24 = accept24("e-405", ["application/json"], method="POST")
+        status24, _f24, _b24 = wire_reply(blob24)
+        if " 405 " not in status24:
+            bad24.append("e-405-%r" % status24)
+        # HEAD answers the same status, type and length as GET
+        blob24 = accept24("e-head", ["text/html;q=0"], method="HEAD",
+                           body=b"")
+        status24, fields24, body24 = wire_reply(blob24)
+        if " 406 " not in status24:
+            bad24.append("e-head-%r" % status24)
+        elif body24:
+            bad24.append("e-head-body-%d" % len(body24))
+        elif fields24.get("content-length") != str(len(refused24)):
+            bad24.append("e-head-length-%r" % fields24.get("content-length"))
+        # 406 is not a message error: a 1.1 connection carries the next one
+        blob24 = accept24("e-pipeline", ["application/json"], second=True)
+        if blob24.count(b"HTTP/1.1 406") != 2:
+            bad24.append("e-pipeline-%d" % blob24.count(b"HTTP/1.1 406"))
+        # HTTP/1.0 judges Accept too, and still names close
+        refused24_ok("e-10", accept24("e-10", ["text/html;q=0"],
+                                      version="HTTP/1.0"), True)
+        # ---- f: dialect, tokens on disk, declared count -------------------
+        with io.open(MODULE, "rb") as handle:
+            raw24 = handle.read()
+        if raw24[:3] == b"\xef\xbb\xbf" or b"\r\n" in raw24:
+            bad24.append("f-module-dialect")
+        try:
+            text24 = raw24.decode("utf-8")
+            text24.encode("ascii")
+        except (UnicodeDecodeError, UnicodeEncodeError):
+            bad24.append("f-module-not-ascii")
+            text24 = raw24.decode("utf-8", "replace")
+        for token24 in ("def _accept_refusal", "def _acceptable_type",
+                        '_list_header(self.headers, "Accept")'):
+            if token24 not in text24:
+                bad24.append("f-missing-%s" % token24.split()[-1])
+        with io.open(REGISTRY, encoding="utf-8") as handle:
+            block24r = handle.read().split('"' + ROW + '"', 1)[-1][:220]
+        if "24)" not in block24r:
+            bad24.append("f-declared")
     finally:
         srv.shutdown()
         srv.server_close()
@@ -3192,6 +3349,7 @@ def main():
     report("AC-FDPV21", bool(bad21), ",".join(bad21))
     report("AC-FDPV22", bool(bad22), ",".join(bad22))
     report("AC-FDPV23", bool(bad23), ",".join(bad23))
+    report("AC-FDPV24", bool(bad24), ",".join(bad24))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:
