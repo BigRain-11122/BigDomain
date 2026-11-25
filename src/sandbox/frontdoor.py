@@ -9506,17 +9506,20 @@ def _speaks_11(version):
         return False
 
 
-def _persistent(version, conntype):
+def _persistent(version, tokens):
     """R3473: may this connection carry another request?
 
     HTTP/1.1 is persistent unless the peer said close (RFC 9112 sec.9.3);
     HTTP/1.0 is persistent only when the peer asked for it and the answer
     says so (RFC 7230 sec.6.3). A request that declared a body closes in
     both cases -- see _send -- because this door never reads one.
+    R3481: Connection is a comma list (RFC 9110 sec.5.3), so the caller
+    passes every token the peer wrote on every line. close anywhere wins,
+    and a 1.0 peer still has to ask for keep-alive explicitly.
     """
     if _speaks_11(version):
-        return conntype != "close"
-    return conntype == "keep-alive"
+        return "close" not in tokens
+    return "keep-alive" in tokens and "close" not in tokens
 
 
 def _host_value_ok(value):
@@ -10110,12 +10113,34 @@ class Handler(BaseHTTPRequestHandler):
             self._send(refused[0], "text/plain; charset=utf-8", refused[1],
                        close=True)
             return False
-        transfer = self.headers.get("Transfer-Encoding")
+        # R3481: Transfer-Encoding is a comma list (RFC 9110 sec.5.3) and
+        # arrived on more than one line in practice. Reading only the first
+        # line answered 200 to "chunked" followed by "gzip" -- a list whose
+        # final coding is not chunked, so the body length cannot be known and
+        # RFC 9112 sec.6.3 owes a 400 -- and answered 200 to "gzip" followed
+        # by "chunked", a coding this door cannot decode (sec.6.1 asks 501).
+        # The conflict with Content-Length is still judged first, because the
+        # smuggling pair is a 400 whatever the codings say.
+        transfer = _list_header(self.headers, "Transfer-Encoding")
         length = self.headers.get("Content-Length")
         if transfer is not None and length is not None:
             self._send(400, "text/plain; charset=utf-8",
                        b"400 conflicting body framing\n", close=True)
             return False
+        if transfer is not None:
+            codings = []
+            for piece in transfer.split(","):
+                token = piece.split(";", 1)[0].strip().lower()
+                if token:
+                    codings.append(token)
+            if not codings or codings[-1] != "chunked":
+                self._send(400, "text/plain; charset=utf-8",
+                           b"400 unsupported transfer coding\n", close=True)
+                return False
+            if len(codings) > 1:
+                self._send(501, "text/plain; charset=utf-8",
+                           b"501 unsupported transfer coding\n", close=True)
+                return False
         lengths = set()
         for raw in (self.headers.get_all("Content-Length") or []):
             for piece in raw.split(","):
@@ -10138,10 +10163,20 @@ class Handler(BaseHTTPRequestHandler):
         # A 1.1 peer keeps the connection unless it said close; a 1.0 peer
         # keeps it only when it asked; and any request that declared a body
         # closes, because the bytes it promised were never read.
-        conntype = (self.headers.get("Connection") or "").strip().lower()
+        # R3481: Connection is a comma list too, and it arrived on more than
+        # one line. Reading only the first line kept a connection alive after
+        # the peer said close on the second line; the joined list is graded
+        # once, so close anywhere wins.
+        conns = _list_header(self.headers, "Connection")
+        tokens = []
+        if conns:
+            for piece in conns.split(","):
+                token = piece.strip().lower()
+                if token:
+                    tokens.append(token)
         self.close_connection = (
             self._request_body_declared or
-            not _persistent(self.request_version, conntype))
+            not _persistent(self.request_version, tokens))
         return True
 
     # R3468: every standard verb this door does not implement is refused by

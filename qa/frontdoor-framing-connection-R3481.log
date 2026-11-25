@@ -1,0 +1,44 @@
+R3481 evidence - repeated Transfer-Encoding and Connection lines are one list (2026-11-26)
+scope: src/sandbox/frontdoor.py, src/sandbox/test_frontdoor_preview_pages.py, src/sandbox/reconcile_all.py
+criterion: AC-FDPV22 (a/b/c/d/e/f), PIN row in src/os/backlog.md written before any edit
+before: parse_request read self.headers.get("Transfer-Encoding") and
+  self.headers.get("Connection"), so only the first line spoke
+  measured (tmp/probe-R3481.py, seventeen raw shapes):
+  te gzip+chunked -> 200 whole face (joined list gzip, chunked: gzip is a coding this
+    door cannot decode, RFC 9112 sec.6.1 asks 501)
+  te chunked+gzip -> 200 whole face (joined list chunked, gzip: chunked is not final,
+    sec.6.3 owes 400 and a close)
+  te single gzip -> 200 and single chunked, gzip -> 200 (same law, never judged)
+  te chunked+cl and gzip+chunked+cl -> 400 conflicting body framing (already delivered)
+  conn keep+close -> two requests answered, no Connection: close on the wire
+  conn close+keep -> closed after one (right by accident), single keep-alive, close ->
+    kept the connection alive
+after: both fields are read through _list_header(headers, name) and graded once
+  a: gzip+chunked and single gzip, chunked -> 501, body names 501, answer closes
+  b: chunked+gzip, single chunked, gzip, single gzip, empty value -> 400 and close
+  c: single chunked -> 200 with the 55185 disk bytes and Connection: close;
+     chunked+cl and gzip+chunked+cl still 400 conflicting body framing (the conflict
+     is judged before the codings); a refusal carries nosniff, Permissions-Policy
+     camera=() and Server: BigDomain
+  d: keep-alive+close, close+keep-alive and single keep-alive, close -> one answer,
+     Connection: close on it, and the second request is never answered
+  e: 1.1 no header -> three pipelined requests each 200 with no close; 1.1 close ->
+     closed; 1.0 keep-alive -> two answers, first says Connection: keep-alive;
+     1.0 no header -> Connection: close
+  f: module ASCII / bare LF / no BOM; _list_header(self.headers, "Transfer-Encoding") and
+     _list_header(self.headers, "Connection") on disk, both old self.headers.get readers
+     gone; registry declared 21->22
+suite: SUITE PASS 22/22, AC-FDPV22 green on its first accepted run
+controls, each run alone and restored byte-identically (frontdoor.py sha256
+  02205c616eb5a94525bfa8564bfd58b6f5da6dbd41a04100d33ed0b02a9f542c before and after):
+  m1 Transfer-Encoding back to the first-line reader -> a-split, b-split and the f tokens red
+  m2 Connection back to the first-line reader -> d-keep-close and the f tokens red
+  restored module re-read SUITE PASS 22/22 after every control
+closeout: matrix 85220 bytes 826 rows DOC-CURRENT; census readable 826/826 unparsed 0;
+  entry index 23/23 fingerprint f08c31c2b8ecf819; chain legs=2 entries=2 tx=1
+  reconcile_rc=0 zero_delta=True html=4403B json=4806B;
+  sweep VERDICT PASS 13/13 fingerprint e209912f91b4078b then --check 21/21
+honest: adds no page, no reading, no business semantics; it answers two list fields the
+  door had been reading one line at a time; the five physical pieces are still missing,
+  so buyers still cannot pay, and the door answers loopback traffic only
+note: after the export refresh the pair converged at entry index 23/23 fingerprint d4ec4b70443fd986 and sweep 13/13 fingerprint a1d35a9b5c3ca979 with --check 21/21; the numbers above were read before that refresh and were true when written; this file then grew past the byte count the archived evidence line quotes because this note was appended after that line was written

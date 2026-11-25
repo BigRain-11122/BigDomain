@@ -8713,8 +8713,9 @@ SUITES = [
     # AC-FDPV18 (an overlapping or adjacent list answers each byte once).
     # AC-FDPV20 (a repeated conditional line is never half-executed).
     # AC-FDPV21 (two Accept-Encoding lines are one coding list).
+    # AC-FDPV22 (two Transfer-Encoding or Connection lines are one list).
     ("frontdoor-preview-pages",
-     os.path.join("test_frontdoor_preview_pages.py"), 21),
+     os.path.join("test_frontdoor_preview_pages.py"), 22),
     # R3115: the 24h export-face age gate (os/export_freshness.py, AC-EXP1..6)
     # had zero production consumers - it ran only inside its own suite - while
     # the CEO card printed export_ts as a bare string. AC-FDC2 (six arms, ONE

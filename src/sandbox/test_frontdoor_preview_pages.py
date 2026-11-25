@@ -101,6 +101,12 @@ are one coding list, so gzip named only on the second line is served (200
 was the measured bug -- identity came back), a q=0 on any line refuses that
 coding, a wildcard on any line accepts gzip, and every single-line coding
 answer did not move.
+AC-FDPV22 (six arms, R3481) pins the framing and connection lists: two
+Transfer-Encoding lines are one coding list, so gzip applied before chunked
+answers 501 (200 was the measured bug -- a coding this door cannot decode)
+while chunked anywhere but last answers 400, a repeated Connection line that
+says close really closes, and every single-line framing and persistence
+answer did not move.
 
 Usage: python test_frontdoor_preview_pages.py
 Exit: 0 = SUITE PASS, 2 = FAIL.
@@ -132,7 +138,7 @@ RESULTS = []
 
 # R3475: one place states how many criteria the registry must
 # declare, so adding a criterion cannot leave eleven stale literals.
-DECLARED_TAG = "21)"
+DECLARED_TAG = "22)"
 
 
 def report(name, bad, detail=""):
@@ -2838,6 +2844,195 @@ def main():
             block21r = handle.read().split('"' + ROW + '"', 1)[-1][:220]
         if DECLARED_TAG not in block21r:
             bad21.append("f-declared")
+        # R3481 measured before the edit (tmp/probe-R3481.py, seventeen raw
+        # shapes): Transfer-Encoding and Connection reached the door through
+        # self.headers.get, so only the first line spoke. "chunked" followed
+        # by "gzip" answered 200 although the final coding was not chunked;
+        # "gzip" followed by "chunked" answered 200 although this door cannot
+        # decode gzip; and a Connection list saying close on its second line
+        # left the connection open. Both fields are comma lists (RFC 9110
+        # sec.5.3), so the door now joins the lines and grades the list once.
+        bad22 = []
+        page22 = "/preview/index.html"
+        with io.open(os.path.join(PREVIEW, "index.html"), "rb") as handle:
+            disk22 = handle.read()
+
+        def framed22(lines):
+            """One raw request with its own framing lines, graded on the wire."""
+            payload = ["GET " + page22 + " HTTP/1.1", "Host: 127.0.0.1"]
+            payload.extend(lines)
+            payload.extend(["Connection: close", "", ""])
+            return wire_reply(raw_request(
+                port, "\r\n".join(payload).encode("latin-1")))
+
+        # ---- a: two coding lines are one list, and gzip needs 501 ---------
+        for tag22, lines22 in (
+                ("a-split", ["Transfer-Encoding: gzip",
+                             "Transfer-Encoding: chunked"]),
+                ("a-one-line", ["Transfer-Encoding: gzip, chunked"])):
+            status22, fields22, body22 = framed22(lines22)
+            if " 501 " not in status22:
+                bad22.append("%s-%r" % (tag22, status22))
+            elif b"501" not in body22:
+                bad22.append("%s-body" % tag22)
+            elif fields22.get("connection", "").lower() != "close":
+                bad22.append("%s-close-%r" % (tag22,
+                                              fields22.get("connection")))
+        # ---- b: a list whose final coding is not chunked is a 400 ---------
+        for tag22, lines22 in (
+                ("b-split", ["Transfer-Encoding: chunked",
+                             "Transfer-Encoding: gzip"]),
+                ("b-one-line", ["Transfer-Encoding: chunked, gzip"]),
+                ("b-no-chunked", ["Transfer-Encoding: gzip"]),
+                ("b-empty", ["Transfer-Encoding:"])):
+            status22, fields22, body22 = framed22(lines22)
+            if " 400 " not in status22:
+                bad22.append("%s-%r" % (tag22, status22))
+            elif fields22.get("connection", "").lower() != "close":
+                bad22.append("%s-close-%r" % (tag22,
+                                              fields22.get("connection")))
+        # ---- c: every delivered framing answer still reads as it did ------
+        status22, fields22, body22 = framed22(["Transfer-Encoding: chunked"])
+        if " 200 " not in status22 or body22 != disk22:
+            bad22.append("c-chunked-%r-%d" % (status22, len(body22)))
+        elif fields22.get("connection", "").lower() != "close":
+            bad22.append("c-chunked-close-%r" % fields22.get("connection"))
+        for tag22, lines22 in (
+                ("c-cl", ["Transfer-Encoding: chunked",
+                          "Content-Length: 5"]),
+                ("c-cl-split", ["Transfer-Encoding: gzip",
+                                "Transfer-Encoding: chunked",
+                                "Content-Length: 5"])):
+            status22, fields22, body22 = framed22(lines22)
+            if " 400 " not in status22 or \
+                    b"conflicting body framing" not in body22:
+                bad22.append("%s-%r" % (tag22, status22))
+        status22, fields22, _body22 = framed22(
+            ["Transfer-Encoding: chunked, gzip"])
+        if fields22.get("x-content-type-options") != "nosniff" or \
+                "camera=()" not in (fields22.get("permissions-policy")
+                                    or "") or \
+                fields22.get("server") != "BigDomain":
+            bad22.append("c-policy")
+
+        def dialog22(conn_lines, requests=2, version="HTTP/1.1",
+                     timeout=6.0):
+            """One socket, one framed answer read per request."""
+            sock22 = socket.create_connection(("127.0.0.1", port),
+                                              timeout=timeout)
+            sock22.settimeout(timeout)
+            got22 = []
+            try:
+                for _ in range(requests):
+                    payload22 = ["GET /healthz " + version,
+                                 "Host: 127.0.0.1"]
+                    payload22.extend(conn_lines)
+                    payload22.extend(["", ""])
+                    try:
+                        sock22.sendall(
+                            "\r\n".join(payload22).encode("latin-1"))
+                        buf22 = b""
+                        while b"\r\n\r\n" not in buf22:
+                            chunk22 = sock22.recv(65536)
+                            if not chunk22:
+                                break
+                            buf22 += chunk22
+                        if b"\r\n\r\n" not in buf22:
+                            got22.append(b"eof")
+                            break
+                        head22, _, rest22 = buf22.partition(b"\r\n\r\n")
+                        length22 = 0
+                        for line22 in head22.split(b"\r\n")[1:]:
+                            name22, _, value22 = line22.partition(b":")
+                            if name22.strip().lower() == b"content-length":
+                                length22 = int(value22.strip())
+                        while len(rest22) < length22:
+                            chunk22 = sock22.recv(65536)
+                            if not chunk22:
+                                break
+                            rest22 += chunk22
+                        got22.append(head22 + b"\r\n\r\n" + rest22)
+                    except OSError:
+                        got22.append(b"transport")
+                        break
+            finally:
+                sock22.close()
+            return got22
+
+        def head22(one22):
+            return one22.split(b"\r\n\r\n", 1)[0].lower()
+
+        # ---- d: two Connection lines are one list, and close anywhere -----
+        for tag22, lines22 in (
+                ("d-keep-close", ["Connection: keep-alive",
+                                  "Connection: close"]),
+                ("d-close-keep", ["Connection: close",
+                                  "Connection: keep-alive"]),
+                ("d-one-line", ["Connection: keep-alive, close"])):
+            answers22 = dialog22(lines22)
+            if len(answers22) != 2:
+                bad22.append("%s-count-%d" % (tag22, len(answers22)))
+            elif not answers22[0].startswith(b"HTTP/1.1 200 OK"):
+                bad22.append("%s-status-%r" % (tag22, answers22[0][:18]))
+            elif b"connection: close" not in head22(answers22[0]):
+                bad22.append("%s-not-closed" % tag22)
+            elif answers22[1].startswith(b"HTTP/1.1 200"):
+                bad22.append("%s-second-answered" % tag22)
+        # ---- e: every single-line persistence answer still reads ----------
+        answers22 = dialog22([], requests=3)
+        if len(answers22) != 3:
+            bad22.append("e-persist-count-%d" % len(answers22))
+        else:
+            for idx22, one22 in enumerate(answers22):
+                if not one22.startswith(b"HTTP/1.1 200 OK"):
+                    bad22.append("e-persist-%d-%r" % (idx22, one22[:18]))
+                elif b"connection: close" in head22(one22):
+                    bad22.append("e-persist-closed-%d" % idx22)
+        answers22 = dialog22(["Connection: close"])
+        if not answers22 or \
+                not answers22[0].startswith(b"HTTP/1.1 200 OK"):
+            bad22.append("e-close-status")
+        elif b"connection: close" not in head22(answers22[0]):
+            bad22.append("e-close-header")
+        elif len(answers22) > 1 and answers22[1].startswith(b"HTTP/1.1 200"):
+            bad22.append("e-close-second")
+        answers22 = dialog22(["Connection: keep-alive"], requests=2,
+                             version="HTTP/1.0")
+        if len(answers22) != 2:
+            bad22.append("e-10-keep-count-%d" % len(answers22))
+        elif not answers22[0].startswith(b"HTTP/1.0 200 OK"):
+            bad22.append("e-10-keep-%r" % answers22[0][:18])
+        elif b"connection: keep-alive" not in answers22[0].lower():
+            bad22.append("e-10-keep-header")
+        elif not answers22[1].startswith(b"HTTP/1.0 200"):
+            bad22.append("e-10-second-%r" % answers22[1][:18])
+        answers22 = dialog22([], requests=1, version="HTTP/1.0")
+        if len(answers22) != 1 or \
+                b"connection: close" not in answers22[0].lower():
+            bad22.append("e-10-silent")
+        # ---- f: dialect, tokens on disk, declared count -------------------
+        with io.open(MODULE, "rb") as handle:
+            raw22 = handle.read()
+        if raw22[:3] == b"\xef\xbb\xbf" or b"\r\n" in raw22:
+            bad22.append("f-module-dialect")
+        try:
+            text22 = raw22.decode("utf-8")
+            text22.encode("ascii")
+        except (UnicodeDecodeError, UnicodeEncodeError):
+            bad22.append("f-module-not-ascii")
+            text22 = raw22.decode("utf-8", "replace")
+        for token22 in ('_list_header(self.headers, "Transfer-Encoding")',
+                        '_list_header(self.headers, "Connection")'):
+            if token22 not in text22:
+                bad22.append("f-missing-listreader")
+        for token22 in ('self.headers.get("Transfer-Encoding")',
+                        'self.headers.get("Connection")'):
+            if token22 in text22:
+                bad22.append("f-old-reader")
+        with io.open(REGISTRY, encoding="utf-8") as handle:
+            block22r = handle.read().split('"' + ROW + '"', 1)[-1][:220]
+        if DECLARED_TAG not in block22r:
+            bad22.append("f-declared")
     finally:
         srv.shutdown()
         srv.server_close()
@@ -2863,6 +3058,7 @@ def main():
     report("AC-FDPV19", bool(bad19), ",".join(bad19))
     report("AC-FDPV20", bool(bad20), ",".join(bad20))
     report("AC-FDPV21", bool(bad21), ",".join(bad21))
+    report("AC-FDPV22", bool(bad22), ",".join(bad22))
 
     failed = [name for name, ok in RESULTS if not ok]
     if failed:

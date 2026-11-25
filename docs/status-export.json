@@ -3,7 +3,7 @@
     "board_pages_skipped": [
       "preview/face-sweep.html (8878B)"
     ],
-    "current": "2026-11-26 R3480 CLOSEOUT: tick advanced to 3480; fold 829 took twelve lines (the R3478 tick line, the fold 828 summary, the R3479 SETTLED line and the whole R3480 product block) to the November archive verbatim (pre 80788B, post 75421B, token_ok=true, predicted_eq_actual=true, round_pointer_lost=[]); the export face was then refreshed and the entry page re-rendered from it so the pair converges.",
+    "current": "2026-11-26 R3481 CLOSEOUT: tick advanced to 3481; fold 830 took the closing R3479 and R3480 lines plus the whole R3481 block to the November archive verbatim (pre 81061B, post 75274B, token_ok=true, predicted_eq_actual=true, round_pointer_lost=[]); the door now answers a repeated Transfer-Encoding or Connection field as one list - chunked-not-final is 400, an undecodable coding is 501, and close anywhere in a Connection list closes - while every single-line framing and persistence answer still reads as delivered.",
     "do": "2026-11-25 R3456 PRODUCT: the answer-revision question now has a door - api_answer_history (live with AC-AMAW1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so 'which answer was rewritten, what did it say before, what does it say now and how often did it change' could only be read by calling the sandbox from a shell - while api_seller_answers and api_listing_qna publish only the CURRENT wording.",
     "last_artifact": "preview/apimarket-report.html (37201B) + preview/apimarket-report.json (59815B) [2026-11-25 commit]",
     "latest_artifact": "preview/apimarket-report.html (37201B) + preview/apimarket-report.json (59815B) [2026-11-25 commit]",
@@ -11,9 +11,9 @@
     "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/frontdoor-repeated-accept-encoding-R3480.log (2598B, 2026-11-26, sha256 b31645b089e0)",
     "latest_evidence": "qa/frontdoor-repeated-accept-encoding-R3480.log (2598B, 2026-11-26, sha256 b31645b089e0)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3480] next window (<=48h): (1) **S4U 仍未落地**：`BigDomain-OSLoop` 的 `Principal.LogonType` 仍为 `Interactive`（R3479 实测 `State=Running`），需**提权会话**跑 `src/os/register_loop_task.ps1` 后读回；**第二十二次承账**，禁再以「未观测」结账。(2) 门的第十九层候选：**重复 `Transfer-Encoding` 与 `Connection` 行**——两者都是逗号列表字段（RFC 9110 §5.3），而门内 `_parse_request` 仍走 `self.headers.get(\"Transfer-Encoding\")` / `self.headers.get(\"Connection\")` 只读第一行（`frontdoor.py` 约 10113/10141 行；`Content-Length` 已按 `get_all` 判冲突，不在本层）；下窗先只读实测四形状（`Transfer-Encoding: gzip`+`chunked`、`chunked`+`gzip`、`Connection: keep-alive`+`close`、`close`+`keep-alive`）再立判据（前者应合并成 `gzip, chunked` 并按「chunked 不在末位/不受支持」拒绝，后者合并后出现 `close` 即应关连接）。(3) 载体余量：本轮 fold 计划读 75900B／阈 78500／余 2600B（未折叠），下窗**先跑 `python src/os/logs_toolkit.py fold --plan-only`** 再干产品活，禁手改 state 文件。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) tick 口径：本轮 3479→3480。(6) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定「诊断不修」）、全量 battery 未实跑、Docker 缺位、backlog.md 体量问题、导出面 `latest_artifact` 槽写手债；**推送债**：R3479/R3480 本地提交已落，`git push origin main` 曾报 `! [remote rejected] main -> main (fatal error in commit_refs_rules)`，按律只记录，本轮再试一次并如实记结果。",
-    "next_milestone_due": "2026-11-28T00:22:45+08:00",
-    "updated_at": "2026-11-26T00:22:45+08:00",
+    "next_milestone": "[R3481] next window (<=48h): (1) **S4U 仍未落地**：`BigDomain-OSLoop` 的 `Principal.LogonType` 仍为 `Interactive`（R3479 实测 `State=Running`），需**提权会话**跑 `src/os/register_loop_task.ps1` 后读回；**第二十三次承账**，禁再以「未观测」结账。(2) 请求头读点家族本轮已收口（门内只剩 `Content-Length` 一个 `self.headers.get`，而它已按 `get_all` 判冲突；`Host` 早已按行数判重）——下窗**转产品面**：从零读者清单取一个买方/卖方 scoped 面（首选 `api_buyer_watch_category_mix`），先只读普查确认出厂世界有落地行；若同族市场级面在出厂世界里恒空，按 R3389 空段裁定拒收并改取下一面。(3) 载体余量：开轮 75841B（余 2659B）未折，收口写入后越阈（81061B），已执行 **fold 830**（13 行含收尾 R3479/R3480 行与 R3481 整块，post 75274B，token_ok=true，round_pointer_lost=[]），再追加 live 收口标题行后 **75813B／余 2687B**；下窗**先跑 `python src/os/logs_toolkit.py fold --plan-only`** 再干产品活，禁手改 state 文件。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) tick 口径：本轮 3480→3481。(6) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定「诊断不修」）、全量 battery 未实跑、Docker 缺位、backlog.md 体量问题、导出面 `latest_artifact` 槽写手债（仍指 apimarket-report 2026-11-25）；另有三个 `qa/crawl-*` 改动件非本轮所写，未入暂存。",
+    "next_milestone_due": "2026-11-28T00:46:03+08:00",
+    "updated_at": "2026-11-26T00:46:03+08:00",
     "heartbeat": {
       "tick": 3480,
       "state_tick": 3480,
@@ -43,8 +43,8 @@
       "readable": 5019
     }
   },
-  "current": "2026-11-26 R3480 CLOSEOUT: tick advanced to 3480; fold 829 took twelve lines (the R3478 tick line, the fold 828 summary, the R3479 SETTLED line and the whole R3480 product block) to the November archive verbatim (pre 80788B, post 75421B, token_ok=true, predicted_eq_actual=true, round_pointer_lost=[]); the export face was then refreshed and the entry page re-rendered from it so the pair converges.",
-  "claims": {"claimed": 38, "captured": 21, "contradicted": 0, "uncaptured": 17, "historic": 0, "rows": 101, "present": true, "census_ts": "2026-11-26T00:22:45+08:00"},
+  "current": "2026-11-26 R3481 CLOSEOUT: tick advanced to 3481; fold 830 took the closing R3479 and R3480 lines plus the whole R3481 block to the November archive verbatim (pre 81061B, post 75274B, token_ok=true, predicted_eq_actual=true, round_pointer_lost=[]); the door now answers a repeated Transfer-Encoding or Connection field as one list - chunked-not-final is 400, an undecodable coding is 501, and close anywhere in a Connection list closes - while every single-line framing and persistence answer still reads as delivered.",
+  "claims": {"claimed": 38, "captured": 21, "contradicted": 0, "uncaptured": 17, "historic": 0, "rows": 101, "present": true, "census_ts": "2026-11-26T00:46:03+08:00"},
   "chain": {"present": true, "rows": 101, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -73,11 +73,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-26 R3480 CLOSEOUT: tick advanced to 3480; fold 829 took twelve lines (the R3478 tick line, the fold 828 summary, the R3479 SETTLED line and the whole R3480 product block) to the November archive verbatim (pre 80788B, post 75421B, token_ok=true, predicted_eq_actual=true, round_pointer_lost=[]); the export face was then refreshed and the entry page re-rendered from it so the pair converges.",
-  "export_ts": "2026-11-26T00:22:45+08:00",
+  "do": "2026-11-26 R3481 CLOSEOUT: tick advanced to 3481; fold 830 took the closing R3479 and R3480 lines plus the whole R3481 block to the November archive verbatim (pre 81061B, post 75274B, token_ok=true, predicted_eq_actual=true, round_pointer_lost=[]); the door now answers a repeated Transfer-Encoding or Connection field as one list - chunked-not-final is 400, an undecodable coding is 501, and close anywhere in a Connection list closes - while every single-line framing and persistence answer still reads as delivered.",
+  "export_ts": "2026-11-26T00:46:03+08:00",
   "latest_artifact": "preview/apimarket-report.html (37201B) + preview/apimarket-report.json (59815B) [2026-11-25 commit]",
   "latest_evidence": "qa/frontdoor-repeated-accept-encoding-R3480.log (2598B, 2026-11-26, sha256 b31645b089e0)",
-  "next_milestone": "[R3480] next window (<=48h): (1) **S4U 仍未落地**：`BigDomain-OSLoop` 的 `Principal.LogonType` 仍为 `Interactive`（R3479 实测 `State=Running`），需**提权会话**跑 `src/os/register_loop_task.ps1` 后读回；**第二十二次承账**，禁再以「未观测」结账。(2) 门的第十九层候选：**重复 `Transfer-Encoding` 与 `Connection` 行**——两者都是逗号列表字段（RFC 9110 §5.3），而门内 `_parse_request` 仍走 `self.headers.get(\"Transfer-Encoding\")` / `self.headers.get(\"Connection\")` 只读第一行（`frontdoor.py` 约 10113/10141 行；`Content-Length` 已按 `get_all` 判冲突，不在本层）；下窗先只读实测四形状（`Transfer-Encoding: gzip`+`chunked`、`chunked`+`gzip`、`Connection: keep-alive`+`close`、`close`+`keep-alive`）再立判据（前者应合并成 `gzip, chunked` 并按「chunked 不在末位/不受支持」拒绝，后者合并后出现 `close` 即应关连接）。(3) 载体余量：本轮 fold 计划读 75900B／阈 78500／余 2600B（未折叠），下窗**先跑 `python src/os/logs_toolkit.py fold --plan-only`** 再干产品活，禁手改 state 文件。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) tick 口径：本轮 3479→3480。(6) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定「诊断不修」）、全量 battery 未实跑、Docker 缺位、backlog.md 体量问题、导出面 `latest_artifact` 槽写手债；**推送债**：R3479/R3480 本地提交已落，`git push origin main` 曾报 `! [remote rejected] main -> main (fatal error in commit_refs_rules)`，按律只记录，本轮再试一次并如实记结果。",
+  "next_milestone": "[R3481] next window (<=48h): (1) **S4U 仍未落地**：`BigDomain-OSLoop` 的 `Principal.LogonType` 仍为 `Interactive`（R3479 实测 `State=Running`），需**提权会话**跑 `src/os/register_loop_task.ps1` 后读回；**第二十三次承账**，禁再以「未观测」结账。(2) 请求头读点家族本轮已收口（门内只剩 `Content-Length` 一个 `self.headers.get`，而它已按 `get_all` 判冲突；`Host` 早已按行数判重）——下窗**转产品面**：从零读者清单取一个买方/卖方 scoped 面（首选 `api_buyer_watch_category_mix`），先只读普查确认出厂世界有落地行；若同族市场级面在出厂世界里恒空，按 R3389 空段裁定拒收并改取下一面。(3) 载体余量：开轮 75841B（余 2659B）未折，收口写入后越阈（81061B），已执行 **fold 830**（13 行含收尾 R3479/R3480 行与 R3481 整块，post 75274B，token_ok=true，round_pointer_lost=[]），再追加 live 收口标题行后 **75813B／余 2687B**；下窗**先跑 `python src/os/logs_toolkit.py fold --plan-only`** 再干产品活，禁手改 state 文件。(4) 基准下次到期 2026-12-01（48h 窗 2026-11-27）。(5) tick 口径：本轮 3480→3481。(6) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定「诊断不修」）、全量 battery 未实跑、Docker 缺位、backlog.md 体量问题、导出面 `latest_artifact` 槽写手债（仍指 apimarket-report 2026-11-25）；另有三个 `qa/crawl-*` 改动件非本轮所写，未入暂存。",
   "outs": [
     "preview/apimarket-report.html (37201B) + preview/apimarket-report.json (59815B) [2026-11-25 commit]",
     "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-25 commit] (halves differ: html [2026-11-25 commit] + json [2026-11-16 commit]; later=html)",
@@ -143,7 +143,7 @@
     "shortfall_total": 15,
     "verdict": "FLOOR-DEBT"
   },
-  "results": [["3480", "OSLoop 执行 tick"]],
+  "results": [["3481", "OSLoop 执行 tick"]],
   "results_archive": {
     "bytes": 336680,
     "count": 179,
@@ -151,8 +151,8 @@
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
   "self_drive": {"window": "2026-11-20..2026-11-26", "window_days": 7, "log_lines_in_window": 124, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 15, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
-  "state_bytes": 75841,
-  "next_milestone_due": "2026-11-28T00:22:45+08:00",
+  "state_bytes": 75813,
+  "next_milestone_due": "2026-11-28T00:46:03+08:00",
   "heartbeat": {
     "tick": 3480,
     "state_tick": 3480,
