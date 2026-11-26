@@ -1,0 +1,41 @@
+R3528 evidence log (2026-11-27)
+================================
+
+work: second named gap producer closed at its birth site
+  file: tools/ledger_reconcile_face.py
+  change: after render(write=True) lands preview/ledger-reconcile-face.{html,json},
+          main() calls board_face_landing.refresh_export_face(HERE) in process;
+          the --check branch returns before that line and never derives the face.
+  untouched: build_doc(), render_html(), check(), --check semantics, BOARD_PAGES.
+
+criteria: AC-PWC6 pinned in src/os/backlog.md before the code edit
+  arms: (a) AST census reads kind=closed; call sits after render(write=True) in
+            main() and after the --check return (position measured from source);
+            resolves to board_face_landing (shared definition, no copy).
+        (b) negative controls: deleting the call reads gap; moving it before the
+            landing makes the order arm read "not after".
+  suite: src/os/test_preview_writer_census.py -> SUITE PASS 9/9
+  registry: os-preview-writer-census 7 -> 9 (src/sandbox/reconcile_all.py)
+
+gates read back
+  PWC-CHECK VERDICT PASS modules=119 closed=8 gap=101 reader=10   (was 7/102)
+  ledger_reconcile_face --check VERDICT PASS 6/6 checks=8 real=PASS
+                       seeded=PASS control=FAIL flipped=2
+  live landing: WROTE preview/ledger-reconcile-face.html (8656B) +
+                .json (6151B) ... face export=WRITTEN
+  suite_matrix_reconcile --check DOC-CURRENT (832 rows / 6981 criteria / 85798B)
+  deliverable_index DELIVERABLE INDEX faces=9 defects=0
+                    fingerprint=60aea3c6c2a0c58d index=56326B
+  export_round --check VERDICT PASS
+  ledger_lines --check VERDICT CLEAN
+
+carried, not papered over
+  (a) 101 gap producers remain named in preview/preview-writer-census.json.
+  (b) battery page NOT re-derived: the detached producer was started twice this
+      window (03:20:57 and 03:21:5x) and answered zero bytes for six minutes each;
+      BSR-CHECK RED E_REGISTRY_DRIFT,E_TOTALS_UNCOVERED is carried to R3529.
+  (c) state fold 850 refused by name: round-split, live-dirty, carry-gap.
+  (d) three qa/crawl-* files are modified by another writer, not this window.
+  (e) ZERO payment capability and no network beyond loopback; the five physical
+      pieces (merchant id, server + domain + filing + ICP, miniprogram appid +
+      secret, and the two remaining account items) still gate every buyer.

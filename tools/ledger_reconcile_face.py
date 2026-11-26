@@ -543,8 +543,17 @@ def main(argv):
         )
         return 0
     html, text, doc = render(write=True)
+    # R3528 (AC-PWC6): landing this pair and re-deriving the CEO face are ONE
+    # run. --check returned above and never reaches this line.
+    try:
+        sys.path.insert(0, os.path.join(HERE, "src", "os"))
+        import board_face_landing
+        ok, note, _proof = board_face_landing.refresh_export_face(HERE)
+        face = "WRITTEN" if ok else "REFUSED %s" % note
+    except Exception as exc:  # a private world may carry no shared writer
+        face = "SKIPPED %s" % type(exc).__name__
     print(
-        "WROTE %s (%dB) + %s (%dB) checks=%d real=%s empty=%s seeded=%s control=%s flipped=%s"
+        "WROTE %s (%dB) + %s (%dB) checks=%d real=%s empty=%s seeded=%s control=%s flipped=%s face export=%s"
         % (
             HTML,
             doc["sizes"]["html"],
@@ -556,6 +565,7 @@ def main(argv):
             doc["seeded"]["run"]["verdict"],
             doc["control"]["run"]["verdict"],
             ",".join(doc["control"]["flipped"]) or "-",
+            face,
         )
     )
     return 0

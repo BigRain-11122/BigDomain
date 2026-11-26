@@ -7962,8 +7962,12 @@ SUITES = [
     # shipped ER.write alias, tamper reddens --check, --check writes nothing,
     # and the first newly closed producer measured by source position.
     # AC-PWC1..AC-PWC5 were pinned in src/os/backlog.md BEFORE the tool existed.
+    # R3528. AC-PWC6 grades the second newly closed producer by source position:
+    # tools/ledger_reconcile_face.py calls the shared face writer after its own
+    # landing (render(write=True)) and never on the --check path, with two
+    # negative controls over a deleted and a moved call.
     ("os-preview-writer-census",
-     os.path.join("..", "os", "test_preview_writer_census.py"), 7),
+     os.path.join("..", "os", "test_preview_writer_census.py"), 9),
     # R2814. tools/ugc_gate_report.py carries AC-UGR1..AC-UGR9 and renders the
     # face for the BLUEPRINT section-five death line (content safety not
     # connected means the door stays shut), yet the registry held ZERO AC-UGR*

@@ -1,7 +1,8 @@
-"""Battery suite for tools/preview_writer_census.py - AC-PWC1..AC-PWC5 (R3527).
+"""Battery suite for tools/preview_writer_census.py - AC-PWC1..AC-PWC6 (R3527, R3528).
 
 Pinned in src/os/backlog.md BEFORE the tool, this file and the face_pair_receipt
-wiring existed.
+wiring existed. AC-PWC6 was pinned in the R3528 window before
+tools/ledger_reconcile_face.py was touched.
 
 Why this exists: R3524..R3526 each closed the same birth-site gap for ONE
 producer (one board battery page, the rest of BOARD_PAGES, one non-board census).
@@ -173,6 +174,51 @@ class PWC5FirstProducerClosed(unittest.TestCase):
         self.assertGreater(call_at, last_write)
         self.assertLess(check_at, call_at)
         self.assertIn("board_face_landing", main_body)
+
+
+def face_after_landing(text, landing="render(write=True)"):
+    """(present, after_landing, shared_definition) measured from main() source."""
+    if "def main(argv):" not in text:
+        return (False, False, False)
+    main_body = text.rpartition("def main(argv):")[2]
+    at = main_body.find("refresh_export_face(")
+    present = at != -1
+    landing_at = main_body.find(landing)
+    after = present and landing_at != -1 and at > landing_at
+    shared = present and "board_face_landing" in main_body
+    return (present, after, shared)
+
+
+class PWC6SecondProducerClosed(unittest.TestCase):
+    """AC-PWC6: ledger_reconcile_face re-derives the face after its landing."""
+
+    def _source(self):
+        path = os.path.join(TOOLS, "ledger_reconcile_face.py")
+        with io.open(path, encoding="utf-8") as f:
+            return f.read()
+
+    def test_closed_and_ordered_after_the_landing(self):
+        text = self._source()
+        kind, _html, writes, closes = MOD.classify_source(text)
+        self.assertEqual(kind, "closed")
+        self.assertGreaterEqual(writes, 2)
+        self.assertGreaterEqual(closes, 1)
+        self.assertEqual(face_after_landing(text), (True, True, True))
+
+    def test_negative_controls_delete_and_move(self):
+        text = self._source()
+        deleted = text.replace(
+            "board_face_landing.refresh_export_face(HERE)",
+            "None  # control: closure removed")
+        self.assertEqual(MOD.classify_source(deleted)[0], "gap")
+        self.assertEqual(face_after_landing(deleted),
+                         (False, False, False))
+        moved = text.replace(
+            "    html, text, doc = render(write=True)",
+            "    ok, note, _proof = board_face_landing.refresh_export_face(HERE)"
+            "  # control: moved before the landing\n"
+            "    html, text, doc = render(write=True)")
+        self.assertEqual(face_after_landing(moved), (True, False, True))
 
 
 if __name__ == "__main__":

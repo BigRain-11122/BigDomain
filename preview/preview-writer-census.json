@@ -3,7 +3,7 @@
     "src/os/board_face_landing.py",
     "src/os/export_round.py"
   ],
-  "generated_at": "2026-11-27T03:14:29+08:00",
+  "generated_at": "2026-11-27T03:22:52+08:00",
   "round": "R3527",
   "rows": [
     {
@@ -399,16 +399,6 @@
       ],
       "path": "tools/ledger_business_report.py",
       "write_calls": 7
-    },
-    {
-      "face_calls": 0,
-      "kind": "gap",
-      "landing_paths": [
-        "ledger-reconcile-face.html",
-        "preview/ledger-reconcile-face.html"
-      ],
-      "path": "tools/ledger_reconcile_face.py",
-      "write_calls": 2
     },
     {
       "face_calls": 0,
@@ -988,6 +978,16 @@
       "face_calls": 1,
       "kind": "closed",
       "landing_paths": [
+        "ledger-reconcile-face.html",
+        "preview/ledger-reconcile-face.html"
+      ],
+      "path": "tools/ledger_reconcile_face.py",
+      "write_calls": 2
+    },
+    {
+      "face_calls": 1,
+      "kind": "closed",
+      "landing_paths": [
         ".html",
         "receipt-admissibility.html"
       ],
@@ -1090,9 +1090,9 @@
     }
   ],
   "totals": {
-    "closed": 7,
+    "closed": 8,
     "excluded": 2,
-    "gap": 102,
+    "gap": 101,
     "modules": 119,
     "reader": 10,
     "writers": 109
