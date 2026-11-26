@@ -1,21 +1,21 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-26 R3513 PRODUCT: the twelfth and last history split platform-live-report is one-derivation - the landed page 8621B is the producer render of the landed report plus the shipped channel block, equal byte for byte once the channel shelf stamp is normalised (landed 55302, today 55908), and the landed json 6228B is reproduced exactly, including its own asymmetry: the AC-PLVR8 row records the pre-channel 7929B while the sizes block records the post-channel 8621B.",
+    "current": "2026-11-26 R3514 PRODUCT: the oldest of the four remaining splits (apimarket-report-refunds, schema 6 landed vs schema 17 renderer) is answered by replaying the producer AS IT STOOD at the commit that wrote the pair - git archive --output=<tar> 6fb6c40b src into a system temp tree, extract with tarfile, run that tree own preview_R2111.main() in process over its own pinned demo world; the render is schema 6 at 25254B (sha 5074953de674), the shipped channel splices it to 25966B byte-identical to the landed page (sha 3d557fa82348) and the landed json is byte-identical at 39928B (sha 6c96d0903068), so the split is producer evolution, not hand editing.",
     "do": "2026-11-25 R3456 PRODUCT: the answer-revision question now has a door - api_answer_history (live with AC-AMAW1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so 'which answer was rewritten, what did it say before, what does it say now and how often did it change' could only be read by calling the sandbox from a shell - while api_seller_answers and api_listing_qna publish only the CURRENT wording.",
-    "last_artifact": "preview/preview-pair-census.html (8320B) + preview/preview-pair-census.json (52943B) [2026-11-26 commit]",
-    "latest_artifact": "preview/preview-pair-census.html (8320B) + preview/preview-pair-census.json (52943B) [2026-11-26 commit]",
+    "last_artifact": "preview/preview-pair-census.html (8320B) + preview/preview-pair-census.json (53129B) [2026-11-26 commit]",
+    "latest_artifact": "preview/preview-pair-census.html (8320B) + preview/preview-pair-census.json (53129B) [2026-11-26 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\preview-pair-census.html",
     "latest_artifact_note": "",
-    "latest_evidence": "qa/face-pair-receipt-R3513.log (2085B, 2026-11-26, sha256 914ef764a69b)",
+    "latest_evidence": "qa/face-pair-receipt-R3514.log (2981B, 2026-11-26, sha256 42a976135ffc)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R3514] next window` line above.",
-    "next_milestone_due": "2026-11-28T22:37:05+08:00",
-    "updated_at": "2026-11-26T22:37:05+08:00",
+    "next_milestone": "[R3515] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——若下窗开在 2026-12-01 或之后，先把刷新轮排最前（P-2026-09-24-56·7 天条件项），毕=更新字段＋文件④更新记录行。 (1) S4U 仍未落地（第五十四次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回；非提权只得 InteractiveToken，违 S4U 律，宁缺不错。 (2) 剩余 3 条 apimarket 面（`questions`/`buyerquestions`/`selleranswers`）**已有 version-drift 读数但无历史重放**：下窗按 R3514 配方各补一条（`git log -1 -- preview/<slug>.json` 定提交 → `git archive --output` 导出该提交 src → 跑那棵树的 `preview_R21xx.main()`（注意老版本 `main()` 收 0 参、写自己的 preview/）→ 比两半摘要 → 把摘要记进对应 FACES 的 `historical` 块）。**一条面一窗**，禁一次登记三条。 (3) `status_export_fresh.py --apply` 不写 `board_pages_skipped` 的缺陷未修（继续绕走正身 `src/os/export_round.py`）。 (4) 支付沙箱 `test_notify_revoke.py` 读 `src/sandbox/reconcile_all.py` 用 ascii 解码的既有失败已承账；一行改编码即可，但须保留 AC-VR7 原意（登记行存在）。 (5) 载体余量：state 本轮 64737B／阈 78500，`fold --plan-only` 答 `writes_nothing=true`；写 state 后必跑 `eol --fix --execute` 与 `eol --fix-indent --execute`（本轮实证：换行写错会 E_STATE_LAYOUT 直接拒读）。 (6) tick 口径：本轮 3513→3514，下轮 R3515。 (7) 电池页生产器**必须 `python -u` 跑**（管道缓冲会静默超时）。 (8) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定诊断不修）、全量 battery 未实跑、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写。",
+    "next_milestone_due": "2026-11-28T22:52:04+08:00",
+    "updated_at": "2026-11-26T22:52:04+08:00",
     "heartbeat": {
       "tick": 3502,
-      "state_tick": 3513,
-      "lag": 11,
+      "state_tick": 3514,
+      "lag": 12,
       "verdict": "FLAG",
       "reason": "heartbeat_row_debt"
     },
@@ -35,8 +35,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-26 R3513 PRODUCT: the twelfth and last history split platform-live-report is one-derivation - the landed page 8621B is the producer render of the landed report plus the shipped channel block, equal byte for byte once the channel shelf stamp is normalised (landed 55302, today 55908), and the landed json 6228B is reproduced exactly, including its own asymmetry: the AC-PLVR8 row records the pre-channel 7929B while the sizes block records the post-channel 8621B.",
-  "claims": {"claimed": 41, "captured": 23, "contradicted": 0, "uncaptured": 18, "historic": 0, "rows": 104, "present": true, "census_ts": "2026-11-26T22:37:05+08:00"},
+  "current": "2026-11-26 R3514 PRODUCT: the oldest of the four remaining splits (apimarket-report-refunds, schema 6 landed vs schema 17 renderer) is answered by replaying the producer AS IT STOOD at the commit that wrote the pair - git archive --output=<tar> 6fb6c40b src into a system temp tree, extract with tarfile, run that tree own preview_R2111.main() in process over its own pinned demo world; the render is schema 6 at 25254B (sha 5074953de674), the shipped channel splices it to 25966B byte-identical to the landed page (sha 3d557fa82348) and the landed json is byte-identical at 39928B (sha 6c96d0903068), so the split is producer evolution, not hand editing.",
+  "claims": {"claimed": 41, "captured": 23, "contradicted": 0, "uncaptured": 18, "historic": 0, "rows": 104, "present": true, "census_ts": "2026-11-26T22:52:04+08:00"},
   "chain": {"present": true, "rows": 104, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -65,14 +65,14 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-26 R3513 PRODUCT: the twelfth and last history split platform-live-report is one-derivation - the landed page 8621B is the producer render of the landed report plus the shipped channel block, equal byte for byte once the channel shelf stamp is normalised (landed 55302, today 55908), and the landed json 6228B is reproduced exactly, including its own asymmetry: the AC-PLVR8 row records the pre-channel 7929B while the sizes block records the post-channel 8621B.",
-  "export_ts": "2026-11-26T22:37:05+08:00",
-  "latest_artifact": "preview/preview-pair-census.html (8320B) + preview/preview-pair-census.json (52943B) [2026-11-26 commit]",
-  "latest_evidence": "qa/face-pair-receipt-R3513.log (2085B, 2026-11-26, sha256 914ef764a69b)",
-  "next_milestone": "[R3514] next window` line above.",
+  "do": "2026-11-26 R3514 PRODUCT: the oldest of the four remaining splits (apimarket-report-refunds, schema 6 landed vs schema 17 renderer) is answered by replaying the producer AS IT STOOD at the commit that wrote the pair - git archive --output=<tar> 6fb6c40b src into a system temp tree, extract with tarfile, run that tree own preview_R2111.main() in process over its own pinned demo world; the render is schema 6 at 25254B (sha 5074953de674), the shipped channel splices it to 25966B byte-identical to the landed page (sha 3d557fa82348) and the landed json is byte-identical at 39928B (sha 6c96d0903068), so the split is producer evolution, not hand editing.",
+  "export_ts": "2026-11-26T22:52:04+08:00",
+  "latest_artifact": "preview/preview-pair-census.html (8320B) + preview/preview-pair-census.json (53129B) [2026-11-26 commit]",
+  "latest_evidence": "qa/face-pair-receipt-R3514.log (2981B, 2026-11-26, sha256 42a976135ffc)",
+  "next_milestone": "[R3515] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——若下窗开在 2026-12-01 或之后，先把刷新轮排最前（P-2026-09-24-56·7 天条件项），毕=更新字段＋文件④更新记录行。 (1) S4U 仍未落地（第五十四次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回；非提权只得 InteractiveToken，违 S4U 律，宁缺不错。 (2) 剩余 3 条 apimarket 面（`questions`/`buyerquestions`/`selleranswers`）**已有 version-drift 读数但无历史重放**：下窗按 R3514 配方各补一条（`git log -1 -- preview/<slug>.json` 定提交 → `git archive --output` 导出该提交 src → 跑那棵树的 `preview_R21xx.main()`（注意老版本 `main()` 收 0 参、写自己的 preview/）→ 比两半摘要 → 把摘要记进对应 FACES 的 `historical` 块）。**一条面一窗**，禁一次登记三条。 (3) `status_export_fresh.py --apply` 不写 `board_pages_skipped` 的缺陷未修（继续绕走正身 `src/os/export_round.py`）。 (4) 支付沙箱 `test_notify_revoke.py` 读 `src/sandbox/reconcile_all.py` 用 ascii 解码的既有失败已承账；一行改编码即可，但须保留 AC-VR7 原意（登记行存在）。 (5) 载体余量：state 本轮 64737B／阈 78500，`fold --plan-only` 答 `writes_nothing=true`；写 state 后必跑 `eol --fix --execute` 与 `eol --fix-indent --execute`（本轮实证：换行写错会 E_STATE_LAYOUT 直接拒读）。 (6) tick 口径：本轮 3513→3514，下轮 R3515。 (7) 电池页生产器**必须 `python -u` 跑**（管道缓冲会静默超时）。 (8) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定诊断不修）、全量 battery 未实跑、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写。",
   "outs": [
-    "preview/preview-pair-census.html (8320B) + preview/preview-pair-census.json (52943B) [2026-11-26 commit]",
-    "preview/face-pair-receipt.html (16322B) + preview/face-pair-receipt.json (24368B) [2026-11-26 mtime]",
+    "preview/preview-pair-census.html (8320B) + preview/preview-pair-census.json (53129B) [2026-11-26 commit]",
+    "preview/face-pair-receipt.html (16508B) + preview/face-pair-receipt.json (25456B) [2026-11-26 mtime]",
     "preview/ledger-reconcile-face.html (8656B) + preview/ledger-reconcile-face.json (6151B) [2026-11-26 commit]",
     "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-26 commit] (halves differ: html [2026-11-26 commit] + json [2026-11-16 commit]; later=html)",
     "preview/lobby-protocol-map.html (29069B) + preview/lobby-protocol-map.json (27924B) [2026-11-26 commit]",
@@ -140,20 +140,20 @@
     "shortfall_total": 15,
     "verdict": "FLOOR-DEBT"
   },
-  "results": [["3513", "OSLoop 执行 tick"]],
+  "results": [["3514", "OSLoop 执行 tick"]],
   "results_archive": {
     "bytes": 336680,
     "count": 179,
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
-  "self_drive": {"window": "2026-11-20..2026-11-26", "window_days": 7, "log_lines_in_window": 112, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 17, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
-  "state_bytes": 61735,
-  "next_milestone_due": "2026-11-28T22:37:05+08:00",
+  "self_drive": {"window": "2026-11-20..2026-11-26", "window_days": 7, "log_lines_in_window": 118, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 22, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
+  "state_bytes": 64868,
+  "next_milestone_due": "2026-11-28T22:52:04+08:00",
   "heartbeat": {
     "tick": 3502,
-    "state_tick": 3513,
-    "lag": 11,
+    "state_tick": 3514,
+    "lag": 12,
     "verdict": "FLAG",
     "reason": "heartbeat_row_debt"
   },
