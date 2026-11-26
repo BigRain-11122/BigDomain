@@ -1,0 +1,58 @@
+R3529 evidence (2026-11-27) - third preview-writer gap closed at its birth site
+
+1. PIN (criteria before code)
+   src/os/backlog.md R3529 PIN line landed before any edit; AC-PWC7 arms:
+   (a) closure measured from source position inside main(), after the last
+       landing write (write_file_atomic(out_html, robot)) and after the
+       --check branch return;
+   (b) the re-derivation goes through board_face_landing.refresh_export_face
+       (ROOT) only - no second writer kept in the tool;
+   (c) behaviour: a record-type fake receives ROOT exactly once, ok passthrough
+       reads WRITTEN, a named refusal reads REFUSED <note>, a raising fake reads
+       SKIPPED <Type> and never propagates;
+   (d) scratch render (AC-PPR7 receipt directory) lands nothing and does not
+       touch the real face.
+
+2. Suite
+   python -m unittest src.os.test_preview_writer_census  ->  Ran 14 tests, OK
+   (was 9; five new arms under AC-PWC7)
+
+3. Family shard
+   python tools/battery_shard.py --match os-preview-writer-census
+   -> SHARD rc=0 green=1 criteria=14 crit_mismatch=0
+
+4. Real landing (end to end)
+   python tools/lobby_session_trace.py
+   -> RENDERED steps=11 frames=17 refusals=6 types=7 codes=4 html=9092B json=8008B
+   -> SELF-CHECK rc=0 findings=0
+   -> face export=WRITTEN
+   python src/os/export_round.py --check -> VERDICT PASS
+
+5. Census moved
+   before: closed=8 gap=101 reader=10 modules=119
+   after : closed=9 gap=100 reader=10 modules=119
+   python tools/preview_writer_census.py --check -> PWC-CHECK VERDICT PASS
+
+6. Registry and matrix
+   src/sandbox/reconcile_all.py row os-preview-writer-census 9 -> 14
+   python src/os/suite_matrix_reconcile.py --write -> 85799 bytes, 832 rows
+   python src/os/suite_matrix_reconcile.py --check -> DOC-CURRENT (6986 criteria)
+
+7. Battery page (separated producer, ~6.4 min, hidden with a heartbeat wait)
+   preview/battery-shard-report.html 16419B / .json 17954B at 03:48:12
+   python tools/battery_shard_report.py --check -> BSR-CHECK VERDICT PASS
+   (page verdict=RED by design; the gate grades coherence)
+
+8. Carrier
+   python src/os/state_fold_run.py --fold --round R3528 --fold-no 850 \
+       --start 137 --end 151 ...
+   -> 78434B -> 71941B, archive VERIFIED, no round split
+   python tmp/close_R3529.py (state_append vehicle) -> tick=3529 log=142 74859B
+   python src/os/ledger_lines.py --check -> VERDICT CLEAN
+
+9. Honest boundary
+   - 100 named gaps remain and none is claimed closed.
+   - run_session()/render_html()/check(), the --check semantics, both landed
+     halves and export_round.BOARD_PAGES are untouched.
+   - ZERO payment capability, no network beyond loopback; the five physical
+     pieces still gate every buyer.
