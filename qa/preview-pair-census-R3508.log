@@ -1,0 +1,102 @@
+R3508 - the census and the entry index stop taking turns being red
+==================================================================
+
+Board head at open: R3508 item (0) - "census records index.html size/mtime/sha
+while the entry index quotes the census byte counts", named as the one red gate
+carrying a name. Criterion AC-PPC8 was pinned in src/os/backlog.md BEFORE any
+code moved.
+
+Read-only state at open
+-----------------------
+  python tools/preview_pair_census.py --check
+    PPC-CHECK VERDICT FAIL read_only=True
+      landed half is not this derivation: preview-pair-census.json
+  python tools/deliverable_index.py --check
+    VERDICT PASS 23/23 fingerprint=b158647b139c9908
+
+  landed census json row for the index pair:
+    html bytes=55908 sha=7BF86690 mtime=2026-11-26T09:35:53+08:00 verdict=no-json
+  live preview/index.html: 55908 bytes sha=54B2EBE2
+  -> same size, different bytes: the entry index had been re-derived after the
+     census was written, and the census had recorded that re-derivation as a
+     measurement of itself.
+
+  preview/*.html naming this census page: exactly 1 (index.html), measured by
+  scanning all 106 landed html halves for the label.
+
+The change
+----------
+  tools/preview_pair_census.py
+    + prints_this_page(path)   detection read off the landed html, not a list
+    + mirror_row(stem, h, j)   class + last commit, no clock, no digest
+    + census()                 a pair whose html half names this page is a
+                               READING; every other pair keeps its measurements
+    + html_of()                rows without a clock sort as 0 (mirror rows are
+                               same-run or no-json, so they never list)
+    + footer                   names the mirror rule and why it exists
+  src/os/test_preview_pair_census.py
+    + AC-PPC8                  4 sub-arms: detection set equality, no
+                               measurement fields on mirror rows, narrowness on
+                               every non-mirror row, negative control on
+                               detection (a synthetic html that does not name
+                               the page is refused), and negative control on the
+                               reading (changing a mirror commit still reddens)
+    ~ AC-PPC1                  REPAIR FOUND THIS WINDOW, recorded not folded in:
+                               R3500 added the channel-receipt class but this
+                               closure arm kept the R3499 tuple, so it counted
+                               103 of 106 rows and had been red since R3500
+                               without anyone re-running this suite. The
+                               invariant is unchanged - one class per row, the
+                               classes cover the tree - the tuple now names the
+                               class that exists.
+  src/sandbox/reconcile_all.py registry row preview-pair-census 7 -> 8
+
+Derivation order (the order that makes both gates green)
+--------------------------------------------------------
+  python tools/preview_pair_census.py            -> PPC round=3507 html=106 paired=103
+                                                    history_split=8 channel_receipt=3
+                                                    frozen_excused=11 same_commit=6
+  python tools/deliverable_index.py              -> faces=9 defects=0 index=55908B
+  python tools/preview_pair_census.py --check    -> PPC-CHECK VERDICT PASS read_only=True
+                                                    history_split=8 channel_receipt=3
+                                                    frozen_excused=11 same_commit=6 explained=7
+  python tools/deliverable_index.py --check      -> VERDICT PASS 23/23
+                                                    fingerprint=a8434f96494a50bf
+
+  index.html keeps 55908 bytes because the quoted figures changed digit for
+  digit (52722 -> the new size keeps the same width); the digest moved, which is
+  why the census used to call it drift.
+
+Gates
+-----
+  SUITE PASS 8/8                    src/os/test_preview_pair_census.py
+  SHARD green=1 criteria=8 crit_mismatch=0   (36.3s, registry 830/6952)
+  matrix DOC-CURRENT                830 rows, 6952 criteria, 85613B
+  battery page                      BSR-CHECK VERDICT PASS (see state log line)
+
+Honest notes
+------------
+  (a) no landed page except the census pair and the entry index was re-derived;
+      no freeze register, archive or AC-PPC1..7 threshold was touched; the
+      index renderer was not changed at all - the fix is on the census side,
+      which is one of the two roads the board named.
+  (b) the exclusion is narrow by construction and pinned: every non-mirror row
+      still records bytes/sha/mtime, and the mirror reading is still compared
+      through its class and its commit.
+  (c) the AC-PPC1 repair is a defect this window surfaced, not a threshold this
+      window moved: the arm had been counting six classes while the tree had
+      seven since R3500.
+  (d) ZERO payment capability, no network beyond loopback; the five physical
+      pieces still gate every buyer.
+
+Second defect, found after the first export refresh
+----------------------------------------------
+  the census html half prints 'Tick 3507' and normalized() blanked the label only
+  in the JSON branch, so the page went red the moment the tick advanced past its
+  own derivation (measured: first difference at offset 1111, 'Tick 3507' vs
+  'Tick 3508'). normalized() now blanks the tick label for html text too, and
+  AC-PPC4 carries two new sub-arms: a rewritten tick is ignored, one changed count
+  still reads drift.
+
+Final gate order actually run: battery page -> census -> index -> export, then all
+  three gates re-read green (PPC-CHECK PASS, AC-DIX 23/23, BSR-CHECK PASS, tick 3508).

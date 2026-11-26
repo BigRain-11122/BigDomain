@@ -5028,8 +5028,14 @@ SUITES = [
     # differ, and a freeze register excuses one only while BOTH halves still
     # match their registered sha256 (AC-PPC1..AC-PPC7 were pinned in
     # src/os/backlog.md before tools/preview_pair_census.py existed).
+    # R3508: one landed face prints a byte count for every preview half, this
+    # page's own two included, so its digest can never be a stable measurement
+    # and the census and the entry index took turns reddening each other; that
+    # pair is recorded as a READING (class plus last commit), the exclusion is
+    # detected from the landed html rather than trusted from a list, and both
+    # negative controls are pinned by AC-PPC8, so 7 -> 8.
     ("preview-pair-census",
-     os.path.join("..", "os", "test_preview_pair_census.py"), 7),
+     os.path.join("..", "os", "test_preview_pair_census.py"), 8),
     # R3500: the per-face receipt answers the census's open question one face
     # at a time - the producer renders into a scratch directory, the shipped
     # post-render channel is applied, and the result is compared with the

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-26T09:36:30+08:00",
+  "generated_at": "2026-11-26T10:07:34+08:00",
   "law": "a split is claimed only when the two halves' last commits differ; an mtime gap alone is published as a bucket, never as a split",
   "oldest_split": {
     "delta_hours": 749.7,
@@ -404,18 +404,18 @@
     {
       "delta_seconds": 0,
       "html": {
-        "bytes": 16413,
-        "commit": "4d90cde5",
-        "mtime": "2026-11-26T09:20:36+08:00",
-        "mtime_epoch": 1795656036,
-        "sha": "02E2A6A1"
+        "bytes": 16416,
+        "commit": "d07dcffc",
+        "mtime": "2026-11-26T10:01:22+08:00",
+        "mtime_epoch": 1795658482,
+        "sha": "F539B225"
       },
       "json": {
-        "bytes": 18052,
-        "commit": "4d90cde5",
-        "mtime": "2026-11-26T09:20:36+08:00",
-        "mtime_epoch": 1795656036,
-        "sha": "520C1DA0"
+        "bytes": 17964,
+        "commit": "d07dcffc",
+        "mtime": "2026-11-26T10:01:22+08:00",
+        "mtime_epoch": 1795658482,
+        "sha": "D791FE1E"
       },
       "name": "battery-shard-report",
       "verdict": "same-run"
@@ -806,14 +806,14 @@
       "delta_seconds": 0,
       "html": {
         "bytes": 10956,
-        "commit": "37c78dce",
+        "commit": "d07dcffc",
         "mtime": "2026-11-26T09:09:05+08:00",
         "mtime_epoch": 1795655345,
         "sha": "3EFEDFDC"
       },
       "json": {
         "bytes": 15109,
-        "commit": "37c78dce",
+        "commit": "d07dcffc",
         "mtime": "2026-11-26T09:09:05+08:00",
         "mtime_epoch": 1795655345,
         "sha": "0727B9A7"
@@ -900,15 +900,11 @@
       "verdict": "channel-receipt"
     },
     {
-      "delta_seconds": 0,
       "html": {
-        "bytes": 55908,
-        "commit": "37c78dce",
-        "mtime": "2026-11-26T09:35:53+08:00",
-        "mtime_epoch": 1795656953,
-        "sha": "7BF86690"
+        "commit": "d07dcffc"
       },
       "json": null,
+      "mirror": "prints a byte count for every preview half, this page's own included, so its bytes move whenever a listed page is re-derived",
       "name": "index",
       "verdict": "no-json"
     },
@@ -2036,7 +2032,7 @@
       "verdict": "same-run"
     }
   ],
-  "round": 3507,
+  "round": 3508,
   "same_run_seconds": 120,
   "self_excluded": "preview-pair-census",
   "source": "tools/preview_pair_census.py",

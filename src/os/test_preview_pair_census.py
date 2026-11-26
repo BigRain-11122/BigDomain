@@ -1,4 +1,4 @@
-"""Battery suite for the preview page-pair census - AC-PPC1..AC-PPC7 (R3499).
+"""Battery suite for the preview page-pair census - AC-PPC1..AC-PPC8 (R3499, R3508).
 
 Seven arms were pinned in src/os/backlog.md at R3499 (PIN then PIN+1 for the
 freeze face) BEFORE tools/preview_pair_census.py existed. The point of the
@@ -15,6 +15,7 @@ Source discipline: pure ASCII, stdlib only, no clock read of its own, no
 network, no shell. The tool's own git lookups are read-only.
 """
 
+import glob
 import hashlib
 import io
 import json
@@ -80,10 +81,16 @@ def main():
         PPC.classify(PPC.SAME_RUN_SECONDS + 1, "", "bbb") == "untracked",
     ]
     named = [r["verdict"] for r in rows]
-    classified = sum(totals[k] for k in ("same-run", "same-commit", "history-split",
-                                        "frozen-excused", "untracked", "no-json"))
+    # R3508 repair, recorded rather than folded in silently: R3500 added the
+    # channel-receipt class to the census but this closure arm kept the R3499
+    # tuple, so it counted 103 of 106 rows and the arm had been red since that
+    # round without anyone re-running this suite. The invariant is unchanged -
+    # every row carries exactly one class and the classes cover the tree.
+    classes = ("same-run", "same-commit", "history-split", "channel-receipt",
+               "frozen-excused", "untracked", "no-json")
+    classified = sum(totals[k] for k in classes)
     ok("AC-PPC1", all(arms) and classified == totals["html"] == len(named)
-       and len(set(named)) <= 6, "arms=%s html=%d classified=%d" % (arms, totals["html"], classified))
+       and len(set(named)) <= len(classes), "arms=%s html=%d classified=%d" % (arms, totals["html"], classified))
 
     # AC-PPC2: the negative control the whole page rests on - the SAME mtime gap
     # answers two different verdicts depending on committed history alone.
@@ -118,9 +125,21 @@ def main():
     stamp_only["round"] = 1
     volatile_ignored = PPC.normalized(json.dumps(stamp_only, indent=2, sort_keys=True,
                                                  ensure_ascii=False)) == PPC.normalized(fresh_json)
-    ok("AC-PPC4", landed_ok and caught and volatile_ignored,
-       "landed_pair=%s tamper_caught=%s label_and_stamp_ignored=%s"
-       % (landed_ok, caught, volatile_ignored))
+    # R3508: the html half prints its own round label, so it went red the moment
+    # the tick moved past its derivation. The label is excluded and the
+    # exclusion is proved narrow - one changed count still reads drift.
+    fresh_html_text = PPC.html_of(payload)
+    html_stamp_only = fresh_html_text.replace("Tick %d" % payload["round"], "Tick 1")
+    marked = ">%d html<" % totals["html"]
+    html_tampered = fresh_html_text.replace(marked, ">%d html<" % (totals["html"] + 1), 1)
+    html_label_ignored = (html_stamp_only != fresh_html_text
+                          and PPC.normalized(html_stamp_only) == PPC.normalized(fresh_html_text))
+    html_digit_caught = (html_tampered != fresh_html_text
+                         and PPC.normalized(html_tampered) != PPC.normalized(fresh_html_text))
+    ok("AC-PPC4", landed_ok and caught and volatile_ignored
+       and html_label_ignored and html_digit_caught,
+       "landed_pair=%s tamper_caught=%s label_and_stamp_ignored=%s html_label=%s html_digit=%s"
+       % (landed_ok, caught, volatile_ignored, html_label_ignored, html_digit_caught))
 
     # AC-PPC5: the page does not describe itself, so committing it cannot flip
     # its own class and redden --check for a reason that is not a defect.
@@ -168,6 +187,57 @@ def main():
               row3.get("freeze_bytes_match"), row4["verdict"]))
     finally:
         shutil.rmtree(work, ignore_errors=True)
+
+    # AC-PPC8: a landed face that prints this page's own byte count is a READING,
+    # not a measurement - its clocks and digests are dropped so the census and
+    # the entry index can no longer redden each other, while its class and last
+    # commit stay compared (negative controls on detection and on the reading).
+    mirrors = [r for r in rows if r.get("mirror")]
+    mirror_names = sorted(r["name"] for r in mirrors)
+    names_page = []
+    for path in sorted(glob.glob(os.path.join(PREVIEW, "*.html"))):
+        stem = os.path.basename(path)[:-5]
+        if stem == PPC.LABEL:
+            continue
+        try:
+            text = read_bytes(path).decode("utf-8", "replace")
+        except OSError:
+            continue
+        if PPC.LABEL in text:
+            names_page.append(stem)
+    names_page.sort()
+    measured_keys = ("bytes", "sha", "mtime", "mtime_epoch")
+    mirror_drops_measurement = all(
+        not any(k in (r["html"] or {}) for k in measured_keys)
+        and not any(k in (r["json"] or {}) for k in measured_keys)
+        and "delta_seconds" not in r
+        for r in mirrors)
+    narrow = all("bytes" in r["html"] for r in rows if not r.get("mirror"))
+    work2 = tempfile.mkdtemp(prefix="ppc3508-")
+    try:
+        quiet = os.path.join(work2, "quiet.html")
+        loud = os.path.join(work2, "loud.html")
+        with io.open(quiet, "wb") as f:
+            f.write(b"<html><body>no sizes here</body></html>")
+        with io.open(loud, "wb") as f:
+            f.write(("<html><body>%s.json &middot; 52722B</body></html>" % PPC.LABEL).encode("utf-8"))
+        detect = (not PPC.prints_this_page(quiet)) and PPC.prints_this_page(loud)
+    finally:
+        shutil.rmtree(work2, ignore_errors=True)
+    reading_compared = True
+    if mirrors:
+        moved = json.loads(PPC.dumps(payload))
+        for row in moved["pairs"]:
+            if row.get("mirror"):
+                row["html"]["commit"] = "deadbee"
+                break
+        reading_compared = (PPC.normalized(json.dumps(moved, indent=2, sort_keys=True,
+                                                      ensure_ascii=False))
+                            != PPC.normalized(read_bytes(JSON_HALF)))
+    ok("AC-PPC8", mirror_names == names_page and bool(names_page)
+       and mirror_drops_measurement and narrow and detect and reading_compared,
+       "mirrors=%s named_in_html=%s no_measurement=%s narrow=%s detect=%s reading_compared=%s"
+       % (mirror_names, names_page, mirror_drops_measurement, narrow, detect, reading_compared))
 
     # AC-PPC7: the suite proved things without changing anything on disk.
     same = (sig(TOOL) == sig_tool and sig(JSON_HALF) == sig_json

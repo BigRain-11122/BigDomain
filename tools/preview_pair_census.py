@@ -50,6 +50,7 @@ import hashlib
 import io
 import json
 import os
+import re
 import subprocess
 import sys
 
@@ -72,6 +73,12 @@ SAME_RUN_SECONDS = 120
 # going red the moment the tick it was derived under advances, the stale-pair
 # trap this page itself exists to expose.
 VOLATILE = ("generated_at", "round")
+# R3508: the html half prints the round it was derived at ("Tick 3507"), and a
+# label is not a measurement - without this the page went red the moment the
+# tick advanced past its own derivation, which is the same stale-label trap
+# R3503 healed on the receipt page. The exclusion is narrow and pinned: one
+# digit changed anywhere else in the page still reads drift (AC-PPC4).
+TICK_RE = re.compile(r"Tick \d+")
 # R3506: an mtime is also a clock. The page was measured red after a round that
 # re-derived the entry index (whose band quotes this page's byte counts): every
 # per-pair digest and commit was unchanged, only the seconds moved, and the two
@@ -83,6 +90,19 @@ VOLATILE = ("generated_at", "round")
 # pair whose class really changed still reads it through the verdict.
 PAIR_CLOCKS = ("mtime", "mtime_epoch")
 FREEZE_REGISTER = os.path.join(REPO, "state", "apimarket-face-freeze.json")
+# R3508: one landed face prints a byte count for EVERY preview half, this page's
+# own two included (measured: exactly one html under preview/ names this label).
+# Its bytes therefore move whenever any listed page is re-derived, so its digest
+# can never be a stable measurement - recording it made the two gates take turns:
+# deriving the entry index reddened this page (measured: same 55908B, different
+# digest), and deriving this page moved the index band that quotes these two
+# byte counts. Such a pair is recorded as a READING - name, class and last
+# commit - with no clock and no digest. The exclusion is read off the landed
+# html, never trusted from a list, and it is NARROW: every other pair keeps its
+# measurements, so a face that really changed still reads drift through its
+# digest and its class.
+MIRROR_REASON = ("prints a byte count for every preview half, this page's own included, "
+                 "so its bytes move whenever a listed page is re-derived")
 # R3500: per-face receipts (tools/face_pair_receipt.py) say WHY a split exists.
 # Only a receipt that reproduces the landed html byte for byte may excuse it;
 # a version-drift receipt explains the split and leaves it standing.
@@ -226,6 +246,35 @@ def apply_receipt(row, html_path, receipts):
         row["receipt_detail"] = rec.get("detail") or rec.get("error") or ""
 
 
+def prints_this_page(path):
+    """True when a landed html half names this census page in its own text.
+
+    A directory index prints every preview half's byte count, this page's
+    included, which is why its own bytes cannot be a measurement of itself.
+    """
+    try:
+        return LABEL in rd_bytes(path).decode("utf-8", "replace")
+    except OSError:
+        return False
+
+
+def mirror_row(stem, h, j):
+    """A pair whose html half prints this page's size: a reading, not a measurement.
+
+    The class is computed exactly as for every other pair, so a mirror pair that
+    really changed hands is still named; only the two clocks and the two digests
+    are dropped, because they move whenever ANY listed page is re-derived.
+    """
+    if j is None:
+        verdict = "no-json"
+    else:
+        verdict = classify(abs(h["mtime_epoch"] - j["mtime_epoch"]), h["commit"], j["commit"])
+    return {"name": stem, "verdict": verdict,
+            "html": {"commit": h["commit"]},
+            "json": {"commit": j["commit"]} if j else None,
+            "mirror": MIRROR_REASON}
+
+
 def census():
     register = freeze_register()
     receipts = pair_receipts()
@@ -237,6 +286,12 @@ def census():
         json_path = html[:-5] + ".json"
         rel_h = "preview/" + os.path.basename(html)
         h = side(html, rel_h)
+        if prints_this_page(html):
+            j = None
+            if os.path.exists(json_path):
+                j = side(json_path, "preview/" + os.path.basename(json_path))
+            rows.append(mirror_row(stem, h, j))
+            continue
         if not os.path.exists(json_path):
             rows.append({"name": stem, "verdict": "no-json", "delta_seconds": 0,
                          "html": h, "json": None})
@@ -257,7 +312,7 @@ def census():
     totals["explained"] = sum(1 for r in rows if r.get("pair_receipt"))
 
     splits = [r for r in rows if r["verdict"] == "history-split"]
-    splits.sort(key=lambda r: (-r["delta_seconds"], r["name"]))
+    splits.sort(key=lambda r: (-r.get("delta_seconds", 0), r["name"]))
     oldest = None
     if splits:
         head = splits[0]
@@ -305,8 +360,8 @@ def esc(text):
 
 def html_of(payload):
     t = payload["totals"]
-    drifted = [p for p in payload["pairs"] if p["delta_seconds"] > SAME_RUN_SECONDS]
-    drifted.sort(key=lambda p: (-p["delta_seconds"], p["name"]))
+    drifted = [p for p in payload["pairs"] if p.get("delta_seconds", 0) > SAME_RUN_SECONDS]
+    drifted.sort(key=lambda p: (-p.get("delta_seconds", 0), p["name"]))
     body = []
     for p in drifted:
         cls = {"history-split": "split", "frozen-excused": "frozen"}.get(p["verdict"], "same")
@@ -354,7 +409,10 @@ def html_of(payload):
             'reproduced the landed html byte for byte; a receipt that explains a split without '
             'reproducing it leaves the split standing. '
             'This page excludes its own pair by name, so committing it cannot change its own '
-            'reading. Non-advisory notice: this is a build status page, not investment advice.'
+            'reading. A pair whose html half prints this page\'s own byte count (the entry '
+            'index does) is recorded as a reading - class and last commit, no clocks and no '
+            'digests - because its bytes move whenever any listed page is re-derived. '
+            'Non-advisory notice: this is a build status page, not investment advice.'
             '</footer>'
             '</div></body></html>\n'
             % (STYLE, payload["round"], t["html"], t["paired"], payload["source"],
@@ -378,7 +436,8 @@ def normalized(data):
     try:
         obj = json.loads(text)
     except Exception:
-        return "\n".join(line.rstrip() for line in text.replace("\r\n", "\n").split("\n"))
+        folded = "\n".join(line.rstrip() for line in text.replace("\r\n", "\n").split("\n"))
+        return TICK_RE.sub("Tick <label>", folded)
     for key in VOLATILE:
         if key in obj:
             obj[key] = "<volatile>"
