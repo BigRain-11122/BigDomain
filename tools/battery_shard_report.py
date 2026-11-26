@@ -44,6 +44,41 @@ OUT_JSON = os.path.join(PREVIEW, "battery-shard-report.json")
 OUT_HTML = os.path.join(PREVIEW, "battery-shard-report.html")
 SHARD = os.path.join(HERE, "battery_shard.py")
 STATE = os.path.join(ROOT, "src", "os", "state.json")
+EXPORT_SRC = os.path.join(ROOT, "src", "os")
+
+
+def refresh_export_face():
+    """AC-BSRB13 (R3524): landing this board page and re-deriving the CEO face
+    are ONE write.
+
+    Measured at R3523: this producer's pair is a meta board page, so it can
+    never become `latest_artifact` - it only lands in the skipped audit. While
+    the producer ran detached, nothing re-derived that audit afterwards, so the
+    export face aged in place and three suites reddened on the next window that
+    looked. The law is the birth site: the shipped writer runs in THIS process,
+    after both halves are on disk, so the landing and the re-derivation cannot
+    be separated again by scheduling.
+
+    Returns (ok, note, proof). A refusing writer is reported by name instead of
+    raised: the pair is already landed, and the exit code is what a driver
+    reads.
+    """
+    if EXPORT_SRC not in sys.path:
+        sys.path.insert(0, EXPORT_SRC)
+    import export_round as ER
+    stamp = ER.datetime.datetime.now(ER.TZ).replace(microsecond=0).isoformat()
+    try:
+        ok, derived, proof = ER.write(ROOT, stamp)
+    except Exception as exc:
+        return (False, "E_BSR_FACE_REFUSED %s: %s"
+                % (type(exc).__name__, exc), {})
+    gate = (proof or {}).get("gate")
+    if not ok or gate != "CURRENT":
+        return (False, "E_BSR_FACE_UNPROVEN ok=%s queue=%s" % (ok, gate),
+                proof or {})
+    return True, "", {"stamp": stamp,
+                      "bytes": (proof or {}).get("bytes"),
+                      "latest": (derived or {}).get("latest")}
 
 
 def live_round():
@@ -491,6 +526,15 @@ def main(argv):
                  payload["totals"]["selected"],
                  payload["totals"]["selected_criteria"],
                  payload["totals"]["uncovered_suites"]))
+        # AC-BSRB13 (R3524): a board landing that leaves the CEO face naming an
+        # older skipped list is half a write, so the shipped writer runs here,
+        # in this process, after both halves are on disk.
+        face_ok, face_note, face = refresh_export_face()
+        if not face_ok:
+            print("BSR face RED %s" % face_note)
+            return 2
+        print("BSR face export=WRITTEN stamp=%s latest=%s bytes=%s"
+              % (face.get("stamp"), face.get("latest"), face.get("bytes")))
         return 0 if payload["verdict"] == "PASS" else 2
     except Refuse as exc:
         print(str(exc))

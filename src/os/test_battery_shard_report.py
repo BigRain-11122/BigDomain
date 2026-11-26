@@ -23,6 +23,7 @@ Source discipline: pure ASCII, stdlib only, no clock, no network, no shell.
 """
 import contextlib
 import copy
+import datetime
 import hashlib
 import importlib.util
 import io
@@ -508,6 +509,87 @@ def main():
        today_ok and legacy_ok and timeout_ok and real_ok,
        "today=%s legacy=%s timeout=%s real=%s(%s)"
        % (today_ok, legacy_ok, timeout_ok, real_ok, fam_real["parse"]))
+
+    # ---- AC-BSRB13 (R3524 pin): landing this board pair and re-deriving the
+    # CEO face are ONE write, and the order is measured from source positions
+    # rather than promised by a comment. R3523 measured the defect: a detached
+    # landing aged the export face in place and three suites reddened.
+    def face_order(src):
+        land = src.find("write_atomic(OUT_HTML")
+        call = src.find("= refresh_export_face()")
+        if land < 0 or call < 0:
+            return "absent"
+        return "after" if call > land else "before"
+
+    real_order = face_order(src_tool)
+    moved = src_tool.replace(
+        "        html_text = render_html(payload)\n",
+        "        _ = refresh_export_face()\n"
+        "        html_text = render_html(payload)\n", 1)
+    moved_order = face_order(moved)
+    cut = src_tool.replace(
+        "        face_ok, face_note, face = refresh_export_face()\n", "", 1)
+    cut_order = face_order(cut)
+    coupling_ok = (real_order == "after" and moved_order == "before"
+                   and cut_order == "absent"
+                   and "ER.write(ROOT, stamp)" in src_tool)
+
+    # Behaviour: the tool must DELEGATE to the shipped writer, once, with the
+    # repo root and a pinned ISO-8601 stamp, and carry its verdict back out.
+    class _FakeER(object):
+        datetime = datetime
+        TZ = datetime.timezone.utc
+
+        @staticmethod
+        def write(repo, stamp):
+            fake_calls.append((repo, stamp))
+            return (True, {"latest": "preview/probe.html (1B) + "
+                                     "preview/probe.json (1B)"},
+                    {"gate": "CURRENT", "bytes": 12})
+
+    class _RefuseER(object):
+        datetime = datetime
+        TZ = datetime.timezone.utc
+
+        @staticmethod
+        def write(repo, stamp):
+            raise ValueError("E_EXPR_UNPROVEN the face cannot be judged "
+                             "face=WRITTEN code=E_EXP_BAD_TS")
+
+    fake_calls = []
+    keep_er = sys.modules.get("export_round")
+    try:
+        sys.modules["export_round"] = _FakeER
+        face_ok, face_note, face_proof = bsr.refresh_export_face()
+    finally:
+        if keep_er is None:
+            sys.modules.pop("export_round", None)
+        else:
+            sys.modules["export_round"] = keep_er
+    one_call = len(fake_calls) == 1
+    stamp = fake_calls[0][1] if one_call else ""
+    shape_ok = bool(re.match(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}"
+                             r"\+00:00$", stamp))
+    delegate_ok = (face_ok is True and face_note == ""
+                   and one_call and fake_calls[0][0] == ROOT
+                   and shape_ok
+                   and face_proof.get("latest", "").startswith("preview/probe")
+                   and face_proof.get("bytes") == 12)
+    keep_er = sys.modules.get("export_round")
+    try:
+        sys.modules["export_round"] = _RefuseER
+        refused_ok, refused_note, _p = bsr.refresh_export_face()
+    finally:
+        if keep_er is None:
+            sys.modules.pop("export_round", None)
+        else:
+            sys.modules["export_round"] = keep_er
+    refuse_ok = (refused_ok is False
+                 and "E_BSR_FACE_REFUSED" in refused_note
+                 and "E_EXPR_UNPROVEN" in refused_note)
+    ok("AC-BSRB13", coupling_ok and delegate_ok and refuse_ok,
+       "order=%s moved=%s cut=%s delegate=%s refuse=%s"
+       % (real_order, moved_order, cut_order, delegate_ok, refuse_ok))
 
     total = len(CHECKS)
     passed = total - len(FAILS)
