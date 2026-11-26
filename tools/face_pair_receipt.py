@@ -85,6 +85,36 @@ FACES = [
         "why": ("next oldest of the twelve splits (743.8h): html last committed at "
                 "700dd89a (the same R3288 back-hop channel), json at e0fd7251 (the "
                 "R2118 pre-purchase Q&A producer)"),
+        # R3515: replayed the producer AS IT STOOD at e0fd7251 over its own pinned
+        # demo world. The json half came back byte for byte and the html half
+        # matched the landed page exactly once the channel was applied AS IT STOOD
+        # at 700dd89a - including that round's spelling of the face name with the
+        # .html suffix, which today's write() no longer uses, so comparing against
+        # the HEAD channel shows a 5-byte difference at the face attribute and
+        # reads as an edit. The pre-channel body is recorded on its own so that
+        # half can be re-checked without the channel module at all.
+        "historical": {
+            "commit": "e0fd7251",
+            "channel_commit": "700dd89a",
+            "method": ("git archive --output=<tar> e0fd7251 src, extract to a temp "
+                       "tree, run that tree's preview_R2118.main() in process, then "
+                       "splice that tree's own channel block (tools/face_backhop.py "
+                       "as of 700dd89a) with the face name spelled <slug>.html"),
+            "rendered_html_bytes": 31595,
+            "rendered_html_sha256_12": "a86748242065",
+            "rendered_json_bytes": 51808,
+            "rendered_json_sha256_12": "72c5b99b02df",
+            "landed_html_bytes": 32309,
+            "landed_html_sha256_12": "40343bcf5f09",
+            "landed_json_bytes": 51808,
+            "landed_json_sha256_12": "72c5b99b02df",
+            "json_byte_identical": True,
+            "html_channel_splice": ("the rendered page plus the channel block as it "
+                                    "stood at 700dd89a (face name spelled <slug>.html, "
+                                    "hop measured on the landed buyer-trial page) equals "
+                                    "the landed page byte for byte, no normalisation"),
+            "witnesses": ["channel-face-spelling", "channel-shelf-stamp"],
+        },
     },
     {
         "slug": "apimarket-report-buyerquestions",
@@ -220,6 +250,10 @@ SHELF_STAMP = re.compile(rb'data-back-bytes="\d+"')
 # The same stamp is printed in the block's visible line ("2 个控件 · 55302B"),
 # so it is normalised there too - and only there, keeping the controls count.
 SHELF_SPAN = re.compile(rb'(\xe4\xb8\xaa\xe6\x8e\xa7\xe4\xbb\xb6 \xc2\xb7 )\d+(B</span>)')
+
+# R3515: the channel block itself, so a historical record's pre-channel body can
+# be recovered from the landed page and hashed against what the replay recorded.
+CHANNEL_BLOCK = re.compile(rb'<div class="backhop".*?</div>\n?', re.S)
 
 
 def shelf_normalised(data):
@@ -1034,6 +1068,27 @@ def measure(face):
         row["detail"] = ("landed html is not the producer html plus the channel block: "
                          "first difference at byte %d" % at)
     return row
+
+
+def landed_body_matches(hist, landed_html):
+    """R3515: the half of a historical replay that needs no channel at all.
+
+    A historical record states how many bytes the producer rendered and what they
+    hashed to BEFORE the post-render channel ran. The landed page still carries
+    that render verbatim with the channel block dropped into it, so the claim is
+    checkable from disk: remove the block and hash what is left. This is
+    independent of which channel version ran (the R3288 face-name spelling moved
+    after that round, the shelf stamp moves every time index.html grows) and of
+    what the block says, so it detects a body edited after the evidence was taken
+    without modelling the channel. A record without the body digests is refused.
+    """
+    if not hist or not hist.get("commit"):
+        return None
+    if hist.get("rendered_html_bytes") is None or not hist.get("rendered_html_sha256_12"):
+        return None
+    body = CHANNEL_BLOCK.sub(b"", landed_html, count=1)
+    return (len(body) == hist["rendered_html_bytes"]
+            and sha256_hex(body)[:12] == hist["rendered_html_sha256_12"])
 
 
 def landed_digest_agrees(hist, landed_html, landed_json):

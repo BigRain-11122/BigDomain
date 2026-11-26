@@ -695,32 +695,72 @@ def main():
     # tool is barred a child process), so the arm pins the re-checkable half: the
     # landed pair must still hash to the digests that replay recorded, a record
     # without a commit is refused, and a record whose digest is moved reads False.
+    # R3515: the arm covers EVERY historical row, not just the first one - a
+    # second face that recorded its evidence has to be pinned by the same law,
+    # otherwise the arm would silently grade only whichever face sorts first.
     hist_rows = [r for r in rows if r.get("historical")]
     hist_ctx = ""
     h_ok = h_refuse = h_neg = h_untouched = False
+    h_per_row = []
     if hist_rows:
-        hist_row = hist_rows[0]
-        hist = hist_row["historical"]
-        html_p = os.path.join(PREVIEW, hist_row["slug"] + ".html")
-        json_p = os.path.join(PREVIEW, hist_row["slug"] + ".json")
-        sig_h = sig(html_p)
-        sig_j = sig(json_p)
-        page_h = read_bytes(html_p)
-        rep_j = read_bytes(json_p)
-        h_ok = (FPR.landed_digest_agrees(hist, page_h, rep_j) is True
-                and hist_row["verdict"] == "version-drift"
-                and bool(re.search(r"[0-9a-f]{7,40}", hist.get("commit") or ""))
-                and hist.get("json_byte_identical") is True)
-        h_refuse = FPR.landed_digest_agrees({"landed_html_sha256_12": "0" * 12}, page_h, rep_j) is None
-        moved = dict(hist)
-        moved["landed_html_sha256_12"] = "f" * 12
-        h_neg = FPR.landed_digest_agrees(moved, page_h, rep_j) is False
-        h_untouched = (sig(html_p) == sig_h and sig(json_p) == sig_j)
-        hist_ctx = "rows=%d commit=%s agree=%s refuse=%s neg=%s" % (
-            len(hist_rows), hist.get("commit"),
-            FPR.landed_digest_agrees(hist, page_h, rep_j), h_refuse, h_neg)
+        for hist_row in hist_rows:
+            hist = hist_row["historical"]
+            html_p = os.path.join(PREVIEW, hist_row["slug"] + ".html")
+            json_p = os.path.join(PREVIEW, hist_row["slug"] + ".json")
+            sig_h = sig(html_p)
+            sig_j = sig(json_p)
+            page_h = read_bytes(html_p)
+            rep_j = read_bytes(json_p)
+            row_ok = (FPR.landed_digest_agrees(hist, page_h, rep_j) is True
+                      and hist_row["verdict"] == "version-drift"
+                      and bool(re.search(r"[0-9a-f]{7,40}", hist.get("commit") or ""))
+                      and hist.get("json_byte_identical") is True
+                      and sig(html_p) == sig_h and sig(json_p) == sig_j)
+            h_per_row.append((hist_row["slug"], row_ok, hist.get("commit")))
+            if hist_row is hist_rows[0]:
+                h_refuse = FPR.landed_digest_agrees(
+                    {"landed_html_sha256_12": "0" * 12}, page_h, rep_j) is None
+                moved = dict(hist)
+                moved["landed_html_sha256_12"] = "f" * 12
+                h_neg = FPR.landed_digest_agrees(moved, page_h, rep_j) is False
+                h_untouched = (sig(html_p) == sig_h and sig(json_p) == sig_j)
+                hist_ctx = "rows=%d commit=%s agree=%s refuse=%s neg=%s" % (
+                    len(hist_rows), hist.get("commit"),
+                    FPR.landed_digest_agrees(hist, page_h, rep_j), h_refuse, h_neg)
+        h_ok = all(r[1] for r in h_per_row)
     ok("AC-PPR16", bool(hist_rows) and h_ok and h_refuse and h_neg and h_untouched,
-       hist_ctx or "no historical record on any row")
+       (hist_ctx or "no historical record on any row")
+       + " per_row=" + ",".join("%s:%s@%s" % r for r in h_per_row))
+
+    # AC-PPR17: the pre-channel body of a historical replay is checkable without
+    # the channel module at all - the landed page carries the producer render
+    # verbatim ahead of the channel block, so its length and hash can be compared
+    # against the record. Load-bearing three ways: every record reads True, a
+    # moved digest reads False, and a record that names no body is refused rather
+    # than trusted. The landed pair is untouched.
+    body_ok = body_neg = body_refuse = body_untouched = False
+    body_ctx = ""
+    if hist_rows:
+        body_hits = []
+        for hist_row in hist_rows:
+            hist = hist_row["historical"]
+            html_p = os.path.join(PREVIEW, hist_row["slug"] + ".html")
+            sig_h = sig(html_p)
+            page_h = read_bytes(html_p)
+            hit = FPR.landed_body_matches(hist, page_h)
+            body_hits.append((hist_row["slug"], hit))
+            if hist_row is hist_rows[0]:
+                moved_body = dict(hist)
+                moved_body["rendered_html_bytes"] = int(hist["rendered_html_bytes"]) + 1
+                body_neg = FPR.landed_body_matches(moved_body, page_h) is False
+                body_refuse = FPR.landed_body_matches({"commit": "e0fd7251"}, page_h) is None
+                body_untouched = sig(html_p) == sig_h
+        body_ok = all(h is True for _s, h in body_hits)
+        body_ctx = "rows=%d body=%s neg=%s refuse=%s" % (
+            len(hist_rows), ",".join("%s:%s" % b for b in body_hits),
+            body_neg, body_refuse)
+    ok("AC-PPR17", bool(hist_rows) and body_ok and body_neg and body_refuse
+       and body_untouched, body_ctx or "no historical record on any row")
 
     total = len(CHECKS)
     passed = total - len(FAILS)

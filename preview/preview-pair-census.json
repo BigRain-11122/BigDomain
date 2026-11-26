@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-26T22:45:05+08:00",
+  "generated_at": "2026-11-26T23:14:33+08:00",
   "law": "a split is claimed only when the two halves' last commits differ; an mtime gap alone is published as a bucket, never as a split",
   "oldest_split": {
     "delta_hours": 749.7,
@@ -295,7 +295,7 @@
       "name": "apimarket-report-questions",
       "pair_receipt": "version-drift",
       "receipt_bound": true,
-      "receipt_detail": "landed page is a schema 11 render and the renderer is at schema 17, so no re-render at HEAD can reproduce it; explained, not excused: first difference at byte 1652",
+      "receipt_detail": "landed page is a schema 11 render and the renderer is at schema 17, so no re-render at HEAD can reproduce it; explained, not excused: first difference at byte 1652; and the pair IS reproduced by the producer as it stood at e0fd7251 (html 31595 B + the channel block = 32309 B, json 51808 B identical), so the split is producer evolution, not editing",
       "verdict": "history-split"
     },
     {
@@ -404,18 +404,18 @@
     {
       "delta_seconds": 0,
       "html": {
-        "bytes": 16413,
+        "bytes": 16412,
         "commit": "4e4f10a7",
-        "mtime": "2026-11-26T22:31:00+08:00",
-        "mtime_epoch": 1795703460,
-        "sha": "8BB1AF37"
+        "mtime": "2026-11-26T23:11:40+08:00",
+        "mtime_epoch": 1795705900,
+        "sha": "FFFE60D0"
       },
       "json": {
-        "bytes": 18052,
+        "bytes": 18252,
         "commit": "4e4f10a7",
-        "mtime": "2026-11-26T22:31:00+08:00",
-        "mtime_epoch": 1795703460,
-        "sha": "6DEB8E14"
+        "mtime": "2026-11-26T23:11:40+08:00",
+        "mtime_epoch": 1795705900,
+        "sha": "40344263"
       },
       "name": "battery-shard-report",
       "verdict": "same-run"
@@ -805,18 +805,18 @@
     {
       "delta_seconds": 0,
       "html": {
-        "bytes": 16508,
-        "commit": "4e4f10a7",
-        "mtime": "2026-11-26T22:42:37+08:00",
-        "mtime_epoch": 1795704157,
-        "sha": "F4E281B8"
+        "bytes": 16694,
+        "commit": "716f1c38",
+        "mtime": "2026-11-26T23:01:15+08:00",
+        "mtime_epoch": 1795705275,
+        "sha": "EC7C82E6"
       },
       "json": {
-        "bytes": 25456,
-        "commit": "4e4f10a7",
-        "mtime": "2026-11-26T22:42:37+08:00",
-        "mtime_epoch": 1795704157,
-        "sha": "D602AF79"
+        "bytes": 26856,
+        "commit": "716f1c38",
+        "mtime": "2026-11-26T23:01:15+08:00",
+        "mtime_epoch": 1795705275,
+        "sha": "5CF956B2"
       },
       "name": "face-pair-receipt",
       "verdict": "same-run"
@@ -2036,7 +2036,7 @@
       "verdict": "same-run"
     }
   ],
-  "round": 3513,
+  "round": 3515,
   "same_run_seconds": 120,
   "self_excluded": "preview-pair-census",
   "source": "tools/preview_pair_census.py",
