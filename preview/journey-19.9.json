@@ -31,7 +31,7 @@
    "carrier_text": "pay spec AC-Y1..Y14+沙箱 16 判据自验在册（双通道）；价目=§四.1（19.9 锁价在册）",
    "gate": "充值页代币三不可条款常驻（L79 分配层③）",
    "carrier": "payment-gate-report",
-   "verdict": "PASS",
+   "verdict": "FAIL AC-PAYG8",
    "ok": true,
    "detail": "declared verdict",
    "artifact": "preview/payment-gate-report.json"
@@ -42,7 +42,7 @@
    "carrier_text": "pay 沙箱幂等+对账 dry-run（launch-rehearsal §三 D-1 复跑项）",
    "gate": "法币/代币双域隔离 AC-Y7",
    "carrier": "payment-gate-report",
-   "verdict": "PASS",
+   "verdict": "FAIL AC-PAYG8",
    "ok": true,
    "detail": "declared verdict",
    "artifact": "preview/payment-gate-report.json"
@@ -107,8 +107,8 @@
   {
    "stem": "ledger-business-report",
    "artifact": "preview/ledger-business-report.json",
-   "bytes": 1174,
-   "mtime_utc": "2026-11-20T00:48:05Z",
+   "bytes": 1233,
+   "mtime_utc": "2026-11-22T11:22:22Z",
    "verdict": "PASS",
    "ok": true,
    "detail": "reconcile_rc=0 tx_count=3 entry_count=6"
@@ -116,8 +116,8 @@
   {
    "stem": "lobby-ws-report",
    "artifact": "preview/lobby-ws-report.json",
-   "bytes": 3070,
-   "mtime_utc": "2026-11-15T00:28:42Z",
+   "bytes": 3144,
+   "mtime_utc": "2026-11-22T11:22:22Z",
    "verdict": "PASS",
    "ok": true,
    "detail": "8/8 criteria"
@@ -125,8 +125,8 @@
   {
    "stem": "membership-benefit-report",
    "artifact": "preview/membership-benefit-report.json",
-   "bytes": 9817,
-   "mtime_utc": "2026-11-16T07:49:16Z",
+   "bytes": 10099,
+   "mtime_utc": "2026-11-22T11:22:22Z",
    "verdict": "PASS",
    "ok": true,
    "detail": "declared verdict"
@@ -134,9 +134,9 @@
   {
    "stem": "payment-gate-report",
    "artifact": "preview/payment-gate-report.json",
-   "bytes": 6959,
-   "mtime_utc": "2026-11-16T07:49:15Z",
-   "verdict": "PASS",
+   "bytes": 7018,
+   "mtime_utc": "2026-11-26T21:46:52Z",
+   "verdict": "FAIL AC-PAYG8",
    "ok": true,
    "detail": "declared verdict"
   },
@@ -144,7 +144,7 @@
    "stem": "platform-live-report",
    "artifact": "preview/platform-live-report.json",
    "bytes": 6228,
-   "mtime_utc": "2026-11-20T00:09:36Z",
+   "mtime_utc": "2026-11-22T23:11:09Z",
    "verdict": "PASS",
    "ok": true,
    "detail": "9/9 criteria"
@@ -153,7 +153,7 @@
    "stem": "ugc-gate-report",
    "artifact": "preview/ugc-gate-report.json",
    "bytes": 20170,
-   "mtime_utc": "2026-11-22T02:58:16Z",
+   "mtime_utc": "2026-11-26T22:12:40Z",
    "verdict": "DECLARED",
    "ok": null,
    "detail": "24 criteria declared, no in-artifact grade"
@@ -208,7 +208,7 @@
     "href": "start-here.html",
     "label": "回到起点：这台机器今天能亲手做什么（只读汇总）",
     "labelled": true,
-    "bytes": 41366,
+    "bytes": 41370,
     "controls": 0,
     "readonly": true,
     "exists": true
@@ -219,9 +219,9 @@
   "last_sentence": "本机不接服务器时，这条路最远走到第 3 跳（buyer-trial.html，3 个控件）；再往后只有读数，没有可操作控件。"
  },
  "headline": "6 of 8 steps carry a declared PASS",
- "generated_utc": "2026-11-22T10:57:18Z",
+ "generated_utc": "2026-11-26T23:17:58Z",
  "sizes": {
-  "html": 12907,
-  "json": 8012
+  "html": 12935,
+  "json": 8040
  }
 }

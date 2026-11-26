@@ -44,7 +44,7 @@ li{margin:6px 0}code{color:#79c0ff}
 <div class="lbl">touchpoint</div><div class="val">19.9 算力包下单（单次爆款·三形态一句话）</div>
 <div class="lbl">carrier</div><div class="val">pay spec AC-Y1..Y14+沙箱 16 判据自验在册（双通道）；价目=§四.1（19.9 锁价在册）</div>
 <div class="lbl">compliance gate</div><div class="val">充值页代币三不可条款常驻（L79 分配层③）</div>
-<div class="lbl">live status</div><div class="val"><span class="chip ok">PASS</span> <span class="small">declared verdict &middot; preview/payment-gate-report.json</span></div>
+<div class="lbl">live status</div><div class="val"><span class="chip ok">FAIL AC-PAYG8</span> <span class="small">declared verdict &middot; preview/payment-gate-report.json</span></div>
 </div></div>
 <div class="step">
 <div class="sid">JV-3</div>
@@ -52,7 +52,7 @@ li{margin:6px 0}code{color:#79c0ff}
 <div class="lbl">touchpoint</div><div class="val">回调/幂等/对账</div>
 <div class="lbl">carrier</div><div class="val">pay 沙箱幂等+对账 dry-run（launch-rehearsal §三 D-1 复跑项）</div>
 <div class="lbl">compliance gate</div><div class="val">法币/代币双域隔离 AC-Y7</div>
-<div class="lbl">live status</div><div class="val"><span class="chip ok">PASS</span> <span class="small">declared verdict &middot; preview/payment-gate-report.json</span></div>
+<div class="lbl">live status</div><div class="val"><span class="chip ok">FAIL AC-PAYG8</span> <span class="small">declared verdict &middot; preview/payment-gate-report.json</span></div>
 </div></div>
 <div class="step">
 <div class="sid">JV-4</div>
@@ -97,12 +97,12 @@ li{margin:6px 0}code{color:#79c0ff}
 </div>
 <div class="card"><h2>Carriers read from disk</h2>
 <table><tr><th>report</th><th>verdict</th><th>detail</th><th>bytes</th><th>mtime utc</th></tr>
-<tr><td><code>preview/ledger-business-report.json</code></td><td><span class="chip ok">PASS</span></td><td>reconcile_rc=0 tx_count=3 entry_count=6</td><td>1174</td><td>2026-11-20T00:48:05Z</td></tr>
-<tr><td><code>preview/lobby-ws-report.json</code></td><td><span class="chip ok">PASS</span></td><td>8/8 criteria</td><td>3070</td><td>2026-11-15T00:28:42Z</td></tr>
-<tr><td><code>preview/membership-benefit-report.json</code></td><td><span class="chip ok">PASS</span></td><td>declared verdict</td><td>9817</td><td>2026-11-16T07:49:16Z</td></tr>
-<tr><td><code>preview/payment-gate-report.json</code></td><td><span class="chip ok">PASS</span></td><td>declared verdict</td><td>6959</td><td>2026-11-16T07:49:15Z</td></tr>
-<tr><td><code>preview/platform-live-report.json</code></td><td><span class="chip ok">PASS</span></td><td>9/9 criteria</td><td>6228</td><td>2026-11-20T00:09:36Z</td></tr>
-<tr><td><code>preview/ugc-gate-report.json</code></td><td><span class="chip flat">DECLARED</span></td><td>24 criteria declared, no in-artifact grade</td><td>20170</td><td>2026-11-22T02:58:16Z</td></tr>
+<tr><td><code>preview/ledger-business-report.json</code></td><td><span class="chip ok">PASS</span></td><td>reconcile_rc=0 tx_count=3 entry_count=6</td><td>1233</td><td>2026-11-22T11:22:22Z</td></tr>
+<tr><td><code>preview/lobby-ws-report.json</code></td><td><span class="chip ok">PASS</span></td><td>8/8 criteria</td><td>3144</td><td>2026-11-22T11:22:22Z</td></tr>
+<tr><td><code>preview/membership-benefit-report.json</code></td><td><span class="chip ok">PASS</span></td><td>declared verdict</td><td>10099</td><td>2026-11-22T11:22:22Z</td></tr>
+<tr><td><code>preview/payment-gate-report.json</code></td><td><span class="chip ok">FAIL AC-PAYG8</span></td><td>declared verdict</td><td>7018</td><td>2026-11-26T21:46:52Z</td></tr>
+<tr><td><code>preview/platform-live-report.json</code></td><td><span class="chip ok">PASS</span></td><td>9/9 criteria</td><td>6228</td><td>2026-11-22T23:11:09Z</td></tr>
+<tr><td><code>preview/ugc-gate-report.json</code></td><td><span class="chip flat">DECLARED</span></td><td>24 criteria declared, no in-artifact grade</td><td>20170</td><td>2026-11-26T22:12:40Z</td></tr>
 </table></div>
 <div class="card"><h2>Compliance four-piece (verbatim from the spec)</h2><ol>
 <li>1. **判据预注册**：AC-JV1..JV6（src/os/backlog.md 本行·先于撰写）。</li>
@@ -236,9 +236,9 @@ li{margin:6px 0}code{color:#79c0ff}
 <li data-hop="1">1. <a href="money-path-demo.html">money-path-demo.html</a> <span data-hop-bytes="13359" data-hop-controls="3" style="opacity:.7">&middot; 可操作 · 3 个控件 · 13359B</span> — 这笔钱在账本里怎么走（可操作）</li>
 <li data-hop="2">2. <a href="merchant-onboard.html">merchant-onboard.html</a> <span data-hop-bytes="23088" data-hop-controls="9" style="opacity:.7">&middot; 可操作 · 9 个控件 · 23088B</span> — 要真收钱还缺什么：商户号 / 服务器 / 域名 / 备案（可填）</li>
 <li data-hop="3">3. <a href="buyer-trial.html">buyer-trial.html</a> <span data-hop-bytes="22382" data-hop-controls="3" style="opacity:.7">&middot; 可操作 · 3 个控件 · 22382B</span> — 自己点一遍：MOCK 下单与两本账配平（可操作）</li>
-<li data-hop="4">4. <a href="start-here.html">start-here.html</a> <span data-hop-bytes="41366" data-hop-controls="0" style="opacity:.7">&middot; 只读 · 0 个控件 · 41366B</span> — 回到起点：这台机器今天能亲手做什么（只读汇总）</li>
+<li data-hop="4">4. <a href="start-here.html">start-here.html</a> <span data-hop-bytes="41370" data-hop-controls="0" style="opacity:.7">&middot; 只读 · 0 个控件 · 41370B</span> — 回到起点：这台机器今天能亲手做什么（只读汇总）</li>
 </ol>
 <p class="small" data-onward-last="本机不接服务器时，这条路最远走到第 3 跳（buyer-trial.html，3 个控件）；再往后只有读数，没有可操作控件。" style="margin:8px 0 0;opacity:.75">本机不接服务器时，这条路最远走到第 3 跳（buyer-trial.html，3 个控件）；再往后只有读数，没有可操作控件。</p>
 </div>
-<p class="small">rendered 2026-11-22T10:57:18Z &middot; html 12907B &middot; json 8012B &middot; offline, zero external calls</p>
+<p class="small">rendered 2026-11-26T23:17:58Z &middot; html 12935B &middot; json 8040B &middot; offline, zero external calls</p>
 </main>

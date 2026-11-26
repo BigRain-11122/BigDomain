@@ -398,11 +398,50 @@ def render_fixed_point():
     raise SystemExit("E_FIXED_POINT: sizes did not converge in 12 passes")
 
 
+def _landing_is_default():
+    """True only when both halves land under this root's own preview/.
+
+    The tool's own suite rebinds PREVIEW/OUT_HTML/OUT_JSON into a private
+    world, so a scratch render must not re-derive the real CEO face.
+    """
+    want = os.path.realpath(PREVIEW)
+    for path in (OUT_HTML, OUT_JSON):
+        if os.path.dirname(os.path.realpath(path)) != want:
+            return False
+    return True
+
+
+def _refresh_face():
+    """AC-PWC18 (R3540): landing this pair and re-deriving the CEO face are ONE run.
+
+    The one definition lives in src/os/board_face_landing.py, so no second writer
+    is kept here. ROOT is passed explicitly, so a private world derives that
+    world's face. Refusals are named, never raised: both halves are already on
+    disk when this runs, so the caller's exit code stays its own.
+    """
+    if not _landing_is_default():
+        return "SKIPPED scratch"
+    try:
+        os_src = os.path.join(ROOT, "src", "os")
+        if os_src not in sys.path:
+            sys.path.insert(0, os_src)
+        import board_face_landing
+        ok, note, _proof = board_face_landing.refresh_export_face(ROOT)
+        return "WRITTEN" if ok else "REFUSED %s" % note
+    except Exception as exc:  # a private world may carry no shared writer
+        return "SKIPPED %s" % type(exc).__name__
+
+
+LAST_FACE = ""
+
+
 def write_artifacts(html_text, json_text):
+    global LAST_FACE
     with io.open(OUT_HTML, "w", encoding="utf-8", newline="\n") as fh:
         fh.write(html_text)
     with io.open(OUT_JSON, "w", encoding="utf-8", newline="\n") as fh:
         fh.write(json_text)
+    LAST_FACE = _refresh_face()
 
 
 def fresh_carrier_block(stem):

@@ -7990,12 +7990,12 @@ SUITES = [
     # the loop body), never inside check(); a scratch render outside this root's
     # preview/ derives nothing, with delete/move negative controls and a
     # landing-path one-derivation arm.
-    # R3537 (AC-PWC15): the same four-arm shape now grades
-    # tools/merchant_onboard.py, the merchant-onboarding page, whose landing path
-    # is one HTML half plus a sizes fixed-point JSON half (the closure sits after
-    # the second write, not the first).
+    # R3540 (AC-PWC18): the same four-arm shape now grades
+    # tools/journey_demo.py, the 19.9 journey face, whose landing path is one
+    # HTML half plus a JSON half inside write_artifacts(); the closure sits after
+    # the JSON write and a scratch landing derives nothing.
     ("os-preview-writer-census",
-     os.path.join("..", "os", "test_preview_writer_census.py"), 51),
+     os.path.join("..", "os", "test_preview_writer_census.py"), 59),
     # R2814. tools/ugc_gate_report.py carries AC-UGR1..AC-UGR9 and renders the
     # face for the BLUEPRINT section-five death line (content safety not
     # connected means the door stays shut), yet the registry held ZERO AC-UGR*

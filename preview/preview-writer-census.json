@@ -3,8 +3,8 @@
     "src/os/board_face_landing.py",
     "src/os/export_round.py"
   ],
-  "generated_at": "2026-11-27T07:02:58+08:00",
-  "round": "R3539",
+  "generated_at": "2026-11-27T07:18:33+08:00",
+  "round": "R3540",
   "rows": [
     {
       "face_calls": 0,
@@ -338,15 +338,6 @@
       "kind": "gap",
       "landing_paths": [],
       "path": "tools/fold_carry_census.py",
-      "write_calls": 2
-    },
-    {
-      "face_calls": 0,
-      "kind": "gap",
-      "landing_paths": [
-        "journey-19.9.html"
-      ],
-      "path": "tools/journey_demo.py",
       "write_calls": 2
     },
     {
@@ -909,6 +900,15 @@
       "face_calls": 1,
       "kind": "closed",
       "landing_paths": [
+        "journey-19.9.html"
+      ],
+      "path": "tools/journey_demo.py",
+      "write_calls": 2
+    },
+    {
+      "face_calls": 1,
+      "kind": "closed",
+      "landing_paths": [
         "ledger-reconcile-face.html",
         "preview/ledger-reconcile-face.html"
       ],
@@ -1090,9 +1090,9 @@
     }
   ],
   "totals": {
-    "closed": 19,
+    "closed": 20,
     "excluded": 2,
-    "gap": 90,
+    "gap": 89,
     "modules": 119,
     "reader": 10,
     "writers": 109
