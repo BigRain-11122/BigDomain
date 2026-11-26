@@ -1,0 +1,42 @@
+R3520 evidence (2026-11-27, BigDomain OSLoop)
+
+CLAIM
+  tools/status_export_fresh.py now derives ceo_face.board_pages_skipped from the
+  same newest_artifact() call that names latest_artifact, grades it in --check,
+  and publishes it in --apply.
+
+MEASURED BEFORE (read-only)
+  rg -n 'encoding="ascii"' src/sandbox          -> 0 matches, 0 files
+  rg -n 'reconcile_all.py' src/sandbox/pay      -> 4 suites, all utf-8 / rb
+  live export ceo_face.board_pages_skipped      -> [] (written by export_round)
+  live derivation skipped                       -> [] (newest is preview-pair-census)
+  sx.check(REAL_EXPORT, REAL_STATE)             -> FAIL: E_SXF_MILESTONE_STALE only
+                                                   (the new [R3521] row had moved)
+
+MEASURED AFTER
+  src/os/test_status_export_fresh.py            -> SUITE PASS 47/47
+    AC-SXFB41 nonempty=True stale=True derived=True missing=True publish=True
+              idem=True repair=True real_untouched=True
+              skipped=['preview/index.html (19B)']
+  registry row (os-status-export-fresh)          -> 45 -> 46
+  src/os/suite_matrix_reconcile.py --write       -> WRITTEN 85613B, 830 rows
+  src/os/suite_matrix_reconcile.py --check       -> DOC-CURRENT
+  src/os/ledger_lines.py --check                 -> CLEAN (ledger=21 round=121)
+  tools/status_export_fresh.py --check           -> VERDICT R3520 PASS
+
+CARRIED, NOT PAPERED OVER
+  battery_shard_report --check -> BSR-CHECK RED E_REGISTRY_DRIFT (criteria total
+  moved with the +1 criterion). The detached producer answered zero bytes twice
+  and the process vanished; the page pair is NOT re-derived this window and is
+  the first item of [R3521].
+
+FOLD
+  fold 841 moved the whole R3519 block (5 lines) to logs/state-log-archive-2026-11.md
+  verbatim. Three refusals were needed and are recorded: a summary sentence that
+  OPENS with a round label is itself a live narrative, so the ledger-split guard
+  refused the fold it had asked for; the accepted summary names no round at its
+  start. state 77546B -> 74978B -> 77621B after this round's five lines.
+
+NOT DONE
+  no citizen-visible product change; zero payment capability; no network beyond
+  loopback; the five physical pieces still gate every buyer.

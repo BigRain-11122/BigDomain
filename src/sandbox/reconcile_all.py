@@ -6499,8 +6499,11 @@ SUITES = [
     # writer and the verifier now ask the same text, a negative control proves
     # the stale block reddens by name, --check stays read-only and idempotent,
     # and a document that will not settle is refused before it lands (39 -> 45).
+    # R3520: AC-SXFB41 grades ceo_face.board_pages_skipped against the same
+    # derivation that names latest_artifact, and --apply publishes it, so the
+    # row the workaround writer owned is shared instead of skipped (45 -> 46).
     ("os-status-export-fresh",
-     os.path.join("..", "os", "test_status_export_fresh.py"), 45),
+     os.path.join("..", "os", "test_status_export_fresh.py"), 46),
     # R2450: three writers land the CEO-visible export and none of them asked
     # the shared payload derivation, so the document was rewritten in whichever
     # transport the running writer felt like. Every writer the audit derives

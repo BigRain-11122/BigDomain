@@ -136,6 +136,22 @@ block was refused by name (E_SXF_CLAIMS_STALE) rather than silently accepted:
            its 48h derivation, and a second --apply on a pinned clock is
            byte-identical.
 
+Added at R3520 (pinned in src/os/backlog.md BEFORE this code), because ONE row of
+the CEO face was written by the other writer and graded by neither: --apply left
+ceo_face.board_pages_skipped exactly as it found it, so the workaround
+(src/os/export_round.py) had to run every closeout or the row could silently
+drift while this face called the document healthy:
+  AC-SXF41 the row is a DERIVED row: ceo_face.board_pages_skipped equals the
+           skipped list of the SAME derivation that names latest_artifact
+           (export_round.newest_artifact, imported - no second definition).
+           Absent is E_SXF_BOARD_SKIP_MISSING; one different element (or a
+           non-list) is E_SXF_BOARD_SKIP_STALE.
+  AC-SXF42 --apply publishes that list and leaves the rest of the document to
+           its existing laws; a second apply on a pinned clock is byte-identical.
+  AC-SXF43 the row is not decoration: a world whose newest pair on disk is a
+           meta board page derives a NON-EMPTY list, and after that list lands a
+           document rewound to [] reddens by name rather than passing.
+
 ASCII source only (repository encoding law). Product text is read from the live
 state, never authored here.
 """
@@ -166,6 +182,10 @@ EXPORT_MAX_BYTES = 60000
 MILESTONE_MAX = 1200
 MILESTONE_MARK = " (truncated)"
 LEGACY_KEY = "results"
+# AC-SXF41 (R3520): the one row src/os/export_round.py wrote and this face did
+# not, so a document refreshed here could carry a stale audit of the board pages
+# passed over while every law in this file read green.
+BOARD_SKIP_KEY = "board_pages_skipped"
 
 ROUND_RE = re.compile(r"\bR(\d{4})\b")
 NEXT_ROW_RE = re.compile(r"\[R(\d{4})\] next window")
@@ -607,6 +627,17 @@ def check(export_path, state_path):
     artifact = newest_artifact(PREVIEW)
     derived_artifact = artifact["line"] if artifact else ""
     face = doc.get("ceo_face") or {}
+    # AC-SXF41 (R3520): the row the other writer owned and this face ignored.
+    derived_skip = list(artifact.get("skipped") or []) if artifact else []
+    landed_skip = face.get(BOARD_SKIP_KEY)
+    if not isinstance(landed_skip, list):
+        problems.append(("E_SXF_BOARD_SKIP_MISSING",
+                         "ceo_face.%s is %r, derived=%r"
+                         % (BOARD_SKIP_KEY, landed_skip, derived_skip)))
+    elif [str(entry) for entry in landed_skip] != derived_skip:
+        problems.append(("E_SXF_BOARD_SKIP_STALE",
+                         "ceo_face.%s landed=%r derived=%r"
+                         % (BOARD_SKIP_KEY, landed_skip, derived_skip)))
     # AC-SXF21: the due row is a DERIVED row, not a free text. When the backlog
     # carries a next-window row, the only truthful due is export_ts + that row's
     # own hour claim, so both copies are graded against the derivation rather
@@ -1138,6 +1169,13 @@ def apply(export_path, state_path, backlog_path, preview_dir, dry_run=False):
     text, ok = _ensure_block(text, CHAIN_KEY, chain, "  ")
     if not ok:
         missing.append(CHAIN_KEY)
+    # AC-SXF42 (R3520): the board-page audit is published from the derivation
+    # that already named latest_artifact, so both writers of this document now
+    # carry the same answer instead of one writing and one skipping the row.
+    derived_skip = list(artifact.get("skipped") or [])
+    text, ok = _ensure_json_list(text, BOARD_SKIP_KEY, derived_skip, "    ")
+    if not ok:
+        missing.append(BOARD_SKIP_KEY + "@ceo_face")
     # AC-SXF38 (R3460): the two rows the round hand used to patch are published
     # from the shipped checker's recount, before the census settles (the
     # self_drive block carries no `rows=` token, so it cannot move that census).
@@ -1227,6 +1265,12 @@ def apply(export_path, state_path, backlog_path, preview_dir, dry_run=False):
             print("E_SXF_WRITE: %s copies are not both the derived value (top=%r ceo_face=%r)"
                   % (key, (pair[0] or "")[:40], (pair[1] or "")[:40]))
             return 7
+    # AC-SXF42 second half: the audit row landed as the derivation, not as prose.
+    landed_skip = landed_face.get(BOARD_SKIP_KEY)
+    if not isinstance(landed_skip, list) or [str(e) for e in landed_skip] != derived_skip:
+        print("E_SXF_WRITE: ceo_face.%s is not the derived audit (landed=%r derived=%r)"
+              % (BOARD_SKIP_KEY, landed_skip, derived_skip))
+        return 7
     before = lf_text(export_path)
     changed = text != before
     if dry_run:

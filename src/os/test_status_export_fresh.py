@@ -109,6 +109,9 @@ def build_world(root):
     # fixture from the derivation (rather than hand-writing a sentence that has to
     # be kept in step) is also what the real writer now does.
     derived_artifact = sx.newest_artifact(os.path.join(root, "preview"))["line"]
+    # AC-SXFB41 (AC-SXF41, R3520): the board-page audit is a derived row too, so
+    # the healthy fixture carries the derivation rather than a typed empty list.
+    derived_skip = list(sx.newest_artifact(os.path.join(root, "preview"))["skipped"])
     derived_milestone = sx.next_milestone(os.path.join(root, "src", "os", "backlog.md"))["text"]
     doc = {
         "export_ts": "2026-11-16T00:00:00+08:00",
@@ -117,6 +120,7 @@ def build_world(root):
             "current": NARRATIVE,
             "latest_artifact": derived_artifact,
             "last_artifact": derived_artifact,
+            "board_pages_skipped": derived_skip,
             "latest_artifact_abs": os.path.join(root, "preview", "fixture.html"),
             "next_milestone": derived_milestone,
             "next_milestone_due": "2026-11-16T12:00:00+08:00",
@@ -1449,6 +1453,112 @@ def writer_arms():
     return real_before == real_after
 
 
+def board_skip_arms():
+    """AC-SXFB41 (AC-SXF41..43, R3520): the row both writers own, neither graded.
+
+    The workaround writer filled ceo_face.board_pages_skipped on every closeout
+    while this face left whatever it found in place, so the row could drift on a
+    tree every law in this file called healthy. The private world is the only
+    place the row can be PROVED to carry weight: a meta board pair is made the
+    newest on disk, so the derivation is non-empty and a rewound [] must redden.
+    """
+    real_before = (snapshot(REAL_EXPORT), snapshot(REAL_STATE))
+    root = tempfile.mkdtemp(prefix="sxf-board-skip-R3520-")
+    saved = rebind(root)
+    try:
+        export, doc = build_world(root)
+        for rel in (("src", "os", "export_consistency_patterns.json"),
+                    ("docs", "proposals.md"),
+                    ("state", "queue", "main.md"),
+                    ("state", "queue", "tech.md"),
+                    ("state", "queue", "explore.md")):
+            dst = os.path.join(root, *rel)
+            folder = os.path.dirname(dst)
+            if not os.path.isdir(folder):
+                os.makedirs(folder)
+            shutil.copyfile(os.path.join(REPO, *rel), dst)
+        state_path = os.path.join(root, "src", "os", "state.json")
+        # The narrative stays the fixture's own NARRATIVE: this arm grades the
+        # audit row, so it must not move the three synonym rows under itself.
+        write_json(state_path, {"tick": 3520, "log": [NARRATIVE]})
+        doc["state_bytes"] = os.path.getsize(state_path)
+        write_json(export, doc)
+        # A meta board pair newer than the product pair: 'index' is BOARD_PAGES,
+        # so the same derivation that names latest_artifact must report it here.
+        stamp = time.time() + 30
+        for ext, body in ((".html", "<html>board</html>\n"), (".json", "{}\n")):
+            path = os.path.join(root, "preview", "index" + ext)
+            with io.open(path, "w", encoding="utf-8", newline="\n") as handle:
+                handle.write(body)
+            os.utime(path, (stamp, stamp))
+        probe = sx.newest_artifact(os.path.join(root, "preview"))
+        derived_skip = list(probe["skipped"])
+        arm_nonempty = bool(derived_skip) and bool(probe["newest_is_board"])
+
+        def run_check():
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf):
+                rc = sx.check(export, sx.STATE)
+            return rc, buf.getvalue()
+
+        # AC-SXF41: the landed document under-states the audit -> red by name.
+        rc_stale, text_stale = run_check()
+        arm_stale = rc_stale == 2 and "E_SXF_BOARD_SKIP_STALE" in text_stale
+        # AC-SXF41: the derived value -> that law is silent.
+        healthy = json.loads(io.open(export, encoding="utf-8").read())
+        healthy["ceo_face"]["board_pages_skipped"] = list(derived_skip)
+        write_json(export, healthy)
+        rc_ok, text_ok = run_check()
+        arm_derived = rc_ok == 0 and "E_SXF_BOARD_SKIP" not in text_ok
+        # AC-SXF41: without the row at all -> red by a DIFFERENT name.
+        absent = json.loads(io.open(export, encoding="utf-8").read())
+        absent["ceo_face"].pop("board_pages_skipped", None)
+        write_json(export, absent)
+        rc_missing, text_missing = run_check()
+        arm_missing = (rc_missing == 2
+                       and "E_SXF_BOARD_SKIP_MISSING" in text_missing)
+        # AC-SXF42: --apply publishes the non-empty audit and stays a function of
+        # its inputs (two pinned runs byte-identical), and repairs a rewound row.
+        write_json(export, healthy)
+        real_clock = sx.now_local
+        pinned = dt.datetime(2026, 11, 27, 6, 0, 0,
+                             tzinfo=dt.timezone(dt.timedelta(hours=8)))
+        try:
+            sx.now_local = lambda: pinned
+            rc_first = sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
+            first = json.loads(io.open(export, encoding="utf-8").read())
+            arm_publish = (rc_first == 0
+                           and (first.get("ceo_face") or {}).get(
+                               "board_pages_skipped") == derived_skip)
+            once = io.open(export, "rb").read()
+            rc_twice = sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
+            twice = io.open(export, "rb").read()
+            arm_idem = rc_twice == 0 and once == twice
+            rewound = json.loads(twice.decode("utf-8"))
+            rewound["ceo_face"]["board_pages_skipped"] = []
+            write_json(export, rewound)
+            rc_repair = sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
+            repaired = json.loads(io.open(export, encoding="utf-8").read())
+            arm_repair = (rc_repair == 0
+                          and (repaired.get("ceo_face") or {}).get(
+                              "board_pages_skipped") == derived_skip)
+        finally:
+            sx.now_local = real_clock
+    finally:
+        restore(saved)
+        shutil.rmtree(root, ignore_errors=True)
+    real_after = (snapshot(REAL_EXPORT), snapshot(REAL_STATE))
+    record("AC-SXFB41",
+           arm_nonempty and arm_stale and arm_derived and arm_missing
+           and arm_publish and arm_idem and arm_repair
+           and real_before == real_after,
+           "nonempty=%s stale=%s derived=%s missing=%s publish=%s idem=%s "
+           "repair=%s real_untouched=%s skipped=%r"
+           % (arm_nonempty, arm_stale, arm_derived, arm_missing, arm_publish,
+              arm_idem, arm_repair, real_before == real_after, derived_skip))
+    return real_before == real_after
+
+
 def main():
     real_before = (snapshot(REAL_EXPORT), snapshot(REAL_STATE))
     root = tempfile.mkdtemp(prefix="sxf-R2821-")
@@ -1461,6 +1571,7 @@ def main():
     wire_arms()
     fixed_point_arms()
     writer_arms()
+    board_skip_arms()
     real_after = (snapshot(REAL_EXPORT), snapshot(REAL_STATE))
     record("ISOLATION", real_before == real_after, "real export+state untouched")
     bad = [name for name, ok, _ in results if not ok]
