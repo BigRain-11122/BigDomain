@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-26T07:48:53+08:00",
+  "generated_at": "2026-11-26T08:28:13+08:00",
   "law": "a split is claimed only when the two halves' last commits differ; an mtime gap alone is published as a bucket, never as a split",
   "oldest_split": {
     "delta_hours": 749.7,
@@ -404,18 +404,18 @@
     {
       "delta_seconds": 0,
       "html": {
-        "bytes": 16416,
-        "commit": "26acf566",
-        "mtime": "2026-11-26T07:33:36+08:00",
-        "mtime_epoch": 1795649616,
-        "sha": "09955F48"
+        "bytes": 16419,
+        "commit": "13819883",
+        "mtime": "2026-11-26T08:25:53+08:00",
+        "mtime_epoch": 1795652753,
+        "sha": "42AFAE4E"
       },
       "json": {
-        "bytes": 17987,
-        "commit": "26acf566",
-        "mtime": "2026-11-26T07:33:36+08:00",
-        "mtime_epoch": 1795649616,
-        "sha": "30316D09"
+        "bytes": 17954,
+        "commit": "13819883",
+        "mtime": "2026-11-26T08:25:53+08:00",
+        "mtime_epoch": 1795652753,
+        "sha": "43D62783"
       },
       "name": "battery-shard-report",
       "verdict": "same-run"
@@ -779,7 +779,9 @@
         "sha": "70E51021"
       },
       "name": "city-face-report",
-      "verdict": "history-split"
+      "pair_receipt": "one-derivation",
+      "receipt": "channel-splice",
+      "verdict": "channel-receipt"
     },
     {
       "delta_seconds": 0,
@@ -803,18 +805,18 @@
     {
       "delta_seconds": 0,
       "html": {
-        "bytes": 8344,
-        "commit": "26acf566",
-        "mtime": "2026-11-26T07:43:24+08:00",
-        "mtime_epoch": 1795650204,
-        "sha": "DCD2E529"
+        "bytes": 9637,
+        "commit": "13819883",
+        "mtime": "2026-11-26T08:15:12+08:00",
+        "mtime_epoch": 1795652112,
+        "sha": "4D85FC0C"
       },
       "json": {
-        "bytes": 11124,
-        "commit": "26acf566",
-        "mtime": "2026-11-26T07:43:24+08:00",
-        "mtime_epoch": 1795650204,
-        "sha": "A768D732"
+        "bytes": 13105,
+        "commit": "13819883",
+        "mtime": "2026-11-26T08:15:12+08:00",
+        "mtime_epoch": 1795652112,
+        "sha": "4AA5BAA6"
       },
       "name": "face-pair-receipt",
       "verdict": "same-run"
@@ -2032,15 +2034,15 @@
       "verdict": "same-run"
     }
   ],
-  "round": 3504,
+  "round": 3506,
   "same_run_seconds": 120,
   "self_excluded": "preview-pair-census",
   "source": "tools/preview_pair_census.py",
   "totals": {
-    "channel-receipt": 1,
-    "explained": 5,
+    "channel-receipt": 2,
+    "explained": 6,
     "frozen-excused": 11,
-    "history-split": 10,
+    "history-split": 9,
     "html": 106,
     "no-json": 3,
     "paired": 103,

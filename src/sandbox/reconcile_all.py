@@ -5047,8 +5047,15 @@ SUITES = [
     # landed report, position independence is required of the renderer, and the
     # only tolerated difference is the channel's own shelf stamp - proved
     # narrow by a negative control).
+    # AC-PPR10 pinned at R3506 before the seventh face was registered: a
+    # live-RUN producer (an ephemeral loopback port and a clock stamp on the
+    # page) is replayed from the report it shipped beside, and the claim is
+    # two half-claims - the page equals the producer's render plus the shipped
+    # channel block up to its shelf stamp, and the report half reproduces the
+    # landed json byte for byte once the working tree's newline is adopted;
+    # one changed fact in the report still reads drift.
     ("face-pair-receipt",
-     os.path.join("..", "os", "test_face_pair_receipt.py"), 9),
+     os.path.join("..", "os", "test_face_pair_receipt.py"), 10),
     ("os-ledger-archive",
      os.path.join("..", "os", "test_ledger_archive.py"), 16),
     # R3091: the archive's own provenance is now readable WITHOUT a child

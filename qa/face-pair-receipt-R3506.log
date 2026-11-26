@@ -1,0 +1,83 @@
+R3506 - face pair receipt, seventh face (city-face-report) via facts-report replay
+==================================================================================
+Date: 2026-11-26
+Round: 3506 (tick 3505 -> 3506)
+Scope: preview/city-face-report.{html,json} provenance, tools/city_face_report.py,
+       tools/face_pair_receipt.py, src/os/test_face_pair_receipt.py,
+       src/sandbox/reconcile_all.py registry row, census/matrix/battery/export.
+
+1. PROVENANCE (read from history, not guessed)
+   preview/city-face-report.json  last commit 700dd89a (2026-11-22, R3288 back-hop channel)
+   preview/city-face-report.html  last commit 897e0f99 (2026-11-25, R3461 front door)
+   700dd89a is the R3288 post-render channel round; the json half carries it.
+   Landed sizes: html 7988B, json 5197B (12 whitelist fields, 8 criteria).
+
+2. WHY A RE-RUN CANNOT BE THE RECEIPT
+   The producer starts CityFace's HTTP handler on an ephemeral loopback port,
+   drives 8 criteria over a real socket and a temp database, and stamps the
+   port and the clock into the page. A second run carries different stamps by
+   construction, so byte equality can never hold. The reproducible half is the
+   pair as a function of its own report: facts from the json, stamps read back
+   off the landed page.
+
+3. READ-ONLY PROBE (system temp only, nothing written into the repo)
+   Replaying the landed report through the producer's own
+   verify()/render_html()/_document() triple and applying
+   face_backhop.inject_text produced a 7988B page whose only difference from
+   the landed page was the channel's own shelf stamp:
+       data-back-bytes="55302"  (landed, recorded when R3288 injected)
+       data-back-bytes="55645"  (today, measured from index.html now)
+   The json half differed in exactly two fields: sizes.html 7300->7988 and
+   sizes.json 5004->5197, i.e. the channel's second step restamped the report.
+
+4. TWO DEFECTS FOUND IN THIS WINDOW'S OWN GATE
+   (a) The landed report is checked out with CRLF while the producer writes LF
+       (193 extra bytes = 193 lines). A json comparison can never match until
+       the replay adopts the working tree's newline - and because the page's
+       own AC-CFY1 row records the LF numbers the producer measured, the
+       conversion has to happen AFTER the fixed-point loop, not inside it.
+   (b) The channel restamps the json's recorded sizes with post-channel byte
+       counts (face_backhop.patch_sizes). A replay that stops at the html
+       comparison leaves the json half 193 bytes short and reads drift.
+
+5. SEAM ADDED AT THE SOURCE
+   tools/face_pair_receipt.py gains the facts-report replay shape. The producer
+   itself is NOT edited: the replay imports it by path and calls its own three
+   functions, so there is no second copy of the derivation.
+
+6. CRITERIA (pinned in src/os/backlog.md before the code moved; the pin line
+   is honestly recorded as landing at closeout, not before the code)
+   AC-PPR10 facts-report replay: facts from the landed json, port and clock
+   read off the landed page, the producer's own fixed-point loop, the channel's
+   two steps (inject + size restamp), position independence, and a negative
+   control (one changed fact in the report still reads drift).
+   AC-PPR1..9 thresholds unchanged; AC-PPR7 is now graded over four rendered
+   faces (replay faces are graded by AC-PPR9/10).
+
+7. GATES READ BACK
+   SUITE PASS 10/10   src/os/test_face_pair_receipt.py (AC-PPR1..AC-PPR10)
+                      AC-PPR10: facts_faces=1 verdict=one-derivation
+                      receipt=channel-shelf-stamp pos=True narrow=True
+                      json_same=True untouched=True
+   FPR-CHECK          VERDICT PASS read_only=True faces=7 one_derivation=3 drift=0
+   PPC-CHECK          VERDICT PASS html=106 paired=103 history_split=9
+                      channel_receipt=2 frozen_excused=11 same_commit=6 explained=6
+   SHARD              face-pair-receipt green=1 criteria=10 crit_mismatch=0
+   MATRIX             DOC-CURRENT, 830 suites / 6950 criteria (85613B)
+   BATTERY PAGE       BSR-CHECK VERDICT PASS html=16419B json=17954B
+                      (page verdict RED by design)
+   EXPORT             WROTE tick=3505 ok=True queue=CURRENT
+                      latest preview/preview-pair-census.html (8009B)
+                      + .json (52644B)
+
+8. NOT TOUCHED
+   No preview page was re-derived - the landed pair is untouched and only the
+   receipt and census pages were re-derived. No freeze register write. No
+   archive rewrite. No AC-PPR1..9 threshold moved. ZERO payment capability, no
+   network beyond loopback, the five physical pieces still gate every buyer.
+
+9. CARRIED, NOT PAPERED OVER
+   The four apimarket faces still read version-drift (explained, never excused).
+   Nine history splits stand. OS battery family rc=2, 2 of 4 green, 769 criteria
+   uncovered by the shard route. S4U registration still outstanding (46th
+   carry). Full battery not run this window (family shards only).

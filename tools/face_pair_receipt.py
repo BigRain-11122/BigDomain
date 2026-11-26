@@ -95,6 +95,17 @@ FACES = [
                 "is a real browser shoot, so a second shoot can never reproduce bytes "
                 "- the page half is replayed from the landed report instead"),
     },
+    {
+        "slug": "city-face-report",
+        "producer": os.path.join("tools", "city_face_report.py"),
+        "replay": {"kind": "facts-report", "function": "render_html"},
+        "why": ("seventh of the twelve splits (62.6h): html last committed at 897e0f99 "
+                "(the R3461 front-door round), json at 700dd89a, which shipped the "
+                "R3288 back-hop channel; this producer drives a live loopback server "
+                "on an ephemeral port and stamps the clock into the page, so a second "
+                "run can never reproduce bytes - the page and the report are replayed "
+                "from the report it shipped beside"),
+    },
 ]
 
 VOLATILE = ("generated_at", "round")
@@ -214,7 +225,7 @@ def render(face, workdir):
     return read_bytes(html_path), read_bytes(json_path)
 
 
-def replay_render(face, workdir, landed_json_bytes):
+def replay_render(face, workdir, landed_json_bytes, landed_html_bytes):
     """AC-PPR9: rebuild the page from the landed report with the producer's renderer.
 
     A live-shoot producer cannot be re-run to the same bytes - a second shoot
@@ -227,6 +238,14 @@ def replay_render(face, workdir, landed_json_bytes):
     path = os.path.join(REPO, face["producer"])
     module = load_module(path, "receipt_replay_%s" % face["slug"].replace("-", "_"))
     doc = json.loads(landed_json_bytes.decode("utf-8"))
+    if spec.get("kind") == "facts-report":
+        return facts_report_replay(face, module, doc, landed_json_bytes,
+                                   landed_html_bytes, workdir)
+    return gallery_replay(face, module, doc, landed_json_bytes, workdir)
+
+
+def gallery_replay(face, module, doc, landed_json_bytes, workdir):
+    spec = face["replay"]
     meta = {key: (title, blurb) for key, title, blurb in getattr(module, spec["table"])}
     rows = []
     for shot in doc.get("shots", []):
@@ -242,6 +261,82 @@ def replay_render(face, workdir, landed_json_bytes):
     getattr(module, spec["function"])(rows, {"ok": doc.get("ok")}, html_path,
                                       proof=doc.get("proof"), page_dir=PREVIEW)
     return read_bytes(html_path), landed_json_bytes
+
+
+def facts_report_replay(face, module, doc, landed_json_bytes, landed_html_bytes, workdir):
+    """AC-PPR10: replay a live-run producer from the report it shipped beside.
+
+    city_face_report measures a live loopback server (an ephemeral port) and
+    stamps the clock into the page, so a second run can never reproduce the
+    landed bytes. What IS reproducible is the pair as a function of its own
+    report: the facts live in the json, and the two stamps the renderer needs
+    (the loopback port and generated_utc) are read back off the landed page.
+    The replay then runs the producer's own fixed-point loop - the page records
+    its own byte size - and finally applies the shipped channel in the same
+    order the R3288 round did: splice the block into the page, then restamp
+    the json's recorded sizes with the post-channel byte counts.
+
+    The claim this buys is narrow and stated: html is the producer's render of
+    the landed facts, and json is that same render with only its size block
+    restamped. Nothing about the live world is re-measured.
+    """
+    facts = doc.get("facts")
+    generated = doc.get("generated_utc")
+    if not isinstance(facts, dict) or not generated:
+        raise ValueError("landed report carries no facts/generated_utc")
+    port = port_from_page(module, landed_html_bytes)
+    if port is None:
+        raise ValueError("landed page carries no loopback port stamp")
+    stamps = {"generated_utc": generated, "port": port}
+    # The landed report is checked out with CRLF on this working tree while the
+    # producer writes LF. That is a repo EOL artifact, not a derivation gap:
+    # the replay adopts the landed newline so the two halves are comparable
+    # byte for byte, and the choice is recorded on the row.
+    crlf = b"\r\n" in landed_json_bytes
+
+    sizes = {"html": 0, "json": 0}
+    body = b""
+    payload = b""
+    for _ in range(6):
+        rows = module.verify(facts, sizes)
+        body = module.render_html(facts, stamps, rows).encode("utf-8")
+        document = module._document(facts, stamps, rows, sizes)
+        payload = (json.dumps(document, ensure_ascii=False, indent=1) + "\n").encode("utf-8")
+        measured = {"html": len(body), "json": len(payload)}
+        if measured == sizes:
+            break
+        sizes = measured
+    else:
+        raise ValueError("document sizes did not converge")
+
+    # The producer writes LF; the landed report is checked out with CRLF on this
+    # tree. The page's own criterion row records the LF numbers the producer
+    # measured, so the newline conversion happens after the loop, exactly where
+    # the working-tree conversion happened for the landed file.
+    if crlf:
+        payload = payload.replace(b"\n", b"\r\n")
+
+    html_path = os.path.join(workdir, "rendered.html")
+    json_path = os.path.join(workdir, "rendered.json")
+    with io.open(json_path, "wb") as handle:
+        handle.write(payload)
+    injected, _how = face_backhop.inject_text(body.decode("utf-8"),
+                                              face["slug"] + ".html")
+    with io.open(html_path, "wb") as handle:
+        handle.write(injected.encode("utf-8"))
+    # The channel's second step: the json's recorded sizes are restamped to the
+    # post-channel byte counts by editing the digits in place, so the document
+    # keeps the producer's formatting. The html keeps the pre-channel numbers
+    # in its criterion row, which is exactly what the landed pair shows.
+    face_backhop.patch_sizes(html_path)
+    return body, read_bytes(json_path)
+
+
+def port_from_page(module, landed_html_bytes):
+    """The loopback port the landed page was rendered with (never guessed)."""
+    host = getattr(module, "HOST", "127.0.0.1").encode("utf-8")
+    found = re.search(re.escape(host) + rb":(\d+)", landed_html_bytes)
+    return found.group(1).decode("ascii") if found else None
 
 
 def applied_channel_verdict(rendered, landed):
@@ -289,10 +384,11 @@ def measure(face):
     try:
         try:
             if face.get("replay"):
-                # AC-PPR9: the page half is replayed from the landed report.
+                # AC-PPR9 / AC-PPR10: the pair is replayed from the landed report.
                 row["replay"] = "%s-from-report" % face["replay"]["function"]
                 rendered, rendered_json = replay_render(
-                    face, work, read_bytes(landed_json_path))
+                    face, work, read_bytes(landed_json_path),
+                    read_bytes(landed_html_path))
             else:
                 rendered, rendered_json = render(face, work)
         except Exception as exc:  # noqa: BLE001 - the reading is the point

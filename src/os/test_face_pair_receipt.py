@@ -248,14 +248,14 @@ def main():
         work_a = tempfile.mkdtemp(prefix="fpr3505a-")
         work_b = tempfile.mkdtemp(prefix="fpr3505b-")
         try:
-            html_a, _ = FPR.replay_render(face, work_a, report)
-            html_b, _ = FPR.replay_render(face, work_b, report)
+            html_a, _ = FPR.replay_render(face, work_a, report, read_bytes(live_html))
+            html_b, _ = FPR.replay_render(face, work_b, report, read_bytes(live_html))
             position_ok = html_a == html_b
             named_ok = b"src='live/hub.png'" in html_a
             neg = json.loads(report.decode("utf-8"))
             neg["shots"][0]["status"] = 599
             html_neg, _ = FPR.replay_render(
-                face, work_a, json.dumps(neg).encode("utf-8"))
+                face, work_a, json.dumps(neg).encode("utf-8"), read_bytes(live_html))
             text_neg, _how = FPR.face_backhop.inject_text(
                 html_neg.decode("utf-8"), "live-sandbox.html")
             landed_live = read_bytes(live_html)
@@ -281,6 +281,59 @@ def main():
           live_row[0].get("shelf_stamp_landed") if live_row else "-",
           live_row[0].get("shelf_stamp_now") if live_row else "-", ctx,
           sig(live_html) == sig_live_html and sig(live_json) == sig_live_json))
+
+    # AC-PPR10: a live-run producer is replayed from the report it shipped
+    # beside, and the claim is two half-claims: the page equals the producer's
+    # render plus the shipped channel block up to the channel's own shelf
+    # stamp, AND the report half reproduces the landed json byte for byte once
+    # the working tree's newline is adopted. The second half is the strongest
+    # reading any face on this page has, so it is pinned rather than described.
+    # Negative control: one changed fact in the report still reads drift.
+    facts_faces = [f for f in FPR.FACES
+                   if (f.get("replay") or {}).get("kind") == "facts-report"]
+    facts_rows = [r for r in rows if r.get("replay") == "render_html-from-report"]
+    facts_html = os.path.join(PREVIEW, "city-face-report.html")
+    facts_json = os.path.join(PREVIEW, "city-face-report.json")
+    sig_facts_html = sig(facts_html)
+    sig_facts_json = sig(facts_json)
+    facts_position = facts_narrow = False
+    fctx = ""
+    if facts_faces:
+        face = facts_faces[0]
+        report = read_bytes(facts_json)
+        page = read_bytes(facts_html)
+        work_c = tempfile.mkdtemp(prefix="fpr3506a-")
+        work_d = tempfile.mkdtemp(prefix="fpr3506b-")
+        try:
+            html_c, json_c = FPR.replay_render(face, work_c, report, page)
+            html_d, json_d = FPR.replay_render(face, work_d, report, page)
+            facts_position = html_c == html_d and json_c == json_d
+            neg = json.loads(report.decode("utf-8"))
+            neg["facts"]["compliance"]["ai_label"] = "PROBE"
+            html_neg, _ = FPR.replay_render(
+                face, work_c, json.dumps(neg, ensure_ascii=False).encode("utf-8"), page)
+            text_neg, _how = FPR.face_backhop.inject_text(
+                html_neg.decode("utf-8"), "city-face-report.html")
+            facts_narrow = (FPR.shelf_normalised(text_neg.encode("utf-8"))
+                            != FPR.shelf_normalised(page))
+            fctx = "pos=%s narrow=%s json_same=%s" % (
+                facts_position, facts_narrow,
+                bool(facts_rows) and facts_rows[0].get("json_same_as_render"))
+        finally:
+            shutil.rmtree(work_c, ignore_errors=True)
+            shutil.rmtree(work_d, ignore_errors=True)
+    ok("AC-PPR10",
+       bool(facts_faces) and bool(facts_rows)
+       and facts_rows[0]["verdict"] == "one-derivation"
+       and facts_rows[0].get("receipt") == "channel-shelf-stamp"
+       and facts_rows[0].get("json_same_as_render") is True
+       and facts_rows[0].get("rendered_json_bytes") == facts_rows[0].get("landed_json_bytes")
+       and facts_position and facts_narrow
+       and sig(facts_html) == sig_facts_html and sig(facts_json) == sig_facts_json,
+       "facts_faces=%d verdict=%s receipt=%s %s untouched=%s"
+       % (len(facts_faces), facts_rows[0]["verdict"] if facts_rows else "-",
+          facts_rows[0].get("receipt") if facts_rows else "-", fctx,
+          sig(facts_html) == sig_facts_html and sig(facts_json) == sig_facts_json))
 
     total = len(CHECKS)
     passed = total - len(FAILS)
