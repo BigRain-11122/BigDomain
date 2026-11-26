@@ -1879,5 +1879,162 @@ class PWC19FifteenthProducerClosed(unittest.TestCase):
             shutil.rmtree(tmp, ignore_errors=True)
 
 
+def mbr_closure_positions(text):
+    """(present, after_landing, readers_clean, shared_only) for AC-PWC20."""
+    if "def main(" not in text:
+        return (False, False, False, False)
+    body = text.rpartition("def main(")[2].split("\ndef ")[0]
+    at = body.find("_refresh_face(")
+    present = at != -1
+    landing_at = body.rfind("handle.write(payload)")
+    after = present and landing_at != -1 and at > landing_at
+    readers = True
+    for name in ("def verify(", "def measure("):
+        if name in text:
+            reader_body = text.rpartition(name)[2].split("\ndef ")[0]
+            if "_refresh_face(" in reader_body:
+                readers = False
+    helper = text.rpartition("def _refresh_face(")[2].split("\ndef ")[0]
+    shared = "board_face_landing.refresh_export_face(ROOT)" in helper
+    no_local_writer = ".write(" not in helper
+    return (present, after, readers and present, shared and no_local_writer)
+
+
+class PWC20SixteenthProducerClosed(unittest.TestCase):
+    """AC-PWC20: membership_benefit_report re-derives the face on its landing path only."""
+
+    def _source(self):
+        with io.open(os.path.join(TOOLS, "membership_benefit_report.py"),
+                     encoding="utf-8") as f:
+            return f.read()
+
+    def test_closed_and_ordered_after_the_landing(self):
+        text = self._source()
+        kind, _html, writes, closes = MOD.classify_source(text)
+        self.assertEqual(kind, "closed")
+        self.assertGreaterEqual(writes, 2)
+        self.assertGreaterEqual(closes, 1)
+        self.assertEqual(mbr_closure_positions(text), (True, True, True, True))
+
+    def test_negative_controls_delete_and_move(self):
+        text = self._source()
+        deleted = text.replace(
+            "    LAST_FACE = _refresh_face(args.out, args.json)\n", "").replace(
+            "board_face_landing.refresh_export_face(ROOT)",
+            "None  # control: shared call removed")
+        self.assertEqual(MOD.classify_source(deleted)[0], "gap")
+        self.assertFalse(mbr_closure_positions(deleted)[0])
+        moved = text.replace(
+            "    LAST_FACE = _refresh_face(args.out, args.json)\n", "").replace(
+            "        handle.write(body)",
+            "        LAST_FACE = _refresh_face(args.out, args.json)"
+            "  # control: moved before the last landing write\n"
+            "        handle.write(body)", 1)
+        pos = mbr_closure_positions(moved)
+        self.assertTrue(pos[0])
+        self.assertFalse(pos[1])
+
+    def test_refresh_is_shared_and_named(self):
+        import membership_benefit_report as MBR
+        calls = []
+
+        class Fake(object):
+            def __init__(self, ok, note):
+                self.ok, self.note = ok, note
+
+            def refresh_export_face(self, root):
+                calls.append(root)
+                return (self.ok, self.note, {})
+
+        class Boom(object):
+            def refresh_export_face(self, root):
+                raise RuntimeError("no writer here")
+
+        pair = (os.path.join(MBR.ROOT, "preview",
+                             "membership-benefit-report.html"),
+                os.path.join(MBR.ROOT, "preview",
+                             "membership-benefit-report.json"))
+        saved = sys.modules.get("board_face_landing")
+        try:
+            sys.modules["board_face_landing"] = Fake(True, "")
+            self.assertEqual(MBR._refresh_face(*pair), "WRITTEN")
+            self.assertEqual(calls, [MBR.ROOT])
+            sys.modules["board_face_landing"] = Fake(False, "E_BFL_FACE_UNPROVEN")
+            self.assertEqual(MBR._refresh_face(*pair),
+                             "REFUSED E_BFL_FACE_UNPROVEN")
+            sys.modules["board_face_landing"] = Boom()
+            self.assertEqual(MBR._refresh_face(*pair), "SKIPPED RuntimeError")
+            self.assertEqual(len(calls), 2)
+        finally:
+            if saved is None:
+                sys.modules.pop("board_face_landing", None)
+            else:
+                sys.modules["board_face_landing"] = saved
+
+    def test_landing_derives_once_and_scratch_and_check_derive_none(self):
+        """A landing in this root's preview derives once; scratch and --check do not."""
+        import builtins
+        import membership_benefit_report as MBR
+        calls = []
+
+        class Fake(object):
+            def refresh_export_face(self, root):
+                calls.append(root)
+                return (True, "", {})
+
+        tmp = tempfile.mkdtemp(prefix="mbr-")
+        saved = sys.modules.get("board_face_landing")
+        saved_stdout = sys.stdout
+        real_open = builtins.open
+        sink = os.path.join(tmp, "sink.bin")
+        try:
+            sys.modules["board_face_landing"] = Fake()
+
+            def fake_open(path, mode="r", *a, **k):
+                if "w" in mode:
+                    if "b" in mode:
+                        return real_open(sink, "wb")
+                    return real_open(sink, "w", encoding="utf-8", newline="")
+                return real_open(path, mode, *a, **k)
+
+            builtins.open = fake_open
+            try:
+                sys.stdout = io.StringIO()
+                MBR.main([])
+            finally:
+                builtins.open = real_open
+            self.assertEqual(calls, [MBR.ROOT])
+            self.assertEqual(len(calls), 1)
+
+            # scratch render: both halves land away from this root's preview
+            scratch = os.path.join(tmp, "scratch")
+            os.makedirs(scratch, exist_ok=True)
+            builtins.open = fake_open
+            try:
+                sys.stdout = io.StringIO()
+                MBR.main(["--out", os.path.join(scratch, "o.html"),
+                          "--json", os.path.join(scratch, "o.json")])
+            finally:
+                builtins.open = real_open
+            self.assertEqual(len(calls), 1)
+
+            # --check reads and never reaches the landing writes
+            before = len(calls)
+            sys.stdout = io.StringIO()
+            try:
+                rc = MBR.main(["--check"])
+            finally:
+                sys.stdout = saved_stdout
+            self.assertEqual(len(calls), before)
+            self.assertIn(rc, (0, 2, 3))
+        finally:
+            sys.stdout = saved_stdout
+            if saved is None:
+                sys.modules.pop("board_face_landing", None)
+            else:
+                sys.modules["board_face_landing"] = saved
+            shutil.rmtree(tmp, ignore_errors=True)
+
+
 if __name__ == "__main__":
     unittest.main()

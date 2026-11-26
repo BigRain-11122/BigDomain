@@ -2,7 +2,7 @@
  "generated_by": "tools/membership_benefit_report.py",
  "p47_item": 5,
  "title": "会员权益验收报告",
- "generated_utc": "2026-11-16T07:49:16Z",
+ "generated_utc": "2026-11-26T23:42:09Z",
  "facts": {
   "tiers": {
    "cocreator": {
@@ -193,8 +193,8 @@
   "47991d8b6a83ead3"
  ],
  "expires": [
-  "2026-12-16T07:49:16Z",
-  "2026-12-16T07:49:16Z"
+  "2026-12-26T23:42:09Z",
+  "2026-12-26T23:42:09Z"
  ],
  "fingerprint": "918674b2db958676",
  "criteria": [
@@ -275,7 +275,7 @@
  ],
  "verdict": "PASS",
  "sizes": {
-  "html": 10915,
-  "json": 10099
+  "html": 10218,
+  "json": 9817
  }
 }
