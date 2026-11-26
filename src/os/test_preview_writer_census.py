@@ -1731,5 +1731,153 @@ class PWC18FourteenthProducerClosed(unittest.TestCase):
             shutil.rmtree(tmp, ignore_errors=True)
 
 
+def mpd_closure_positions(text):
+    """(present, after_landing, check_clean, shared_only) for AC-PWC19."""
+    if "def write_all(" not in text:
+        return (False, False, False, False)
+    body = text.rpartition("def write_all(")[2].split("\ndef ")[0]
+    at = body.find("_refresh_face(")
+    present = at != -1
+    landing_at = body.rfind("fh.write(html)")
+    after = present and landing_at != -1 and at > landing_at
+    check_body = text.rpartition("def check(")[2].split("\ndef ")[0]
+    check_clean = present and "_refresh_face(" not in check_body
+    helper = text.rpartition("def _refresh_face(")[2].split("\ndef ")[0]
+    shared = "board_face_landing.refresh_export_face(ROOT)" in helper
+    no_local_writer = ".write(" not in helper
+    return (present, after, check_clean, shared and no_local_writer)
+
+
+class PWC19FifteenthProducerClosed(unittest.TestCase):
+    """AC-PWC19: money_path_demo re-derives the face on its landing path only."""
+
+    def _source(self):
+        with io.open(os.path.join(TOOLS, "money_path_demo.py"),
+                     encoding="utf-8") as f:
+            return f.read()
+
+    def test_closed_and_ordered_after_the_landing(self):
+        text = self._source()
+        kind, _html, writes, closes = MOD.classify_source(text)
+        self.assertEqual(kind, "closed")
+        self.assertGreaterEqual(writes, 2)
+        self.assertGreaterEqual(closes, 1)
+        self.assertEqual(mpd_closure_positions(text), (True, True, True, True))
+
+    def test_negative_controls_delete_and_move(self):
+        text = self._source()
+        deleted = text.replace(
+            "    LAST_FACE = _refresh_face(html_path, json_path)\n", "").replace(
+            "board_face_landing.refresh_export_face(ROOT)",
+            "None  # control: shared call removed")
+        self.assertEqual(MOD.classify_source(deleted)[0], "gap")
+        self.assertFalse(mpd_closure_positions(deleted)[0])
+        moved = text.replace(
+            "    LAST_FACE = _refresh_face(html_path, json_path)\n", "").replace(
+            "        fh.write(html)",
+            "        LAST_FACE = _refresh_face(html_path, json_path)"
+            "  # control: moved before the last landing write\n        fh.write(html)", 1)
+        pos = mpd_closure_positions(moved)
+        self.assertTrue(pos[0])
+        self.assertFalse(pos[1])
+
+    def test_refresh_is_shared_and_named(self):
+        import money_path_demo as MPD
+        calls = []
+
+        class Fake(object):
+            def __init__(self, ok, note):
+                self.ok, self.note = ok, note
+
+            def refresh_export_face(self, root):
+                calls.append(root)
+                return (self.ok, self.note, {})
+
+        class Boom(object):
+            def refresh_export_face(self, root):
+                raise RuntimeError("no writer here")
+
+        pair = (os.path.join(MPD.PREVIEW, MPD.HTML_NAME),
+                os.path.join(MPD.PREVIEW, MPD.JSON_NAME))
+        saved = sys.modules.get("board_face_landing")
+        try:
+            sys.modules["board_face_landing"] = Fake(True, "")
+            self.assertEqual(MPD._refresh_face(*pair), "WRITTEN")
+            self.assertEqual(calls, [MPD.ROOT])
+            sys.modules["board_face_landing"] = Fake(False, "E_BFL_FACE_UNPROVEN")
+            self.assertEqual(MPD._refresh_face(*pair),
+                             "REFUSED E_BFL_FACE_UNPROVEN")
+            sys.modules["board_face_landing"] = Boom()
+            self.assertEqual(MPD._refresh_face(*pair), "SKIPPED RuntimeError")
+            self.assertEqual(len(calls), 2)
+        finally:
+            if saved is None:
+                sys.modules.pop("board_face_landing", None)
+            else:
+                sys.modules["board_face_landing"] = saved
+
+    def test_landing_derives_once_and_scratch_and_check_derive_none(self):
+        """A landing in this root's preview derives once; scratch and --check do not."""
+        import builtins
+        import money_path_demo as MPD
+        calls = []
+
+        class Fake(object):
+            def refresh_export_face(self, root):
+                calls.append(root)
+                return (True, "", {})
+
+        tmp = tempfile.mkdtemp(prefix="mpd-")
+        world = os.path.join(tmp, "preview")
+        os.makedirs(world)
+        for name in MPD.SOURCE_NAMES.values():
+            shutil.copyfile(os.path.join(MPD.PREVIEW, name),
+                            os.path.join(world, name))
+        saved = MPD.PREVIEW
+        saved_mod = sys.modules.get("board_face_landing")
+        saved_stdout = sys.stdout
+        real_open = builtins.open
+        sink = os.path.join(tmp, "sink.bin")
+        try:
+            sys.modules["board_face_landing"] = Fake()
+
+            def fake_open(path, mode="r", *a, **k):
+                if "w" in mode:
+                    return real_open(sink, "w")
+                return real_open(path, mode, *a, **k)
+
+            builtins.open = fake_open
+            try:
+                MPD.write_all()
+            finally:
+                builtins.open = real_open
+            self.assertEqual(calls, [MPD.ROOT])
+            self.assertEqual(len(calls), 1)
+
+            # scratch render: PREVIEW points away from this root's preview
+            MPD.PREVIEW = world
+            MPD.write_all()
+            self.assertEqual(len(calls), 1)
+
+            # --check reads and never reaches write_all()
+            MPD.PREVIEW = saved
+            before = len(calls)
+            sys.stdout = io.StringIO()
+            try:
+                rc = MPD.main(["--check"])
+            finally:
+                sys.stdout = saved_stdout
+            self.assertEqual(len(calls), before)
+            self.assertIn(rc, (0, 2))
+        finally:
+            sys.stdout = saved_stdout
+            MPD.PREVIEW = saved
+            if saved_mod is None:
+                sys.modules.pop("board_face_landing", None)
+            else:
+                sys.modules["board_face_landing"] = saved_mod
+            shutil.rmtree(tmp, ignore_errors=True)
+
+
 if __name__ == "__main__":
     unittest.main()

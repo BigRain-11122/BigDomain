@@ -7994,8 +7994,12 @@ SUITES = [
     # tools/journey_demo.py, the 19.9 journey face, whose landing path is one
     # HTML half plus a JSON half inside write_artifacts(); the closure sits after
     # the JSON write and a scratch landing derives nothing.
+    # R3541 (AC-PWC19): the same four-arm shape now grades
+    # tools/money_path_demo.py, the money-path face, whose landing path is one
+    # JSON half plus an HTML half inside write_all(); the closure sits after the
+    # HTML write and the guard measures against ROOT's own preview.
     ("os-preview-writer-census",
-     os.path.join("..", "os", "test_preview_writer_census.py"), 59),
+     os.path.join("..", "os", "test_preview_writer_census.py"), 63),
     # R2814. tools/ugc_gate_report.py carries AC-UGR1..AC-UGR9 and renders the
     # face for the BLUEPRINT section-five death line (content safety not
     # connected means the door stays shut), yet the registry held ZERO AC-UGR*

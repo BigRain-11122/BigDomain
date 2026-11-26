@@ -42,7 +42,7 @@
         "readonly": false
       },
       {
-        "bytes": 12907,
+        "bytes": 12935,
         "controls": 0,
         "exists": true,
         "href": "journey-19.9.html",
@@ -51,7 +51,7 @@
         "readonly": true
       },
       {
-        "bytes": 41366,
+        "bytes": 41370,
         "controls": 0,
         "exists": true,
         "href": "start-here.html",
@@ -112,15 +112,15 @@
   ],
   "sources": {
     "blockers": {
-      "bytes": 6931,
+      "bytes": 6755,
       "path": "preview/ceo-blockers.json"
     },
     "journey": {
-      "bytes": 8012,
+      "bytes": 8040,
       "path": "preview/journey-19.9.json"
     },
     "payment": {
-      "bytes": 7177,
+      "bytes": 7018,
       "path": "preview/payment-gate-report.json"
     }
   },
@@ -139,7 +139,7 @@
       "id": "JV-2",
       "ok": true,
       "touchpoint": "19.9 算力包下单（单次爆款·三形态一句话）",
-      "verdict": "PASS"
+      "verdict": "FAIL AC-PAYG8"
     },
     {
       "carrier": "payment-gate-report",
@@ -147,7 +147,7 @@
       "id": "JV-3",
       "ok": true,
       "touchpoint": "回调/幂等/对账",
-      "verdict": "PASS"
+      "verdict": "FAIL AC-PAYG8"
     },
     {
       "carrier": "ledger-business-report",

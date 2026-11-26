@@ -1,0 +1,9 @@
+R3541 evidence (measured in this window, ASCII):
+SUITE src/os/test_preview_writer_census.py => Ran 63 tests OK (was 59, four new arms under AC-PWC19)
+TOOL python tools/money_path_demo.py => WROTE money-path-demo.html 13377B / money-path-demo.json 6159B; face APPLIED latest_artifact->preview/money-path-demo.html; VERDICT PASS products=5 steps=8 physical=3 decision=5
+TOOL --check => VERDICT PASS products=5 steps=8 physical=3 decision=5 (read-only, zero derivations)
+CENSUS python tools/preview_writer_census.py => PWC (R3541) modules=119 closed=21 gap=88 reader=10 face export=WRITTEN
+MATRIX python src/os/suite_matrix_reconcile.py --write => WRITTEN docs/sandbox-suite-matrix.md 85799 bytes, 832 rows; --check => DOC-CURRENT
+INDEX python tools/deliverable_index.py => faces=9 defects=0 fingerprint=529bd2c0e9b4443b index=56337B
+CARRIER python src/os/state_io.py --check => STATE IO CANON-CLEAN bytes=52834 crlf=232 bare_lf=0 off_indent=0
+HONEST: 88 gaps carried by name; zero payment capability; no network beyond loopback; five physical pieces still gate every buyer.
