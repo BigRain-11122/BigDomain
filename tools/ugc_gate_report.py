@@ -35,6 +35,7 @@ SERVER_PY = os.path.join(LOBBY, "server.py")
 STUB_PY = os.path.join(LOBBY, "msgsec_stub.py")
 OUT_HTML = os.path.join(ROOT, "preview", "ugc-gate-report.html")
 OUT_JSON = os.path.join(ROOT, "preview", "ugc-gate-report.json")
+LAST_FACE = ""  # set by write_outputs when it lands this tool's own face pair
 
 CRITERIA = (
     ("AC-UGR1", "report renders as HTML and JSON, both non-empty, and every measured case row appears in the HTML exactly once"),
@@ -1049,7 +1050,39 @@ def render_json(data):
     return json.dumps(out, ensure_ascii=False, indent=2, sort_keys=True)
 
 
+def _lands_this_face():
+    """True only when both halves land under this root's own preview/ dir.
+
+    The tool also renders into scratch directories (the battery suite points
+    OUT_HTML/OUT_JSON at a private world), and a scratch render lands nothing
+    the CEO face can name, so it must derive nothing either.
+    """
+    prev = os.path.join(os.path.abspath(ROOT), "preview")
+    return (os.path.dirname(os.path.abspath(OUT_HTML)) == prev
+            and os.path.dirname(os.path.abspath(OUT_JSON)) == prev)
+
+
+def _refresh_face():
+    """AC-PWC14 (R3536): landing this pair and re-deriving the CEO face are ONE run.
+
+    The one definition lives in src/os/board_face_landing.py, so no second writer
+    is kept here. Refusals are named, never raised: both halves are already on
+    disk when this runs, so the caller's exit code stays its own.
+    """
+    try:
+        os_src = os.path.join(ROOT, "src", "os")
+        if os_src not in sys.path:
+            sys.path.insert(0, os_src)
+        import board_face_landing
+        ok, note, _proof = board_face_landing.refresh_export_face(ROOT)
+        return "WRITTEN" if ok else "REFUSED %s" % note
+    except Exception as exc:  # a private world may carry no shared writer
+        return "SKIPPED %s" % type(exc).__name__
+
+
 def write_outputs(data):
+    global LAST_FACE
+    LAST_FACE = ""
     os.makedirs(os.path.dirname(OUT_HTML), exist_ok=True)
     with open(OUT_HTML, "w", encoding="utf-8", newline="\n") as fh:
         fh.write(render_html(data))
@@ -1065,6 +1098,9 @@ def write_outputs(data):
             fh.write(render_json(data) + "\n")
         if data["sizes"]["json"] == os.path.getsize(OUT_JSON):
             break
+    # R3536 (AC-PWC14): the landing and the CEO face are one derivation.
+    if _lands_this_face():
+        LAST_FACE = _refresh_face()
 
 
 def check(data):
@@ -1495,6 +1531,7 @@ def main():
     write = args.write or (not args.check and not args.no_write)
     if write:
         write_outputs(data)
+        print("face export=%s" % (LAST_FACE or "SKIPPED E_UGR_SCRATCH_RENDER"))
     if args.check:
         return check(data)
     print("WROTE %s" % OUT_HTML)

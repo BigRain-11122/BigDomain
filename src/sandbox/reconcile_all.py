@@ -7984,8 +7984,14 @@ SUITES = [
     # the shared face writer after the last landing write of its single page
     # pair, never inside check(), with delete/move negative controls, a
     # behaviour arm and a landing-path one-derivation arm.
+    # R3536. AC-PWC14 grades the tenth newly closed producer: tools/ugc_gate_report.py
+    # lands its single page pair inside write_outputs() and calls the shared face
+    # writer after the sizes fixed-point loop (the last JSON landing write sits in
+    # the loop body), never inside check(); a scratch render outside this root's
+    # preview/ derives nothing, with delete/move negative controls and a
+    # landing-path one-derivation arm.
     ("os-preview-writer-census",
-     os.path.join("..", "os", "test_preview_writer_census.py"), 38),
+     os.path.join("..", "os", "test_preview_writer_census.py"), 42),
     # R2814. tools/ugc_gate_report.py carries AC-UGR1..AC-UGR9 and renders the
     # face for the BLUEPRINT section-five death line (content safety not
     # connected means the door stays shut), yet the registry held ZERO AC-UGR*

@@ -6,6 +6,8 @@ tools/ledger_reconcile_face.py was touched, AC-PWC7 in R3529 before
 tools/lobby_session_trace.py, AC-PWC8 in R3530 before tools/first_yuan_path.py,
 AC-PWC9 in R3531 before tools/filing_checklist.py, AC-PWC10 in R3532 before
 tools/ship_checklist.py, AC-PWC11 in R3533 before tools/start_here.py.
+AC-PWC12 in R3534 before tools/first_yuan_chain.py, AC-PWC13 in R3535 before
+tools/payment_gate_report.py, AC-PWC14 in R3536 before tools/ugc_gate_report.py.
 
 Why this exists: R3524..R3526 each closed the same birth-site gap for ONE
 producer (one board battery page, the rest of BOARD_PAGES, one non-board census).
@@ -1030,6 +1032,147 @@ class PWC13NinthProducerClosed(unittest.TestCase):
                 sys.modules.pop("board_face_landing", None)
             else:
                 sys.modules["board_face_landing"] = saved
+            shutil.rmtree(tmp, ignore_errors=True)
+
+
+def ugr_closure_positions(text, last_landing='fh.write(render_json(data) + "\\n")'):
+    """(present, after_landing, check_clean, shared_only) for AC-PWC14."""
+    if "def write_outputs(" not in text:
+        return (False, False, False, False)
+    body = text.rpartition("def write_outputs(")[2].split("\ndef check(")[0]
+    at = body.find("_refresh_face()")
+    present = at != -1
+    landing_at = body.rfind(last_landing)
+    after = present and landing_at != -1 and at > landing_at
+    check_body = text.rpartition("def check(")[2].split("\ndef ")[0]
+    check_clean = present and "_refresh_face(" not in check_body
+    helper = text.rpartition("def _refresh_face(")[2].split("\ndef write_outputs(")[0]
+    shared = "board_face_landing.refresh_export_face(ROOT)" in helper
+    no_local_writer = ".write(" not in helper
+    return (present, after, check_clean, shared and no_local_writer)
+
+
+class PWC14TenthProducerClosed(unittest.TestCase):
+    """AC-PWC14: ugc_gate_report re-derives the face on its landing path only."""
+
+    def _source(self):
+        with io.open(os.path.join(TOOLS, "ugc_gate_report.py"),
+                     encoding="utf-8") as f:
+            return f.read()
+
+    def test_closed_and_ordered_after_the_landing(self):
+        text = self._source()
+        kind, _html, writes, closes = MOD.classify_source(text)
+        self.assertEqual(kind, "closed")
+        self.assertGreaterEqual(writes, 2)
+        self.assertGreaterEqual(closes, 1)
+        self.assertEqual(ugr_closure_positions(text), (True, True, True, True))
+
+    def test_negative_controls_delete_and_move(self):
+        text = self._source()
+        deleted = text.replace(
+            "    if _lands_this_face():\n        LAST_FACE = _refresh_face()",
+            "    pass  # control: closure call removed").replace(
+            "board_face_landing.refresh_export_face(ROOT)",
+            "None  # control: shared call removed")
+        self.assertEqual(MOD.classify_source(deleted)[0], "gap")
+        self.assertFalse(ugr_closure_positions(deleted)[0])
+        moved = text.replace(
+            "    # R3536 (AC-PWC14): the landing and the CEO face are one derivation."
+            "\n    if _lands_this_face():\n        LAST_FACE = _refresh_face()", "").replace(
+            "    for _ in range(6):",
+            "    _refresh_face()  # control: moved before the landing loop"
+            "\n    for _ in range(6):", 1)
+        pos = ugr_closure_positions(moved)
+        self.assertTrue(pos[0])
+        self.assertFalse(pos[1])
+
+    def test_refresh_is_shared_and_named(self):
+        import ugc_gate_report as UGR
+        calls = []
+
+        class Fake(object):
+            def __init__(self, ok, note):
+                self.ok, self.note = ok, note
+
+            def refresh_export_face(self, root):
+                calls.append(root)
+                return (self.ok, self.note, {})
+
+        class Boom(object):
+            def refresh_export_face(self, root):
+                raise RuntimeError("no writer here")
+
+        saved = sys.modules.get("board_face_landing")
+        try:
+            sys.modules["board_face_landing"] = Fake(True, "")
+            self.assertEqual(UGR._refresh_face(), "WRITTEN")
+            self.assertEqual(calls, [UGR.ROOT])
+            sys.modules["board_face_landing"] = Fake(False, "E_BFL_FACE_UNPROVEN")
+            self.assertEqual(UGR._refresh_face(), "REFUSED E_BFL_FACE_UNPROVEN")
+            sys.modules["board_face_landing"] = Boom()
+            self.assertEqual(UGR._refresh_face(), "SKIPPED RuntimeError")
+            self.assertEqual(len(calls), 2)
+        finally:
+            if saved is None:
+                sys.modules.pop("board_face_landing", None)
+            else:
+                sys.modules["board_face_landing"] = saved
+
+    def test_landing_derives_once_and_scratch_and_check_derive_none(self):
+        """A landing in this root's preview/ derives once; scratch and --check do not."""
+        import ugc_gate_report as UGR
+        calls = []
+
+        class Fake(object):
+            def refresh_export_face(self, root):
+                calls.append(root)
+                return (True, "", {})
+
+        data = UGR.collect()
+        tmp = tempfile.mkdtemp(prefix="ugr-")
+        os.makedirs(os.path.join(tmp, "preview"))
+        saved_root, saved_html, saved_json = UGR.ROOT, UGR.OUT_HTML, UGR.OUT_JSON
+        saved_mod = sys.modules.get("board_face_landing")
+        saved_stdout = sys.stdout
+        try:
+            sys.modules["board_face_landing"] = Fake()
+            UGR.ROOT = tmp
+            UGR.OUT_HTML = os.path.join(tmp, "preview", "ugc-gate-report.html")
+            UGR.OUT_JSON = os.path.join(tmp, "preview", "ugc-gate-report.json")
+            UGR.write_outputs(data)
+            self.assertEqual(calls, [tmp])
+            self.assertEqual(len(calls), 1)
+            self.assertTrue(os.path.isfile(UGR.OUT_HTML))
+            self.assertTrue(os.path.isfile(UGR.OUT_JSON))
+
+            # scratch render: the halves land outside this root's preview/
+            scratch_html = os.path.join(tmp, "scratch.html")
+            scratch_json = os.path.join(tmp, "scratch.json")
+            UGR.OUT_HTML, UGR.OUT_JSON = scratch_html, scratch_json
+            UGR.write_outputs(data)
+            self.assertEqual(len(calls), 1)
+            self.assertEqual(UGR.LAST_FACE, "")
+
+            UGR.ROOT, UGR.OUT_HTML, UGR.OUT_JSON = saved_root, saved_html, saved_json
+            calls[:] = []
+            saved_argv = sys.argv
+            sys.argv = ["ugc_gate_report.py", "--check"]
+            sys.stdout = io.StringIO()
+            try:
+                rc = UGR.main()
+            finally:
+                sys.stdout = saved_stdout
+                sys.argv = saved_argv
+            self.assertEqual(calls, [])
+            self.assertIn(rc, (0, 2))
+        finally:
+            sys.stdout = saved_stdout
+            UGR.ROOT, UGR.OUT_HTML, UGR.OUT_JSON = saved_root, saved_html, saved_json
+            if saved_mod is None:
+                sys.modules.pop("board_face_landing", None)
+            else:
+                sys.modules["board_face_landing"] = saved_mod
             shutil.rmtree(tmp, ignore_errors=True)
 
 

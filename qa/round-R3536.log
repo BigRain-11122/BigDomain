@@ -1,0 +1,69 @@
+ROUND R3536 | BigDomain OSLoop | 2026-11-27
+PRODUCT: the tenth gap producer from the R3527 census closes at its birth site.
+
+CLAIM (board head R3536 item (2), one live-line producer only):
+  tools/ugc_gate_report.py - the openable face for the P-47 item 3 UGC +
+  msgSecCheck pipeline (BLUEPRINT section five death line).
+
+PIN (AC-PWC14, written to src/os/backlog.md BEFORE any code edit):
+  (a) closure surface: AST reads kind=closed; the _refresh_face() call sits in
+      write_outputs() AFTER the sizes fixed-point loop (the last JSON landing
+      write lives in the loop body) and never inside check();
+  (b) shared definition: the helper carries only
+      board_face_landing.refresh_export_face(ROOT), no local .write(
+  (c) behaviour: a recording fake sees exactly one call with ROOT;
+      WRITTEN / REFUSED <note> / SKIPPED <Type>, never raises;
+  (d) two paths plus two negative controls: landing under this root's own
+      preview/ derives exactly once, a scratch render elsewhere derives zero,
+      --check derives zero; delete -> gap, move before the landing loop ->
+      order fails.
+
+READ-ONLY FIRST (measured, not assumed):
+  classify_source(tools/ugc_gate_report.py) -> kind=gap write_calls=4
+      face_calls=0 landing_paths=['ugc-gate-report.html']
+  landing writes: write_outputs() 1054-1055 (html) and the six-pass sizes loop
+      1064-1065 (json, last write inside the loop body)
+  check() opens both halves read-only; main() sets write=False before
+      write_outputs() when --check is passed.
+  every write_outputs() call in the battery suite patches ROOT/OUT_HTML/
+      OUT_JSON into a private world (test_ugc_gate_report.py 464-469, 716-718,
+      791-802, 1016-1021), so the landing guard was measured before it was needed.
+
+TWO MEASURED FIRST-DRAFT CORRECTIONS (recorded, not hidden):
+  1. the move control that swapped the trailing block for a bare call left the
+     call in place, so the order arm read after-landing and passed falsely; the
+     control now deletes the block and inserts the call before the loop.
+  2. ugc_gate_report.main() takes no argv, so the read-only arm patches
+     sys.argv instead of passing a list.
+
+GATES (all run in this window):
+  python -m unittest src.os.test_preview_writer_census  -> Ran 42 tests OK (was 38)
+  python tools/ugc_gate_report.py                       -> ROWS 4 cases; fail-closed
+                                                            attempts 4 blocked 3; parity rc=0
+                                                            WROTE html=28112B json=20170B
+                                                            face export=WRITTEN
+  python tools/ugc_gate_report.py --check               -> VERDICT PASS checks=19/19
+                                                            (read-only, derived nothing)
+  python tools/preview_writer_census.py                 -> PWC (R3536) modules=119
+                                                            closed=16 gap=93 reader=10
+  python tools/preview_writer_census.py --check         -> PWC-CHECK VERDICT PASS
+  python src/os/suite_matrix_reconcile.py --write       -> 832 rows, 85799B,
+                                                            row 743 census criteria 38->42
+  python tools/deliverable_index.py                     -> faces=9 defects=0 index=56337B
+  python src/os/ledger_lines.py --check                 -> VERDICT CLEAN
+  python tools/status_export_fresh.py --apply           -> do / latest_artifact /
+                                                            next_milestone published
+  python src/os/export_round.py --check                 -> VERDICT PASS
+  state written BEFORE the census page (the R3535 ordering law), so the page
+  label and the tick agree.
+
+CARRIED (not claimed):
+  the battery page reads BSR-CHECK RED E_REGISTRY_DRIFT after the 38->42 bump;
+  a detached producer (logs/battery-R3536.log) was started and is carried into
+  the next window if it has not landed.
+  93 census gaps stay named in preview/preview-writer-census.json.
+  qa_log broken=5; 769 criteria uncovered by the shard path; Docker absent; the
+  three qa/crawl-* files are not this window's work; S4U still unregistered.
+
+BOUNDARY: ZERO payment capability, no network beyond loopback; the five physical
+pieces still gate every buyer.

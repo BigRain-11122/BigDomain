@@ -5,7 +5,7 @@
     "token": "ai_generated"
   },
   "call_sites": [
-    "src/sandbox/frontdoor.py:661",
+    "src/sandbox/frontdoor.py:663",
     "src/sandbox/journey_demo.py:90",
     "src/sandbox/lobby/msgsec_stub.py:40",
     "src/sandbox/lobby/msgsec_stub.py:123"
@@ -294,7 +294,7 @@
     }
   ],
   "sizes": {
-    "html": 28799,
+    "html": 28112,
     "json": 20170
   },
   "unparsed": [],
