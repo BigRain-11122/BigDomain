@@ -1,0 +1,72 @@
+R3537 round evidence (AC-PWC15: tools/merchant_onboard.py closes at its birth site)
+==========================================================================
+[1] five-still scan (before any work)
+    python src/os/scan_five_still.py
+    -> [LEDGER] atbd_lines=0 unreplied_groups=0
+    -> [DEC] rows=356 tokens=143 new=0
+    -> [ORD] max_ts=2026-11-20
+    -> [BENCH] refreshed=2026-11-24 (due 2026-12-01)
+    -> git status: only qa/crawl-baselines.json, qa/crawl-failure-days.jsonl,
+       qa/crawl-log.jsonl (not written by this window); no index.lock
+
+[2] full-file content-addressed decision diff (run because the windowed reader
+    reported 143 tokens against a 144-token baseline)
+    live ids = 144, baseline = 144, new = [], gone = []
+    -> nothing owed
+
+[3] census row read (read-only)
+    tools/merchant_onboard.py: kind=gap write_calls=3 face_calls=0
+    landing_paths=['merchant-onboard.html']
+    tools/buyer_trial.py: kind=gap write_calls=3 face_calls=0
+    landing_paths=['buyer-trial.html','membership-face.html',
+                   'merchant-onboard.html','money-path-demo.html'] (four landings,
+    deferred by name: the multi-landing clause needs one arm per landing point)
+
+[4] landing-write positions measured before the edit
+    write(): 485-486 HTML half
+             492-493 first JSON half, 496-497 second JSON half (json_bytes fixed point)
+    check(): 510, read-only (both io.open calls are reads)
+    main():  616, --write -> write(), --check -> check()
+
+[5] suite
+    python src/os/test_preview_writer_census.py  (captured to logs/suite-R3537.txt)
+    -> Ran 46 tests, OK, exit 0   (was 42; four new arms under AC-PWC15)
+
+[6] real end-to-end run
+    python tools/merchant_onboard.py --write
+    -> merchant-onboard WROTE html=23088B json=8123B items=8 proven=2
+    -> APPLIED R3537 ... latest_artifact->preview/merchant-onboard.html (23088B)
+       + preview/merchant-onboard.json (8124B)
+    python tools/merchant_onboard.py --check
+    -> merchant-onboard VERDICT PASS criteria=7 items=8 ceo=6 proven=2
+       external_refs=0 route_hops=4
+
+[7] chain (state tick first, then the census page: round_label reads the tick)
+    state.json tick 3536 -> 3537
+    python tools/preview_writer_census.py --write
+    -> PWC (R3537) modules=119 closed=17 gap=92 reader=10 face export=WRITTEN
+    python tools/preview_writer_census.py --check
+    -> PWC-CHECK VERDICT PASS read_only=True modules=119 closed=17 gap=92 reader=10
+    python src/os/suite_matrix_reconcile.py --write / --check
+    -> WRITTEN 85799 bytes, 832 rows ; DOC-CURRENT
+    python tools/deliverable_index.py
+    -> DELIVERABLE INDEX faces=9 defects=0 fingerprint=c99f051cdb49f67a index=56337B
+    python tools/status_export_fresh.py --check
+    -> VERDICT R3537 PASS: do, ceo_face.current and current all name R3537
+
+[8] defect found and fixed in this window (recorded, not hidden)
+    the first state append omitted a comma, so state.json was unparseable and the
+    shared writer answered REFUSED ... JSONDecodeError (char 33382) while the
+    census page itself landed. With the comma restored the same run answered
+    WRITTEN. The landing guard was reading the real face, not a hard-coded pass.
+
+[9] carried by name, not claimed
+    battery page reads BSR-CHECK RED E_REGISTRY_DRIFT after the 42 -> 46 criteria
+    bump; one bounded re-derivation (210 s cap) produced an empty log and was
+    killed (logs/battery-R3537.log empty), same failure mode as the last windows.
+    qa_log --ledger-check still broken=5; 769 criteria uncovered by the shard
+    path; Docker absent; the three qa/crawl-* files are not this window's.
+
+[10] honesty boundary
+    ZERO payment capability and no network beyond loopback; the five physical
+    pieces still gate every buyer.
