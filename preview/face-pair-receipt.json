@@ -197,6 +197,10 @@
       "rendered_json_bytes": 5197,
       "rendered_json_sha256": "ee71b910aeb19802c87f730ad6853f986379f4b2e1b06e397a5110efb8ca9c33",
       "replay": "render_html-from-report",
+      "replay_stamps": [
+        "generated_utc",
+        "port"
+      ],
       "shelf_stamp_landed": 55302,
       "shelf_stamp_now": 55908,
       "slug": "city-face-report",
@@ -236,16 +240,52 @@
       "spliced_html_sha256": "bfb231797af1117a8d1497b443cd2f1f7324a47c2e5123c18f5f2e7be6be6b83",
       "verdict": "one-derivation",
       "why": "eighth of the twelve splits (62.6h): html last committed at 897e0f99 (the R3461 front-door round), json at 700dd89a, which shipped the R3288 back-hop channel; this producer reads six live reports plus the debt register and stamps its own byte sizes into BOTH halves, so the two landed halves record the sizes of two different moments - the page keeps the pre-channel numbers, the report the post-channel ones"
+    },
+    {
+      "channel_block_bytes": 697,
+      "channel_how": "inserted",
+      "current_schema_version": null,
+      "detail": "landed html = producer html + the shipped channel block, equal byte for byte once the channel's own shelf stamp is normalised on both sides (landed 55302, today 55908): the stamp records when the channel ran, not which derivation the page is",
+      "json_same_as_render": true,
+      "landed_carries_schema_badge": false,
+      "landed_html": "preview/membership-benefit-report.html",
+      "landed_html_bytes": 10915,
+      "landed_html_sha256": "79f01e2fe9e3d9cb555845a3dcfc7db28edac943f259e526561e197ff7c567e9",
+      "landed_json": "preview/membership-benefit-report.json",
+      "landed_json_bytes": 10099,
+      "landed_json_sha256": "0db12770f7f2570bd38eb35708622864150602458bd97c55475f1b58b9b07d09",
+      "landed_schema_version": null,
+      "producer": "tools/membership_benefit_report.py",
+      "raw_first_diff_offset": 10204,
+      "receipt": "channel-shelf-stamp",
+      "rendered_html_bytes": 10218,
+      "rendered_html_sha256": "98811c80e9182a05d85b26feeecffeb669a7da2d4ffbfcec34a260571e3a66b0",
+      "rendered_json_bytes": 10099,
+      "rendered_json_sha256": "0db12770f7f2570bd38eb35708622864150602458bd97c55475f1b58b9b07d09",
+      "replay": "render_html-from-report",
+      "replay_stamps": [
+        "generated_utc",
+        "expires",
+        "periods"
+      ],
+      "shelf_stamp_landed": 55302,
+      "shelf_stamp_now": 55908,
+      "slug": "membership-benefit-report",
+      "splice_offset": 10204,
+      "spliced_html_bytes": 10915,
+      "spliced_html_sha256": "03ed914f0aabadd1d940d2152891a4c313beea429d7806db020c2dcd45945d26",
+      "verdict": "one-derivation",
+      "why": "ninth of the twelve splits (62.6h): html last committed at 897e0f99 (the R3461 front-door round), json at 700dd89a, which shipped the R3288 back-hop channel; this producer builds its member/lobby/ledger world IN PROCESS over a temp directory, so its page carries no loopback port stamp - the report's own top-level expires/periods are the stamps that make the render reproducible (AC-PPR12)"
     }
   ],
-  "generated_at": "2026-11-26T09:09:05+08:00",
+  "generated_at": "2026-11-26T10:18:55+08:00",
   "law": "a history split is excused for one face only when the producer's own html, plus the shipped post-render channel, reproduces the landed html byte for byte - and for a producer that applies the channel itself, when its own html equals the landed page with no block surgery at all",
-  "round": 3506,
+  "round": 3508,
   "source": "tools/face_pair_receipt.py",
   "totals": {
     "drift": 0,
-    "faces": 8,
-    "one_derivation": 4,
+    "faces": 9,
+    "one_derivation": 5,
     "unreproducible": 0,
     "version_drift": 4
   }

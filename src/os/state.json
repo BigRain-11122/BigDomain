@@ -146,7 +146,7 @@
     "D-20261106-04",
     "D-20261114-0"
   ],
-  "last_decision_rows": 356,
+  "last_decision_rows": 438,
   "last_gord_tbl_rows": 4,
   "last_order": "2026-11-20 22:5x",
   "log": [
@@ -280,7 +280,13 @@
                 "R3508 tokens: local=~19k api=0 api_reason=no cloud call: one five-still scan, one content-addressed group token-set diff, one red-read of both gates plus one digest cross-check on the index pair, one html scan for the directory index, one new detector plus one mirror row, one AC-PPC8 arm with two negative controls, one stale-arm repair found by running the suite, one registry bump, one derivation chain of three pages, one matrix re-derivation, one battery page re-derivation, one evidence log and the state ring",
                 "R3508 second defect found at the source, in this window's own gate: the census html half prints Tick 3507 and the comparison had no label exclusion for html text - only the JSON dict was blanked - so the page went red the moment the tick advanced past its own derivation, which is the same stale-label trap R3503 healed on the receipt page. normalized() now blanks the tick label for html as well, and AC-PPC4 carries two new sub-arms proving the exclusion narrow: a rewritten tick is ignored and one changed count still reads drift.",
                 "R3508 gates re-read after that fix and a second export refresh: PPC-CHECK VERDICT PASS, AC-DIX 23/23, SUITE PASS 8/8, BSR-CHECK VERDICT PASS, export WROTE tick=3508 - derived in the documented order (battery page, census, index, export), and the census page no longer depends on which window derived it.",
-                "R3508 closeout: the two pages that measure each other no longer chase each other - the census records a face that prints its own size as a reading rather than a measurement, and both gates are green in the same window for the first time since R3500."
+                "R3508 closeout: the two pages that measure each other no longer chase each other - the census records a face that prints its own size as a reading rather than a measurement, and both gates are green in the same window for the first time since R3500.",
+                "2026-11-26 R3509 PRODUCT: the ninth preview history split reads one-derivation - membership-benefit-report (10915B html / 10099B json) is replayed from the report it shipped beside, json byte-identical (sha 0db12770) and html equal after the channel's shelf stamp, so the census answers history_split=7 channel_receipt=4 explained=8 and the receipt gate faces=9 one_derivation=5.",
+                "R3509 law: AC-PPR12 grades a facts-report face whose page carries NO loopback port stamp - this producer measures its member/lobby/ledger world in process, so the stamps are the ones its own landed report records (generated_utc plus the declared expires and periods); a declared key missing refuses by name, a face declaring port=true still refuses a page without its port, and the row names the stamps it used.",
+                "R3509 GROUP SCAN: 0 @BigDomain lines in the group ledger so no dispatch was owed; decisions.md answered 438 rows and 140 ids with 0 newcomers and the same four citation ids folded out, so nothing is owed (last_decision_rows moved 356 to 438 as an auxiliary reading only); the orders head is unchanged at 2026-11-20 22:5x; benchmarks due 2026-12-01; no index.lock and no second executor.",
+                "R3509 honesty, read off the disk: the work landed at 10:15-10:20 but that window ended before closeout - no state line, no commit, four throwaway probes left in src/os - so this window re-ran every gate instead of trusting the tree (SUITE PASS 12/12, FPR PASS faces=9, PPC PASS history_split=7, matrix DOC-CURRENT, ledger CLEAN), deleted the probes, and re-derived the battery page the round's own registry bump (11 to 12 criteria) had reddened, in the documented order battery page then census then index then export.",
+                "R3509 carried: seven splits remain; ledger-business-report was probed and not fixed - its tx ids hash a wall-clock stamp, so it needs a clock-identity replay criterion; S4U still unregistered (a non-elevated run buys only InteractiveToken, which the standing law forbids); ZERO payment capability and no network beyond loopback.",
+                "R3509 tokens: local=~14k api=0 api_reason=no cloud call: inherited work verified rather than trusted - one five-still scan, one group token-set diff, one twelve-arm suite, one receipt gate, one census gate, one matrix check, one ledger check, two page re-derivations, one index derivation, one probe cleanup and the state ring"
   ],
-                "tick": 3508
+                "tick": 3509
 }

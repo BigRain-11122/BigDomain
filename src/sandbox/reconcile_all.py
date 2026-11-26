@@ -5068,8 +5068,13 @@ SUITES = [
     # stand in for the other; the report half must reproduce byte for byte after
     # the newline is adopted and the channel's size patch runs, and one changed
     # carrier fact still reads drift.
+    # R3509: AC-PPR12 grades a facts-report face whose page carries NO loopback
+    # port stamp - a producer that measures its world in process (membership
+    # benefit) may only use the stamps its own landed report records, every
+    # declared key must be present or the replay refuses, and a face that
+    # declares port=true still refuses a page without its port.
     ("face-pair-receipt",
-     os.path.join("..", "os", "test_face_pair_receipt.py"), 11),
+     os.path.join("..", "os", "test_face_pair_receipt.py"), 12),
     ("os-ledger-archive",
      os.path.join("..", "os", "test_ledger_archive.py"), 16),
     # R3091: the archive's own provenance is now readable WITHOUT a child

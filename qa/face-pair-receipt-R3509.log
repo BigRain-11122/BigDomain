@@ -1,0 +1,74 @@
+R3509 evidence - ninth preview history split (membership-benefit-report)
+=======================================================================
+
+Round status: the WORK landed in the interrupted window at 10:15-10:20
+(2026-11-26) but the window ended before closeout: no state line, no commit,
+and four throwaway probes were left in src/os. This window re-ran every gate
+on the shipped tree instead of trusting it, removed the probes, and closed
+the round.
+
+Face under receipt
+------------------
+slug      : membership-benefit-report
+producer  : tools/membership_benefit_report.py  (named from history, not guessed)
+landed    : preview/membership-benefit-report.html 10915B @ 897e0f99 (R3461 front-door round)
+            preview/membership-benefit-report.json 10099B @ 700dd89a (R3288 back-hop channel)
+age       : 62.6h
+
+Replay shape: facts-report WITHOUT a loopback port stamp
+--------------------------------------------------------
+This producer builds its member/lobby/ledger world IN PROCESS over a temp
+directory, so its page carries no port stamp; AC-PPR10 as written refuses
+such a page by name ("landed page carries no loopback port stamp"). That is
+not a real red - it is one criterion pinning one side shape onto another.
+
+AC-PPR12 (four arms, pinned before the diff landed)
+  (a) stamps declared per face: port=false reuses the stamps the landed report
+      records - generated_utc plus the declared keys expires and periods - and
+      every declared key must be present or the replay refuses (no "skip the
+      missing stamp" escape);
+  (b) the port is still mandatory where the face declares it: the seventh face
+      (port=true) still refuses a page with no port stamp - the relaxation is
+      narrow, proved by negative control;
+  (c) the two halves stand on their own: json byte-identical, html byte-equal
+      after the ONE named normalisation, and the row must name the stamps it
+      actually used (replay_stamps);
+  (d) read-only: both landed halves unchanged before and after, tool source
+      still imports no subprocess and opens no socket (AC-PPR4 unchanged).
+
+Measured
+--------
+json half   : 10099B, sha256 0db12770f7f2570bd38eb35708622864150602458bd97c55475f1b58b9b07d09
+              rendered == landed, BYTE IDENTICAL
+html half   : rendered 10218B, spliced with the channel channel block 697B
+              -> 10915B sha 03ed914f0aabadd1d940d2152891a4c313beea429d7806db020c2dcd45945d26
+              landed 10915B sha 0db12770... (html) differs only in the channel's
+              own shelf stamp (landed 55302 / today 55908)
+verdict     : one-derivation, receipt = channel-shelf-stamp
+replay_stamps: generated_utc, expires, periods
+
+Gates read back in the documented derivation order
+(battery page -> census -> entry index -> export)
+--------------------------------------------------
+SUITE                            PASS 12/12  (AC-PPR1..12)
+FPR-CHECK                        VERDICT PASS read_only=True faces=9 one_derivation=5 drift=0
+PPC-CHECK                        VERDICT PASS html=106 paired=103 history_split=7
+                                 channel_receipt=4 frozen_excused=11 same_commit=6 explained=8
+suite matrix                     DOC-CURRENT docs/sandbox-suite-matrix.md
+ledger_lines --check             VERDICT CLEAN (missing none, orphan none)
+registry row face-pair-receipt   11 -> 12 criteria (src/sandbox/reconcile_all.py)
+battery page                     E_REGISTRY_DRIFT before re-derivation (the registry
+                                 bump this round made), re-derived in-window
+
+Honest notes
+------------
+- zero code was written by this window; it verified, cleaned up and closed.
+- the four src/os/probe_R3509_*.py files were throwaway probes (their findings
+  are in the PIN line and this log); they were deleted, not committed.
+- the neighbouring leftover ledger-business-report was also probed and is
+  recorded as carried, not fixed: its tx ids are compute_tx_id of a wall-clock
+  stamp, so a today re-render can never match the landed ids; it next needs a
+  "clock identity replay" criterion, not this one.
+- seven history splits remain (was eight).
+- ZERO payment capability, no network beyond loopback; the five physical
+  pieces still gate every buyer.

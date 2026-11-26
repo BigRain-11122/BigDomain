@@ -117,6 +117,18 @@ FACES = [
                 "two landed halves record the sizes of two different moments - the "
                 "page keeps the pre-channel numbers, the report the post-channel ones"),
     },
+    {
+        "slug": "membership-benefit-report",
+        "producer": os.path.join("tools", "membership_benefit_report.py"),
+        "replay": {"kind": "facts-report", "function": "render_html", "port": False,
+                   "stamp_keys": ["expires", "periods"]},
+        "why": ("ninth of the twelve splits (62.6h): html last committed at 897e0f99 "
+                "(the R3461 front-door round), json at 700dd89a, which shipped the "
+                "R3288 back-hop channel; this producer builds its member/lobby/ledger "
+                "world IN PROCESS over a temp directory, so its page carries no "
+                "loopback port stamp - the report's own top-level expires/periods are "
+                "the stamps that make the render reproducible (AC-PPR12)"),
+    },
 ]
 
 VOLATILE = ("generated_at", "round")
@@ -314,10 +326,21 @@ def facts_report_replay(face, module, doc, landed_json_bytes, landed_html_bytes,
     generated = doc.get("generated_utc")
     if not isinstance(facts, dict) or not generated:
         raise ValueError("landed report carries no facts/generated_utc")
-    port = port_from_page(module, landed_html_bytes)
-    if port is None:
-        raise ValueError("landed page carries no loopback port stamp")
-    stamps = {"generated_utc": generated, "port": port}
+    spec = face["replay"]
+    stamps = {"generated_utc": generated}
+    # AC-PPR12: a producer that measures its world in process stamps no loopback
+    # port into its page, so the stamps that make its render reproducible are the
+    # ones its own report records. Every declared key must be present - a report
+    # missing one is refused rather than replayed with the gap guessed over.
+    for key in spec.get("stamp_keys") or []:
+        if key not in doc:
+            raise ValueError("landed report carries no %s stamp" % key)
+        stamps[key] = doc[key]
+    if spec.get("port", True):
+        port = port_from_page(module, landed_html_bytes)
+        if port is None:
+            raise ValueError("landed page carries no loopback port stamp")
+        stamps["port"] = port
     # The landed report is checked out with CRLF on this working tree while the
     # producer writes LF. That is a repo EOL artifact, not a derivation gap:
     # the replay adopts the landed newline so the two halves are comparable
@@ -465,6 +488,11 @@ def measure(face):
                 if face["replay"].get("kind") == "landed-document":
                     label = "%s-from-landed-document" % face["replay"]["function"]
                 row["replay"] = label
+                if face["replay"].get("kind") == "facts-report":
+                    used = ["generated_utc"] + list(face["replay"].get("stamp_keys") or [])
+                    if face["replay"].get("port", True):
+                        used.append("port")
+                    row["replay_stamps"] = used
                 rendered, rendered_json = replay_render(
                     face, work, read_bytes(landed_json_path),
                     read_bytes(landed_html_path))

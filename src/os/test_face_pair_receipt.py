@@ -393,6 +393,84 @@ def main():
           doc_rows[0].get("receipt") if doc_rows else "-", dctx,
           sig(doc_html) == sig_doc_html and sig(doc_json) == sig_doc_json))
 
+    # AC-PPR12: a facts-report face whose page carries NO loopback port stamp
+    # (R3509, membership-benefit-report). AC-PPR10 pinned the port as mandatory,
+    # which graded a producer that measures its world in process as
+    # unreproducible for a shape difference rather than a derivation gap. The
+    # relaxation is narrow and pinned here: a face that declares port=False may
+    # only use the stamps its own landed report records, every declared key must
+    # be present (a report missing one is refused, not replayed with a guess),
+    # and a face that declares port=True still refuses a page without its port.
+    naked = [f for f in FPR.FACES
+             if (f.get("replay") or {}).get("kind") == "facts-report"
+             and not f["replay"].get("port", True)]
+    naked_rows = [r for r in rows if r.get("slug") in [f["slug"] for f in naked]]
+    naked_html = os.path.join(PREVIEW, naked[0]["slug"] + ".html") if naked else None
+    naked_json = os.path.join(PREVIEW, naked[0]["slug"] + ".json") if naked else None
+    sig_nh = sig(naked_html) if naked_html else None
+    sig_nj = sig(naked_json) if naked_json else None
+    naked_stamps = naked_refuse = port_still_required = False
+    nctx = "no portless face"
+    if naked:
+        face = naked[0]
+        report = read_bytes(naked_json)
+        page = read_bytes(naked_html)
+        work_g = tempfile.mkdtemp(prefix="fpr3509a-")
+        work_h = tempfile.mkdtemp(prefix="fpr3509b-")
+        try:
+            html_g, json_g = FPR.replay_render(face, work_g, report, page)
+            html_h, json_h = FPR.replay_render(face, work_h, report, page)
+            position = html_g == html_h and json_g == json_h
+            want = ["generated_utc"] + list(face["replay"].get("stamp_keys") or [])
+            naked_stamps = (bool(naked_rows) and position
+                            and naked_rows[0].get("replay_stamps") == want
+                            and naked_rows[0]["verdict"] == "one-derivation"
+                            and naked_rows[0].get("json_same_as_render") is True
+                            and naked_rows[0].get("rendered_json_bytes")
+                            == naked_rows[0].get("landed_json_bytes"))
+            broken = json.loads(report.decode("utf-8").replace("\r\n", "\n"))
+            for key in face["replay"].get("stamp_keys") or []:
+                broken.pop(key, None)
+            try:
+                FPR.replay_render(face, work_g,
+                                  json.dumps(broken, ensure_ascii=False).encode("utf-8"),
+                                  page)
+                naked_refuse = False
+            except ValueError:
+                naked_refuse = True
+            nctx = "stamps=%s pos=%s refuse=%s json_same=%s" % (
+                naked_rows[0].get("replay_stamps") if naked_rows else "-", position,
+                naked_refuse,
+                bool(naked_rows) and naked_rows[0].get("json_same_as_render"))
+        finally:
+            shutil.rmtree(work_g, ignore_errors=True)
+            shutil.rmtree(work_h, ignore_errors=True)
+    ported = [f for f in FPR.FACES
+              if (f.get("replay") or {}).get("kind") == "facts-report"
+              and f["replay"].get("port", True)]
+    if ported:
+        face = ported[0]
+        work_i = tempfile.mkdtemp(prefix="fpr3509c-")
+        try:
+            ported_page = read_bytes(os.path.join(PREVIEW, face["slug"] + ".html"))
+            ported_json = read_bytes(os.path.join(PREVIEW, face["slug"] + ".json"))
+            stripped = re.sub(rb"127\.0\.0\.1:\d+", b"127.0.0.1", ported_page)
+            try:
+                FPR.replay_render(face, work_i, ported_json, stripped)
+                port_still_required = False
+            except ValueError:
+                port_still_required = True
+        finally:
+            shutil.rmtree(work_i, ignore_errors=True)
+    ok("AC-PPR12",
+       bool(naked) and bool(naked_rows) and naked_stamps and naked_refuse
+       and port_still_required
+       and sig(naked_html) == sig_nh and sig(naked_json) == sig_nj,
+       "portless=%d %s port_required=%s untouched=%s"
+       % (len(naked), nctx, port_still_required,
+          naked_html is not None and sig(naked_html) == sig_nh
+          and sig(naked_json) == sig_nj))
+
     total = len(CHECKS)
     passed = total - len(FAILS)
     if FAILS:

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-26T10:07:34+08:00",
+  "generated_at": "2026-11-26T15:20:19+08:00",
   "law": "a split is claimed only when the two halves' last commits differ; an mtime gap alone is published as a bucket, never as a split",
   "oldest_split": {
     "delta_hours": 749.7,
@@ -404,18 +404,18 @@
     {
       "delta_seconds": 0,
       "html": {
-        "bytes": 16416,
-        "commit": "d07dcffc",
-        "mtime": "2026-11-26T10:01:22+08:00",
-        "mtime_epoch": 1795658482,
-        "sha": "F539B225"
+        "bytes": 16413,
+        "commit": "df3a6aa4",
+        "mtime": "2026-11-26T15:19:20+08:00",
+        "mtime_epoch": 1795677560,
+        "sha": "E057BE3E"
       },
       "json": {
-        "bytes": 17964,
-        "commit": "d07dcffc",
-        "mtime": "2026-11-26T10:01:22+08:00",
-        "mtime_epoch": 1795658482,
-        "sha": "D791FE1E"
+        "bytes": 18052,
+        "commit": "df3a6aa4",
+        "mtime": "2026-11-26T15:19:20+08:00",
+        "mtime_epoch": 1795677560,
+        "sha": "B0104343"
       },
       "name": "battery-shard-report",
       "verdict": "same-run"
@@ -805,18 +805,18 @@
     {
       "delta_seconds": 0,
       "html": {
-        "bytes": 10956,
+        "bytes": 12286,
         "commit": "d07dcffc",
-        "mtime": "2026-11-26T09:09:05+08:00",
-        "mtime_epoch": 1795655345,
-        "sha": "3EFEDFDC"
+        "mtime": "2026-11-26T10:18:55+08:00",
+        "mtime_epoch": 1795659535,
+        "sha": "8DA7018C"
       },
       "json": {
-        "bytes": 15109,
+        "bytes": 17318,
         "commit": "d07dcffc",
-        "mtime": "2026-11-26T09:09:05+08:00",
-        "mtime_epoch": 1795655345,
-        "sha": "0727B9A7"
+        "mtime": "2026-11-26T10:18:55+08:00",
+        "mtime_epoch": 1795659535,
+        "sha": "2DEC1208"
       },
       "name": "face-pair-receipt",
       "verdict": "same-run"
@@ -901,7 +901,7 @@
     },
     {
       "html": {
-        "commit": "d07dcffc"
+        "commit": "df3a6aa4"
       },
       "json": null,
       "mirror": "prints a byte count for every preview half, this page's own included, so its bytes move whenever a listed page is re-derived",
@@ -1269,7 +1269,9 @@
         "sha": "EEE6AB2D"
       },
       "name": "membership-benefit-report",
-      "verdict": "history-split"
+      "pair_receipt": "one-derivation",
+      "receipt": "channel-splice",
+      "verdict": "channel-receipt"
     },
     {
       "delta_seconds": 0,
@@ -2032,15 +2034,15 @@
       "verdict": "same-run"
     }
   ],
-  "round": 3508,
+  "round": 3509,
   "same_run_seconds": 120,
   "self_excluded": "preview-pair-census",
   "source": "tools/preview_pair_census.py",
   "totals": {
-    "channel-receipt": 3,
-    "explained": 7,
+    "channel-receipt": 4,
+    "explained": 8,
     "frozen-excused": 11,
-    "history-split": 8,
+    "history-split": 7,
     "html": 106,
     "no-json": 3,
     "paired": 103,
