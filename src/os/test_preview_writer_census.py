@@ -221,5 +221,115 @@ class PWC6SecondProducerClosed(unittest.TestCase):
         self.assertEqual(face_after_landing(moved), (True, False, True))
 
 
+def lst_closure_positions(text, landing="write_file_atomic(out_html, robot)"):
+    """(present, after_landing, check_returns_first, shared_only) for AC-PWC7."""
+    if "def main(" not in text:
+        return (False, False, False, False)
+    body = text.rpartition("def main(")[2]
+    at = body.find("_refresh_face()")
+    present = at != -1
+    landing_at = body.find(landing)
+    after = present and landing_at != -1 and at > landing_at
+    check_at = body.find("if checking:")
+    first = check_at != -1 and present and check_at < at
+    helper = text.rpartition("def _refresh_face(")[2]
+    shared = "board_face_landing.refresh_export_face(ROOT)" in helper
+    no_local_writer = "ER.write(" not in helper and ".write(" not in helper
+    return (present, after, first, shared and no_local_writer)
+
+
+class PWC7ThirdProducerClosed(unittest.TestCase):
+    """AC-PWC7: lobby_session_trace re-derives the face after its landing only."""
+
+    def _source(self):
+        with io.open(os.path.join(TOOLS, "lobby_session_trace.py"),
+                     encoding="utf-8") as f:
+            return f.read()
+
+    def test_closed_and_ordered_after_the_landing(self):
+        text = self._source()
+        kind, _html, writes, closes = MOD.classify_source(text)
+        self.assertEqual(kind, "closed")
+        self.assertGreaterEqual(writes, 1)
+        self.assertGreaterEqual(closes, 1)
+        self.assertEqual(lst_closure_positions(text), (True, True, True, True))
+
+    def test_negative_controls_delete_and_move(self):
+        text = self._source()
+        deleted = text.replace(
+            '        print("face export=" + _refresh_face())',
+            "        pass  # control: closure call removed")
+        self.assertEqual(lst_closure_positions(deleted)[0], False)
+        moved = text.replace(
+            "    write_file_atomic(out_json, dump_json(payload))",
+            "    _refresh_face()  # control: moved before the landing\n"
+            "    write_file_atomic(out_json, dump_json(payload))")
+        pos = lst_closure_positions(moved)
+        self.assertTrue(pos[0])
+        self.assertFalse(pos[1])
+
+    def test_refresh_is_shared_and_named(self):
+        import lobby_session_trace as LST
+        calls = []
+
+        class Fake(object):
+            def __init__(self, ok, note):
+                self.ok, self.note = ok, note
+
+            def refresh_export_face(self, root):
+                calls.append(root)
+                return (self.ok, self.note, {})
+
+        class Boom(object):
+            def refresh_export_face(self, root):
+                raise RuntimeError("no writer here")
+
+        saved = sys.modules.get("board_face_landing")
+        try:
+            sys.modules["board_face_landing"] = Fake(True, "")
+            self.assertEqual(LST._refresh_face(), "WRITTEN")
+            self.assertEqual(calls, [LST.ROOT])
+            sys.modules["board_face_landing"] = Fake(False, "E_BFL_FACE_UNPROVEN")
+            self.assertEqual(LST._refresh_face(), "REFUSED E_BFL_FACE_UNPROVEN")
+            sys.modules["board_face_landing"] = Boom()
+            self.assertEqual(LST._refresh_face(), "SKIPPED RuntimeError")
+            self.assertEqual(len(calls), 2)
+        finally:
+            if saved is None:
+                sys.modules.pop("board_face_landing", None)
+            else:
+                sys.modules["board_face_landing"] = saved
+
+    def test_scratch_render_lands_nothing(self):
+        import lobby_session_trace as LST
+        scratch = os.path.join(ROOT, "preview", "_scratch_render_probe.html")
+        self.assertFalse(LST._landing_is_default(scratch, scratch))
+        self.assertFalse(LST._landing_is_default(LST.OUT_HTML, scratch))
+        self.assertTrue(LST._landing_is_default(LST.OUT_HTML, LST.OUT_JSON))
+
+    def test_check_path_does_not_refresh(self):
+        import lobby_session_trace as LST
+        calls = []
+
+        class Fake(object):
+            def refresh_export_face(self, root):
+                calls.append(root)
+                return (True, "", {})
+
+        saved = sys.modules.get("board_face_landing")
+        saved_argv = sys.argv
+        try:
+            sys.modules["board_face_landing"] = Fake()
+            sys.argv = ["lobby_session_trace.py", "--check"]
+            LST.main()
+        finally:
+            sys.argv = saved_argv
+            if saved is None:
+                sys.modules.pop("board_face_landing", None)
+            else:
+                sys.modules["board_face_landing"] = saved
+        self.assertEqual(calls, [])
+
+
 if __name__ == "__main__":
     unittest.main()

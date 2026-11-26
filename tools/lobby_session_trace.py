@@ -542,6 +542,30 @@ def check(payload_bytes, html_bytes):
     return findings, (0 if not findings else 2)
 
 
+def _landing_is_default(out_html, out_json):
+    """True only for the two landed halves - a scratch render lands nothing."""
+    return (os.path.abspath(out_html) == os.path.abspath(OUT_HTML)
+            and os.path.abspath(out_json) == os.path.abspath(OUT_JSON))
+
+
+def _refresh_face():
+    """AC-PWC7 (R3529): landing this pair and re-deriving the CEO face are ONE run.
+
+    The one definition lives in src/os/board_face_landing.py, so no second writer
+    is kept here. Refusals are named, never raised: both halves are already on
+    disk when this runs, so the caller's exit code stays its own.
+    """
+    try:
+        os_src = os.path.join(ROOT, "src", "os")
+        if os_src not in sys.path:
+            sys.path.insert(0, os_src)
+        import board_face_landing
+        ok, note, _proof = board_face_landing.refresh_export_face(ROOT)
+        return "WRITTEN" if ok else "REFUSED %s" % note
+    except Exception as exc:  # a private world may carry no shared writer
+        return "SKIPPED %s" % type(exc).__name__
+
+
 def main(out_html=OUT_HTML, out_json=OUT_JSON):
     argv = sys.argv[1:]
     checking = "--check" in argv
@@ -596,6 +620,12 @@ def main(out_html=OUT_HTML, out_json=OUT_JSON):
     for finding in findings:
         print("  - " + finding)
     print("SELF-CHECK rc=%d findings=%d" % (code, len(findings)))
+    # R3529 (AC-PWC7): a LANDING re-derives the CEO face in this same process.
+    # A scratch render (AC-PPR7 receipt) lands nothing, so it must not touch it.
+    if _landing_is_default(out_html, out_json):
+        print("face export=" + _refresh_face())
+    else:
+        print("face export=SKIPPED E_PWC_SCRATCH_RENDER")
     return code
 
 

@@ -1,17 +1,17 @@
 {
   "ceo_face": {
-    "board_pages_skipped": [],
+    "board_pages_skipped": ["preview/battery-shard-report.html (16419B)"],
     "current": "2026-11-27 R3528 PRODUCT: the second named gap producer closes at its birth site - tools/ledger_reconcile_face.py calls board_face_landing.refresh_export_face(HERE) in process after render(write=True) lands its pair, --check returning before it; census closed=8 gap=101 (was 7/102).",
     "do": "2026-11-25 R3456 PRODUCT: the answer-revision question now has a door - api_answer_history (live with AC-AMAW1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so 'which answer was rewritten, what did it say before, what does it say now and how often did it change' could only be read by calling the sandbox from a shell - while api_seller_answers and api_listing_qna publish only the CURRENT wording.",
-    "last_artifact": "preview/preview-writer-census.html (17211B) + preview/preview-writer-census.json (24992B) [2026-11-27 mtime]",
-    "latest_artifact": "preview/preview-writer-census.html (17211B) + preview/preview-writer-census.json (24992B) [2026-11-27 mtime]",
+    "last_artifact": "preview/preview-writer-census.html (17217B) + preview/preview-writer-census.json (24995B) [2026-11-27 mtime]",
+    "latest_artifact": "preview/preview-writer-census.html (17217B) + preview/preview-writer-census.json (24995B) [2026-11-27 mtime]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\preview-writer-census.html",
     "latest_artifact_note": "",
     "latest_evidence": "qa/round-R3528.log (2413B, 2026-11-27, sha256 e91f232e1f20)",
-    "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R3529] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——若下窗开在 12-01 或之后，先把刷新轮排最前（P-2026-09-24-56），毕=更新字段＋文件④更新记录行。 (1) S4U 仍未落地（第六十八次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回；宁缺不错。 (2) **101 家缺口已列名**（`preview/preview-writer-census.json`）：下窗只动一家，优先 `lobby_session_trace`／`first_yuan_path`，判据沿用 `AC-PWC6` 形状（删调用读 gap、挪到落盘前读顺序不成立）。 (3) **电池页欠账已在本窗闭合（LATE：03:28:07 落盘 16416B/17987B，`BSR-CHECK VERDICT PASS`）**——分离生产器六分钟零输出是「跑完才打印」，下窗起按长任务（≥8 分钟）启动；本轮已按 battery→census→index→export 补链（索引 `fingerprint=fc889d8c9ec53973`）。 (4) `replay-receipt` 可豁免性仍待 L3 签发或驳回（`docs/spec/replay-receipt-admission-spec.md`，页=`preview/receipt-admissibility.html`）——**窗口禁自行翻计数**。 (5) 载体：`state_fold_run` 折叠 850 被 `round-split,live-dirty,carry-gap` 拒绝；下窗先 `git status` 清树再折 R3527/R3528 整块，写 state 前必先 `fold --plan-only`。 (6) tick 口径：本轮 3527→3528，下轮 R3529。 (7) 承账不变：`qa_log --ledger-check broken=5`、`769` 判据未被分片路径覆盖、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写。",
-    "next_milestone_due": "2026-11-29T03:30:42+08:00",
-    "updated_at": "2026-11-27T03:30:42+08:00",
+    "newest_pair_on_disk_is_board": true,
+    "next_milestone": "[R3530] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——若下窗开在 12-01 或之后，先把刷新轮排最前（P-2026-09-24-56），毕=更新字段＋文件④更新记录行。 (1) S4U 仍未落地（第六十九次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回；宁缺不错。 (2) **100 家缺口已列名**（`preview/preview-writer-census.json`）：下窗只动一家，优先 `tools/first_yuan_path.py`（唯一「首元路径」面，`--write/--check` 双入口、落一对 `preview/first-yuan.{html,json}`），判据沿用 `AC-PWC7` 形状（源码位置量＋两条负控＋共享定义；注意它的落页在 `cmd_write()` 里，位置臂须量 `cmd_write` 体内最后一个写之后、且 `main()` 的 `--check` 分支不经过它）。 (3) `replay-receipt` 可豁免性仍待 L3 签发或驳回（`docs/spec/replay-receipt-admission-spec.md`，页=`preview/receipt-admissibility.html`）——**窗口禁自行翻计数**。 (4) 载体：`state.json` 已于 78434B 贴闸（阈 78500）；本轮须在干净树上折叠整轮块释放余量，写 state 前必先 `fold --plan-only` 再 `--execute`。 (5) tick 口径：本轮 3528→3529，下轮 R3530。 (6) 承账不变：`qa_log --ledger-check broken=5`、`769` 判据未被分片路径覆盖、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写。",
+    "next_milestone_due": "2026-11-29T03:49:34+08:00",
+    "updated_at": "2026-11-27T03:49:34+08:00",
     "heartbeat": {
       "tick": 3522,
       "state_tick": 3528,
@@ -36,7 +36,7 @@
     }
   },
   "current": "2026-11-27 R3528 PRODUCT: the second named gap producer closes at its birth site - tools/ledger_reconcile_face.py calls board_face_landing.refresh_export_face(HERE) in process after render(write=True) lands its pair, --check returning before it; census closed=8 gap=101 (was 7/102).",
-  "claims": {"claimed": 41, "captured": 23, "contradicted": 0, "uncaptured": 18, "historic": 0, "rows": 105, "present": true, "census_ts": "2026-11-27T03:30:42+08:00"},
+  "claims": {"claimed": 41, "captured": 23, "contradicted": 0, "uncaptured": 18, "historic": 0, "rows": 105, "present": true, "census_ts": "2026-11-27T03:49:34+08:00"},
   "chain": {"present": true, "rows": 105, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -66,12 +66,12 @@
     }
   ],
   "do": "2026-11-27 R3528 PRODUCT: the second named gap producer closes at its birth site - tools/ledger_reconcile_face.py calls board_face_landing.refresh_export_face(HERE) in process after render(write=True) lands its pair, --check returning before it; census closed=8 gap=101 (was 7/102).",
-  "export_ts": "2026-11-27T03:30:42+08:00",
-  "latest_artifact": "preview/preview-writer-census.html (17211B) + preview/preview-writer-census.json (24992B) [2026-11-27 mtime]",
+  "export_ts": "2026-11-27T03:49:34+08:00",
+  "latest_artifact": "preview/preview-writer-census.html (17217B) + preview/preview-writer-census.json (24995B) [2026-11-27 mtime]",
   "latest_evidence": "qa/round-R3528.log (2413B, 2026-11-27, sha256 e91f232e1f20)",
-  "next_milestone": "[R3529] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——若下窗开在 12-01 或之后，先把刷新轮排最前（P-2026-09-24-56），毕=更新字段＋文件④更新记录行。 (1) S4U 仍未落地（第六十八次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回；宁缺不错。 (2) **101 家缺口已列名**（`preview/preview-writer-census.json`）：下窗只动一家，优先 `lobby_session_trace`／`first_yuan_path`，判据沿用 `AC-PWC6` 形状（删调用读 gap、挪到落盘前读顺序不成立）。 (3) **电池页欠账已在本窗闭合（LATE：03:28:07 落盘 16416B/17987B，`BSR-CHECK VERDICT PASS`）**——分离生产器六分钟零输出是「跑完才打印」，下窗起按长任务（≥8 分钟）启动；本轮已按 battery→census→index→export 补链（索引 `fingerprint=fc889d8c9ec53973`）。 (4) `replay-receipt` 可豁免性仍待 L3 签发或驳回（`docs/spec/replay-receipt-admission-spec.md`，页=`preview/receipt-admissibility.html`）——**窗口禁自行翻计数**。 (5) 载体：`state_fold_run` 折叠 850 被 `round-split,live-dirty,carry-gap` 拒绝；下窗先 `git status` 清树再折 R3527/R3528 整块，写 state 前必先 `fold --plan-only`。 (6) tick 口径：本轮 3527→3528，下轮 R3529。 (7) 承账不变：`qa_log --ledger-check broken=5`、`769` 判据未被分片路径覆盖、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写。",
+  "next_milestone": "[R3530] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——若下窗开在 12-01 或之后，先把刷新轮排最前（P-2026-09-24-56），毕=更新字段＋文件④更新记录行。 (1) S4U 仍未落地（第六十九次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回；宁缺不错。 (2) **100 家缺口已列名**（`preview/preview-writer-census.json`）：下窗只动一家，优先 `tools/first_yuan_path.py`（唯一「首元路径」面，`--write/--check` 双入口、落一对 `preview/first-yuan.{html,json}`），判据沿用 `AC-PWC7` 形状（源码位置量＋两条负控＋共享定义；注意它的落页在 `cmd_write()` 里，位置臂须量 `cmd_write` 体内最后一个写之后、且 `main()` 的 `--check` 分支不经过它）。 (3) `replay-receipt` 可豁免性仍待 L3 签发或驳回（`docs/spec/replay-receipt-admission-spec.md`，页=`preview/receipt-admissibility.html`）——**窗口禁自行翻计数**。 (4) 载体：`state.json` 已于 78434B 贴闸（阈 78500）；本轮须在干净树上折叠整轮块释放余量，写 state 前必先 `fold --plan-only` 再 `--execute`。 (5) tick 口径：本轮 3528→3529，下轮 R3530。 (6) 承账不变：`qa_log --ledger-check broken=5`、`769` 判据未被分片路径覆盖、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写。",
   "outs": [
-    "preview/preview-writer-census.html (17211B) + preview/preview-writer-census.json (24992B) [2026-11-27 mtime]",
+    "preview/preview-writer-census.html (17217B) + preview/preview-writer-census.json (24995B) [2026-11-27 mtime]",
     "preview/ledger-reconcile-face.html (8656B) + preview/ledger-reconcile-face.json (6151B) [2026-11-27 commit]",
     "preview/preview-pair-census.html (8320B) + preview/preview-pair-census.json (54163B) [2026-11-27 mtime]",
     "preview/face-pair-receipt.html (17066B) + preview/face-pair-receipt.json (30591B) [2026-11-26 mtime]",
@@ -150,7 +150,7 @@
   },
   "self_drive": {"window": "2026-11-21..2026-11-27", "window_days": 7, "log_lines_in_window": 148, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 27, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
   "state_bytes": 78434,
-  "next_milestone_due": "2026-11-29T03:30:42+08:00",
+  "next_milestone_due": "2026-11-29T03:49:34+08:00",
   "heartbeat": {
     "tick": 3522,
     "state_tick": 3528,

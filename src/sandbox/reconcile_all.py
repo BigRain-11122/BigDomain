@@ -7966,8 +7966,12 @@ SUITES = [
     # tools/ledger_reconcile_face.py calls the shared face writer after its own
     # landing (render(write=True)) and never on the --check path, with two
     # negative controls over a deleted and a moved call.
+    # R3529. AC-PWC7 grades the third newly closed producer the same way, plus a
+    # behaviour arm (one named call, refusals named, no raise) and a scratch arm:
+    # tools/lobby_session_trace.py may render the same session into a receipt
+    # directory (AC-PPR7) and a scratch render must NOT re-derive the CEO face.
     ("os-preview-writer-census",
-     os.path.join("..", "os", "test_preview_writer_census.py"), 9),
+     os.path.join("..", "os", "test_preview_writer_census.py"), 14),
     # R2814. tools/ugc_gate_report.py carries AC-UGR1..AC-UGR9 and renders the
     # face for the BLUEPRINT section-five death line (content safety not
     # connected means the door stays shut), yet the registry held ZERO AC-UGR*
