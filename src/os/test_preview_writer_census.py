@@ -5,7 +5,7 @@ wiring existed. AC-PWC6 was pinned in the R3528 window before
 tools/ledger_reconcile_face.py was touched, AC-PWC7 in R3529 before
 tools/lobby_session_trace.py, AC-PWC8 in R3530 before tools/first_yuan_path.py,
 AC-PWC9 in R3531 before tools/filing_checklist.py, AC-PWC10 in R3532 before
-tools/ship_checklist.py.
+tools/ship_checklist.py, AC-PWC11 in R3533 before tools/start_here.py.
 
 Why this exists: R3524..R3526 each closed the same birth-site gap for ONE
 producer (one board battery page, the rest of BOARD_PAGES, one non-board census).
@@ -653,6 +653,130 @@ class PWC10SixthProducerClosed(unittest.TestCase):
         finally:
             os.chdir(cwd)
             SCL.HTML, SCL.JSON = saved_html, saved_json
+            if saved is None:
+                sys.modules.pop("board_face_landing", None)
+            else:
+                sys.modules["board_face_landing"] = saved
+            shutil.rmtree(tmp, ignore_errors=True)
+
+
+def sth_closure_positions(text, last_landing='fh.write("\\n")'):
+    """(present, after_landing, check_clean, shared_only) for AC-PWC11."""
+    if "def write(" not in text:
+        return (False, False, False, False)
+    body = text.rpartition("def write(")[2].split("def check(")[0]
+    at = body.find("_refresh_face()")
+    present = at != -1
+    landing_at = body.rfind(last_landing)
+    after = present and landing_at != -1 and at > landing_at
+    check_body = text.rpartition("def check(")[2].split("def main(")[0]
+    check_clean = "_refresh_face()" not in check_body
+    helper = text.rpartition("def _refresh_face(")[2].split("LAST_FACE = ")[0]
+    shared = "board_face_landing.refresh_export_face(ROOT)" in helper
+    no_local_writer = ".write(" not in helper
+    return (present, after, check_clean, shared and no_local_writer)
+
+
+class PWC11SeventhProducerClosed(unittest.TestCase):
+    """AC-PWC11: start_here re-derives the face on its write path only."""
+
+    def _source(self):
+        with io.open(os.path.join(TOOLS, "start_here.py"),
+                     encoding="utf-8") as f:
+            return f.read()
+
+    def test_closed_and_ordered_after_the_landing(self):
+        text = self._source()
+        kind, _html, writes, closes = MOD.classify_source(text)
+        self.assertEqual(kind, "closed")
+        self.assertGreaterEqual(writes, 2)
+        self.assertGreaterEqual(closes, 1)
+        self.assertEqual(sth_closure_positions(text), (True, True, True, True))
+
+    def test_negative_controls_delete_and_move(self):
+        text = self._source()
+        deleted = text.replace(
+            "    LAST_FACE = _refresh_face()",
+            "    pass  # control: closure call removed").replace(
+            "board_face_landing.refresh_export_face(ROOT)",
+            "None  # control: shared call removed")
+        self.assertEqual(MOD.classify_source(deleted)[0], "gap")
+        self.assertFalse(sth_closure_positions(deleted)[0])
+        moved = text.replace(
+            '    with open(OUT_JSON, "w", encoding="utf-8", newline="\\n") as fh:',
+            "    _refresh_face()  # control: moved before the JSON landing\n"
+            '    with open(OUT_JSON, "w", encoding="utf-8", newline="\\n") as fh:')
+        pos = sth_closure_positions(moved)
+        self.assertTrue(pos[0])
+        self.assertFalse(pos[1])
+
+    def test_refresh_is_shared_and_named(self):
+        import start_here as STH
+        calls = []
+
+        class Fake(object):
+            def __init__(self, ok, note):
+                self.ok, self.note = ok, note
+
+            def refresh_export_face(self, root):
+                calls.append(root)
+                return (self.ok, self.note, {})
+
+        class Boom(object):
+            def refresh_export_face(self, root):
+                raise RuntimeError("no writer here")
+
+        saved = sys.modules.get("board_face_landing")
+        try:
+            sys.modules["board_face_landing"] = Fake(True, "")
+            self.assertEqual(STH._refresh_face(), "WRITTEN")
+            self.assertEqual(calls, [STH.ROOT])
+            sys.modules["board_face_landing"] = Fake(False, "E_BFL_FACE_UNPROVEN")
+            self.assertEqual(STH._refresh_face(), "REFUSED E_BFL_FACE_UNPROVEN")
+            sys.modules["board_face_landing"] = Boom()
+            self.assertEqual(STH._refresh_face(), "SKIPPED RuntimeError")
+            self.assertEqual(len(calls), 2)
+        finally:
+            if saved is None:
+                sys.modules.pop("board_face_landing", None)
+            else:
+                sys.modules["board_face_landing"] = saved
+
+    def test_write_derives_once_and_check_derives_none(self):
+        """The landing path derives exactly once; --check derives nothing."""
+        import start_here as STH
+        calls = []
+
+        class Fake(object):
+            def refresh_export_face(self, root):
+                calls.append(root)
+                return (True, "", {})
+
+        tmp = tempfile.mkdtemp(prefix="sth-")
+        saved_html, saved_json = STH.OUT_HTML, STH.OUT_JSON
+        saved = sys.modules.get("board_face_landing")
+        cwd = os.getcwd()
+        try:
+            STH.OUT_HTML = os.path.join(tmp, "start-here.html")
+            STH.OUT_JSON = os.path.join(tmp, "start-here.json")
+            sys.modules["board_face_landing"] = Fake()
+            os.chdir(ROOT)
+            STH.write()
+            self.assertEqual(calls, [STH.ROOT])
+            self.assertEqual(len(calls), 1)
+            self.assertTrue(os.path.isfile(STH.OUT_HTML))
+            self.assertTrue(os.path.isfile(STH.OUT_JSON))
+            calls[:] = []
+            saved_stdout = sys.stdout
+            sys.stdout = io.StringIO()
+            try:
+                STH.check()
+            finally:
+                sys.stdout = saved_stdout
+            self.assertEqual(calls, [])
+        finally:
+            os.chdir(cwd)
+            STH.OUT_HTML, STH.OUT_JSON = saved_html, saved_json
             if saved is None:
                 sys.modules.pop("board_face_landing", None)
             else:

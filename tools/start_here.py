@@ -2667,7 +2667,30 @@ def render(proj):
     )
 
 
+def _refresh_face():
+    """AC-PWC11 (R3533): landing this pair and re-deriving the CEO face are ONE run.
+
+    The one definition lives in src/os/board_face_landing.py, so no second writer
+    is kept here. ROOT is passed explicitly, so a private world derives that
+    world's face. Refusals are named, never raised: both halves are already on
+    disk when this runs, so the caller's exit code stays its own.
+    """
+    try:
+        os_src = os.path.join(ROOT, "src", "os")
+        if os_src not in sys.path:
+            sys.path.insert(0, os_src)
+        import board_face_landing
+        ok, note, _proof = board_face_landing.refresh_export_face(ROOT)
+        return "WRITTEN" if ok else "REFUSED %s" % note
+    except Exception as exc:  # a private world may carry no shared writer
+        return "SKIPPED %s" % type(exc).__name__
+
+
+LAST_FACE = ""
+
+
 def write():
+    global LAST_FACE
     proj = projection()
     html = render(proj)
     with open(OUT_HTML, "w", encoding="utf-8", newline="\n") as fh:
@@ -2732,9 +2755,11 @@ def write():
     with open(OUT_JSON, "w", encoding="utf-8", newline="\n") as fh:
         json.dump(snapshot, fh, ensure_ascii=False, indent=1)
         fh.write("\n")
+    LAST_FACE = _refresh_face()
     print("WROTE %s html=%dB operable=%d faces=%d missing=%d"
           % (os.path.relpath(OUT_HTML, ROOT), len(html.encode("utf-8")),
              len(proj["operable"]), proj["faces_total"], len(proj["missing"])))
+    print("face export=%s" % LAST_FACE)
     return 0
 
 

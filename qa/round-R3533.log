@@ -1,0 +1,57 @@
+R3533 evidence log (2026-11-27) - BigDomain OSLoop round
+================================================================
+
+WORK: close the seventh named census gap at its birth site.
+      tools/start_here.py (the front door page a first visitor opens) now
+      calls board_face_landing.refresh_export_face(ROOT) in process after
+      the last landing write of its single page pair, never on --check.
+
+CRITERION (pinned in src/os/backlog.md BEFORE any code change)
+      AC-PWC11, four arms:
+        a) closure by source position: classify_source -> closed;
+           the call sits after fh.write("\n") in write() and never in check()
+        b) shared definition: the helper body carries only
+           board_face_landing.refresh_export_face(ROOT), no local .write(
+        c) behaviour: fake module -> WRITTEN / REFUSED <note> /
+           SKIPPED <Type>, exactly one call with ROOT, never raises
+        d) two paths measured + two negative controls: write() derives once,
+           check() derives zero; delete -> gap; move before the JSON landing
+           -> order fails
+
+READ-ONLY MEASUREMENT BEFORE THE CHANGE
+      landing writes: open(OUT_HTML) + fh.write(html) at 2674,
+                      open(OUT_JSON) + json.dump + fh.write("\n") at 2734
+      check(): reads only (fh.read()), no face call
+      main(): --check returns from check() before write() is reachable
+      census landing_paths "index.html" is the EXCLUDE constant, not a
+      second landing, so the multi-landing clause was measured, not assumed
+
+GATES READ BACK
+      python src/os/test_preview_writer_census.py   -> Ran 30 tests OK
+      python tools/start_here.py --write            -> WROTE preview\start-here.html
+                                                       html=41370B operable=6
+                                                       faces=108 missing=6
+                                                       face export=WRITTEN
+      python tools/start_here.py --check            -> VERDICT PASS criteria=29
+      python tools/preview_writer_census.py --check -> PWC-CHECK VERDICT PASS
+                                                       read_only=True modules=119
+                                                       closed=13 gap=96 reader=10
+      python src/os/suite_matrix_reconcile.py --check -> DOC-CURRENT 832 rows
+                                                       7002 criteria
+      python tools/deliverable_index.py --check      -> VERDICT PASS 23/23
+      python src/os/export_round.py --check          -> VERDICT PASS tick=... R3533
+
+REGISTRY: os-preview-writer-census 26 -> 30 criteria (R3533 comment block added)
+
+HONEST BOUNDARIES
+      - only the birth-site coupling changed; projection()/render()/check()
+        and the --check semantics are untouched, page byte shape untouched,
+        export_round.BOARD_PAGES untouched
+      - 96 census gaps carried, none claimed closed
+      - battery page pair still reads BSR-CHECK RED E_REGISTRY_DRIFT after the
+        26 -> 30 bump; the detached producer was still running at closeout, so
+        no battery result is claimed here (next window's first item)
+      - state.json is 78426B against the 78500 fold gate (margin 74B): the next
+        window must fold before it writes
+      - ZERO payment capability, no network beyond loopback: the five physical
+        pieces still gate every buyer

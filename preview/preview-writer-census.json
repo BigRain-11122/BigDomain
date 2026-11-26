@@ -3,8 +3,8 @@
     "src/os/board_face_landing.py",
     "src/os/export_round.py"
   ],
-  "generated_at": "2026-11-27T04:57:50+08:00",
-  "round": "R3532",
+  "generated_at": "2026-11-27T05:12:22+08:00",
+  "round": "R3533",
   "rows": [
     {
       "face_calls": 0,
@@ -812,17 +812,6 @@
     {
       "face_calls": 0,
       "kind": "gap",
-      "landing_paths": [
-        ".html",
-        "index.html",
-        "start-here.html"
-      ],
-      "path": "tools/start_here.py",
-      "write_calls": 4
-    },
-    {
-      "face_calls": 0,
-      "kind": "gap",
       "landing_paths": [],
       "path": "tools/status_export_fresh.py",
       "write_calls": 3
@@ -1004,6 +993,17 @@
       "write_calls": 2
     },
     {
+      "face_calls": 1,
+      "kind": "closed",
+      "landing_paths": [
+        ".html",
+        "index.html",
+        "start-here.html"
+      ],
+      "path": "tools/start_here.py",
+      "write_calls": 4
+    },
+    {
       "face_calls": 0,
       "kind": "reader",
       "landing_paths": [],
@@ -1090,9 +1090,9 @@
     }
   ],
   "totals": {
-    "closed": 12,
+    "closed": 13,
     "excluded": 2,
-    "gap": 97,
+    "gap": 96,
     "modules": 119,
     "reader": 10,
     "writers": 109
