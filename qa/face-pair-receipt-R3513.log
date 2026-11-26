@@ -1,0 +1,39 @@
+R3513 face-pair-receipt evidence (2026-11-26)
+=============================================
+Face: platform-live-report (twelfth and last of the twelve history splits)
+Producer: tools/platform_live_report.py (json last committed 7e3a6f9c / R3333,
+          html last committed 897e0f99 / R3461 front-door round)
+Landed: preview/platform-live-report.json 6228B, .html 8621B
+
+Replay shape: facts-spread-report (new this round)
+  - facts from landed TOP-level keys (faces/pages/ports/children_gone/
+    city_snapshot/hub_live/ports_refusing_after_teardown/shipped_sha256)
+  - evidence rebuilt from the graded rows; the later-graded rows are read off
+    the landed page (`class="later"`), so the evidence block stays the
+    producer's own
+  - hub URL stamp read back off the landed page at the hub port the report
+    names (never guessed)
+  - the report fingerprint must be reproduced from the landed facts before any
+    render, otherwise the replay is refused by name
+
+Read-only probe (system temp, tree untouched before the edit):
+  fingerprint landed a728e7efa001fa4d == replay a728e7efa001fa4d
+  render 7929B + channel block = 8621B = landed html, first diff only the
+  channel shelf stamp (landed 55302 / today 55908)
+  json 6228B byte-for-byte equal after the channel's size patch, including the
+  landed asymmetry: AC-PLVR8 row records pre-channel 7929B while the sizes
+  block records post-channel 8621B
+
+Gates read back:
+  SUITE PASS 15/15 (AC-PPR15 four arms: two-read stability, fingerprint
+    reproduction, a moved non-hub port reddens the pair, an unprinted hub port
+    refuses)
+  FPR-CHECK VERDICT PASS read_only=True faces=12 one_derivation=8 drift=0
+  PPC-CHECK VERDICT PASS read_only=True html=106 paired=103 history_split=4
+    channel_receipt=7 frozen_excused=11 same_commit=6 explained=11
+  BSR-CHECK VERDICT PASS html=16413B json=18052B (page verdict RED by design)
+  suite matrix: DOC-CURRENT
+  deliverable index: VERDICT PASS 23/23 fingerprint=19c5076debe53e33
+
+Untouched: producer source, both landed halves, freeze register, archives,
+AC-PPR1..14 thresholds.

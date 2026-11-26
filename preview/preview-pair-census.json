@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-26T16:57:44+08:00",
+  "generated_at": "2026-11-26T22:33:18+08:00",
   "law": "a split is claimed only when the two halves' last commits differ; an mtime gap alone is published as a bucket, never as a split",
   "oldest_split": {
     "delta_hours": 749.7,
@@ -404,18 +404,18 @@
     {
       "delta_seconds": 0,
       "html": {
-        "bytes": 16416,
+        "bytes": 16413,
         "commit": "6f1cfc88",
-        "mtime": "2026-11-26T15:49:38+08:00",
-        "mtime_epoch": 1795679378,
-        "sha": "3FCF4D83"
+        "mtime": "2026-11-26T22:31:00+08:00",
+        "mtime_epoch": 1795703460,
+        "sha": "8BB1AF37"
       },
       "json": {
-        "bytes": 17964,
+        "bytes": 18052,
         "commit": "6f1cfc88",
-        "mtime": "2026-11-26T15:49:38+08:00",
-        "mtime_epoch": 1795679378,
-        "sha": "9351450E"
+        "mtime": "2026-11-26T22:31:00+08:00",
+        "mtime_epoch": 1795703460,
+        "sha": "6DEB8E14"
       },
       "name": "battery-shard-report",
       "verdict": "same-run"
@@ -805,18 +805,18 @@
     {
       "delta_seconds": 0,
       "html": {
-        "bytes": 14971,
+        "bytes": 16322,
         "commit": "97ae0de6",
-        "mtime": "2026-11-26T16:41:24+08:00",
-        "mtime_epoch": 1795682484,
-        "sha": "F88B31C5"
+        "mtime": "2026-11-26T22:09:34+08:00",
+        "mtime_epoch": 1795702174,
+        "sha": "CB827AC6"
       },
       "json": {
-        "bytes": 22042,
+        "bytes": 24368,
         "commit": "97ae0de6",
-        "mtime": "2026-11-26T16:41:24+08:00",
-        "mtime_epoch": 1795682484,
-        "sha": "8D73F6F6"
+        "mtime": "2026-11-26T22:09:34+08:00",
+        "mtime_epoch": 1795702174,
+        "sha": "67344DD5"
       },
       "name": "face-pair-receipt",
       "verdict": "same-run"
@@ -1366,7 +1366,9 @@
         "sha": "D0C180BC"
       },
       "name": "platform-live-report",
-      "verdict": "history-split"
+      "pair_receipt": "one-derivation",
+      "receipt": "channel-splice",
+      "verdict": "channel-receipt"
     },
     {
       "delta_seconds": 0,
@@ -2034,15 +2036,15 @@
       "verdict": "same-run"
     }
   ],
-  "round": 3512,
+  "round": 3513,
   "same_run_seconds": 120,
   "self_excluded": "preview-pair-census",
   "source": "tools/preview_pair_census.py",
   "totals": {
-    "channel-receipt": 6,
-    "explained": 10,
+    "channel-receipt": 7,
+    "explained": 11,
     "frozen-excused": 11,
-    "history-split": 5,
+    "history-split": 4,
     "html": 106,
     "no-json": 3,
     "paired": 103,

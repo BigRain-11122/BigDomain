@@ -152,6 +152,30 @@ FACES = [
                 "payment sandbox - so the pair is reproduced only when both sources "
                 "are pinned to the second its landed report records (AC-PPR14)"),
     },
+    {
+        "slug": "platform-live-report",
+        "producer": os.path.join("tools", "platform_live_report.py"),
+        "replay": {
+            "kind": "facts-spread-report",
+            "function": "render",
+            "facts_from": {
+                "faces": "faces",
+                "pages": "pages",
+                "ports": "ports",
+                "children_gone": "children_gone",
+                "city_snapshot": "city_snapshot",
+                "hub_live": "hub_live",
+                "ports_refusing": "ports_refusing_after_teardown",
+                "shipped_before": "shipped_sha256",
+            },
+        },
+        "why": ("twelfth of the twelve splits: html last committed at 897e0f99 (the "
+                "R3461 front-door round), json at 7e3a6f9c (R3333), which shipped the "
+                "sandbox one-click proof; this producer starts eight real servers, reads "
+                "every door over a socket and tears them down, and it keeps its facts at "
+                "the TOP level of its report with no evidence block - the graded rows are "
+                "the evidence and the hub URL is read back off the landed page (AC-PPR15)"),
+    },
 ]
 
 # The stamp a wall-clock producer records for its own render. Shape is the
@@ -317,6 +341,9 @@ def replay_render(face, workdir, landed_json_bytes, landed_html_bytes):
     if spec.get("kind") == "clock-pin":
         return clock_pin_replay(face, module, doc, landed_json_bytes,
                                 landed_html_bytes, workdir)
+    if spec.get("kind") == "facts-spread-report":
+        return facts_spread_replay(face, module, doc, landed_json_bytes,
+                                  landed_html_bytes, workdir)
     return gallery_replay(face, module, doc, landed_json_bytes, workdir)
 
 
@@ -415,6 +442,91 @@ def facts_report_replay(face, module, doc, landed_json_bytes, landed_html_bytes,
     # post-channel byte counts by editing the digits in place, so the document
     # keeps the producer's formatting. The html keeps the pre-channel numbers
     # in its criterion row, which is exactly what the landed pair shows.
+    face_backhop.patch_sizes(html_path)
+    return body, read_bytes(json_path)
+
+
+def page_url_with_port(page, port):
+    """The url the landed page prints for one loopback port (never guessed)."""
+    if port is None:
+        return None
+    prefix = b"http://127.0.0.1:" + str(port).encode("ascii")
+    found = re.search(re.escape(prefix) + rb"(/[^\"<\s]*)", page)
+    return found.group(0).decode("utf-8") if found else None
+
+
+def facts_spread_replay(face, module, doc, landed_json_bytes, landed_html_bytes, workdir):
+    """AC-PPR15: replay a live-run report whose facts sit at the TOP level.
+
+    platform_live_report starts eight real servers, reads every door over a
+    socket and tears the lot down, so a second run can never reproduce bytes:
+    the ports are OS-assigned and the pages it reads are live. What is
+    reproducible is the pair as a function of the report it shipped beside -
+    but that report keeps its facts at top-level keys (faces, pages, ports,
+    children_gone, ...) instead of one facts dict, and it carries no evidence
+    block: the graded rows ARE the evidence. The one stamp the report does not
+    record is the hub URL as the page prints it, so that is read back off the
+    landed page by the port the report itself names. The report's fingerprint
+    pins what the run proved and never the ephemeral ports, so reproducing it
+    from the landed facts is what proves this is the landed run and not a
+    fresh measurement.
+    """
+    spec = face["replay"]
+    rows = doc.get("criteria")
+    if not isinstance(rows, list) or not rows:
+        raise ValueError("landed report carries no criteria list")
+    # The report carries every criterion, but only the ones the page graded at
+    # render time were ever evidence; the rest say so on the landed page with a
+    # "later" row. Reading that set off the page keeps the evidence block the
+    # producer's own, instead of rebuilding it from a guess.
+    later = {cid.decode("ascii") for cid in
+             re.findall(rb'<tr class="later"><td>([A-Z0-9-]+)</td>', landed_html_bytes)}
+    evidence = {row["id"]: {"pass": bool(row["pass"]),
+                            "measured": str(row["measured"])}
+                for row in rows if row["id"] not in later}
+    facts = {}
+    for key, source in spec["facts_from"].items():
+        if source not in doc:
+            raise ValueError("landed report carries no %s" % source)
+        facts[key] = doc[source]
+    hub_port = (doc.get("ports") or {}).get("hub")
+    hub_url = page_url_with_port(landed_html_bytes, hub_port)
+    if hub_url is None:
+        raise ValueError("landed page carries no hub url stamp")
+    facts["hub_url"] = hub_url
+    if module._fingerprint(evidence, facts) != doc.get("fingerprint"):
+        raise ValueError("landed facts do not reproduce the report fingerprint")
+
+    page, data = module.render(evidence, facts)
+    body = page.encode("utf-8")
+    html_bytes = len(body)
+    prev_json = 0
+    payload = b""
+    for _ in range(12):
+        data["sizes"] = {"html": html_bytes, "json": prev_json}
+        row8 = module.ac_plr8(page, html_bytes, prev_json)
+        row9 = module.ac_plr9(page, module.CRITERIA)
+        for row in data["criteria"]:
+            if row["id"] == "AC-PLVR8":
+                row["pass"], row["measured"] = row8["pass"], row8["measured"]
+            elif row["id"] == "AC-PLVR9":
+                row["pass"], row["measured"] = row9["pass"], row9["measured"]
+        data["passed"] = sum(1 for c in data["criteria"] if c["pass"])
+        data["verdict"] = "PASS" if data["passed"] == data["total"] else "FAIL"
+        payload = (json.dumps(data, ensure_ascii=False, indent=1) + "\n").encode("utf-8")
+        if prev_json == len(payload):
+            break
+        prev_json = len(payload)
+    else:
+        raise ValueError("document sizes did not converge")
+
+    json_path = os.path.join(workdir, "rendered.json")
+    with io.open(json_path, "wb") as handle:
+        handle.write(payload)
+    injected, _how = face_backhop.inject_text(page, face["slug"] + ".html")
+    html_path = os.path.join(workdir, "rendered.html")
+    with io.open(html_path, "wb") as handle:
+        handle.write(injected.encode("utf-8"))
     face_backhop.patch_sizes(html_path)
     return body, read_bytes(json_path)
 
@@ -688,7 +800,15 @@ def measure(face):
                     label = "%s-from-report-clock-pin" % face["replay"]["function"]
                 if face["replay"].get("kind") == "clock-pin":
                     label = "%s-from-report-two-clock-pin" % face["replay"]["function"]
+                if face["replay"].get("kind") == "facts-spread-report":
+                    label = "%s-from-report-facts-spread" % face["replay"]["function"]
                 row["replay"] = label
+                if face["replay"].get("kind") == "facts-spread-report":
+                    row["replay_stamps"] = [
+                        "hub_url (read back off the landed page at the reported hub port)",
+                        "facts from landed top-level keys: "
+                        + ",".join(sorted(face["replay"]["facts_from"])),
+                    ]
                 if face["replay"].get("kind") == "facts-report":
                     used = ["generated_utc"] + list(face["replay"].get("stamp_keys") or [])
                     if face["replay"].get("port", True):
@@ -778,6 +898,16 @@ def measure(face):
             }
         except Exception:
             pass
+    if (face.get("replay") or {}).get("kind") == "facts-spread-report":
+        # AC-PPR15: the fingerprint is the run's identity (it pins what the run
+        # proved, never the ephemeral ports), so the row records whether the
+        # replay reproduced it instead of leaving that to prose.
+        try:
+            row["fingerprint_same"] = (
+                json.loads(rendered_json.decode("utf-8")).get("fingerprint")
+                == json.loads(landed_json_bytes.decode("utf-8")).get("fingerprint"))
+        except Exception:
+            row["fingerprint_same"] = False
 
     if splice is None:
         # AC-PPR8: this producer already applies the shipped channel to its own

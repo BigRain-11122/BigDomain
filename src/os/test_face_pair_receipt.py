@@ -627,6 +627,69 @@ def main():
        % (len(pin_faces), pin_rows[0]["verdict"] if pin_rows else "-", pctx,
           sig(pin_html) == sig_ph and sig(pin_json) == sig_pj))
 
+    # AC-PPR15 (R3513, platform-live-report): a live-run report whose facts sit
+    # at the TOP level and which carries no evidence block at all. Four arms:
+    # the replay is stable across two reads; the report's own fingerprint (which
+    # pins what the run proved and never the ephemeral ports) is reproduced from
+    # the landed facts; a moved port that is NOT the hub still reddens the pair
+    # (so the fingerprint pin is not doing the comparison's work for it); and a
+    # hub port the landed page never printed is refused rather than guessed.
+    spread_faces = [f for f in FPR.FACES
+                    if (f.get("replay") or {}).get("kind") == "facts-spread-report"]
+    spread_rows = [r for r in rows
+                   if (r.get("replay") or "").endswith("-from-report-facts-spread")]
+    spread_html = os.path.join(PREVIEW, "platform-live-report.html")
+    spread_json = os.path.join(PREVIEW, "platform-live-report.json")
+    sig_sh = sig(spread_html)
+    sig_sj = sig(spread_json)
+    s_repeat = s_fp = s_narrow = s_refuse = False
+    sctx = ""
+    if spread_faces:
+        face = spread_faces[0]
+        page = read_bytes(spread_html)
+        report = read_bytes(spread_json)
+        doc_s = json.loads(report.decode("utf-8"))
+        work_s = tempfile.mkdtemp(prefix="fpr3513-")
+        try:
+            html_s, json_s = FPR.replay_render(face, work_s, report, page)
+            html_t, json_t = FPR.replay_render(face, work_s, report, page)
+            s_repeat = (html_s == html_t and json_s == json_t)
+            s_fp = (json.loads(json_s.decode("utf-8")).get("fingerprint")
+                    == doc_s.get("fingerprint"))
+            moved = json.loads(json.dumps(doc_s))
+            moved["ports"]["web"] = int(moved["ports"]["web"]) + 1
+            _h, json_m = FPR.replay_render(
+                face, work_s,
+                (json.dumps(moved, ensure_ascii=False, indent=1) + "\n").encode("utf-8"),
+                page)
+            s_narrow = json_m != json_s
+            unprinted = json.loads(json.dumps(doc_s))
+            unprinted["ports"]["hub"] = 1
+            try:
+                FPR.replay_render(
+                    face, work_s,
+                    (json.dumps(unprinted, ensure_ascii=False, indent=1) + "\n").encode("utf-8"),
+                    page)
+                s_refuse = False
+            except ValueError:
+                s_refuse = True
+            sctx = "repeat=%s fingerprint=%s narrow=%s refuse=%s row_fp=%s" % (
+                s_repeat, s_fp, s_narrow, s_refuse,
+                spread_rows[0].get("fingerprint_same") if spread_rows else "-")
+        finally:
+            shutil.rmtree(work_s, ignore_errors=True)
+    ok("AC-PPR15",
+       bool(spread_faces) and bool(spread_rows)
+       and spread_rows[0]["verdict"] == "one-derivation"
+       and spread_rows[0].get("receipt") == "channel-shelf-stamp"
+       and spread_rows[0].get("fingerprint_same") is True
+       and spread_rows[0].get("json_same_as_render") is True
+       and s_repeat and s_fp and s_narrow and s_refuse
+       and sig(spread_html) == sig_sh and sig(spread_json) == sig_sj,
+       "spread_faces=%d verdict=%s %s untouched=%s"
+       % (len(spread_faces), spread_rows[0]["verdict"] if spread_rows else "-",
+          sctx, sig(spread_html) == sig_sh and sig(spread_json) == sig_sj))
+
     total = len(CHECKS)
     passed = total - len(FAILS)
     if FAILS:
