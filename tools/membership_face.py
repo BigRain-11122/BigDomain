@@ -487,6 +487,42 @@ def write_atomic(path, data):
     os.replace(tmp, path)
 
 
+def _landing_is_default():
+    """AC-PWC17 (R3539): a scratch render derives nothing.
+
+    Both halves are derived from ROOT at import time, so a caller that redirects
+    them off this root's own preview/ is rendering a private world, not landing
+    the company face.
+    """
+    try:
+        own = os.path.realpath(os.path.join(ROOT, "preview"))
+        return (os.path.dirname(os.path.realpath(OUT_HTML)) == own
+                and os.path.dirname(os.path.realpath(OUT_JSON)) == own)
+    except Exception:
+        return False
+
+
+def _refresh_face():
+    """AC-PWC17 (R3539): landing this pair and re-deriving the CEO face are ONE run.
+
+    The one definition lives in src/os/board_face_landing.py, so no second writer
+    is kept here. ROOT is passed explicitly, so a private world derives that
+    world's face. Refusals are named, never raised: both halves are already on
+    disk when this runs, so the caller's exit code stays its own.
+    """
+    if not _landing_is_default():
+        return "SKIPPED not-this-root"
+    try:
+        os_src = os.path.join(ROOT, "src", "os")
+        if os_src not in sys.path:
+            sys.path.insert(0, os_src)
+        import board_face_landing
+        ok, note, _proof = board_face_landing.refresh_export_face(ROOT)
+        return "WRITTEN" if ok else "REFUSED %s" % note
+    except Exception as exc:  # a private world may carry no shared writer
+        return "SKIPPED %s" % type(exc).__name__
+
+
 def gate(conf, payload, html_text, json_bytes, diag=None):
     reasons = []
     if any(not n["found"] for n in payload["needles"]):
@@ -597,6 +633,7 @@ def main(argv):
     print("WROTE tiers=%d paid=%d pending=%d matched=%d blocked=%d html=%dB json=%dB"
           % (c["tiers"], c["paid"], c["pending"], c["matched"], c["blocked"],
              len(html_text.encode("utf-8")), len(json_bytes)))
+    _refresh_face()
     return 0
 
 

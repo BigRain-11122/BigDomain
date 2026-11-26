@@ -3,8 +3,8 @@
     "src/os/board_face_landing.py",
     "src/os/export_round.py"
   ],
-  "generated_at": "2026-11-27T06:45:08+08:00",
-  "round": "R3538",
+  "generated_at": "2026-11-27T07:02:58+08:00",
+  "round": "R3539",
   "rows": [
     {
       "face_calls": 0,
@@ -488,15 +488,6 @@
       "face_calls": 0,
       "kind": "gap",
       "landing_paths": [
-        "membership-face.html"
-      ],
-      "path": "tools/membership_face.py",
-      "write_calls": 4
-    },
-    {
-      "face_calls": 0,
-      "kind": "gap",
-      "landing_paths": [
         "money-path-demo.html"
       ],
       "path": "tools/money_path_demo.py",
@@ -938,6 +929,15 @@
       "face_calls": 1,
       "kind": "closed",
       "landing_paths": [
+        "membership-face.html"
+      ],
+      "path": "tools/membership_face.py",
+      "write_calls": 4
+    },
+    {
+      "face_calls": 1,
+      "kind": "closed",
+      "landing_paths": [
         "merchant-onboard.html"
       ],
       "path": "tools/merchant_onboard.py",
@@ -1090,9 +1090,9 @@
     }
   ],
   "totals": {
-    "closed": 18,
+    "closed": 19,
     "excluded": 2,
-    "gap": 91,
+    "gap": 90,
     "modules": 119,
     "reader": 10,
     "writers": 109
