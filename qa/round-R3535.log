@@ -1,0 +1,48 @@
+R3535 round evidence (BigDomain OSLoop, 2026-11-27)
+
+PIN (written to src/os/backlog.md before any code change):
+  AC-PWC13 - tools/payment_gate_report.py re-derives docs/status-export.json IN PROCESS
+  after its landing loop, through the shared board_face_landing.refresh_export_face(ROOT).
+  Four arms: closure (AST kind=closed, call after the sizes fixed-point loop, absent from
+  check()), shared definition (no local writer), behaviour (exactly one call, WRITTEN /
+  REFUSED / SKIPPED, never raises), two paths measured plus two negative controls
+  (landing derives once, --check derives none; delete -> gap, move before loop -> order fails).
+
+READ-ONLY FIRST:
+  classify_source(tools/payment_gate_report.py) -> kind=gap write_calls=4 face_calls=0
+                                                  landing_paths=['payment-gate-report.html']
+  landing writes: main() 561-562 (html) and the six-pass sizes loop 571-573 (json, last write)
+  check() opens jout read-only; main() returns from --check before any landing.
+
+GATES (all run in this window):
+  python -m unittest src.os.test_preview_writer_census  -> Ran 38 tests OK (was 34)
+  python tools/payment_gate_report.py                  -> PAYMENT GATE REPORT html=7024B json=7018B
+                                                          channels=standard,virtual accepted=3
+                                                          refused=7 verdict=FAIL AC-PAYG8
+                                                          face export=WRITTEN
+  python tools/payment_gate_report.py --check          -> read-only, same 2 named refusals
+  python tools/preview_writer_census.py --check        -> PWC-CHECK VERDICT PASS read_only=True
+                                                          modules=119 closed=15 gap=94 reader=10
+  src/sandbox/suite_matrix_reconcile.py --write        -> 832 rows, 7010 criteria
+  python tools/deliverable_index.py                    -> faces=9 defects=0 index=56337B
+  python src/os/ledger_lines.py --check                -> VERDICT CLEAN
+  python tools/status_export_fresh.py --apply          -> do / latest_artifact / next_milestone published
+  python src/os/export_round.py --check                -> VERDICT PASS
+
+ORDERING DEFECT MEASURED THIS WINDOW (fixed by ordering, not by a threshold move):
+  At open, preview/preview-writer-census.{json,html} read round=R3533 while a fresh derivation
+  read R3534 and the rows were IDENTICAL (0 row diffs). Cause: round_label() reads state.json
+  tick, and the closeout wrote state AFTER re-deriving the page, so the shipped gate answered
+  "landed half is not this derivation" for every window between closeout and the next work.
+  This round writes state tick first, then lands the census page; --check reads PASS.
+
+CARRIED (not claimed):
+  payment page verdict stays FAIL (AC-PAYG1 value-domain, tiers=0; AC-PAYG8) by design.
+  battery page read BSR-CHECK RED E_REGISTRY_DRIFT after the criteria bump 34->38 and its
+  detached producer (logs/battery-R3535.log, pid 41764) was still running at closeout.
+  94 census gaps stay named in preview/preview-writer-census.json.
+  qa_log broken=5; 769 criteria uncovered by the shard path; Docker absent; the three
+  qa/crawl-* files are not this window's work.
+
+BOUNDARY: ZERO payment capability, no network beyond loopback; the five physical pieces
+still gate every buyer.

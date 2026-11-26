@@ -538,6 +538,25 @@ def check(meas, out, jout, diag=None):
     return fails
 
 
+def _refresh_face():
+    """AC-PWC13 (R3535): landing this pair and re-deriving the CEO face are ONE run.
+
+    The one definition lives in src/os/board_face_landing.py, so no second writer
+    is kept here. ROOT is passed explicitly, so a private world derives that
+    world's face. Refusals are named, never raised: both halves are already on
+    disk when this runs, so the caller's exit code stays its own.
+    """
+    try:
+        os_src = os.path.join(ROOT, "src", "os")
+        if os_src not in sys.path:
+            sys.path.insert(0, os_src)
+        import board_face_landing
+        ok, note, _proof = board_face_landing.refresh_export_face(ROOT)
+        return "WRITTEN" if ok else "REFUSED %s" % note
+    except Exception as exc:  # a private world may carry no shared writer
+        return "SKIPPED %s" % type(exc).__name__
+
+
 def main(argv):
     ap = argparse.ArgumentParser(add_help=True)
     ap.add_argument("--out", default=DEFAULT_OUT)
@@ -573,6 +592,7 @@ def main(argv):
             fh.write("\n")
         if meas["sizes"]["json"] == os.path.getsize(args.json):
             break
+    face = _refresh_face()
     size = os.path.getsize(args.out)
     jsize = os.path.getsize(args.json)
     print("PAYMENT GATE REPORT html=%dB json=%dB channels=%s accepted=%d "
@@ -583,6 +603,7 @@ def main(argv):
               len([r for r in meas["legacy_negative"] if r["ok"]]) +
               len([r for r in meas["v3_negative"] if r["ok"]]),
               meas["verdict"]))
+    print("face export=%s" % face)
     return 0 if meas["verdict"] == "PASS" else 2
 
 

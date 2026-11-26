@@ -35,7 +35,7 @@
     {
       "id": "AC-PAYG1",
       "measured": "criteria rows=8",
-      "pass": true,
+      "pass": false,
       "text": "html+json landed, criteria table non-empty"
     },
     {
@@ -76,12 +76,12 @@
     },
     {
       "id": "AC-PAYG8",
-      "measured": "ascii=True network_refs=0 imports_ok=True imports=adapters,argparse,copy,datetime,hashlib,html,json,os,sys,v3,value_domain",
-      "pass": true,
+      "measured": "ascii=True network_refs=0 imports_ok=False imports=adapters,argparse,board_face_landing,copy,datetime,hashlib,html,json,os,sys,v3,value_domain",
+      "pass": false,
       "text": "tool source ASCII, stdlib+shipped imports (incl. the shared value_domain module), zero network refs"
     }
   ],
-  "generated_utc": "2026-11-16T07:49:15Z",
+  "generated_utc": "2026-11-26T21:46:52Z",
   "legacy_negative": [
     {
       "case": "tampered signature",
@@ -154,14 +154,15 @@
     }
   ],
   "sizes": {
-    "html": 7682,
-    "json": 7177
+    "html": 7024,
+    "json": 7018
   },
   "source": {
     "ascii": true,
     "imports": [
       "adapters",
       "argparse",
+      "board_face_landing",
       "copy",
       "datetime",
       "hashlib",
@@ -173,7 +174,7 @@
       "value_domain"
     ],
     "network_refs": 0,
-    "sha256": "52efc7d777c5b4c2b9b7fe3d8db163f050927f4d82f3cad81d438e1518417296"
+    "sha256": "3cfa5b8d870603fe103ced713a1d17371d564f79ae9ab6491fc97f3477096da3"
   },
   "v3_negative": [
     {
@@ -214,5 +215,5 @@
     "headers_required": 4,
     "ok": true
   },
-  "verdict": "PASS"
+  "verdict": "FAIL AC-PAYG8"
 }

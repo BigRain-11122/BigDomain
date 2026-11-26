@@ -908,5 +908,130 @@ class PWC12EighthProducerClosed(unittest.TestCase):
             shutil.rmtree(tmp, ignore_errors=True)
 
 
+def pgr_closure_positions(text, last_landing='fh.write("\\n")'):
+    """(present, after_landing, check_clean, shared_only) for AC-PWC13."""
+    if "def main(" not in text:
+        return (False, False, False, False)
+    body = text.rpartition("def main(")[2]
+    at = body.find("_refresh_face()")
+    present = at != -1
+    landing_at = body.rfind(last_landing)
+    after = present and landing_at != -1 and at > landing_at
+    # the --check branch must return before the landing loop, so the closure
+    # call can never sit inside it
+    check_clean = present and at > body.find("if args.check:")
+    helper = text.rpartition("def _refresh_face(")[2].split("def main(")[0]
+    shared = "board_face_landing.refresh_export_face(ROOT)" in helper
+    no_local_writer = ".write(" not in helper
+    return (present, after, check_clean, shared and no_local_writer)
+
+
+class PWC13NinthProducerClosed(unittest.TestCase):
+    """AC-PWC13: payment_gate_report re-derives the face on its landing path only."""
+
+    def _source(self):
+        with io.open(os.path.join(TOOLS, "payment_gate_report.py"),
+                     encoding="utf-8") as f:
+            return f.read()
+
+    def test_closed_and_ordered_after_the_landing(self):
+        text = self._source()
+        kind, _html, writes, closes = MOD.classify_source(text)
+        self.assertEqual(kind, "closed")
+        self.assertGreaterEqual(writes, 2)
+        self.assertGreaterEqual(closes, 1)
+        self.assertEqual(pgr_closure_positions(text), (True, True, True, True))
+
+    def test_negative_controls_delete_and_move(self):
+        text = self._source()
+        deleted = text.replace(
+            "    face = _refresh_face()",
+            "    face = None  # control: closure call removed").replace(
+            "board_face_landing.refresh_export_face(ROOT)",
+            "None  # control: shared call removed")
+        self.assertEqual(MOD.classify_source(deleted)[0], "gap")
+        self.assertFalse(pgr_closure_positions(deleted)[0])
+        moved = text.replace(
+            "    for _ in range(6):",
+            "    _refresh_face()  # control: moved before the landing loop\n"
+            "    for _ in range(6):")
+        pos = pgr_closure_positions(moved)
+        self.assertTrue(pos[0])
+        self.assertFalse(pos[1])
+
+    def test_refresh_is_shared_and_named(self):
+        import payment_gate_report as PGR
+        calls = []
+
+        class Fake(object):
+            def __init__(self, ok, note):
+                self.ok, self.note = ok, note
+
+            def refresh_export_face(self, root):
+                calls.append(root)
+                return (self.ok, self.note, {})
+
+        class Boom(object):
+            def refresh_export_face(self, root):
+                raise RuntimeError("no writer here")
+
+        saved = sys.modules.get("board_face_landing")
+        try:
+            sys.modules["board_face_landing"] = Fake(True, "")
+            self.assertEqual(PGR._refresh_face(), "WRITTEN")
+            self.assertEqual(calls, [PGR.ROOT])
+            sys.modules["board_face_landing"] = Fake(False, "E_BFL_FACE_UNPROVEN")
+            self.assertEqual(PGR._refresh_face(), "REFUSED E_BFL_FACE_UNPROVEN")
+            sys.modules["board_face_landing"] = Boom()
+            self.assertEqual(PGR._refresh_face(), "SKIPPED RuntimeError")
+            self.assertEqual(len(calls), 2)
+        finally:
+            if saved is None:
+                sys.modules.pop("board_face_landing", None)
+            else:
+                sys.modules["board_face_landing"] = saved
+
+    def test_landing_derives_once_and_check_derives_none(self):
+        """The landing path derives exactly once; --check derives nothing."""
+        import payment_gate_report as PGR
+        calls = []
+
+        class Fake(object):
+            def refresh_export_face(self, root):
+                calls.append(root)
+                return (True, "", {})
+
+        tmp = tempfile.mkdtemp(prefix="pgr-")
+        out = os.path.join(tmp, "payment-gate-report.html")
+        jout = os.path.join(tmp, "payment-gate-report.json")
+        saved = sys.modules.get("board_face_landing")
+        saved_stdout = sys.stdout
+        try:
+            sys.modules["board_face_landing"] = Fake()
+            sys.stdout = io.StringIO()
+            rc = PGR.main(["--out", out, "--json", jout])
+            sys.stdout = saved_stdout
+            self.assertEqual(calls, [PGR.ROOT])
+            self.assertEqual(len(calls), 1)
+            self.assertTrue(os.path.isfile(out))
+            self.assertTrue(os.path.isfile(jout))
+            self.assertIn(rc, (0, 2))
+            calls[:] = []
+            sys.stdout = io.StringIO()
+            try:
+                rc2 = PGR.main(["--check", "--out", out, "--json", jout])
+            finally:
+                sys.stdout = saved_stdout
+            self.assertEqual(calls, [])
+            self.assertIn(rc2, (0, 2))
+        finally:
+            sys.stdout = saved_stdout
+            if saved is None:
+                sys.modules.pop("board_face_landing", None)
+            else:
+                sys.modules["board_face_landing"] = saved
+            shutil.rmtree(tmp, ignore_errors=True)
+
+
 if __name__ == "__main__":
     unittest.main()

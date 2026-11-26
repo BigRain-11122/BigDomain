@@ -3,8 +3,8 @@
     "src/os/board_face_landing.py",
     "src/os/export_round.py"
   ],
-  "generated_at": "2026-11-27T05:26:47+08:00",
-  "round": "R3533",
+  "generated_at": "2026-11-27T05:48:39+08:00",
+  "round": "R3535",
   "rows": [
     {
       "face_calls": 0,
@@ -527,15 +527,6 @@
       "face_calls": 0,
       "kind": "gap",
       "landing_paths": [
-        "payment-gate-report.html"
-      ],
-      "path": "tools/payment_gate_report.py",
-      "write_calls": 4
-    },
-    {
-      "face_calls": 0,
-      "kind": "gap",
-      "landing_paths": [
         "platform-live-report.html"
       ],
       "path": "tools/platform_live_report.py",
@@ -965,6 +956,15 @@
       "face_calls": 1,
       "kind": "closed",
       "landing_paths": [
+        "payment-gate-report.html"
+      ],
+      "path": "tools/payment_gate_report.py",
+      "write_calls": 4
+    },
+    {
+      "face_calls": 1,
+      "kind": "closed",
+      "landing_paths": [
         ".html",
         "receipt-admissibility.html"
       ],
@@ -1090,9 +1090,9 @@
     }
   ],
   "totals": {
-    "closed": 14,
+    "closed": 15,
     "excluded": 2,
-    "gap": 95,
+    "gap": 94,
     "modules": 119,
     "reader": 10,
     "writers": 109
