@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-27T00:40:23+08:00",
+  "generated_at": "2026-11-27T01:25:00+08:00",
   "law": "a split is claimed only when the two halves' last commits differ; an mtime gap alone is published as a bucket, never as a split",
   "oldest_split": {
     "delta_hours": 749.7,
@@ -404,18 +404,18 @@
     {
       "delta_seconds": 0,
       "html": {
-        "bytes": 16413,
-        "commit": "160e1b76",
-        "mtime": "2026-11-27T00:15:33+08:00",
-        "mtime_epoch": 1795709733,
-        "sha": "5404AB61"
+        "bytes": 16419,
+        "commit": "3bb312b4",
+        "mtime": "2026-11-27T01:15:30+08:00",
+        "mtime_epoch": 1795713330,
+        "sha": "A1FB8F6D"
       },
       "json": {
-        "bytes": 18047,
-        "commit": "160e1b76",
-        "mtime": "2026-11-27T00:15:33+08:00",
-        "mtime_epoch": 1795709733,
-        "sha": "73BE1057"
+        "bytes": 17939,
+        "commit": "3bb312b4",
+        "mtime": "2026-11-27T01:15:30+08:00",
+        "mtime_epoch": 1795713330,
+        "sha": "2B49509B"
       },
       "name": "battery-shard-report",
       "verdict": "same-run"
@@ -806,14 +806,14 @@
       "delta_seconds": 0,
       "html": {
         "bytes": 17066,
-        "commit": "160e1b76",
+        "commit": "26f83348",
         "mtime": "2026-11-27T00:38:19+08:00",
         "mtime_epoch": 1795711099,
         "sha": "97251821"
       },
       "json": {
         "bytes": 30591,
-        "commit": "160e1b76",
+        "commit": "26f83348",
         "mtime": "2026-11-27T00:38:19+08:00",
         "mtime_epoch": 1795711099,
         "sha": "63D9923C"
@@ -2036,7 +2036,7 @@
       "verdict": "same-run"
     }
   ],
-  "round": 3517,
+  "round": 3520,
   "same_run_seconds": 120,
   "self_excluded": "preview-pair-census",
   "source": "tools/preview_pair_census.py",

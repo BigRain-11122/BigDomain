@@ -1,0 +1,55 @@
+R3521 evidence (2026-11-27)
+
+GROUP SCAN
+  ledger @BigDomain lines: 0 (no dispatch owed)
+  decisions.md: 438 rows / 140 distinct ids vs stored baseline -> 0 newcomers
+  orders head: 2026-11-20 22:5x (unchanged)
+  benchmarks_refreshed: 2026-11-24 -> due 2026-12-01
+  git status: battery pair + 3 qa/crawl-* (not this window), no index.lock
+
+BATTERY PAIR READ-BACK (board item 2)
+  preview/battery-shard-report.html 16419B
+  preview/battery-shard-report.json 17939B
+  both mtime 2026-11-27 01:15:30
+  BSR-CHECK VERDICT PASS checks=8 (page verdict=RED by design)
+
+CENSUS PAIR
+  before: PPC-CHECK FAIL ("landed half is not this derivation: preview-pair-census.json")
+          cause: per-pair byte readings moved when the battery page was re-derived
+  re-derived: PPC (preview-pair-census) round=3520 html=106 paired=103 no_json=3
+              same_run=75 same_commit=6 history_split=4 frozen_excused=11 untracked=0
+  after: PPC-CHECK VERDICT PASS read_only=True html=106 paired=103 history_split=4
+         channel_receipt=7 frozen_excused=11 same_commit=6 explained=11
+
+NEW FACE (board item 3) - read-only, writes no verdict
+  python tools/preview_pair_census.py --admissibility
+  PPC-ADMIT VERDICT PASS read_only=True splits=4 admitted=4 if_admitted=0 controls=3 checks=5
+    apimarket-report-buyerquestions verdict=version-drift admitted=True
+    apimarket-report-questions     verdict=version-drift admitted=True
+    apimarket-report-refunds       verdict=version-drift admitted=True
+    apimarket-report-selleranswers verdict=version-drift admitted=True
+    control binding-digest-moved-one-hex ok=True answer=receipt-not-bound-to-landed-bytes
+    control json-claim-dropped          ok=True answer=json-not-byte-identical
+    control no-receipt-at-all           ok=True answer=no-receipt
+  --write -> preview/receipt-admissibility.json 2261B
+
+DECISION PIECE
+  docs/spec/replay-receipt-admission-spec.md (proposal for the L3 round; not executed)
+
+CARRIER
+  state pre 78264B -> fold 842 (window 19:30, two whole round blocks) -> 73313B
+  after 5 log lines: 76569B (gate 78500, margin 1931B)
+  ledger_lines --check VERDICT CLEAN
+  eol --fix: nothing to fix; eol --fix-indent: predicted_eq_actual=true
+
+EXPORT
+  python tools/status_export_fresh.py --apply -> R3521 changed=True bytes=36714
+  --check -> VERDICT R3521 PASS
+
+GATES
+  PPC-CHECK PASS, PPC-ADMIT PASS, BSR-CHECK PASS, ledger CLEAN, export PASS
+
+HONEST
+  no law, threshold, freeze register or receipt table was changed; the four
+  apimarket splits still count as splits. ZERO payment capability; no network
+  beyond loopback; the five physical pieces still gate every buyer.

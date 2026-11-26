@@ -246,6 +246,152 @@ def apply_receipt(row, html_path, receipts):
         row["receipt_detail"] = rec.get("detail") or rec.get("error") or ""
 
 
+# R3521: the four apimarket splits are every one of them explained by a
+# byte-exact historical replay (R3514..R3518), yet the shipped law excuses only
+# a receipt whose verdict is `one-derivation`, so they keep counting as splits.
+# Whether a replay receipt SHOULD excuse a split is a law decision, and the
+# board forbids flipping the count to make it green. So this face answers the
+# numeric question without touching the law: how many splits would fall, which
+# receipt blocks each survivor, and does a receiptless or unbound receipt still
+# read as a split. The shipped totals are not written by this face.
+ADMIT_OUT = os.path.join(PREVIEW, "receipt-admissibility.json")
+ADMIT_LAW = ("a split stays a split; this face only answers what a law admitting "
+             "byte-exact replay receipts would buy, and refuses to admit a receipt "
+             "that is unbound, shape-less or absent")
+
+
+def admit_reasons(rec, landed_full, landed_12):
+    """Every reason this receipt may NOT excuse the split; empty means it may.
+
+    Read off the record's own fields and the live bytes: the binding digest is
+    recomputed from the file, never trusted from the receipt's `_now` copy.
+    """
+    if not rec:
+        return ["no-receipt"]
+    why = []
+    if rec.get("verdict") != "version-drift":
+        why.append("receipt-verdict=" + str(rec.get("verdict")))
+    hist = rec.get("historical") or {}
+    if not hist.get("commit"):
+        why.append("no-historical-commit")
+    if not hist.get("json_byte_identical"):
+        why.append("json-not-byte-identical")
+    if not hist.get("landed_digests_agree"):
+        why.append("replay-digests-disagree")
+    if rec.get("landed_html_sha256") != landed_full:
+        why.append("receipt-not-bound-to-landed-bytes")
+    if hist.get("landed_html_sha256_12") != landed_12:
+        why.append("recorded-replay-digest-is-not-the-landed-page")
+    return why
+
+
+def negative_controls(receipts, rows):
+    """Prove the admission test is not decorative, on the real records.
+
+    Three controls, each a receipt that WOULD be admitted except for one moved
+    field, so a green control means the moved field is load-bearing: the binding
+    digest, the byte-identical json claim, and the absence of any receipt.
+    """
+    probe = next((r for r in rows if r["receipt_verdict"]), None)
+    if probe is None:
+        return [{"control": "no-probe", "expected": "a version-drift receipt on a split",
+                 "answer": [], "ok": False}]
+    name = probe["name"] + ".html"
+    path = os.path.join(PREVIEW, name)
+    full = sha256_hex(path) if os.path.exists(path) else ""
+    twelve = full[:12]
+    base = receipts.get(name) or {}
+    out = []
+
+    moved = json.loads(json.dumps(base))
+    digest = moved.get("landed_html_sha256") or ""
+    moved["landed_html_sha256"] = ("0" if digest[:1] != "0" else "1") + digest[1:]
+    answer = admit_reasons(moved, full, twelve)
+    out.append({"control": "binding-digest-moved-one-hex",
+                "expected": "receipt-not-bound-to-landed-bytes",
+                "answer": answer, "ok": answer == ["receipt-not-bound-to-landed-bytes"]})
+
+    loose = json.loads(json.dumps(base))
+    loose.setdefault("historical", {})["json_byte_identical"] = False
+    answer = admit_reasons(loose, full, twelve)
+    out.append({"control": "json-claim-dropped",
+                "expected": "json-not-byte-identical",
+                "answer": answer, "ok": answer == ["json-not-byte-identical"]})
+
+    answer = admit_reasons(None, full, twelve)
+    out.append({"control": "no-receipt-at-all",
+                "expected": "no-receipt",
+                "answer": answer, "ok": answer == ["no-receipt"]})
+    return out
+
+
+def admissibility(payload):
+    receipts = pair_receipts()
+    rows = []
+    for row in payload["pairs"]:
+        if row["verdict"] != "history-split":
+            continue
+        name = row["name"] + ".html"
+        path = os.path.join(PREVIEW, name)
+        full = sha256_hex(path) if os.path.exists(path) else ""
+        rec = receipts.get(name) or {}
+        hist = rec.get("historical") or {}
+        why = admit_reasons(rec or None, full, full[:12])
+        rows.append({
+            "name": row["name"],
+            "receipt_verdict": rec.get("verdict") or "",
+            "historical_commit": hist.get("commit") or "",
+            "live_sha256_12": full[:12],
+            "recorded_sha256_12": hist.get("landed_html_sha256_12") or "",
+            "would_be_admitted": not why,
+            "blocked_by": why,
+        })
+    admitted = sum(1 for r in rows if r["would_be_admitted"])
+    controls = negative_controls(receipts, rows)
+    return {
+        "generated_at": datetime.datetime.now().astimezone().replace(microsecond=0).isoformat(),
+        "round": payload.get("round", 0),
+        "source": "tools/preview_pair_census.py --admissibility",
+        "law_now": "a version-drift receipt explains a split and never excuses it",
+        "law_question": ADMIT_LAW,
+        "splits": len(rows),
+        "admitted": admitted,
+        "if_admitted": {
+            "history_split_before": len(rows),
+            "history_split_after": len(rows) - admitted,
+            "shipped_totals_unchanged": True,
+        },
+        "rows": rows,
+        "negative_controls": controls,
+        "checks": 5,
+    }
+
+
+def admit_problems(payload, face):
+    """Five named checks; any one failing makes the face refuse to print PASS."""
+    problems = []
+    total = payload["totals"]["history-split"]
+    if face["splits"] != total:
+        problems.append("face covers %d splits but the law counts %d"
+                        % (face["splits"], total))
+    bad = [c["control"] for c in face["negative_controls"] if not c.get("ok")]
+    if bad:
+        problems.append("negative control answered wrong: " + ",".join(bad))
+    expect = face["splits"] - face["admitted"]
+    if face["if_admitted"]["history_split_after"] != expect:
+        problems.append("arithmetic is not this face's own count")
+    for row in face["rows"]:
+        if not row["would_be_admitted"]:
+            continue
+        path = os.path.join(PREVIEW, row["name"] + ".html")
+        live = sha256_hex(path) if os.path.exists(path) else ""
+        if live[:12] != row["live_sha256_12"]:
+            problems.append("admitted row does not match the file now: " + row["name"])
+        if not row["historical_commit"]:
+            problems.append("admitted row carries no historical commit: " + row["name"])
+    return problems
+
+
 def prints_this_page(path):
     """True when a landed html half names this census page in its own text.
 
@@ -470,6 +616,31 @@ def check(payload):
 
 def main(argv):
     payload = census()
+    if "--admissibility" in argv:
+        face = admissibility(payload)
+        problems = admit_problems(payload, face)
+        if problems:
+            print("PPC-ADMIT VERDICT FAIL read_only=True")
+            for p in problems:
+                print("  " + p)
+            return 2
+        if "--write" in argv:
+            with io.open(ADMIT_OUT, "wb") as f:
+                f.write((json.dumps(face, indent=2, sort_keys=True,
+                                    ensure_ascii=False) + "\n").encode("utf-8"))
+        print("PPC-ADMIT VERDICT PASS read_only=%s splits=%d admitted=%d "
+              "if_admitted=%d controls=%d checks=%d"
+              % ("False" if "--write" in argv else "True", face["splits"],
+                 face["admitted"], face["if_admitted"]["history_split_after"],
+                 len(face["negative_controls"]), face["checks"]))
+        for row in face["rows"]:
+            print("  %s verdict=%s admitted=%s blocked_by=%s"
+                  % (row["name"], row["receipt_verdict"] or "-",
+                     row["would_be_admitted"], ",".join(row["blocked_by"]) or "-"))
+        for con in face["negative_controls"]:
+            print("  control %s ok=%s answer=%s"
+                  % (con["control"], con["ok"], ",".join(con["answer"]) or "-"))
+        return 0
     if "--check" in argv:
         problems = check(payload)
         if problems:

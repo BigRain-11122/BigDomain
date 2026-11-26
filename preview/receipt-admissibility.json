@@ -1,0 +1,79 @@
+{
+  "admitted": 4,
+  "checks": 5,
+  "generated_at": "2026-11-27T01:26:31+08:00",
+  "if_admitted": {
+    "history_split_after": 0,
+    "history_split_before": 4,
+    "shipped_totals_unchanged": true
+  },
+  "law_now": "a version-drift receipt explains a split and never excuses it",
+  "law_question": "a split stays a split; this face only answers what a law admitting byte-exact replay receipts would buy, and refuses to admit a receipt that is unbound, shape-less or absent",
+  "negative_controls": [
+    {
+      "answer": [
+        "receipt-not-bound-to-landed-bytes"
+      ],
+      "control": "binding-digest-moved-one-hex",
+      "expected": "receipt-not-bound-to-landed-bytes",
+      "ok": true
+    },
+    {
+      "answer": [
+        "json-not-byte-identical"
+      ],
+      "control": "json-claim-dropped",
+      "expected": "json-not-byte-identical",
+      "ok": true
+    },
+    {
+      "answer": [
+        "no-receipt"
+      ],
+      "control": "no-receipt-at-all",
+      "expected": "no-receipt",
+      "ok": true
+    }
+  ],
+  "round": 3520,
+  "rows": [
+    {
+      "blocked_by": [],
+      "historical_commit": "d3faa192",
+      "live_sha256_12": "eec871f68baa",
+      "name": "apimarket-report-buyerquestions",
+      "receipt_verdict": "version-drift",
+      "recorded_sha256_12": "eec871f68baa",
+      "would_be_admitted": true
+    },
+    {
+      "blocked_by": [],
+      "historical_commit": "e0fd7251",
+      "live_sha256_12": "40343bcf5f09",
+      "name": "apimarket-report-questions",
+      "receipt_verdict": "version-drift",
+      "recorded_sha256_12": "40343bcf5f09",
+      "would_be_admitted": true
+    },
+    {
+      "blocked_by": [],
+      "historical_commit": "6fb6c40b",
+      "live_sha256_12": "3d557fa82348",
+      "name": "apimarket-report-refunds",
+      "receipt_verdict": "version-drift",
+      "recorded_sha256_12": "3d557fa82348",
+      "would_be_admitted": true
+    },
+    {
+      "blocked_by": [],
+      "historical_commit": "ce3583ca",
+      "live_sha256_12": "380d1ead0976",
+      "name": "apimarket-report-selleranswers",
+      "receipt_verdict": "version-drift",
+      "recorded_sha256_12": "380d1ead0976",
+      "would_be_admitted": true
+    }
+  ],
+  "source": "tools/preview_pair_census.py --admissibility",
+  "splits": 4
+}
