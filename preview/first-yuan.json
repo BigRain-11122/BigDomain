@@ -1,6 +1,7 @@
 {
   "blockers": {
     "code_items": [
+      "backlog-encoding-R3431R3432",
       "loop-s4u-reconcile",
       "product-face-R2527",
       "product-face-R2529",
@@ -10,7 +11,6 @@
       "product-face-R2559",
       "product-face-R2565",
       "product-face-R2602",
-      "reconcile-battery-R2762",
       "product-face-R2742b",
       "product-face-R2751",
       "reconcile-battery-R2757"
@@ -22,67 +22,67 @@
   },
   "carriers": [
     {
-      "bytes": 3070,
+      "bytes": 3144,
       "field": "verdict",
       "id": "C1",
       "label": "大厅 WebSocket 握手面",
-      "mtime": "2026-11-15T00:28:42Z",
+      "mtime": "2026-11-22T11:22:22Z",
       "ok": true,
       "source": "preview/lobby-ws-report.json",
       "state": "verdict=PASS"
     },
     {
-      "bytes": 5004,
+      "bytes": 5197,
       "field": "verdict",
       "id": "C2",
       "label": "城市观测面",
-      "mtime": "2026-11-15T00:03:28Z",
+      "mtime": "2026-11-22T11:22:22Z",
       "ok": true,
       "source": "preview/city-face-report.json",
       "state": "verdict=PASS"
     },
     {
-      "bytes": 6415,
+      "bytes": 7177,
       "field": "verdict",
       "id": "C3",
       "label": "19.9 支付通道面",
-      "mtime": "2026-11-15T01:00:38Z",
+      "mtime": "2026-11-22T11:22:22Z",
       "ok": true,
       "source": "preview/payment-gate-report.json",
       "state": "verdict=PASS"
     },
     {
-      "bytes": 9817,
+      "bytes": 10099,
       "field": "verdict",
       "id": "C4",
       "label": "权益 / 月卡面",
-      "mtime": "2026-11-14T23:55:47Z",
+      "mtime": "2026-11-22T11:22:22Z",
       "ok": true,
       "source": "preview/membership-benefit-report.json",
       "state": "verdict=PASS"
     },
     {
-      "bytes": 1061,
+      "bytes": 1233,
       "field": "reconcile_rc",
       "id": "C5",
       "label": "代币双式账本面",
-      "mtime": "2026-11-15T01:46:48Z",
+      "mtime": "2026-11-22T11:22:22Z",
       "ok": true,
       "source": "preview/ledger-business-report.json",
       "state": "reconcile_rc=0 refused=2 tx=3 entries=6"
     },
     {
-      "bytes": 6881,
+      "bytes": 20170,
       "field": "hole_status",
       "id": "C6",
       "label": "UGC 安全闸面",
-      "mtime": "2026-11-15T02:00:36Z",
+      "mtime": "2026-11-25T01:58:04Z",
       "ok": false,
       "source": "preview/ugc-gate-report.json",
       "state": "hole_status=LIVE"
     }
   ],
-  "generated_utc": "2026-11-15T02:59:12Z",
+  "generated_utc": "2026-11-26T20:01:00Z",
   "reasons": [
     "C1 verdict=PASS OK",
     "C2 verdict=PASS OK",
@@ -93,8 +93,8 @@
   ],
   "schema": "bigdomain-first-yuan-1",
   "sizes": {
-    "html": 4593,
-    "json": 2701
+    "html": 3917,
+    "json": 2606
   },
   "top_edge": "物理件未到位 3 项（具名清单见 preview/ceo-blockers.html）；UGC 闸现读 hole_status=LIVE",
   "verdict": "BLOCKED-PHYSICAL"

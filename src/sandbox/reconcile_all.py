@@ -7970,8 +7970,12 @@ SUITES = [
     # behaviour arm (one named call, refusals named, no raise) and a scratch arm:
     # tools/lobby_session_trace.py may render the same session into a receipt
     # directory (AC-PPR7) and a scratch render must NOT re-derive the CEO face.
+    # R3530. AC-PWC8 grades the fourth newly closed producer by source position:
+    # tools/first_yuan_path.py calls the shared face writer after its only
+    # landing loop (fh.write(body) over both halves) and never inside
+    # cmd_check(), with delete/move negative controls plus a behaviour arm.
     ("os-preview-writer-census",
-     os.path.join("..", "os", "test_preview_writer_census.py"), 14),
+     os.path.join("..", "os", "test_preview_writer_census.py"), 18),
     # R2814. tools/ugc_gate_report.py carries AC-UGR1..AC-UGR9 and renders the
     # face for the BLUEPRINT section-five death line (content safety not
     # connected means the door stays shut), yet the registry held ZERO AC-UGR*

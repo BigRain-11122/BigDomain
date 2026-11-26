@@ -90,15 +90,16 @@
 </div>
 
 <h2>最新实物（盘上 mtime 派生，禁写死）</h2>
-<div class="note">preview-writer-census.json · json=    24995B · html=    17217B · 2026-11-27T03:53:57</div>
+<div class="note">preview-writer-census.json · json=    24998B · html=    17223B · 2026-11-27T04:21:21</div>
 <div class="note">无自验命令：no producer is recorded for preview-writer-census.json（如实命名，不编造）</div>
 <div class="note" data-law="static">本带按文件 mtime 排名；<code>docs/status-export.json</code> 按提交内容时钟排名。导出面选出的那一对与两个字节数写在那份文档里，本页不复制（复制会让本页字节随导出面重写而变）。两法此刻是否意见不同，由 <code>python tools/closeout_order.py --plan</code> 的 LAW 行只读印出。</div>
 <div class="note">Snapshot: the size and stamp above were measured when this page was rendered; a later re-render of that face changes them. The live fact this band asserts is which artifact is newest, not its byte count.</div>
 <h2>全部已上线面（盘上 pair 派生·点开即看）</h2>
 <div class="note">本块面数=108，逐条直接从 <code>preview/</code> 扫描得出：面名·字节·时间戳均实读。</div>
 <ul>
-<li><a href="preview-writer-census.html">preview-writer-census</a> <span class="tag">    17217B</span> <span class="tag">2026-11-27 03:53</span> <span class="tag">json=preview-writer-census.json</span></li>
-<li><a href="battery-shard-report.html">battery-shard-report</a> <span class="tag">    16419B</span> <span class="tag">2026-11-27 03:49</span> <span class="tag">json=battery-shard-report.json</span></li>
+<li><a href="preview-writer-census.html">preview-writer-census</a> <span class="tag">    17223B</span> <span class="tag">2026-11-27 04:21</span> <span class="tag">json=preview-writer-census.json</span></li>
+<li><a href="battery-shard-report.html">battery-shard-report</a> <span class="tag">    16419B</span> <span class="tag">2026-11-27 04:19</span> <span class="tag">json=battery-shard-report.json</span></li>
+<li><a href="first-yuan.html">first-yuan</a> <span class="tag">     3917B</span> <span class="tag">2026-11-27 04:01</span> <span class="tag">json=first-yuan.json</span></li>
 <li><a href="lobby-session-trace.html">lobby-session-trace</a> <span class="tag">     9092B</span> <span class="tag">2026-11-27 03:36</span> <span class="tag">json=lobby-session-trace.json</span></li>
 <li><a href="ledger-reconcile-face.html">ledger-reconcile-face</a> <span class="tag">     8656B</span> <span class="tag">2026-11-27 03:23</span> <span class="tag">json=ledger-reconcile-face.json</span></li>
 <li><a href="preview-pair-census.html">preview-pair-census</a> <span class="tag">     8320B</span> <span class="tag">2026-11-27 03:01</span> <span class="tag">json=preview-pair-census.json</span></li>
@@ -122,7 +123,6 @@
 <li><a href="lobby-ws-report.html">lobby-ws-report</a> <span class="tag">     6693B</span> <span class="tag">2026-11-25 09:58</span> <span class="tag">json=lobby-ws-report.json</span></li>
 <li><a href="live-sandbox.html">live-sandbox</a> <span class="tag">     6450B</span> <span class="tag">2026-11-25 09:58</span> <span class="tag">json=live-sandbox.json</span></li>
 <li><a href="ledger-business-report.html">ledger-business-report</a> <span class="tag">     5970B</span> <span class="tag">2026-11-25 09:58</span> <span class="tag">json=ledger-business-report.json</span></li>
-<li><a href="first-yuan.html">first-yuan</a> <span class="tag">     4593B</span> <span class="tag">2026-11-25 09:58</span> <span class="tag">json=first-yuan.json</span></li>
 <li><a href="city-face-report.html">city-face-report</a> <span class="tag">     7988B</span> <span class="tag">2026-11-25 09:58</span> <span class="tag">json=city-face-report.json</span></li>
 <li><a href="apimarket-report-workbench.html">apimarket-report-workbench</a> <span class="tag">    15665B</span> <span class="tag">2026-11-25 09:58</span> <span class="tag">json=apimarket-report-workbench.json</span> <span class="tag hist">历史快照·schema 2</span></li>
 <li><a href="apimarket-report-slowanswer.html">apimarket-report-slowanswer</a> <span class="tag">    13022B</span> <span class="tag">2026-11-25 09:58</span> <span class="tag">json=apimarket-report-slowanswer.json</span> <span class="tag hist">历史快照·schema 14</span></li>
@@ -213,7 +213,7 @@
 <div class="disclaimer">常驻合规三面：<b>AIGC 标识</b>（生成内容全呈现面标注）· <b>msgSecCheck 前置闸</b>（内容安全未接禁开门）· <b>非投顾</b>（本平台产出不构成投资建议）。</div>
 <table>
 <tr><th>#</th><th>面</th><th>实物（点开即看）</th><th>实测判据</th><th>占位 / 阻塞</th></tr>
-<tr><td>1</td><td><b>shard-battery</b><br>BigDomain 分片电池面 R3528</td><td><a href="battery-shard-report.html">battery-shard-report.html</a><br><span class="tag warn">verdict=RED</span> <span class="tag">    16419B</span> <span class="tag">2026-11-26T19:49:16Z</span></td><td>本周动过的三族（大厅/导出/队列）实跑分片：43 套件 / 336 判据的族级绿红与逐套件行，全部解析自分片器真实 stdout</td><td>分片不是全量电池：645 套件未覆盖，全量一趟仍需单窗监督</td></tr>
+<tr><td>1</td><td><b>shard-battery</b><br>BigDomain 分片电池面 R3529</td><td><a href="battery-shard-report.html">battery-shard-report.html</a><br><span class="tag warn">verdict=RED</span> <span class="tag">    16419B</span> <span class="tag">2026-11-26T20:19:04Z</span></td><td>本周动过的三族（大厅/导出/队列）实跑分片：43 套件 / 336 判据的族级绿红与逐套件行，全部解析自分片器真实 stdout</td><td>分片不是全量电池：645 套件未覆盖，全量一趟仍需单窗监督</td></tr>
 <tr><td>2</td><td><b>platform-live</b><br>BigDomain 沙箱 · 全部门实测在线（一指令拉起）</td><td><a href="platform-live-report.html">platform-live-report.html</a><br><span class="tag ok">verdict=PASS</span> <span class="tag">     8621B</span> <span class="tag">2026-11-25T01:58:04Z</span></td><td>六道沙箱门由一条命令拉起，逐门实测 HTTP 200，跑完即拆（4/4 子进程归零 · 8/8 端口拒连）</td><td>生产 wss/ICP/日志留存/1000 并发 p95 = CEO 物理件</td></tr>
 <tr><td>3</td><td><b>lobby-ws</b><br>P-47-1 lobby WebSocket handshake - driven on a real socket</td><td><a href="lobby-ws-report.html">lobby-ws-report.html</a><br><span class="tag ok">verdict=PASS</span> <span class="tag">     6693B</span> <span class="tag">2026-11-25T01:58:04Z</span></td><td>P-47① 大厅 WebSocket：两个真实客户端走 RFC6455，服务端拒绝伪造 actor/ai_generated</td><td>入场为 mock；违禁词表为沙箱替身</td></tr>
 <tr><td>4</td><td><b>city-face</b><br>城市观测面验收报告</td><td><a href="city-face-report.html">city-face-report.html</a><br><span class="tag ok">verdict=PASS</span> <span class="tag">     7988B</span> <span class="tag">2026-11-15T00:03:27.829099Z</span></td><td>城市观测面：12 白名单字段实服务、越权字段拒发、零写端点</td><td>城市数据为样例包，非实况导出</td></tr>
@@ -223,7 +223,7 @@
 <tr><td>8</td><td><b>ledger</b><br>代币双式账本业务报告</td><td><a href="ledger-business-report.html">ledger-business-report.html</a><br><span class="tag warn">verdict=n/a</span> <span class="tag">     5970B</span> <span class="tag">2026-11-20 00:48:05Z</span></td><td>P-47② 代币双式账本：账户/交易/分录三表与对账脚本实跑</td><td>真实支付入账待商户号到位</td></tr>
 <tr><td>9</td><td><b>apimarket</b><br>BigDomain API Market - Settlement Ledger</td><td><a href="apimarket-report.html">apimarket-report.html</a><br><span class="tag warn">verdict=n/a</span> <span class="tag">    37201B</span> <span class="tag">2026-11-25T02:02:38Z</span></td><td>API 市场结算台账：卖家账本、结算分录与注意力项（示例集）</td><td>结算数据为示例集；真实结算待商户号/支付物理件</td></tr>
 </table>
-<!-- fingerprint 73e9a90f1b41ead2 -->
+<!-- fingerprint cd0ff67db279303b -->
 <!-- BD-DELIVERABLE-INDEX:END -->
   <h2>市场月度台账（五个月度读面 · 一页点进）</h2>
   <div class="note">新页 <a href="apimarket-monthly-faces.html">apimarket-monthly-faces</a>（json=apimarket-monthly-faces.json）：把已交付的五个市场月度读面渲染成一页，数据来自确定性演示世界。<strong>AIGC 标识与非投顾提示常驻</strong>；两个月面在该世界里没有对应事件（售后、折扣），按<strong>诚实空态</strong>呈现，不合成月份。页内每个数字由读面在渲染时实读，不写死。</div>

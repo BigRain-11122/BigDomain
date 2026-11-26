@@ -1,0 +1,60 @@
+R3530 evidence - 2026-11-27 (BigDomain OSLoop)
+
+TARGET
+  tools/first_yuan_path.py - the fourth gap producer named by the R3527 census.
+  It lands preview/first-yuan.{html,json}, a pair that becomes latest_artifact,
+  and did not re-derive docs/status-export.json after landing.
+
+CRITERIA (pinned in src/os/backlog.md before any code change)
+  AC-PWC8 four arms: closure by source position, shared definition only,
+  behaviour with a recording fake, delete/move negative controls plus a
+  --check path that must never refresh.
+
+BEFORE
+  python tools/preview_writer_census.py --check
+    PWC-CHECK VERDICT PASS read_only=True modules=119 closed=9 gap=100 reader=10
+  state tick 3529, state.json 74859B, fold gate 78500, verdict FOLD-CLEAR.
+
+WORK
+  tools/first_yuan_path.py gains _refresh_face() (shared board_face_landing,
+  BASE passed explicitly) and cmd_write() calls it after its only landing loop.
+  src/os/test_preview_writer_census.py gains AC-PWC8 (4 arms).
+  src/sandbox/reconcile_all.py registry row os-preview-writer-census 14 -> 18.
+
+MEASURED AFTER
+  python -m unittest src.os.test_preview_writer_census      Ran 18 tests OK
+  python tools/first_yuan_path.py --write                   face export=WRITTEN
+    WROTE preview/first-yuan.html 3917B preview/first-yuan.json 2606B
+    verdict=BLOCKED-PHYSICAL
+  python tools/first_yuan_path.py --check                   VERDICT PASS fails=0
+    (AC-FYP1..7 green, both halves byte- and mtime-identical)
+  export face                                                latest_artifact =
+    preview/first-yuan.html (3917B) + preview/first-yuan.json (2606B)
+  python tools/preview_writer_census.py --check
+    PWC-CHECK VERDICT PASS read_only=True modules=119 closed=10 gap=99 reader=10
+  python src/os/suite_matrix_reconcile.py --check           DOC-CURRENT (832 rows, 6990 criteria)
+  python tools/battery_shard_report.py --check               BSR-CHECK VERDICT PASS checks=8
+  python src/os/export_round.py --check                      VERDICT PASS tick=3530
+  python src/os/ledger_lines.py --check                      VERDICT CLEAN
+  python src/os/state_fold_run.py --check                    bytes=76791 gate=78500 margin=1709
+
+HONEST BOUNDARIES
+  (a) Only the birth-site coupling changed; derive/render_html/build/cmd_check and
+      the two landed halves keep their shape; export_round.BOARD_PAGES untouched.
+  (b) The suite's first draft measured wrong twice and both fixes are recorded in
+      the code comment trail: the shared-definition arm sliced the helper past its
+      own body, and the delete control still read closed because the census
+      classifies module-level calls (the control now removes the shared call too).
+  (c) 99 gaps remain named and carried; nothing is claimed closed.
+  (d) The battery page went stale on the 14 -> 18 criteria bump and was re-derived
+      by the detached producer (landed 04:19:04) before the census/index/export
+      chain; its round label reads the previous tick because it ran before the
+      tick advance, and BSR-CHECK grades it PASS after.
+  (e) ZERO payment capability, no network beyond loopback; the five physical
+      pieces still gate every buyer.
+
+GROUP SCAN
+  0 @BigDomain lines in cph4/evolution-ledger.md; decisions.md 438 rows /
+  141 distinct ids vs 144-token baseline, 0 newcomers, 3 citations folded out;
+  orders head unchanged at 2026-11-20 22:5x; benchmarks due 2026-12-01;
+  no index.lock; the three qa/crawl-* files are not this window's writes.

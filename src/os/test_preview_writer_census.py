@@ -1,8 +1,9 @@
-"""Battery suite for tools/preview_writer_census.py - AC-PWC1..AC-PWC6 (R3527, R3528).
+"""Battery suite for tools/preview_writer_census.py - AC-PWC1..AC-PWC8 (R3527-R3530).
 
 Pinned in src/os/backlog.md BEFORE the tool, this file and the face_pair_receipt
 wiring existed. AC-PWC6 was pinned in the R3528 window before
-tools/ledger_reconcile_face.py was touched.
+tools/ledger_reconcile_face.py was touched, AC-PWC7 in R3529 before
+tools/lobby_session_trace.py, AC-PWC8 in R3530 before tools/first_yuan_path.py.
 
 Why this exists: R3524..R3526 each closed the same birth-site gap for ONE
 producer (one board battery page, the rest of BOARD_PAGES, one non-board census).
@@ -324,6 +325,113 @@ class PWC7ThirdProducerClosed(unittest.TestCase):
             LST.main()
         finally:
             sys.argv = saved_argv
+            if saved is None:
+                sys.modules.pop("board_face_landing", None)
+            else:
+                sys.modules["board_face_landing"] = saved
+        self.assertEqual(calls, [])
+
+
+def fyp_closure_positions(text, landing="fh.write(body)"):
+    """(present, after_landing, check_clean, shared_only) for AC-PWC8."""
+    if "def cmd_write(" not in text:
+        return (False, False, False, False)
+    body = text.rpartition("def cmd_write(")[2].split("def cmd_check(")[0]
+    at = body.find("_refresh_face()")
+    present = at != -1
+    landing_at = body.rfind(landing)
+    after = present and landing_at != -1 and at > landing_at
+    check_body = text.rpartition("def cmd_check(")[2].split("def main(")[0]
+    check_clean = "_refresh_face()" not in check_body
+    helper = text.rpartition("def _refresh_face(")[2].split("def cmd_write(")[0]
+    shared = "board_face_landing.refresh_export_face(BASE)" in helper
+    no_local_writer = "ER.write(" not in helper and ".write(" not in helper
+    return (present, after, check_clean, shared and no_local_writer)
+
+
+class PWC8FourthProducerClosed(unittest.TestCase):
+    """AC-PWC8: first_yuan_path re-derives the face after its landing only."""
+
+    def _source(self):
+        with io.open(os.path.join(TOOLS, "first_yuan_path.py"),
+                     encoding="utf-8") as f:
+            return f.read()
+
+    def test_closed_and_ordered_after_the_landing(self):
+        text = self._source()
+        kind, _html, writes, closes = MOD.classify_source(text)
+        self.assertEqual(kind, "closed")
+        self.assertGreaterEqual(writes, 1)
+        self.assertGreaterEqual(closes, 1)
+        self.assertEqual(fyp_closure_positions(text), (True, True, True, True))
+
+    def test_negative_controls_delete_and_move(self):
+        text = self._source()
+        deleted = text.replace(
+            '    print("face export=" + _refresh_face())',
+            "    pass  # control: closure call removed").replace(
+            "board_face_landing.refresh_export_face(BASE)",
+            "None  # control: shared call removed")
+        self.assertEqual(MOD.classify_source(deleted)[0], "gap")
+        self.assertFalse(fyp_closure_positions(deleted)[0])
+        moved = text.replace(
+            "    for rel, body in ((HTML_REL, html), (JSON_REL, text)):",
+            "    _refresh_face()  # control: moved before the landing\n"
+            "    for rel, body in ((HTML_REL, html), (JSON_REL, text)):")
+        pos = fyp_closure_positions(moved)
+        self.assertTrue(pos[0])
+        self.assertFalse(pos[1])
+
+    def test_refresh_is_shared_and_named(self):
+        import first_yuan_path as FYP
+        calls = []
+
+        class Fake(object):
+            def __init__(self, ok, note):
+                self.ok, self.note = ok, note
+
+            def refresh_export_face(self, root):
+                calls.append(root)
+                return (self.ok, self.note, {})
+
+        class Boom(object):
+            def refresh_export_face(self, root):
+                raise RuntimeError("no writer here")
+
+        saved = sys.modules.get("board_face_landing")
+        try:
+            sys.modules["board_face_landing"] = Fake(True, "")
+            self.assertEqual(FYP._refresh_face(), "WRITTEN")
+            self.assertEqual(calls, [FYP.BASE])
+            sys.modules["board_face_landing"] = Fake(False, "E_BFL_FACE_UNPROVEN")
+            self.assertEqual(FYP._refresh_face(), "REFUSED E_BFL_FACE_UNPROVEN")
+            sys.modules["board_face_landing"] = Boom()
+            self.assertEqual(FYP._refresh_face(), "SKIPPED RuntimeError")
+            self.assertEqual(len(calls), 2)
+        finally:
+            if saved is None:
+                sys.modules.pop("board_face_landing", None)
+            else:
+                sys.modules["board_face_landing"] = saved
+
+    def test_check_path_does_not_refresh(self):
+        import first_yuan_path as FYP
+        calls = []
+
+        class Fake(object):
+            def refresh_export_face(self, root):
+                calls.append(root)
+                return (True, "", {})
+
+        saved = sys.modules.get("board_face_landing")
+        out = io.StringIO()
+        saved_stdout = sys.stdout
+        try:
+            sys.modules["board_face_landing"] = Fake()
+            sys.stdout = out
+            FYP.cmd_check()
+        finally:
+            sys.stdout = saved_stdout
             if saved is None:
                 sys.modules.pop("board_face_landing", None)
             else:

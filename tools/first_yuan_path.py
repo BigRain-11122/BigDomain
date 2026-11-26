@@ -240,11 +240,31 @@ def build():
     return html, text, d
 
 
+def _refresh_face():
+    """AC-PWC8 (R3530): landing this pair and re-deriving the CEO face are ONE run.
+
+    The one definition lives in src/os/board_face_landing.py, so no second writer
+    is kept here. BASE is passed explicitly, so a private world derives that
+    world's face. Refusals are named, never raised: both halves are already on
+    disk when this runs, so the caller's exit code stays its own.
+    """
+    try:
+        os_src = os.path.join(BASE, "src", "os")
+        if os_src not in sys.path:
+            sys.path.insert(0, os_src)
+        import board_face_landing
+        ok, note, _proof = board_face_landing.refresh_export_face(BASE)
+        return "WRITTEN" if ok else "REFUSED %s" % note
+    except Exception as exc:  # a private world may carry no shared writer
+        return "SKIPPED %s" % type(exc).__name__
+
+
 def cmd_write():
     html, text, d = build()
     for rel, body in ((HTML_REL, html), (JSON_REL, text)):
         with io.open(_abs(rel), "w", encoding="utf-8", newline="\n") as fh:
             fh.write(body)
+    print("face export=" + _refresh_face())
     print("WROTE %s %dB %s %dB verdict=%s" % (
         HTML_REL, len(html.encode("utf-8")), JSON_REL, len(text.encode("utf-8")), d["verdict"]))
     return 0
