@@ -1,21 +1,21 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-27 R3518 PRODUCT: the last of the four apimarket history splits now carries a disk-reproducible replay - apimarket-report-selleranswers was reproduced by its producer AS IT STOOD at ce3583ca once that tree's ledger clock was pinned to the second recovered from the landed spend digest (2026-10-25T03:43:39Z): html 18894 B plus the channel block as it stood at 700dd89a equals the landed 19612 B byte for byte with no normalisation, and json 31520 B is identical, so AC-PPR16 and AC-PPR17 now cover four rows and AC-PPR18 covers two witnesses.",
+    "current": "2026-11-27 R3519 PRODUCT: the pay revocation acceptance suite runs to a verdict again - AC-VR7 decoded src/sandbox/reconcile_all.py as ascii while that registry carries 3 non-ASCII bytes, so the arm crashed and all seven arms were unreadable; the registration check now reads BYTES (rb plus an ascii byte literal) and the same arm carries two negative controls: a registry copy with one invalid-UTF8 byte still hits, a one-character rename misses. SUITE PASS 7/7.",
     "do": "2026-11-25 R3456 PRODUCT: the answer-revision question now has a door - api_answer_history (live with AC-AMAW1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so 'which answer was rewritten, what did it say before, what does it say now and how often did it change' could only be read by calling the sandbox from a shell - while api_seller_answers and api_listing_qna publish only the CURRENT wording.",
-    "last_artifact": "preview/preview-pair-census.html (8320B) + preview/preview-pair-census.json (53687B) [2026-11-27 mtime] (halves differ: html [2026-11-27 commit] + json [2026-11-27 mtime]; later=json)",
-    "latest_artifact": "preview/preview-pair-census.html (8320B) + preview/preview-pair-census.json (53687B) [2026-11-27 mtime] (halves differ: html [2026-11-27 commit] + json [2026-11-27 mtime]; later=json)",
+    "last_artifact": "preview/preview-pair-census.html (8320B) + preview/preview-pair-census.json (53687B) [2026-11-27 commit]",
+    "latest_artifact": "preview/preview-pair-census.html (8320B) + preview/preview-pair-census.json (53687B) [2026-11-27 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\preview-pair-census.html",
     "latest_artifact_note": "",
     "latest_evidence": "qa/round-R3517.log (4816B, 2026-11-27, sha256 b0a09f4402b6)",
     "newest_pair_on_disk_is_board": false,
     "next_milestone": "[R3519] next window line above and it is kept only as a pointer to its own head: (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——若下窗开在 2026-12-01 或之后，先把刷新轮排最前（P-2026-09-24-56），毕=更新字段＋文件④更新记录行。 (1) **S4U 仍未落地（第五十七次承账）**——需提权会话跑 `src/os/register_loop_task.ps1` 后读回；宁缺不错。 (2) 最后 1 条 apimarket 面 `apimarket-report-selleranswers`（json@`ce3583ca`、producer `preview_R2120.py`）按 R3516 配方补一条；若该生产器同样只钉 API 钟，直接用 `clock_witness` 枚举法。 (3) **电池页派生真因已更正**：本轮实测「五分钟零输出」有一半是**自己的管道缓冲**（`| Select-Object -Last` 会吞掉全程输出直到进程结束），故以后**禁对长派生加尾管道**；无管道前台 + 15s 心跳线程仍失败一次，故**正法=隐藏分离进程写 `logs/bsr-out.txt` 后再读**，或短超时前台直跑。 (4) `status_export_fresh.py --apply` 不写 `board_pages_skipped` 的缺陷未修（继续绕走 `src/os/export_round.py`）。 (5) 支付沙箱 `test_notify_revoke.py` 读 `src/sandbox/reconcile_all.py` 用 ascii 解码的既有失败已承账。 (6) 载体余量：state 本轮 74561B／阈 78500（余 3933B），下窗写 state 前先跑 `fold --plan-only`。 (7) tick 口径：本轮 3516→3517，下轮 R3518。 (8) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定诊断不修）、全量 battery 未实跑、769 判据未被分片路径覆盖、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写。",
-    "next_milestone_due": "2026-11-29T00:43:27+08:00",
-    "updated_at": "2026-11-27T00:43:27+08:00",
+    "next_milestone_due": "2026-11-29T00:52:55+08:00",
+    "updated_at": "2026-11-27T00:52:55+08:00",
     "heartbeat": {
       "tick": 3502,
-      "state_tick": 3518,
-      "lag": 16,
+      "state_tick": 3519,
+      "lag": 17,
       "verdict": "FLAG",
       "reason": "heartbeat_row_debt"
     },
@@ -27,7 +27,7 @@
       "over7": 0,
       "dup_rows": 0,
       "distinct": 13,
-      "collapsed": 0,
+      "collapsed": 1,
       "labels_refreshed": 0,
       "notes_stale": 0,
       "note_claims": 0,
@@ -35,8 +35,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-27 R3518 PRODUCT: the last of the four apimarket history splits now carries a disk-reproducible replay - apimarket-report-selleranswers was reproduced by its producer AS IT STOOD at ce3583ca once that tree's ledger clock was pinned to the second recovered from the landed spend digest (2026-10-25T03:43:39Z): html 18894 B plus the channel block as it stood at 700dd89a equals the landed 19612 B byte for byte with no normalisation, and json 31520 B is identical, so AC-PPR16 and AC-PPR17 now cover four rows and AC-PPR18 covers two witnesses.",
-  "claims": {"claimed": 41, "captured": 23, "contradicted": 0, "uncaptured": 18, "historic": 0, "rows": 104, "present": true, "census_ts": "2026-11-27T00:43:27+08:00"},
+  "current": "2026-11-27 R3519 PRODUCT: the pay revocation acceptance suite runs to a verdict again - AC-VR7 decoded src/sandbox/reconcile_all.py as ascii while that registry carries 3 non-ASCII bytes, so the arm crashed and all seven arms were unreadable; the registration check now reads BYTES (rb plus an ascii byte literal) and the same arm carries two negative controls: a registry copy with one invalid-UTF8 byte still hits, a one-character rename misses. SUITE PASS 7/7.",
+  "claims": {"claimed": 41, "captured": 23, "contradicted": 0, "uncaptured": 18, "historic": 0, "rows": 104, "present": true, "census_ts": "2026-11-27T00:52:55+08:00"},
   "chain": {"present": true, "rows": 104, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -65,13 +65,13 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-27 R3518 PRODUCT: the last of the four apimarket history splits now carries a disk-reproducible replay - apimarket-report-selleranswers was reproduced by its producer AS IT STOOD at ce3583ca once that tree's ledger clock was pinned to the second recovered from the landed spend digest (2026-10-25T03:43:39Z): html 18894 B plus the channel block as it stood at 700dd89a equals the landed 19612 B byte for byte with no normalisation, and json 31520 B is identical, so AC-PPR16 and AC-PPR17 now cover four rows and AC-PPR18 covers two witnesses.",
-  "export_ts": "2026-11-27T00:43:27+08:00",
-  "latest_artifact": "preview/preview-pair-census.html (8320B) + preview/preview-pair-census.json (53687B) [2026-11-27 mtime] (halves differ: html [2026-11-27 commit] + json [2026-11-27 mtime]; later=json)",
+  "do": "2026-11-27 R3519 PRODUCT: the pay revocation acceptance suite runs to a verdict again - AC-VR7 decoded src/sandbox/reconcile_all.py as ascii while that registry carries 3 non-ASCII bytes, so the arm crashed and all seven arms were unreadable; the registration check now reads BYTES (rb plus an ascii byte literal) and the same arm carries two negative controls: a registry copy with one invalid-UTF8 byte still hits, a one-character rename misses. SUITE PASS 7/7.",
+  "export_ts": "2026-11-27T00:52:55+08:00",
+  "latest_artifact": "preview/preview-pair-census.html (8320B) + preview/preview-pair-census.json (53687B) [2026-11-27 commit]",
   "latest_evidence": "qa/round-R3517.log (4816B, 2026-11-27, sha256 b0a09f4402b6)",
   "next_milestone": "[R3519] next window line above and it is kept only as a pointer to its own head: (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——若下窗开在 2026-12-01 或之后，先把刷新轮排最前（P-2026-09-24-56），毕=更新字段＋文件④更新记录行。 (1) **S4U 仍未落地（第五十七次承账）**——需提权会话跑 `src/os/register_loop_task.ps1` 后读回；宁缺不错。 (2) 最后 1 条 apimarket 面 `apimarket-report-selleranswers`（json@`ce3583ca`、producer `preview_R2120.py`）按 R3516 配方补一条；若该生产器同样只钉 API 钟，直接用 `clock_witness` 枚举法。 (3) **电池页派生真因已更正**：本轮实测「五分钟零输出」有一半是**自己的管道缓冲**（`| Select-Object -Last` 会吞掉全程输出直到进程结束），故以后**禁对长派生加尾管道**；无管道前台 + 15s 心跳线程仍失败一次，故**正法=隐藏分离进程写 `logs/bsr-out.txt` 后再读**，或短超时前台直跑。 (4) `status_export_fresh.py --apply` 不写 `board_pages_skipped` 的缺陷未修（继续绕走 `src/os/export_round.py`）。 (5) 支付沙箱 `test_notify_revoke.py` 读 `src/sandbox/reconcile_all.py` 用 ascii 解码的既有失败已承账。 (6) 载体余量：state 本轮 74561B／阈 78500（余 3933B），下窗写 state 前先跑 `fold --plan-only`。 (7) tick 口径：本轮 3516→3517，下轮 R3518。 (8) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定诊断不修）、全量 battery 未实跑、769 判据未被分片路径覆盖、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写。",
   "outs": [
-    "preview/preview-pair-census.html (8320B) + preview/preview-pair-census.json (53687B) [2026-11-27 mtime] (halves differ: html [2026-11-27 commit] + json [2026-11-27 mtime]; later=json)",
+    "preview/preview-pair-census.html (8320B) + preview/preview-pair-census.json (53687B) [2026-11-27 commit]",
     "preview/face-pair-receipt.html (17066B) + preview/face-pair-receipt.json (30591B) [2026-11-26 mtime]",
     "preview/ledger-reconcile-face.html (8656B) + preview/ledger-reconcile-face.json (6151B) [2026-11-26 commit]",
     "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-26 commit] (halves differ: html [2026-11-26 commit] + json [2026-11-16 commit]; later=html)",
@@ -140,20 +140,20 @@
     "shortfall_total": 15,
     "verdict": "FLOOR-DEBT"
   },
-  "results": [["3518", "OSLoop 执行 tick"]],
+  "results": [["3519", "OSLoop 执行 tick"]],
   "results_archive": {
     "bytes": 336680,
     "count": 179,
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
-  "self_drive": {"window": "2026-11-21..2026-11-27", "window_days": 7, "log_lines_in_window": 142, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 26, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
-  "state_bytes": 77185,
-  "next_milestone_due": "2026-11-29T00:43:27+08:00",
+  "self_drive": {"window": "2026-11-21..2026-11-27", "window_days": 7, "log_lines_in_window": 144, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 26, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
+  "state_bytes": 77546,
+  "next_milestone_due": "2026-11-29T00:52:55+08:00",
   "heartbeat": {
     "tick": 3502,
-    "state_tick": 3518,
-    "lag": 16,
+    "state_tick": 3519,
+    "lag": 17,
     "verdict": "FLAG",
     "reason": "heartbeat_row_debt"
   },
@@ -165,7 +165,7 @@
     "over7": 0,
     "dup_rows": 0,
     "distinct": 13,
-    "collapsed": 0,
+    "collapsed": 1,
     "labels_refreshed": 0,
     "notes_stale": 0,
     "note_claims": 0,

@@ -1,0 +1,9 @@
+PASS AC-VR1: schema=True no-UPDATE=True az-no-db=True receipt=��Ͷ�˳�פ��ʾ������ƷΪ AI ���ɹ�������ʷ�ز��о�չʾ���񣬷�Ͷ�ʽ��飬�������κθ����������顢��λԤ��������ŵ����ʷ�ز����ݽ����о�չʾ��������δ�����֣�������Ʒһ�����Ų����˿�Ĳ����Թ���ҳ��ʾΪ׼��������жϣ������Ե�������פչʾ�������۵��� row=True
+PASS AC-VR2: pre={'once': 2, 'longterm': 0, 'consumed': 0} revoke=revoked post={'once': 0, 'longterm': 0, 'consumed': 0} rearm={'once': 1, 'longterm': 0, 'consumed': 0} none=nothing_to_revoke rows=0
+PASS AC-VR4: reg1=True cycle=True once-rearm=True (pre={'once': 2, 'longterm': 1, 'consumed': 0} whole-kill longterm 1->0) same-second-edge=True
+PASS AC-VR5: fresh=True live=True dead=True exhausted-not-revoked=True
+PASS AC-VR3: pre-sent=1 dead-budget={'once': 0, 'longterm': 0, 'consumed': 0} skipped=skipped_no_budget granted=True banner=1 rearm={'once': 1, 'longterm': 0, 'consumed': 0} resend=sent immutable-sent=2
+PASS AC-VR6: empty=True(E_AZ_BAD_ARGS) none=True(E_AZ_BAD_ARGS) blank=True(E_AZ_BAD_ARGS) unknown-tpl=True(E_PN_UNKNOWN_TEMPLATE) rows=7->7; grant-refused=True revoke-on-unapproved=revoked rows=1
+PASS AC-VR7: ascii=True net-imports=none budget-keys=['consumed', 'longterm', 'once'] registered=True no-decode=True neg-control=True no-UPDATE=True
+---- pay-notify-revoke acceptance: 7/7 passed
+SUITE PASS 7/7

@@ -311,18 +311,30 @@ def main():
                        ("urllib", "requests", "socket", "http"))]
     bf_keys = set(face.budget_face("AV-NONE", "tpl_ok").keys())
     keys_ok = bf_keys == {"once", "longterm", "consumed"}
-    reg_src = open(os.path.join(
-        os.path.dirname(BASE), "reconcile_all.py"),
-        encoding="ascii").read()
-    reg_ok = ('("pay-notify-revoke",'
-              ' os.path.join("pay", "test_notify_revoke.py"), 7),'
-              in reg_src)
+    # R3519: the registry is a data file and may carry non-ASCII text, so
+    # it is read as BYTES and never decoded; the arm only asks whether the
+    # registration line is still on disk (AC-VR7's original intent).
+    reg_raw = open(os.path.join(
+        os.path.dirname(BASE), "reconcile_all.py"), "rb").read()
+    reg_line = (b'("pay-notify-revoke",'
+                b' os.path.join("pay", "test_notify_revoke.py"), 7),')
+    reg_hit = reg_line in reg_raw
+    # negative control a: a byte that is invalid UTF-8 must not break the
+    # read - proof that no decoder sits on this path
+    cut = next((i for i, b in enumerate(reg_raw) if b > 127), None)
+    reg_probe = (reg_raw if cut is None
+                 else reg_raw[:cut] + b"\xff" + reg_raw[cut + 1:])
+    reg_enc_ok = reg_line in reg_probe
+    # negative control b: one renamed character must move the hit to False
+    reg_neg_ok = reg_line not in reg_raw.replace(
+        b"pay-notify-revoke", b"pay-notify-revokx")
+    reg_ok = reg_hit and reg_enc_ok and reg_neg_ok
     record("AC-VR7", ok_ascii and not net_hits and keys_ok and reg_ok
            and no_update,
            "ascii=%s net-imports=%s budget-keys=%s registered=%s"
-           " no-UPDATE=%s"
-           % (ok_ascii, net_hits or "none", sorted(bf_keys), reg_ok,
-              no_update))
+           " no-decode=%s neg-control=%s no-UPDATE=%s"
+           % (ok_ascii, net_hits or "none", sorted(bf_keys), reg_hit,
+              reg_enc_ok, reg_neg_ok, no_update))
 
     face.close()
     shutil.rmtree(tmp, ignore_errors=True)
