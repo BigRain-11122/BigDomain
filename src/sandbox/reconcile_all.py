@@ -7945,6 +7945,14 @@ SUITES = [
     # before and after.
     ("os-battery-shard-report",
      os.path.join("..", "os", "test_battery_shard_report.py"), 14),
+    # R3525. R3524 coupled one board-page producer to the CEO face by hand; the
+    # census this round found the same birth-site gap on the other three writers
+    # of export_round.BOARD_PAGES, so the law is one shared definition
+    # (src/os/board_face_landing.py) plus a source census closed over
+    # BOARD_PAGES. AC-BFL1..AC-BFL4 were pinned in src/os/backlog.md BEFORE the
+    # helper and this suite existed.
+    ("os-board-face-landing",
+     os.path.join("..", "os", "test_board_face_landing.py"), 4),
     # R2814. tools/ugc_gate_report.py carries AC-UGR1..AC-UGR9 and renders the
     # face for the BLUEPRINT section-five death line (content safety not
     # connected means the door stays shut), yet the registry held ZERO AC-UGR*

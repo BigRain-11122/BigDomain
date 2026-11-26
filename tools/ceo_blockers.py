@@ -331,6 +331,19 @@ def render_both():
     return html, payload
 
 
+def refresh_face():
+    """AC-BFL2 (R3525): this pair is a board page, so landing it moves the CEO
+    face only if the face is re-derived here. The shared definition is imported,
+    not copied, and a refusal is printed rather than raised."""
+    if os.path.join(REPO, "src", "os") not in sys.path:
+        sys.path.insert(0, os.path.join(REPO, "src", "os"))
+    import board_face_landing as BFL
+    ok, note, proof = BFL.refresh_export_face(REPO)
+    if not ok:
+        print("face refresh %s" % note)
+    return ok
+
+
 def write_artifacts():
     html, payload = render_both()
     os.makedirs(os.path.dirname(HTML_PATH), exist_ok=True)
@@ -338,6 +351,7 @@ def write_artifacts():
         fh.write(html)
     with io.open(JSON_PATH, "w", encoding="utf-8", newline="\n") as fh:
         fh.write(payload)
+    refresh_face()
     return html, payload
 
 

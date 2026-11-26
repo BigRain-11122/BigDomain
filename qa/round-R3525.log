@@ -1,0 +1,29 @@
+R3525 evidence (2026-11-27)
+===========================
+PRODUCT  src/os/board_face_landing.py - one shared definition: landing a board
+         page and re-deriving docs/status-export.json are one write.
+WIRED    tools/ceo_blockers.py, tools/face_sweep.py, tools/deliverable_index.py
+         (battery_shard_report.py keeps its proven R3524 implementation).
+CENSUS   export_round.BOARD_PAGES = ceo-blockers, face-sweep,
+         battery-shard-report, index. Before this round only the fourth writer
+         re-derived the face, so three landed pages left the skipped audit to
+         age - the R3523 red shape.
+CRITERIA AC-BFL1..4 pinned in src/os/backlog.md before the code.
+         arm1 helper: one call, the root it was handed, ISO stamp, refusals named
+         arm2 census: closed over BOARD_PAGES, each cell verified from source
+         arm3 controls: call removed / moved before the landing both read absent
+         arm4 read-only: no child process, no socket, no write, tree stable
+
+RUNS
+  python src/os/test_board_face_landing.py            -> SUITE PASS 4/4
+  python src/os/suite_matrix_reconcile.py --write     -> WRITTEN 831 rows / 6969 criteria
+  python src/os/suite_matrix_reconcile.py --check     -> DOC-CURRENT
+  python src/os/export_round.py --check               -> VERDICT PASS
+  python src/os/ledger_lines.py --check               -> VERDICT CLEAN
+  real end-to-end via the shared helper               -> ok=True
+
+CARRIED (not papered over)
+  - tools/preview_pair_census.py is a NON-board page writer; it lands the page
+    that is latest_artifact today and still refreshes nothing (next window).
+  - the battery page re-derivation started detached and did not land before
+    closeout; BSR-CHECK still reads E_REGISTRY_DRIFT.

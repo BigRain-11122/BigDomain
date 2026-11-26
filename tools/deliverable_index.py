@@ -874,6 +874,20 @@ def front_count(text):
     return names
 
 
+def refresh_face():
+    """AC-BFL2 (R3525): preview/index.html is a board page, so it can never be
+    `latest_artifact` - landing it leaves the skipped audit stale unless the face
+    is re-derived here. Shared definition imported, refusal printed not raised."""
+    src_os = os.path.join(REPO, "src", "os")
+    if src_os not in sys.path:
+        sys.path.insert(0, src_os)
+    import board_face_landing as BFL
+    ok, note, _proof = BFL.refresh_export_face(REPO)
+    if not ok:
+        print("face refresh %s" % note)
+    return ok
+
+
 def main(argv):
     check = "--check" in argv[1:]
     text = read(INDEX)
@@ -1341,6 +1355,7 @@ def main(argv):
     new_text = inject(text, block)
     with open(INDEX, "w", encoding="utf-8", newline="\n") as fh:
         fh.write(new_text)
+    refresh_face()
     print("DELIVERABLE INDEX faces=%d defects=%d fingerprint=%s index=%dB" %
           (len(rows), sum(len(r["defects"]) for r in rows), fp,
            os.path.getsize(INDEX)))

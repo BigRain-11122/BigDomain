@@ -520,6 +520,20 @@ def render(rows, stamp, swept_ns):
     return html_text, json_text, sizes
 
 
+def refresh_face():
+    """AC-BFL2 (R3525): this board page can never become `latest_artifact`, so
+    the skipped audit only stays honest if the writer re-derives the face after
+    the landing. Shared definition imported, refusal printed not raised."""
+    src_os = os.path.join(ROOT, "src", "os")
+    if src_os not in sys.path:
+        sys.path.insert(0, src_os)
+    import board_face_landing as BFL
+    ok, note, _proof = BFL.refresh_export_face(ROOT)
+    if not ok:
+        print("face refresh %s" % note)
+    return ok
+
+
 def sweep(opts):
     faces = load_faces(opts["faces_json"])
     # Taken BEFORE a single gate runs: any artifact touched from here on is newer than the
@@ -537,6 +551,7 @@ def sweep(opts):
     if (dh, dj) != (sizes["html"], sizes["json"]):
         raise SystemExit("E_SIZE_DISK: landed bytes %d/%d != stated %d/%d"
                          % (dh, dj, sizes["html"], sizes["json"]))
+    refresh_face()
     passing = sum(1 for r in rows if _passing(r))
     for r in rows:
         print("face %-16s exit=%-3d verdict=%s (%.2fs)" % (r["id"], r["exit"], r["verdict"], r["duration_s"]))
