@@ -46,7 +46,7 @@
   }
  ],
  "face": "buyer-trial",
- "generated_utc": "2026-11-25T18:57:02Z",
+ "generated_utc": "2026-11-26T22:44:01Z",
  "products": [
   {
    "blocked": false,
@@ -308,7 +308,7 @@
    "readonly": false
   },
   {
-   "bytes": 41366,
+   "bytes": 41370,
    "controls": 0,
    "href": "start-here.html",
    "label": "回到起点：这台机器今天能亲手做什么（只读汇总）",
@@ -321,7 +321,7 @@
  },
  "source": {
   "path": "preview/payment-gate-report.json",
-  "sha256": "6a5f112cf930788cbc382bedd1b5a5909ddcea6ce6e99e6f80ce0958ec2d3cbe"
+  "sha256": "4a92c02ef108270be9bcdcffab0b41bb3906c94534209ca3ce48abb30bda2639"
  },
  "title": "买家试用镜 · 本地演示",
  "verdict": "PASS"

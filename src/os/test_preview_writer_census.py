@@ -1316,5 +1316,151 @@ class PWC15EleventhProducerClosed(unittest.TestCase):
             shutil.rmtree(tmp, ignore_errors=True)
 
 
+def bt_closure_positions(text, last_landing='f.write(text + "\\n")'):
+    """(present, after_landing, check_clean, shared_only) for AC-PWC16."""
+    if "def write():" not in text:
+        return (False, False, False, False)
+    body = text.rpartition("def write():")[2].split("\ndef ")[0]
+    at = body.find("_refresh_face()")
+    present = at != -1
+    landing_at = body.rfind(last_landing)
+    after = present and landing_at != -1 and at > landing_at
+    check_body = text.rpartition("def check():")[2].split("\ndef ")[0]
+    check_clean = present and "_refresh_face(" not in check_body
+    helper = text.rpartition("def _refresh_face(")[2].split("\ndef ")[0]
+    shared = "board_face_landing.refresh_export_face(ROOT)" in helper
+    no_local_writer = ".write(" not in helper
+    return (present, after, check_clean, shared and no_local_writer)
+
+
+class PWC16TwelfthProducerClosed(unittest.TestCase):
+    """AC-PWC16: buyer_trial re-derives the face on its landing path only."""
+
+    def _source(self):
+        with io.open(os.path.join(TOOLS, "buyer_trial.py"),
+                     encoding="utf-8") as f:
+            return f.read()
+
+    def test_closed_and_ordered_after_the_landing(self):
+        text = self._source()
+        kind, _html, writes, closes = MOD.classify_source(text)
+        self.assertEqual(kind, "closed")
+        self.assertGreaterEqual(writes, 2)
+        self.assertGreaterEqual(closes, 1)
+        self.assertEqual(bt_closure_positions(text), (True, True, True, True))
+
+    def test_four_census_paths_are_one_landing_and_three_reads(self):
+        """The census names four html paths; only one pair is ever written."""
+        text = self._source()
+        body = text.rpartition("def write():")[2].split("\ndef ")[0]
+        for name in ("membership-face.html", "merchant-onboard.html",
+                     "money-path-demo.html"):
+            self.assertNotIn(name, body)
+        self.assertIn("OUT_HTML", body)
+        self.assertEqual(body.count('io.open(OUT_JSON, "w"'), 2)
+
+    def test_negative_controls_delete_and_move(self):
+        text = self._source()
+        deleted = text.replace(
+            "    _refresh_face()\n    return 0",
+            "    return 0  # control: closure call removed").replace(
+            "board_face_landing.refresh_export_face(ROOT)",
+            "None  # control: shared call removed")
+        self.assertEqual(MOD.classify_source(deleted)[0], "gap")
+        self.assertFalse(bt_closure_positions(deleted)[0])
+        moved = text.replace("    _refresh_face()\n    return 0", "    return 0").replace(
+            '    # record its own size honestly on a second short pass',
+            '    _refresh_face()  # control: moved before the last landing write'
+            '\n    # record its own size honestly on a second short pass', 1)
+        pos = bt_closure_positions(moved)
+        self.assertTrue(pos[0])
+        self.assertFalse(pos[1])
+
+    def test_refresh_is_shared_and_named(self):
+        import buyer_trial as BT
+        calls = []
+
+        class Fake(object):
+            def __init__(self, ok, note):
+                self.ok, self.note = ok, note
+
+            def refresh_export_face(self, root):
+                calls.append(root)
+                return (self.ok, self.note, {})
+
+        class Boom(object):
+            def refresh_export_face(self, root):
+                raise RuntimeError("no writer here")
+
+        saved = sys.modules.get("board_face_landing")
+        try:
+            sys.modules["board_face_landing"] = Fake(True, "")
+            self.assertEqual(BT._refresh_face(), "WRITTEN")
+            self.assertEqual(calls, [BT.ROOT])
+            sys.modules["board_face_landing"] = Fake(False, "E_BFL_FACE_UNPROVEN")
+            self.assertEqual(BT._refresh_face(), "REFUSED E_BFL_FACE_UNPROVEN")
+            sys.modules["board_face_landing"] = Boom()
+            self.assertEqual(BT._refresh_face(), "SKIPPED RuntimeError")
+            self.assertEqual(len(calls), 2)
+        finally:
+            if saved is None:
+                sys.modules.pop("board_face_landing", None)
+            else:
+                sys.modules["board_face_landing"] = saved
+
+    def test_landing_derives_once_and_scratch_and_check_derive_none(self):
+        """A landing in this root's preview/ derives once; scratch and --check do not."""
+        import buyer_trial as BT
+        calls = []
+
+        class Fake(object):
+            def refresh_export_face(self, root):
+                calls.append(root)
+                return (True, "", {})
+
+        tmp = tempfile.mkdtemp(prefix="bt-")
+        os.makedirs(os.path.join(tmp, "preview"))
+        saved = (BT.ROOT, BT.PREVIEW, BT.OUT_HTML, BT.OUT_JSON)
+        saved_mod = sys.modules.get("board_face_landing")
+        saved_stdout = sys.stdout
+        try:
+            sys.modules["board_face_landing"] = Fake()
+            BT.ROOT = tmp
+            BT.PREVIEW = os.path.join(tmp, "preview")
+            BT.OUT_HTML = os.path.join(BT.PREVIEW, "buyer-trial.html")
+            BT.OUT_JSON = os.path.join(BT.PREVIEW, "buyer-trial.json")
+            sys.stdout = io.StringIO()
+            RC = BT.write()
+            self.assertEqual(RC, 0)
+            self.assertEqual(calls, [tmp])
+            self.assertEqual(len(calls), 1)
+            self.assertTrue(os.path.isfile(BT.OUT_HTML))
+            self.assertTrue(os.path.isfile(BT.OUT_JSON))
+
+            # scratch render: the halves land outside this root's preview/
+            BT.OUT_HTML = os.path.join(tmp, "scratch.html")
+            BT.OUT_JSON = os.path.join(tmp, "scratch.json")
+            BT.write()
+            self.assertEqual(len(calls), 1)
+
+            BT.ROOT, BT.PREVIEW, BT.OUT_HTML, BT.OUT_JSON = saved
+            calls[:] = []
+            sys.stdout = io.StringIO()
+            try:
+                rc = BT.main(["--check"])
+            finally:
+                sys.stdout = saved_stdout
+            self.assertEqual(calls, [])
+            self.assertIn(rc, (0, 2))
+        finally:
+            sys.stdout = saved_stdout
+            BT.ROOT, BT.PREVIEW, BT.OUT_HTML, BT.OUT_JSON = saved
+            if saved_mod is None:
+                sys.modules.pop("board_face_landing", None)
+            else:
+                sys.modules["board_face_landing"] = saved_mod
+            shutil.rmtree(tmp, ignore_errors=True)
+
+
 if __name__ == "__main__":
     unittest.main()

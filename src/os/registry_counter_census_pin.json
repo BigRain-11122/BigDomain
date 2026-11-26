@@ -395,6 +395,7 @@
     "os-battery-followup-help-wire",
     "os-battery-shard",
     "os-battery-shard-report",
+    "os-board-face-landing",
     "os-buyer-answer-wait-board",
     "os-buyer-cohort-board",
     "os-buyer-concentration-board",
@@ -831,6 +832,8 @@
     "watermark-scale-unknown",
     "watermark-sweep"
   ],
-  "silent": [],
+  "silent": [
+    "os-preview-writer-census"
+  ],
   "unparsed": []
 }

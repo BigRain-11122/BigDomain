@@ -1,0 +1,52 @@
+R3538 round evidence - tools/buyer_trial.py birth-site closure (AC-PWC16)
+
+1. Read-only measurement before any write
+   - census row: kind=gap write_calls=3 face_calls=0
+     landing_paths=[buyer-trial.html, membership-face.html,
+                    merchant-onboard.html, money-path-demo.html]
+   - write() holds every landing write: HTML 515-516, JSON 525-526, JSON again
+     531-532 (sizes fixed point) -> closure belongs AFTER 532.
+   - the other three page names are only READ by measure_hop() at 127 (route
+     sizes), so the multi-landing clause was measured, then dismissed.
+   - check() opens both halves read-only; main() --check never calls write().
+
+2. Wiring (additive only)
+   - _landing_is_default(): both halves must sit under THIS root's preview/.
+   - _refresh_face(): board_face_landing.refresh_export_face(ROOT); returns
+     WRITTEN / REFUSED <note> / SKIPPED <Type>; never raises.
+   - call site: last statement of write(), after the second JSON landing.
+
+3. Suite
+   Ran 51 tests OK (was 46; five new arms under AC-PWC16, incl. an arm that
+   asserts the four census paths are one landing plus three reads).
+
+4. Real run
+   python tools/buyer_trial.py --write
+     buyer-trial WROTE html=22382B json=6574B products=5
+     face export=WRITTEN
+   python tools/buyer_trial.py --check
+     buyer-trial VERDICT PASS criteria=7 products=5 route_hops=4 external_refs=0
+
+5. Gates (all read back, not asserted)
+   PWC-CHECK VERDICT PASS read_only=True modules=119 closed=18 gap=91 reader=10
+   REGISTRY COUNTER CENSUS rows=832 readable=831 unparsed=0 silent=1
+     VERDICT PASS pinned=832   (pin was stale by two rows: os-board-face-landing
+     became readable and os-preview-writer-census grades SILENT because the
+     suite prints no closing row; re-pinned this window, recorded not hidden)
+   suite matrix: 832 rows, DOC-CURRENT
+   deliverable index: PASS 23/23 fingerprint=4f4a2453c30a6ef0
+   CLOSEOUT-GATE PASS files=5068 flags=0 round_main=OK census=PASS
+     matrix=DOC-CURRENT
+     CARRIER bytes=41050 gate=78500 layout_ok=true bare_lf=0 indent_anomaly=0
+
+6. Honest notes
+   - first attempt at the state write was refused by the shipped carrier law
+     (E_CLG_CARRIER_LAYOUT, indent_anomaly=65): a separator comma landed on its
+     own line and the file was written LF. Rewritten from the committed carrier
+     with the 16-space item indent and CRLF.
+   - ordering measured twice: first-yuan-chain --check reads E_STALE when the
+     index re-render runs first, so the chain page lands first, the index binds
+     to it, and only then do both gates read PASS.
+   - 91 gaps stay named in preview/preview-writer-census.json; none claimed.
+   - ZERO payment capability, no network beyond loopback; the five physical
+     pieces still gate every buyer.
