@@ -1,0 +1,1100 @@
+{
+  "excluded": [
+    "src/os/board_face_landing.py",
+    "src/os/export_round.py"
+  ],
+  "generated_at": "2026-11-27T03:14:29+08:00",
+  "round": "R3527",
+  "rows": [
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [],
+      "path": "src/os/launch_battery_R2768.py",
+      "write_calls": 3
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [],
+      "path": "src/os/launch_battery_R2775.py",
+      "write_calls": 3
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [],
+      "path": "src/os/launch_battery_R2779.py",
+      "write_calls": 3
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "hub.html",
+        "panel.html"
+      ],
+      "path": "src/os/live_R2484.py",
+      "write_calls": 2
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "member.html"
+      ],
+      "path": "src/os/live_R2489.py",
+      "write_calls": 2
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "ledger.html"
+      ],
+      "path": "src/os/panel_live_R2481.py",
+      "write_calls": 2
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "apimarket-report-buyerquestions.html"
+      ],
+      "path": "src/os/preview_R2119.py",
+      "write_calls": 1
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "apimarket-report-selleranswers.html"
+      ],
+      "path": "src/os/preview_R2120.py",
+      "write_calls": 1
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "apimarket-report.html"
+      ],
+      "path": "src/os/preview_apimarket_current.py",
+      "write_calls": 3
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [],
+      "path": "src/os/registry_counter_census.py",
+      "write_calls": 11
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "empty.html"
+      ],
+      "path": "src/os/sweep_suite_tmp.py",
+      "write_calls": 2
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [],
+      "path": "src/os/tree_snapshot.py",
+      "write_calls": 6
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "answer-revision-board.html"
+      ],
+      "path": "tools/answer_revision_board.py",
+      "write_calls": 10
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        ".html"
+      ],
+      "path": "tools/apimarket_face_freeze.py",
+      "write_calls": 2
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        ".html"
+      ],
+      "path": "tools/apimarket_schema_banner.py",
+      "write_calls": 1
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "buyer-answer-wait-board.html"
+      ],
+      "path": "tools/buyer_answer_wait_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "buyer-cohort.html"
+      ],
+      "path": "tools/buyer_cohort_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "buyer-concentration-board.html"
+      ],
+      "path": "tools/buyer_concentration_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "buyer-gap-board.html"
+      ],
+      "path": "tools/buyer_gap_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "buyer-ledger-board.html"
+      ],
+      "path": "tools/buyer_ledger_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "buyer-months-board.html"
+      ],
+      "path": "tools/buyer_months_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "buyer-profile-board.html"
+      ],
+      "path": "tools/buyer_profile_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "buyer-rating-pattern-board.html"
+      ],
+      "path": "tools/buyer_rating_pattern_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "buyer-refund-months-board.html"
+      ],
+      "path": "tools/buyer_refund_months_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "buyer-trial.html",
+        "membership-face.html",
+        "merchant-onboard.html",
+        "money-path-demo.html"
+      ],
+      "path": "tools/buyer_trial.py",
+      "write_calls": 3
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "buyer-watch-months-board.html"
+      ],
+      "path": "tools/buyer_watch_months_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "category-history-board.html"
+      ],
+      "path": "tools/category_history_board.py",
+      "write_calls": 10
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "category-price-months-board.html"
+      ],
+      "path": "tools/category_price_months_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "category-question-months-board.html"
+      ],
+      "path": "tools/category_question_months_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "category-refund-months.html"
+      ],
+      "path": "tools/category_refund_months.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "category-velocity-months-board.html"
+      ],
+      "path": "tools/category_velocity_months_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "category-watch-months-board.html"
+      ],
+      "path": "tools/category_watch_months_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "live-sandbox.html"
+      ],
+      "path": "tools/ceo_live_shot.py",
+      "write_calls": 7
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "city-face-report.html",
+        "city_view.html"
+      ],
+      "path": "tools/city_face_report.py",
+      "write_calls": 4
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "core-loop-walkthrough.html"
+      ],
+      "path": "tools/core_loop_walkthrough.py",
+      "write_calls": 2
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [],
+      "path": "tools/crawl_runner.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "buyer-trial.html",
+        "index.html",
+        "merchant-onboard.html"
+      ],
+      "path": "tools/face_backhop.py",
+      "write_calls": 5
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        ".html",
+        "buyer-trial.html",
+        "index.html"
+      ],
+      "path": "tools/face_route_scan.py",
+      "write_calls": 2
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "filing-checklist.html",
+        "preview/face-sweep.html",
+        "preview/filing-checklist.html",
+        "preview/platform-live-report.html"
+      ],
+      "path": "tools/filing_checklist.py",
+      "write_calls": 2
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "first-yuan-chain.html"
+      ],
+      "path": "tools/first_yuan_chain.py",
+      "write_calls": 4
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "preview/first-yuan.html"
+      ],
+      "path": "tools/first_yuan_path.py",
+      "write_calls": 1
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [],
+      "path": "tools/fold_carry_census.py",
+      "write_calls": 2
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "journey-19.9.html"
+      ],
+      "path": "tools/journey_demo.py",
+      "write_calls": 2
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "ledger-business-report.html"
+      ],
+      "path": "tools/ledger_business_report.py",
+      "write_calls": 7
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "ledger-reconcile-face.html",
+        "preview/ledger-reconcile-face.html"
+      ],
+      "path": "tools/ledger_reconcile_face.py",
+      "write_calls": 2
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "library-board.html"
+      ],
+      "path": "tools/library_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "listing-metadata-history-board.html"
+      ],
+      "path": "tools/listing_metadata_history_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "listing-position-board.html"
+      ],
+      "path": "tools/listing_position_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "listing-price-history-board.html"
+      ],
+      "path": "tools/listing_price_history_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "listing-velocity-board.html"
+      ],
+      "path": "tools/listing_velocity_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "listing-view-board.html"
+      ],
+      "path": "tools/listing_view_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "lobby-protocol-map.html"
+      ],
+      "path": "tools/lobby_protocol_map.py",
+      "write_calls": 4
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "lobby-session-trace.html",
+        "preview/lobby-session-trace.html"
+      ],
+      "path": "tools/lobby_session_trace.py",
+      "write_calls": 2
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "lobby-ws-report.html"
+      ],
+      "path": "tools/lobby_ws_report.py",
+      "write_calls": 2
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "market-daily.html"
+      ],
+      "path": "tools/market_daily_board.py",
+      "write_calls": 8
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "market-hour-heatmap.html"
+      ],
+      "path": "tools/market_hour_heatmap.py",
+      "write_calls": 8
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "market-price-percentiles.html"
+      ],
+      "path": "tools/market_price_percentiles.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "market-provider-months-board.html"
+      ],
+      "path": "tools/market_provider_months_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "market-relist-months-board.html"
+      ],
+      "path": "tools/market_relist_months_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "membership-benefit-report.html"
+      ],
+      "path": "tools/membership_benefit_report.py",
+      "write_calls": 4
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "membership-face.html"
+      ],
+      "path": "tools/membership_face.py",
+      "write_calls": 4
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "merchant-onboard.html"
+      ],
+      "path": "tools/merchant_onboard.py",
+      "write_calls": 3
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "money-path-demo.html"
+      ],
+      "path": "tools/money_path_demo.py",
+      "write_calls": 4
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "payment-gate-report.html"
+      ],
+      "path": "tools/payment_gate_report.py",
+      "write_calls": 4
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "platform-live-report.html"
+      ],
+      "path": "tools/platform_live_report.py",
+      "write_calls": 2
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "price-reaction-board.html"
+      ],
+      "path": "tools/price_reaction_board.py",
+      "write_calls": 4
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "provider-identity-board.html"
+      ],
+      "path": "tools/provider_identity_board.py",
+      "write_calls": 10
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "public-listings-board.html"
+      ],
+      "path": "tools/public_listings_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "purchase-dossier-board.html"
+      ],
+      "path": "tools/purchase_dossier_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [],
+      "path": "tools/qa_log.py",
+      "write_calls": 28
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "refund-exposure.html"
+      ],
+      "path": "tools/refund_exposure_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "refund-latency-board.html"
+      ],
+      "path": "tools/refund_latency_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "refund-propensity-board.html"
+      ],
+      "path": "tools/refund_propensity_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "refund-reasons.html"
+      ],
+      "path": "tools/refund_reasons_board.py",
+      "write_calls": 8
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "repeat-purchase-board.html"
+      ],
+      "path": "tools/repeat_purchase_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "reply-latency-board.html"
+      ],
+      "path": "tools/reply_latency_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "search-board.html"
+      ],
+      "path": "tools/search_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "seller-answer-months-board.html"
+      ],
+      "path": "tools/seller_answer_months_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "seller-cohort.html"
+      ],
+      "path": "tools/seller_cohort_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "seller-concentration.html"
+      ],
+      "path": "tools/seller_concentration_board.py",
+      "write_calls": 8
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "seller-ledger-board.html"
+      ],
+      "path": "tools/seller_ledger_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "seller-price-cadence-board.html"
+      ],
+      "path": "tools/seller_price_cadence_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "seller-price-demand-board.html"
+      ],
+      "path": "tools/seller_price_demand_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "seller-quality-scorecard.html"
+      ],
+      "path": "tools/seller_quality_scorecard.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "seller-rating-months-board.html"
+      ],
+      "path": "tools/seller_rating_months_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "seller-refund-months-board.html"
+      ],
+      "path": "tools/seller_refund_months_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "seller-refund-reasons-board.html"
+      ],
+      "path": "tools/seller_refund_reasons_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "seller-repeat-months-board.html"
+      ],
+      "path": "tools/seller_repeat_months_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "seller-reply-months-board.html"
+      ],
+      "path": "tools/seller_reply_months_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "seller-revenue-board.html"
+      ],
+      "path": "tools/seller_revenue_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "seller-reviews-board.html"
+      ],
+      "path": "tools/seller_reviews_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "seller-supply-board.html"
+      ],
+      "path": "tools/seller_supply_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "seller-todo-board.html"
+      ],
+      "path": "tools/seller_todo_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "preview/ceo-blockers.html",
+        "preview/face-sweep.html",
+        "preview/lobby-ws-report.html",
+        "preview/payment-gate-report.html"
+      ],
+      "path": "tools/ship_checklist.py",
+      "write_calls": 2
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "similar-listing-board.html"
+      ],
+      "path": "tools/similar_listing_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        ".html",
+        "index.html",
+        "start-here.html"
+      ],
+      "path": "tools/start_here.py",
+      "write_calls": 4
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [],
+      "path": "tools/status_export_fresh.py",
+      "write_calls": 3
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "ticket-size-board.html"
+      ],
+      "path": "tools/ticket_size_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "ugc-gate-report.html"
+      ],
+      "path": "tools/ugc_gate_report.py",
+      "write_calls": 4
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "watch-alerts-board.html"
+      ],
+      "path": "tools/watch_alerts_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "watch-category-mix-board.html"
+      ],
+      "path": "tools/watch_category_mix_board.py",
+      "write_calls": 10
+    },
+    {
+      "face_calls": 0,
+      "kind": "gap",
+      "landing_paths": [
+        "watch-conversion-board.html"
+      ],
+      "path": "tools/watch_conversion_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 1,
+      "kind": "closed",
+      "landing_paths": [
+        "battery-shard-report.html",
+        "index.html",
+        "ledger-reconcile-face.html",
+        "lobby-session-trace.html"
+      ],
+      "path": "tools/battery_shard_report.py",
+      "write_calls": 4
+    },
+    {
+      "face_calls": 1,
+      "kind": "closed",
+      "landing_paths": [
+        "ceo-blockers.html",
+        "preview/index.html",
+        "preview/ledger-business-report.html",
+        "preview/membership-benefit-report.html"
+      ],
+      "path": "tools/ceo_blockers.py",
+      "write_calls": 2
+    },
+    {
+      "face_calls": 1,
+      "kind": "closed",
+      "landing_paths": [
+        "-report.html",
+        ".html",
+        "index.html"
+      ],
+      "path": "tools/deliverable_index.py",
+      "write_calls": 2
+    },
+    {
+      "face_calls": 1,
+      "kind": "closed",
+      "landing_paths": [
+        ".html",
+        "git archive --output=<tar> ce3583ca src, extract to a temp tree, pin that tree's ledger clock to the enumerated second, run its preview_R2120.main() in process, then splice that tree's own channel block from 700dd89a (tools/face_backhop.py with that round's buyer-trial.html blob) with the face name spelled <slug>.html",
+        "git archive --output=<tar> d3faa192 src, extract to a temp tree, run that tree's preview_R2119.main() in process with ledger.now_utc pinned to the enumerated second, then splice that tree's own channel block from 700dd89a with the face name spelled <slug>.html",
+        "git archive --output=<tar> e0fd7251 src, extract to a temp tree, run that tree's preview_R2118.main() in process, then splice that tree's own channel block (tools/face_backhop.py as of 700dd89a) with the face name spelled <slug>.html"
+      ],
+      "path": "tools/face_pair_receipt.py",
+      "write_calls": 12
+    },
+    {
+      "face_calls": 1,
+      "kind": "closed",
+      "landing_paths": [
+        "face-sweep.html",
+        "preview/apimarket-report-claims-demo.html",
+        "preview/apimarket-report-claims.html",
+        "preview/apimarket-report.html"
+      ],
+      "path": "tools/face_sweep.py",
+      "write_calls": 4
+    },
+    {
+      "face_calls": 1,
+      "kind": "closed",
+      "landing_paths": [
+        ".html",
+        "receipt-admissibility.html"
+      ],
+      "path": "tools/preview_pair_census.py",
+      "write_calls": 4
+    },
+    {
+      "face_calls": 1,
+      "kind": "closed",
+      "landing_paths": [
+        ".html"
+      ],
+      "path": "tools/preview_writer_census.py",
+      "write_calls": 2
+    },
+    {
+      "face_calls": 0,
+      "kind": "reader",
+      "landing_paths": [],
+      "path": "src/os/declare_R2779.py",
+      "write_calls": 0
+    },
+    {
+      "face_calls": 0,
+      "kind": "reader",
+      "landing_paths": [
+        "apimarket-report-refunds.html"
+      ],
+      "path": "src/os/preview_R2111.py",
+      "write_calls": 0
+    },
+    {
+      "face_calls": 0,
+      "kind": "reader",
+      "landing_paths": [
+        "apimarket-report-questions.html"
+      ],
+      "path": "src/os/preview_R2118.py",
+      "write_calls": 0
+    },
+    {
+      "face_calls": 0,
+      "kind": "reader",
+      "landing_paths": [],
+      "path": "src/os/stage_residue.py",
+      "write_calls": 0
+    },
+    {
+      "face_calls": 0,
+      "kind": "reader",
+      "landing_paths": [
+        "apimarket-report.html"
+      ],
+      "path": "tools/apimarket_current_face.py",
+      "write_calls": 0
+    },
+    {
+      "face_calls": 0,
+      "kind": "reader",
+      "landing_paths": [
+        "buyer-trial.html",
+        "journey-19.9.html",
+        "lobby-session-trace.html",
+        "membership-face.html"
+      ],
+      "path": "tools/buyer_route.py",
+      "write_calls": 0
+    },
+    {
+      "face_calls": 0,
+      "kind": "reader",
+      "landing_paths": [],
+      "path": "tools/closeout_gate.py",
+      "write_calls": 0
+    },
+    {
+      "face_calls": 0,
+      "kind": "reader",
+      "landing_paths": [
+        ".html",
+        "preview/first-yuan-chain.html",
+        "preview/index.html"
+      ],
+      "path": "tools/closeout_order.py",
+      "write_calls": 0
+    },
+    {
+      "face_calls": 0,
+      "kind": "reader",
+      "landing_paths": [],
+      "path": "tools/face_walk.py",
+      "write_calls": 0
+    },
+    {
+      "face_calls": 0,
+      "kind": "reader",
+      "landing_paths": [],
+      "path": "tools/snapshot_pin_census.py",
+      "write_calls": 0
+    }
+  ],
+  "totals": {
+    "closed": 7,
+    "excluded": 2,
+    "gap": 102,
+    "modules": 119,
+    "reader": 10,
+    "writers": 109
+  }
+}

@@ -7955,6 +7955,15 @@ SUITES = [
     # change latest_artifact with no skipped-audit row to show it.
     ("os-board-face-landing",
      os.path.join("..", "os", "test_board_face_landing.py"), 7),
+    # R3527. tools/preview_writer_census.py counts the whole class the last
+    # three rounds kept repairing one producer at a time: which modules land a
+    # preview/*.html page and which re-derive the CEO face in process. Seven
+    # arms: writer/reader/closed on a private tree, prose-is-not-closure, the
+    # shipped ER.write alias, tamper reddens --check, --check writes nothing,
+    # and the first newly closed producer measured by source position.
+    # AC-PWC1..AC-PWC5 were pinned in src/os/backlog.md BEFORE the tool existed.
+    ("os-preview-writer-census",
+     os.path.join("..", "os", "test_preview_writer_census.py"), 7),
     # R2814. tools/ugc_gate_report.py carries AC-UGR1..AC-UGR9 and renders the
     # face for the BLUEPRINT section-five death line (content safety not
     # connected means the door stays shut), yet the registry held ZERO AC-UGR*

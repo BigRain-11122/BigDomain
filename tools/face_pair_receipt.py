@@ -1385,6 +1385,17 @@ def main(argv):
         f.write(dumps(payload).encode("utf-8"))
     with io.open(HTML_OUT, "wb") as f:
         f.write(html_of(payload).encode("utf-8"))
+    # AC-PWC5 (R3527): this pair is a NON-board page, so landing it can change
+    # latest_artifact with no skipped-audit row to show it. Re-derive the CEO
+    # face in this process, through the one shared definition, AFTER both halves
+    # are on disk; --check returned before this line and never writes.
+    try:
+        sys.path.insert(0, os.path.join(REPO, "src", "os"))
+        import board_face_landing
+        ok, note, _proof = board_face_landing.refresh_export_face(REPO)
+        face = "WRITTEN" if ok else "REFUSED %s" % note
+    except Exception as exc:  # a private world may carry no shared writer
+        face = "SKIPPED %s" % type(exc).__name__
     for r in payload["faces"]:
         print("%-32s %-16s %s" % (r["slug"], r["verdict"], r.get("detail", r.get("error", ""))))
     print("FPR (%s) round=%s faces=%d one_derivation=%d drift=%d unreproducible=%d"
