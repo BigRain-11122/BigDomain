@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-26T15:50:59+08:00",
+  "generated_at": "2026-11-26T16:12:36+08:00",
   "law": "a split is claimed only when the two halves' last commits differ; an mtime gap alone is published as a bucket, never as a split",
   "oldest_split": {
     "delta_hours": 749.7,
@@ -405,14 +405,14 @@
       "delta_seconds": 0,
       "html": {
         "bytes": 16416,
-        "commit": "82109f8a",
+        "commit": "6f1cfc88",
         "mtime": "2026-11-26T15:49:38+08:00",
         "mtime_epoch": 1795679378,
         "sha": "3FCF4D83"
       },
       "json": {
         "bytes": 17964,
-        "commit": "82109f8a",
+        "commit": "6f1cfc88",
         "mtime": "2026-11-26T15:49:38+08:00",
         "mtime_epoch": 1795679378,
         "sha": "9351450E"
@@ -806,14 +806,14 @@
       "delta_seconds": 0,
       "html": {
         "bytes": 13608,
-        "commit": "82109f8a",
+        "commit": "6f1cfc88",
         "mtime": "2026-11-26T15:37:16+08:00",
         "mtime_epoch": 1795678636,
         "sha": "0109733E"
       },
       "json": {
         "bytes": 19440,
-        "commit": "82109f8a",
+        "commit": "6f1cfc88",
         "mtime": "2026-11-26T15:37:16+08:00",
         "mtime_epoch": 1795678636,
         "sha": "64555995"
@@ -900,10 +900,6 @@
       "verdict": "channel-receipt"
     },
     {
-      "html": {
-        "commit": "82109f8a"
-      },
-      "json": null,
       "mirror": "prints a byte count for every preview half, this page's own included, so its bytes move whenever a listed page is re-derived",
       "name": "index",
       "verdict": "no-json"
@@ -2036,7 +2032,7 @@
       "verdict": "same-run"
     }
   ],
-  "round": 3509,
+  "round": 3510,
   "same_run_seconds": 120,
   "self_excluded": "preview-pair-census",
   "source": "tools/preview_pair_census.py",

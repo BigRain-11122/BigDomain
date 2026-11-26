@@ -262,17 +262,16 @@ def mirror_row(stem, h, j):
     """A pair whose html half prints this page's size: a reading, not a measurement.
 
     The class is computed exactly as for every other pair, so a mirror pair that
-    really changed hands is still named; only the two clocks and the two digests
-    are dropped, because they move whenever ANY listed page is re-derived.
+    really changed hands is still named; the two clocks, the two digests and both
+    last-commit labels are dropped, because they move whenever ANY listed page is
+    re-derived - and a mirror page is re-derived by this very derivation order
+    every window, so its commit label was the one reading that could never settle.
     """
     if j is None:
         verdict = "no-json"
     else:
         verdict = classify(abs(h["mtime_epoch"] - j["mtime_epoch"]), h["commit"], j["commit"])
-    return {"name": stem, "verdict": verdict,
-            "html": {"commit": h["commit"]},
-            "json": {"commit": j["commit"]} if j else None,
-            "mirror": MIRROR_REASON}
+    return {"name": stem, "verdict": verdict, "mirror": MIRROR_REASON}
 
 
 def census():

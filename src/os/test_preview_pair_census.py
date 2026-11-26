@@ -1,4 +1,4 @@
-"""Battery suite for the preview page-pair census - AC-PPC1..AC-PPC8 (R3499, R3508).
+"""Battery suite for the preview page-pair census - AC-PPC1..AC-PPC9 (R3499, R3508, R3511).
 
 Seven arms were pinned in src/os/backlog.md at R3499 (PIN then PIN+1 for the
 freeze face) BEFORE tools/preview_pair_census.py existed. The point of the
@@ -189,9 +189,9 @@ def main():
         shutil.rmtree(work, ignore_errors=True)
 
     # AC-PPC8: a landed face that prints this page's own byte count is a READING,
-    # not a measurement - its clocks and digests are dropped so the census and
-    # the entry index can no longer redden each other, while its class and last
-    # commit stay compared (negative controls on detection and on the reading).
+    # not a measurement - its clocks, digests and last-commit labels are dropped
+    # so the census and the entry index can no longer redden each other, while
+    # its class stays compared (negative controls on detection and on the reading).
     mirrors = [r for r in rows if r.get("mirror")]
     mirror_names = sorted(r["name"] for r in mirrors)
     names_page = []
@@ -208,8 +208,8 @@ def main():
     names_page.sort()
     measured_keys = ("bytes", "sha", "mtime", "mtime_epoch")
     mirror_drops_measurement = all(
-        not any(k in (r["html"] or {}) for k in measured_keys)
-        and not any(k in (r["json"] or {}) for k in measured_keys)
+        not any(k in (r.get("html") or {}) for k in measured_keys)
+        and not any(k in (r.get("json") or {}) for k in measured_keys)
         and "delta_seconds" not in r
         for r in mirrors)
     narrow = all("bytes" in r["html"] for r in rows if not r.get("mirror"))
@@ -229,7 +229,7 @@ def main():
         moved = json.loads(PPC.dumps(payload))
         for row in moved["pairs"]:
             if row.get("mirror"):
-                row["html"]["commit"] = "deadbee"
+                row["verdict"] = "history-split"
                 break
         reading_compared = (PPC.normalized(json.dumps(moved, indent=2, sort_keys=True,
                                                       ensure_ascii=False))
@@ -238,6 +238,31 @@ def main():
        and mirror_drops_measurement and narrow and detect and reading_compared,
        "mirrors=%s named_in_html=%s no_measurement=%s narrow=%s detect=%s reading_compared=%s"
        % (mirror_names, names_page, mirror_drops_measurement, narrow, detect, reading_compared))
+
+    # AC-PPC9: a mirror row carries no clock at all, so a page that embeds this
+    # page's own size can no longer redden the pair by being re-derived - while
+    # the exclusion stays narrow: a normal pair's commits are still compared and
+    # one changed commit still reads drift.
+    mirror_rows_have_no_clock = all(
+        "commit" not in (r.get("html") or {}) and "commit" not in (r.get("json") or {})
+        for r in mirrors)
+    paired = [r for r in rows if not r.get("mirror")
+              and isinstance(r.get("html"), dict) and isinstance(r.get("json"), dict)
+              and "commit" in r["html"] and "commit" in r["json"]]
+    if paired:
+        shifted = json.loads(PPC.dumps(payload))
+        for row in shifted["pairs"]:
+            if row["name"] == paired[0]["name"]:
+                row["html"]["commit"] = "deadbee"
+                break
+        commit_still_compared = (PPC.normalized(json.dumps(shifted, indent=2, sort_keys=True,
+                                                           ensure_ascii=False))
+                                 != PPC.normalized(fresh_json))
+    else:
+        commit_still_compared = False
+    ok("AC-PPC9", bool(mirrors) and mirror_rows_have_no_clock and commit_still_compared,
+       "mirror_without_clock=%s paired_rows=%d commit_still_compared=%s"
+       % (mirror_rows_have_no_clock, len(paired), commit_still_compared))
 
     # AC-PPC7: the suite proved things without changing anything on disk.
     same = (sig(TOOL) == sig_tool and sig(JSON_HALF) == sig_json
