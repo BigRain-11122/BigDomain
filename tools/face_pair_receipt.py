@@ -106,6 +106,17 @@ FACES = [
                 "run can never reproduce bytes - the page and the report are replayed "
                 "from the report it shipped beside"),
     },
+    {
+        "slug": "first-yuan",
+        "producer": os.path.join("tools", "first_yuan_path.py"),
+        "replay": {"kind": "landed-document", "function": "render_html"},
+        "why": ("eighth of the twelve splits (62.6h): html last committed at 897e0f99 "
+                "(the R3461 front-door round), json at 700dd89a, which shipped the "
+                "R3288 back-hop channel; this producer reads six live reports plus the "
+                "debt register and stamps its own byte sizes into BOTH halves, so the "
+                "two landed halves record the sizes of two different moments - the "
+                "page keeps the pre-channel numbers, the report the post-channel ones"),
+    },
 ]
 
 VOLATILE = ("generated_at", "round")
@@ -124,6 +135,22 @@ SHELF_SPAN = re.compile(rb'(\xe4\xb8\xaa\xe6\x8e\xa7\xe4\xbb\xb6 \xc2\xb7 )\d+(B
 
 def shelf_normalised(data):
     return SHELF_SPAN.sub(rb'\1*\2', SHELF_STAMP.sub(b'data-back-bytes="*"', data))
+
+
+# The self-referential footer line a whole-document producer prints: it names
+# both byte counts of the pair, and the landed page keeps the numbers from
+# BEFORE the channel ran while the landed report keeps the numbers AFTER it.
+# Reading the stamp back off the page is therefore not a convenience - it is the
+# only value that makes the producer's own render reproducible.
+SELF_SIZES = re.compile(rb'\xe5\xb0\xba\xe5\xaf\xb8 (\d+) B / (\d+) B')
+
+
+def self_sizes_from_page(page):
+    """The pair's own recorded sizes, read off the landed page (never guessed)."""
+    found = SELF_SIZES.search(page)
+    if not found:
+        return None
+    return {"html": int(found.group(1)), "json": int(found.group(2))}
 
 
 def shelf_stamp(data):
@@ -241,6 +268,9 @@ def replay_render(face, workdir, landed_json_bytes, landed_html_bytes):
     if spec.get("kind") == "facts-report":
         return facts_report_replay(face, module, doc, landed_json_bytes,
                                    landed_html_bytes, workdir)
+    if spec.get("kind") == "landed-document":
+        return landed_document_replay(face, module, doc, landed_json_bytes,
+                                      landed_html_bytes, workdir)
     return gallery_replay(face, module, doc, landed_json_bytes, workdir)
 
 
@@ -332,6 +362,51 @@ def facts_report_replay(face, module, doc, landed_json_bytes, landed_html_bytes,
     return body, read_bytes(json_path)
 
 
+def landed_document_replay(face, module, doc, landed_json_bytes, landed_html_bytes, workdir):
+    """AC-PPR11: replay a whole-document producer from the report it shipped beside.
+
+    first_yuan_path reads six live reports plus the debt register, and it prints
+    its own byte counts into BOTH halves. Those counts are not one number seen
+    twice: the landed page carries the pre-channel pair (3911 / 2600, the LF
+    bytes the producer wrote) while the landed report carries the post-channel
+    pair (4593 / 2701, the working-tree CRLF bytes the channel's size patch
+    measured). So the replay takes its facts from the report and its sizes stamp
+    from the PAGE - guessing either one from the other would make the render
+    unreproducible for a reason that is not a derivation gap.
+
+    What this buys is stated narrowly: the page is the producer's own
+    render_html applied to the landed document, and the report is that same
+    document re-serialised and then restamped by the shipped channel against the
+    post-channel page. Nothing about the live world is re-measured.
+    """
+    sizes = self_sizes_from_page(landed_html_bytes)
+    if sizes is None:
+        raise ValueError("landed page carries no self-referential sizes stamp")
+    document = dict(doc)
+    document["sizes"] = sizes
+    body = module.render_html(document).encode("utf-8")
+    # The landed report is checked out with CRLF on this working tree while the
+    # producer writes LF (R3506 measured the same split on another face); the
+    # replay adopts the landed newline so the two reports are comparable byte
+    # for byte, and the choice is recorded on the row.
+    crlf = b"\r\n" in landed_json_bytes
+    payload = (json.dumps(document, ensure_ascii=False, indent=2, sort_keys=True)
+               + "\n").encode("utf-8")
+    if crlf:
+        payload = payload.replace(b"\n", b"\r\n")
+
+    html_path = os.path.join(workdir, "rendered.html")
+    json_path = os.path.join(workdir, "rendered.json")
+    with io.open(json_path, "wb") as handle:
+        handle.write(payload)
+    injected, _how = face_backhop.inject_text(body.decode("utf-8"),
+                                              face["slug"] + ".html")
+    with io.open(html_path, "wb") as handle:
+        handle.write(injected.encode("utf-8"))
+    face_backhop.patch_sizes(html_path)
+    return body, read_bytes(json_path)
+
+
 def port_from_page(module, landed_html_bytes):
     """The loopback port the landed page was rendered with (never guessed)."""
     host = getattr(module, "HOST", "127.0.0.1").encode("utf-8")
@@ -384,8 +459,12 @@ def measure(face):
     try:
         try:
             if face.get("replay"):
-                # AC-PPR9 / AC-PPR10: the pair is replayed from the landed report.
-                row["replay"] = "%s-from-report" % face["replay"]["function"]
+                # AC-PPR9 / AC-PPR10 / AC-PPR11: the pair is replayed from the
+                # landed report, and the label names which replay shape read it.
+                label = "%s-from-report" % face["replay"]["function"]
+                if face["replay"].get("kind") == "landed-document":
+                    label = "%s-from-landed-document" % face["replay"]["function"]
+                row["replay"] = label
                 rendered, rendered_json = replay_render(
                     face, work, read_bytes(landed_json_path),
                     read_bytes(landed_html_path))

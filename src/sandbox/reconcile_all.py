@@ -5054,8 +5054,16 @@ SUITES = [
     # channel block up to its shelf stamp, and the report half reproduces the
     # landed json byte for byte once the working tree's newline is adopted;
     # one changed fact in the report still reads drift.
+    # AC-PPR11 pinned at R3507 before the eighth face was registered: a
+    # whole-document producer that prints its own byte sizes into BOTH halves is
+    # replayed from the report it shipped beside, with the sizes stamp read back
+    # OFF THE LANDED PAGE - the page keeps the pre-channel numbers (LF) while the
+    # report keeps the post-channel ones (working tree CRLF), so neither can
+    # stand in for the other; the report half must reproduce byte for byte after
+    # the newline is adopted and the channel's size patch runs, and one changed
+    # carrier fact still reads drift.
     ("face-pair-receipt",
-     os.path.join("..", "os", "test_face_pair_receipt.py"), 10),
+     os.path.join("..", "os", "test_face_pair_receipt.py"), 11),
     ("os-ledger-archive",
      os.path.join("..", "os", "test_ledger_archive.py"), 16),
     # R3091: the archive's own provenance is now readable WITHOUT a child

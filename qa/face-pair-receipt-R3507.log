@@ -1,0 +1,65 @@
+R3507 - face pair receipt, eighth face (first-yuan) via landed-document replay
+=================================================================================
+Date: 2026-11-26
+Round: 3507 (tick 3506 -> 3507)
+Scope: preview/first-yuan.{html,json} provenance, tools/first_yuan_path.py,
+       tools/face_pair_receipt.py, src/os/test_face_pair_receipt.py,
+       src/sandbox/reconcile_all.py registry row, census/matrix/battery/export.
+
+1. PROVENANCE (read from history, not guessed)
+   preview/first-yuan.json   last commit 700dd89a (2026-11-22, R3288 back-hop channel)
+   preview/first-yuan.html   last commit 897e0f99 (2026-11-25, R3461 front door)
+   tools/first_yuan_path.py  first and only commit 1b171859 (R2772 "first-yuan money
+                             path face"), which shipped this page's two halves.
+   So the producer is named by its own commit, and the two halves were moved later
+   by two different rounds - the json by the channel, the html by the front door.
+
+2. READ-ONLY PROBE, SYSTEM TEMP ONLY (no worktree byte moved)
+   Replaying the CURRENT inputs does not reproduce the page, and the reason is not
+   a secret: the producer reads six live reports plus the debt register, and the
+   debt register's open rows changed since 2026-11-15 (measured: landed code_items
+   start "loop-s4u-reconcile", today's start "backlog-encoding-R3431R3432").
+   Replaying the LANDED document does reproduce it, up to two named things:
+     html 4593B landed vs 4594B rendered at today's clock, first diff at byte 1377
+            (the generated_utc stamp) -> resolved by taking the document as landed;
+     after that, first diff at byte 4073 = the channel's own shelf stamp
+            (55908 today vs 55302 at R3288), the SAME tolerance AC-PPR9 pins.
+   The landed json is checked out CRLF (101 line ends) while the producer writes LF;
+   adopting the working-tree newline and running the channel's size patch
+   (face_backhop.patch_sizes) reproduces the landed 2701B report BYTE FOR BYTE.
+
+3. TWO SELF-REFERENCES, NOT ONE (the reason a new shape was needed)
+   The landed page records  sizes 3911 B / 2600 B  (pre-channel, LF bytes).
+   The landed report records sizes 4593 B / 2701 B  (post-channel, working tree).
+   Neither value can stand in for the other: guessing the page stamp from the
+   report (or the reverse) makes the render unreproducible for a reason that is
+   not a derivation gap. AC-PPR11 therefore reads the stamp OFF THE LANDED PAGE.
+
+4. LANDED (tools only; the producer was NOT touched)
+   tools/face_pair_receipt.py:
+     - FACES gains the eighth face with replay kind "landed-document";
+     - replay_render dispatches that kind;
+     - self_sizes_from_page() reads the self-referential footer pair off the page;
+     - landed_document_replay() renders the landed document, adopts the working
+       tree newline, splices the shipped channel and runs patch_sizes;
+     - the row label distinguishes the shape ("render_html-from-landed-document").
+   src/os/test_face_pair_receipt.py: AC-PPR11 with four legs - stamp read back
+     (len(render) == recorded html size), position independence (two scratch dirs
+     byte-identical), negative control (one changed carrier fact still reads
+     drift), and read-only (both landed halves unchanged).
+   src/sandbox/reconcile_all.py: registry row 10 -> 11 with the pin comment.
+
+5. GATES READ BACK
+   SUITE PASS 11/11 (AC-PPR1..11)
+   FPR-CHECK VERDICT PASS read_only=True faces=8 one_derivation=4 drift=0
+   PPC-CHECK PASS html=106 paired=103 history_split=8 channel_receipt=3
+                frozen_excused=11 same_commit=6 explained=7
+   suite matrix: STALE-CONTENT at 6951 criteria -> WRITTEN -> DOC-CURRENT
+   (830 rows, 85613B, evidence qa/reconcile-all-R2739.log leg 675/675)
+
+6. NOT DONE / NOT CLAIMED
+   - No preview landing page was re-derived; no freeze register entry was written;
+     no archive was rewritten; AC-PPR1..10 thresholds unchanged.
+   - The four apimarket faces still read version-drift: explained, never excused.
+   - ZERO payment capability, no network beyond loopback: the five physical pieces
+     still gate every buyer.

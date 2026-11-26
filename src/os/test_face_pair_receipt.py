@@ -335,6 +335,64 @@ def main():
           facts_rows[0].get("receipt") if facts_rows else "-", fctx,
           sig(facts_html) == sig_facts_html and sig(facts_json) == sig_facts_json))
 
+    # AC-PPR11: a producer that reads live inputs and prints its own byte sizes
+    # into BOTH halves cannot be compared against one self-reference - the
+    # landed page keeps the pre-channel pair (3911/2600, LF) while the landed
+    # report keeps the post-channel pair (4593/2701, working-tree CRLF). The
+    # replay therefore reads the sizes OFF THE LANDED PAGE, and the report half
+    # must still equal the landed bytes after the working-tree newline and the
+    # channel's size patch. Negative control: one changed carrier fact reads
+    # drift, so the tolerance cannot hide a real difference.
+    doc_faces = [f for f in FPR.FACES
+                 if (f.get("replay") or {}).get("kind") == "landed-document"]
+    doc_rows = [r for r in rows if r.get("replay") == "render_html-from-landed-document"]
+    doc_html = os.path.join(PREVIEW, "first-yuan.html")
+    doc_json = os.path.join(PREVIEW, "first-yuan.json")
+    sig_doc_html = sig(doc_html)
+    sig_doc_json = sig(doc_json)
+    doc_position = doc_narrow = doc_stamp = False
+    dctx = ""
+    if doc_faces:
+        face = doc_faces[0]
+        report = read_bytes(doc_json)
+        page = read_bytes(doc_html)
+        work_e = tempfile.mkdtemp(prefix="fpr3507a-")
+        work_f = tempfile.mkdtemp(prefix="fpr3507b-")
+        try:
+            html_e, json_e = FPR.replay_render(face, work_e, report, page)
+            html_f, json_f = FPR.replay_render(face, work_f, report, page)
+            doc_position = html_e == html_f and json_e == json_f
+            stamp = FPR.self_sizes_from_page(page)
+            doc_stamp = (stamp is not None
+                         and len(html_e) == stamp["html"])
+            neg = json.loads(report.decode("utf-8").replace("\r\n", "\n"))
+            neg["carriers"][0]["state"] = "verdict=PROBE"
+            probe = (json.dumps(neg, ensure_ascii=False, indent=2, sort_keys=True)
+                     + "\n").encode("utf-8")
+            html_neg, _ = FPR.replay_render(face, work_e, probe, page)
+            text_neg, _how = FPR.face_backhop.inject_text(
+                html_neg.decode("utf-8"), "first-yuan.html")
+            doc_narrow = (FPR.shelf_normalised(text_neg.encode("utf-8"))
+                          != FPR.shelf_normalised(page))
+            dctx = "pos=%s stamp=%s narrow=%s json_same=%s" % (
+                doc_position, doc_stamp, doc_narrow,
+                bool(doc_rows) and doc_rows[0].get("json_same_as_render"))
+        finally:
+            shutil.rmtree(work_e, ignore_errors=True)
+            shutil.rmtree(work_f, ignore_errors=True)
+    ok("AC-PPR11",
+       bool(doc_faces) and bool(doc_rows)
+       and doc_rows[0]["verdict"] == "one-derivation"
+       and doc_rows[0].get("receipt") == "channel-shelf-stamp"
+       and doc_rows[0].get("json_same_as_render") is True
+       and doc_rows[0].get("rendered_json_bytes") == doc_rows[0].get("landed_json_bytes")
+       and doc_position and doc_stamp and doc_narrow
+       and sig(doc_html) == sig_doc_html and sig(doc_json) == sig_doc_json,
+       "doc_faces=%d verdict=%s receipt=%s %s untouched=%s"
+       % (len(doc_faces), doc_rows[0]["verdict"] if doc_rows else "-",
+          doc_rows[0].get("receipt") if doc_rows else "-", dctx,
+          sig(doc_html) == sig_doc_html and sig(doc_json) == sig_doc_json))
+
     total = len(CHECKS)
     passed = total - len(FAILS)
     if FAILS:

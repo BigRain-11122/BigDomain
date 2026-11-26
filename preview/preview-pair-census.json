@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-26T08:57:13+08:00",
+  "generated_at": "2026-11-26T09:36:30+08:00",
   "law": "a split is claimed only when the two halves' last commits differ; an mtime gap alone is published as a bucket, never as a split",
   "oldest_split": {
     "delta_hours": 749.7,
@@ -404,18 +404,18 @@
     {
       "delta_seconds": 0,
       "html": {
-        "bytes": 16419,
+        "bytes": 16413,
         "commit": "4d90cde5",
-        "mtime": "2026-11-26T08:25:53+08:00",
-        "mtime_epoch": 1795652753,
-        "sha": "42AFAE4E"
+        "mtime": "2026-11-26T09:20:36+08:00",
+        "mtime_epoch": 1795656036,
+        "sha": "02E2A6A1"
       },
       "json": {
-        "bytes": 17954,
+        "bytes": 18052,
         "commit": "4d90cde5",
-        "mtime": "2026-11-26T08:25:53+08:00",
-        "mtime_epoch": 1795652753,
-        "sha": "43D62783"
+        "mtime": "2026-11-26T09:20:36+08:00",
+        "mtime_epoch": 1795656036,
+        "sha": "520C1DA0"
       },
       "name": "battery-shard-report",
       "verdict": "same-run"
@@ -805,18 +805,18 @@
     {
       "delta_seconds": 0,
       "html": {
-        "bytes": 9637,
-        "commit": "4d90cde5",
-        "mtime": "2026-11-26T08:37:54+08:00",
-        "mtime_epoch": 1795653474,
-        "sha": "AE44F3AA"
+        "bytes": 10956,
+        "commit": "37c78dce",
+        "mtime": "2026-11-26T09:09:05+08:00",
+        "mtime_epoch": 1795655345,
+        "sha": "3EFEDFDC"
       },
       "json": {
-        "bytes": 13105,
-        "commit": "4d90cde5",
-        "mtime": "2026-11-26T08:37:54+08:00",
-        "mtime_epoch": 1795653474,
-        "sha": "4F076078"
+        "bytes": 15109,
+        "commit": "37c78dce",
+        "mtime": "2026-11-26T09:09:05+08:00",
+        "mtime_epoch": 1795655345,
+        "sha": "0727B9A7"
       },
       "name": "face-pair-receipt",
       "verdict": "same-run"
@@ -863,7 +863,7 @@
       "delta_seconds": 0,
       "html": {
         "bytes": 4403,
-        "commit": "4d90cde5",
+        "commit": "37c78dce",
         "mtime": "2026-11-26T08:56:37+08:00",
         "mtime_epoch": 1795654597,
         "sha": "10692497"
@@ -895,16 +895,18 @@
         "sha": "3CCD8DB3"
       },
       "name": "first-yuan",
-      "verdict": "history-split"
+      "pair_receipt": "one-derivation",
+      "receipt": "channel-splice",
+      "verdict": "channel-receipt"
     },
     {
       "delta_seconds": 0,
       "html": {
         "bytes": 55908,
-        "commit": "4d90cde5",
-        "mtime": "2026-11-26T08:55:36+08:00",
-        "mtime_epoch": 1795654536,
-        "sha": "10896C57"
+        "commit": "37c78dce",
+        "mtime": "2026-11-26T09:35:53+08:00",
+        "mtime_epoch": 1795656953,
+        "sha": "7BF86690"
       },
       "json": null,
       "name": "index",
@@ -2034,15 +2036,15 @@
       "verdict": "same-run"
     }
   ],
-  "round": 3506,
+  "round": 3507,
   "same_run_seconds": 120,
   "self_excluded": "preview-pair-census",
   "source": "tools/preview_pair_census.py",
   "totals": {
-    "channel-receipt": 2,
-    "explained": 6,
+    "channel-receipt": 3,
+    "explained": 7,
     "frozen-excused": 11,
-    "history-split": 9,
+    "history-split": 8,
     "html": 106,
     "no-json": 3,
     "paired": 103,
