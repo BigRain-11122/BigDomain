@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-26T16:42:02+08:00",
+  "generated_at": "2026-11-26T16:57:44+08:00",
   "law": "a split is claimed only when the two halves' last commits differ; an mtime gap alone is published as a bucket, never as a split",
   "oldest_split": {
     "delta_hours": 749.7,
@@ -806,14 +806,14 @@
       "delta_seconds": 0,
       "html": {
         "bytes": 14971,
-        "commit": "6f1cfc88",
+        "commit": "97ae0de6",
         "mtime": "2026-11-26T16:41:24+08:00",
         "mtime_epoch": 1795682484,
         "sha": "F88B31C5"
       },
       "json": {
         "bytes": 22042,
-        "commit": "6f1cfc88",
+        "commit": "97ae0de6",
         "mtime": "2026-11-26T16:41:24+08:00",
         "mtime_epoch": 1795682484,
         "sha": "8D73F6F6"
@@ -2034,7 +2034,7 @@
       "verdict": "same-run"
     }
   ],
-  "round": 3511,
+  "round": 3512,
   "same_run_seconds": 120,
   "self_excluded": "preview-pair-census",
   "source": "tools/preview_pair_census.py",
