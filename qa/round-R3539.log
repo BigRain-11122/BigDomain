@@ -1,0 +1,32 @@
+R3539 evidence (2026-11-27)
+AC-PWC17: tools/membership_face.py closes at its birth site.
+
+pre-registration : src/os/backlog.md R3539 PIN line (in tree before any code edit)
+suite           : python -m unittest src.os.test_preview_writer_census
+                  Ran 55 tests -> OK   (was 51; four new arms under AC-PWC17)
+census before   : kind=gap write_calls=4 face_calls=0 landing_paths=[membership-face.html]
+census after    : PWC-CHECK VERDICT PASS read_only=True modules=119 closed=19 gap=90 reader=10
+
+end-to-end (real landing, not asserted):
+  $ python tools/membership_face.py
+  WROTE tiers=4 paid=3 pending=2 matched=1 blocked=4 html=10881B json=7051B
+  APPLIED R3539 changed=True bytes=38402 lf_only=True bom=False
+  latest_artifact->preview/membership-face.html (10881B) + preview/membership-face.json (7051B)
+  $ python tools/membership_face.py --check
+  VERDICT PASS tiers=4 paid=3 pending=2 matched=1 blocked=4 privs=11
+  rc=0
+
+gates:
+  src/os/suite_matrix_reconcile.py --write  -> DOC-CURRENT
+  src/os/suite_matrix_reconcile.py --check  -> DOC-CURRENT
+  tools/deliverable_index.py --write        -> faces=9 defects=0 index=56337B
+  tools/status_export_fresh.py --check      -> VERDICT R3539 PASS
+  src/os/export_round.py --check            -> VERDICT PASS
+  src/os/state_io.py --check                -> CANON-CLEAN bytes=45656 crlf=222 bare_lf=0 off_indent=0
+  git commit hooks                          -> HOOK OK staged=10 tree=PASS carrier=PASS matrix=PASS
+
+carried by name, not claimed:
+  battery page reads BSR-CHECK RED E_REGISTRY_DRIFT after the 51 -> 55 criteria bump;
+  one direct re-derivation was cancelled at 5 minutes with no output.
+  qa_log --ledger-check broken=5; Docker absent; three qa/crawl-* files are not this window's.
+  ZERO payment capability, no network beyond loopback: the five physical pieces still gate buyers.
