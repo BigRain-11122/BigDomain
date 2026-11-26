@@ -1,0 +1,96 @@
+R3517 evidence - the ledger red was one stored line in the wrong shape
+======================================================================
+
+Question the board carried in: round R3514 committed work but "never wrote
+a budget line", so seven os-ledger suites were red on rounds_without_ledger
+= 3514 and the proposed fix was a named exemption.
+
+1. Measured first, read-only
+----------------------------
+python src/os/ledger_lines.py --check
+  lines total=134 window=134 kinds ledger=18 round=112 other=4
+  rounds_without_ledger: 3514   VERDICT DIRTY
+
+classify probe over the live window (in process, no writes):
+  exactly ONE dated ledger-shaped line:
+  2026-11-26 R3514 tokens: local=~30k api=0 api_reason=no cloud call: ...
+  classify() -> "round"  because LEDGER_PREFIX_RE = ^R(\d{3,5}) tokens:
+  LEDGER_PRESENCE_RE tolerates the date prefix, LEDGER_PREFIX_RE does not.
+
+python src/os/repair_tokens_prefix_R2597.py --check   (before the change)
+  {"verdict":"DIRTY","rounds":1,"detail":[{"round":"3514","items":[]}]}
+  i.e. the door saw the missing budget line but had no candidate to heal -
+  its only shape was a 'tokens:' line with no round label.
+
+Conclusion: the line exists on disk. An exemption would have reported a
+written budget line as never written, so none was added.
+
+2. Change (two sites, both additive)
+------------------------------------
+src/os/repair_tokens_prefix_R2597.py
+  - second shape: a line that reads as LEDGER_PRESENCE but not as
+    LEDGER_PREFIX is a candidate; --apply strips ONLY ^YYYY-MM-DD\s+ and
+    then requires the shipped classifier to read it as a ledger line.
+  - AC-RTP7 (two arms) added to src/os/test_repair_tokens_prefix.py.
+
+src/os/state_append.py
+  - _ledger_dated() asks the two shipped regexes; --line payloads of that
+    shape are refused by name E_RSA_LEDGER_DATE (rc=2, zero bytes, no temp
+    file, hint names the repair door). --tokens/--round and a bare
+    'R<n> tokens:' still land; a dated NON-ledger line still lands.
+  - AC-RSA13 (three arms) added to src/os/test_state_append.py.
+
+Registry counters moved with the criteria: reconcile_all.py and
+state/suite-matrix.json declare os-ledger-tokens-prefix-repair 6 -> 8 and
+os-state-append 12 -> 13.
+
+3. Heal and read-back
+---------------------
+python src/os/repair_tokens_prefix_R2597.py --check
+  {"verdict":"DIRTY","rounds":1,"detail":[{"round":"3514","items":[120]}]}
+python src/os/repair_tokens_prefix_R2597.py --apply
+  {"action":"apply","rounds":["3514"],"items":[120],"bytes":71220,
+   "verdict":"REPAIRED"}
+  one item differs, 11 bytes fewer ('2026-11-26 '), every key equal
+python src/os/ledger_lines.py --check
+  kinds ledger=19 round=111 other=4
+  rounds_without_ledger: none  ledger_without_round: none
+  baseline missing=0 orphan=0  VERDICT CLEAN
+
+4. Gates
+--------
+SUITE PASS 8/8   src/os/test_repair_tokens_prefix.py (AC-RTP7 x2 added)
+SUITE PASS 13/13 src/os/test_state_append.py (AC-RSA13 added)
+SHARD rc=0 os-ledger selected=13 green=13 criteria=104 crit_mismatch=0
+SHARD rc=0 os-export selected=20 green=20 criteria=170 crit_mismatch=0
+SHARD rc=0 os-queue  selected=16 green=16 criteria=98  crit_mismatch=0
+
+Pages re-derived in derivation order after the state writes:
+  tools/battery_shard_report.py   json=18047B html=16413B
+                                  BSR-CHECK VERDICT PASS (page RED by design)
+  tools/preview_pair_census.py    html=106 paired=103 history_split=4
+                                  channel_receipt=7 frozen_excused=11
+                                  PPC-CHECK VERDICT PASS
+  tools/ledger_reconcile_face.py  html=8656B json=6151B VERDICT PASS 6/6
+  src/os/export_round.py          export_ts 2026-11-27T00:27:44+08:00
+                                  VERDICT R3517 PASS / WROTE ok=True
+
+facts_pair_ledger / deliverable index:
+  src/os/test_deliverable_index.py  SUITE PASS 28/28 gate=21
+
+5. Honest limits
+----------------
+- One stored log line was edited: its date prefix was removed and nothing
+  else. No archive was touched and no other log line was rewritten.
+- E_RTP_NOT_LEDGER and E_RTP_HAS_LEDGER are proved on repair() directly,
+  because --apply's candidate set is closed by the shape law and a stale or
+  hand-built findings list is the only way to reach them. Recorded rather
+  than faked with an unreachable input.
+- The battery page re-derivation was reported silent twice before; measured
+  cause this round: piping the producer through Select-Object -Last buffers
+  its whole output, so the runner sees zero bytes. Run it unpiped.
+- The commit carries round R3516 as well, whose product work had been left
+  uncommitted on the tree (state tick 3516, no commit).
+- ZERO payment capability, no network beyond loopback. The five physical
+  pieces (merchant id, server+domain+filing+ICP, miniprogram appid+secret,
+  ...) still gate every buyer.

@@ -36,6 +36,7 @@ BASE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(BASE)
 PREVIEW = os.path.join(REPO, "preview")
 STATE = os.path.join(REPO, "src", "os", "state.json")
+LEDGER_DIR = os.path.join(REPO, "src", "sandbox", "ledger")
 LABEL = "face-pair-receipt"
 JSON_OUT = os.path.join(PREVIEW, LABEL + ".json")
 HTML_OUT = os.path.join(PREVIEW, LABEL + ".html")
@@ -122,6 +123,48 @@ FACES = [
         "why": ("third oldest of the twelve splits (742.4h): html last committed at "
                 "700dd89a (the same R3288 back-hop channel), json at d3faa192 (the "
                 "R2119 buyer-question-history producer)"),
+        # R3516: replayed the producer AS IT STOOD at d3faa192 over its own pinned
+        # fixtures. Unlike R3510's face, this producer pinned only the API clock
+        # (A._now_utc); the ledger filled every ts_utc from the WALL clock, and
+        # compute_tx_id hashes that ts, so the landed tx digests named a second
+        # the report never recorded. The second was recovered by enumeration: the
+        # landed spend tx id is matched against compute_tx_id over a candidate
+        # span, and the hit (2026-10-25T03:31:25Z) is what makes the render a
+        # function of its fixtures again. The channel was then applied as it stood
+        # at 700dd89a with the hop measurement the landed block itself records -
+        # that number is a witness of when the channel ran, not a derivation.
+        "historical": {
+            "commit": "d3faa192",
+            "channel_commit": "700dd89a",
+            "method": ("git archive --output=<tar> d3faa192 src, extract to a temp "
+                       "tree, run that tree's preview_R2119.main() in process with "
+                       "ledger.now_utc pinned to the enumerated second, then splice "
+                       "that tree's own channel block from 700dd89a with the face "
+                       "name spelled <slug>.html"),
+            "producer_clock_pin": "2026-10-25T03:31:25Z",
+            "clock_witness": {
+                "tx_type": "spend",
+                "action": "spend",
+                "ref": "preview-sale-1",
+                "ref_type": "order",
+                "entries": [["usr:bob", "debit", 10],
+                            ["pool:reserve", "credit", 10]],
+                "tx_id": "06367a3ed76862ed",
+            },
+            "rendered_html_bytes": 18121,
+            "rendered_html_sha256_12": "bd375970052a",
+            "rendered_json_bytes": 30303,
+            "rendered_json_sha256_12": "c86157d24bc9",
+            "landed_html_bytes": 18840,
+            "landed_html_sha256_12": "eec871f68baa",
+            "landed_json_bytes": 30303,
+            "landed_json_sha256_12": "c86157d24bc9",
+            "json_byte_identical": True,
+            "html_channel_splice": ("the rendered page plus the channel block as it "
+                                    "stood at 700dd89a equals the landed page byte for "
+                                    "byte, no normalisation"),
+            "witnesses": ["channel-hop-measurement", "channel-face-spelling"],
+        },
     },
     {
         "slug": "apimarket-report-selleranswers",
@@ -1089,6 +1132,37 @@ def landed_body_matches(hist, landed_html):
     body = CHANNEL_BLOCK.sub(b"", landed_html, count=1)
     return (len(body) == hist["rendered_html_bytes"]
             and sha256_hex(body)[:12] == hist["rendered_html_sha256_12"])
+
+
+def clock_pin_reproduces(hist, pin=None):
+    """R3516: the second a producer's tx digests were hashed at, recovered by
+    enumeration, is load-bearing rather than decorative.
+
+    A producer that pins its API clock but not the ledger clock leaves every
+    ts_utc on the wall clock, and compute_tx_id hashes that ts - so the landed
+    report names a second it never recorded. The window recovered it by matching
+    the landed tx id against compute_tx_id over a candidate span and recorded the
+    pin plus the tx it was proved by. This re-check is cheap and load-bearing:
+    the recorded second must still reproduce the recorded tx id, a second either
+    side must not, and a record without the pin or the witness is refused rather
+    than trusted. The hashing rule is borrowed from the ledger module, not copied.
+    """
+    if not hist:
+        return None
+    witness = hist.get("clock_witness")
+    pin = pin or hist.get("producer_clock_pin")
+    if not pin or not isinstance(witness, dict):
+        return None
+    need = ("tx_type", "action", "ref", "ref_type", "entries", "tx_id")
+    if any(k not in witness for k in need) or not witness["entries"]:
+        return None
+    if LEDGER_DIR not in sys.path:
+        sys.path.insert(0, LEDGER_DIR)
+    import ledger as L
+    entries = [(a, d, int(n)) for a, d, n in witness["entries"]]
+    return (L.compute_tx_id(pin, witness["tx_type"], witness["action"],
+                            witness["ref"], witness["ref_type"], entries)
+            == witness["tx_id"])
 
 
 def landed_digest_agrees(hist, landed_html, landed_json):

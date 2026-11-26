@@ -103,6 +103,71 @@ class RepairTokensPrefixCase(unittest.TestCase):
             R.apply(self.path)
         self.assertEqual(ctx.exception.code, 'E_RTP_AMBIGUOUS')
 
+    def test_ac_rtp7_dated_ledger_line_is_healable(self):
+        """AC-RTP7 (R3517): the date prefix is the only malformation."""
+        lines = ['2026-11-26 R9001 PRODUCT window did a thing.',
+                 '2026-11-26 R9001 GROUP SCAN read the group files.',
+                 '2026-11-26 R9001 tokens: local=~30k api=0 '
+                 'api_reason=no cloud call']
+        before_text = self.write(lines)
+        code, report = R.check(self.path)
+        self.assertEqual(code, 2)
+        self.assertEqual([f['round'] for f in report['detail']], ['9001'])
+        self.assertEqual(report['detail'][0]['items'], [2])
+        self.assertEqual(open(self.path, 'rb').read().decode('utf-8'),
+                         before_text)
+        out = R.apply(self.path)
+        self.assertEqual(out['verdict'], 'REPAIRED')
+        payload = json.loads(open(self.path, 'rb').read().decode('utf-8'))
+        self.assertEqual(payload['log'][2],
+                         'R9001 tokens: local=~30k api=0 '
+                         'api_reason=no cloud call')
+        self.assertEqual(LL.classify(payload['log'][2]), 'ledger')
+        report_clean = LL.audit(payload['log'])
+        self.assertEqual(report_clean['rounds_without_ledger'], [])
+        # AC-RTP8: one item differs, every other byte and key is equal, and a
+        # second apply is a no-byte no-op.
+        after_text = open(self.path, 'rb').read().decode('utf-8')
+        self.assertEqual(len(before_text) - len('2026-11-26 '),
+                         len(after_text))
+        before = json.loads(before_text)
+        for key in before:
+            if key != 'log':
+                self.assertEqual(before[key], payload[key])
+        self.assertEqual(before['log'][:2], payload['log'][:2])
+        again = R.apply(self.path)
+        self.assertEqual(again['verdict'], 'CLEAN')
+        self.assertEqual(open(self.path, 'rb').read().decode('utf-8'),
+                         after_text)
+
+    def test_ac_rtp7_negative_controls(self):
+        """AC-RTP7 (c): the three refusals still hold on the new shape.
+
+        The candidate set is defined BY the shape law, so a line that would
+        not classify as a ledger line after the strip is never a candidate
+        at all, and a round that already owns a ledger line is never in the
+        findings - both refusals are therefore proved on repair() itself,
+        which is the entry a stale or hand-built findings list would reach,
+        and it must refuse instead of rewriting anything.
+        """
+        with self.assertRaises(R.RepairError) as ctx:
+            R.repair({'log': ['2026-11-26 R9001 PRODUCT window did a thing.']},
+                     [{'round': '9001', 'items': [0]}])
+        self.assertEqual(ctx.exception.code, 'E_RTP_NOT_LEDGER')
+        with self.assertRaises(R.RepairError) as ctx:
+            R.repair({'log': ['2026-11-26 R9001 PRODUCT window did a thing.',
+                              'R9001 tokens: local=1 api=0',
+                              '2026-11-26 R9001 tokens: local=2 api=0']},
+                     [{'round': '9001', 'items': [2]}])
+        self.assertEqual(ctx.exception.code, 'E_RTP_HAS_LEDGER')
+        # two candidates in one round block are ambiguous, never guessed
+        self.write(['2026-11-26 R9001 PRODUCT window did a thing.',
+                    '2026-11-26 R9001 tokens: local=1 api=0',
+                    'tokens: local=2 api=0'])
+        with self.assertRaises(R.RepairError) as ctx:
+            R.apply(self.path)
+        self.assertEqual(ctx.exception.code, 'E_RTP_AMBIGUOUS')
+
     def test_ac_rtp6_source_is_ascii_and_stdlib_only(self):
         src = open(os.path.join(HERE, 'repair_tokens_prefix_R2597.py'),
                    'rb').read()

@@ -762,6 +762,38 @@ def main():
     ok("AC-PPR17", bool(hist_rows) and body_ok and body_neg and body_refuse
        and body_untouched, body_ctx or "no historical record on any row")
 
+    # AC-PPR18: a replay whose producer left the ledger clock on the wall needs
+    # the second it was hashed at put on the record, and that second must carry
+    # weight. Three ways: every record with a clock witness reproduces its tx id,
+    # a second either side does not (so the pin is the reason, not a coincidence),
+    # and a record that names no pin or no witness is refused rather than trusted.
+    clock_rows = [r for r in hist_rows if r["historical"].get("clock_witness")]
+    clk_ok = clk_neg = clk_refuse = clk_untouched = False
+    clk_ctx = ""
+    if clock_rows:
+        clk_hits = []
+        for clk_row in clock_rows:
+            hist = clk_row["historical"]
+            html_p = os.path.join(PREVIEW, clk_row["slug"] + ".html")
+            json_p = os.path.join(PREVIEW, clk_row["slug"] + ".json")
+            sig_h = sig(html_p)
+            sig_j = sig(json_p)
+            hit = FPR.clock_pin_reproduces(hist)
+            clk_hits.append((clk_row["slug"], hit))
+            if clk_row is clock_rows[0]:
+                later = FPR.clock_pin_reproduces(hist, pin="2026-10-25T03:31:26Z")
+                clk_neg = later is False
+                clk_refuse = (FPR.clock_pin_reproduces(
+                    {"producer_clock_pin": hist["producer_clock_pin"]}) is None
+                    and FPR.clock_pin_reproduces({"clock_witness": hist["clock_witness"]}) is None)
+                clk_untouched = (sig(html_p) == sig_h and sig(json_p) == sig_j)
+        clk_ok = all(h is True for _s, h in clk_hits)
+        clk_ctx = "rows=%d pin=%s hit=%s neg=%s refuse=%s" % (
+            len(clock_rows), clock_rows[0]["historical"].get("producer_clock_pin"),
+            ",".join("%s:%s" % c for c in clk_hits), clk_neg, clk_refuse)
+    ok("AC-PPR18", bool(clock_rows) and clk_ok and clk_neg and clk_refuse
+       and clk_untouched, clk_ctx or "no clock-witness record on any row")
+
     total = len(CHECKS)
     passed = total - len(FAILS)
     if FAILS:

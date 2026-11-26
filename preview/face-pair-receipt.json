@@ -101,9 +101,51 @@
       "channel_block_bytes": 719,
       "channel_how": "inserted",
       "current_schema_version": 17,
-      "detail": "landed page is a schema 12 render and the renderer is at schema 17, so no re-render at HEAD can reproduce it; explained, not excused: first difference at byte 1652",
+      "detail": "landed page is a schema 12 render and the renderer is at schema 17, so no re-render at HEAD can reproduce it; explained, not excused: first difference at byte 1652; and the pair IS reproduced by the producer as it stood at d3faa192 (html 18121 B + the channel block = 18840 B, json 30303 B identical), so the split is producer evolution, not editing",
       "first_diff_context": "d from the read faces</div>\n<div class=\"marker\">AIGC / sandbox artifact: synthet",
       "first_diff_offset": 1652,
+      "historical": {
+        "channel_commit": "700dd89a",
+        "clock_witness": {
+          "action": "spend",
+          "entries": [
+            [
+              "usr:bob",
+              "debit",
+              10
+            ],
+            [
+              "pool:reserve",
+              "credit",
+              10
+            ]
+          ],
+          "ref": "preview-sale-1",
+          "ref_type": "order",
+          "tx_id": "06367a3ed76862ed",
+          "tx_type": "spend"
+        },
+        "commit": "d3faa192",
+        "html_channel_splice": "the rendered page plus the channel block as it stood at 700dd89a equals the landed page byte for byte, no normalisation",
+        "json_byte_identical": true,
+        "landed_digests_agree": true,
+        "landed_html_bytes": 18840,
+        "landed_html_sha256_12": "eec871f68baa",
+        "landed_html_sha256_12_now": "eec871f68baa",
+        "landed_json_bytes": 30303,
+        "landed_json_sha256_12": "c86157d24bc9",
+        "landed_json_sha256_12_now": "c86157d24bc9",
+        "method": "git archive --output=<tar> d3faa192 src, extract to a temp tree, run that tree's preview_R2119.main() in process with ledger.now_utc pinned to the enumerated second, then splice that tree's own channel block from 700dd89a with the face name spelled <slug>.html",
+        "producer_clock_pin": "2026-10-25T03:31:25Z",
+        "rendered_html_bytes": 18121,
+        "rendered_html_sha256_12": "bd375970052a",
+        "rendered_json_bytes": 30303,
+        "rendered_json_sha256_12": "c86157d24bc9",
+        "witnesses": [
+          "channel-hop-measurement",
+          "channel-face-spelling"
+        ]
+      },
       "json_same_as_render": false,
       "landed_carries_schema_badge": false,
       "landed_html": "preview/apimarket-report-buyerquestions.html",
@@ -437,9 +479,9 @@
       "why": "twelfth of the twelve splits: html last committed at 897e0f99 (the R3461 front-door round), json at 7e3a6f9c (R3333), which shipped the sandbox one-click proof; this producer starts eight real servers, reads every door over a socket and tears them down, and it keeps its facts at the TOP level of its report with no evidence block - the graded rows are the evidence and the hub URL is read back off the landed page (AC-PPR15)"
     }
   ],
-  "generated_at": "2026-11-26T23:01:15+08:00",
+  "generated_at": "2026-11-26T23:47:12+08:00",
   "law": "a history split is excused for one face only when the producer's own html, plus the shipped post-render channel, reproduces the landed html byte for byte - and for a producer that applies the channel itself, when its own html equals the landed page with no block surgery at all",
-  "round": 3514,
+  "round": 3516,
   "source": "tools/face_pair_receipt.py",
   "totals": {
     "drift": 0,

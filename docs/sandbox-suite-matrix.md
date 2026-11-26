@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 830 | 6954 | 675/675 | R2739 |
+| 830 | 6957 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -517,7 +517,7 @@
 | 478 | os-state-fold-run | ../os/test_state_fold_run.py | 18 | green | 0.2 |
 | 479 | os-fold-round-block-boundary | ../os/test_fold_round_block_boundary.py | 6 | green | 0.4 |
 | 480 | os-state-io | ../os/test_state_io.py | 12 | green | 1.5 |
-| 481 | os-state-append | ../os/test_state_append.py | 12 | no-evidence | - |
+| 481 | os-state-append | ../os/test_state_append.py | 13 | no-evidence | - |
 | 482 | os-one-off-round-scripts | ../os/test_one_off_round_scripts.py | 6 | no-evidence | - |
 | 483 | os-pre-commit-gate | ../os/test_pre_commit_gate.py | 22 | no-evidence | - |
 | 484 | os-closeout | ../os/test_closeout.py | 29 | no-evidence | - |
@@ -649,7 +649,7 @@
 | 610 | os-status-export-writer-transport-scope | ../os/test_status_export_writer_transport_scope.py | 6 | green | 31.6 |
 | 611 | os-ledger-line-shape-guard | ../os/test_ledger_line_shape_guard.py | 6 | green | 1.0 |
 | 612 | os-ledger-round-main-shape | ../os/test_ledger_round_main_shape.py | 9 | no-evidence | - |
-| 613 | os-ledger-tokens-prefix-repair | ../os/test_repair_tokens_prefix.py | 6 | green | 0.8 |
+| 613 | os-ledger-tokens-prefix-repair | ../os/test_repair_tokens_prefix.py | 8 | green | 0.8 |
 | 614 | os-own-usage-block-renderer | ../os/test_own_usage_block_renderer.py | 6 | green | 1.5 |
 | 615 | os-contract-usage-renderer | ../os/test_contract_usage_renderer.py | 6 | green | 1.8 |
 | 616 | os-queue-floor-export-face | ../os/test_queue_floor_export_face.py | 6 | green | 0.4 |
@@ -867,7 +867,7 @@
 | 828 | claim-census | test_claim_census.py | 10 | no-evidence | - |
 | 829 | os-stage-residue | ../os/test_stage_residue.py | 4 | no-evidence | - |
 | 830 | os-corpus-supply-chain | ../os/test_corpus_supply_chain.py | 7 | no-evidence | - |
-|  | 合计 |  | 6954 | green 675 / FAIL 0 / no-evidence 155 |  |
+|  | 合计 |  | 6957 | green 675 / FAIL 0 / no-evidence 155 |  |
 
 ## 证据出处
 

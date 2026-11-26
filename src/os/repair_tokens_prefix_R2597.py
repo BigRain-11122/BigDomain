@@ -19,6 +19,27 @@ AC-RTP5  refuses E_RTP_AMBIGUOUS when two or more unlabelled tokens lines
 AC-RTP6  pure ASCII, standard library only, no network; the only two
          actions are --check and --apply.
 
+R3517 second shape (the same door, a different malformation):
+
+AC-RTP7  a ledger line that carries a date prefix is healable: the live
+         shape law LEDGER_PREFIX_RE refuses a date prefix, so
+         '2026-11-26 R3514 tokens: ...' classifies as a round narrative
+         and its round reads as having no ledger line at all (measured:
+         exactly one such line over the live window, round 3514). --check
+         names it and --apply strips ONLY the leading 'YYYY-MM-DD ' when
+         the stripped form classifies as a ledger line; the existing
+         refusals still hold - a strip that would not read as a ledger
+         line is E_RTP_NOT_LEDGER, an already-ledger round is
+         E_RTP_HAS_LEDGER, two candidates in one round block are
+         E_RTP_AMBIGUOUS.
+AC-RTP8  the payload proof of AC-RTP4 covers this shape unchanged: one
+         log item differs, every other byte and key is equal, and a
+         second --apply reads CLEAN and writes no byte.
+
+Why a repair and not an exemption: the line exists on disk. Excusing its
+round in FOLD_CARRY_EXEMPT would permanently report a written budget line
+as never written, which is the papering-over this board forbids.
+
 Usage:
   python src/os/repair_tokens_prefix_R2597.py --check
   python src/os/repair_tokens_prefix_R2597.py --apply
@@ -40,6 +61,19 @@ import state_io as SIO
 STATE = os.path.join(HERE, 'state.json')
 ROUND_NO_RE = re.compile(r'R(\d{3,5})')
 TOKENS_RE = re.compile(r'^tokens:\s')
+DATE_PREFIX_RE = re.compile(r'^\d{4}-\d{2}-\d{2}\s+')
+
+
+def _dated_ledger(line):
+    """A ledger-shaped line the live shape law cannot read (R3517)."""
+    text = line.strip()
+    return (LL.LEDGER_PRESENCE_RE.match(text) is not None
+            and LL.LEDGER_PREFIX_RE.match(text) is None)
+
+
+def _unlabelled_tokens(line):
+    """A 'tokens:' line that landed without its round label (AC-RTP2)."""
+    return TOKENS_RE.match(line.strip()) is not None
 
 
 class RepairError(Exception):
@@ -74,7 +108,8 @@ def measure(raw):
     findings = []
     for round_no in sorted(set(missing)):
         candidates = [i for i, line in enumerate(log)
-                      if isinstance(line, str) and TOKENS_RE.match(line.strip())
+                      if isinstance(line, str)
+                      and (_unlabelled_tokens(line) or _dated_ledger(line))
                       and kinds[i] != 'ledger']
         mine = []
         for i in candidates:
@@ -105,10 +140,16 @@ def repair(payload, findings):
                               'R%s candidates=%d' % (round_no, len(items)))
         i = items[0]
         line = log[i]
-        labelled = 'R%s %s' % (round_no, line.lstrip())
-        if LL.classify(labelled) != 'ledger':
+        if _dated_ledger(line):
+            # Strip exactly the prefix the shape law refuses, nothing else:
+            # the date is the ONLY difference between what landed and what
+            # the classifier accepts, so the payload cannot move.
+            healed = DATE_PREFIX_RE.sub('', line.strip(), count=1)
+        else:
+            healed = 'R%s %s' % (round_no, line.lstrip())
+        if LL.classify(healed) != 'ledger':
             raise RepairError('E_RTP_NOT_LEDGER', 'R%s' % round_no)
-        log[i] = labelled
+        log[i] = healed
     return log
 
 

@@ -5230,7 +5230,7 @@ SUITES = [
     # line that forgot its date prefix is refused at the write site rather
     # than discovered later by a crash or a battery leg (AC-RSA1..AC-RSA10).
     ("os-state-append",
-     os.path.join("..", "os", "test_state_append.py"), 12),
+     os.path.join("..", "os", "test_state_append.py"), 13),
     # R2838: retiring a one-off family does not stop it from growing again -
     # 226 state_append_R*.py and 682 export_R*/closeout_R*.py were deleted and
     # nothing refused the next one (R2837 disclosure (b)). The law is a freeze
@@ -6542,7 +6542,7 @@ SUITES = [
     # stated in the module docstring BEFORE this file existed and are the
     # R2597 verification window's birth-site repair.)
     ("os-ledger-tokens-prefix-repair",
-     os.path.join("..", "os", "test_repair_tokens_prefix.py"), 6),
+     os.path.join("..", "os", "test_repair_tokens_prefix.py"), 8),
     # R2383: the imported runner contract had one owner after R2373, but a
     # tool's OWN argument block still had none - the guard wrote a literal
     # and the help wire composed its own flag line. One renderer owns that

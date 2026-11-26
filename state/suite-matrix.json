@@ -512,7 +512,7 @@
 | 473 | os-state-fold-run | ../os/test_state_fold_run.py | 18 | no-evidence | - |
 | 474 | os-fold-round-block-boundary | ../os/test_fold_round_block_boundary.py | 6 | no-evidence | - |
 | 475 | os-state-io | ../os/test_state_io.py | 12 | no-evidence | - |
-| 476 | os-state-append | ../os/test_state_append.py | 12 | no-evidence | - |
+| 476 | os-state-append | ../os/test_state_append.py | 13 | no-evidence | - |
 | 477 | os-one-off-round-scripts | ../os/test_one_off_round_scripts.py | 6 | no-evidence | - |
 | 478 | os-pre-commit-gate | ../os/test_pre_commit_gate.py | 21 | no-evidence | - |
 | 479 | os-closeout | ../os/test_closeout.py | 29 | no-evidence | - |
@@ -644,7 +644,7 @@
 | 605 | os-status-export-writer-transport-scope | ../os/test_status_export_writer_transport_scope.py | 6 | no-evidence | - |
 | 606 | os-ledger-line-shape-guard | ../os/test_ledger_line_shape_guard.py | 6 | no-evidence | - |
 | 607 | os-ledger-round-main-shape | ../os/test_ledger_round_main_shape.py | 9 | no-evidence | - |
-| 608 | os-ledger-tokens-prefix-repair | ../os/test_repair_tokens_prefix.py | 6 | no-evidence | - |
+| 608 | os-ledger-tokens-prefix-repair | ../os/test_repair_tokens_prefix.py | 8 | no-evidence | - |
 | 609 | os-own-usage-block-renderer | ../os/test_own_usage_block_renderer.py | 6 | no-evidence | - |
 | 610 | os-contract-usage-renderer | ../os/test_contract_usage_renderer.py | 6 | no-evidence | - |
 | 611 | os-queue-floor-export-face | ../os/test_queue_floor_export_face.py | 6 | no-evidence | - |

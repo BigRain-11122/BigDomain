@@ -88,9 +88,24 @@ def atomic_write(path, text):
             os.remove(temp)
 
 
+def _ledger_dated(text):
+    """A budget line the live shape law cannot read (R3517, AC-RSA13).
+
+    LEDGER_PREFIX_RE is anchored at the round marker and refuses a date
+    prefix, while LEDGER_PRESENCE_RE tolerates one. A line that reads as
+    presence but not as prefix is therefore stored bytes no live reader
+    counts as a ledger line: measured at R3514, where a dated 'tokens:' line
+    left its round reported as having no budget line at all. The gate asks
+    the shipped regexes rather than a copy of them, so the two laws cannot
+    drift apart.
+    """
+    text = (text or "").strip()
+    return (ledger_lines.LEDGER_PRESENCE_RE.match(text) is not None
+            and ledger_lines.LEDGER_PREFIX_RE.match(text) is None)
+
+
 def _break_at(text):
     """Index of the first line break in text, or -1 (R3309).
-
     One log item is one line: the archive is appended with
     `"\\n".join(window)`, so an item that carries a break cannot be found
     again as one line, and a terminal break is silently trimmed by the
@@ -122,6 +137,13 @@ def _collect(data, args):
         text = raw.strip()
         if not text:
             return None, _refuse("E_RSA_EMPTY_LINE", 3, "an empty --line")
+        if _ledger_dated(text):
+            return None, _refuse(
+                "E_RSA_LEDGER_DATE", 2,
+                "a budget line may not carry a date prefix; write it as "
+                "'R<n> tokens: ...' or pass --tokens with --round "
+                "(hint: python src/os/repair_tokens_prefix_R2597.py --apply "
+                "heals one already stored this way)")
         if text in existing:
             return None, {"rc": 0, "ok": False, "code": "E_RSA_DUPLICATE",
                           "detail": text[:60]}

@@ -37,7 +37,7 @@ import state_append as SA  # noqa: E402
 import logs_toolkit as LT  # noqa: E402
 import state_io  # noqa: E402
 
-EXPECTED_CRITERIA = 12
+EXPECTED_CRITERIA = 13
 MODULE = os.path.join(BASE, "state_append.py")
 RUNNER = os.path.join(SRC, "sandbox", "reconcile_all.py")
 LABEL = "os-state-append"
@@ -499,6 +499,58 @@ def ac_rsa12():
           "(lag, tick, ahead, skipped) and moves no heartbeat byte")
 
 
+def ac_rsa13():
+    """AC-RSA13: a dated budget line is refused at birth (R3517).
+
+    Three arms, in this order:
+      (a) 'YYYY-MM-DD R<n> tokens: ...' reads E_RSA_LEDGER_DATE with rc=2,
+          zero bytes moved and no temp file, because that shape classifies
+          as a round narrative and its round then reads as having no budget
+          line at all (measured on the shipped tree at R3514);
+      (b) the same payload in the shape the law reads (bare 'R<n> tokens:')
+          and the --tokens/--round vehicle both still land;
+      (c) narrowness: a DATED NON-ledger line ('2026-11-26 R9001 PRODUCT:')
+          is not caught by this gate - the guard is about the ledger shape,
+          not about date prefixes in general.
+    """
+    folder, path = world(["2026-11-16 R9001 PRODUCT: a dated older round"])
+    ok = False
+    try:
+        before = fingerprint(path)
+        names_before = sorted(os.listdir(folder))
+        dated = "2026-11-16 R9002 tokens: local=1 api=0 api_reason=spent"
+        code_a, out_a, _ = run_cli(["--state", path, "--round", "9002",
+                                    "--line", dated])
+        after = fingerprint(path)
+        arm_a = (code_a == 2 and "E_RSA_LEDGER_DATE" in out_a
+                 and before == after and names_before == sorted(os.listdir(folder))
+                 and "repair_tokens_prefix_R2597" in out_a)
+        code_b1, out_b1, _ = run_cli(["--state", path, "--round", "9002",
+                                      "--line", "R9002 tokens: local=1 api=0",
+                                      "--tick"])
+        code_b2, out_b2, _ = run_cli(["--state", path, "--round", "9003",
+                                      "--tokens", "local=2 api=0", "--tick"])
+        payload = state_io.parse(read_text(path))
+        arm_b = (code_b1 == 0 and code_b2 == 0
+                 and "R9002 tokens: local=1 api=0" in payload["log"]
+                 and "R9003 tokens: local=2 api=0" in payload["log"])
+        code_c, out_c, _ = run_cli(["--state", path, "--round", "9004",
+                                    "--line",
+                                    "2026-11-16 R9004 PRODUCT: dated but not "
+                                    "a budget line", "--tick"])
+        arm_c = code_c == 0 and "E_RSA_LEDGER_DATE" not in out_c
+        ok = arm_a and arm_b and arm_c
+        if not ok:
+            print("  measured: a=%r b=%r c=%r out_a=%r out_c=%r"
+                  % (arm_a, arm_b, arm_c, out_a.strip()[:120],
+                     out_c.strip()[:120]), flush=True)
+    finally:
+        cleanup(folder)
+    check(ok, "AC-RSA13 a dated budget line reads E_RSA_LEDGER_DATE with "
+          "rc=2 and zero bytes moved, the two lawful shapes still land, and "
+          "a dated non-ledger line is not caught by the gate")
+
+
 def main():
     print("state append suite (expected criteria %d)" % EXPECTED_CRITERIA,
           flush=True)
@@ -513,6 +565,7 @@ def main():
     ac_rsa10()
     ac_rsa11()
     ac_rsa12()
+    ac_rsa13()
     ac_rsa7()
     verdict = "SUITE PASS" if FAILS == 0 else "SUITE FAIL"
     print("%s %d/%d" % (verdict, PASSES, PASSES + FAILS), flush=True)
