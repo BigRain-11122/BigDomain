@@ -310,16 +310,66 @@
       "spliced_html_sha256": "6653cdbf48f509d0acd92004fac65811e197af91f597c966c4eda19a96b21ccb",
       "verdict": "one-derivation",
       "why": "tenth of the twelve splits: html last committed at 897e0f99 (the R3461 front-door round), json at 700dd89a, which shipped the R3288 back-hop channel; this producer seeds a demo ledger through the shipped Ledger API and every tx id is a content hash over the write second, so a later run reproduces the pair only when the clock is pinned to the second its own landed report records (AC-PPR13)"
+    },
+    {
+      "channel_block_bytes": 691,
+      "channel_how": "inserted",
+      "current_schema_version": null,
+      "detail": "landed html = producer html + the shipped channel block, equal byte for byte once the channel's own shelf stamp is normalised on both sides (landed 55302, today 55908): the stamp records when the channel ran, not which derivation the page is",
+      "json_same_as_render": false,
+      "landed_carries_schema_badge": false,
+      "landed_html": "preview/payment-gate-report.html",
+      "landed_html_bytes": 7682,
+      "landed_html_sha256": "6189495ae6e17f8f329fb1bb12ffbd743ce68c2d584b72e4055e5f6c14b6b520",
+      "landed_json": "preview/payment-gate-report.json",
+      "landed_json_bytes": 7177,
+      "landed_json_sha256": "6a5f112cf930788cbc382bedd1b5a5909ddcea6ce6e99e6f80ce0958ec2d3cbe",
+      "landed_schema_version": null,
+      "producer": "tools/payment_gate_report.py",
+      "raw_first_diff_offset": 6978,
+      "receipt": "channel-shelf-stamp",
+      "rendered_html_bytes": 6991,
+      "rendered_html_sha256": "6a3786d16b480f9e85c67cc7982b0b1458a08c5cc0a99357dcce0b7ea08699fa",
+      "rendered_json_bytes": 6959,
+      "rendered_json_sha256": "65766128d8b8830ca22df98c59c1a04425e4a25694076b3d2ed15b3506d1d5b2",
+      "replay": "main-from-report-two-clock-pin",
+      "replay_stamps": [
+        "generated_utc=2026-11-16T07:49:15Z (producer clock and payment sandbox clock)"
+      ],
+      "self_stamps": {
+        "landed": {
+          "sizes": {
+            "html": 7682,
+            "json": 7177
+          },
+          "source_sha256": "52efc7d777c5b4c2b9b7fe3d8db163f050927f4d82f3cad81d438e1518417296"
+        },
+        "rendered": {
+          "sizes": {
+            "html": 6991,
+            "json": 6959
+          },
+          "source_sha256": "bb0e6be59f6c895356facf30291383911d242ef9be59a24da70489ec89a0573b"
+        }
+      },
+      "shelf_stamp_landed": 55302,
+      "shelf_stamp_now": 55908,
+      "slug": "payment-gate-report",
+      "splice_offset": 6978,
+      "spliced_html_bytes": 7682,
+      "spliced_html_sha256": "b6761c73915e6beee499386e5f68c9c07f93e28047b7c1e54892d1378df37c49",
+      "verdict": "one-derivation",
+      "why": "eleventh of the twelve splits: html last committed at 897e0f99 (the R3461 front-door round), json at 700dd89a, which shipped the R3288 back-hop channel; this producer reads the wall clock in TWO packages - its own stamp plus the stale-timestamp refusals inside the shipped payment sandbox - so the pair is reproduced only when both sources are pinned to the second its landed report records (AC-PPR14)"
     }
   ],
-  "generated_at": "2026-11-26T15:37:16+08:00",
+  "generated_at": "2026-11-26T16:41:24+08:00",
   "law": "a history split is excused for one face only when the producer's own html, plus the shipped post-render channel, reproduces the landed html byte for byte - and for a producer that applies the channel itself, when its own html equals the landed page with no block surgery at all",
-  "round": 3509,
+  "round": 3511,
   "source": "tools/face_pair_receipt.py",
   "totals": {
     "drift": 0,
-    "faces": 10,
-    "one_derivation": 6,
+    "faces": 11,
+    "one_derivation": 7,
     "unreproducible": 0,
     "version_drift": 4
   }

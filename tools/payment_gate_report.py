@@ -84,6 +84,17 @@ ORDER_ID = "order-R2759-pack19"
 AMOUNT_CENT = 1990
 V3_SERIAL = "PUB_KEY_ID_2026111530"
 
+
+def _now():
+    """One clock source for the whole render (AC-PPR14).
+
+    The pair is a wall-clock report: the stamp it prints and the two stale
+    negative cases are both read from the wall clock. A replay can reproduce
+    the pair byte for byte only if that single source can be pinned to the
+    second the landed report records, so every read goes through here.
+    """
+    return datetime.datetime.now(datetime.timezone.utc)
+
 L = {
     "title": "19.9 \u652f\u4ed8\u901a\u9053\u9a8c\u6536\u62a5\u544a",
     "sub": "BigDomain \u00b7 P-47 \u7b2c\u56db\u9762 \u00b7 \u6c99\u7bb1\u5b9e\u6d4b",
@@ -218,7 +229,7 @@ def collect():
     bad_sig["sig"] = ("0" if bad_sig["sig"][0] != "0" else "1") + bad_sig["sig"][1:]
     bad_signer = ch.make_callback(ORDER_ID, AMOUNT_CENT, "nonce-sgn",
                                   signer="imposter")
-    past = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(
+    past = _now() - datetime.timedelta(
         seconds=ch.ts_window + 100)
     stale = ch.make_callback(ORDER_ID, AMOUNT_CENT, "nonce-ts",
                              ts_utc=past.strftime("%Y-%m-%dT%H:%M:%SZ"))
@@ -255,7 +266,7 @@ def collect():
     tampered["v3"]["body"] = tampered["v3"]["body"] + " "
     stale_v3 = v3ch.make_v3_callback(
         ORDER_ID, AMOUNT_CENT, "nonce-v3-ts",
-        ts_unix=int((datetime.datetime.now(datetime.timezone.utc) -
+        ts_unix=int((_now() -
                      datetime.timedelta(seconds=v3ch.ts_window + 100))
                     .timestamp()))
     notpaid = v3ch.make_v3_callback(ORDER_ID, AMOUNT_CENT, "nonce-v3-np",
@@ -303,8 +314,7 @@ def collect():
     imports_ok = all(name in allowed for name in imports)
 
     meas = {
-        "generated_utc": datetime.datetime.now(
-            datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "generated_utc": _now().strftime("%Y-%m-%dT%H:%M:%SZ"),
         "config": {"path": "src/sandbox/pay/config.json",
                    "sha256": _sha256(CONFIG)},
         "channels_built": sorted(channels.keys()),

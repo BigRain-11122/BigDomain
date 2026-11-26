@@ -33,8 +33,19 @@ class AdapterError(Exception):
         self.check = str(check)
 
 
+def now_utc():
+    """One clock source for the payment sandbox (AC-PPR14).
+
+    Both the timestamp a callback is signed with and the freshness check that
+    refuses a stale one read the wall clock. Keeping them behind one function
+    lets a replay pin the second a landed report recorded instead of
+    re-measuring "now".
+    """
+    return datetime.datetime.now(datetime.timezone.utc)
+
+
 def utc_now_iso():
-    return datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    return now_utc().strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 def parse_ts(ts_utc):
@@ -102,8 +113,7 @@ class MockChannel:
             ts = parse_ts(ts_utc)
         except ValueError:
             raise AdapterError("bad ts_utc: %s" % ts_utc) from None
-        delta = abs((datetime.datetime.now(datetime.timezone.utc) - ts)
-                    .total_seconds())
+        delta = abs((now_utc() - ts).total_seconds())
         if delta > self.ts_window:
             raise AdapterError("ts outside +-%ds window (delta=%.0fs)"
                                % (self.ts_window, delta))

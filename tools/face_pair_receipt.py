@@ -141,6 +141,17 @@ FACES = [
                 "second, so a later run reproduces the pair only when the clock is "
                 "pinned to the second its own landed report records (AC-PPR13)"),
     },
+    {
+        "slug": "payment-gate-report",
+        "producer": os.path.join("tools", "payment_gate_report.py"),
+        "replay": {"kind": "clock-pin", "function": "main"},
+        "why": ("eleventh of the twelve splits: html last committed at 897e0f99 (the "
+                "R3461 front-door round), json at 700dd89a, which shipped the R3288 "
+                "back-hop channel; this producer reads the wall clock in TWO packages "
+                "- its own stamp plus the stale-timestamp refusals inside the shipped "
+                "payment sandbox - so the pair is reproduced only when both sources "
+                "are pinned to the second its landed report records (AC-PPR14)"),
+    },
 ]
 
 # The stamp a wall-clock producer records for its own render. Shape is the
@@ -303,6 +314,9 @@ def replay_render(face, workdir, landed_json_bytes, landed_html_bytes):
     if spec.get("kind") == "clock-identity":
         return clock_identity_replay(face, module, doc, landed_json_bytes,
                                      landed_html_bytes, workdir)
+    if spec.get("kind") == "clock-pin":
+        return clock_pin_replay(face, module, doc, landed_json_bytes,
+                                landed_html_bytes, workdir)
     return gallery_replay(face, module, doc, landed_json_bytes, workdir)
 
 
@@ -519,6 +533,53 @@ def clock_identity_replay(face, module, doc, landed_json_bytes, landed_html_byte
     return body, read_bytes(json_path)
 
 
+def clock_pin_replay(face, module, doc, landed_json_bytes, landed_html_bytes, workdir):
+    """AC-PPR14: replay a two-clock producer from the second its report records.
+
+    payment_gate_report reads the wall clock in two packages: it stamps its own
+    generated_utc, and its stale-timestamp negative cases are refused by the
+    shipped payment sandbox, whose verify() compares the payload timestamp with
+    its own wall clock. A replay that pins only the producer reproduces every
+    world fact and still prints delta=867202s where the landed report says
+    400s - the second clock is load-bearing, and the first attempt proved it.
+    Both sources are therefore pinned to the second the landed report carries,
+    and the producer's own main() runs into a scratch directory.
+
+    What this buys is stated narrowly: the page half is the producer's render of
+    the world it measures today, under the landed clock. No real gateway is
+    re-measured. The report's self-stamps - its two byte sizes and the sha256 of
+    the producer source itself - are recorded on the row, never equalised: they
+    witness the moment of writing, not the derivation, and the landed json
+    predates the channel that later rewrote its page.
+    """
+    import datetime
+
+    stamp = doc.get("generated_utc")
+    if not isinstance(stamp, str) or not stamp.endswith("Z"):
+        raise ValueError("landed report carries no generated_utc clock stamp")
+    pin = datetime.datetime.strptime(stamp, "%Y-%m-%dT%H:%M:%SZ").replace(
+        tzinfo=datetime.timezone.utc)
+    pay_dir = os.path.join(REPO, "src", "sandbox", "pay")
+    if pay_dir not in sys.path:
+        sys.path.insert(0, pay_dir)
+    import adapters
+
+    original_now = module._now
+    original_sandbox_now = adapters.now_utc
+    out = os.path.join(workdir, "rendered.html")
+    jout = os.path.join(workdir, "rendered.json")
+    module._now = lambda: pin
+    adapters.now_utc = lambda: pin
+    try:
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            module.main(["--out", out, "--json", jout])
+    finally:
+        module._now = original_now
+        adapters.now_utc = original_sandbox_now
+    return read_bytes(out), read_bytes(jout)
+
+
 def landed_document_replay(face, module, doc, landed_json_bytes, landed_html_bytes, workdir):
     """AC-PPR11: replay a whole-document producer from the report it shipped beside.
 
@@ -625,6 +686,8 @@ def measure(face):
                     label = "%s-from-landed-document" % face["replay"]["function"]
                 if face["replay"].get("kind") == "clock-identity":
                     label = "%s-from-report-clock-pin" % face["replay"]["function"]
+                if face["replay"].get("kind") == "clock-pin":
+                    label = "%s-from-report-two-clock-pin" % face["replay"]["function"]
                 row["replay"] = label
                 if face["replay"].get("kind") == "facts-report":
                     used = ["generated_utc"] + list(face["replay"].get("stamp_keys") or [])
@@ -639,6 +702,21 @@ def measure(face):
                     except Exception:
                         pin = None
                     row["replay_stamps"] = ["generated_utc=%s (clock pin)" % pin]
+                if face["replay"].get("kind") == "clock-pin":
+                    # AC-PPR14: two clocks, one second. The self-stamps are
+                    # recorded beside the pin because they differ by design.
+                    try:
+                        landed_doc = json.loads(landed_json_bytes.decode("utf-8"))
+                        pin = landed_doc.get("generated_utc")
+                        row["replay_stamps"] = [
+                            "generated_utc=%s (producer clock and payment sandbox clock)" % pin]
+                        row["self_stamps"] = {
+                            "landed": {"sizes": landed_doc.get("sizes"),
+                                       "source_sha256": (landed_doc.get("source") or {}).get("sha256")},
+                        }
+                    except Exception:
+                        pin = None
+                        row["replay_stamps"] = ["generated_utc pin unavailable"]
                 rendered, rendered_json = replay_render(
                     face, work, landed_json_bytes,
                     read_bytes(landed_html_path))
@@ -688,6 +766,18 @@ def measure(face):
         "json_same_as_render": landed_json_bytes == rendered_json,
         "landed_carries_schema_badge": b'data-report-schema="' in landed,
     })
+    if (face.get("replay") or {}).get("kind") == "clock-pin":
+        # AC-PPR14: name the two self-stamps instead of letting a size mismatch
+        # read as a lost derivation. The landed json is a pre-channel render, so
+        # its recorded html size is its own moment's, not the shipped page's.
+        try:
+            now_doc = json.loads(rendered_json.decode("utf-8"))
+            row.setdefault("self_stamps", {})["rendered"] = {
+                "sizes": now_doc.get("sizes"),
+                "source_sha256": (now_doc.get("source") or {}).get("sha256"),
+            }
+        except Exception:
+            pass
 
     if splice is None:
         # AC-PPR8: this producer already applies the shipped channel to its own

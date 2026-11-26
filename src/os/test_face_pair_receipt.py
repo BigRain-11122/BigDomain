@@ -15,6 +15,8 @@ Source discipline: pure ASCII, stdlib only, no clock read of its own, no
 network, no shell.
 """
 
+import contextlib
+import datetime
 import hashlib
 import io
 import json
@@ -546,6 +548,84 @@ def main():
        % (len(clock_faces), clock_rows[0]["verdict"] if clock_rows else "-",
           clock_rows[0].get("receipt") if clock_rows else "-", cctx,
           sig(clock_html) == sig_ch and sig(clock_json) == sig_cj))
+
+    # AC-PPR14 (R3512, payment-gate-report): a producer whose clock is read from
+    # TWO packages - its own generated_utc stamp and the stale-timestamp refusals
+    # inside the shipped payment sandbox - is reproduced only when BOTH are
+    # pinned to the second the landed report records. The arm proves the second
+    # clock is load-bearing (pinning only the producer leaves the stale-delta
+    # text different from the landed report), that a one-second shift reddens
+    # the pair, and that the report's self-stamps (two sizes, the producer's own
+    # source sha256) are recorded rather than equalised.
+    pin_faces = [f for f in FPR.FACES
+                 if (f.get("replay") or {}).get("kind") == "clock-pin"]
+    pin_rows = [r for r in rows
+                if (r.get("replay") or "").endswith("-two-clock-pin")]
+    pin_html = os.path.join(PREVIEW, "payment-gate-report.html")
+    pin_json = os.path.join(PREVIEW, "payment-gate-report.json")
+    sig_ph = sig(pin_html)
+    sig_pj = sig(pin_json)
+    p_ok = p_two = p_narrow = p_honest = False
+    pctx = ""
+    if pin_faces:
+        face = pin_faces[0]
+        page = read_bytes(pin_html)
+        report = read_bytes(pin_json)
+        doc_p = json.loads(report.decode("utf-8").replace("\r\n", "\n"))
+        work_p = tempfile.mkdtemp(prefix="fpr3512-")
+        try:
+            html_p, json_p = FPR.replay_render(face, work_p, report, page)
+            html_q, json_q = FPR.replay_render(face, work_p, report, page)
+            p_two = (html_p == html_q and json_p == json_q)
+            # Narrowness: one second later is a different report.
+            shifted = dict(doc_p)
+            shifted["generated_utc"] = plus_one_second(doc_p["generated_utc"])
+            _h, json_s = FPR.replay_render(
+                face, work_p,
+                (json.dumps(shifted, ensure_ascii=False, indent=2) + "\n").encode("utf-8"),
+                page)
+            p_narrow = json_s != json_p
+            # The second clock: pin only the producer and the stale-delta text
+            # that the sandbox computes must stop matching the landed report.
+            module = FPR.load_module(os.path.join(ROOT, face["producer"]),
+                                     "fpr3512_single")
+            import adapters
+            stamp = doc_p["generated_utc"]
+            single = os.path.join(work_p, "single")
+            os.makedirs(single, exist_ok=True)
+            real_sandbox_now = adapters.now_utc
+            original_now = module._now
+            module._now = lambda: datetime.datetime.strptime(
+                stamp, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=datetime.timezone.utc)
+            try:
+                with contextlib.redirect_stdout(io.StringIO()):
+                    module.main(["--out", os.path.join(single, "s.html"),
+                                 "--json", os.path.join(single, "s.json")])
+            finally:
+                module._now = original_now
+                adapters.now_utc = real_sandbox_now
+            one = json.loads(read_bytes(os.path.join(single, "s.json")).decode("utf-8"))
+            landed_stale = doc_p["legacy_negative"][2]["detail"]
+            single_stale = one["legacy_negative"][2]["detail"]
+            p_ok = single_stale != landed_stale
+            p_honest = (pin_rows and pin_rows[0].get("json_same_as_render") is False
+                        and set((pin_rows[0].get("self_stamps") or {}).keys())
+                        == {"landed", "rendered"}
+                        and pin_rows[0]["self_stamps"]["landed"]["sizes"]
+                        != pin_rows[0]["self_stamps"]["rendered"]["sizes"])
+            pctx = "two=%s narrow=%s single_clock_differs=%s honest=%s" % (
+                p_two, p_narrow, p_ok, p_honest)
+        finally:
+            shutil.rmtree(work_p, ignore_errors=True)
+    ok("AC-PPR14",
+       bool(pin_faces) and bool(pin_rows)
+       and pin_rows[0]["verdict"] == "one-derivation"
+       and pin_rows[0].get("receipt") == "channel-shelf-stamp"
+       and p_two and p_narrow and p_ok and p_honest
+       and sig(pin_html) == sig_ph and sig(pin_json) == sig_pj,
+       "pin_faces=%d verdict=%s %s untouched=%s"
+       % (len(pin_faces), pin_rows[0]["verdict"] if pin_rows else "-", pctx,
+          sig(pin_html) == sig_ph and sig(pin_json) == sig_pj))
 
     total = len(CHECKS)
     passed = total - len(FAILS)

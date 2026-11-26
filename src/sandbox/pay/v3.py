@@ -163,7 +163,7 @@ class V3Channel(adapters.MockChannel):
                          mchid="sandbox-mchid", appid="sandbox-appid",
                          private_key_pem=None):
         ts = int(ts_unix) if ts_unix is not None else int(
-            datetime.datetime.now(datetime.timezone.utc).timestamp())
+            adapters.now_utc().timestamp())
         sg_serial = str(serial or (self.serials[0] if self.serials
                                    else "PUB_KEY_ID_0000000000"))
         resource = {
@@ -267,7 +267,7 @@ class V3Channel(adapters.MockChannel):
             raise adapters.AdapterError(
                 "bad Wechatpay-Timestamp: %s"
                 % headers["Wechatpay-Timestamp"]) from None
-        delta = abs(datetime.datetime.now(datetime.timezone.utc).timestamp()
+        delta = abs(adapters.now_utc().timestamp()
                     - ts)
         if delta > self.ts_window:  # AC-V33: parameterized window
             raise adapters.AdapterError(
