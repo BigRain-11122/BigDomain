@@ -771,7 +771,12 @@ def main():
     clk_ok = clk_neg = clk_refuse = clk_untouched = False
     clk_ctx = ""
     if clock_rows:
+        # R3518: the negative control is per row (that row's own pin plus one
+        # second), so a second face with a witness cannot borrow the first
+        # face's proof and go untested.
         clk_hits = []
+        clk_neg_hits = []
+        untouched = []
         for clk_row in clock_rows:
             hist = clk_row["historical"]
             html_p = os.path.join(PREVIEW, clk_row["slug"] + ".html")
@@ -780,17 +785,28 @@ def main():
             sig_j = sig(json_p)
             hit = FPR.clock_pin_reproduces(hist)
             clk_hits.append((clk_row["slug"], hit))
-            if clk_row is clock_rows[0]:
-                later = FPR.clock_pin_reproduces(hist, pin="2026-10-25T03:31:26Z")
-                clk_neg = later is False
-                clk_refuse = (FPR.clock_pin_reproduces(
-                    {"producer_clock_pin": hist["producer_clock_pin"]}) is None
-                    and FPR.clock_pin_reproduces({"clock_witness": hist["clock_witness"]}) is None)
-                clk_untouched = (sig(html_p) == sig_h and sig(json_p) == sig_j)
+            later_pin = None
+            try:
+                later_pin = (datetime.datetime.strptime(
+                    hist["producer_clock_pin"], "%Y-%m-%dT%H:%M:%SZ")
+                    + datetime.timedelta(seconds=1)).strftime("%Y-%m-%dT%H:%M:%SZ")
+            except (KeyError, TypeError, ValueError):
+                later_pin = None
+            clk_neg_hits.append((clk_row["slug"],
+                                 FPR.clock_pin_reproduces(hist, pin=later_pin)
+                                 if later_pin else None))
+            untouched.append(sig(html_p) == sig_h and sig(json_p) == sig_j)
+        first = clock_rows[0]["historical"]
         clk_ok = all(h is True for _s, h in clk_hits)
+        clk_neg = all(v is False for _s, v in clk_neg_hits)
+        clk_refuse = (FPR.clock_pin_reproduces(
+            {"producer_clock_pin": first["producer_clock_pin"]}) is None
+            and FPR.clock_pin_reproduces({"clock_witness": first["clock_witness"]}) is None)
+        clk_untouched = all(untouched)
         clk_ctx = "rows=%d pin=%s hit=%s neg=%s refuse=%s" % (
-            len(clock_rows), clock_rows[0]["historical"].get("producer_clock_pin"),
-            ",".join("%s:%s" % c for c in clk_hits), clk_neg, clk_refuse)
+            len(clock_rows), first.get("producer_clock_pin"),
+            ",".join("%s:%s" % c for c in clk_hits),
+            ",".join("%s:%s" % c for c in clk_neg_hits), clk_refuse)
     ok("AC-PPR18", bool(clock_rows) and clk_ok and clk_neg and clk_refuse
        and clk_untouched, clk_ctx or "no clock-witness record on any row")
 

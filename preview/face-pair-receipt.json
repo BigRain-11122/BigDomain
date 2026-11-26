@@ -36,13 +36,13 @@
       "producer": "src/os/preview_R2111.py",
       "raw_first_diff_offset": 1652,
       "rendered_html_bytes": 36497,
-      "rendered_html_sha256": "9b6ab05961b822a043fccfba5264cecab9cdb7bd0522290a4b3194d97a5cf718",
+      "rendered_html_sha256": "afe16f12cca27095d62bf72ff9f69cd84f4bc89387c9234cb832fba5af2a5dbb",
       "rendered_json_bytes": 59515,
       "rendered_json_sha256": "42af21bc8b433edac3e2a37b5a4b9b878f91cd7fedb34a4628fdcf4f729d94e2",
       "slug": "apimarket-report-refunds",
       "splice_offset": 36483,
       "spliced_html_bytes": 37209,
-      "spliced_html_sha256": "89bb2928d6297f5d43b98e77f0ef107d7e52ff3d0f837ca83d8b011bb8e3f719",
+      "spliced_html_sha256": "102f1ba6a533b52431c5dbe0845b064681fb76f9deed0ed4105efb202039977b",
       "verdict": "version-drift",
       "why": "oldest survivor of the twelve splits: html last committed at 700dd89a (the R3288 back-hop channel), json at 6fb6c40b (the R2111 producer)"
     },
@@ -87,13 +87,13 @@
       "producer": "src/os/preview_R2118.py",
       "raw_first_diff_offset": 1652,
       "rendered_html_bytes": 39020,
-      "rendered_html_sha256": "9211bd54e8f332907dd1981855d3c9b787fb8f18f8c5d1bf2b984c874b788be9",
+      "rendered_html_sha256": "4d91a1fbb289cccf32eec9651595ec47578e63a288f8e1e85970f9c29da5ecc2",
       "rendered_json_bytes": 62552,
       "rendered_json_sha256": "9b5360897aa0788e805ae47946eccd77e4d74cf4dabcf05b538fddd8606aa60f",
       "slug": "apimarket-report-questions",
       "splice_offset": 39006,
       "spliced_html_bytes": 39734,
-      "spliced_html_sha256": "02d4d4b32b5dddf1091b75dda701a2f554295bdff71098cc9c994be9e2e5b2b2",
+      "spliced_html_sha256": "a8672d479ae599e7768b51b5ba4c4ce69e1dc5468e3a6739aa7c88b8198a4f10",
       "verdict": "version-drift",
       "why": "next oldest of the twelve splits (743.8h): html last committed at 700dd89a (the same R3288 back-hop channel), json at e0fd7251 (the R2118 pre-purchase Q&A producer)"
     },
@@ -158,13 +158,13 @@
       "producer": "src/os/preview_R2119.py",
       "raw_first_diff_offset": 1652,
       "rendered_html_bytes": 21556,
-      "rendered_html_sha256": "afb57721c7420fc77a2fb6be2205e8704ad9af39d36649ece3ef6fa5a8318019",
+      "rendered_html_sha256": "f12d77dfb788302b2e020668f69c94f8f8c204b781e35c239c2e9d104cbf452f",
       "rendered_json_bytes": 34641,
       "rendered_json_sha256": "e4986aebee6fb4d4d674bb4c412c7b701ceea70eee06a4812130c67581f5483b",
       "slug": "apimarket-report-buyerquestions",
       "splice_offset": 21542,
       "spliced_html_bytes": 22275,
-      "spliced_html_sha256": "0658603dcdef78810c4863f34385eb0039b909e3a5a2831c3822272abb8ed6cb",
+      "spliced_html_sha256": "44522b6930b6d8cce6537314d8352632e3aa4ca5559214b3ddce396e3965903d",
       "verdict": "version-drift",
       "why": "third oldest of the twelve splits (742.4h): html last committed at 700dd89a (the same R3288 back-hop channel), json at d3faa192 (the R2119 buyer-question-history producer)"
     },
@@ -172,9 +172,51 @@
       "channel_block_bytes": 718,
       "channel_how": "inserted",
       "current_schema_version": 17,
-      "detail": "landed page is a schema 13 render and the renderer is at schema 17, so no re-render at HEAD can reproduce it; explained, not excused: first difference at byte 1652",
+      "detail": "landed page is a schema 13 render and the renderer is at schema 17, so no re-render at HEAD can reproduce it; explained, not excused: first difference at byte 1652; and the pair IS reproduced by the producer as it stood at ce3583ca (html 18894 B + the channel block = 19612 B, json 31520 B identical), so the split is producer evolution, not editing",
       "first_diff_context": "d from the read faces</div>\n<div class=\"marker\">AIGC / sandbox artifact: synthet",
       "first_diff_offset": 1652,
+      "historical": {
+        "channel_commit": "700dd89a",
+        "clock_witness": {
+          "action": "spend",
+          "entries": [
+            [
+              "usr:bob",
+              "debit",
+              10
+            ],
+            [
+              "pool:reserve",
+              "credit",
+              10
+            ]
+          ],
+          "ref": "preview-sale-1",
+          "ref_type": "order",
+          "tx_id": "d429be83079bb546",
+          "tx_type": "spend"
+        },
+        "commit": "ce3583ca",
+        "html_channel_splice": "the rendered page plus the channel block as it stood at 700dd89a equals the landed page byte for byte, no normalisation",
+        "json_byte_identical": true,
+        "landed_digests_agree": true,
+        "landed_html_bytes": 19612,
+        "landed_html_sha256_12": "380d1ead0976",
+        "landed_html_sha256_12_now": "380d1ead0976",
+        "landed_json_bytes": 31520,
+        "landed_json_sha256_12": "5167bf23b97e",
+        "landed_json_sha256_12_now": "5167bf23b97e",
+        "method": "git archive --output=<tar> ce3583ca src, extract to a temp tree, pin that tree's ledger clock to the enumerated second, run its preview_R2120.main() in process, then splice that tree's own channel block from 700dd89a (tools/face_backhop.py with that round's buyer-trial.html blob) with the face name spelled <slug>.html",
+        "producer_clock_pin": "2026-10-25T03:43:39Z",
+        "rendered_html_bytes": 18894,
+        "rendered_html_sha256_12": "5b41f64a0063",
+        "rendered_json_bytes": 31520,
+        "rendered_json_sha256_12": "5167bf23b97e",
+        "witnesses": [
+          "channel-hop-measurement",
+          "channel-face-spelling"
+        ]
+      },
       "json_same_as_render": false,
       "landed_carries_schema_badge": false,
       "landed_html": "preview/apimarket-report-selleranswers.html",
@@ -187,13 +229,13 @@
       "producer": "src/os/preview_R2120.py",
       "raw_first_diff_offset": 1652,
       "rendered_html_bytes": 21779,
-      "rendered_html_sha256": "9ce9718c9d2b519ba1d616b7cfb4c8e89909204dd791d4ece25918b49bd4abd9",
+      "rendered_html_sha256": "52681496c93788990ebda09125a15b5257cc8731ba415578613fc6c44a75f74f",
       "rendered_json_bytes": 34967,
       "rendered_json_sha256": "c5c9261120ae83eee5d12e2ed1c581285108237ebfb64ed954b10d8eb5a13234",
       "slug": "apimarket-report-selleranswers",
       "splice_offset": 21765,
       "spliced_html_bytes": 22497,
-      "spliced_html_sha256": "a9731a9c5c896ce419927d7470e8be45ae1c18e1f57e4b0336fc41ec82f0e77d",
+      "spliced_html_sha256": "8b7cf10822ade20aa639b2f0f72c5f7a6e44bb3b716466713728be7e33ed7597",
       "verdict": "version-drift",
       "why": "fourth of the twelve splits: html last committed at 700dd89a (the same R3288 back-hop channel), json at ce3583ca, which shipped preview_R2120.py in the same commit (seller answered-question ledger, schema 12->13)"
     },
@@ -479,9 +521,9 @@
       "why": "twelfth of the twelve splits: html last committed at 897e0f99 (the R3461 front-door round), json at 7e3a6f9c (R3333), which shipped the sandbox one-click proof; this producer starts eight real servers, reads every door over a socket and tears them down, and it keeps its facts at the TOP level of its report with no evidence block - the graded rows are the evidence and the hub URL is read back off the landed page (AC-PPR15)"
     }
   ],
-  "generated_at": "2026-11-26T23:47:12+08:00",
+  "generated_at": "2026-11-27T00:38:19+08:00",
   "law": "a history split is excused for one face only when the producer's own html, plus the shipped post-render channel, reproduces the landed html byte for byte - and for a producer that applies the channel itself, when its own html equals the landed page with no block surgery at all",
-  "round": 3516,
+  "round": 3517,
   "source": "tools/face_pair_receipt.py",
   "totals": {
     "drift": 0,

@@ -173,6 +173,48 @@ FACES = [
                 "same R3288 back-hop channel), json at ce3583ca, which shipped "
                 "preview_R2120.py in the same commit (seller answered-question "
                 "ledger, schema 12->13)"),
+        # R3518: replayed the producer AS IT STOOD at ce3583ca. That version
+        # pinned only the API clock (A._now_utc) and left the ledger clock on the
+        # wall, and compute_tx_id hashes that second, so the landed report names
+        # a second it never wrote down. The second was recovered by matching the
+        # landed spend tx id against compute_tx_id over a candidate day and then
+        # pinned before the rerun; both halves came back byte for byte, and the
+        # channel was applied as it stood at 700dd89a with the landed block's own
+        # hop reading (22382 B) taken from the blob, not from a checkout (the
+        # host's text conversion adds bytes git never saw).
+        "historical": {
+            "commit": "ce3583ca",
+            "channel_commit": "700dd89a",
+            "method": ("git archive --output=<tar> ce3583ca src, extract to a temp "
+                       "tree, pin that tree's ledger clock to the enumerated second, "
+                       "run its preview_R2120.main() in process, then splice that "
+                       "tree's own channel block from 700dd89a (tools/face_backhop.py "
+                       "with that round's buyer-trial.html blob) with the face name "
+                       "spelled <slug>.html"),
+            "producer_clock_pin": "2026-10-25T03:43:39Z",
+            "clock_witness": {
+                "tx_type": "spend",
+                "action": "spend",
+                "ref": "preview-sale-1",
+                "ref_type": "order",
+                "entries": [["usr:bob", "debit", 10],
+                            ["pool:reserve", "credit", 10]],
+                "tx_id": "d429be83079bb546",
+            },
+            "rendered_html_bytes": 18894,
+            "rendered_html_sha256_12": "5b41f64a0063",
+            "rendered_json_bytes": 31520,
+            "rendered_json_sha256_12": "5167bf23b97e",
+            "landed_html_bytes": 19612,
+            "landed_html_sha256_12": "380d1ead0976",
+            "landed_json_bytes": 31520,
+            "landed_json_sha256_12": "5167bf23b97e",
+            "json_byte_identical": True,
+            "html_channel_splice": ("the rendered page plus the channel block as it "
+                                    "stood at 700dd89a equals the landed page byte for "
+                                    "byte, no normalisation"),
+            "witnesses": ["channel-hop-measurement", "channel-face-spelling"],
+        },
     },
     {
         "slug": "lobby-session-trace",
