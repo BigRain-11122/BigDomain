@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-26T07:25:17+08:00",
+  "generated_at": "2026-11-26T07:48:53+08:00",
   "law": "a split is claimed only when the two halves' last commits differ; an mtime gap alone is published as a bucket, never as a split",
   "oldest_split": {
     "delta_hours": 749.7,
@@ -405,17 +405,17 @@
       "delta_seconds": 0,
       "html": {
         "bytes": 16416,
-        "commit": "c6d88b3c",
-        "mtime": "2026-11-26T06:44:00+08:00",
-        "mtime_epoch": 1795646640,
-        "sha": "16BB0B2B"
+        "commit": "26acf566",
+        "mtime": "2026-11-26T07:33:36+08:00",
+        "mtime_epoch": 1795649616,
+        "sha": "09955F48"
       },
       "json": {
         "bytes": 17987,
-        "commit": "c6d88b3c",
-        "mtime": "2026-11-26T06:44:00+08:00",
-        "mtime_epoch": 1795646640,
-        "sha": "EF7ECF35"
+        "commit": "26acf566",
+        "mtime": "2026-11-26T07:33:36+08:00",
+        "mtime_epoch": 1795649616,
+        "sha": "30316D09"
       },
       "name": "battery-shard-report",
       "verdict": "same-run"
@@ -803,18 +803,18 @@
     {
       "delta_seconds": 0,
       "html": {
-        "bytes": 7107,
-        "commit": "75f7dda2",
-        "mtime": "2026-11-26T07:23:39+08:00",
-        "mtime_epoch": 1795649019,
-        "sha": "A0BC000D"
+        "bytes": 8344,
+        "commit": "26acf566",
+        "mtime": "2026-11-26T07:43:24+08:00",
+        "mtime_epoch": 1795650204,
+        "sha": "DCD2E529"
       },
       "json": {
-        "bytes": 9211,
-        "commit": "75f7dda2",
-        "mtime": "2026-11-26T07:23:39+08:00",
-        "mtime_epoch": 1795649019,
-        "sha": "6B419FA1"
+        "bytes": 11124,
+        "commit": "26acf566",
+        "mtime": "2026-11-26T07:43:24+08:00",
+        "mtime_epoch": 1795650204,
+        "sha": "A768D732"
       },
       "name": "face-pair-receipt",
       "verdict": "same-run"
@@ -1096,7 +1096,9 @@
         "sha": "CEA7D21A"
       },
       "name": "live-sandbox",
-      "verdict": "history-split"
+      "pair_receipt": "one-derivation",
+      "receipt": "channel-splice",
+      "verdict": "channel-receipt"
     },
     {
       "delta_seconds": 0,
@@ -1121,14 +1123,14 @@
       "delta_seconds": 0,
       "html": {
         "bytes": 9092,
-        "commit": "700dd89a",
+        "commit": "26acf566",
         "mtime": "2026-11-26T07:22:29+08:00",
         "mtime_epoch": 1795648949,
         "sha": "E7B0E37F"
       },
       "json": {
         "bytes": 8008,
-        "commit": "b0b07b2b",
+        "commit": "26acf566",
         "mtime": "2026-11-26T07:22:29+08:00",
         "mtime_epoch": 1795648949,
         "sha": "D39039F0"
@@ -2030,15 +2032,15 @@
       "verdict": "same-run"
     }
   ],
-  "round": 3503,
+  "round": 3504,
   "same_run_seconds": 120,
   "self_excluded": "preview-pair-census",
   "source": "tools/preview_pair_census.py",
   "totals": {
-    "channel-receipt": 0,
-    "explained": 4,
+    "channel-receipt": 1,
+    "explained": 5,
     "frozen-excused": 11,
-    "history-split": 11,
+    "history-split": 10,
     "html": 106,
     "no-json": 3,
     "paired": 103,

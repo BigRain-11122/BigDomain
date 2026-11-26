@@ -5042,8 +5042,13 @@ SUITES = [
     # AC-PPR8 pinned at R3504 before the fifth face was registered: a producer
     # that applies the channel itself is compared directly, with no block
     # surgery to hide a gap).
+    # AC-PPR9 pinned at R3505 before the sixth face was registered: a live
+    # shoot can never re-render to bytes, so its page half is replayed from the
+    # landed report, position independence is required of the renderer, and the
+    # only tolerated difference is the channel's own shelf stamp - proved
+    # narrow by a negative control).
     ("face-pair-receipt",
-     os.path.join("..", "os", "test_face_pair_receipt.py"), 8),
+     os.path.join("..", "os", "test_face_pair_receipt.py"), 9),
     ("os-ledger-archive",
      os.path.join("..", "os", "test_ledger_archive.py"), 16),
     # R3091: the archive's own provenance is now readable WITHOUT a child

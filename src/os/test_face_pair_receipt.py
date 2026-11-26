@@ -17,6 +17,7 @@ network, no shell.
 
 import hashlib
 import io
+import json
 import os
 import re
 import shutil
@@ -182,12 +183,15 @@ def main():
     # AC-PPR7: every registered producer can be rendered into a scratch
     # directory (two defaulted outputs) and its own defaults still name the
     # landed halves, so a no-argument run is unchanged; the negative control is
-    # a synthetic producer that can only write where it likes.
-    discipline = {f["slug"]: FPR.output_discipline(f) for f in FPR.FACES}
+    # a synthetic producer that can only write where it likes. R3505: a replay
+    # face is graded by AC-PPR9 instead - its producer is a browser shoot, so
+    # "render into a scratch directory" is not the shape it can honour.
+    rendered_faces = [f for f in FPR.FACES if not f.get("replay")]
+    discipline = {f["slug"]: FPR.output_discipline(f) for f in rendered_faces}
     stub = "import os\n\n\ndef main():\n    return 0\n"
     stub_problems = FPR.evaluate_output_discipline(stub, "apimarket-report-questions")
     ok("AC-PPR7",
-       all(not v for v in discipline.values()) and len(discipline) == len(FPR.FACES)
+       all(not v for v in discipline.values()) and len(discipline) == len(rendered_faces)
        and bool(stub_problems),
        "faces=%s stub_refused=%s" % (sorted(discipline), bool(stub_problems)))
 
@@ -222,6 +226,61 @@ def main():
        "applied_faces=%d fifth=%s direct=%s@%s tampered=%s@%s"
        % (len(applied), fifth[0]["verdict"] if fifth else "-", verdict_a, offset_a,
           verdict_b, offset_b))
+
+    # AC-PPR9: a live-shoot face is graded by replay, not by a re-shoot. Four
+    # things must hold: the page half is rebuilt from the landed report by the
+    # producer's own gallery (no browser, no clock), the same report renders the
+    # same bytes into two different scratch directories (position independence,
+    # which is why the page takes a page_dir), the only tolerated difference is
+    # the channel's own shelf stamp - and that tolerance is narrow, because one
+    # changed field in the report still reads drift.
+    replay_face = [f for f in FPR.FACES if f.get("replay")]
+    replay_row = [r for r in rows if r.get("replay")]
+    live_html = os.path.join(PREVIEW, "live-sandbox.html")
+    live_json = os.path.join(PREVIEW, "live-sandbox.json")
+    sig_live_html = sig(live_html)
+    sig_live_json = sig(live_json)
+    position_ok = narrow_ok = named_ok = False
+    ctx = ""
+    if replay_face and replay_row:
+        face = replay_face[0]
+        report = read_bytes(live_json)
+        work_a = tempfile.mkdtemp(prefix="fpr3505a-")
+        work_b = tempfile.mkdtemp(prefix="fpr3505b-")
+        try:
+            html_a, _ = FPR.replay_render(face, work_a, report)
+            html_b, _ = FPR.replay_render(face, work_b, report)
+            position_ok = html_a == html_b
+            named_ok = b"src='live/hub.png'" in html_a
+            neg = json.loads(report.decode("utf-8"))
+            neg["shots"][0]["status"] = 599
+            html_neg, _ = FPR.replay_render(
+                face, work_a, json.dumps(neg).encode("utf-8"))
+            text_neg, _how = FPR.face_backhop.inject_text(
+                html_neg.decode("utf-8"), "live-sandbox.html")
+            landed_live = read_bytes(live_html)
+            narrow_ok = (FPR.shelf_normalised(text_neg.encode("utf-8"))
+                         != FPR.shelf_normalised(landed_live))
+            ctx = "pos=%s named=%s narrow=%s" % (position_ok, named_ok, narrow_ok)
+        finally:
+            shutil.rmtree(work_a, ignore_errors=True)
+            shutil.rmtree(work_b, ignore_errors=True)
+    live_row = [r for r in replay_row if r["slug"] == "live-sandbox"]
+    ok("AC-PPR9",
+       bool(replay_face) and bool(live_row)
+       and live_row[0]["verdict"] == "one-derivation"
+       and live_row[0].get("receipt") == "channel-shelf-stamp"
+       and isinstance(live_row[0].get("shelf_stamp_landed"), int)
+       and isinstance(live_row[0].get("shelf_stamp_now"), int)
+       and not live_row[0].get("replay") is None
+       and position_ok and named_ok and narrow_ok
+       and sig(live_html) == sig_live_html and sig(live_json) == sig_live_json,
+       "replay_faces=%d verdict=%s receipt=%s shelf=%s->%s %s untouched=%s"
+       % (len(replay_face), live_row[0]["verdict"] if live_row else "-",
+          live_row[0].get("receipt") if live_row else "-",
+          live_row[0].get("shelf_stamp_landed") if live_row else "-",
+          live_row[0].get("shelf_stamp_now") if live_row else "-", ctx,
+          sig(live_html) == sig_live_html and sig(live_json) == sig_live_json))
 
     total = len(CHECKS)
     passed = total - len(FAILS)

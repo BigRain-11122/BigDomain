@@ -1,0 +1,79 @@
+R3505 - face pair receipt, sixth face (live-sandbox) via replay
+=============================================================
+Date: 2026-11-26
+Round: 3505 (tick 3504 -> 3505)
+Scope: preview/live-sandbox.{html,json} provenance, tools/ceo_live_shot.py,
+       tools/face_pair_receipt.py, src/os/test_face_pair_receipt.py,
+       src/sandbox/reconcile_all.py registry row, census/matrix/battery/export.
+
+1. PROVENANCE (read from history, not guessed)
+   preview/live-sandbox.json  last commit 8092eff8 (2026-11-19, R2988 shoot)
+   preview/live-sandbox.html  last commit 897e0f99 (2026-11-25, R3461 front door)
+   8092eff8 shipped tools/ceo_live_shot.py and both halves in one commit.
+   Landed sizes: html 6450B, json 4772B (18 shots, proof=true).
+
+2. WHY A RE-SHOOT CANNOT BE THE RECEIPT
+   The producer launches start_all.py, drives Edge, screenshots and then writes
+   the gallery. A second shoot carries a new clock stamp and new PNG bytes by
+   construction, so byte equality can never hold. The reproducible half is the
+   page: gallery(report) + the shipped post-render channel.
+
+3. READ-ONLY PROBE (system temp only, nothing written into the repo)
+   Replaying the landed report through the producer's own gallery() and FACES
+   table, then applying face_backhop.inject_text, produced a 6450B page whose
+   line diff against the landed page was ONE line: the image src
+       landed: src='live/hub.png'
+       replay: src='../../../../Desktop/.../preview/live/hub.png'
+   The gallery derives the relative path from os.path.dirname(path), so the
+   gap is positional - a function of where the page is written, not of the
+   derivation.
+
+4. SEAM ADDED AT THE SOURCE
+   tools/ceo_live_shot.py: gallery(rows, report, path, proof=None, page_dir=None)
+   page_dir is where the page BELIEVES it sits; it defaults to where the bytes
+   go, so a no-argument run is byte-identical to before (checked by reading the
+   landed pair back through the receipt).
+
+5. SECOND DIFFERENCE, MEASURED AND NAMED
+   After the seam the pages were equal except for the channel's own stamp:
+       data-back-bytes="55302"  (landed, recorded when R3461 injected)
+       data-back-bytes="55645"  (today, measured from index.html now)
+   Both forms of that one number (attribute and the visible "2 个控件 · NB"
+   span) are normalised on both sides; both values are recorded per face, and
+   the negative control proves the tolerance narrow (one changed status in the
+   report still reads drift).
+
+6. DEFECT FOUND IN THIS WINDOW'S OWN GATE
+   Running "python tools/face_pair_receipt.py --check" made the lobby producer
+   read that flag from sys.argv and switch to its verify-the-landed-pages mode,
+   so it wrote nothing and the receipt reported FileNotFoundError against the
+   producer. render() now hands each producer only its own path and the two
+   output paths.
+
+7. CRITERIA (pinned in src/os/backlog.md before any code moved)
+   AC-PPR9 replay for live-shoot faces, position independence, negative
+   control, read-only. AC-PPR7 is now graded over the five rendered faces.
+   No AC-PPR1..8 threshold was moved.
+
+8. GATES READ BACK
+   SUITE PASS 9/9   src/os/test_face_pair_receipt.py (AC-PPR1..AC-PPR9)
+                    AC-PPR9: replay_faces=1 verdict=one-derivation
+                    receipt=channel-shelf-stamp shelf=55302->55645
+                    pos=True named=True narrow=True untouched=True
+   FPR-CHECK        VERDICT PASS read_only=True faces=6 one_derivation=2 drift=0
+   PPC-CHECK        VERDICT PASS html=106 paired=103 history_split=10
+                    channel_receipt=1 frozen_excused=11 same_commit=6 explained=5
+   MATRIX           DOC-CURRENT, 830 suites / 6949 criteria (registry 8 -> 9)
+   BATTERY PAGE     BSR-CHECK VERDICT PASS (page verdict RED by design)
+   EXPORT           WROTE tick=3505 ok=True queue=CURRENT
+                    latest preview/face-pair-receipt.html (8344B) + .json (11124B)
+
+9. NOT TOUCHED
+   No other preview page re-derived. No freeze register write. No archive
+   rewrite. No AC-PPR1..8 threshold moved. ZERO payment capability, no network
+   beyond loopback, the five physical pieces still gate every buyer.
+
+10. CARRIED, NOT PAPERED OVER
+   OS battery family rc=2, 2 of 4 green, 769 criteria uncovered by the shard
+   route. S4U registration still outstanding (45th carry). Full battery not run
+   this window (family shards only).

@@ -511,8 +511,16 @@ def shoot(browser_name, report, settle_ms, width, out_dir, pass_no=1):
     return rows
 
 
-def gallery(rows, report, path, proof=None):
-    """One page a person can scroll instead of seven tabs."""
+def gallery(rows, report, path, proof=None, page_dir=None):
+    """One page a person can scroll instead of seven tabs.
+
+    R3505: `page_dir` is where the page BELIEVES it sits, and it defaults to
+    where the bytes are written. A receipt renders into a scratch directory and
+    still has to name its pictures exactly as the landed page does, so "where
+    the bytes go" and "what the page calls its neighbours" are separate
+    questions now. Called without the new argument the page is unchanged.
+    """
+    where = os.path.dirname(path) if page_dir is None else page_dir
     total = len(rows)
     good = sum(1 for row in rows if row["ok"])
     parts = [
@@ -564,7 +572,7 @@ def gallery(rows, report, path, proof=None):
             # that does not exist (measured on the round's own real run: nine
             # empty frames). Resolve from the page's own directory instead.
             src = os.path.relpath(os.path.join(REPO, row["png"]),
-                                  os.path.dirname(path))
+                                  where)
             parts.append("<img src='%s' alt='%s'>"
                          % (src.replace("\\", "/"), row["title"]))
         if row["errors"]:

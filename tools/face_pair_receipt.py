@@ -85,9 +85,39 @@ FACES = [
                 "temp database), not a pure function, and it applies the back-hop "
                 "channel itself"),
     },
+    {
+        "slug": "live-sandbox",
+        "producer": os.path.join("tools", "ceo_live_shot.py"),
+        "replay": {"function": "gallery", "table": "FACES"},
+        "why": ("sixth of the twelve splits (147.3h): html last committed at 897e0f99 "
+                "(the R3461 front-door round), json at 8092eff8, which shipped "
+                "tools/ceo_live_shot.py and both halves in one commit; this producer "
+                "is a real browser shoot, so a second shoot can never reproduce bytes "
+                "- the page half is replayed from the landed report instead"),
+    },
 ]
 
 VOLATILE = ("generated_at", "round")
+
+# The shipped channel stamps the shelf page's byte count into its own block at
+# injection time. That number is a witness of WHEN the channel ran, not of what
+# the pair is: it moves every time index.html grows, so a page spliced at R3461
+# can never be reproduced byte for byte by a channel run today. AC-PPR9
+# therefore compares the block with that one stamp normalised on BOTH sides and
+# records both values, and the suite proves the normalisation is narrow.
+SHELF_STAMP = re.compile(rb'data-back-bytes="\d+"')
+# The same stamp is printed in the block's visible line ("2 个控件 · 55302B"),
+# so it is normalised there too - and only there, keeping the controls count.
+SHELF_SPAN = re.compile(rb'(\xe4\xb8\xaa\xe6\x8e\xa7\xe4\xbb\xb6 \xc2\xb7 )\d+(B</span>)')
+
+
+def shelf_normalised(data):
+    return SHELF_SPAN.sub(rb'\1*\2', SHELF_STAMP.sub(b'data-back-bytes="*"', data))
+
+
+def shelf_stamp(data):
+    found = SHELF_STAMP.search(data)
+    return int(found.group(0).split(b'"')[1]) if found else None
 
 
 def sha256_hex(data):
@@ -151,6 +181,13 @@ def output_discipline(face):
     return evaluate_output_discipline(source, face["slug"])
 
 
+def load_module(path, name):
+    spec = importlib.util.spec_from_file_location(name, path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
 def render(face, workdir):
     """Run the face's producer into a scratch directory and return both halves.
 
@@ -159,13 +196,52 @@ def render(face, workdir):
     """
     name = "receipt_producer_%s" % face["slug"].replace("-", "_")
     path = os.path.join(REPO, face["producer"])
-    spec = importlib.util.spec_from_file_location(name, path)
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
+    module = load_module(path, name)
     html_path = os.path.join(workdir, "rendered.html")
     json_path = os.path.join(workdir, "rendered.json")
-    module.main(html_path, json_path)
+    # R3505: a producer that reads sys.argv inherits OUR flags, and
+    # lobby_session_trace reads "--check" to mean "verify the landed pages
+    # instead of rendering". Measured: running the receipt with --check made
+    # that producer write nothing, so the receipt blamed the producer for a
+    # FileNotFoundError it had caused itself. The producer now sees only its
+    # own path and the two output paths, never this tool's flags.
+    saved = sys.argv[:]
+    sys.argv = [path, html_path, json_path]
+    try:
+        module.main(html_path, json_path)
+    finally:
+        sys.argv = saved
     return read_bytes(html_path), read_bytes(json_path)
+
+
+def replay_render(face, workdir, landed_json_bytes):
+    """AC-PPR9: rebuild the page from the landed report with the producer's renderer.
+
+    A live-shoot producer cannot be re-run to the same bytes - a second shoot
+    brings a new clock stamp and new screenshots - so the only reproducible half
+    left is the page-shaped one: the producer's own gallery applied to the
+    report it shipped beside, with the page told it sits in preview/ exactly as
+    the landed page does. No browser, no clock, no child process.
+    """
+    spec = face["replay"]
+    path = os.path.join(REPO, face["producer"])
+    module = load_module(path, "receipt_replay_%s" % face["slug"].replace("-", "_"))
+    doc = json.loads(landed_json_bytes.decode("utf-8"))
+    meta = {key: (title, blurb) for key, title, blurb in getattr(module, spec["table"])}
+    rows = []
+    for shot in doc.get("shots", []):
+        title, blurb = meta[shot["face"]]
+        rows.append({
+            "face": shot["face"], "title": title, "blurb": blurb,
+            "url": shot.get("url"), "status": shot.get("status"),
+            "ok": shot.get("ok"), "acted": shot.get("acted"),
+            "why": shot.get("why"), "errors": shot.get("errors") or [],
+            "png": shot.get("png"),
+        })
+    html_path = os.path.join(workdir, "replayed.html")
+    getattr(module, spec["function"])(rows, {"ok": doc.get("ok")}, html_path,
+                                      proof=doc.get("proof"), page_dir=PREVIEW)
+    return read_bytes(html_path), landed_json_bytes
 
 
 def applied_channel_verdict(rendered, landed):
@@ -202,7 +278,7 @@ def measure(face):
         "landed_html": "preview/%s.html" % slug,
         "landed_json": "preview/%s.json" % slug,
     }
-    problems = output_discipline(face)
+    problems = [] if face.get("replay") else output_discipline(face)
     if problems:
         row["verdict"] = "unreproducible"
         row["error"] = ("producer cannot render into a scratch directory: "
@@ -212,7 +288,13 @@ def measure(face):
     work = tempfile.mkdtemp(prefix="face-pair-receipt-")
     try:
         try:
-            rendered, rendered_json = render(face, work)
+            if face.get("replay"):
+                # AC-PPR9: the page half is replayed from the landed report.
+                row["replay"] = "%s-from-report" % face["replay"]["function"]
+                rendered, rendered_json = replay_render(
+                    face, work, read_bytes(landed_json_path))
+            else:
+                rendered, rendered_json = render(face, work)
         except Exception as exc:  # noqa: BLE001 - the reading is the point
             row["verdict"] = "unreproducible"
             row["error"] = "%s: %s" % (type(exc).__name__, exc)
@@ -297,6 +379,22 @@ def measure(face):
         return row
 
     at = splice if delta is None else delta
+    # AC-PPR9: the only tolerated difference is the channel's own shelf stamp.
+    # Both values are recorded, and the suite pins that this normalisation is
+    # narrow enough that any other single-byte change still reads drift.
+    if delta is not None and shelf_normalised(injected) == shelf_normalised(landed):
+        row["verdict"] = "one-derivation"
+        row["receipt"] = "channel-shelf-stamp"
+        row["shelf_stamp_landed"] = shelf_stamp(landed)
+        row["shelf_stamp_now"] = shelf_stamp(injected)
+        row["spliced_html_sha256"] = sha256_hex(injected)
+        row["detail"] = ("landed html = producer html + the shipped channel block, equal "
+                         "byte for byte once the channel's own shelf stamp is normalised "
+                         "on both sides (landed %s, today %s): the stamp records when the "
+                         "channel ran, not which derivation the page is"
+                         % (row["shelf_stamp_landed"], row["shelf_stamp_now"]))
+        return row
+
     row["first_diff_offset"] = at
     row["first_diff_context"] = context(landed, at)
     # A page rendered before the schema badge existed cannot be reproduced by a
