@@ -5073,8 +5073,13 @@ SUITES = [
     # benefit) may only use the stamps its own landed report records, every
     # declared key must be present or the replay refuses, and a face that
     # declares port=true still refuses a page without its port.
+    # R3510: AC-PPR13 grades a wall-clock producer whose tx ids are content
+    # hashes over the write second (ledger business) - the replay pins the
+    # ledger clock to the second the landed report records, re-seeds through the
+    # producer's own seed_demo and runs reconcile in process; one second later
+    # the three landed tx ids must NOT reproduce, so the pin is load-bearing.
     ("face-pair-receipt",
-     os.path.join("..", "os", "test_face_pair_receipt.py"), 12),
+     os.path.join("..", "os", "test_face_pair_receipt.py"), 13),
     ("os-ledger-archive",
      os.path.join("..", "os", "test_ledger_archive.py"), 16),
     # R3091: the archive's own provenance is now readable WITHOUT a child

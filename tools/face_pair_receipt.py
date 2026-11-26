@@ -21,6 +21,7 @@ Source discipline: ASCII only, stdlib only, no clock read beyond the page stamp.
 """
 
 import ast
+import contextlib
 import hashlib
 import importlib.util
 import io
@@ -129,7 +130,23 @@ FACES = [
                 "loopback port stamp - the report's own top-level expires/periods are "
                 "the stamps that make the render reproducible (AC-PPR12)"),
     },
+    {
+        "slug": "ledger-business-report",
+        "producer": os.path.join("tools", "ledger_business_report.py"),
+        "replay": {"kind": "clock-identity", "function": "build_html"},
+        "why": ("tenth of the twelve splits: html last committed at 897e0f99 (the "
+                "R3461 front-door round), json at 700dd89a, which shipped the R3288 "
+                "back-hop channel; this producer seeds a demo ledger through the "
+                "shipped Ledger API and every tx id is a content hash over the write "
+                "second, so a later run reproduces the pair only when the clock is "
+                "pinned to the second its own landed report records (AC-PPR13)"),
+    },
 ]
+
+# The stamp a wall-clock producer records for its own render. Shape is the
+# producer's, not the ledger's: "YYYY-MM-DD HH:MM:SSZ" (the ledger's own ts
+# dialect uses a "T" separator, and the replay converts).
+CLOCK_STAMP = re.compile(r"^\d{4}-\d\d-\d\d \d\d:\d\d:\d\dZ$")
 
 VOLATILE = ("generated_at", "round")
 
@@ -283,6 +300,9 @@ def replay_render(face, workdir, landed_json_bytes, landed_html_bytes):
     if spec.get("kind") == "landed-document":
         return landed_document_replay(face, module, doc, landed_json_bytes,
                                       landed_html_bytes, workdir)
+    if spec.get("kind") == "clock-identity":
+        return clock_identity_replay(face, module, doc, landed_json_bytes,
+                                     landed_html_bytes, workdir)
     return gallery_replay(face, module, doc, landed_json_bytes, workdir)
 
 
@@ -385,6 +405,120 @@ def facts_report_replay(face, module, doc, landed_json_bytes, landed_html_bytes,
     return body, read_bytes(json_path)
 
 
+def clock_identity_replay(face, module, doc, landed_json_bytes, landed_html_bytes, workdir):
+    """AC-PPR13: replay a wall-clock producer from the second its report records.
+
+    ledger_business_report seeds a throwaway demo ledger through the shipped
+    Ledger API, and every tx id is a content hash over the write timestamp:
+    _write_tx takes the wall clock, so no later run can reproduce the three ids
+    - unless the clock is pinned to the second the landed report stamped. The
+    replay therefore pins ledger.now_utc to that second, re-seeds through the
+    producer's own seed_demo, runs the shipped reconcile IN PROCESS (stdout
+    captured, no child process) and renders with the producer's own build_html.
+
+    What this buys is stated narrowly: the pair is the producer's render of a
+    world rebuilt from the landed facts under the landed clock. The demo
+    database is re-seeded, which is what the producer's own AC-LBR10 note says
+    it is - an output, not an input. Nothing about the live world is
+    re-measured.
+    """
+    stamp = doc.get("generated_utc")
+    if not isinstance(stamp, str) or not CLOCK_STAMP.match(stamp):
+        raise ValueError("landed report carries no generated_utc clock stamp")
+    for key in ("db", "accounts", "tx_count", "entry_count", "issued",
+                "reconcile_rc", "rejected"):
+        if key not in doc:
+            raise ValueError("landed report carries no %s field" % key)
+    # The producer put the shipped ledger package on sys.path when it was
+    # imported, so this is the same module object its seed_demo imports.
+    import ledger
+    import reconcile
+
+    db_path = os.path.join(workdir, "demo.db")
+    config = module.load_config()
+    original_now = ledger.now_utc
+    ledger.now_utc = lambda: stamp.replace(" ", "T")
+    try:
+        _steps, rejected, disclaimer, rows = module.seed_demo(db_path, config)
+    finally:
+        ledger.now_utc = original_now
+
+    buf = io.StringIO()
+    cfg_path = os.path.join(REPO, "src", "sandbox", "ledger", "config.json")
+    with contextlib.redirect_stdout(buf):
+        rc = reconcile.main(["reconcile.py", db_path, cfg_path])
+
+    issued = 0
+    for tx in rows["tx"]:
+        if tx["type"] == "mint":
+            issued += sum(int(en["amount"]) for en in rows["entries"]
+                          if en["tx_id"] == tx["tx_id"] and en["direction"] == "debit")
+    if not issued:
+        issued = sum(int(r["balance"]) for r in rows["accounts"]
+                     if module.account_class(r["account_id"]) == "pool")
+
+    ctx = {
+        "now": stamp,
+        "db": doc["db"],
+        "issued": issued,
+        "rejected": rejected,
+        "disclaimer": module.disclaimer_text(disclaimer),
+        "rows": rows,
+        "rc": rc,
+        "recon": buf.getvalue().rstrip(),
+        "cmd": "python tools/ledger_business_report.py",
+    }
+    body = module.build_html(ctx).encode("utf-8")
+
+    payload = {
+        "generated_utc": stamp,
+        "db": doc["db"],
+        "accounts": rows["accounts"],
+        "tx_count": len(rows["tx"]),
+        "entry_count": len(rows["entries"]),
+        "issued": issued,
+        "reconcile_rc": rc,
+        "rejected": [{"case": c, "code": k, "detail": d, "blocked": b}
+                     for c, k, d, b in rejected],
+        "report": doc.get("report") or ("preview/%s.html" % face["slug"]),
+        "sources": module.source_fingerprints(),
+    }
+    html_path = os.path.join(workdir, "rendered.html")
+    json_path = os.path.join(workdir, "rendered.json")
+    with io.open(html_path, "wb") as handle:
+        handle.write(body)
+    # The producer's own fixed point: only the json's byte count is
+    # self-referential, so it is iterated until the recorded number is the
+    # number on disk. The html size recorded here is the pre-channel page.
+    for _ in range(6):
+        payload["sizes"] = {
+            "html": os.path.getsize(html_path),
+            "json": os.path.getsize(json_path) if os.path.exists(json_path) else 0,
+        }
+        raw = (json.dumps(payload, ensure_ascii=False, indent=1) + "\n").encode("utf-8")
+        with io.open(json_path, "wb") as handle:
+            handle.write(raw)
+        if payload["sizes"]["json"] == os.path.getsize(json_path):
+            break
+    else:
+        raise ValueError("document sizes did not converge")
+
+    # The landed report is checked out with CRLF on this working tree while the
+    # producer writes LF; the replay adopts the landed newline so the two
+    # reports are comparable byte for byte, and the choice is recorded on the row.
+    if b"\r\n" in landed_json_bytes:
+        raw = read_bytes(json_path).replace(b"\n", b"\r\n")
+        with io.open(json_path, "wb") as handle:
+            handle.write(raw)
+
+    injected, _how = face_backhop.inject_text(body.decode("utf-8"),
+                                              face["slug"] + ".html")
+    with io.open(html_path, "wb") as handle:
+        handle.write(injected.encode("utf-8"))
+    face_backhop.patch_sizes(html_path)
+    return body, read_bytes(json_path)
+
+
 def landed_document_replay(face, module, doc, landed_json_bytes, landed_html_bytes, workdir):
     """AC-PPR11: replay a whole-document producer from the report it shipped beside.
 
@@ -479,22 +613,34 @@ def measure(face):
         return row
 
     work = tempfile.mkdtemp(prefix="face-pair-receipt-")
+    landed_json_bytes = read_bytes(landed_json_path)
     try:
         try:
             if face.get("replay"):
-                # AC-PPR9 / AC-PPR10 / AC-PPR11: the pair is replayed from the
-                # landed report, and the label names which replay shape read it.
+                # AC-PPR9 / AC-PPR10 / AC-PPR11 / AC-PPR13: the pair is replayed
+                # from the landed report, and the label names which replay shape
+                # read it.
                 label = "%s-from-report" % face["replay"]["function"]
                 if face["replay"].get("kind") == "landed-document":
                     label = "%s-from-landed-document" % face["replay"]["function"]
+                if face["replay"].get("kind") == "clock-identity":
+                    label = "%s-from-report-clock-pin" % face["replay"]["function"]
                 row["replay"] = label
                 if face["replay"].get("kind") == "facts-report":
                     used = ["generated_utc"] + list(face["replay"].get("stamp_keys") or [])
                     if face["replay"].get("port", True):
                         used.append("port")
                     row["replay_stamps"] = used
+                if face["replay"].get("kind") == "clock-identity":
+                    # The pin is not a promise: the row names the exact second
+                    # the replay held the ledger clock at.
+                    try:
+                        pin = json.loads(landed_json_bytes.decode("utf-8")).get("generated_utc")
+                    except Exception:
+                        pin = None
+                    row["replay_stamps"] = ["generated_utc=%s (clock pin)" % pin]
                 rendered, rendered_json = replay_render(
-                    face, work, read_bytes(landed_json_path),
+                    face, work, landed_json_bytes,
                     read_bytes(landed_html_path))
             else:
                 rendered, rendered_json = render(face, work)
@@ -506,7 +652,6 @@ def measure(face):
         shutil.rmtree(work, ignore_errors=True)
 
     landed = read_bytes(landed_html_path)
-    landed_json_bytes = read_bytes(landed_json_path)
     channel, how = face_backhop.inject_text(rendered.decode("utf-8"), slug + ".html")
     injected = channel.encode("utf-8")
 

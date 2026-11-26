@@ -65,6 +65,12 @@ def sig(path):
     return (len(data), hashlib.sha256(data).hexdigest()[:16])
 
 
+def plus_one_second(stamp):
+    """Arithmetic on a landed stamp, not a clock read: the pinned second must
+    be load-bearing, so the negative control needs the neighbouring second."""
+    return stamp[:-3] + "%02d" % ((int(stamp[-3:-1]) + 1) % 60) + stamp[-1]
+
+
 def main():
     sig_tool = sig(TOOL)
     sig_json = sig(JSON_HALF)
@@ -470,6 +476,76 @@ def main():
        % (len(naked), nctx, port_still_required,
           naked_html is not None and sig(naked_html) == sig_nh
           and sig(naked_json) == sig_nj))
+
+    # AC-PPR13: a producer whose every tx id is a content hash over the write
+    # second (ledger_business_report) cannot be reproduced by a later run unless
+    # the ledger clock is pinned to the second its own landed report records.
+    # The arm proves the pin is load-bearing rather than decorative: the same
+    # replay one second later must NOT reproduce the three landed tx ids, and a
+    # report that carries no clock stamp is refused by name.
+    clock_faces = [f for f in FPR.FACES
+                   if (f.get("replay") or {}).get("kind") == "clock-identity"]
+    clock_rows = [r for r in rows
+                  if (r.get("replay") or "").endswith("-clock-pin")]
+    clock_html = os.path.join(PREVIEW, "ledger-business-report.html")
+    clock_json = os.path.join(PREVIEW, "ledger-business-report.json")
+    sig_ch = sig(clock_html)
+    sig_cj = sig(clock_json)
+    c_pin = c_ids = c_narrow = c_refuse = False
+    cctx = ""
+    if clock_faces:
+        face = clock_faces[0]
+        page = read_bytes(clock_html)
+        report = read_bytes(clock_json)
+        doc_c = json.loads(report.decode("utf-8").replace("\r\n", "\n"))
+        work_j = tempfile.mkdtemp(prefix="fpr3510a-")
+        work_k = tempfile.mkdtemp(prefix="fpr3510b-")
+        try:
+            html_j, json_j = FPR.replay_render(face, work_j, report, page)
+            html_k, json_k = FPR.replay_render(face, work_k, report, page)
+            pin_name = "generated_utc=%s (clock pin)" % doc_c["generated_utc"]
+            c_pin = (html_j == html_k and json_j == json_k and bool(clock_rows)
+                     and clock_rows[0].get("replay_stamps") == [pin_name])
+            landed_ids = set(re.findall(r"<code>([0-9a-f]{12})</code>",
+                                        page.decode("utf-8")))
+            shown_ids = set(re.findall(r"<code>([0-9a-f]{12})</code>",
+                                       html_j.decode("utf-8")))
+            c_ids = bool(landed_ids) and landed_ids == shown_ids
+            shifted = dict(doc_c)
+            shifted["generated_utc"] = plus_one_second(doc_c["generated_utc"])
+            probe = (json.dumps(shifted, ensure_ascii=False, indent=1)
+                     + "\n").encode("utf-8")
+            html_n, _json_n = FPR.replay_render(face, work_j, probe, page)
+            neg_ids = set(re.findall(r"<code>([0-9a-f]{12})</code>",
+                                     html_n.decode("utf-8")))
+            c_narrow = bool(landed_ids) and neg_ids != landed_ids
+            naked = dict(doc_c)
+            naked.pop("generated_utc", None)
+            try:
+                FPR.replay_render(face, work_j,
+                                  json.dumps(naked, ensure_ascii=False).encode("utf-8"),
+                                  page)
+                c_refuse = False
+            except ValueError:
+                c_refuse = True
+            cctx = "pin=%s ids=%d narrow=%s refuse=%s row=%s" % (
+                c_pin, len(landed_ids), c_narrow, c_refuse,
+                clock_rows[0].get("replay_stamps") if clock_rows else "-")
+        finally:
+            shutil.rmtree(work_j, ignore_errors=True)
+            shutil.rmtree(work_k, ignore_errors=True)
+    ok("AC-PPR13",
+       bool(clock_faces) and bool(clock_rows)
+       and clock_rows[0]["verdict"] == "one-derivation"
+       and clock_rows[0].get("receipt") == "channel-shelf-stamp"
+       and clock_rows[0].get("json_same_as_render") is True
+       and clock_rows[0].get("rendered_json_bytes") == clock_rows[0].get("landed_json_bytes")
+       and c_pin and c_ids and c_narrow and c_refuse
+       and sig(clock_html) == sig_ch and sig(clock_json) == sig_cj,
+       "clock_faces=%d verdict=%s receipt=%s %s untouched=%s"
+       % (len(clock_faces), clock_rows[0]["verdict"] if clock_rows else "-",
+          clock_rows[0].get("receipt") if clock_rows else "-", cctx,
+          sig(clock_html) == sig_ch and sig(clock_json) == sig_cj))
 
     total = len(CHECKS)
     passed = total - len(FAILS)

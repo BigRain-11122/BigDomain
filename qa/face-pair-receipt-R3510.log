@@ -1,0 +1,50 @@
+R3510 evidence: tenth preview history split receipted by clock identity
+======================================================================
+date     2026-11-26
+face     preview/ledger-business-report.html (5970B) / .json (1233B)
+producer tools/ledger_business_report.py
+producer inputs (sha16, recorded in the landed report and re-measured live):
+  driver 2b1fc97ea1451c02  ledger 4fcbe414fe9d7e5c  config 32b018fad53fb8bc
+  `python tools/ledger_business_report.py --check` -> LEDGER BUSINESS CHECK PASS fails=0
+
+WHY A NEW SHAPE (AC-PPR13)
+The producer seeds a throwaway demo ledger through the shipped Ledger API.
+Every tx id is compute_tx_id(ts_utc, ...) and _write_tx takes the wall clock,
+so a later run cannot reproduce the three ids unless the clock is pinned to the
+second the landed report stamped. The replay pins ledger.now_utc to that second,
+re-seeds through the producer's own seed_demo, runs the shipped reconcile IN
+PROCESS (stdout captured; no child process) and renders with build_html.
+
+READ-ONLY PROBE (system temp directory; zero tree writes)
+  pin 2026-11-20 00:48:05Z -> 2026-11-20T00:48:05Z
+  tx ids f8ece7bcfc20 aaf487458534 c60f997d03d9  (== landed page)
+  json half 1233B byte-identical (CRLF adopted, channel size patch applied)
+  html half equal to producer render + channel block after the shelf
+  stamp normalisation (landed 55302 / today 55908)
+  first diff offset 5450 == the channel's data-back-bytes stamp
+
+GATES READ BACK (documented derivation order: battery page, census, index, export)
+  SUITE PASS 13/13  src/os/test_face_pair_receipt.py (AC-PPR1..13)
+    AC-PPR13 clock_faces=1 verdict=one-derivation receipt=channel-shelf-stamp
+      pin=True ids=3 narrow=True refuse=True untouched=True
+      row=['generated_utc=2026-11-20 00:48:05Z (clock pin)']
+  FPR-CHECK VERDICT PASS read_only=True faces=10 one_derivation=6 drift=0
+  PPC-CHECK VERDICT PASS history_split=6 channel_receipt=5 frozen_excused=11
+    same_commit=6 explained=9   (was 7 / 4 / 8)
+  suite registry row 12 -> 13 (src/sandbox/reconcile_all.py)
+  matrix --write WRITTEN then --check DOC-CURRENT (830 rows, 85613B)
+  BSR-CHECK VERDICT PASS html=16416B json=17964B (page verdict RED by design)
+  entry index VERDICT PASS 23/23 fingerprint=1517962792cd0533
+
+NOT TOUCHED
+No producer edit, no landed half re-derived, no freeze register written, no
+AC-PPR1..12 threshold moved. Carrier: fold 839 moved the whole R3500..R3506
+blocks (50 lines) to logs/state-log-archive-2026-11.md verbatim; state
+80776B -> 51968B.
+
+HONEST
+Six splits remain (payment-gate-report and platform-live-report are the next
+two named by the board). The demo database is re-seeded, which the producer's
+own AC-LBR10 note already calls an output rather than an input. ZERO payment
+capability and no network beyond loopback: the five physical pieces still gate
+every buyer.
