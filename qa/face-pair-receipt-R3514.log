@@ -1,0 +1,54 @@
+R3514 evidence - historical-producer replay for apimarket-report-refunds
+=====================================================================
+window: 2026-11-26  (round 3513 -> 3514)
+
+WHY
+  The pair is split: preview/apimarket-report-refunds.json was last written by
+  6fb6c40b (R2111 producer, schema 6) and the page by 700dd89a (R3288 channel).
+  At HEAD the renderer writes schema 17, so version-drift was the only reading
+  and the question "was the page edited by hand?" stayed open.
+
+PROBE (read-only, system temp only)
+  step 1  git archive --output=%TEMP%\r3514-hist2-*\src.tar 6fb6c40b src
+          NOTE: piping git archive into tar through PowerShell corrupts the
+          stream (tar.exe: Damaged tar archive (bad header checksum), dozens of
+          retries, 3 files extracted). --output to a file then tarfile extract
+          gives 903 files. Recorded so no later window repeats the pipe.
+  step 2  python -c "import preview_R2111; preview_R2111.main()"  (that tree's
+          own copy; it writes <tree>/preview/)
+          -> report written: 25254 bytes, sha256 5074953de674..., schema 6
+          -> json written:    39928 bytes, sha256 6c96d0903068...
+  step 3  compare (in process, tools/face_backhop.inject_text)
+          render 25254  sha 5074953d
+          landed 25966  sha 3d557fa8
+          injected = 25966, how=inserted, equal to landed = True
+          json render 39928 sha 6c96d090 / landed 39928 sha 6c96d090 -> identical
+
+RESULT
+  The landed pair IS reproduced byte for byte by the producer as it stood at
+  6fb6c40b. The split is producer evolution, not hand editing. Recorded on the
+  FACES entry as a "historical" block (commit, both rendered digests, both
+  landed digests, json_byte_identical=True).
+
+GATE (AC-PPR4 is untouched: the tool still spawns nothing)
+  - tools/face_pair_receipt.py gains landed_digest_agrees(): a record without a
+    commit is refused (None), any moved landed digest reads False; the record is
+    attached to the version-drift row and its agreement is reported on the row.
+  - src/os/test_face_pair_receipt.py gains AC-PPR16 (agree / refuse / negative,
+    plus both landed halves untouched).
+
+READ-BACK (this window, after the change)
+  SUITE PASS 16/16
+  PASS AC-PPR16 rows=1 commit=6fb6c40b agree=True refuse=True neg=True
+  FPR-CHECK VERDICT PASS read_only=True faces=12 one_derivation=8 drift=0
+  PPC  round=3513 html=106 paired=103 history_split=4 frozen_excused=11 same_run=75
+       (unchanged by design: an explained split is not an excused one)
+  DELIVERABLE INDEX faces=9 defects=0 fingerprint=37c102a8e504e6a2 index=55908B
+  suite matrix DOC-CURRENT
+  state 61610B -> 64737B, fold --plan-only writes_nothing=true
+
+NOT DONE (carried, named)
+  - the other three apimarket faces (questions / buyerquestions / selleranswers)
+    still carry version-drift with no replay; one face per window.
+  - zero payment capability, no network beyond loopback: the five physical
+    pieces still gate every buyer.

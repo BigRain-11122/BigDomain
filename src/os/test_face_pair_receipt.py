@@ -690,6 +690,38 @@ def main():
        % (len(spread_faces), spread_rows[0]["verdict"] if spread_rows else "-",
           sctx, sig(spread_html) == sig_sh and sig(spread_json) == sig_sj))
 
+    # AC-PPR16: a version-drift row may carry a replay of the producer AS IT
+    # STOOD at the commit that wrote the pair. The replay runs in the window (the
+    # tool is barred a child process), so the arm pins the re-checkable half: the
+    # landed pair must still hash to the digests that replay recorded, a record
+    # without a commit is refused, and a record whose digest is moved reads False.
+    hist_rows = [r for r in rows if r.get("historical")]
+    hist_ctx = ""
+    h_ok = h_refuse = h_neg = h_untouched = False
+    if hist_rows:
+        hist_row = hist_rows[0]
+        hist = hist_row["historical"]
+        html_p = os.path.join(PREVIEW, hist_row["slug"] + ".html")
+        json_p = os.path.join(PREVIEW, hist_row["slug"] + ".json")
+        sig_h = sig(html_p)
+        sig_j = sig(json_p)
+        page_h = read_bytes(html_p)
+        rep_j = read_bytes(json_p)
+        h_ok = (FPR.landed_digest_agrees(hist, page_h, rep_j) is True
+                and hist_row["verdict"] == "version-drift"
+                and bool(re.search(r"[0-9a-f]{7,40}", hist.get("commit") or ""))
+                and hist.get("json_byte_identical") is True)
+        h_refuse = FPR.landed_digest_agrees({"landed_html_sha256_12": "0" * 12}, page_h, rep_j) is None
+        moved = dict(hist)
+        moved["landed_html_sha256_12"] = "f" * 12
+        h_neg = FPR.landed_digest_agrees(moved, page_h, rep_j) is False
+        h_untouched = (sig(html_p) == sig_h and sig(json_p) == sig_j)
+        hist_ctx = "rows=%d commit=%s agree=%s refuse=%s neg=%s" % (
+            len(hist_rows), hist.get("commit"),
+            FPR.landed_digest_agrees(hist, page_h, rep_j), h_refuse, h_neg)
+    ok("AC-PPR16", bool(hist_rows) and h_ok and h_refuse and h_neg and h_untouched,
+       hist_ctx or "no historical record on any row")
+
     total = len(CHECKS)
     passed = total - len(FAILS)
     if FAILS:

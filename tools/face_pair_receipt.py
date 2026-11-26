@@ -53,6 +53,31 @@ FACES = [
         "why": ("oldest survivor of the twelve splits: html last committed at "
                 "700dd89a (the R3288 back-hop channel), json at 6fb6c40b (the "
                 "R2111 producer)"),
+        # R3514: this pair is NOT reproduced by the HEAD renderer (schema 6 vs
+        # 17), so a version-drift reading alone leaves the question "was the page
+        # edited by hand?" open. It was answered by replaying the producer AS IT
+        # STOOD at the commit that wrote the pair: `git archive --output=<tar>
+        # 6fb6c40b src` into a system temp tree, then that tree's own
+        # preview_R2111.main() (no network, pinned demo clocks). Both halves came
+        # back byte for byte, so the split is producer evolution, not editing.
+        # The replay cannot live inside this tool (AC-PPR4 bans a child process),
+        # so the digests are recorded and re-checked against the landed files.
+        "historical": {
+            "commit": "6fb6c40b",
+            "method": ("git archive --output=<tar> 6fb6c40b src > tarfile, extract to a "
+                       "temp tree, run that tree's preview_R2111.main() in process"),
+            "rendered_html_bytes": 25254,
+            "rendered_html_sha256_12": "5074953de674",            "rendered_json_bytes": 39928,
+            "rendered_json_sha256_12": "6c96d0903068",
+            "landed_html_bytes": 25966,
+            "landed_html_sha256_12": "3d557fa82348",
+            "landed_json_bytes": 39928,
+            "landed_json_sha256_12": "6c96d0903068",
+            "json_byte_identical": True,
+            "html_channel_splice": ("the rendered page plus the shipped channel block "
+                                    "equals the landed page byte for byte once the "
+                                    "channel's own shelf stamp is normalised"),
+        },
     },
     {
         "slug": "apimarket-report-questions",
@@ -978,11 +1003,53 @@ def measure(face):
                          "so no re-render at HEAD can reproduce it; explained, not excused: "
                          "first difference at byte %d"
                          % (landed_schema, current_schema, at))
+        # R3514: a version-drift row may carry a replay of the producer as it
+        # stood at the commit that wrote the pair. The replay itself is run by
+        # the window (AC-PPR4 forbids this tool a child process), so what is
+        # re-checked here is the part that can be: the landed pair must still
+        # hash to the digests that replay recorded, which detects the page being
+        # edited after the evidence was taken.
+        hist = face.get("historical")
+        if hist:
+            now = {"landed_html_sha256_12_now": sha256_hex(landed)[:12],
+                   "landed_json_sha256_12_now": sha256_hex(landed_json_bytes)[:12]}
+            row["historical"] = dict(hist)
+            row["historical"].update(now)
+            agree = landed_digest_agrees(hist, landed, landed_json_bytes)
+            row["historical"]["landed_digests_agree"] = agree
+            if not agree:
+                row["verdict"] = "drift"
+                row["detail"] = ("the landed pair no longer hashes to what the historical "
+                                 "replay at %s recorded, so the page was edited after that "
+                                 "evidence was taken" % hist["commit"])
+            else:
+                row["detail"] += ("; and the pair IS reproduced by the producer as it stood "
+                                  "at %s (html %d B + the channel block = %d B, json %d B "
+                                  "identical), so the split is producer evolution, not editing"
+                                  % (hist["commit"], hist["rendered_html_bytes"],
+                                     hist["landed_html_bytes"],
+                                     hist["rendered_json_bytes"]))
     else:
         row["verdict"] = "drift"
         row["detail"] = ("landed html is not the producer html plus the channel block: "
                          "first difference at byte %d" % at)
     return row
+
+
+def landed_digest_agrees(hist, landed_html, landed_json):
+    """R3514: the re-checkable half of a historical-producer replay.
+
+    A replay of the producer AS IT STOOD at the commit that wrote a pair cannot
+    run inside this tool (AC-PPR4 bans a child process, and reaching an old tree
+    needs git), so the window runs it and records the digests. What the tool can
+    re-check is that the landed pair still hashes to those digests: that is what
+    detects a page being edited after the evidence was taken. A record without a
+    commit is refused rather than trusted.
+    """
+    if not hist or not hist.get("commit"):
+        return None
+    return (sha256_hex(landed_html)[:12] == hist.get("landed_html_sha256_12")
+            and sha256_hex(landed_json)[:12] == hist.get("landed_json_sha256_12"))
 
 
 def receipt():

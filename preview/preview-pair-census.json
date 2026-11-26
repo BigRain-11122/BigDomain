@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-26T22:33:18+08:00",
+  "generated_at": "2026-11-26T22:45:05+08:00",
   "law": "a split is claimed only when the two halves' last commits differ; an mtime gap alone is published as a bucket, never as a split",
   "oldest_split": {
     "delta_hours": 749.7,
@@ -317,7 +317,7 @@
       "name": "apimarket-report-refunds",
       "pair_receipt": "version-drift",
       "receipt_bound": true,
-      "receipt_detail": "landed page is a schema 6 render and the renderer is at schema 17, so no re-render at HEAD can reproduce it; explained, not excused: first difference at byte 1652",
+      "receipt_detail": "landed page is a schema 6 render and the renderer is at schema 17, so no re-render at HEAD can reproduce it; explained, not excused: first difference at byte 1652; and the pair IS reproduced by the producer as it stood at 6fb6c40b (html 25254 B + the channel block = 25966 B, json 39928 B identical), so the split is producer evolution, not editing",
       "verdict": "history-split"
     },
     {
@@ -405,14 +405,14 @@
       "delta_seconds": 0,
       "html": {
         "bytes": 16413,
-        "commit": "6f1cfc88",
+        "commit": "4e4f10a7",
         "mtime": "2026-11-26T22:31:00+08:00",
         "mtime_epoch": 1795703460,
         "sha": "8BB1AF37"
       },
       "json": {
         "bytes": 18052,
-        "commit": "6f1cfc88",
+        "commit": "4e4f10a7",
         "mtime": "2026-11-26T22:31:00+08:00",
         "mtime_epoch": 1795703460,
         "sha": "6DEB8E14"
@@ -805,18 +805,18 @@
     {
       "delta_seconds": 0,
       "html": {
-        "bytes": 16322,
-        "commit": "97ae0de6",
-        "mtime": "2026-11-26T22:09:34+08:00",
-        "mtime_epoch": 1795702174,
-        "sha": "CB827AC6"
+        "bytes": 16508,
+        "commit": "4e4f10a7",
+        "mtime": "2026-11-26T22:42:37+08:00",
+        "mtime_epoch": 1795704157,
+        "sha": "F4E281B8"
       },
       "json": {
-        "bytes": 24368,
-        "commit": "97ae0de6",
-        "mtime": "2026-11-26T22:09:34+08:00",
-        "mtime_epoch": 1795702174,
-        "sha": "67344DD5"
+        "bytes": 25456,
+        "commit": "4e4f10a7",
+        "mtime": "2026-11-26T22:42:37+08:00",
+        "mtime_epoch": 1795704157,
+        "sha": "D602AF79"
       },
       "name": "face-pair-receipt",
       "verdict": "same-run"
