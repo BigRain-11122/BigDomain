@@ -1,0 +1,36 @@
+R3527 round evidence - 2026-11-27 (BigDomain OSLoop)
+
+PRODUCT
+  tools/preview_writer_census.py              (new, AST census of preview html writers)
+  src/os/test_preview_writer_census.py        (new, AC-PWC1..5, seven arms)
+  preview/preview-writer-census.json          24989B
+  preview/preview-writer-census.html          17205B
+  tools/face_pair_receipt.py                  wired at birth site (AC-PWC5)
+
+GATES (read back, not assumed)
+  python -m unittest src.os.test_preview_writer_census
+    Ran 7 tests - OK
+  python tools/preview_writer_census.py --check
+    PWC-CHECK VERDICT PASS read_only=True modules=119 closed=7 gap=102 reader=10
+  python src/os/suite_matrix_reconcile.py --check
+    DOC-CURRENT rows=832 criteria=6979
+  python src/os/export_round.py --check
+    VERDICT PASS tick=2026-11-27 R3527 PRODUCT
+  python src/os/ledger_lines.py --check
+    VERDICT CLEAN
+
+CENSUS RESULT (the number this round exists to produce)
+  119 modules land or read a preview page
+    7 closed  battery_shard_report, preview_pair_census, preview_writer_census,
+              face_pair_receipt, ceo_blockers, face_sweep, deliverable_index
+  102 gap     every historical board producer plus ledger_reconcile_face,
+              lobby_session_trace, first_yuan_path, filing_checklist,
+              ship_checklist and the rest
+   10 reader  path named, no write call
+    2 excluded definition sites (export_round.py, board_face_landing.py)
+
+CARRIED, NOT PAPERED OVER
+  battery page pair not re-derived after criteria moved 6972 -> 6979
+  state.json 77396B (fold_margin 1104B) - fold first next window
+  102 named gaps remain; one per window from here
+  S4U still unregistered; ZERO payment capability; no network beyond loopback
