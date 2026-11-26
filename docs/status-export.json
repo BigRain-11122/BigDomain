@@ -3,15 +3,15 @@
     "board_pages_skipped": [],
     "current": "2026-11-27 R3537 PRODUCT: the eleventh gap producer from the R3527 census closes at its birth site - tools/merchant_onboard.py, the page that names who owns each missing physical item and how it is verified, now re-derives docs/status-export.json IN PROCESS through the shared board_face_landing.refresh_export_face(ROOT) after its LAST landing write (this page writes the JSON half TWICE, the second time to fix json_bytes, so the closure sits after that second write and not after the first), and only when both halves land under this root's own preview/ - a scratch render derives nothing; the census moves from closed=16 gap=93 to closed=17 gap=92.",
     "do": "2026-11-25 R3456 PRODUCT: the answer-revision question now has a door - api_answer_history (live with AC-AMAW1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so 'which answer was rewritten, what did it say before, what does it say now and how often did it change' could only be read by calling the sandbox from a shell - while api_seller_answers and api_listing_qna publish only the CURRENT wording.",
-    "last_artifact": "preview/preview-writer-census.html (17265B) + preview/preview-writer-census.json (25019B) [2026-11-27 mtime]",
-    "latest_artifact": "preview/preview-writer-census.html (17265B) + preview/preview-writer-census.json (25019B) [2026-11-27 mtime]",
+    "last_artifact": "preview/preview-writer-census.html (17265B) + preview/preview-writer-census.json (25019B) [2026-11-27 commit]",
+    "latest_artifact": "preview/preview-writer-census.html (17265B) + preview/preview-writer-census.json (25019B) [2026-11-27 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\preview-writer-census.html",
     "latest_artifact_note": "",
     "latest_evidence": "qa/round-R3536.log (4292B, 2026-11-27, sha256 95fe1e6879d6)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R3537] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先把刷新轮排最前，毕=更新字段＋文件④更新记录行。 (1) S4U 仍未落地（第七十五次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回；宁缺不错。 (2) **93 家缺口已列名**（`preview/preview-writer-census.json`）：下窗只动一家活线生产者（历史 board 生产器排后），判据沿用 `AC-PWC14` 形状（源码位置量＋两条负控＋共享定义＋落地守卫；多落页点的工具须每处各量）。下一批活线候选按普查页实测挑：`tools/merchant_onboard.py`、`tools/buyer_trial.py`（`tools/status_export_fresh.py` 的 `landing_paths` 为空=它本身就是导出面写者，需单列判据，勿套用同类臂）。 (3) `replay-receipt` 可豁免性仍待 L3 签发或驳回——窗口禁自行翻计数。 (4) 载体 `state.json` 现 ~33KB（阈 78500，余量充足）；写 state 前仍建议先 `state_fold_run.py --fold --dry-run` 看余量。 (5) tick 口径：本轮 3535→3536，下轮 R3537。 (6) 承账不变：`qa_log --ledger-check broken=5`、`769` 判据未被分片路径覆盖、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写；电池页判据行 38→42 后仍读 `BSR-CHECK RED E_REGISTRY_DRIFT`（本窗两次分离派发皆未跑起：PowerShell 作业随宿主 shell 死、`CREATE_NO_WINDOW` 进程三分钟 0.1s CPU 空日志，已按名承账未宣称），下窗换承载法重派生并按 battery→census→index→export 补链。 (7) **定序律新增一条（本窗实测）：CEO 面必须在 commit 之后再派生一次**——提交前派生按 mtime 排序，提交后产品对的排序戳变成 committer time，`export_round --check` 会当场读 `AC-EXPW1`（本窗实锚）；正法=commit 后跑 `python tools/status_export_fresh.py --apply` 再落一次面并随小提交入库。",
-    "next_milestone_due": "2026-11-29T06:28:45+08:00",
-    "updated_at": "2026-11-27T06:28:45+08:00",
+    "next_milestone": "[R3538] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先把刷新轮排最前，毕=更新字段＋文件④更新记录行。 (1) S4U 仍未落地（第七十六次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回；宁缺不错。 (2) **92 家缺口已列名**（`preview/preview-writer-census.json`）：下窗只动一家活线生产者（历史 board 生产器排后），判据沿用 `AC-PWC15` 形状（源码位置量＋两条负控＋共享定义＋落地守卫；多落页点的工具须每处各量）。下一批活线候选按普查实测挑：`tools/buyer_trial.py` 落**四个**页点（`buyer-trial`/`merchant-onboard`/`membership-face`/`money-path-demo`，多落页点律适用，单臂了事=违判据形状）、`tools/status_export_fresh.py` 的 `landing_paths` 为空=它本身就是导出面写者，需单列判据，勿套用同类臂。 (3) `replay-receipt` 可豁免性仍待 L3 签发或驳回——窗口禁自行翻计数。 (4) 载体 `state.json` 现 36961B（阈 78500，余量充足）；写 state 前仍建议先 `state_fold_run.py --fold --dry-run` 看余量。 (5) tick 口径：本轮 3536→3537，下轮 R3538。 (6) 承账不变：`qa_log --ledger-check broken=5`、`769` 判据未被分片路径覆盖、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写；电池页判据行 42→46 后仍读 `BSR-CHECK RED E_REGISTRY_DRIFT`，本窗一次**有界**重派生（210s 上限）又是空日志被杀（`logs/battery-R3537.log` 为空），已按名承账未宣称，下窗换承载法重派生并按 battery→census→index→export 补链。 (7) **定序律重申（R3535/R3536/R3537 三次实测）**：先写 `state.json` tick，再落普查页（`round_label()` 读 tick）；commit 之后必须再派生一次 CEO 面（提交把产品对的排序戳改成 committer time）。",
+    "next_milestone_due": "2026-11-29T06:33:26+08:00",
+    "updated_at": "2026-11-27T06:33:26+08:00",
     "heartbeat": {
       "tick": 3522,
       "state_tick": 3537,
@@ -36,7 +36,7 @@
     }
   },
   "current": "2026-11-27 R3537 PRODUCT: the eleventh gap producer from the R3527 census closes at its birth site - tools/merchant_onboard.py, the page that names who owns each missing physical item and how it is verified, now re-derives docs/status-export.json IN PROCESS through the shared board_face_landing.refresh_export_face(ROOT) after its LAST landing write (this page writes the JSON half TWICE, the second time to fix json_bytes, so the closure sits after that second write and not after the first), and only when both halves land under this root's own preview/ - a scratch render derives nothing; the census moves from closed=16 gap=93 to closed=17 gap=92.",
-  "claims": {"claimed": 41, "captured": 23, "contradicted": 0, "uncaptured": 18, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-27T06:28:45+08:00"},
+  "claims": {"claimed": 41, "captured": 23, "contradicted": 0, "uncaptured": 18, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-27T06:33:26+08:00"},
   "chain": {"present": true, "rows": 106, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -66,10 +66,10 @@
     }
   ],
   "do": "2026-11-27 R3537 PRODUCT: the eleventh gap producer from the R3527 census closes at its birth site - tools/merchant_onboard.py, the page that names who owns each missing physical item and how it is verified, now re-derives docs/status-export.json IN PROCESS through the shared board_face_landing.refresh_export_face(ROOT) after its LAST landing write (this page writes the JSON half TWICE, the second time to fix json_bytes, so the closure sits after that second write and not after the first), and only when both halves land under this root's own preview/ - a scratch render derives nothing; the census moves from closed=16 gap=93 to closed=17 gap=92.",
-  "export_ts": "2026-11-27T06:28:45+08:00",
-  "latest_artifact": "preview/preview-writer-census.html (17265B) + preview/preview-writer-census.json (25019B) [2026-11-27 mtime]",
+  "export_ts": "2026-11-27T06:33:26+08:00",
+  "latest_artifact": "preview/preview-writer-census.html (17265B) + preview/preview-writer-census.json (25019B) [2026-11-27 commit]",
   "latest_evidence": "qa/round-R3536.log (4292B, 2026-11-27, sha256 95fe1e6879d6)",
-  "next_milestone": "[R3537] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先把刷新轮排最前，毕=更新字段＋文件④更新记录行。 (1) S4U 仍未落地（第七十五次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回；宁缺不错。 (2) **93 家缺口已列名**（`preview/preview-writer-census.json`）：下窗只动一家活线生产者（历史 board 生产器排后），判据沿用 `AC-PWC14` 形状（源码位置量＋两条负控＋共享定义＋落地守卫；多落页点的工具须每处各量）。下一批活线候选按普查页实测挑：`tools/merchant_onboard.py`、`tools/buyer_trial.py`（`tools/status_export_fresh.py` 的 `landing_paths` 为空=它本身就是导出面写者，需单列判据，勿套用同类臂）。 (3) `replay-receipt` 可豁免性仍待 L3 签发或驳回——窗口禁自行翻计数。 (4) 载体 `state.json` 现 ~33KB（阈 78500，余量充足）；写 state 前仍建议先 `state_fold_run.py --fold --dry-run` 看余量。 (5) tick 口径：本轮 3535→3536，下轮 R3537。 (6) 承账不变：`qa_log --ledger-check broken=5`、`769` 判据未被分片路径覆盖、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写；电池页判据行 38→42 后仍读 `BSR-CHECK RED E_REGISTRY_DRIFT`（本窗两次分离派发皆未跑起：PowerShell 作业随宿主 shell 死、`CREATE_NO_WINDOW` 进程三分钟 0.1s CPU 空日志，已按名承账未宣称），下窗换承载法重派生并按 battery→census→index→export 补链。 (7) **定序律新增一条（本窗实测）：CEO 面必须在 commit 之后再派生一次**——提交前派生按 mtime 排序，提交后产品对的排序戳变成 committer time，`export_round --check` 会当场读 `AC-EXPW1`（本窗实锚）；正法=commit 后跑 `python tools/status_export_fresh.py --apply` 再落一次面并随小提交入库。",
+  "next_milestone": "[R3538] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先把刷新轮排最前，毕=更新字段＋文件④更新记录行。 (1) S4U 仍未落地（第七十六次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回；宁缺不错。 (2) **92 家缺口已列名**（`preview/preview-writer-census.json`）：下窗只动一家活线生产者（历史 board 生产器排后），判据沿用 `AC-PWC15` 形状（源码位置量＋两条负控＋共享定义＋落地守卫；多落页点的工具须每处各量）。下一批活线候选按普查实测挑：`tools/buyer_trial.py` 落**四个**页点（`buyer-trial`/`merchant-onboard`/`membership-face`/`money-path-demo`，多落页点律适用，单臂了事=违判据形状）、`tools/status_export_fresh.py` 的 `landing_paths` 为空=它本身就是导出面写者，需单列判据，勿套用同类臂。 (3) `replay-receipt` 可豁免性仍待 L3 签发或驳回——窗口禁自行翻计数。 (4) 载体 `state.json` 现 36961B（阈 78500，余量充足）；写 state 前仍建议先 `state_fold_run.py --fold --dry-run` 看余量。 (5) tick 口径：本轮 3536→3537，下轮 R3538。 (6) 承账不变：`qa_log --ledger-check broken=5`、`769` 判据未被分片路径覆盖、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写；电池页判据行 42→46 后仍读 `BSR-CHECK RED E_REGISTRY_DRIFT`，本窗一次**有界**重派生（210s 上限）又是空日志被杀（`logs/battery-R3537.log` 为空），已按名承账未宣称，下窗换承载法重派生并按 battery→census→index→export 补链。 (7) **定序律重申（R3535/R3536/R3537 三次实测）**：先写 `state.json` tick，再落普查页（`round_label()` 读 tick）；commit 之后必须再派生一次 CEO 面（提交把产品对的排序戳改成 committer time）。",
   "outs": [
     "preview/preview-writer-census.html (17265B) + preview/preview-writer-census.json (25019B) [2026-11-27 mtime]",
     "preview/merchant-onboard.html (23088B) + preview/merchant-onboard.json (8124B) [2026-11-27 mtime]",
@@ -154,7 +154,7 @@
   },
   "self_drive": {"window": "2026-11-21..2026-11-27", "window_days": 7, "log_lines_in_window": 56, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 12, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
   "state_bytes": 36961,
-  "next_milestone_due": "2026-11-29T06:28:45+08:00",
+  "next_milestone_due": "2026-11-29T06:33:26+08:00",
   "heartbeat": {
     "tick": 3522,
     "state_tick": 3537,
