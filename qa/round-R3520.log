@@ -24,11 +24,15 @@ MEASURED AFTER
   src/os/ledger_lines.py --check                 -> CLEAN (ledger=21 round=121)
   tools/status_export_fresh.py --check           -> VERDICT R3520 PASS
 
-CARRIED, NOT PAPERED OVER
-  battery_shard_report --check -> BSR-CHECK RED E_REGISTRY_DRIFT (criteria total
-  moved with the +1 criterion). The detached producer answered zero bytes twice
-  and the process vanished; the page pair is NOT re-derived this window and is
-  the first item of [R3521].
+BATTERY PAGE - CORRECTED AFTER THE FACT
+  At commit time this log said the page pair was not re-derived. Measured later:
+  the detached producer DID finish (commit 13b978a4 landed first), and
+  battery_shard_report --check now reads BSR-CHECK VERDICT PASS checks=8 with
+  html 16424B and json 17890B. The law this round added then caught its own
+  consequence: with that board pair newest on disk the landed audit went stale,
+  export --check answered E_SXF_BOARD_SKIP_STALE plus AC-EXPW9, and --apply
+  published ['preview/battery-shard-report.html (16424B)'] before the face read
+  VERDICT R3520 PASS again. The earlier sentence above is kept, not deleted.
 
 FOLD
   fold 841 moved the whole R3519 block (5 lines) to logs/state-log-archive-2026-11.md

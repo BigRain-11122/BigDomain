@@ -1,6 +1,6 @@
 {
   "ceo_face": {
-    "board_pages_skipped": [],
+    "board_pages_skipped": ["preview/battery-shard-report.html (16424B)"],
     "current": "2026-11-27 R3520 PRODUCT: the CEO face's board-page audit is no longer one writer's private row - tools/status_export_fresh.py now derives ceo_face.board_pages_skipped from the SAME newest_artifact() that names latest_artifact and publishes it on --apply, so a document refreshed from this side can no longer carry a stale audit while every other law in the file reads green.",
     "do": "2026-11-25 R3456 PRODUCT: the answer-revision question now has a door - api_answer_history (live with AC-AMAW1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so 'which answer was rewritten, what did it say before, what does it say now and how often did it change' could only be read by calling the sandbox from a shell - while api_seller_answers and api_listing_qna publish only the CURRENT wording.",
     "last_artifact": "preview/preview-pair-census.html (8320B) + preview/preview-pair-census.json (53687B) [2026-11-27 commit]",
@@ -9,9 +9,9 @@
     "latest_artifact_note": "",
     "latest_evidence": "qa/round-R3517.log (4816B, 2026-11-27, sha256 b0a09f4402b6)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R3521] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——若下窗开在 2026-12-01 或之后，先把刷新轮排最前（P-2026-09-24-56），毕=更新字段＋文件④更新记录行。 (1) S4U 仍未落地（第六十次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回；非提权只得 InteractiveToken，违 S4U 律，宁缺不错。 (2) **电池页本轮未收口**：判据总数随本窗 +1 移动，`battery_shard_report --check` 答 `BSR-CHECK RED E_REGISTRY_DRIFT`；隐藏分离进程两次在提交前未落盘（`logs/bsr-out.txt` 0 字节，进程静默消失）——下窗第一步先重派生该对页并读回 PASS，禁把红页留给读者。 (3) 四条 apimarket 分裂全部有盘上重放证据但 `history_split` 恒 4：要改的是判据法不是页——先把「重放证据是否可豁免」写成带负控的提案/决策件。 (4) 支付沙箱同族量具面**已普查收口**（本窗实测 `encoding=\"ascii\"` 在 `src/sandbox` 为 0，四邻套件已用 utf-8/字节读注册表），若再出现解码崩溃按新面重开。 (5) 载体余量：state 本轮 77607B／阈 78500（余 893B，fold 841 已折 R3519 整块）——**下窗写 state 前必先折一轮**，且摘要句不得以轮标开头（否则它自己就是活叙述，会被 `E_LEDGER_SPLIT` 拒绝）。 (6) tick 口径：本轮 3519→3520，下轮 R3521。 (7) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定诊断不修）、全量 battery 未实跑、769 判据未被分片路径覆盖、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写。",
-    "next_milestone_due": "2026-11-29T01:10:33+08:00",
-    "updated_at": "2026-11-27T01:10:33+08:00",
+    "next_milestone": "[R3521] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——若下窗开在 2026-12-01 或之后，先把刷新轮排最前（P-2026-09-24-56），毕=更新字段＋文件④更新记录行。 (1) S4U 仍未落地（第六十次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回；非提权只得 InteractiveToken，违 S4U 律，宁缺不错。 (2) **电池页已在本窗收口**（分离进程在提交后才写完）：`preview/battery-shard-report.html` 16424B ＋ .json 17890B 一对同源，`BSR-CHECK VERDICT PASS checks=8`；且本窗新律当场抓到后果——该板页成为盘上最新后，落地审计变陈旧，`E_SXF_BOARD_SKIP_STALE` ＋ `AC-EXPW9` 双红，`--apply` 发布 `['preview/battery-shard-report.html (16424B)']` 后读回 PASS。**下窗只需复核该对页未再漂移**，不必重派生。 (3) 四条 apimarket 分裂全部有盘上重放证据但 `history_split` 恒 4：要改的是判据法不是页——先把「重放证据是否可豁免」写成带负控的提案/决策件。 (4) 支付沙箱同族量具面**已普查收口**（本窗实测 `encoding=\"ascii\"` 在 `src/sandbox` 为 0，四邻套件已用 utf-8/字节读注册表），若再出现解码崩溃按新面重开。 (5) 载体余量：state 本轮 77607B／阈 78500（余 893B，fold 841 已折 R3519 整块）——**下窗写 state 前必先折一轮**，且摘要句不得以轮标开头（否则它自己就是活叙述，会被 `E_LEDGER_SPLIT` 拒绝）。 (6) tick 口径：本轮 3519→3520，下轮 R3521。 (7) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定诊断不修）、全量 battery 未实跑、769 判据未被分片路径覆盖、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写。",
+    "next_milestone_due": "2026-11-29T01:13:49+08:00",
+    "updated_at": "2026-11-27T01:13:49+08:00",
     "heartbeat": {
       "tick": 3502,
       "state_tick": 3519,
@@ -36,7 +36,7 @@
     }
   },
   "current": "2026-11-27 R3520 PRODUCT: the CEO face's board-page audit is no longer one writer's private row - tools/status_export_fresh.py now derives ceo_face.board_pages_skipped from the SAME newest_artifact() that names latest_artifact and publishes it on --apply, so a document refreshed from this side can no longer carry a stale audit while every other law in the file reads green.",
-  "claims": {"claimed": 41, "captured": 23, "contradicted": 0, "uncaptured": 18, "historic": 0, "rows": 104, "present": true, "census_ts": "2026-11-27T01:10:33+08:00"},
+  "claims": {"claimed": 41, "captured": 23, "contradicted": 0, "uncaptured": 18, "historic": 0, "rows": 104, "present": true, "census_ts": "2026-11-27T01:13:49+08:00"},
   "chain": {"present": true, "rows": 104, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -66,10 +66,10 @@
     }
   ],
   "do": "2026-11-27 R3520 PRODUCT: the CEO face's board-page audit is no longer one writer's private row - tools/status_export_fresh.py now derives ceo_face.board_pages_skipped from the SAME newest_artifact() that names latest_artifact and publishes it on --apply, so a document refreshed from this side can no longer carry a stale audit while every other law in the file reads green.",
-  "export_ts": "2026-11-27T01:10:33+08:00",
+  "export_ts": "2026-11-27T01:13:49+08:00",
   "latest_artifact": "preview/preview-pair-census.html (8320B) + preview/preview-pair-census.json (53687B) [2026-11-27 commit]",
   "latest_evidence": "qa/round-R3517.log (4816B, 2026-11-27, sha256 b0a09f4402b6)",
-  "next_milestone": "[R3521] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——若下窗开在 2026-12-01 或之后，先把刷新轮排最前（P-2026-09-24-56），毕=更新字段＋文件④更新记录行。 (1) S4U 仍未落地（第六十次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回；非提权只得 InteractiveToken，违 S4U 律，宁缺不错。 (2) **电池页本轮未收口**：判据总数随本窗 +1 移动，`battery_shard_report --check` 答 `BSR-CHECK RED E_REGISTRY_DRIFT`；隐藏分离进程两次在提交前未落盘（`logs/bsr-out.txt` 0 字节，进程静默消失）——下窗第一步先重派生该对页并读回 PASS，禁把红页留给读者。 (3) 四条 apimarket 分裂全部有盘上重放证据但 `history_split` 恒 4：要改的是判据法不是页——先把「重放证据是否可豁免」写成带负控的提案/决策件。 (4) 支付沙箱同族量具面**已普查收口**（本窗实测 `encoding=\"ascii\"` 在 `src/sandbox` 为 0，四邻套件已用 utf-8/字节读注册表），若再出现解码崩溃按新面重开。 (5) 载体余量：state 本轮 77607B／阈 78500（余 893B，fold 841 已折 R3519 整块）——**下窗写 state 前必先折一轮**，且摘要句不得以轮标开头（否则它自己就是活叙述，会被 `E_LEDGER_SPLIT` 拒绝）。 (6) tick 口径：本轮 3519→3520，下轮 R3521。 (7) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定诊断不修）、全量 battery 未实跑、769 判据未被分片路径覆盖、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写。",
+  "next_milestone": "[R3521] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——若下窗开在 2026-12-01 或之后，先把刷新轮排最前（P-2026-09-24-56），毕=更新字段＋文件④更新记录行。 (1) S4U 仍未落地（第六十次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回；非提权只得 InteractiveToken，违 S4U 律，宁缺不错。 (2) **电池页已在本窗收口**（分离进程在提交后才写完）：`preview/battery-shard-report.html` 16424B ＋ .json 17890B 一对同源，`BSR-CHECK VERDICT PASS checks=8`；且本窗新律当场抓到后果——该板页成为盘上最新后，落地审计变陈旧，`E_SXF_BOARD_SKIP_STALE` ＋ `AC-EXPW9` 双红，`--apply` 发布 `['preview/battery-shard-report.html (16424B)']` 后读回 PASS。**下窗只需复核该对页未再漂移**，不必重派生。 (3) 四条 apimarket 分裂全部有盘上重放证据但 `history_split` 恒 4：要改的是判据法不是页——先把「重放证据是否可豁免」写成带负控的提案/决策件。 (4) 支付沙箱同族量具面**已普查收口**（本窗实测 `encoding=\"ascii\"` 在 `src/sandbox` 为 0，四邻套件已用 utf-8/字节读注册表），若再出现解码崩溃按新面重开。 (5) 载体余量：state 本轮 77607B／阈 78500（余 893B，fold 841 已折 R3519 整块）——**下窗写 state 前必先折一轮**，且摘要句不得以轮标开头（否则它自己就是活叙述，会被 `E_LEDGER_SPLIT` 拒绝）。 (6) tick 口径：本轮 3519→3520，下轮 R3521。 (7) 承账不变：`qa_log --ledger-check broken=5`（R3371 裁定诊断不修）、全量 battery 未实跑、769 判据未被分片路径覆盖、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写。",
   "outs": [
     "preview/preview-pair-census.html (8320B) + preview/preview-pair-census.json (53687B) [2026-11-27 commit]",
     "preview/face-pair-receipt.html (17066B) + preview/face-pair-receipt.json (30591B) [2026-11-26 mtime]",
@@ -147,9 +147,9 @@
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
-  "self_drive": {"window": "2026-11-21..2026-11-27", "window_days": 7, "log_lines_in_window": 145, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 26, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
-  "state_bytes": 77621,
-  "next_milestone_due": "2026-11-29T01:10:33+08:00",
+  "self_drive": {"window": "2026-11-21..2026-11-27", "window_days": 7, "log_lines_in_window": 146, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 26, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
+  "state_bytes": 78264,
+  "next_milestone_due": "2026-11-29T01:13:49+08:00",
   "heartbeat": {
     "tick": 3502,
     "state_tick": 3519,
