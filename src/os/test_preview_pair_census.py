@@ -1,4 +1,5 @@
-"""Battery suite for the preview page-pair census - AC-PPC1..AC-PPC9 (R3499, R3508, R3511).
+"""Battery suite for the preview page-pair census - AC-PPC1..AC-PPC9 (R3499, R3508, R3511)
+and AC-PPA1..AC-PPA5 (R3522, the replay-receipt admissibility face).
 
 Seven arms were pinned in src/os/backlog.md at R3499 (PIN then PIN+1 for the
 freeze face) BEFORE tools/preview_pair_census.py existed. The point of the
@@ -31,6 +32,7 @@ PREVIEW = os.path.join(ROOT, "preview")
 JSON_HALF = os.path.join(PREVIEW, "preview-pair-census.json")
 HTML_HALF = os.path.join(PREVIEW, "preview-pair-census.html")
 REGISTER = os.path.join(ROOT, "state", "apimarket-face-freeze.json")
+RECEIPT = os.path.join(PREVIEW, "face-pair-receipt.json")
 STATE = os.path.join(ROOT, "src", "os", "state.json")
 sys.path.insert(0, TOOLS)
 
@@ -68,6 +70,9 @@ def main():
     sig_html = sig(HTML_HALF)
     sig_reg = sig(REGISTER)
     sig_state = sig(STATE)
+    sig_admit_json = sig(PPC.ADMIT_OUT)
+    sig_admit_html = sig(PPC.ADMIT_HTML)
+    sig_receipt = sig(RECEIPT)
 
     payload = PPC.census()
     rows = payload["pairs"]
@@ -264,10 +269,116 @@ def main():
        "mirror_without_clock=%s paired_rows=%d commit_still_compared=%s"
        % (mirror_rows_have_no_clock, len(paired), commit_still_compared))
 
+    # AC-PPA1: the admissibility face covers exactly the splits the law counts
+    # and its arithmetic is its own - admitted plus blocked is the whole face,
+    # and the shipped totals are declared untouched rather than quietly moved.
+    face = PPC.admissibility(payload)
+    f_rows = face["rows"]
+    admitted_rows = [r for r in f_rows if r["would_be_admitted"]]
+    ok("AC-PPA1", face["splits"] == totals["history-split"] == len(f_rows)
+       and face["admitted"] == len(admitted_rows)
+       and face["if_admitted"]["history_split_before"] == face["splits"]
+       and face["if_admitted"]["history_split_after"] == face["splits"] - face["admitted"]
+       and face["if_admitted"]["shipped_totals_unchanged"] is True
+       and face["checks"] == 5 and "never excuses" in face["law_now"],
+       "splits=%d admitted=%d after=%d"
+       % (face["splits"], face["admitted"], face["if_admitted"]["history_split_after"]))
+
+    # AC-PPA2: every admitted row is re-derived here, from its own bytes read by
+    # this suite, not from the face's own digest - and a row the face refuses
+    # must name why, so a refusal is never a silent zero.
+    def live12(name):
+        try:
+            return hashlib.sha256(read_bytes(os.path.join(PREVIEW, name + ".html"))).hexdigest()[:12]
+        except OSError:
+            return ""
+
+    recount = all(live12(r["name"]) == r["live_sha256_12"] for r in admitted_rows)
+    bound = all(r["receipt_verdict"] == "version-drift" and r["historical_commit"]
+                and r["recorded_sha256_12"] == r["live_sha256_12"]
+                and not r["blocked_by"] for r in admitted_rows)
+    named = all(r["blocked_by"] for r in f_rows if not r["would_be_admitted"])
+    ok("AC-PPA2", bool(admitted_rows) and recount and bound and named,
+       "admitted=%d recount=%s bound=%s blocked_rows_named=%s"
+       % (len(admitted_rows), recount, bound, named))
+
+    # AC-PPA3: the three controls sit on the real records and each moved field
+    # has to be load-bearing - the exact single reason is pinned, so a control
+    # that answered False for the wrong reason cannot pass.
+    cons = dict((c["control"], c) for c in face["negative_controls"])
+    expect = {"binding-digest-moved-one-hex": "receipt-not-bound-to-landed-bytes",
+              "json-claim-dropped": "json-not-byte-identical",
+              "no-receipt-at-all": "no-receipt"}
+    controls_ok = (set(cons) == set(expect)
+                   and all(cons[k]["ok"] is True and cons[k]["answer"] == [v]
+                           for k, v in expect.items()))
+    ok("AC-PPA3", controls_ok, "controls=%s" % sorted(cons))
+
+    # AC-PPA4: the page is one derivation with two halves; a changed measurement
+    # reddens it while the clock and the window label do not, which is what lets
+    # a decision read it whole after the tick has moved on.
+    fresh_adj_json = PPC.admit_dumps(face).encode("utf-8")
+    fresh_adj_html = PPC.admit_html_of(face).encode("utf-8")
+    adj_landed = (os.path.exists(PPC.ADMIT_OUT) and os.path.exists(PPC.ADMIT_HTML)
+                  and PPC.admit_normalized(read_bytes(PPC.ADMIT_OUT))
+                  == PPC.admit_normalized(fresh_adj_json)
+                  and PPC.admit_normalized(read_bytes(PPC.ADMIT_HTML))
+                  == PPC.admit_normalized(fresh_adj_html))
+    tampered_adj = json.loads(PPC.admit_dumps(face))
+    tampered_adj["rows"][0]["would_be_admitted"] = not tampered_adj["rows"][0]["would_be_admitted"]
+    adj_caught = (PPC.admit_normalized(json.dumps(tampered_adj, indent=2, sort_keys=True,
+                                                  ensure_ascii=False))
+                  != PPC.admit_normalized(fresh_adj_json))
+    stamp_adj = json.loads(PPC.admit_dumps(face))
+    stamp_adj["generated_at"] = "1999-01-01T00:00:00+08:00"
+    stamp_adj["round"] = 1
+    adj_stamp_ignored = (PPC.admit_normalized(json.dumps(stamp_adj, indent=2, sort_keys=True,
+                                                         ensure_ascii=False))
+                         == PPC.admit_normalized(fresh_adj_json))
+    ok("AC-PPA4", adj_landed and adj_caught and adj_stamp_ignored,
+       "landed_pair=%s tamper_caught=%s label_ignored=%s"
+       % (adj_landed, adj_caught, adj_stamp_ignored))
+
+    # AC-PPA5: the staleness gate is the point of the page - a landed row whose
+    # live bytes moved must be named, a clean pair must read clean, and a
+    # missing half must be named rather than skipped.
+    work3 = tempfile.mkdtemp(prefix="ppa3522-")
+    try:
+        good_json = os.path.join(work3, "good.json")
+        good_html = os.path.join(work3, "good.html")
+        bad_json = os.path.join(work3, "bad.json")
+        with io.open(good_json, "wb") as f:
+            f.write(PPC.admit_dumps(face).encode("utf-8"))
+        with io.open(good_html, "wb") as f:
+            f.write(PPC.admit_html_of(face).encode("utf-8"))
+        clean = PPC.admit_check(payload, face, good_json, good_html)
+        stale_doc = json.loads(PPC.admit_dumps(face))
+        moved_name = ""
+        for row in stale_doc["rows"]:
+            if row["would_be_admitted"]:
+                row["live_sha256_12"] = "0" * 12
+                moved_name = row["name"]
+                break
+        with io.open(bad_json, "wb") as f:
+            f.write((json.dumps(stale_doc, indent=2, sort_keys=True,
+                                ensure_ascii=False) + "\n").encode("utf-8"))
+        stale = PPC.admit_check(payload, face, bad_json, good_html)
+        missing = PPC.admit_check(payload, face, os.path.join(work3, "absent.json"), good_html)
+    finally:
+        shutil.rmtree(work3, ignore_errors=True)
+    ok("AC-PPA5", clean == [] and any("live bytes moved" in p and moved_name in p for p in stale)
+       and any("missing half" in p for p in missing),
+       "clean=%d stale_named=%s missing_named=%s"
+       % (len(clean), any("live bytes moved" in p for p in stale),
+          any("missing half" in p for p in missing)))
+
     # AC-PPC7: the suite proved things without changing anything on disk.
     same = (sig(TOOL) == sig_tool and sig(JSON_HALF) == sig_json
             and sig(HTML_HALF) == sig_html and sig(REGISTER) == sig_reg
-            and sig(STATE) == sig_state)
+            and sig(STATE) == sig_state
+            and sig(PPC.ADMIT_OUT) == sig_admit_json
+            and sig(PPC.ADMIT_HTML) == sig_admit_html
+            and sig(RECEIPT) == sig_receipt)
     ok("AC-PPC7", same, "repo_untouched=%s" % same)
 
     total = len(CHECKS)

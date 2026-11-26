@@ -255,6 +255,10 @@ def apply_receipt(row, html_path, receipts):
 # receipt blocks each survivor, and does a receiptless or unbound receipt still
 # read as a split. The shipped totals are not written by this face.
 ADMIT_OUT = os.path.join(PREVIEW, "receipt-admissibility.json")
+ADMIT_HTML = os.path.join(PREVIEW, "receipt-admissibility.html")
+# The face's clock and the window label are not measurements, exactly as on the
+# census page: without this the pair would redden the moment the tick advanced.
+ADMIT_VOLATILE = ("generated_at", "round")
 ADMIT_LAW = ("a split stays a split; this face only answers what a law admitting "
              "byte-exact replay receipts would buy, and refuses to admit a receipt "
              "that is unbound, shape-less or absent")
@@ -389,6 +393,111 @@ def admit_problems(payload, face):
             problems.append("admitted row does not match the file now: " + row["name"])
         if not row["historical_commit"]:
             problems.append("admitted row carries no historical commit: " + row["name"])
+    return problems
+
+
+def admit_dumps(face):
+    return json.dumps(face, indent=2, sort_keys=True, ensure_ascii=False) + "\n"
+
+
+def admit_normalized(data):
+    """Byte comparison with only the clock and the window label blanked."""
+    text = data.decode("utf-8") if isinstance(data, bytes) else data
+    try:
+        obj = json.loads(text)
+    except Exception:
+        folded = "\n".join(line.rstrip() for line in text.replace("\r\n", "\n").split("\n"))
+        return TICK_RE.sub("Tick <label>", folded)
+    for key in ADMIT_VOLATILE:
+        if key in obj:
+            obj[key] = "<volatile>"
+    return json.dumps(obj, indent=2, sort_keys=True, ensure_ascii=False).replace("\r\n", "\n")
+
+
+def admit_html_of(face):
+    """One openable page for the same reading the json half carries.
+
+    It names no census label on purpose: a page that prints this tool's own
+    label is re-classified as a mirror, which would hide it from the census.
+    """
+    rows = []
+    for row in face["rows"]:
+        cls = "same" if row["would_be_admitted"] else "split"
+        rows.append(
+            '<tr><td class="n">%s</td><td class="m">%s</td><td class="m">%s</td>'
+            '<td class="m">%s</td><td class="m">%s</td><td class="%s">%s</td>'
+            '<td class="m">%s</td></tr>'
+            % (esc(row["name"]), esc(row["receipt_verdict"] or "-"),
+               esc(row["historical_commit"] or "-"), esc(row["live_sha256_12"]),
+               esc(row["recorded_sha256_12"] or "-"), cls,
+               "yes" if row["would_be_admitted"] else "no",
+               esc(",".join(row["blocked_by"]) or "-")))
+    controls = []
+    for con in face["negative_controls"]:
+        controls.append(
+            '<tr><td class="n">%s</td><td class="m">%s</td><td class="m">%s</td>'
+            '<td class="%s">%s</td></tr>'
+            % (esc(con["control"]), esc(con["expected"]),
+               esc(",".join(con["answer"]) or "-"),
+               "same" if con["ok"] else "split", "yes" if con["ok"] else "no"))
+    ia = face["if_admitted"]
+    return ('<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">'
+            '<title>BigDomain &middot; replay receipts</title><style>%s</style></head><body>'
+            '<div class="wrap"><h1>Replay receipts: what an admitting law would buy</h1>'
+            '<p class="sub">Tick %d &middot; %d history splits &middot; derived by %s</p>'
+            '<div class="banner">%s</div>'
+            '<div class="banner">Today\'s law: %s. Nothing on this page changes a verdict - '
+            'the shipped census still counts %d history splits, so admitting these receipts '
+            'is a decision, not a re-render.</div>'
+            '<div class="tally"><span>%d splits</span><span>%d admitted</span>'
+            '<span>%d would remain</span><span>controls %d</span></div>'
+            '<table><thead><tr><th>face</th><th>receipt</th><th>historical commit</th>'
+            '<th>live sha</th><th>recorded sha</th><th>admitted</th><th>blocked by</th>'
+            '</tr></thead><tbody>%s</tbody></table>'
+            '<h2 style="font-size:15px;margin:26px 0 8px">Negative controls on the real '
+            'records</h2>'
+            '<table><thead><tr><th>control</th><th>what a green answer must name</th>'
+            '<th>answer</th><th>ok</th></tr></thead><tbody>%s</tbody></table>'
+            '<footer>Every digest on this page is recomputed from the live bytes, never '
+            'trusted from the receipt. Non-advisory notice: this is a build status page, '
+            'not investment advice.</footer></div></body></html>\n'
+            % (STYLE, face["round"], face["splits"], esc(face["source"]),
+               esc(face["law_question"]), esc(face["law_now"]), ia["history_split_before"],
+               face["splits"], face["admitted"], ia["history_split_after"],
+               len(face["negative_controls"]), "\n".join(rows), "\n".join(controls)))
+
+
+def admit_check(payload, face, out=None, html=None):
+    """Name every way the landed page is not this derivation, or has gone stale.
+
+    The staleness arm reads the LANDED rows, not the fresh ones: it answers
+    whether the bytes the page describes are still the bytes on disk, which is
+    the question a decision reader actually asks of it.
+    """
+    out = ADMIT_OUT if out is None else out
+    html = ADMIT_HTML if html is None else html
+    problems = []
+    for path, fresh in ((out, admit_dumps(face).encode("utf-8")),
+                        (html, admit_html_of(face).encode("utf-8"))):
+        if not os.path.exists(path):
+            problems.append("missing half " + os.path.basename(path))
+            continue
+        if admit_normalized(rd_bytes(path)) != admit_normalized(fresh):
+            problems.append("landed half is not this derivation: " + os.path.basename(path))
+    if payload["totals"]["history-split"] != face["splits"]:
+        problems.append("the law counts %d splits but this face covers %d"
+                        % (payload["totals"]["history-split"], face["splits"]))
+    try:
+        landed = json.loads(rd_bytes(out).decode("utf-8"))
+    except Exception:
+        landed = {}
+    for row in landed.get("rows") or ():
+        if not row.get("would_be_admitted"):
+            continue
+        path = os.path.join(PREVIEW, row["name"] + ".html")
+        live = sha256_hex(path)[:12] if os.path.exists(path) else ""
+        if live != row.get("live_sha256_12"):
+            problems.append("live bytes moved since this face was written: " + row["name"])
     return problems
 
 
@@ -618,6 +727,18 @@ def main(argv):
     payload = census()
     if "--admissibility" in argv:
         face = admissibility(payload)
+        if "--check" in argv:
+            problems = admit_check(payload, face)
+            if problems:
+                print("PPC-ADMIT-CHECK VERDICT FAIL read_only=True")
+                for p in problems:
+                    print("  " + p)
+                return 2
+            print("PPC-ADMIT-CHECK VERDICT PASS read_only=True splits=%d admitted=%d "
+                  "if_admitted=%d"
+                  % (face["splits"], face["admitted"],
+                     face["if_admitted"]["history_split_after"]))
+            return 0
         problems = admit_problems(payload, face)
         if problems:
             print("PPC-ADMIT VERDICT FAIL read_only=True")
@@ -626,8 +747,9 @@ def main(argv):
             return 2
         if "--write" in argv:
             with io.open(ADMIT_OUT, "wb") as f:
-                f.write((json.dumps(face, indent=2, sort_keys=True,
-                                    ensure_ascii=False) + "\n").encode("utf-8"))
+                f.write(admit_dumps(face).encode("utf-8"))
+            with io.open(ADMIT_HTML, "wb") as f:
+                f.write(admit_html_of(face).encode("utf-8"))
         print("PPC-ADMIT VERDICT PASS read_only=%s splits=%d admitted=%d "
               "if_admitted=%d controls=%d checks=%d"
               % ("False" if "--write" in argv else "True", face["splits"],

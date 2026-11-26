@@ -5034,8 +5034,15 @@ SUITES = [
     # pair is recorded as a READING (class plus last commit), the exclusion is
     # detected from the landed html rather than trusted from a list, and both
     # negative controls are pinned by AC-PPC8, so 7 -> 8.
+    # R3522: the census row had recorded 8 criteria while the shipped suite
+    # already carried 9 arms, so the registry and the suite disagreed before
+    # this round touched anything. Corrected to the measured arm count and
+    # extended by AC-PPA1..AC-PPA5, which pin the replay-receipt admissibility
+    # face (contract, an independent digest recount, the three negative
+    # controls by their exact reasons, the landed pair plus its tamper/label
+    # controls, and the staleness gate that names a row whose live bytes moved).
     ("preview-pair-census",
-     os.path.join("..", "os", "test_preview_pair_census.py"), 8),
+     os.path.join("..", "os", "test_preview_pair_census.py"), 14),
     # R3500: the per-face receipt answers the census's open question one face
     # at a time - the producer renders into a scratch directory, the shipped
     # post-render channel is applied, and the result is compared with the

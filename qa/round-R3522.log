@@ -1,0 +1,61 @@
+R3522 evidence - replay-receipt admissibility page, its staleness gate, and the healed census pair
+
+1. Head measured before any edit (two reds, not one)
+   python src/os/test_preview_pair_census.py
+     FAIL AC-PPC4 landed_pair=False tamper_caught=True label_and_stamp_ignored=True
+     SUITE FAIL 8/9
+   python tools/preview_pair_census.py --check
+     PPC-CHECK VERDICT FAIL read_only=True
+       landed half is not this derivation: preview-pair-census.json
+   registry row for preview-pair-census said 8 criteria while the suite printed 9 arms.
+
+2. Derivation after the code change
+   python tools/preview_pair_census.py --admissibility --write
+     PPC-ADMIT VERDICT PASS read_only=False splits=4 admitted=4 if_admitted=0 controls=3 checks=5
+     control binding-digest-moved-one-hex ok=True answer=receipt-not-bound-to-landed-bytes
+     control json-claim-dropped ok=True answer=json-not-byte-identical
+     control no-receipt-at-all ok=True answer=no-receipt
+   python tools/preview_pair_census.py
+     PPC (preview-pair-census) round=3521 html=107 paired=104 no_json=3 same_run=76
+       same_commit=6 history_split=4 frozen_excused=11 untracked=0
+   python tools/preview_pair_census.py --check
+     PPC-CHECK VERDICT PASS read_only=True html=107 paired=104 history_split=4
+       channel_receipt=7 frozen_excused=11 same_commit=6 explained=11
+   python tools/preview_pair_census.py --admissibility --check
+     PPC-ADMIT-CHECK VERDICT PASS read_only=True splits=4 admitted=4 if_admitted=0
+
+3. Suite and shard read back
+   python src/os/test_preview_pair_census.py
+     PASS AC-PPA1 splits=4 admitted=4 after=0
+     PASS AC-PPA2 admitted=4 recount=True bound=True blocked_rows_named=True
+     PASS AC-PPA3 controls=[binding-digest-moved-one-hex, json-claim-dropped, no-receipt-at-all]
+     PASS AC-PPA4 landed_pair=True tamper_caught=True label_ignored=True
+     PASS AC-PPA5 clean=0 stale_named=True missing_named=True
+     SUITE PASS 14/14
+   python tools/battery_shard.py --match preview-pair-census
+     SHARD rc=0 scope=SHARD selected=1 executed=1 green=1 criteria=14
+       crit_mismatch=0 elapsed=48.3s crit_checked=1 crit_unchecked=0
+
+4. Matrix and CEO face
+   python src/os/suite_matrix_reconcile.py --write
+     WRITTEN docs/sandbox-suite-matrix.md 85614 bytes, 830 rows
+   python src/os/suite_matrix_reconcile.py --check
+     DOC-CURRENT docs/sandbox-suite-matrix.md
+   python src/os/export_round.py
+     WROTE tick=3522 ok=True queue=CURRENT latest=preview/preview-pair-census.html (8320B)
+       + preview/preview-pair-census.json (54155B)
+   python tools/status_export_fresh.py --check
+     VERDICT R3522 PASS: do, ceo_face.current and current all name R3522
+
+5. Carrier
+   fold 846 moved the whole R3521 round block to the November archive verbatim
+     pre 76583B -> post 73577B, gate_ok=true, predicted_eq_actual=true
+   python src/os/state_append.py ... --tick
+     APPEND OK tick=3522 log=146 bytes=76907 fold_margin=1593
+
+6. Not done, carried by name
+   - the admittance law itself is untouched: the census still counts 4 history splits and
+     docs/spec/replay-receipt-admission-spec.md awaits the L3 decision round
+   - S4U registration still needs an elevated session (62nd carry)
+   - full battery sweep not run; 769 criteria are still outside the shard path
+   - the detached battery page re-derivation was started in this window
