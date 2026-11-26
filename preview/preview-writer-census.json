@@ -3,7 +3,7 @@
     "src/os/board_face_landing.py",
     "src/os/export_round.py"
   ],
-  "generated_at": "2026-11-27T04:39:43+08:00",
+  "generated_at": "2026-11-27T04:53:33+08:00",
   "round": "R3531",
   "rows": [
     {
@@ -804,18 +804,6 @@
       "face_calls": 0,
       "kind": "gap",
       "landing_paths": [
-        "preview/ceo-blockers.html",
-        "preview/face-sweep.html",
-        "preview/lobby-ws-report.html",
-        "preview/payment-gate-report.html"
-      ],
-      "path": "tools/ship_checklist.py",
-      "write_calls": 2
-    },
-    {
-      "face_calls": 0,
-      "kind": "gap",
-      "landing_paths": [
         "similar-listing-board.html"
       ],
       "path": "tools/similar_listing_board.py",
@@ -1004,6 +992,18 @@
       "write_calls": 2
     },
     {
+      "face_calls": 1,
+      "kind": "closed",
+      "landing_paths": [
+        "preview/ceo-blockers.html",
+        "preview/face-sweep.html",
+        "preview/lobby-ws-report.html",
+        "preview/payment-gate-report.html"
+      ],
+      "path": "tools/ship_checklist.py",
+      "write_calls": 2
+    },
+    {
       "face_calls": 0,
       "kind": "reader",
       "landing_paths": [],
@@ -1090,9 +1090,9 @@
     }
   ],
   "totals": {
-    "closed": 11,
+    "closed": 12,
     "excluded": 2,
-    "gap": 98,
+    "gap": 97,
     "modules": 119,
     "reader": 10,
     "writers": 109

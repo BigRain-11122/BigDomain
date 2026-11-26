@@ -7980,7 +7980,7 @@ SUITES = [
     # calls the shared face writer after its last landing write - and never
     # inside check(), with delete/move negative controls plus a behaviour arm.
     ("os-preview-writer-census",
-     os.path.join("..", "os", "test_preview_writer_census.py"), 22),
+     os.path.join("..", "os", "test_preview_writer_census.py"), 26),
     # R2814. tools/ugc_gate_report.py carries AC-UGR1..AC-UGR9 and renders the
     # face for the BLUEPRINT section-five death line (content safety not
     # connected means the door stays shut), yet the registry held ZERO AC-UGR*

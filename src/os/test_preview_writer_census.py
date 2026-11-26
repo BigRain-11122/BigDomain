@@ -3,7 +3,9 @@
 Pinned in src/os/backlog.md BEFORE the tool, this file and the face_pair_receipt
 wiring existed. AC-PWC6 was pinned in the R3528 window before
 tools/ledger_reconcile_face.py was touched, AC-PWC7 in R3529 before
-tools/lobby_session_trace.py, AC-PWC8 in R3530 before tools/first_yuan_path.py.
+tools/lobby_session_trace.py, AC-PWC8 in R3530 before tools/first_yuan_path.py,
+AC-PWC9 in R3531 before tools/filing_checklist.py, AC-PWC10 in R3532 before
+tools/ship_checklist.py.
 
 Why this exists: R3524..R3526 each closed the same birth-site gap for ONE
 producer (one board battery page, the rest of BOARD_PAGES, one non-board census).
@@ -550,6 +552,107 @@ class PWC9FifthProducerClosed(unittest.TestCase):
         finally:
             os.chdir(cwd)
             FCL.HTML, FCL.JSON = saved_html, saved_json
+            if saved is None:
+                sys.modules.pop("board_face_landing", None)
+            else:
+                sys.modules["board_face_landing"] = saved
+            shutil.rmtree(tmp, ignore_errors=True)
+
+
+class PWC10SixthProducerClosed(unittest.TestCase):
+    """AC-PWC10: ship_checklist re-derives the face on its write path only."""
+
+    def _source(self):
+        with io.open(os.path.join(TOOLS, "ship_checklist.py"),
+                     encoding="utf-8") as f:
+            return f.read()
+
+    def test_closed_and_ordered_after_the_landing(self):
+        text = self._source()
+        kind, _html, writes, closes = MOD.classify_source(text)
+        self.assertEqual(kind, "closed")
+        self.assertGreaterEqual(writes, 2)
+        self.assertGreaterEqual(closes, 1)
+        self.assertEqual(fcl_closure_positions(text), (True, True, True, True))
+
+    def test_negative_controls_delete_and_move(self):
+        text = self._source()
+        deleted = text.replace(
+            "        LAST_FACE = _refresh_face()",
+            "        pass  # control: closure call removed").replace(
+            "board_face_landing.refresh_export_face(REPO)",
+            "None  # control: shared call removed")
+        self.assertEqual(MOD.classify_source(deleted)[0], "gap")
+        self.assertFalse(fcl_closure_positions(deleted)[0])
+        moved = text.replace(
+            '        with io.open(JSON, "w", encoding="utf-8", newline="\\n") as f:',
+            "        _refresh_face()  # control: moved before the JSON landing\n"
+            '        with io.open(JSON, "w", encoding="utf-8", newline="\\n") as f:')
+        pos = fcl_closure_positions(moved)
+        self.assertTrue(pos[0])
+        self.assertFalse(pos[1])
+
+    def test_refresh_is_shared_and_named(self):
+        import ship_checklist as SCL
+        calls = []
+
+        class Fake(object):
+            def __init__(self, ok, note):
+                self.ok, self.note = ok, note
+
+            def refresh_export_face(self, root):
+                calls.append(root)
+                return (self.ok, self.note, {})
+
+        class Boom(object):
+            def refresh_export_face(self, root):
+                raise RuntimeError("no writer here")
+
+        saved = sys.modules.get("board_face_landing")
+        try:
+            sys.modules["board_face_landing"] = Fake(True, "")
+            self.assertEqual(SCL._refresh_face(), "WRITTEN")
+            self.assertEqual(calls, [SCL.REPO])
+            sys.modules["board_face_landing"] = Fake(False, "E_BFL_FACE_UNPROVEN")
+            self.assertEqual(SCL._refresh_face(), "REFUSED E_BFL_FACE_UNPROVEN")
+            sys.modules["board_face_landing"] = Boom()
+            self.assertEqual(SCL._refresh_face(), "SKIPPED RuntimeError")
+            self.assertEqual(len(calls), 2)
+        finally:
+            if saved is None:
+                sys.modules.pop("board_face_landing", None)
+            else:
+                sys.modules["board_face_landing"] = saved
+
+    def test_only_the_write_mode_closes(self):
+        """One function, two modes: the scratch render must close nothing."""
+        import ship_checklist as SCL
+        calls = []
+
+        class Fake(object):
+            def refresh_export_face(self, root):
+                calls.append(root)
+                return (True, "", {})
+
+        tmp = tempfile.mkdtemp(prefix="scl-")
+        saved_html, saved_json = SCL.HTML, SCL.JSON
+        saved = sys.modules.get("board_face_landing")
+        cwd = os.getcwd()
+        try:
+            SCL.HTML = os.path.join(tmp, "ship-checklist.html")
+            SCL.JSON = os.path.join(tmp, "ship-checklist.json")
+            sys.modules["board_face_landing"] = Fake()
+            os.chdir(ROOT)
+            SCL.render(write=False)
+            self.assertEqual(calls, [])
+            SCL.render(write=True)
+            self.assertEqual(calls, [SCL.REPO])
+            self.assertEqual(len(calls), 1)
+            self.assertTrue(os.path.isfile(SCL.HTML))
+            self.assertTrue(os.path.isfile(SCL.JSON))
+        finally:
+            os.chdir(cwd)
+            SCL.HTML, SCL.JSON = saved_html, saved_json
             if saved is None:
                 sys.modules.pop("board_face_landing", None)
             else:

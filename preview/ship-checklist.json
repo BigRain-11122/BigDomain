@@ -21,7 +21,7 @@
       "note": "证据在盘（1 条，渲染时实测）",
       "face": "preview/face-sweep.html",
       "face_present": true,
-      "face_bytes": 5113
+      "face_bytes": 8878
     },
     {
       "id": "hard-msgseccheck",
@@ -32,7 +32,7 @@
       "note": "证据在盘（1 条，渲染时实测）",
       "face": "preview/ugc-gate-report.html",
       "face_present": true,
-      "face_bytes": 9576
+      "face_bytes": 28799
     },
     {
       "id": "hard-non-advisory",
@@ -43,7 +43,7 @@
       "note": "证据在盘（1 条，渲染时实测）",
       "face": "preview/lobby-ws-report.html",
       "face_present": true,
-      "face_bytes": 5952
+      "face_bytes": 6693
     },
     {
       "id": "self-ugc-gate-face",
@@ -54,7 +54,7 @@
       "note": "证据在盘（1 条，渲染时实测）",
       "face": "preview/ugc-gate-report.html",
       "face_present": true,
-      "face_bytes": 9576
+      "face_bytes": 28799
     },
     {
       "id": "self-six-doors",
@@ -65,7 +65,7 @@
       "note": "证据在盘（1 条，渲染时实测）",
       "face": "preview/platform-live-report.html",
       "face_present": true,
-      "face_bytes": 6889
+      "face_bytes": 8621
     },
     {
       "id": "self-payment-gate",
@@ -76,7 +76,7 @@
       "note": "证据在盘（1 条，渲染时实测）",
       "face": "preview/payment-gate-report.html",
       "face_present": true,
-      "face_bytes": 6737
+      "face_bytes": 7682
     },
     {
       "id": "self-filing-playbook",
@@ -87,7 +87,7 @@
       "note": "证据在盘（1 条，渲染时实测）",
       "face": "preview/face-sweep.html",
       "face_present": true,
-      "face_bytes": 5113
+      "face_bytes": 8878
     },
     {
       "id": "self-pre-approval",
@@ -98,7 +98,7 @@
       "note": "证据在盘（1 条，渲染时实测）",
       "face": "preview/face-sweep.html",
       "face_present": true,
-      "face_bytes": 5113
+      "face_bytes": 8878
     },
     {
       "id": "ceo-physical-pieces",
@@ -109,7 +109,7 @@
       "note": "待 CEO（阻塞面登记 physical=3）",
       "face": "preview/platform-live-report.html",
       "face_present": true,
-      "face_bytes": 6889
+      "face_bytes": 8621
     },
     {
       "id": "ceo-miniprogram-keys",
@@ -120,7 +120,7 @@
       "note": "待 CEO（阻塞面登记 physical=3）",
       "face": "preview/ceo-blockers.html",
       "face_present": true,
-      "face_bytes": 8453
+      "face_bytes": 8454
     },
     {
       "id": "ceo-filing-number",
@@ -131,11 +131,11 @@
       "note": "待 CEO（阻塞面登记 physical=3）",
       "face": "preview/ceo-blockers.html",
       "face_present": true,
-      "face_bytes": 8453
+      "face_bytes": 8454
     }
   ],
   "sizes": {
-    "html": 9182,
-    "json": 4983
+    "html": 9184,
+    "json": 4985
   }
 }

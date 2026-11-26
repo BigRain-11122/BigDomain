@@ -1,0 +1,16 @@
+ROUND R3532 evidence (2026-11-27)
+target=tools/ship_checklist.py criterion=AC-PWC10
+--- suite ---
+Ran 26 tests in 0.102s
+OK
+--- gates ---
+PWC-CHECK VERDICT PASS read_only=True modules=119 closed=12 gap=97 reader=10
+VERDICT PASS 8/8 items=11 ready=8 open=0 blocked=3 html=9184B json=4985B
+DOC-CURRENT docs/sandbox-suite-matrix.md
+  evidence-source=walk-leg
+VERDICT CLEAN
+BSR-CHECK VERDICT PASS
+SHARD rc=0 scope=SHARD selected=1 executed=1 green=1 criteria=26 crit_mismatch=0 elapsed=0.2s crit_checked=0 crit_unchecked=1
+SHARD disclosure crit_unchecked=os-preview-writer-census
+DELIVERABLE INDEX faces=9 defects=0 fingerprint=4eccee2131e4869f index=56326B
+VERDICT PASS tick=2026-11-27 R3531 PRODUCT: th
