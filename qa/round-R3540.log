@@ -1,0 +1,44 @@
+R3540 evidence log (BigDomain OSLoop, 2026-11-27)
+
+Scope: close the fourteenth gap producer from the R3527 census at its birth site.
+
+Five-still scan (read-only, before any work):
+  group ledger @BigDomain lines = 0  -> no dispatch owed
+  docs/decisions.md = 438 rows / 140 distinct ids vs 144-token baseline
+    0 newcomers, 1 baseline id folded out (D-20261114-0, truncated citation)
+  company orders head = 2026-11-20 22:5x (unchanged)
+  benchmarks_refreshed = 2026-11-24, due 2026-12-01 (not crossed)
+  git status = only qa/crawl-* (not written this window), no index.lock
+  board head = R3539 item (2) next-gap producer -> pullable, work round
+
+Target read-only measurement (tools/journey_demo.py):
+  census row: kind=gap write_calls=2 face_calls=0 landing_paths=[journey-19.9.html]
+  landing writes both inside write_artifacts(): HTML at 402-403, JSON at 404-405
+  render_fixed_point() authors nothing; check()/carrier_state() read only
+  main() returns from --check before render_fixed_point()/write_artifacts()
+  test_journey_demo.patch_world() rebinds PREVIEW + both halves -> guard needed
+
+Change (additive only):
+  _landing_is_default() / _refresh_face() helper pair in tools/journey_demo.py
+  LAST_FACE = _refresh_face() after fh.write(json_text) inside write_artifacts()
+
+Gates read back:
+  python -m unittest src.os.test_preview_writer_census -> Ran 59 tests OK (was 55)
+  python tools/journey_demo.py -> WROTE html=12935B json=8040B steps=8
+     shared writer APPLIED latest_artifact->preview/journey-19.9.html
+  python tools/journey_demo.py --check -> VERDICT PASS 9/9, zero derivation
+  python tools/preview_writer_census.py -> modules=119 closed=20 gap=89 reader=10
+  python src/os/suite_matrix_reconcile.py --write -> 832 rows, 7031 criteria
+     row 743 os-preview-writer-census criteria 51 -> 59 (measured, not typed)
+  python tools/deliverable_index.py -> faces=9 defects=0 index=56337B
+  python tools/qa_log.py --ledger-check -> QA-LEDGER OK rows=106 broken=5
+  python src/os/export_round.py --check -> VERDICT PASS
+  python src/os/state_io.py -> CANON-CLEAN bytes=49185 crlf=227 bare_lf=0
+
+Carried by name (not claimed):
+  battery_shard_report.py --write produced no output for 5 minutes and was
+  cancelled (third window with the same symptom); the page still reads
+  RED E_REGISTRY_DRIFT after the criteria move
+  89 census gaps remain named in preview/preview-writer-census.json
+  ZERO payment capability, no network beyond loopback; five physical pieces
+  still gate every buyer
