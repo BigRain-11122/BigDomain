@@ -7950,9 +7950,11 @@ SUITES = [
     # of export_round.BOARD_PAGES, so the law is one shared definition
     # (src/os/board_face_landing.py) plus a source census closed over
     # BOARD_PAGES. AC-BFL1..AC-BFL4 were pinned in src/os/backlog.md BEFORE the
-    # helper and this suite existed.
+    # helper and this suite existed. R3526 added AC-BFL5..AC-BFL7 for the
+    # non-board census writer tools/preview_pair_census.py, whose landing can
+    # change latest_artifact with no skipped-audit row to show it.
     ("os-board-face-landing",
-     os.path.join("..", "os", "test_board_face_landing.py"), 4),
+     os.path.join("..", "os", "test_board_face_landing.py"), 7),
     # R2814. tools/ugc_gate_report.py carries AC-UGR1..AC-UGR9 and renders the
     # face for the BLUEPRINT section-five death line (content safety not
     # connected means the door stays shut), yet the registry held ZERO AC-UGR*

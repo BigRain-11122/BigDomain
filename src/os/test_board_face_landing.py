@@ -82,6 +82,40 @@ def landing_arm(text):
     return {"writes": writes, "calls": calls, "order_ok": order_ok}
 
 
+CENSUS_TOOL = os.path.join(TOOLS, "preview_pair_census.py")
+CENSUS_GROUPS = (
+    ("census-pair", ("JSON_OUT", "HTML_OUT")),
+    ("admit-pair", ("ADMIT_OUT", "ADMIT_HTML")),
+)
+CENSUS_CALL_RE = re.compile(r"\brefresh_face\(")
+
+
+def census_landing(text):
+    """AC-BFL5 measurement: at every landing site of the non-board census tool
+    both halves are written and the shared face call comes after the last write.
+    A site whose halves are missing reads absent instead of passing vacuously."""
+    lines = text.splitlines()
+    calls = [i for i, line in enumerate(lines, 1)
+             if CENSUS_CALL_RE.search(line) and not line.strip().startswith("def ")]
+    out = {}
+    for name, targets in CENSUS_GROUPS:
+        writes = []
+        seen = set()
+        for i, line in enumerate(lines, 1):
+            if "io.open(" not in line:
+                continue
+            for target in targets:
+                if target in line:
+                    writes.append(i)
+                    seen.add(target)
+        last = max(writes) if writes else 0
+        after = [c for c in calls if c > last]
+        out[name] = {"writes": writes, "halves": len(seen), "last": last,
+                     "call_after": after[:1],
+                     "ok": len(seen) == len(targets) and bool(after)}
+    return out
+
+
 class _FakeER(object):
     def __init__(self):
         self.calls = []
@@ -249,6 +283,89 @@ def main():
        and sig_before == sig_after,
        "no_child=%s no_write=%s suite_banned=%s tree_stable=%s"
        % (no_child, no_write, suite_banned or "none", sig_before == sig_after))
+
+    # AC-BFL5 -- the non-board census tool is closed over BOTH of its landing
+    # sites: each pair's two halves are written and one shared face call follows
+    # the last write, resolving to board_face_landing rather than a second copy.
+    census_text = source(CENSUS_TOOL)
+    groups = census_landing(census_text)
+    red_sites = [n for n, row in groups.items() if not row["ok"]]
+    shares = "import board_face_landing" in census_text
+    ok("AC-BFL5", not red_sites and shares,
+       "sites=%s red=%s shared=%s"
+       % (dict((n, (r["halves"], r["last"], r["call_after"]))
+               for n, r in groups.items()), red_sites or "none", shares))
+
+    # AC-BFL6 -- behaviour through a recording fake helper: exactly one call, on
+    # this tool's own root, and a named refusal comes back as False, never raised.
+    class _FakeHelper(object):
+        def __init__(self, answer):
+            self.calls = []
+            self.answer = answer
+
+        def refresh_export_face(self, root, stamp=None):
+            self.calls.append((root, stamp))
+            return self.answer
+
+    spec = importlib.util.spec_from_file_location("ppc_probe", CENSUS_TOOL)
+    tool = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(tool)
+    keep_helper = sys.modules.get("board_face_landing")
+    good = _FakeHelper((True, "", {"stamp": "2026-11-27T00:00:00+08:00"}))
+    try:
+        sys.modules["board_face_landing"] = good
+        called_ok = tool.refresh_face()
+    finally:
+        if keep_helper is None:
+            sys.modules.pop("board_face_landing", None)
+        else:
+            sys.modules["board_face_landing"] = keep_helper
+    delegate_ok = (called_ok is True and len(good.calls) == 1
+                   and good.calls[0][0] == tool.REPO and good.calls[0][1] is None)
+    refused = _FakeHelper((False, "E_BFL_FACE_REFUSED ValueError: boom", {}))
+    try:
+        sys.modules["board_face_landing"] = refused
+        refused_ok = tool.refresh_face()
+    finally:
+        if keep_helper is None:
+            sys.modules.pop("board_face_landing", None)
+        else:
+            sys.modules["board_face_landing"] = keep_helper
+    ok("AC-BFL6", delegate_ok and refused_ok is False,
+       "delegate=%s calls=%d root_is_repo=%s refused_returns_false=%s"
+       % (delegate_ok, len(good.calls),
+          bool(good.calls) and good.calls[0][0] == tool.REPO,
+          refused_ok is False))
+
+    # AC-BFL7 -- two negative controls on COPIES of the census tool, so the law
+    # is load-bearing: cutting the call, or moving it before the landing writes,
+    # must both read absent while the real source reads present; and the shipped
+    # --check branch must return before any landing write.
+    census_site = ('    with io.open(JSON_OUT, "wb") as f:\n'
+                   '        f.write(dumps(payload).encode("utf-8"))\n'
+                   '    with io.open(HTML_OUT, "wb") as f:\n'
+                   '        f.write(html_of(payload).encode("utf-8"))\n'
+                   '    refresh_face()\n')
+    site_found = census_site in census_text
+    bare = census_site.replace("    refresh_face()\n", "")
+    cut_text = census_text.replace(census_site, bare, 1)
+    moved_text = census_text.replace(census_site, "    refresh_face()\n" + bare, 1)
+    cut_row = census_landing(cut_text)
+    moved_row = census_landing(moved_text)
+    real_row = census_landing(census_text)
+    admit_alive = cut_row["admit-pair"]["ok"]
+    check_first = census_text.index('if "--check" in argv:') < \
+        census_text.index('with io.open(JSON_OUT')
+    tool_sig_before = stat_sig([CENSUS_TOOL])
+    tool_sig_after = stat_sig([CENSUS_TOOL])
+    ok("AC-BFL7", site_found and real_row["census-pair"]["ok"]
+       and not cut_row["census-pair"]["ok"]
+       and not moved_row["census-pair"]["ok"]
+       and admit_alive and check_first and tool_sig_before == tool_sig_after,
+       "site=%s real=%s cut=%s moved=%s admit_untouched=%s check_first=%s stable=%s"
+       % (site_found, real_row["census-pair"]["ok"],
+          cut_row["census-pair"]["ok"], moved_row["census-pair"]["ok"],
+          admit_alive, check_first, tool_sig_before == tool_sig_after))
 
     total = len(CHECKS)
     passed = total - len(FAILS)

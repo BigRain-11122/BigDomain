@@ -1,0 +1,47 @@
+ROUND R3526 evidence - non-board writer lands its page and re-derives the CEO face in the same write
+
+1. READ-ONLY MEASUREMENT BEFORE ANY CODE CHANGE
+   export_round.BOARD_PAGES = (ceo-blockers, face-sweep, battery-shard-report, index)
+   export_round.newest_artifact('.') -> preview/preview-pair-census.html (8320B) + preview-preview-pair-census.json (54155B), source=commit
+   docs/status-export.json: export_ts=2026-11-27T02:36:24+08:00, latest_artifact names the same pair
+   pair mtime 2026-11-27 01:40:22  ->  face was derived AFTER the landing (by another writer)
+   conclusion: no live drift at window start; the gap is structural (landing this pair changes latest_artifact
+   with no skipped-audit row to show it), which is why the fix is a birth-site coupling, not a re-render.
+
+2. CRITERIA PINNED FIRST (src/os/backlog.md [R3526 PIN], before any edit)
+   AC-BFL5 closure: both landing sites of tools/preview_pair_census.py write BOTH halves and call the shared
+                   face writer AFTER the last write, resolving to board_face_landing.
+   AC-BFL6 behaviour: a recording fake helper receives exactly one call with REPO, ok passed through, a named
+                   refusal returns False and is never raised.
+   AC-BFL7 controls: cutting the call or moving it before the landing writes reads absent while the real source
+                   reads present and the OTHER landing site stays present (so the control does not over-reach);
+                   the --check branch returns before any landing write.
+
+3. SUITE
+   python src/os/test_board_face_landing.py -> SUITE PASS 7/7
+     AC-BFL5 sites={'census-pair': (2, 812, [814]), 'admit-pair': (2, 779, [781])} red=none shared=True
+     AC-BFL6 delegate=True calls=1 root_is_repo=True refused_returns_false=True
+     AC-BFL7 site=True real=True cut=False moved=False admit_untouched=True check_first=True stable=True
+   registry src/sandbox/reconcile_all.py 4 -> 7 criteria; matrix 831 rows / 6972 criteria DOC-CURRENT
+
+4. END TO END FROM A REAL LANDING
+   python tools/preview_pair_census.py
+     face export=WRITTEN stamp=2026-11-27T02:42:26+08:00
+     PPC (preview-pair-census) html=107 paired=104 history_split=4 frozen_excused=11
+   python tools/preview_pair_census.py --check -> PPC-CHECK VERDICT PASS read_only=True
+   python src/os/export_round.py --check -> VERDICT PASS
+
+5. CHAIN AFTER THE BATTERY PAGE LANDED (detached producer, 2026-11-27 03:00:09)
+   preview/battery-shard-report.html 16419B / .json 17954B ; battery_shard_report --check -> BSR-CHECK VERDICT PASS
+   then, in that order: census (face export=WRITTEN 03:01:18) -> deliverable_index (index=56115B,
+   fingerprint=067396f23671a23c, defects=0) -> export face (export_ts 2026-11-27T03:01:33+08:00)
+   python src/os/ledger_lines.py --check -> VERDICT CLEAN
+
+6. HONEST BOUNDARIES
+   (a) census()/check()/admit_*() measurements and thresholds are unchanged; the fix is one function plus two
+       call sites, and the shared definition was imported rather than copied.
+   (b) only ONE non-board writer was closed this round; other writers that land preview pages are named as the
+       next window's read-only census item instead of being silently assumed clean.
+   (c) the battery page producer still answers zero bytes for five minutes when run in the foreground, so it was
+       started detached and landed while this window did other work; measured twice this round.
+   (d) ZERO payment capability and no network beyond loopback; the five physical pieces still gate every buyer.

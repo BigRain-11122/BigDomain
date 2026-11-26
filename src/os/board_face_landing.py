@@ -8,9 +8,14 @@ it: the skipped audit silently ages, and the three suites that grade it redden o
 the next window that looks. R3523 paid exactly that.
 
 This module is the one definition those writers share. It takes the root
-explicitly, so a writer running against a private world derives that world's face
-and never the real repo's, and the shipped writer src/os/export_round.py runs in
+explicitly, so a writer running against a private world derives that world's
+face and never the real repo's, and the shipped writer src/os/export_round.py runs in
 THIS process rather than in a scheduled child.
+
+R3526: a NON-board producer needs it too, and for a sharper reason - landing a
+page outside BOARD_PAGES can change `latest_artifact`, so the face ages with no
+skipped-audit row to show it. tools/preview_pair_census.py is the first such
+writer and imports this same function rather than keeping a second copy.
 
 Refusals are named, never raised: the page pair is already on disk when this
 runs, so the caller's exit code stays its own.

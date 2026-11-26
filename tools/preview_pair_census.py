@@ -723,6 +723,34 @@ def check(payload):
     return problems
 
 
+def refresh_face():
+    """AC-BFL6 (R3526): this pair is NOT a board page, which makes the gap worse
+    rather than smaller - landing it can change `latest_artifact`, so the CEO face
+    goes stale without this writer touching it, and no skipped-audit row records
+    that anything changed. The shared definition is imported, not copied, and a
+    refusal is printed rather than raised."""
+    src_os = os.path.join(REPO, "src", "os")
+    if src_os not in sys.path:
+        sys.path.insert(0, src_os)
+    try:
+        import board_face_landing as BFL
+    except Exception as exc:
+        print("face refresh E_PPC_FACE_MISSING %s: %s"
+              % (type(exc).__name__, exc))
+        return False
+    try:
+        good, note, proof = BFL.refresh_export_face(REPO)
+    except Exception as exc:
+        print("face refresh E_PPC_FACE_REFUSED %s: %s"
+              % (type(exc).__name__, exc))
+        return False
+    if not good:
+        print("face refresh %s" % note)
+        return False
+    print("face export=WRITTEN stamp=%s" % (proof or {}).get("stamp"))
+    return True
+
+
 def main(argv):
     payload = census()
     if "--admissibility" in argv:
@@ -750,6 +778,7 @@ def main(argv):
                 f.write(admit_dumps(face).encode("utf-8"))
             with io.open(ADMIT_HTML, "wb") as f:
                 f.write(admit_html_of(face).encode("utf-8"))
+            refresh_face()
         print("PPC-ADMIT VERDICT PASS read_only=%s splits=%d admitted=%d "
               "if_admitted=%d controls=%d checks=%d"
               % ("False" if "--write" in argv else "True", face["splits"],
@@ -782,6 +811,7 @@ def main(argv):
         f.write(dumps(payload).encode("utf-8"))
     with io.open(HTML_OUT, "wb") as f:
         f.write(html_of(payload).encode("utf-8"))
+    refresh_face()
     t = payload["totals"]
     print("PPC (%s) round=%s html=%d paired=%d no_json=%d same_run=%d same_commit=%d "
           "history_split=%d frozen_excused=%d untracked=%d"
