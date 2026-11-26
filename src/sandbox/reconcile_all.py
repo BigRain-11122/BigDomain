@@ -7985,7 +7985,7 @@ SUITES = [
     # pair, never inside check(), with delete/move negative controls, a
     # behaviour arm and a landing-path one-derivation arm.
     ("os-preview-writer-census",
-     os.path.join("..", "os", "test_preview_writer_census.py"), 30),
+     os.path.join("..", "os", "test_preview_writer_census.py"), 34),
     # R2814. tools/ugc_gate_report.py carries AC-UGR1..AC-UGR9 and renders the
     # face for the BLUEPRINT section-five death line (content safety not
     # connected means the door stays shut), yet the registry held ZERO AC-UGR*

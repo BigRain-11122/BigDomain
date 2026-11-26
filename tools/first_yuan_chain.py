@@ -488,6 +488,25 @@ def live_ledger_digest():
         return hashlib.sha256(handle.read()).hexdigest()[:16]
 
 
+def _refresh_face():
+    """AC-PWC12 (R3534): landing this pair and re-deriving the CEO face are ONE run.
+
+    The one definition lives in src/os/board_face_landing.py, so no second writer
+    is kept here. ROOT is passed explicitly, so a private world derives that
+    world's face. Refusals are named, never raised: both halves are already on
+    disk when this runs, so the caller's exit code stays its own.
+    """
+    try:
+        os_src = os.path.join(ROOT, "src", "os")
+        if os_src not in sys.path:
+            sys.path.insert(0, os_src)
+        import board_face_landing
+        ok, note, _proof = board_face_landing.refresh_export_face(ROOT)
+        return "WRITTEN" if ok else "REFUSED %s" % note
+    except Exception as exc:  # a private world may carry no shared writer
+        return "SKIPPED %s" % type(exc).__name__
+
+
 def do_render():
     before = live_ledger_digest()
     payload = build_payload()
@@ -497,7 +516,9 @@ def do_render():
     body = render_html(payload)
     write_atomic(JSON_PATH, dumps(payload))
     write_atomic(HTML_PATH, body)
+    face = _refresh_face()
     money = payload["money"]
+    print("face export=" + face)
     print("RENDER legs=%d prices=%s same_price=%s value_differs=%s "
           "entries=%d tx=%d reconcile_rc=%d zero_delta=%s html=%dB json=%dB"
           % (len(payload["legs"]),

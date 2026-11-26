@@ -1,0 +1,60 @@
+R3534 evidence log (2026-11-27)
+=================================
+
+AC-PWC12 pinned in src/os/backlog.md BEFORE tools/first_yuan_chain.py,
+src/os/test_preview_writer_census.py and the registry were touched.
+
+Read-only measurements before any write
+--------------------------------------
+census row  : {"face_calls": 0, "kind": "gap", "landing_paths": ["first-yuan-chain.html"],
+               "path": "tools/first_yuan_chain.py", "write_calls": 4}
+landing     : do_render() -> write_atomic(JSON_PATH, dumps(payload))   (last but one)
+                           -> write_atomic(HTML_PATH, body)            (LAST landing write)
+check       : do_check() opens both halves read-only and carries E_WROTE as its own
+              did-not-write proof; main() returns do_check() on --check before do_render().
+ROOT        : module constant (line 41), so a private world derives its own face.
+
+Carrier refill (before any state write)
+---------------------------------------
+python src/os/state_fold_run.py --fold --round R3534 --fold-no 852 --start 1 --end 111 \
+  --summary "R3534 fold moved the whole oldest live prefix (R3491 through R3517 with their
+  fold summaries) verbatim to logs/state-log-archive-2026-11.md ... | tokens: <57 carried>"
+  -> STATE FOLD RUN round=R3534 fold=852 mode=execute verdict=CLEAR
+     window=1..111 lines=111 live 148->38 bytes 78426->22902 margin=55598 tokens=459 ok=True
+     archive=VERIFIED layout=AGREE
+     REFUSED windows tried first: 1..60/64/100 token-missing+carry-gap, 1..57 round-split,
+     1..110 token-missing+live-dirty (recorded, not hidden: only 1..111 is a clean boundary).
+python src/os/ledger_lines.py --check -> VERDICT CLEAN (43 lines, rounds_without_ledger none)
+
+Birth-site closure (the product)
+--------------------------------
+tools/first_yuan_chain.py::_refresh_face() added; called once in do_render() AFTER the last
+landing write; refuses by name, never raises; the one definition stays in src/os/board_face_landing.py.
+
+python tools/first_yuan_chain.py
+  -> face export=WRITTEN
+  -> RENDER legs=2 prices=birthright_entry=990,tier_patron_30d=2990 same_price=False
+     value_differs=True entries=2 tx=1 reconcile_rc=0 zero_delta=True html=4403B json=4806B
+
+Gates read back
+---------------
+python -m unittest src.os.test_preview_writer_census -v   -> Ran 34 tests ... OK (rc=0)
+     (new class PWC12EighthProducerClosed: 4 arms, 30 -> 34 criteria)
+python tools/preview_writer_census.py                     -> modules=119 closed=14 gap=95 reader=10
+     face export=WRITTEN
+python tools/preview_writer_census.py --check             -> PWC-CHECK VERDICT PASS read_only=True
+python tools/battery_shard_report.py --check              -> BSR-CHECK VERDICT PASS checks=8
+     (html=16419B json=17954B, page verdict RED by design; re-derived by a detached producer
+      after the registry bump 30 -> 34)
+python src/os/suite_matrix_reconcile.py --write/--check   -> DOC-CURRENT (832 rows, 7006 criteria)
+python tools/deliverable_index.py + --check               -> PASS 23/23 fingerprint=ed28e284078a9fda
+python src/os/export_round.py + --check                   -> VERDICT PASS tick=2026-11-27 R3534 PRODUCT
+
+Honest boundaries
+-----------------
+(a) only the birth-site coupling changed: build_world/drive_leg/build_payload/render_html/
+    do_check and the --check semantics are untouched; both landed halves keep their byte shape;
+    export_round.BOARD_PAGES was not edited.
+(b) the remaining 95 gaps are carried and named in preview/preview-writer-census.json.
+(c) ZERO payment capability and no network beyond loopback: the five physical pieces still
+    gate every buyer.
