@@ -6,12 +6,12 @@
     "last_artifact": "preview/preview-pair-census.html (8320B) + preview/preview-pair-census.json (54155B) [2026-11-27 commit]",
     "latest_artifact": "preview/preview-pair-census.html (8320B) + preview/preview-pair-census.json (54155B) [2026-11-27 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\preview-pair-census.html",
-    "latest_artifact_note": "",
-    "latest_evidence": "qa/round-R3522.log (3363B, 2026-11-27, sha256 f83468d3c01d)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/round-R3524.log (1135B, 2026-11-27, sha256 e2fad328a846)",
+    "latest_evidence": "qa/round-R3524.log (1135B, 2026-11-27, sha256 e2fad328a846)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3524] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——若下窗开在 12-01 或之后，先把刷新轮排最前（P-2026-09-24-56），毕=更新字段＋文件④更新记录行。 (1) S4U 仍未落地（第六十三次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回；宁缺不错。 (2) **本轮点名的出生地缺口（真缺口，非文案）**：一个板页成对件由分离生产器落地后，没有任何东西重派生 `docs/status-export.json`，于是导出面留旧、三条套件连带红——正法=让「落板页」与「重派生导出面」成为同一次写（落页进程内调用 shipped `export_round.write`），须先在板行立判据再改代码，禁只加提醒文案或再加一个外部检查器。 (3) `replay-receipt` 可豁免性仍待 L3 签发或驳回（`docs/spec/replay-receipt-admission-spec.md`，L3 读的页=`preview/receipt-admissibility.html`，有陈旧闸）——**窗口禁自行翻计数**。 (4) 载体余量：state 本窗收口 76771B／阈 78500（余 1729B）——写 state 前必先 `fold --plan-only`，折叠窗必须是**整轮块**，摘要句不得以轮标开头。 (5) tick 口径：本轮 3522→3523，下轮 R3524。 (6) 承账不变：`qa_log --ledger-check broken=5`、全量 battery 未实跑、769 判据未被分片路径覆盖、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写。",
-    "next_milestone_due": "2026-11-29T02:16:57+08:00",
-    "updated_at": "2026-11-27T02:16:57+08:00",
+    "next_milestone": "[R3525] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——若下窗开在 12-01 或之后，先把刷新轮排最前（P-2026-09-24-56），毕=更新字段＋文件④更新记录行。 (1) S4U 仍未落地（第六十四次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回；宁缺不错。 (2) **新律已接线，但只接在一个生产者上**：`tools/battery_shard_report.py` 落页时会进程内重派生导出面；下窗只读普查其余板页写者（`ceo-blockers`／`face-sweep`／`index`／`deliverable_index`），把「落页而不重派生导出面」的同形缺口一次列清，有缺口再按本窗形状扩律（判据先行），无缺口则记一行结论收口——禁无实证扩改。 (3) `replay-receipt` 可豁免性仍待 L3 签发或驳回（`docs/spec/replay-receipt-admission-spec.md`，L3 读的页=`preview/receipt-admissibility.html`，有陈旧闸）——**窗口禁自行翻计数**。 (4) 载体余量：state 本窗 77258B／阈 78500（余 1242B）——写 state 前必先 `fold --plan-only`，折叠窗必须是**整轮块**、走 `--execute` 才真写（本窗实测：无 `--execute` 只打印计划并 rc=0，静默不写）。 (5) tick 口径：本轮 3523→3524，下轮 R3525。 (6) 承账不变：`qa_log --ledger-check broken=5`、全量 battery 未实跑、769 判据未被分片路径覆盖、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写。",
+    "next_milestone_due": "2026-11-29T02:18:55+08:00",
+    "updated_at": "2026-11-27T02:18:55+08:00",
     "heartbeat": {
       "tick": 3522,
       "state_tick": 3524,
@@ -36,7 +36,7 @@
     }
   },
   "current": "2026-11-27 R3524 PRODUCT: landing a board page pair and re-deriving the CEO face are now ONE write - tools/battery_shard_report.py gains refresh_export_face(), which runs the shipped export_round.write in this process after both halves are on disk, so the skipped audit can no longer age behind a landing the way R3523 measured.",
-  "claims": {"claimed": 41, "captured": 23, "contradicted": 0, "uncaptured": 18, "historic": 0, "rows": 104, "present": true, "census_ts": "2026-11-27T02:16:57+08:00"},
+  "claims": {"claimed": 41, "captured": 23, "contradicted": 0, "uncaptured": 18, "historic": 0, "rows": 104, "present": true, "census_ts": "2026-11-27T02:18:55+08:00"},
   "chain": {"present": true, "rows": 104, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -66,10 +66,10 @@
     }
   ],
   "do": "2026-11-27 R3524 PRODUCT: landing a board page pair and re-deriving the CEO face are now ONE write - tools/battery_shard_report.py gains refresh_export_face(), which runs the shipped export_round.write in this process after both halves are on disk, so the skipped audit can no longer age behind a landing the way R3523 measured.",
-  "export_ts": "2026-11-27T02:16:57+08:00",
+  "export_ts": "2026-11-27T02:18:55+08:00",
   "latest_artifact": "preview/preview-pair-census.html (8320B) + preview/preview-pair-census.json (54155B) [2026-11-27 commit]",
-  "latest_evidence": "qa/round-R3522.log (3363B, 2026-11-27, sha256 f83468d3c01d)",
-  "next_milestone": "[R3524] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——若下窗开在 12-01 或之后，先把刷新轮排最前（P-2026-09-24-56），毕=更新字段＋文件④更新记录行。 (1) S4U 仍未落地（第六十三次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回；宁缺不错。 (2) **本轮点名的出生地缺口（真缺口，非文案）**：一个板页成对件由分离生产器落地后，没有任何东西重派生 `docs/status-export.json`，于是导出面留旧、三条套件连带红——正法=让「落板页」与「重派生导出面」成为同一次写（落页进程内调用 shipped `export_round.write`），须先在板行立判据再改代码，禁只加提醒文案或再加一个外部检查器。 (3) `replay-receipt` 可豁免性仍待 L3 签发或驳回（`docs/spec/replay-receipt-admission-spec.md`，L3 读的页=`preview/receipt-admissibility.html`，有陈旧闸）——**窗口禁自行翻计数**。 (4) 载体余量：state 本窗收口 76771B／阈 78500（余 1729B）——写 state 前必先 `fold --plan-only`，折叠窗必须是**整轮块**，摘要句不得以轮标开头。 (5) tick 口径：本轮 3522→3523，下轮 R3524。 (6) 承账不变：`qa_log --ledger-check broken=5`、全量 battery 未实跑、769 判据未被分片路径覆盖、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写。",
+  "latest_evidence": "qa/round-R3524.log (1135B, 2026-11-27, sha256 e2fad328a846)",
+  "next_milestone": "[R3525] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——若下窗开在 12-01 或之后，先把刷新轮排最前（P-2026-09-24-56），毕=更新字段＋文件④更新记录行。 (1) S4U 仍未落地（第六十四次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回；宁缺不错。 (2) **新律已接线，但只接在一个生产者上**：`tools/battery_shard_report.py` 落页时会进程内重派生导出面；下窗只读普查其余板页写者（`ceo-blockers`／`face-sweep`／`index`／`deliverable_index`），把「落页而不重派生导出面」的同形缺口一次列清，有缺口再按本窗形状扩律（判据先行），无缺口则记一行结论收口——禁无实证扩改。 (3) `replay-receipt` 可豁免性仍待 L3 签发或驳回（`docs/spec/replay-receipt-admission-spec.md`，L3 读的页=`preview/receipt-admissibility.html`，有陈旧闸）——**窗口禁自行翻计数**。 (4) 载体余量：state 本窗 77258B／阈 78500（余 1242B）——写 state 前必先 `fold --plan-only`，折叠窗必须是**整轮块**、走 `--execute` 才真写（本窗实测：无 `--execute` 只打印计划并 rc=0，静默不写）。 (5) tick 口径：本轮 3523→3524，下轮 R3525。 (6) 承账不变：`qa_log --ledger-check broken=5`、全量 battery 未实跑、769 判据未被分片路径覆盖、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写。",
   "outs": [
     "preview/preview-pair-census.html (8320B) + preview/preview-pair-census.json (54155B) [2026-11-27 commit]",
     "preview/face-pair-receipt.html (17066B) + preview/face-pair-receipt.json (30591B) [2026-11-26 mtime]",
@@ -148,8 +148,8 @@
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
   "self_drive": {"window": "2026-11-21..2026-11-27", "window_days": 7, "log_lines_in_window": 144, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 25, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
-  "state_bytes": 77258,
-  "next_milestone_due": "2026-11-29T02:16:57+08:00",
+  "state_bytes": 77272,
+  "next_milestone_due": "2026-11-29T02:18:55+08:00",
   "heartbeat": {
     "tick": 3522,
     "state_tick": 3524,
