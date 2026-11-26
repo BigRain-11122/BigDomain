@@ -3,8 +3,8 @@
     "src/os/board_face_landing.py",
     "src/os/export_round.py"
   ],
-  "generated_at": "2026-11-27T04:21:21+08:00",
-  "round": "R3530",
+  "generated_at": "2026-11-27T04:39:43+08:00",
+  "round": "R3531",
   "rows": [
     {
       "face_calls": 0,
@@ -343,18 +343,6 @@
         "index.html"
       ],
       "path": "tools/face_route_scan.py",
-      "write_calls": 2
-    },
-    {
-      "face_calls": 0,
-      "kind": "gap",
-      "landing_paths": [
-        "filing-checklist.html",
-        "preview/face-sweep.html",
-        "preview/filing-checklist.html",
-        "preview/platform-live-report.html"
-      ],
-      "path": "tools/filing_checklist.py",
       "write_calls": 2
     },
     {
@@ -959,6 +947,18 @@
       "face_calls": 1,
       "kind": "closed",
       "landing_paths": [
+        "filing-checklist.html",
+        "preview/face-sweep.html",
+        "preview/filing-checklist.html",
+        "preview/platform-live-report.html"
+      ],
+      "path": "tools/filing_checklist.py",
+      "write_calls": 2
+    },
+    {
+      "face_calls": 1,
+      "kind": "closed",
+      "landing_paths": [
         "preview/first-yuan.html"
       ],
       "path": "tools/first_yuan_path.py",
@@ -1090,9 +1090,9 @@
     }
   ],
   "totals": {
-    "closed": 10,
+    "closed": 11,
     "excluded": 2,
-    "gap": 99,
+    "gap": 98,
     "modules": 119,
     "reader": 10,
     "writers": 109

@@ -1,21 +1,21 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-27 R3530 PRODUCT: the fourth gap producer from the R3527 census closes at its birth site - tools/first_yuan_path.py, the one page that folds all six commercial carrier faces into a single verdict, now re-derives docs/status-export.json IN PROCESS after its only landing loop (cmd_write writes both halves, then calls the shared board_face_landing.refresh_export_face(BASE)), so landing the first-yuan page and re-deriving the CEO face can no longer be scheduled apart.",
+    "current": "2026-11-27 R3531 PRODUCT: the fifth gap producer from the R3527 census closes at its birth site - tools/filing_checklist.py re-derives the CEO face in process after it lands its pair, and only through the mode that really lands: render(write=False) calls the shared writer zero times while render(write=True) calls board_face_landing.refresh_export_face(REPO) once, after its last landing write; the census reads closed=11 gap=98 (was 10/99) and both halves of the filing page are landed (12893B/8138B, items=21).",
     "do": "2026-11-25 R3456 PRODUCT: the answer-revision question now has a door - api_answer_history (live with AC-AMAW1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so 'which answer was rewritten, what did it say before, what does it say now and how often did it change' could only be read by calling the sandbox from a shell - while api_seller_answers and api_listing_qna publish only the CURRENT wording.",
-    "last_artifact": "preview/preview-writer-census.html (17223B) + preview/preview-writer-census.json (24998B) [2026-11-27 mtime]",
-    "latest_artifact": "preview/preview-writer-census.html (17223B) + preview/preview-writer-census.json (24998B) [2026-11-27 mtime]",
+    "last_artifact": "preview/preview-writer-census.html (17229B) + preview/preview-writer-census.json (25001B) [2026-11-27 mtime]",
+    "latest_artifact": "preview/preview-writer-census.html (17229B) + preview/preview-writer-census.json (25001B) [2026-11-27 mtime]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\preview-writer-census.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/round-R3530.log (3479B, 2026-11-27, sha256 94f8c9bce80f)",
+    "latest_artifact_note": "",
     "latest_evidence": "qa/round-R3530.log (3479B, 2026-11-27, sha256 94f8c9bce80f)",
     "newest_pair_on_disk_is_board": false,
-    "next_milestone": "[R3530] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——若下窗开在 12-01 或之后，先把刷新轮排最前（P-2026-09-24-56），毕=更新字段＋文件④更新记录行。 (1) S4U 仍未落地（第七十次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回；宁缺不错。 (2) **99 家缺口已列名**（`preview/preview-writer-census.json`）：下窗只动一家，优先 `tools/filing_checklist.py`／`tools/ship_checklist.py` 这类活线生产器（历史 board 生产器排后），判据沿用 `AC-PWC8` 形状（源码位置量＋两条负控＋共享定义；注意多落页点的工具须每处各量）。 (3) `replay-receipt` 可豁免性仍待 L3 签发或驳回（`docs/spec/replay-receipt-admission-spec.md`，页=`preview/receipt-admissibility.html`）——**窗口禁自行翻计数**。 (4) 载体：`state.json` 现 74859B（阈 78500，余 3641B）；本窗已先 `fold --plan-only` 再 `--execute` 折叠整轮块释放余量。 (5) tick 口径：本轮 3529→3530，下轮 R3531。 (6) 承账不变：`qa_log --ledger-check broken=5`、`769` 判据未被分片路径覆盖、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写。",
-    "next_milestone_due": "2026-11-29T04:24:15+08:00",
-    "updated_at": "2026-11-27T04:24:15+08:00",
+    "next_milestone": "[R3532] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先把刷新轮排最前，毕=更新字段＋文件④更新记录行。 (1) S4U 仍未落地（第七十一次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回。 (2) **98 家缺口已列名**（`preview/preview-writer-census.json`）：下窗只动一家，`tools/ship_checklist.py` 与已闭合的 `tools/filing_checklist.py` 同形（同一个 `render()` 双模式），判据沿用 `AC-PWC9` 形状（每模式各量＋两条负控＋共享定义）。 (3) `replay-receipt` 可豁免性仍待 L3 签发或驳回（窗口禁自行翻计数）。 (4) 载体：`state.json` 现 72675B（阈 78500，余 5825B）；写 state 前先 `fold --plan-only`。 (5) tick 口径：本轮 3530→3531，下轮 R3532。 (6) 承账不变：电池页本窗 `E_REGISTRY_DRIFT`（判据行 18→22 后由分离生产器长跑重派生，结果下窗首读）、`qa_log --ledger-check broken=5`、`769` 判据未被分片路径覆盖、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写。",
+    "next_milestone_due": "2026-11-29T04:39:51+08:00",
+    "updated_at": "2026-11-27T04:39:51+08:00",
     "heartbeat": {
       "tick": 3522,
-      "state_tick": 3530,
-      "lag": 8,
+      "state_tick": 3531,
+      "lag": 9,
       "verdict": "FLAG",
       "reason": "heartbeat_row_debt"
     },
@@ -35,8 +35,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-27 R3530 PRODUCT: the fourth gap producer from the R3527 census closes at its birth site - tools/first_yuan_path.py, the one page that folds all six commercial carrier faces into a single verdict, now re-derives docs/status-export.json IN PROCESS after its only landing loop (cmd_write writes both halves, then calls the shared board_face_landing.refresh_export_face(BASE)), so landing the first-yuan page and re-deriving the CEO face can no longer be scheduled apart.",
-  "claims": {"claimed": 41, "captured": 23, "contradicted": 0, "uncaptured": 18, "historic": 0, "rows": 105, "present": true, "census_ts": "2026-11-27T04:24:15+08:00"},
+  "current": "2026-11-27 R3531 PRODUCT: the fifth gap producer from the R3527 census closes at its birth site - tools/filing_checklist.py re-derives the CEO face in process after it lands its pair, and only through the mode that really lands: render(write=False) calls the shared writer zero times while render(write=True) calls board_face_landing.refresh_export_face(REPO) once, after its last landing write; the census reads closed=11 gap=98 (was 10/99) and both halves of the filing page are landed (12893B/8138B, items=21).",
+  "claims": {"claimed": 41, "captured": 23, "contradicted": 0, "uncaptured": 18, "historic": 0, "rows": 105, "present": true, "census_ts": "2026-11-27T04:39:51+08:00"},
   "chain": {"present": true, "rows": 105, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -65,13 +65,13 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-27 R3530 PRODUCT: the fourth gap producer from the R3527 census closes at its birth site - tools/first_yuan_path.py, the one page that folds all six commercial carrier faces into a single verdict, now re-derives docs/status-export.json IN PROCESS after its only landing loop (cmd_write writes both halves, then calls the shared board_face_landing.refresh_export_face(BASE)), so landing the first-yuan page and re-deriving the CEO face can no longer be scheduled apart.",
-  "export_ts": "2026-11-27T04:24:15+08:00",
-  "latest_artifact": "preview/preview-writer-census.html (17223B) + preview/preview-writer-census.json (24998B) [2026-11-27 mtime]",
+  "do": "2026-11-27 R3531 PRODUCT: the fifth gap producer from the R3527 census closes at its birth site - tools/filing_checklist.py re-derives the CEO face in process after it lands its pair, and only through the mode that really lands: render(write=False) calls the shared writer zero times while render(write=True) calls board_face_landing.refresh_export_face(REPO) once, after its last landing write; the census reads closed=11 gap=98 (was 10/99) and both halves of the filing page are landed (12893B/8138B, items=21).",
+  "export_ts": "2026-11-27T04:39:51+08:00",
+  "latest_artifact": "preview/preview-writer-census.html (17229B) + preview/preview-writer-census.json (25001B) [2026-11-27 mtime]",
   "latest_evidence": "qa/round-R3530.log (3479B, 2026-11-27, sha256 94f8c9bce80f)",
-  "next_milestone": "[R3530] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——若下窗开在 12-01 或之后，先把刷新轮排最前（P-2026-09-24-56），毕=更新字段＋文件④更新记录行。 (1) S4U 仍未落地（第七十次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回；宁缺不错。 (2) **99 家缺口已列名**（`preview/preview-writer-census.json`）：下窗只动一家，优先 `tools/filing_checklist.py`／`tools/ship_checklist.py` 这类活线生产器（历史 board 生产器排后），判据沿用 `AC-PWC8` 形状（源码位置量＋两条负控＋共享定义；注意多落页点的工具须每处各量）。 (3) `replay-receipt` 可豁免性仍待 L3 签发或驳回（`docs/spec/replay-receipt-admission-spec.md`，页=`preview/receipt-admissibility.html`）——**窗口禁自行翻计数**。 (4) 载体：`state.json` 现 74859B（阈 78500，余 3641B）；本窗已先 `fold --plan-only` 再 `--execute` 折叠整轮块释放余量。 (5) tick 口径：本轮 3529→3530，下轮 R3531。 (6) 承账不变：`qa_log --ledger-check broken=5`、`769` 判据未被分片路径覆盖、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写。",
+  "next_milestone": "[R3532] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先把刷新轮排最前，毕=更新字段＋文件④更新记录行。 (1) S4U 仍未落地（第七十一次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回。 (2) **98 家缺口已列名**（`preview/preview-writer-census.json`）：下窗只动一家，`tools/ship_checklist.py` 与已闭合的 `tools/filing_checklist.py` 同形（同一个 `render()` 双模式），判据沿用 `AC-PWC9` 形状（每模式各量＋两条负控＋共享定义）。 (3) `replay-receipt` 可豁免性仍待 L3 签发或驳回（窗口禁自行翻计数）。 (4) 载体：`state.json` 现 72675B（阈 78500，余 5825B）；写 state 前先 `fold --plan-only`。 (5) tick 口径：本轮 3530→3531，下轮 R3532。 (6) 承账不变：电池页本窗 `E_REGISTRY_DRIFT`（判据行 18→22 后由分离生产器长跑重派生，结果下窗首读）、`qa_log --ledger-check broken=5`、`769` 判据未被分片路径覆盖、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写。",
   "outs": [
-    "preview/preview-writer-census.html (17223B) + preview/preview-writer-census.json (24998B) [2026-11-27 mtime]",
+    "preview/preview-writer-census.html (17229B) + preview/preview-writer-census.json (25001B) [2026-11-27 mtime]",
     "preview/first-yuan.html (3917B) + preview/first-yuan.json (2606B) [2026-11-27 mtime]",
     "preview/ledger-reconcile-face.html (8656B) + preview/ledger-reconcile-face.json (6151B) [2026-11-27 commit]",
     "preview/preview-pair-census.html (8320B) + preview/preview-pair-census.json (54163B) [2026-11-27 mtime]",
@@ -142,20 +142,20 @@
     "shortfall_total": 15,
     "verdict": "FLOOR-DEBT"
   },
-  "results": [["3530", "OSLoop 执行 tick"]],
+  "results": [["3531", "OSLoop 执行 tick"]],
   "results_archive": {
     "bytes": 336680,
     "count": 179,
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
-  "self_drive": {"window": "2026-11-21..2026-11-27", "window_days": 7, "log_lines_in_window": 130, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 25, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
-  "state_bytes": 70517,
-  "next_milestone_due": "2026-11-29T04:24:15+08:00",
+  "self_drive": {"window": "2026-11-21..2026-11-27", "window_days": 7, "log_lines_in_window": 135, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 26, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
+  "state_bytes": 72675,
+  "next_milestone_due": "2026-11-29T04:39:51+08:00",
   "heartbeat": {
     "tick": 3522,
-    "state_tick": 3530,
-    "lag": 8,
+    "state_tick": 3531,
+    "lag": 9,
     "verdict": "FLAG",
     "reason": "heartbeat_row_debt"
   },

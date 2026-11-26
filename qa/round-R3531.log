@@ -1,0 +1,38 @@
+R3531 evidence - fifth census gap closed at its birth site (filing_checklist)
+
+work
+  tools/filing_checklist.py: _refresh_face() helper added; called from
+    render(write=True) after the last landing write (JSON half), never from
+    check(); LAST_FACE printed by main().
+  src/os/test_preview_writer_census.py: helper fcl_closure_positions() and
+    class PWC9FifthProducerClosed (4 arms: source position, delete/move
+    negative controls, shared-and-named behaviour, per-mode measurement).
+  src/sandbox/reconcile_all.py: registry row os-preview-writer-census 18 -> 22.
+
+gates
+  python src/os/test_preview_writer_census.py       Ran 22 tests OK
+  SUITE PASS 22/22
+  python tools/preview_writer_census.py --check
+    PWC-CHECK VERDICT PASS read_only=True modules=119 closed=11 gap=98 reader=10
+  python tools/filing_checklist.py
+    face export=WRITTEN
+    WROTE preview\filing-checklist.html (12893B) + preview\filing-checklist.json (8138B)
+    items=21 ready=2 manual=9
+  python tools/filing_checklist.py --check
+    VERDICT PASS 8/8 items=21 ready=2 manual=9 materials=7 pre_approval=10 flow=5
+  python src/os/ledger_lines.py --check            VERDICT CLEAN
+  python src/os/suite_matrix_reconcile.py --write  WRITTEN 85799B 832 rows
+  python src/os/suite_matrix_reconcile.py --check  DOC-CURRENT
+  python tools/battery_shard_report.py --check
+    BSR-CHECK VERDICT PASS html=16419B json=17954B checks=8 (page RED by design)
+  python tools/deliverable_index.py
+    DELIVERABLE INDEX faces=9 defects=0 fingerprint=c288911f65fbd1ce index=56326B
+  python tools/status_export_fresh.py --check
+    VERDICT R3531 PASS: do, ceo_face.current and current all name R3531
+
+honest
+  the battery page first read BSR-CHECK RED E_REGISTRY_DRIFT after the registry
+  row moved 18 -> 22; a synchronous re-derivation answered zero bytes for five
+  minutes and was cancelled, so the page was re-derived by a detached producer
+  (logs/bsr-out.txt) and only then read PASS - no claim was made before the
+  read-back. ZERO payment capability, no network beyond loopback.

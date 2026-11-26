@@ -439,5 +439,123 @@ class PWC8FourthProducerClosed(unittest.TestCase):
         self.assertEqual(calls, [])
 
 
+def fcl_closure_positions(text, last_landing="f.write(text)"):
+    """(present, after_landing, check_clean, shared_only) for AC-PWC9."""
+    if "def render(" not in text:
+        return (False, False, False, False)
+    body = text.rpartition("def render(")[2].split("def check(")[0]
+    at = body.find("_refresh_face()")
+    present = at != -1
+    landing_at = body.rfind(last_landing)
+    after = present and landing_at != -1 and at > landing_at
+    check_body = text.rpartition("def check(")[2].split("def main(")[0]
+    check_clean = "_refresh_face()" not in check_body
+    helper = text.rpartition("def _refresh_face(")[2].split("def render(")[0]
+    shared = "board_face_landing.refresh_export_face(REPO)" in helper
+    no_local_writer = ".write(" not in helper
+    return (present, after, check_clean, shared and no_local_writer)
+
+
+class PWC9FifthProducerClosed(unittest.TestCase):
+    """AC-PWC9: filing_checklist re-derives the face on its write path only."""
+
+    def _source(self):
+        with io.open(os.path.join(TOOLS, "filing_checklist.py"),
+                     encoding="utf-8") as f:
+            return f.read()
+
+    def test_closed_and_ordered_after_the_landing(self):
+        text = self._source()
+        kind, _html, writes, closes = MOD.classify_source(text)
+        self.assertEqual(kind, "closed")
+        self.assertGreaterEqual(writes, 2)
+        self.assertGreaterEqual(closes, 1)
+        self.assertEqual(fcl_closure_positions(text), (True, True, True, True))
+
+    def test_negative_controls_delete_and_move(self):
+        text = self._source()
+        deleted = text.replace(
+            "        LAST_FACE = _refresh_face()",
+            "        pass  # control: closure call removed").replace(
+            "board_face_landing.refresh_export_face(REPO)",
+            "None  # control: shared call removed")
+        self.assertEqual(MOD.classify_source(deleted)[0], "gap")
+        self.assertFalse(fcl_closure_positions(deleted)[0])
+        moved = text.replace(
+            '        with io.open(JSON, "w", encoding="utf-8", newline="\\n") as f:',
+            "        _refresh_face()  # control: moved before the JSON landing\n"
+            '        with io.open(JSON, "w", encoding="utf-8", newline="\\n") as f:')
+        pos = fcl_closure_positions(moved)
+        self.assertTrue(pos[0])
+        self.assertFalse(pos[1])
+
+    def test_refresh_is_shared_and_named(self):
+        import filing_checklist as FCL
+        calls = []
+
+        class Fake(object):
+            def __init__(self, ok, note):
+                self.ok, self.note = ok, note
+
+            def refresh_export_face(self, root):
+                calls.append(root)
+                return (self.ok, self.note, {})
+
+        class Boom(object):
+            def refresh_export_face(self, root):
+                raise RuntimeError("no writer here")
+
+        saved = sys.modules.get("board_face_landing")
+        try:
+            sys.modules["board_face_landing"] = Fake(True, "")
+            self.assertEqual(FCL._refresh_face(), "WRITTEN")
+            self.assertEqual(calls, [FCL.REPO])
+            sys.modules["board_face_landing"] = Fake(False, "E_BFL_FACE_UNPROVEN")
+            self.assertEqual(FCL._refresh_face(), "REFUSED E_BFL_FACE_UNPROVEN")
+            sys.modules["board_face_landing"] = Boom()
+            self.assertEqual(FCL._refresh_face(), "SKIPPED RuntimeError")
+            self.assertEqual(len(calls), 2)
+        finally:
+            if saved is None:
+                sys.modules.pop("board_face_landing", None)
+            else:
+                sys.modules["board_face_landing"] = saved
+
+    def test_only_the_write_mode_closes(self):
+        """The tool lands through one function with two modes: measure each."""
+        import filing_checklist as FCL
+        calls = []
+
+        class Fake(object):
+            def refresh_export_face(self, root):
+                calls.append(root)
+                return (True, "", {})
+
+        tmp = tempfile.mkdtemp(prefix="fcl-")
+        saved_html, saved_json = FCL.HTML, FCL.JSON
+        saved = sys.modules.get("board_face_landing")
+        cwd = os.getcwd()
+        try:
+            FCL.HTML = os.path.join(tmp, "filing-checklist.html")
+            FCL.JSON = os.path.join(tmp, "filing-checklist.json")
+            sys.modules["board_face_landing"] = Fake()
+            os.chdir(ROOT)
+            FCL.render(write=False)
+            self.assertEqual(calls, [])
+            FCL.render(write=True)
+            self.assertEqual(calls, [FCL.REPO])
+            self.assertEqual(len(calls), 1)
+            self.assertTrue(os.path.isfile(FCL.HTML))
+            self.assertTrue(os.path.isfile(FCL.JSON))
+        finally:
+            os.chdir(cwd)
+            FCL.HTML, FCL.JSON = saved_html, saved_json
+            if saved is None:
+                sys.modules.pop("board_face_landing", None)
+            else:
+                sys.modules["board_face_landing"] = saved
+            shutil.rmtree(tmp, ignore_errors=True)
+
+
 if __name__ == "__main__":
     unittest.main()

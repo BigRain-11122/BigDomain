@@ -324,7 +324,31 @@ def build_json(rows, sizes):
     }
 
 
+def _refresh_face():
+    """AC-PWC9 (R3531): landing this pair and re-deriving the CEO face are ONE run.
+
+    The one definition lives in src/os/board_face_landing.py, so no second writer
+    is kept here. REPO is passed explicitly, so a private world derives that
+    world's face. Refusals are named, never raised: both halves are already on
+    disk when this runs, so the caller's exit code stays its own.
+    """
+    try:
+        os_src = os.path.join(REPO, "src", "os")
+        if os_src not in sys.path:
+            sys.path.insert(0, os_src)
+        import board_face_landing
+        ok, note, _proof = board_face_landing.refresh_export_face(REPO)
+        return "WRITTEN" if ok else "REFUSED %s" % note
+    except Exception as exc:  # a private world may carry no shared writer
+        return "SKIPPED %s" % type(exc).__name__
+
+
+LAST_FACE = ""
+
+
 def render(write=True):
+    """Render both halves; only the write mode lands, so only it closes the face."""
+    global LAST_FACE
     rows = build_rows()
     sizes = {"html": 0, "json": 0}
     html = ""
@@ -343,6 +367,7 @@ def render(write=True):
             f.write(html)
         with io.open(JSON, "w", encoding="utf-8", newline="\n") as f:
             f.write(text)
+        LAST_FACE = _refresh_face()
     return html, text, rows, sizes
 
 
@@ -447,6 +472,7 @@ def main(argv):
     html, text, rows, sizes = render(write=True)
     ready = len([r for r in rows if r["state"] == "READY"])
     human = len([r for r in rows if r["state"] in ("NEEDS-HUMAN", "BLOCKED")])
+    print("face export=" + LAST_FACE)
     print("WROTE %s (%dB) + %s (%dB) items=%d ready=%d manual=%d"
           % (HTML, sizes["html"], JSON, sizes["json"], len(rows), ready, human))
     return 0

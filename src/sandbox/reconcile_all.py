@@ -7974,8 +7974,13 @@ SUITES = [
     # tools/first_yuan_path.py calls the shared face writer after its only
     # landing loop (fh.write(body) over both halves) and never inside
     # cmd_check(), with delete/move negative controls plus a behaviour arm.
+    # R3531. AC-PWC9 grades the fifth newly closed producer by source position:
+    # tools/filing_checklist.py lands through ONE render() with two modes, so the
+    # closure is measured per mode - write=False re-derives nothing, write=True
+    # calls the shared face writer after its last landing write - and never
+    # inside check(), with delete/move negative controls plus a behaviour arm.
     ("os-preview-writer-census",
-     os.path.join("..", "os", "test_preview_writer_census.py"), 18),
+     os.path.join("..", "os", "test_preview_writer_census.py"), 22),
     # R2814. tools/ugc_gate_report.py carries AC-UGR1..AC-UGR9 and renders the
     # face for the BLUEPRINT section-five death line (content safety not
     # connected means the door stays shut), yet the registry held ZERO AC-UGR*
