@@ -1,6 +1,6 @@
 {
   "ceo_face": {
-    "board_pages_skipped": ["preview/battery-shard-report.html (16412B)"],
+    "board_pages_skipped": ["preview/battery-shard-report.html (16419B)"],
     "current": "2026-11-27 R3533 PRODUCT: the seventh named gap producer closes at its birth site - tools/start_here.py lands the one page a first visitor opens and then re-derives the CEO face in the same process, so landing the front door can no longer be scheduled apart from refreshing the face; the census reads closed=13 gap=96 where it read 12/97.",
     "do": "2026-11-25 R3456 PRODUCT: the answer-revision question now has a door - api_answer_history (live with AC-AMAW1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so 'which answer was rewritten, what did it say before, what does it say now and how often did it change' could only be read by calling the sandbox from a shell - while api_seller_answers and api_listing_qna publish only the CURRENT wording.",
     "last_artifact": "preview/preview-writer-census.html (17241B) + preview/preview-writer-census.json (25007B) [2026-11-27 commit]",
@@ -10,8 +10,8 @@
     "latest_evidence": "qa/round-R3533.log (3374B, 2026-11-27, sha256 afaf6d7cea74)",
     "newest_pair_on_disk_is_board": true,
     "next_milestone": "[R3534] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先把刷新轮排最前，毕=更新字段＋文件④更新记录行。 (1) S4U 仍未落地（第七十二次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回；宁缺不错。 (2) **96 家缺口已列名**（`preview/preview-writer-census.json`）：下窗只动一家活线生产者（历史 board 生产器排后），判据沿用 `AC-PWC11` 形状（源码位置量＋两条负控＋共享定义；多落页点的工具须每处各量）。`tools/status_export_fresh.py`、`tools/first_yuan_chain.py`、`tools/payment_gate_report.py`、`tools/ugc_gate_report.py` 是下一批活线候选。 (3) `replay-receipt` 可豁免性仍待 L3 签发或驳回——窗口禁自行翻计数。 (4) 载体：`state.json` 现 **78426B（阈 78500，余 74B）**——下窗**第一动作必先 `state_fold_run.py --fold` 腾余量再写任何 state 行**。 (5) tick 口径：本轮 3532→3533，下轮 R3534。 (6) 承账不变：`qa_log --ledger-check broken=5`、`769` 判据未被分片路径覆盖、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写。",
-    "next_milestone_due": "2026-11-29T05:14:56+08:00",
-    "updated_at": "2026-11-27T05:14:56+08:00",
+    "next_milestone_due": "2026-11-29T05:15:35+08:00",
+    "updated_at": "2026-11-27T05:15:35+08:00",
     "heartbeat": {
       "tick": 3522,
       "state_tick": 3533,
@@ -36,7 +36,7 @@
     }
   },
   "current": "2026-11-27 R3533 PRODUCT: the seventh named gap producer closes at its birth site - tools/start_here.py lands the one page a first visitor opens and then re-derives the CEO face in the same process, so landing the front door can no longer be scheduled apart from refreshing the face; the census reads closed=13 gap=96 where it read 12/97.",
-  "claims": {"claimed": 41, "captured": 23, "contradicted": 0, "uncaptured": 18, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-27T05:14:56+08:00"},
+  "claims": {"claimed": 41, "captured": 23, "contradicted": 0, "uncaptured": 18, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-27T05:15:35+08:00"},
   "chain": {"present": true, "rows": 106, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -66,7 +66,7 @@
     }
   ],
   "do": "2026-11-27 R3533 PRODUCT: the seventh named gap producer closes at its birth site - tools/start_here.py lands the one page a first visitor opens and then re-derives the CEO face in the same process, so landing the front door can no longer be scheduled apart from refreshing the face; the census reads closed=13 gap=96 where it read 12/97.",
-  "export_ts": "2026-11-27T05:14:56+08:00",
+  "export_ts": "2026-11-27T05:15:35+08:00",
   "latest_artifact": "preview/preview-writer-census.html (17241B) + preview/preview-writer-census.json (25007B) [2026-11-27 commit]",
   "latest_evidence": "qa/round-R3533.log (3374B, 2026-11-27, sha256 afaf6d7cea74)",
   "next_milestone": "[R3534] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先把刷新轮排最前，毕=更新字段＋文件④更新记录行。 (1) S4U 仍未落地（第七十二次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回；宁缺不错。 (2) **96 家缺口已列名**（`preview/preview-writer-census.json`）：下窗只动一家活线生产者（历史 board 生产器排后），判据沿用 `AC-PWC11` 形状（源码位置量＋两条负控＋共享定义；多落页点的工具须每处各量）。`tools/status_export_fresh.py`、`tools/first_yuan_chain.py`、`tools/payment_gate_report.py`、`tools/ugc_gate_report.py` 是下一批活线候选。 (3) `replay-receipt` 可豁免性仍待 L3 签发或驳回——窗口禁自行翻计数。 (4) 载体：`state.json` 现 **78426B（阈 78500，余 74B）**——下窗**第一动作必先 `state_fold_run.py --fold` 腾余量再写任何 state 行**。 (5) tick 口径：本轮 3532→3533，下轮 R3534。 (6) 承账不变：`qa_log --ledger-check broken=5`、`769` 判据未被分片路径覆盖、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写。",
@@ -153,7 +153,7 @@
   },
   "self_drive": {"window": "2026-11-21..2026-11-27", "window_days": 7, "log_lines_in_window": 145, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 28, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
   "state_bytes": 78426,
-  "next_milestone_due": "2026-11-29T05:14:56+08:00",
+  "next_milestone_due": "2026-11-29T05:15:35+08:00",
   "heartbeat": {
     "tick": 3522,
     "state_tick": 3533,
