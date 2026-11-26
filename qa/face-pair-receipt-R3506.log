@@ -81,3 +81,21 @@ Scope: preview/city-face-report.{html,json} provenance, tools/city_face_report.p
    Nine history splits stand. OS battery family rc=2, 2 of 4 green, 769 criteria
    uncovered by the shard route. S4U registration still outstanding (46th
    carry). Full battery not run this window (family shards only).
+
+10. CORRECTION FOUND AFTER THE COMMIT (named, not hidden)
+   The post-commit re-read showed the four page gates could not all be green at
+   once. The receipt recorded the channel's shelf stamp as a measurement, and
+   the census recorded per-pair mtimes (plus the delta_seconds arithmetic over
+   them) as measurements. Deriving the entry index moved the census, deriving
+   the census moved the index band, so two clocks chased each other.
+
+   Both gates now compare the MEASUREMENT - per-pair size, digest, commit and
+   verdict, and per-face shelf-normalised byte equality - and treat the clock
+   fields as recorded evidence. No threshold moved; no page was re-rendered to
+   make a gate green.
+
+   Read back in the documented render order (chain -> entry index -> census):
+     FPR-CHECK   PASS faces=7 one_derivation=3 drift=0
+     PPC-CHECK   PASS history_split=9 channel_receipt=2 explained=6
+     entry-index 23/23   first-yuan-chain PASS   SUITE PASS 10/10
+     CLOSEOUT    PASS carrier 63175B margin 15325

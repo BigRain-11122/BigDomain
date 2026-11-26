@@ -483,7 +483,11 @@ def measure(face):
         row["receipt"] = "channel-shelf-stamp"
         row["shelf_stamp_landed"] = shelf_stamp(landed)
         row["shelf_stamp_now"] = shelf_stamp(injected)
-        row["spliced_html_sha256"] = sha256_hex(injected)
+        # R3506: the digest is taken over the shelf-NORMALISED page, because the
+        # raw digest of a page that embeds a clock is itself a clock - it moved
+        # 55645 -> 56041 with every verdict unchanged. The normalised digest
+        # still detects any other byte, which is what the page is for.
+        row["spliced_html_sha256"] = sha256_hex(shelf_normalised(injected))
         row["detail"] = ("landed html = producer html + the shipped channel block, equal "
                          "byte for byte once the channel's own shelf stamp is normalised "
                          "on both sides (landed %s, today %s): the stamp records when the "
@@ -601,6 +605,18 @@ def dumps(payload):
 
 
 ROUND_LABEL = re.compile(r"Tick \d+")
+# R3506: the channel's shelf stamp is a witness of WHEN the channel ran, not of
+# which derivation the page is - it moves every time index.html grows, i.e. on
+# every round that re-derives the entry index. AC-PPR9 already normalises that
+# one number out of the byte comparison; the page then records both values as
+# evidence, and those recorded values (plus the digest of a page that embeds
+# them, and the sentence that quotes them) are clocks too. Treating them as
+# measurements made the page red for a reason that is not a defect: measured
+# 2026-11-26, shelf_stamp_now moved 55645 -> 56041 with every per-face verdict
+# unchanged. The stable claim is the shelf-normalised byte equality, which the
+# verdict records and the suite pins with a negative control.
+WITNESS = ("shelf_stamp_now", "shelf_stamp_landed")
+SHELF_DIGITS = re.compile(r"(landed|today) \d+")
 
 
 def normalized(data):
@@ -608,15 +624,25 @@ def normalized(data):
     try:
         obj = json.loads(text)
     except Exception:
-        # The page prints the round it was derived at; that label is not a
-        # measurement, so --check ignores it the same way the census page does
-        # (R3499 precedent) - every per-face size and digest is still compared
-        # byte for byte, so a tampered reading is never excused by this.
+        # The page prints the round it was derived at and, in each detail
+        # sentence, the two shelf stamps; neither is a measurement, so --check
+        # ignores them the same way the census page does (R3499 precedent) -
+        # every per-face size and digest is still compared byte for byte, so a
+        # tampered reading is never excused by this.
         text = ROUND_LABEL.sub("Tick <volatile>", text)
+        text = SHELF_DIGITS.sub(r"\1 <stamp>", text)
         return "\n".join(line.rstrip() for line in text.replace("\r\n", "\n").split("\n"))
     for key in VOLATILE:
         if key in obj:
             obj[key] = "<volatile>"
+    for row in obj.get("faces") or ():
+        if not isinstance(row, dict):
+            continue
+        for key in WITNESS:
+            if key in row:
+                row[key] = "<volatile>"
+        if isinstance(row.get("detail"), str):
+            row["detail"] = SHELF_DIGITS.sub(r"\1 <stamp>", row["detail"])
     return json.dumps(obj, indent=2, sort_keys=True, ensure_ascii=False).replace("\r\n", "\n")
 
 

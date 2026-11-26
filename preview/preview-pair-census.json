@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-26T08:28:13+08:00",
+  "generated_at": "2026-11-26T08:57:13+08:00",
   "law": "a split is claimed only when the two halves' last commits differ; an mtime gap alone is published as a bucket, never as a split",
   "oldest_split": {
     "delta_hours": 749.7,
@@ -405,14 +405,14 @@
       "delta_seconds": 0,
       "html": {
         "bytes": 16419,
-        "commit": "13819883",
+        "commit": "4d90cde5",
         "mtime": "2026-11-26T08:25:53+08:00",
         "mtime_epoch": 1795652753,
         "sha": "42AFAE4E"
       },
       "json": {
         "bytes": 17954,
-        "commit": "13819883",
+        "commit": "4d90cde5",
         "mtime": "2026-11-26T08:25:53+08:00",
         "mtime_epoch": 1795652753,
         "sha": "43D62783"
@@ -806,17 +806,17 @@
       "delta_seconds": 0,
       "html": {
         "bytes": 9637,
-        "commit": "13819883",
-        "mtime": "2026-11-26T08:15:12+08:00",
-        "mtime_epoch": 1795652112,
-        "sha": "4D85FC0C"
+        "commit": "4d90cde5",
+        "mtime": "2026-11-26T08:37:54+08:00",
+        "mtime_epoch": 1795653474,
+        "sha": "AE44F3AA"
       },
       "json": {
         "bytes": 13105,
-        "commit": "13819883",
-        "mtime": "2026-11-26T08:15:12+08:00",
-        "mtime_epoch": 1795652112,
-        "sha": "4AA5BAA6"
+        "commit": "4d90cde5",
+        "mtime": "2026-11-26T08:37:54+08:00",
+        "mtime_epoch": 1795653474,
+        "sha": "4F076078"
       },
       "name": "face-pair-receipt",
       "verdict": "same-run"
@@ -863,16 +863,16 @@
       "delta_seconds": 0,
       "html": {
         "bytes": 4403,
-        "commit": "69453e99",
-        "mtime": "2026-11-26T05:19:46+08:00",
-        "mtime_epoch": 1795641586,
-        "sha": "36BA619F"
+        "commit": "4d90cde5",
+        "mtime": "2026-11-26T08:56:37+08:00",
+        "mtime_epoch": 1795654597,
+        "sha": "10692497"
       },
       "json": {
         "bytes": 4806,
         "commit": "35f13f63",
-        "mtime": "2026-11-26T05:19:46+08:00",
-        "mtime_epoch": 1795641586,
+        "mtime": "2026-11-26T08:56:37+08:00",
+        "mtime_epoch": 1795654597,
         "sha": "E814CA9D"
       },
       "name": "first-yuan-chain",
@@ -900,11 +900,11 @@
     {
       "delta_seconds": 0,
       "html": {
-        "bytes": 55645,
-        "commit": "f2bc2847",
-        "mtime": "2026-11-26T05:19:32+08:00",
-        "mtime_epoch": 1795641572,
-        "sha": "783D5926"
+        "bytes": 55908,
+        "commit": "4d90cde5",
+        "mtime": "2026-11-26T08:55:36+08:00",
+        "mtime_epoch": 1795654536,
+        "sha": "10896C57"
       },
       "json": null,
       "name": "index",

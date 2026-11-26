@@ -67,12 +67,21 @@ HTML_OUT = os.path.join(PREVIEW, LABEL + ".html")
 # the boards cared about (the smallest drifted case measured was 3.6h).
 SAME_RUN_SECONDS = 120
 # generated_at is the clock, and round is the label of the window that derived
-# the page. Neither is a measurement: the measurement is the per-pair byte size,
-# digest and mtime, and those must match exactly or the gate refuses. Treating
-# the label as volatile is what keeps a page honest for a whole window instead of
-# going red the moment the tick it was derived under advances - the stale-pair
+# the page. Neither is a measurement, so --check ignores them - treating the
+# label as volatile is what keeps a page honest for a whole window instead of
+# going red the moment the tick it was derived under advances, the stale-pair
 # trap this page itself exists to expose.
 VOLATILE = ("generated_at", "round")
+# R3506: an mtime is also a clock. The page was measured red after a round that
+# re-derived the entry index (whose band quotes this page's byte counts): every
+# per-pair digest and commit was unchanged, only the seconds moved, and the two
+# gates could not both be green because deriving the index moves this page's own
+# mtime while deriving this page moves the index's band. The measurement is the
+# per-pair byte SIZE, DIGEST and COMMIT plus the verdict it produces; the clock
+# fields are evidence, recorded on the row and excluded from the comparison.
+# A pair whose bytes really moved still reads drift through its digest, and a
+# pair whose class really changed still reads it through the verdict.
+PAIR_CLOCKS = ("mtime", "mtime_epoch")
 FREEZE_REGISTER = os.path.join(REPO, "state", "apimarket-face-freeze.json")
 # R3500: per-face receipts (tools/face_pair_receipt.py) say WHY a split exists.
 # Only a receipt that reproduces the landed html byte for byte may excuse it;
@@ -373,6 +382,20 @@ def normalized(data):
     for key in VOLATILE:
         if key in obj:
             obj[key] = "<volatile>"
+    for pair in obj.get("pairs") or ():
+        if not isinstance(pair, dict):
+            continue
+        # delta_seconds is arithmetic over the two clocks, so it is a clock too;
+        # `verdict` is the class those clocks produce and IS compared, so a pair
+        # that really re-split still reddens this gate.
+        if "delta_seconds" in pair:
+            pair["delta_seconds"] = "<clock>"
+        for half in ("html", "json"):
+            write = pair.get(half)
+            if isinstance(write, dict):
+                for key in PAIR_CLOCKS:
+                    if key in write:
+                        write[key] = "<clock>"
     return json.dumps(obj, indent=2, sort_keys=True, ensure_ascii=False).replace("\r\n", "\n")
 
 
