@@ -52,3 +52,11 @@ NOT DONE (carried, named)
     still carry version-drift with no replay; one face per window.
   - zero payment capability, no network beyond loopback: the five physical
     pieces still gate every buyer.
+
+GATE GAP (honest)
+  the battery shard page was NOT re-derived this round: after the new arm the
+  producer still printed nothing for five minutes and the runner cancelled it,
+  so preview/battery-shard-report.* may lag the matrix by one criterion count.
+  The matrix itself reads DOC-CURRENT and the pre-commit hook re-checked it
+  (rows=830/830). The next window must re-derive the page writing to a file in
+  the background and read BSR-CHECK back.
