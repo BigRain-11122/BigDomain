@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-24 19:46:51Z",
+ "generated_utc": "2026-11-27 20:12:41Z",
  "face": "api_seller_price_cadence_months",
  "scope": "market",
  "month_count": 3,
@@ -162,7 +162,7 @@
  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
  "report": "preview/seller-price-cadence-board.html",
  "sources": {
-  "driver": "cd6f4f855a868e28",
+  "driver": "8939b83f3933c2e8",
   "copy": "fbdf8ada5646f9ec",
   "apimarket": "82a49194bef85737",
   "report": "3a83dce99c9e2bd4"
