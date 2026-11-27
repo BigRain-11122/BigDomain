@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-24 09:41:28Z",
+ "generated_utc": "2026-11-27 16:02:34Z",
  "face": "api_refund_exposure",
  "board_face": "api_board",
  "seller_count": 2,
@@ -38,7 +38,7 @@
  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
  "report": "preview/refund-exposure.html",
  "sources": {
-  "driver": "580218e10c3bacb0",
+  "driver": "1e75794011387686",
   "copy": "37e7a4c40ebc5506",
   "apimarket": "82a49194bef85737",
   "report": "3a83dce99c9e2bd4"
