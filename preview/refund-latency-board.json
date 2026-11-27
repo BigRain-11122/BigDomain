@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-24 19:04:29Z",
+ "generated_utc": "2026-11-27 02:07:54Z",
  "face": "api_refund_latency",
  "scope": "market",
  "band_count": 6,
@@ -128,7 +128,7 @@
  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
  "report": "preview/refund-latency-board.html",
  "sources": {
-  "driver": "fc071fe883c0911b",
+  "driver": "b946a439794f4745",
   "copy": "9df19c066bb405e2",
   "apimarket": "82a49194bef85737",
   "report": "3a83dce99c9e2bd4"
