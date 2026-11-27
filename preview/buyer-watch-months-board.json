@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-24 21:14:13Z",
+ "generated_utc": "2026-11-27 11:10:36Z",
  "face": "api_buyer_watch_months",
  "scope": "buyer",
  "buyers": [
@@ -180,7 +180,7 @@
  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
  "report": "preview/buyer-watch-months-board.html",
  "sources": {
-  "driver": "cb9b4059daae722a",
+  "driver": "c7d35825adcb6159",
   "copy": "ac9b5007704fa9a8",
   "apimarket": "82a49194bef85737",
   "report": "3a83dce99c9e2bd4"
