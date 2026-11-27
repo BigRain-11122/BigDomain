@@ -3,8 +3,8 @@
     "src/os/board_face_landing.py",
     "src/os/export_round.py"
   ],
-  "generated_at": "2026-11-28T03:26:57+08:00",
-  "round": "R3597",
+  "generated_at": "2026-11-28T03:36:43+08:00",
+  "round": "R3598",
   "rows": [
     {
       "face_calls": 0,
@@ -202,15 +202,6 @@
       ],
       "path": "tools/seller_cohort_board.py",
       "write_calls": 9
-    },
-    {
-      "face_calls": 0,
-      "kind": "gap",
-      "landing_paths": [
-        "seller-concentration.html"
-      ],
-      "path": "tools/seller_concentration_board.py",
-      "write_calls": 8
     },
     {
       "face_calls": 0,
@@ -867,6 +858,15 @@
       "face_calls": 1,
       "kind": "closed",
       "landing_paths": [
+        "seller-concentration.html"
+      ],
+      "path": "tools/seller_concentration_board.py",
+      "write_calls": 8
+    },
+    {
+      "face_calls": 1,
+      "kind": "closed",
+      "landing_paths": [
         "seller-ledger-board.html"
       ],
       "path": "tools/seller_ledger_board.py",
@@ -1090,9 +1090,9 @@
     }
   ],
   "totals": {
-    "closed": 78,
+    "closed": 79,
     "excluded": 2,
-    "gap": 31,
+    "gap": 30,
     "modules": 119,
     "reader": 10,
     "writers": 109

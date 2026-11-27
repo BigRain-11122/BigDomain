@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 832 | 7263 | 675/675 | R2739 |
+| 832 | 7267 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -779,7 +779,7 @@
 | 740 | os-suite-closing-row-census | ../os/test_suite_closing_row_census.py | 24 | no-evidence | - |
 | 741 | os-battery-shard-report | ../os/test_battery_shard_report.py | 14 | no-evidence | - |
 | 742 | os-board-face-landing | ../os/test_board_face_landing.py | 7 | no-evidence | - |
-| 743 | os-preview-writer-census | ../os/test_preview_writer_census.py | 291 | no-evidence | - |
+| 743 | os-preview-writer-census | ../os/test_preview_writer_census.py | 295 | no-evidence | - |
 | 744 | os-ugc-gate-report | ../os/test_ugc_gate_report.py | 50 | no-evidence | - |
 | 745 | os-tree-snapshot | ../os/test_tree_snapshot.py | 6 | no-evidence | - |
 | 746 | os-lobby-ws-report-face | ../os/test_lobby_ws_report.py | 7 | no-evidence | - |
@@ -869,7 +869,7 @@
 | 830 | claim-census | test_claim_census.py | 10 | no-evidence | - |
 | 831 | os-stage-residue | ../os/test_stage_residue.py | 4 | no-evidence | - |
 | 832 | os-corpus-supply-chain | ../os/test_corpus_supply_chain.py | 7 | no-evidence | - |
-|  | 合计 |  | 7263 | green 675 / FAIL 0 / no-evidence 157 |  |
+|  | 合计 |  | 7267 | green 675 / FAIL 0 / no-evidence 157 |  |
 
 ## 证据出处
 

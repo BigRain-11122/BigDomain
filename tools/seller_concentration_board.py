@@ -359,6 +359,40 @@ def check_sources(json_path):
     return fails
 
 
+def _landing_is_default(html_path, json_path):
+    """True only when both halves land under THIS root's own preview/.
+
+    The wanted folder is computed from ROOT, not from the rebindable --out and
+    --json flags, so a run that redirects its outputs cannot pose as the root.
+    """
+    want = os.path.realpath(os.path.join(ROOT, "preview"))
+    for path in (html_path, json_path):
+        if os.path.dirname(os.path.realpath(path)) != want:
+            return False
+    return True
+
+
+def _refresh_face(html_path, json_path):
+    """AC-PWC77 (R3599): landing this pair and re-deriving the CEO face are ONE run.
+
+    The one definition lives in src/os/board_face_landing.py, so no second
+    writer is kept here. ROOT is passed explicitly, so a private world derives
+    that world's face. Refusals are named, never raised: the landing already
+    happened, so a refusal must not turn a good page into a traceback.
+    """
+    if not _landing_is_default(html_path, json_path):
+        return "SKIPPED scratch"
+    try:
+        os_src = os.path.join(ROOT, "src", "os")
+        if os_src not in sys.path:
+            sys.path.insert(0, os_src)
+        import board_face_landing
+        ok, note, _proof = board_face_landing.refresh_export_face(ROOT)
+        return "WRITTEN" if ok else "REFUSED %s" % note
+    except Exception as exc:  # the landing already happened; name the refusal
+        return "SKIPPED %s" % type(exc).__name__
+
+
 def main(argv):
     ap = argparse.ArgumentParser(add_help=True)
     ap.add_argument("--out", default=OUT_HTML)
@@ -436,12 +470,13 @@ def main(argv):
         if payload["sizes"]["json"] == os.path.getsize(args.json):
             break
 
+    face = _refresh_face(args.out, args.json)
     print("SELLER-CONCENTRATION %s bytes=%d buyers=%d net=%s top1=%s hhi=%s "
-          "pareto=%s"
+          "pareto=%s face=%s"
           % (payload["report"], len(doc.encode("utf-8")),
              env["buyer_count"], fmt(env["net_revenue"], "-"),
              fmt(pct(env["top1_share"]), "-"), fmt(env["herfindahl"], "-"),
-             fmt(env["pareto_buyer_count"], "-")))
+             fmt(env["pareto_buyer_count"], "-"), face))
     return 0
 
 
