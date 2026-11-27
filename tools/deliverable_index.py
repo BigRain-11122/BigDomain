@@ -270,6 +270,9 @@ PAIR_PRODUCERS = {
     # R3430: same single-writer shape - one render, one json, no back-hop block
     # - so the resident account statement names its producer.
     "buyer-profile-board.json": "tools/buyer_profile_board.py",
+    # R3565: same single-writer shape - one render, one json, no back-hop block
+    # - so the resident rating-pattern page names its producer.
+    "buyer-rating-pattern-board.json": "tools/buyer_rating_pattern_board.py",
     # R3432: same single-writer shape - one render, one json, no back-hop block
     # - so the seller shelf supply page names its producer.
     "seller-supply-board.json": "tools/seller_supply_board.py",
