@@ -1,0 +1,15 @@
+R3564 evidence (2026-11-27)
+
+SUITE   python src/os/test_preview_writer_census.py -> Ran 155 tests, OK (was 151)
+LAND    python tools/buyer_profile_board.py -> BUYER-PROFILE preview/buyer-profile-board.html bytes=11045 buyers=3 purchases=4 gross=28 net=13 face=WRITTEN
+CHECK   python tools/buyer_profile_board.py --check -> BUYER-PROFILE CHECK PASS fails=0 html=11045B json=2690B
+CENSUS  python tools/preview_writer_census.py -> modules=119 closed=44 gap=65 reader=10
+MATRIX  python src/os/suite_matrix_reconcile.py --write -> 85800 bytes, 832 rows; check -> DOC-CURRENT
+INDEX   python tools/deliverable_index.py --write -> --check -> {"failed": [], "passed": 23, "total": 23}
+CHAIN   python tools/first_yuan_chain.py -> RENDER legs=2 entries=2 tx=1; --check -> VERDICT PASS legs=2 entries=2 tx=1
+FACE    latest_artifact = preview/buyer-profile-board.html (11045B) + preview/buyer-profile-board.json (2690B) after the product pair own commit
+GATE    python tools/closeout_gate.py -> CLOSEOUT-GATE PASS files=5081 flags=0 census=PASS matrix=DOC-CURRENT
+
+Order measured: one pass of index --write -> chain render -> chain --check -> index --check
+reached both green (failed=[] and VERDICT PASS) in this window; the ring rule stays
+"iterate to the fixed point, never copy last window order".
