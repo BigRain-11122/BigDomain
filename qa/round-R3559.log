@@ -1,0 +1,63 @@
+R3559 evidence log - AC-PWC37 closes the thirty-third census gap at its birth site
+target: tools/buyer_cohort_board.py
+landing: preview/buyer-cohort.html + preview/buyer-cohort.json
+
+0. carrier fold (before any write)
+python src/os/state_fold_run.py --check
+  STATE FOLD bytes=77744 gate=78500 margin=756 log_lines=91 verdict=FOLD-CLEAR
+two hand windows were refused by the shipped predicate:
+  1..86 -> REFUSED token-missing,live-floor
+  1..60 -> REFUSED token-missing,live-floor
+the shipped choose_window answered end=60 with its own summary; fold 854 landed:
+  STATE FOLD RUN round=R3559 fold=854 verdict=CLEAR window=1..60 lines=60
+  live 91->32 bytes 77744->31580 margin=46920 tokens=31 archive=VERIFIED
+
+1. read-only first (no product write before the PIN line)
+classify_source(tools/buyer_cohort_board.py)
+  kind=gap write_calls=9 face_calls=0 landing_paths=['buyer-cohort.html']
+  HTML half at main() lines 447-449
+  JSON half at 461-463, then the six-pass sizes fixed-point loop at 467-477
+  convergence test at 476: if payload["sizes"]["json"] == os.path.getsize(args.json)
+  --check branch returns at 434-442 before any open(...,"w")
+
+2. suite (after wiring)
+python src/os/test_preview_writer_census.py
+  Ran 135 tests in 23.094s
+  OK
+  (was 131; four new arms under AC-PWC37 with two negative controls)
+
+3. real landing
+python tools/buyer_cohort_board.py
+  APPLIED R3558 changed=True bytes=40207 lf_only=True bom=False
+  latest_artifact->preview/buyer-cohort.html (4956B) + preview/buyer-cohort.json (1111B)
+  BUYER-COHORT preview/buyer-cohort.html bytes=4956 months=1 purchases=2 buyers=2 face=WRITTEN
+
+4. read-only check
+python tools/buyer_cohort_board.py --check
+  BUYER-COHORT CHECK PASS fails=0 html=4956B json=1111B
+
+5. census re-derivation
+python tools/preview_writer_census.py
+  PWC (R3558) modules=119 closed=39 gap=70 reader=10 face export=WRITTEN
+  (was closed=38 gap=71)
+
+6. matrix
+python src/os/suite_matrix_reconcile.py --write
+  WRITTEN docs/sandbox-suite-matrix.md
+  85800 bytes, 832 rows, evidence=qa/reconcile-all-R2739.log
+
+7. index/chain ring measured in this window (four orders tried)
+  product newest + index --write -> index --check reads 21/23 red after the chain run
+  index --write -> chain bare -> chain --check -> index --check -> all green
+  DELIVERABLE INDEX faces=9 defects=0 fingerprint=343ba1f3878495af index=56466B
+  VERDICT PASS legs=2 entries=2 tx=1 reconcile_rc=0 html=4403B read_only=True
+  VERDICT PASS 23/23 fingerprint=343ba1f3878495af
+
+8. measured trap re-confirmed the hard way
+tools/preview_writer_census.py --help is NOT help: it executes the writer.
+This window ran it once as a probe and re-derived the census page and the CEO
+face (same derivation, no new product). Probes of preview_writer_census.py and
+deliverable_index.py must be source reads only.
+
+9. carrier after the round
+state tick=3559, log 37 lines, 150 adopted decision tokens, 35641 B
