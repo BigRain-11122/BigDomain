@@ -3,8 +3,8 @@
     "src/os/board_face_landing.py",
     "src/os/export_round.py"
   ],
-  "generated_at": "2026-11-27T08:26:06+08:00",
-  "round": "R3545",
+  "generated_at": "2026-11-27T08:38:48+08:00",
+  "round": "R3546",
   "rows": [
     {
       "face_calls": 0,
@@ -438,15 +438,6 @@
       ],
       "path": "tools/market_relist_months_board.py",
       "write_calls": 9
-    },
-    {
-      "face_calls": 0,
-      "kind": "gap",
-      "landing_paths": [
-        "platform-live-report.html"
-      ],
-      "path": "tools/platform_live_report.py",
-      "write_calls": 2
     },
     {
       "face_calls": 0,
@@ -956,6 +947,15 @@
       "face_calls": 1,
       "kind": "closed",
       "landing_paths": [
+        "platform-live-report.html"
+      ],
+      "path": "tools/platform_live_report.py",
+      "write_calls": 2
+    },
+    {
+      "face_calls": 1,
+      "kind": "closed",
+      "landing_paths": [
         ".html",
         "receipt-admissibility.html"
       ],
@@ -1090,9 +1090,9 @@
     }
   ],
   "totals": {
-    "closed": 25,
+    "closed": 26,
     "excluded": 2,
-    "gap": 84,
+    "gap": 83,
     "modules": 119,
     "reader": 10,
     "writers": 109

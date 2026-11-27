@@ -2496,5 +2496,186 @@ class PWC23TwentyFifthProducerClosed(unittest.TestCase):
             shutil.rmtree(tmp, ignore_errors=True)
 
 
+def plr_closure_positions(text):
+    """(present, after_landing, readers_clean, shared_only) for AC-PWC24."""
+    if "def main(" not in text:
+        return (False, False, False, False)
+    body = text.rpartition("def main(")[2].split("\ndef ")[0]
+    at = body.find("_refresh_face(HTML_PATH, JSON_PATH)")
+    present = at != -1
+    last_write = body.rfind("_write(json_text, JSON_PATH)")
+    after = present and last_write != -1 and at > last_write
+    readers = True
+    for name in ("def check(", "def measure(", "def render("):
+        if name in text:
+            reader_body = text.rpartition(name)[2].split("\ndef ")[0]
+            if "_refresh_face(" in reader_body:
+                readers = False
+    helper = text.rpartition("def _refresh_face(")[2].split("\ndef ")[0]
+    shared = "board_face_landing.refresh_export_face(ROOT)" in helper
+    no_local_writer = ".write(" not in helper
+    return (present, after, readers and present, shared and no_local_writer)
+
+
+class PWC24NineteenthProducerClosed(unittest.TestCase):
+    """AC-PWC24: platform_live_report re-derives the face on its landing path only.
+
+    That tool's own measure() boots the whole sandbox over real loopback sockets
+    for up to 45 seconds, so the behavioural arms replace measure() with a
+    synthetic (evidence, facts) pair and grade ONLY the number of face
+    derivations; no socket is opened and no child process is spawned here.
+    """
+
+    def _source(self):
+        with io.open(os.path.join(TOOLS, "platform_live_report.py"),
+                     encoding="utf-8") as f:
+            return f.read()
+
+    def test_closed_and_ordered_after_the_fixed_point_loop(self):
+        text = self._source()
+        kind, _html, writes, closes = MOD.classify_source(text)
+        self.assertEqual(kind, "closed")
+        self.assertGreaterEqual(writes, 1)
+        self.assertGreaterEqual(closes, 1)
+        self.assertEqual(plr_closure_positions(text), (True, True, True, True))
+
+    def test_negative_controls_delete_and_move(self):
+        text = self._source()
+        deleted = text.replace(
+            "    face = _refresh_face(HTML_PATH, JSON_PATH)\n", "").replace(
+            "board_face_landing.refresh_export_face(ROOT)",
+            "None  # control: shared call removed")
+        self.assertEqual(MOD.classify_source(deleted)[0], "gap")
+        self.assertFalse(plr_closure_positions(deleted)[0])
+        moved = text.replace(
+            "    face = _refresh_face(HTML_PATH, JSON_PATH)\n", "").replace(
+            "        json_bytes = _write(json_text, JSON_PATH)",
+            "        face = _refresh_face(HTML_PATH, JSON_PATH)  "
+            "# control: moved before the last landing write\n"
+            "        json_bytes = _write(json_text, JSON_PATH)", 1)
+        pos = plr_closure_positions(moved)
+        self.assertTrue(pos[0])
+        self.assertFalse(pos[1])
+
+    def test_refresh_is_shared_and_named(self):
+        import platform_live_report as PLR
+        calls = []
+
+        class Fake(object):
+            def __init__(self, ok, note):
+                self.ok, self.note = ok, note
+
+            def refresh_export_face(self, root):
+                calls.append(root)
+                return (self.ok, self.note, {})
+
+        class Boom(object):
+            def refresh_export_face(self, root):
+                raise RuntimeError("no writer here")
+
+        self.assertTrue(PLR._landing_is_default(PLR.HTML_PATH, PLR.JSON_PATH))
+        saved = sys.modules.get("board_face_landing")
+        try:
+            sys.modules["board_face_landing"] = Fake(True, "")
+            self.assertEqual(PLR._refresh_face(PLR.HTML_PATH, PLR.JSON_PATH),
+                             "WRITTEN")
+            self.assertEqual(calls, [PLR.ROOT])
+            sys.modules["board_face_landing"] = Fake(False, "E_BFL_FACE_UNPROVEN")
+            self.assertEqual(PLR._refresh_face(PLR.HTML_PATH, PLR.JSON_PATH),
+                             "REFUSED E_BFL_FACE_UNPROVEN")
+            sys.modules["board_face_landing"] = Boom()
+            self.assertEqual(PLR._refresh_face(PLR.HTML_PATH, PLR.JSON_PATH),
+                             "SKIPPED RuntimeError")
+            self.assertEqual(len(calls), 2)
+        finally:
+            if saved is None:
+                sys.modules.pop("board_face_landing", None)
+            else:
+                sys.modules["board_face_landing"] = saved
+
+    def test_landing_derives_once_and_scratch_and_check_derive_none(self):
+        """A landing in this world's own preview derives once; scratch and --check do not."""
+        import platform_live_report as PLR
+        calls = []
+
+        class Fake(object):
+            def refresh_export_face(self, root):
+                calls.append(root)
+                return (True, "", {})
+
+        def synthetic():
+            keys = ("city", "lobby", "ledger", "ugc", "hub")
+            faces, pages, ports = {}, {}, {}
+            for i, key in enumerate(keys):
+                faces[key] = "http://127.0.0.1:%d/" % (8000 + i)
+                ports[key] = 8000 + i
+                pages[key] = {"url": faces[key], "status": 200,
+                              "bytes": 100 + i, "ctype": "text/html",
+                              "title": "door " + key,
+                              "sha": "%016x" % (i + 1)}
+            facts = {
+                "host": "127.0.0.1",
+                "hub_url": faces["hub"],
+                "ports": ports,
+                "faces": faces,
+                "pages": pages,
+                "city_snapshot": {"status": 200, "bytes": 10,
+                                  "keys": ["as_of"],
+                                  "as_of": "2026-11-27T00:00:00"},
+                "hub_live": dict((k, True) for k in keys),
+                "ports_refusing": dict((k, True) for k in keys),
+                "children_gone": {"child": True},
+                "shipped_before": {"src/sandbox/start_all.py": "0" * 16},
+                "shipped_after": {"src/sandbox/start_all.py": "0" * 16},
+                "url_literals": [],
+                "external_literals": [],
+            }
+            evidence = dict((cid, {"pass": True, "measured": "synthetic"})
+                            for cid, _ in PLR.CRITERIA)
+            return evidence, facts
+
+        tmp = tempfile.mkdtemp(prefix="plr-pwc-")
+        os.makedirs(os.path.join(tmp, "preview"), exist_ok=True)
+        saved_mod = sys.modules.get("board_face_landing")
+        saved = (PLR.ROOT, PLR.PREVIEW, PLR.HTML_PATH, PLR.JSON_PATH, PLR.measure)
+        saved_stdout = sys.stdout
+        try:
+            sys.modules["board_face_landing"] = Fake()
+            PLR.ROOT = tmp
+            PLR.PREVIEW = os.path.join(tmp, "preview")
+            PLR.HTML_PATH = os.path.join(PLR.PREVIEW, "platform-live-report.html")
+            PLR.JSON_PATH = os.path.join(PLR.PREVIEW, "platform-live-report.json")
+            PLR.measure = synthetic
+            sys.stdout = io.StringIO()
+            rc = PLR.main([])
+            self.assertEqual(rc, 0)
+            self.assertEqual(calls, [tmp])
+            self.assertTrue(os.path.isfile(PLR.HTML_PATH))
+            self.assertTrue(os.path.isfile(PLR.JSON_PATH))
+
+            # scratch render: the halves land outside this world's preview/
+            PLR.HTML_PATH = os.path.join(tmp, "scratch.html")
+            PLR.JSON_PATH = os.path.join(tmp, "scratch.json")
+            PLR.main([])
+            self.assertEqual(len(calls), 1)
+
+            # --check is read-only: it derives nothing
+            PLR.HTML_PATH = os.path.join(PLR.PREVIEW, "platform-live-report.html")
+            PLR.JSON_PATH = os.path.join(PLR.PREVIEW, "platform-live-report.json")
+            calls[:] = []
+            rc = PLR.main(["--check"])
+            self.assertEqual(calls, [])
+            self.assertIn(rc, (0, 2))
+        finally:
+            sys.stdout = saved_stdout
+            (PLR.ROOT, PLR.PREVIEW, PLR.HTML_PATH, PLR.JSON_PATH,
+             PLR.measure) = saved
+            if saved_mod is None:
+                sys.modules.pop("board_face_landing", None)
+            else:
+                sys.modules["board_face_landing"] = saved_mod
+            shutil.rmtree(tmp, ignore_errors=True)
+
+
 if __name__ == "__main__":
     unittest.main()

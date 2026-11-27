@@ -61,18 +61,18 @@
   }
  ],
  "faces": {
-  "lobby": "http://127.0.0.1:62289/lobby/",
-  "city": "http://127.0.0.1:62287/city/",
-  "checkout": "http://127.0.0.1:62291/checkout/",
-  "gate": "http://127.0.0.1:62288/gate/",
-  "ledger": "http://127.0.0.1:62292/ledger/",
-  "ugc": "http://127.0.0.1:62293/ugc/",
-  "panel": "http://127.0.0.1:62294/panel/",
-  "member": "http://127.0.0.1:62295/member/"
+  "lobby": "http://127.0.0.1:51906/lobby/",
+  "city": "http://127.0.0.1:51904/city/",
+  "checkout": "http://127.0.0.1:51908/checkout/",
+  "gate": "http://127.0.0.1:51905/gate/",
+  "ledger": "http://127.0.0.1:51909/ledger/",
+  "ugc": "http://127.0.0.1:51910/ugc/",
+  "panel": "http://127.0.0.1:51911/panel/",
+  "member": "http://127.0.0.1:51912/member/"
  },
  "pages": {
   "lobby": {
-   "url": "http://127.0.0.1:62289/lobby/",
+   "url": "http://127.0.0.1:51906/lobby/",
    "status": 200,
    "bytes": 10077,
    "ctype": "text/html",
@@ -80,7 +80,7 @@
    "sha": "6c5513f6c56b8068"
   },
   "city": {
-   "url": "http://127.0.0.1:62287/city/",
+   "url": "http://127.0.0.1:51904/city/",
    "status": 200,
    "bytes": 6653,
    "ctype": "text/html",
@@ -88,7 +88,7 @@
    "sha": "f4da3a32459c2e32"
   },
   "checkout": {
-   "url": "http://127.0.0.1:62291/checkout/",
+   "url": "http://127.0.0.1:51908/checkout/",
    "status": 200,
    "bytes": 9988,
    "ctype": "text/html",
@@ -96,7 +96,7 @@
    "sha": "071ac6f7bf261735"
   },
   "gate": {
-   "url": "http://127.0.0.1:62288/gate/",
+   "url": "http://127.0.0.1:51905/gate/",
    "status": 200,
    "bytes": 7157,
    "ctype": "text/html",
@@ -104,7 +104,7 @@
    "sha": "bac08b7b9d63e907"
   },
   "ledger": {
-   "url": "http://127.0.0.1:62292/ledger/",
+   "url": "http://127.0.0.1:51909/ledger/",
    "status": 200,
    "bytes": 7977,
    "ctype": "text/html",
@@ -112,7 +112,7 @@
    "sha": "a3924b40b8d1d2df"
   },
   "ugc": {
-   "url": "http://127.0.0.1:62293/ugc/",
+   "url": "http://127.0.0.1:51910/ugc/",
    "status": 200,
    "bytes": 8816,
    "ctype": "text/html",
@@ -120,7 +120,7 @@
    "sha": "8569ef06639c7c5f"
   },
   "panel": {
-   "url": "http://127.0.0.1:62294/panel/",
+   "url": "http://127.0.0.1:51911/panel/",
    "status": 200,
    "bytes": 8462,
    "ctype": "text/html",
@@ -128,7 +128,7 @@
    "sha": "0042242e0f1cf17c"
   },
   "member": {
-   "url": "http://127.0.0.1:62295/member/",
+   "url": "http://127.0.0.1:51912/member/",
    "status": 200,
    "bytes": 8752,
    "ctype": "text/html",
@@ -137,16 +137,16 @@
   }
  },
  "ports": {
-  "ws": 62286,
-  "city": 62287,
-  "gate": 62288,
-  "web": 62289,
-  "hub": 62290,
-  "checkout": 62291,
-  "ledger": 62292,
-  "ugc": 62293,
-  "panel": 62294,
-  "member": 62295
+  "ws": 51903,
+  "city": 51904,
+  "gate": 51905,
+  "web": 51906,
+  "hub": 51907,
+  "checkout": 51908,
+  "ledger": 51909,
+  "ugc": 51910,
+  "panel": 51911,
+  "member": 51912
  },
  "ports_refusing_after_teardown": {
   "ws": true,
@@ -217,7 +217,7 @@
   "production criteria AC-P1..P5 are pre-registered and not executed"
  ],
  "sizes": {
-  "html": 8621,
+  "html": 7929,
   "json": 6228
  }
 }

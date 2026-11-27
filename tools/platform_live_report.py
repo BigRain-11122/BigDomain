@@ -518,6 +518,40 @@ def _write(text, path):
     return os.path.getsize(path)
 
 
+def _landing_is_default(html_path, json_path):
+    """True only when both halves land under THIS root's own preview/.
+
+    The wanted folder is computed from ROOT, not from any rebindable output
+    constant, so a world that repoints its outputs cannot pose as the root.
+    """
+    want = os.path.realpath(os.path.join(ROOT, "preview"))
+    for path in (html_path, json_path):
+        if os.path.dirname(os.path.realpath(path)) != want:
+            return False
+    return True
+
+
+def _refresh_face(html_path, json_path):
+    """AC-PWC24 (R3546): landing this pair and re-deriving the CEO face are ONE run.
+
+    The one definition lives in src/os/board_face_landing.py, so no second
+    writer is kept here. ROOT is passed explicitly, so a private world derives
+    that world's face. Refusals are named, never raised: both halves are
+    already on disk when this runs, so the caller's exit code stays its own.
+    """
+    if not _landing_is_default(html_path, json_path):
+        return "SKIPPED scratch"
+    try:
+        os_src = os.path.join(ROOT, "src", "os")
+        if os_src not in sys.path:
+            sys.path.insert(0, os_src)
+        import board_face_landing
+        ok, note, _proof = board_face_landing.refresh_export_face(ROOT)
+        return "WRITTEN" if ok else "REFUSED %s" % note
+    except Exception as exc:  # a private world may carry no shared writer
+        return "SKIPPED %s" % type(exc).__name__
+
+
 def main(argv):
     check = "--check" in argv
     evidence, facts = measure()
@@ -577,6 +611,10 @@ def main(argv):
             converged = True
             break
         prev_json = json_bytes
+    # AC-PWC24: the face re-derivation belongs to the landed pair, not to a
+    # schedule that can run apart from it; the fixed-point loop above writes
+    # both halves up to twelve times, so the closure sits AFTER it.
+    face = _refresh_face(HTML_PATH, JSON_PATH)
     for cid, intent in CRITERIA:
         row = [c for c in data["criteria"] if c["id"] == cid][0]
         print(" | %s %s: %s" % ("PASS" if row["pass"] else "FAIL", cid, row["measured"]))
@@ -588,9 +626,9 @@ def main(argv):
     passed = sum(1 for c in landed["criteria"] if c["pass"])
     total = len(CRITERIA)
     good = converged and consistent and passed == total
-    print("VERDICT %s %d/%d fingerprint=%s html=%dB json=%dB self_consistent=%s converged=%s"
+    print("VERDICT %s %d/%d fingerprint=%s html=%dB json=%dB self_consistent=%s converged=%s face=%s"
           % ("PASS" if good else "FAIL", passed, total, data["fingerprint"],
-             html_bytes, json_bytes, consistent, converged))
+             html_bytes, json_bytes, consistent, converged, face))
     return 0 if good else 2
 
 

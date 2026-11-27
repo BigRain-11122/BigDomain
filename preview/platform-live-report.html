@@ -37,30 +37,30 @@ code{color:#79c0ff}
 </table></div>
 <div class="card"><h2>各道门（真实 HTTP 取回）</h2>
 <table><tr><th>门</th><th>地址</th><th>HTTP</th><th>字节</th><th>Content-Type</th><th>页面 title</th></tr>
-<tr class="ok"><td>checkout</td><td><code>http://127.0.0.1:62291/checkout/</code></td><td>200</td><td>9988 B</td><td>text/html</td><td>BigDomain 硅基域 · 19.9 入场结账沙箱</td></tr>
-<tr class="ok"><td>city</td><td><code>http://127.0.0.1:62287/city/</code></td><td>200</td><td>6653 B</td><td>text/html</td><td>硅基城市 · BigDomain</td></tr>
-<tr class="ok"><td>gate</td><td><code>http://127.0.0.1:62288/gate/</code></td><td>200</td><td>7157 B</td><td>text/html</td><td>内容安全闸判据台 · 沙箱</td></tr>
-<tr class="ok"><td>ledger</td><td><code>http://127.0.0.1:62292/ledger/</code></td><td>200</td><td>7977 B</td><td>text/html</td><td>代币账本控制台 · BigDomain 沙箱</td></tr>
-<tr class="ok"><td>lobby</td><td><code>http://127.0.0.1:62289/lobby/</code></td><td>200</td><td>10077 B</td><td>text/html</td><td>硅基大厅 · BigDomain 沙箱</td></tr>
-<tr class="ok"><td>member</td><td><code>http://127.0.0.1:62295/member/</code></td><td>200</td><td>8752 B</td><td>text/html</td><td>BigDomain 会员权益面 · 沙箱</td></tr>
-<tr class="ok"><td>panel</td><td><code>http://127.0.0.1:62294/panel/</code></td><td>200</td><td>8462 B</td><td>text/html</td><td>沙箱控制台 · Sandbox Panel</td></tr>
-<tr class="ok"><td>ugc</td><td><code>http://127.0.0.1:62293/ugc/</code></td><td>200</td><td>8816 B</td><td>text/html</td><td>UGC 管道控制台 · BigDomain 沙箱</td></tr>
+<tr class="ok"><td>checkout</td><td><code>http://127.0.0.1:51908/checkout/</code></td><td>200</td><td>9988 B</td><td>text/html</td><td>BigDomain 硅基域 · 19.9 入场结账沙箱</td></tr>
+<tr class="ok"><td>city</td><td><code>http://127.0.0.1:51904/city/</code></td><td>200</td><td>6653 B</td><td>text/html</td><td>硅基城市 · BigDomain</td></tr>
+<tr class="ok"><td>gate</td><td><code>http://127.0.0.1:51905/gate/</code></td><td>200</td><td>7157 B</td><td>text/html</td><td>内容安全闸判据台 · 沙箱</td></tr>
+<tr class="ok"><td>ledger</td><td><code>http://127.0.0.1:51909/ledger/</code></td><td>200</td><td>7977 B</td><td>text/html</td><td>代币账本控制台 · BigDomain 沙箱</td></tr>
+<tr class="ok"><td>lobby</td><td><code>http://127.0.0.1:51906/lobby/</code></td><td>200</td><td>10077 B</td><td>text/html</td><td>硅基大厅 · BigDomain 沙箱</td></tr>
+<tr class="ok"><td>member</td><td><code>http://127.0.0.1:51912/member/</code></td><td>200</td><td>8752 B</td><td>text/html</td><td>BigDomain 会员权益面 · 沙箱</td></tr>
+<tr class="ok"><td>panel</td><td><code>http://127.0.0.1:51911/panel/</code></td><td>200</td><td>8462 B</td><td>text/html</td><td>沙箱控制台 · Sandbox Panel</td></tr>
+<tr class="ok"><td>ugc</td><td><code>http://127.0.0.1:51910/ugc/</code></td><td>200</td><td>8816 B</td><td>text/html</td><td>UGC 管道控制台 · BigDomain 沙箱</td></tr>
 </table>
-<p class="note">Hub 门：<code>http://127.0.0.1:62290/hub/</code>（hub 自报 live：checkout=True, city=True, gate=True, ledger=True, lobby=True, member=True, panel=True, ugc=True）</p></div>
+<p class="note">Hub 门：<code>http://127.0.0.1:51907/hub/</code>（hub 自报 live：checkout=True, city=True, gate=True, ledger=True, lobby=True, member=True, panel=True, ugc=True）</p></div>
 <div class="card"><h2>深读一例：city /city/snapshot</h2>
 <p>HTTP 200 · 810 B · 顶层键 4 个 · <code>as_of</code> = <code>2026-09-24T14:00:00Z</code></p></div>
 <div class="card"><h2>计划端口与拆台后状态</h2>
 <table><tr><th>端口键</th><th>端口</th><th>拆台后</th></tr>
-<tr><td>checkout</td><td>62291</td><td>已拆台</td></tr>
-<tr><td>city</td><td>62287</td><td>已拆台</td></tr>
-<tr><td>gate</td><td>62288</td><td>已拆台</td></tr>
-<tr><td>hub</td><td>62290</td><td>已拆台</td></tr>
-<tr><td>ledger</td><td>62292</td><td>已拆台</td></tr>
-<tr><td>member</td><td>62295</td><td>已拆台</td></tr>
-<tr><td>panel</td><td>62294</td><td>已拆台</td></tr>
-<tr><td>ugc</td><td>62293</td><td>已拆台</td></tr>
-<tr><td>web</td><td>62289</td><td>已拆台</td></tr>
-<tr><td>ws</td><td>62286</td><td>已拆台</td></tr>
+<tr><td>checkout</td><td>51908</td><td>已拆台</td></tr>
+<tr><td>city</td><td>51904</td><td>已拆台</td></tr>
+<tr><td>gate</td><td>51905</td><td>已拆台</td></tr>
+<tr><td>hub</td><td>51907</td><td>已拆台</td></tr>
+<tr><td>ledger</td><td>51909</td><td>已拆台</td></tr>
+<tr><td>member</td><td>51912</td><td>已拆台</td></tr>
+<tr><td>panel</td><td>51911</td><td>已拆台</td></tr>
+<tr><td>ugc</td><td>51910</td><td>已拆台</td></tr>
+<tr><td>web</td><td>51906</td><td>已拆台</td></tr>
+<tr><td>ws</td><td>51903</td><td>已拆台</td></tr>
 </table>
 <p class="note">端口由操作系统临时分配（<code>plan()</code>），所以这里不承诺固定端口，只承诺「起得来、测得到、拆得净」。</p></div>
 <div class="card"><h2>你自己跑（复制即可）</h2>
@@ -80,6 +80,3 @@ code{color:#79c0ff}
 <li>沙箱数据为演示库，非真实用户数据；页面 title 取自各门真实返回，未手写。</li>
 </ul></div>
 </main>
-<div class="backhop" data-back-hop="1" data-back-face="platform-live-report.html" data-back-rule="内部/CEO 读数面：回到全站清单页，从这里挑下一页" data-back-bytes="55302" data-back-controls="2" style="border-top:1px solid rgba(128,128,128,.35);margin:22px 0 0;padding:10px 0 0;font-size:13px;line-height:1.6">
-<span style="opacity:.75">这是读数页，没有可填的东西。</span> 回到可点的那一页：<a href="index.html" data-back-target="1">index.html</a> <span style="opacity:.7">&middot; 2 个控件 · 55302B</span> <span style="opacity:.6">（内部/CEO 读数面：回到全站清单页，从这里挑下一页；浏览器后退也行）</span>
-</div>
