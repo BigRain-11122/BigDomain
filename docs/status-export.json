@@ -3,15 +3,15 @@
     "board_pages_skipped": [],
     "current": "2026-11-27 R3543 PRODUCT: the seventeenth gap producer from the R3527 census closes at its birth site - tools/lobby_ws_report.py, the one openable page for the P-47 item 1 lobby WebSocket handshake, now re-derives docs/status-export.json IN PROCESS through the shared board_face_landing.refresh_export_face(ROOT) after its sizes fixed-point loop (the loop writes the pair up to six times, so the closure sits AFTER the loop, not inside it), and only when both halves land under THIS root's own preview/ - a scratch render derives nothing; the census moves from closed=22 gap=87 to closed=23 gap=86.",
     "do": "2026-11-25 R3456 PRODUCT: the answer-revision question now has a door - api_answer_history (live with AC-AMAW1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so 'which answer was rewritten, what did it say before, what does it say now and how often did it change' could only be read by calling the sandbox from a shell - while api_seller_answers and api_listing_qna publish only the CURRENT wording.",
-    "last_artifact": "preview/preview-writer-census.html (17301B) + preview/preview-writer-census.json (25037B) [2026-11-27 mtime]",
-    "latest_artifact": "preview/preview-writer-census.html (17301B) + preview/preview-writer-census.json (25037B) [2026-11-27 mtime]",
+    "last_artifact": "preview/preview-writer-census.html (17301B) + preview/preview-writer-census.json (25037B) [2026-11-27 commit]",
+    "latest_artifact": "preview/preview-writer-census.html (17301B) + preview/preview-writer-census.json (25037B) [2026-11-27 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\preview-writer-census.html",
     "latest_artifact_note": "",
     "latest_evidence": "qa/round-R3542.log (8155B, 2026-11-27, sha256 41e2d4ea81e7)",
     "newest_pair_on_disk_is_board": false,
     "next_milestone": "[R3543] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先把刷新轮排最前，毕=更新字段＋文件④更新记录行。 (1) S4U 仍未落地（第八十一次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回；宁缺不错。 (2) **87 家缺口已列名**（`preview/preview-writer-census.json`）：下窗只动一家活线生产者（历史 board 生产器排后），判据沿用 `AC-PWC20` 形状（源码位置量＋两条负控＋共享定义＋按 ROOT 的落地守卫）。下一批活线候选按普查实测挑：`tools/lobby_ws_report.py`（`landing_paths=['lobby-ws-report.html']`）；`tools/status_export_fresh.py` 的 `landing_paths` 为空=它本身就是导出面写者，需单列判据。 (3) `replay-receipt` 可豁免性仍待 L3 签发或驳回——窗口禁自行翻计数。 (4) 载体 `state.json` 现 55779B（阈 78500，余量 22721B）；写 state 走「从已提交载体重写、16 空格条目缩进、CRLF」，本轮 `state_io.py --check` 读 CANON-CLEAN。 (5) tick 口径：本轮 3541→3542，下轮 R3543。 (6) 承账不变：`qa_log --ledger-check broken=5`、`769` 判据未被分片路径覆盖、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写。 (7) **两页定序律修订（本轮实测，方向与旧记录相反）**：先写 `deliverable_index` 再写 `first_yuan_chain` 才双双 PASS（23/23 与 VERDICT PASS 同时成立）；先链页后索引会读两页互指 stale。 (8) **证据日志方言**：PS 5.1 的 `Out-File -Encoding utf8` 写 BOM+CRLF，收口闸判 `new-dialect` 而整轮红；正法=落盘后转 UTF-8 无 BOM + LF（本轮一次实证，改写 8272B→8155B 后 flags=0）。 (9) **CEO 面一处陈旧键，按名承账未修**：`docs/status-export.json` 的 `ceo_face.do` 仍停在 `2026-11-25 R3456 PRODUCT…`，而顶层 `do`/`ceo_face.current` 已是 (truncated)",
-    "next_milestone_due": "2026-11-29T08:01:39+08:00",
-    "updated_at": "2026-11-27T08:01:39+08:00",
+    "next_milestone_due": "2026-11-29T08:02:52+08:00",
+    "updated_at": "2026-11-27T08:02:52+08:00",
     "heartbeat": {
       "tick": 3522,
       "state_tick": 3543,
@@ -36,7 +36,7 @@
     }
   },
   "current": "2026-11-27 R3543 PRODUCT: the seventeenth gap producer from the R3527 census closes at its birth site - tools/lobby_ws_report.py, the one openable page for the P-47 item 1 lobby WebSocket handshake, now re-derives docs/status-export.json IN PROCESS through the shared board_face_landing.refresh_export_face(ROOT) after its sizes fixed-point loop (the loop writes the pair up to six times, so the closure sits AFTER the loop, not inside it), and only when both halves land under THIS root's own preview/ - a scratch render derives nothing; the census moves from closed=22 gap=87 to closed=23 gap=86.",
-  "claims": {"claimed": 43, "captured": 24, "contradicted": 0, "uncaptured": 19, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-27T08:01:39+08:00"},
+  "claims": {"claimed": 43, "captured": 24, "contradicted": 0, "uncaptured": 19, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-27T08:02:52+08:00"},
   "chain": {"present": true, "rows": 106, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -66,8 +66,8 @@
     }
   ],
   "do": "2026-11-27 R3543 PRODUCT: the seventeenth gap producer from the R3527 census closes at its birth site - tools/lobby_ws_report.py, the one openable page for the P-47 item 1 lobby WebSocket handshake, now re-derives docs/status-export.json IN PROCESS through the shared board_face_landing.refresh_export_face(ROOT) after its sizes fixed-point loop (the loop writes the pair up to six times, so the closure sits AFTER the loop, not inside it), and only when both halves land under THIS root's own preview/ - a scratch render derives nothing; the census moves from closed=22 gap=87 to closed=23 gap=86.",
-  "export_ts": "2026-11-27T08:01:39+08:00",
-  "latest_artifact": "preview/preview-writer-census.html (17301B) + preview/preview-writer-census.json (25037B) [2026-11-27 mtime]",
+  "export_ts": "2026-11-27T08:02:52+08:00",
+  "latest_artifact": "preview/preview-writer-census.html (17301B) + preview/preview-writer-census.json (25037B) [2026-11-27 commit]",
   "latest_evidence": "qa/round-R3542.log (8155B, 2026-11-27, sha256 41e2d4ea81e7)",
   "next_milestone": "[R3543] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先把刷新轮排最前，毕=更新字段＋文件④更新记录行。 (1) S4U 仍未落地（第八十一次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回；宁缺不错。 (2) **87 家缺口已列名**（`preview/preview-writer-census.json`）：下窗只动一家活线生产者（历史 board 生产器排后），判据沿用 `AC-PWC20` 形状（源码位置量＋两条负控＋共享定义＋按 ROOT 的落地守卫）。下一批活线候选按普查实测挑：`tools/lobby_ws_report.py`（`landing_paths=['lobby-ws-report.html']`）；`tools/status_export_fresh.py` 的 `landing_paths` 为空=它本身就是导出面写者，需单列判据。 (3) `replay-receipt` 可豁免性仍待 L3 签发或驳回——窗口禁自行翻计数。 (4) 载体 `state.json` 现 55779B（阈 78500，余量 22721B）；写 state 走「从已提交载体重写、16 空格条目缩进、CRLF」，本轮 `state_io.py --check` 读 CANON-CLEAN。 (5) tick 口径：本轮 3541→3542，下轮 R3543。 (6) 承账不变：`qa_log --ledger-check broken=5`、`769` 判据未被分片路径覆盖、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写。 (7) **两页定序律修订（本轮实测，方向与旧记录相反）**：先写 `deliverable_index` 再写 `first_yuan_chain` 才双双 PASS（23/23 与 VERDICT PASS 同时成立）；先链页后索引会读两页互指 stale。 (8) **证据日志方言**：PS 5.1 的 `Out-File -Encoding utf8` 写 BOM+CRLF，收口闸判 `new-dialect` 而整轮红；正法=落盘后转 UTF-8 无 BOM + LF（本轮一次实证，改写 8272B→8155B 后 flags=0）。 (9) **CEO 面一处陈旧键，按名承账未修**：`docs/status-export.json` 的 `ceo_face.do` 仍停在 `2026-11-25 R3456 PRODUCT…`，而顶层 `do`/`ceo_face.current` 已是 (truncated)",
   "outs": [
@@ -160,7 +160,7 @@
   },
   "self_drive": {"window": "2026-11-21..2026-11-27", "window_days": 7, "log_lines_in_window": 90, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 19, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
   "state_bytes": 59080,
-  "next_milestone_due": "2026-11-29T08:01:39+08:00",
+  "next_milestone_due": "2026-11-29T08:02:52+08:00",
   "heartbeat": {
     "tick": 3522,
     "state_tick": 3543,
