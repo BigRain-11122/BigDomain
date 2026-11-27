@@ -1,48 +1,42 @@
 {
   "ceo_face": {
     "board_pages_skipped": [],
-    "current": "2026-11-27 R3572 PRODUCT: the forty-sixth gap producer from the R3527 census closes at its birth site - tools/category_watch_months_board.py, the one openable page that answers how each category watch list moved month by month (per-month watch counts, live watches, adds, removes and net change plus per-category cells, all printed from the shipped api_category_watch_months face over a one-off demo world), now re-derives docs/status-export.json IN PROCESS through the shared board_face_landing.refresh_export_face(ROOT) after its sizes fixed-point loop (that loop rewrites the JSON up to six times, so the closure sits after the loop, not inside it), and only when both halves land under THIS root own preview/ - a --out/--json redirection derives nothing; the census moves from closed=51 gap=58 to closed=52 gap=57.",
+    "current": "2026-11-27 R3573 PRODUCT: the forty-seventh gap producer from the R3527 census closes at its birth site - tools/library_board.py, the one openable page that lists every purchase a resident holds (price paid, seller and platform split, live asking price, delist stamp, refund stamp and this buyer own stars per row, with per-buyer and market totals, all read from the shipped api_library face over a one-off demo world), now re-derives docs/status-export.json IN PROCESS through the shared board_face_landing.refresh_export_face(ROOT) after its sizes fixed-point loop (that loop rewrites the JSON up to six times, so the closure sits after the loop, not inside it), and only when both halves land under THIS root own preview/ - a --out/--json redirection derives nothing; the census moves from closed=52 gap=57 to closed=53 gap=56.",
     "do": "2026-11-25 R3456 PRODUCT: the answer-revision question now has a door - api_answer_history (live with AC-AMAW1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so 'which answer was rewritten, what did it say before, what does it say now and how often did it change' could only be read by calling the sandbox from a shell - while api_seller_answers and api_listing_qna publish only the CURRENT wording.",
-    "last_artifact": "preview/category-watch-months-board.html (10726B) + preview/category-watch-months-board.json (3667B) [2026-11-27 mtime]",
-    "latest_artifact": "preview/category-watch-months-board.html (10726B) + preview/category-watch-months-board.json (3667B) [2026-11-27 mtime]",
-    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\category-watch-months-board.html",
+    "last_artifact": "preview/library-board.html (9654B) + preview/library-board.json (4388B) [2026-11-27 mtime]",
+    "latest_artifact": "preview/library-board.html (9654B) + preview/library-board.json (4388B) [2026-11-27 mtime]",
+    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\library-board.html",
     "latest_artifact_note": "",
     "latest_evidence": "qa/round-R3564.log (1288B, 2026-11-27, sha256 c36ba280a17e)",
     "newest_pair_on_disk_is_board": false,
     "next_milestone": "[R3572] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先把刷新轮排最前，毕=更新字段＋文件④更新记录行。 (1) S4U 仍未落地（第一百一十一次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回；宁缺不错。 (2) **57 家缺口已列名**（`preview/preview-writer-census.json`，本轮 `closed=52 gap=57`）：下窗只动一家活线生产者，判据沿用 `AC-PWC50` 形状。下一批候选按普查实测：`tools/library_board.py`（9）、`tools/listing_metadata_history_board.py`（9）、`tools/listing_position_board.py`（9）、`tools/listing_price_history_board.py`（9）、`tools/listing_velocity_board.py`（9）；`tools/qa_log.py`（28，多落页）、`src/os/registry_counter_census.py`（11，收口件）、`tools/crawl_runner.py`（9，无落页）仍不接。 (3) `replay-receipt` 可豁免性仍待 L3 签发或驳回。 (4) 载体 `state.json` 本窗检查 `FOLD-CLEAR bytes=51369 gate=78500 log_lines=52`——下窗照旧先跑 `python src/os/state_fold_run.py --check`。 (5) tick 口径：本轮 3571→3572，下轮 R3573。 (6) 承账不变：`qa_log --ledger-check broken=5`、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写、电池页待重派生。 (7) **本窗实测（写进下窗第一步）**：①绿序同上 (d)，产品必须是最新对半才写索引；②`tools/deliverable_index.py` 裸跑=写、`--check`=判，`tools/first_yuan_chain.py` 裸跑=渲染、`--check`=判；③矩阵正身=`python src/os/suite_matrix_reconcile.py --write` 然后 `--check` 读 `DOC-CURRENT`；④收口正身=`python src/os/closeout.py --round <n> --tick auto --line .. (truncated)",
-    "next_milestone_due": "2026-11-29T20:09:40+08:00",
-    "updated_at": "2026-11-27T20:09:40+08:00",
+    "next_milestone_due": "2026-11-29T20:20:34+08:00",
+    "updated_at": "2026-11-27T20:20:34+08:00",
     "heartbeat": {
-      "tick": 3572,
-      "state_tick": 3572,
+      "tick": 3573,
+      "state_tick": 3573,
       "lag": 0,
       "verdict": "PASS",
       "reason": "fresh"
     },
     "outs_age": {
-      "rows": 48,
-      "measurable": 47,
+      "rows": 49,
+      "measurable": 48,
       "unmeasurable": 1,
       "oldest_days": 2,
       "over7": 0,
       "dup_rows": 0,
-      "distinct": 48,
+      "distinct": 49,
       "collapsed": 0,
       "labels_refreshed": 0,
       "notes_stale": 0,
       "note_claims": 0,
       "criteria_stale": 0,
       "criteria_claims": 0
-    },
-    "corpus": {
-      "files": 5082,
-      "bytes": 512096294,
-      "mb": 512.1,
-      "readable": 5082
     }
   },
-  "current": "2026-11-27 R3572 PRODUCT: the forty-sixth gap producer from the R3527 census closes at its birth site - tools/category_watch_months_board.py, the one openable page that answers how each category watch list moved month by month (per-month watch counts, live watches, adds, removes and net change plus per-category cells, all printed from the shipped api_category_watch_months face over a one-off demo world), now re-derives docs/status-export.json IN PROCESS through the shared board_face_landing.refresh_export_face(ROOT) after its sizes fixed-point loop (that loop rewrites the JSON up to six times, so the closure sits after the loop, not inside it), and only when both halves land under THIS root own preview/ - a --out/--json redirection derives nothing; the census moves from closed=51 gap=58 to closed=52 gap=57.",
-  "claims": {"claimed": 43, "captured": 24, "contradicted": 0, "uncaptured": 19, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-27T20:09:40+08:00"},
+  "current": "2026-11-27 R3573 PRODUCT: the forty-seventh gap producer from the R3527 census closes at its birth site - tools/library_board.py, the one openable page that lists every purchase a resident holds (price paid, seller and platform split, live asking price, delist stamp, refund stamp and this buyer own stars per row, with per-buyer and market totals, all read from the shipped api_library face over a one-off demo world), now re-derives docs/status-export.json IN PROCESS through the shared board_face_landing.refresh_export_face(ROOT) after its sizes fixed-point loop (that loop rewrites the JSON up to six times, so the closure sits after the loop, not inside it), and only when both halves land under THIS root own preview/ - a --out/--json redirection derives nothing; the census moves from closed=52 gap=57 to closed=53 gap=56.",
+  "claims": {"claimed": 43, "captured": 24, "contradicted": 0, "uncaptured": 19, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-27T20:20:34+08:00"},
   "chain": {"present": true, "rows": 106, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -71,15 +65,16 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-27 R3572 PRODUCT: the forty-sixth gap producer from the R3527 census closes at its birth site - tools/category_watch_months_board.py, the one openable page that answers how each category watch list moved month by month (per-month watch counts, live watches, adds, removes and net change plus per-category cells, all printed from the shipped api_category_watch_months face over a one-off demo world), now re-derives docs/status-export.json IN PROCESS through the shared board_face_landing.refresh_export_face(ROOT) after its sizes fixed-point loop (that loop rewrites the JSON up to six times, so the closure sits after the loop, not inside it), and only when both halves land under THIS root own preview/ - a --out/--json redirection derives nothing; the census moves from closed=51 gap=58 to closed=52 gap=57.",
-  "export_ts": "2026-11-27T20:09:40+08:00",
-  "latest_artifact": "preview/category-watch-months-board.html (10726B) + preview/category-watch-months-board.json (3667B) [2026-11-27 mtime]",
+  "do": "2026-11-27 R3573 PRODUCT: the forty-seventh gap producer from the R3527 census closes at its birth site - tools/library_board.py, the one openable page that lists every purchase a resident holds (price paid, seller and platform split, live asking price, delist stamp, refund stamp and this buyer own stars per row, with per-buyer and market totals, all read from the shipped api_library face over a one-off demo world), now re-derives docs/status-export.json IN PROCESS through the shared board_face_landing.refresh_export_face(ROOT) after its sizes fixed-point loop (that loop rewrites the JSON up to six times, so the closure sits after the loop, not inside it), and only when both halves land under THIS root own preview/ - a --out/--json redirection derives nothing; the census moves from closed=52 gap=57 to closed=53 gap=56.",
+  "export_ts": "2026-11-27T20:20:34+08:00",
+  "latest_artifact": "preview/library-board.html (9654B) + preview/library-board.json (4388B) [2026-11-27 mtime]",
   "latest_evidence": "qa/round-R3564.log (1288B, 2026-11-27, sha256 c36ba280a17e)",
   "next_milestone": "[R3572] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先把刷新轮排最前，毕=更新字段＋文件④更新记录行。 (1) S4U 仍未落地（第一百一十一次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回；宁缺不错。 (2) **57 家缺口已列名**（`preview/preview-writer-census.json`，本轮 `closed=52 gap=57`）：下窗只动一家活线生产者，判据沿用 `AC-PWC50` 形状。下一批候选按普查实测：`tools/library_board.py`（9）、`tools/listing_metadata_history_board.py`（9）、`tools/listing_position_board.py`（9）、`tools/listing_price_history_board.py`（9）、`tools/listing_velocity_board.py`（9）；`tools/qa_log.py`（28，多落页）、`src/os/registry_counter_census.py`（11，收口件）、`tools/crawl_runner.py`（9，无落页）仍不接。 (3) `replay-receipt` 可豁免性仍待 L3 签发或驳回。 (4) 载体 `state.json` 本窗检查 `FOLD-CLEAR bytes=51369 gate=78500 log_lines=52`——下窗照旧先跑 `python src/os/state_fold_run.py --check`。 (5) tick 口径：本轮 3571→3572，下轮 R3573。 (6) 承账不变：`qa_log --ledger-check broken=5`、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写、电池页待重派生。 (7) **本窗实测（写进下窗第一步）**：①绿序同上 (d)，产品必须是最新对半才写索引；②`tools/deliverable_index.py` 裸跑=写、`--check`=判，`tools/first_yuan_chain.py` 裸跑=渲染、`--check`=判；③矩阵正身=`python src/os/suite_matrix_reconcile.py --write` 然后 `--check` 读 `DOC-CURRENT`；④收口正身=`python src/os/closeout.py --round <n> --tick auto --line .. (truncated)",
   "outs": [
-    "preview/category-watch-months-board.html (10726B) + preview/category-watch-months-board.json (3667B) [2026-11-27 mtime]",
+    "preview/library-board.html (9654B) + preview/library-board.json (4388B) [2026-11-27 mtime]",
     "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-27 mtime] (halves differ: html [2026-11-27 mtime] + json [2026-11-16 commit]; later=html)",
-    "preview/preview-writer-census.html (17475B) + preview/preview-writer-census.json (25124B) [2026-11-27 mtime]",
+    "preview/preview-writer-census.html (17481B) + preview/preview-writer-census.json (25127B) [2026-11-27 mtime]",
+    "preview/category-watch-months-board.html (10726B) + preview/category-watch-months-board.json (3667B) [2026-11-27 mtime]",
     "preview/category-velocity-months-board.html (6449B) + preview/category-velocity-months-board.json (1302B) [2026-11-27 mtime]",
     "preview/category-refund-months.html (4529B) + preview/category-refund-months.json (1354B) [2026-11-27 mtime]",
     "preview/category-question-months-board.html (11545B) + preview/category-question-months-board.json (4726B) [2026-11-27 mtime]",
@@ -181,42 +176,36 @@
     "shortfall_total": 15,
     "verdict": "FLOOR-DEBT"
   },
-  "results": [["3572", "OSLoop 执行 tick"]],
+  "results": [["3573", "OSLoop 执行 tick"]],
   "results_archive": {
     "bytes": 336680,
     "count": 179,
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
-  "self_drive": {"window": "2026-11-21..2026-11-27", "window_days": 7, "log_lines_in_window": 56, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 45, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
-  "state_bytes": 56166,
-  "next_milestone_due": "2026-11-29T20:09:40+08:00",
+  "self_drive": {"window": "2026-11-21..2026-11-27", "window_days": 7, "log_lines_in_window": 59, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 47, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
+  "state_bytes": 58986,
+  "next_milestone_due": "2026-11-29T20:20:34+08:00",
   "heartbeat": {
-    "tick": 3572,
-    "state_tick": 3572,
+    "tick": 3573,
+    "state_tick": 3573,
     "lag": 0,
     "verdict": "PASS",
     "reason": "fresh"
   },
   "outs_age": {
-    "rows": 48,
-    "measurable": 47,
+    "rows": 49,
+    "measurable": 48,
     "unmeasurable": 1,
     "oldest_days": 2,
     "over7": 0,
     "dup_rows": 0,
-    "distinct": 48,
+    "distinct": 49,
     "collapsed": 0,
     "labels_refreshed": 0,
     "notes_stale": 0,
     "note_claims": 0,
     "criteria_stale": 0,
     "criteria_claims": 0
-  },
-  "corpus": {
-    "files": 5082,
-    "bytes": 512096294,
-    "mb": 512.1,
-    "readable": 5082
   }
 }

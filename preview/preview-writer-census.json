@@ -3,8 +3,8 @@
     "src/os/board_face_landing.py",
     "src/os/export_round.py"
   ],
-  "generated_at": "2026-11-27T20:07:50+08:00",
-  "round": "R3571",
+  "generated_at": "2026-11-27T20:16:54+08:00",
+  "round": "R3572",
   "rows": [
     {
       "face_calls": 0,
@@ -177,15 +177,6 @@
       "landing_paths": [],
       "path": "tools/fold_carry_census.py",
       "write_calls": 2
-    },
-    {
-      "face_calls": 0,
-      "kind": "gap",
-      "landing_paths": [
-        "library-board.html"
-      ],
-      "path": "tools/library_board.py",
-      "write_calls": 9
     },
     {
       "face_calls": 0,
@@ -802,6 +793,15 @@
       "face_calls": 1,
       "kind": "closed",
       "landing_paths": [
+        "library-board.html"
+      ],
+      "path": "tools/library_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 1,
+      "kind": "closed",
+      "landing_paths": [
         "lobby-protocol-map.html"
       ],
       "path": "tools/lobby_protocol_map.py",
@@ -1090,9 +1090,9 @@
     }
   ],
   "totals": {
-    "closed": 52,
+    "closed": 53,
     "excluded": 2,
-    "gap": 57,
+    "gap": 56,
     "modules": 119,
     "reader": 10,
     "writers": 109
