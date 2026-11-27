@@ -10,8 +10,8 @@
     "latest_evidence": "qa/round-R3564.log (1288B, 2026-11-27, sha256 c36ba280a17e)",
     "newest_pair_on_disk_is_board": true,
     "next_milestone": "[R3601] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）—— 12-01 或之后开窗先把刷新轮排最前（P-2026-09-24-56），毕=更新字段＋文件④更新记录行。(1) **S4U 仍未落地**（第一百三十八次承账）：`BigDomain-OSLoop` 任务存在但 `Principal.LogonType=Interactive`，正法=提权会话跑 `src/os/register_loop_task.ps1` 后读回须为 `S4U`；宁缺不错（禁用 `Get-ScheduledTaskPrincipal`，本机无此 cmdlet 会给出假阴性）。(2) **28 家缺口已列名**（`preview/preview-writer-census.json`，本窗 `closed=81 gap=28`）：下窗只动一家活线生产者，判据沿用 `AC-PWC79` 形状（源码位置量+两条负控+共享定义+落地守卫）；下一批候选=`tools/seller_price_cadence_board.py`、`tools/price_reaction_board.py`、`tools/seller_price_demand_board.py`（三者本窗已实测 `kind=gap`，写量 9/4/9），其后 `tools/refund_reasons_board.py`、`tools/seller_refund_reasons_board.py`、`tools/watch_conversion_board.py`、`tools/watch_alerts_board.py`；`tools/qa_log.py`、`tools/crawl_runner.py`、`src/os/registry_counter_census.py` 仍不接；开工前仍先实测 `classify_source` 确认 `kind=gap`。(3) **绿序本窗实证**：产品落页（自动派生面）→普查 `--write`→产品再落→矩阵 `src/os/suite_matrix_reconcile.py --write`/`--check`（必读 `DOC-CURRENT`）→链 `tools/first_yuan_chain.py` 裸跑＋`--check`→产品再落→index `tools/deliverable_index.py --write`＋`--check` 23/23→`tools/closeout_order.py --write`＋`--check` 4/4（`transient_steps=1` (truncated)",
-    "next_milestone_due": "2026-11-30T04:03:31+08:00",
-    "updated_at": "2026-11-28T04:03:31+08:00",
+    "next_milestone_due": "2026-11-30T04:06:25+08:00",
+    "updated_at": "2026-11-28T04:06:25+08:00",
     "heartbeat": {
       "tick": 3579,
       "state_tick": 3601,
@@ -36,7 +36,7 @@
     }
   },
   "current": "2026-11-28 R3601 PRODUCT: the seventy-fifth gap producer from the R3527 census closes at its birth site - tools/similar_listing_board.py, the one openable page that answers the buyer's most natural follow-up after opening a listing (what else is like this one, is it dearer or cheaper, by how much, who carries the better rating, and whether the market truncated the shelf), now re-derives docs/status-export.json IN PROCESS through the shared board_face_landing.refresh_export_face(ROOT) after its sizes fixed-point loop, and only when both halves land under THIS root own preview/ - a --out/--json redirection derives nothing; the census moves from closed=80 gap=29 to closed=81 gap=28.",
-  "claims": {"claimed": 43, "captured": 24, "contradicted": 0, "uncaptured": 19, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-28T04:03:31+08:00"},
+  "claims": {"claimed": 43, "captured": 24, "contradicted": 0, "uncaptured": 19, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-28T04:06:25+08:00"},
   "chain": {"present": true, "rows": 106, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -66,7 +66,7 @@
     }
   ],
   "do": "2026-11-28 R3601 PRODUCT: the seventy-fifth gap producer from the R3527 census closes at its birth site - tools/similar_listing_board.py, the one openable page that answers the buyer's most natural follow-up after opening a listing (what else is like this one, is it dearer or cheaper, by how much, who carries the better rating, and whether the market truncated the shelf), now re-derives docs/status-export.json IN PROCESS through the shared board_face_landing.refresh_export_face(ROOT) after its sizes fixed-point loop, and only when both halves land under THIS root own preview/ - a --out/--json redirection derives nothing; the census moves from closed=80 gap=29 to closed=81 gap=28.",
-  "export_ts": "2026-11-28T04:03:31+08:00",
+  "export_ts": "2026-11-28T04:06:25+08:00",
   "latest_artifact": "preview/similar-listing-board.html (5298B) + preview/similar-listing-board.json (3639B) [2026-11-28 commit]",
   "latest_evidence": "qa/round-R3564.log (1288B, 2026-11-27, sha256 c36ba280a17e)",
   "next_milestone": "[R3601] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）—— 12-01 或之后开窗先把刷新轮排最前（P-2026-09-24-56），毕=更新字段＋文件④更新记录行。(1) **S4U 仍未落地**（第一百三十八次承账）：`BigDomain-OSLoop` 任务存在但 `Principal.LogonType=Interactive`，正法=提权会话跑 `src/os/register_loop_task.ps1` 后读回须为 `S4U`；宁缺不错（禁用 `Get-ScheduledTaskPrincipal`，本机无此 cmdlet 会给出假阴性）。(2) **28 家缺口已列名**（`preview/preview-writer-census.json`，本窗 `closed=81 gap=28`）：下窗只动一家活线生产者，判据沿用 `AC-PWC79` 形状（源码位置量+两条负控+共享定义+落地守卫）；下一批候选=`tools/seller_price_cadence_board.py`、`tools/price_reaction_board.py`、`tools/seller_price_demand_board.py`（三者本窗已实测 `kind=gap`，写量 9/4/9），其后 `tools/refund_reasons_board.py`、`tools/seller_refund_reasons_board.py`、`tools/watch_conversion_board.py`、`tools/watch_alerts_board.py`；`tools/qa_log.py`、`tools/crawl_runner.py`、`src/os/registry_counter_census.py` 仍不接；开工前仍先实测 `classify_source` 确认 `kind=gap`。(3) **绿序本窗实证**：产品落页（自动派生面）→普查 `--write`→产品再落→矩阵 `src/os/suite_matrix_reconcile.py --write`/`--check`（必读 `DOC-CURRENT`）→链 `tools/first_yuan_chain.py` 裸跑＋`--check`→产品再落→index `tools/deliverable_index.py --write`＋`--check` 23/23→`tools/closeout_order.py --write`＋`--check` 4/4（`transient_steps=1` (truncated)",
@@ -211,9 +211,9 @@
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
-  "self_drive": {"window": "2026-11-22..2026-11-28", "window_days": 7, "log_lines_in_window": 67, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 56, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
-  "state_bytes": 67043,
-  "next_milestone_due": "2026-11-30T04:03:31+08:00",
+  "self_drive": {"window": "2026-11-22..2026-11-28", "window_days": 7, "log_lines_in_window": 68, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 57, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
+  "state_bytes": 67800,
+  "next_milestone_due": "2026-11-30T04:06:25+08:00",
   "heartbeat": {
     "tick": 3579,
     "state_tick": 3601,
