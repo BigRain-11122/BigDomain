@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-24 10:46:09Z",
+ "generated_utc": "2026-11-27 09:34:01Z",
  "face": "api_buyer_ledger",
  "board_face": "api_board",
  "source_face": "api_sales",
@@ -156,7 +156,7 @@
  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
  "report": "preview/buyer-ledger-board.html",
  "sources": {
-  "driver": "5c9bc9599f61c227",
+  "driver": "2bdde7b1c34d6316",
   "copy": "19e15a0cec184bf6",
   "apimarket": "82a49194bef85737",
   "report": "3a83dce99c9e2bd4"
