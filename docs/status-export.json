@@ -3,15 +3,15 @@
     "board_pages_skipped": ["preview/face-sweep.html (8946B)"],
     "current": "2026-11-28 R3592 PRODUCT: the sixty-sixth gap producer from the R3527 census closes at its birth site - tools/seller_answer_months_board.py, the one openable page that answers how heavy a shop Q&A cadence actually is month by month (per-seller KPI strip, then one contiguous month grid carrying answered, discharged-backlog and same-month splits, buyers, listings, fastest/mean/slowest wait, the running lifetime count and a peak-relative bar with an honest zero row and zero badge for a silent month), now re-derives docs/status-export.json IN PROCESS through the shared board_face_landing.refresh_export_face(ROOT) after its sizes fixed-point loop and only when both halves land under THIS root own preview/ - a --out/--json redirection derives nothing; the census moves from closed=71 gap=38 to closed=72 gap=37.",
     "do": "2026-11-25 R3456 PRODUCT: the answer-revision question now has a door - api_answer_history (live with AC-AMAW1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so 'which answer was rewritten, what did it say before, what does it say now and how often did it change' could only be read by calling the sandbox from a shell - while api_seller_answers and api_listing_qna publish only the CURRENT wording.",
-    "last_artifact": "preview/seller-answer-months-board.html (7529B) + preview/seller-answer-months-board.json (2734B) [2026-11-28 mtime]",
-    "latest_artifact": "preview/seller-answer-months-board.html (7529B) + preview/seller-answer-months-board.json (2734B) [2026-11-28 mtime]",
+    "last_artifact": "preview/seller-answer-months-board.html (7529B) + preview/seller-answer-months-board.json (2734B) [2026-11-28 commit]",
+    "latest_artifact": "preview/seller-answer-months-board.html (7529B) + preview/seller-answer-months-board.json (2734B) [2026-11-28 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\seller-answer-months-board.html",
     "latest_artifact_note": "",
     "latest_evidence": "qa/round-R3564.log (1288B, 2026-11-27, sha256 c36ba280a17e)",
     "newest_pair_on_disk_is_board": true,
     "next_milestone": "[R3592] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）—— 12-01 或之后开窗先把刷新轮排最前，毕=更新字段＋文件④更新记录行。(1) **S4U 仍未落地**（第一百二十九次承账）：`BigDomain-OSLoop` 任务存在但 `Principal.LogonType=Interactive`，正法=提权会话跑 `src/os/register_loop_task.ps1` 后读回须为 `S4U`（禁用 `Get-ScheduledTaskPrincipal`，本机无此 cmdlet 会给出假阴性）。(2) **37 家缺口已列名**（`preview/preview-writer-census.json`，本轮 `closed=72 gap=37`）：下窗只动一家活线生产者，判据沿用 `AC-PWC70` 形状；下一批候选= `tools/seller_reply_months_board.py`、`tools/seller_refund_months_board.py`、`tools/seller_repeat_months_board.py`（开工前先实测 `classify_source` 确认 `kind=gap`）；`tools/qa_log.py`、`src/os/registry_counter_census.py`、`tools/crawl_runner.py` 仍不接。(3) tick 口径：本轮 3591→3592，下轮 R3593。(4) 承账不变：`qa_log --ledger-check broken=5`、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写、电池页待重派生、收口绿序不变。(5) **本窗实测（写进下窗第一步）**：①绿序照 R3591（产品落页自动派生面→普查 `--write`→产品再落→矩阵 `--write`＋`--check` 须 `DOC-CURRENT`→链裸跑＋`--check`→产品再落→index `--write`＋`--check` 23/23→`closeout_order --write`＋`--check` 4/4→`closeout_gate`），A（状态追加前）与 B（状态追加后）两遍零红步；②折叠闸=`python src/os/state_fold_run.py --check`（本窗 `FOLD-CLEAR margin=25987`，六条状态行后 `margin=20084`）；③新判据类名=`PWC70SixtySixthProducerClosed`，closure (truncated)",
-    "next_milestone_due": "2026-11-30T01:33:33+08:00",
-    "updated_at": "2026-11-28T01:33:33+08:00",
+    "next_milestone_due": "2026-11-30T01:35:57+08:00",
+    "updated_at": "2026-11-28T01:35:57+08:00",
     "heartbeat": {
       "tick": 3579,
       "state_tick": 3592,
@@ -36,7 +36,7 @@
     }
   },
   "current": "2026-11-28 R3592 PRODUCT: the sixty-sixth gap producer from the R3527 census closes at its birth site - tools/seller_answer_months_board.py, the one openable page that answers how heavy a shop Q&A cadence actually is month by month (per-seller KPI strip, then one contiguous month grid carrying answered, discharged-backlog and same-month splits, buyers, listings, fastest/mean/slowest wait, the running lifetime count and a peak-relative bar with an honest zero row and zero badge for a silent month), now re-derives docs/status-export.json IN PROCESS through the shared board_face_landing.refresh_export_face(ROOT) after its sizes fixed-point loop and only when both halves land under THIS root own preview/ - a --out/--json redirection derives nothing; the census moves from closed=71 gap=38 to closed=72 gap=37.",
-  "claims": {"claimed": 43, "captured": 24, "contradicted": 0, "uncaptured": 19, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-28T01:33:33+08:00"},
+  "claims": {"claimed": 43, "captured": 24, "contradicted": 0, "uncaptured": 19, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-28T01:35:57+08:00"},
   "chain": {"present": true, "rows": 106, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -66,12 +66,12 @@
     }
   ],
   "do": "2026-11-28 R3592 PRODUCT: the sixty-sixth gap producer from the R3527 census closes at its birth site - tools/seller_answer_months_board.py, the one openable page that answers how heavy a shop Q&A cadence actually is month by month (per-seller KPI strip, then one contiguous month grid carrying answered, discharged-backlog and same-month splits, buyers, listings, fastest/mean/slowest wait, the running lifetime count and a peak-relative bar with an honest zero row and zero badge for a silent month), now re-derives docs/status-export.json IN PROCESS through the shared board_face_landing.refresh_export_face(ROOT) after its sizes fixed-point loop and only when both halves land under THIS root own preview/ - a --out/--json redirection derives nothing; the census moves from closed=71 gap=38 to closed=72 gap=37.",
-  "export_ts": "2026-11-28T01:33:33+08:00",
-  "latest_artifact": "preview/seller-answer-months-board.html (7529B) + preview/seller-answer-months-board.json (2734B) [2026-11-28 mtime]",
+  "export_ts": "2026-11-28T01:35:57+08:00",
+  "latest_artifact": "preview/seller-answer-months-board.html (7529B) + preview/seller-answer-months-board.json (2734B) [2026-11-28 commit]",
   "latest_evidence": "qa/round-R3564.log (1288B, 2026-11-27, sha256 c36ba280a17e)",
   "next_milestone": "[R3592] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）—— 12-01 或之后开窗先把刷新轮排最前，毕=更新字段＋文件④更新记录行。(1) **S4U 仍未落地**（第一百二十九次承账）：`BigDomain-OSLoop` 任务存在但 `Principal.LogonType=Interactive`，正法=提权会话跑 `src/os/register_loop_task.ps1` 后读回须为 `S4U`（禁用 `Get-ScheduledTaskPrincipal`，本机无此 cmdlet 会给出假阴性）。(2) **37 家缺口已列名**（`preview/preview-writer-census.json`，本轮 `closed=72 gap=37`）：下窗只动一家活线生产者，判据沿用 `AC-PWC70` 形状；下一批候选= `tools/seller_reply_months_board.py`、`tools/seller_refund_months_board.py`、`tools/seller_repeat_months_board.py`（开工前先实测 `classify_source` 确认 `kind=gap`）；`tools/qa_log.py`、`src/os/registry_counter_census.py`、`tools/crawl_runner.py` 仍不接。(3) tick 口径：本轮 3591→3592，下轮 R3593。(4) 承账不变：`qa_log --ledger-check broken=5`、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写、电池页待重派生、收口绿序不变。(5) **本窗实测（写进下窗第一步）**：①绿序照 R3591（产品落页自动派生面→普查 `--write`→产品再落→矩阵 `--write`＋`--check` 须 `DOC-CURRENT`→链裸跑＋`--check`→产品再落→index `--write`＋`--check` 23/23→`closeout_order --write`＋`--check` 4/4→`closeout_gate`），A（状态追加前）与 B（状态追加后）两遍零红步；②折叠闸=`python src/os/state_fold_run.py --check`（本窗 `FOLD-CLEAR margin=25987`，六条状态行后 `margin=20084`）；③新判据类名=`PWC70SixtySixthProducerClosed`，closure (truncated)",
   "outs": [
-    "preview/seller-answer-months-board.html (7529B) + preview/seller-answer-months-board.json (2734B) [2026-11-28 mtime]",
+    "preview/seller-answer-months-board.html (7529B) + preview/seller-answer-months-board.json (2734B) [2026-11-28 commit]",
     "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-28 mtime] (halves differ: html [2026-11-28 mtime] + json [2026-11-16 commit]; later=html)",
     "preview/preview-writer-census.html (17595B) + preview/preview-writer-census.json (25184B) [2026-11-28 mtime]",
     "preview/search-board.html (12170B) + preview/search-board.json (8135B) [2026-11-28 mtime]",
@@ -204,7 +204,7 @@
   },
   "self_drive": {"window": "2026-11-22..2026-11-28", "window_days": 7, "log_lines_in_window": 56, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 47, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
   "state_bytes": 58416,
-  "next_milestone_due": "2026-11-30T01:33:33+08:00",
+  "next_milestone_due": "2026-11-30T01:35:57+08:00",
   "heartbeat": {
     "tick": 3579,
     "state_tick": 3592,
