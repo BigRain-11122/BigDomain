@@ -2339,5 +2339,162 @@ class PWC22EighteenthProducerClosed(unittest.TestCase):
             shutil.rmtree(tmp, ignore_errors=True)
 
 
+def clw_closure_positions(text):
+    """(present, after_landing, readers_clean, shared_only) for AC-PWC23."""
+    if "def main(" not in text:
+        return (False, False, False, False)
+    body = text.rpartition("def main(")[2].split("\ndef ")[0]
+    at = body.find("_refresh_face()")
+    present = at != -1
+    last_write = body.rfind("handle.write(render_html(payload))")
+    after = present and last_write != -1 and at > last_write
+    readers = True
+    for name in ("def check(", "def build(", "def render_html("):
+        if name in text:
+            reader_body = text.rpartition(name)[2].split("\ndef ")[0]
+            if "_refresh_face(" in reader_body:
+                readers = False
+    helper = text.rpartition("def _refresh_face(")[2].split("\ndef ")[0]
+    shared = "board_face_landing.refresh_export_face(ROOT)" in helper
+    no_local_writer = ".write(" not in helper
+    return (present, after, readers and present, shared and no_local_writer)
+
+
+class PWC23TwentyFifthProducerClosed(unittest.TestCase):
+    """AC-PWC23: core_loop_walkthrough re-derives the face on its landing path only."""
+
+    def _source(self):
+        with io.open(os.path.join(TOOLS, "core_loop_walkthrough.py"),
+                     encoding="utf-8") as f:
+            return f.read()
+
+    def test_closed_and_ordered_after_the_landing(self):
+        text = self._source()
+        kind, _html, writes, closes = MOD.classify_source(text)
+        self.assertEqual(kind, "closed")
+        self.assertGreaterEqual(writes, 2)
+        self.assertGreaterEqual(closes, 1)
+        self.assertEqual(clw_closure_positions(text), (True, True, True, True))
+
+    def test_negative_controls_delete_and_move(self):
+        text = self._source()
+        deleted = text.replace(
+            "    face = _refresh_face()\n", "").replace(
+            "board_face_landing.refresh_export_face(ROOT)",
+            "None  # control: shared call removed")
+        self.assertEqual(MOD.classify_source(deleted)[0], "gap")
+        self.assertFalse(clw_closure_positions(deleted)[0])
+        moved = text.replace(
+            "    face = _refresh_face()\n", "").replace(
+            '    with io.open(HTML_PATH, "w", encoding="utf-8", newline="\\n") as handle:\n'
+            '        handle.write(render_html(payload))',
+            '    face = _refresh_face()  # control: moved before the last landing write\n'
+            '    with io.open(HTML_PATH, "w", encoding="utf-8", newline="\\n") as handle:\n'
+            '        handle.write(render_html(payload))', 1)
+        pos = clw_closure_positions(moved)
+        self.assertTrue(pos[0])
+        self.assertFalse(pos[1])
+
+    def test_refresh_is_shared_and_named(self):
+        import core_loop_walkthrough as CLW
+        calls = []
+
+        class Fake(object):
+            def __init__(self, ok, note):
+                self.ok, self.note = ok, note
+
+            def refresh_export_face(self, root):
+                calls.append(root)
+                return (self.ok, self.note, {})
+
+        class Boom(object):
+            def refresh_export_face(self, root):
+                raise RuntimeError("no writer here")
+
+        self.assertTrue(CLW._landing_is_default())
+        saved = sys.modules.get("board_face_landing")
+        try:
+            sys.modules["board_face_landing"] = Fake(True, "")
+            self.assertEqual(CLW._refresh_face(), "WRITTEN")
+            self.assertEqual(calls, [CLW.ROOT])
+            sys.modules["board_face_landing"] = Fake(False, "E_BFL_FACE_UNPROVEN")
+            self.assertEqual(CLW._refresh_face(),
+                             "REFUSED E_BFL_FACE_UNPROVEN")
+            sys.modules["board_face_landing"] = Boom()
+            self.assertEqual(CLW._refresh_face(), "SKIPPED RuntimeError")
+            self.assertEqual(len(calls), 2)
+        finally:
+            if saved is None:
+                sys.modules.pop("board_face_landing", None)
+            else:
+                sys.modules["board_face_landing"] = saved
+
+    def test_landing_derives_once_and_scratch_and_check_derive_none(self):
+        """A landing in this root's own preview derives once; scratch and --check do not."""
+        # Two sandboxes ship a top-level `store` module, so this in-process arm
+        # pins the ugc one before the walkthrough module binds its imports.
+        ugc_dir = os.path.join(ROOT, "src", "sandbox", "ugc")
+        if ugc_dir not in sys.path:
+            sys.path.insert(0, ugc_dir)
+        saved_store = sys.modules.pop("store", None)
+        saved_pipeline = sys.modules.pop("pipeline", None)
+        import core_loop_walkthrough as CLW
+        calls = []
+
+        class Fake(object):
+            def refresh_export_face(self, root):
+                calls.append(root)
+                return (True, "", {})
+
+        tmp = tempfile.mkdtemp(prefix="clw-pwc-")
+        for rel in (("src", "sandbox", "ugc", "pipeline.py"),
+                    ("src", "sandbox", "ledger", "ledger.py")):
+            path = os.path.join(tmp, *rel)
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            with io.open(path, "w", encoding="utf-8") as f:
+                f.write("# private world stand-in\n")
+        os.makedirs(os.path.join(tmp, "preview"), exist_ok=True)
+        saved_mod = sys.modules.get("board_face_landing")
+        saved = (CLW.ROOT, CLW.PREVIEW, CLW.JSON_PATH, CLW.HTML_PATH)
+        saved_stdout = sys.stdout
+        try:
+            sys.modules["board_face_landing"] = Fake()
+            CLW.ROOT = tmp
+            CLW.PREVIEW = os.path.join(tmp, "preview")
+            CLW.JSON_PATH = os.path.join(CLW.PREVIEW, "core-loop-walkthrough.json")
+            CLW.HTML_PATH = os.path.join(CLW.PREVIEW, "core-loop-walkthrough.html")
+            sys.stdout = io.StringIO()
+            rc = CLW.main([])
+            self.assertEqual(rc, 0)
+            self.assertEqual(calls, [tmp])
+            self.assertTrue(os.path.isfile(CLW.HTML_PATH))
+            self.assertTrue(os.path.isfile(CLW.JSON_PATH))
+
+            # scratch render: the halves land in this root, but not in preview/
+            CLW.HTML_PATH = os.path.join(tmp, "scratch.html")
+            CLW.JSON_PATH = os.path.join(tmp, "scratch.json")
+            CLW.main([])
+            self.assertEqual(len(calls), 1)
+
+            CLW.ROOT, CLW.PREVIEW, CLW.JSON_PATH, CLW.HTML_PATH = saved
+            calls[:] = []
+            sys.stdout = io.StringIO()
+            rc = CLW.main(["--check"])
+            self.assertEqual(calls, [])
+            self.assertIn(rc, (0, 2))
+        finally:
+            sys.stdout = saved_stdout
+            CLW.ROOT, CLW.PREVIEW, CLW.JSON_PATH, CLW.HTML_PATH = saved
+            if saved_mod is None:
+                sys.modules.pop("board_face_landing", None)
+            else:
+                sys.modules["board_face_landing"] = saved_mod
+            if saved_store is not None:
+                sys.modules["store"] = saved_store
+            if saved_pipeline is not None:
+                sys.modules["pipeline"] = saved_pipeline
+            shutil.rmtree(tmp, ignore_errors=True)
+
+
 if __name__ == "__main__":
     unittest.main()

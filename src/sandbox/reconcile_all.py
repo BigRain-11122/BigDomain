@@ -8000,10 +8000,10 @@ SUITES = [
     # HTML write and the guard measures against ROOT's own preview.
     # R3543 (AC-PWC21): the same shape now grades tools/lobby_ws_report.py,
     # whose two landing halves sit inside a sizes fixed-point loop, so the
-    # closure must sit after the loop; the pin moves to the measured 75 at
-    # R3544 (the 71 stored here was the R3543 measurement).
+    # closure must sit after the loop; the pin moves to the measured 79 at
+    # R3545 (the 75 stored here was the R3544 measurement, AC-PWC23).
     ("os-preview-writer-census",
-     os.path.join("..", "os", "test_preview_writer_census.py"), 75),
+     os.path.join("..", "os", "test_preview_writer_census.py"), 79),
     # R2814. tools/ugc_gate_report.py carries AC-UGR1..AC-UGR9 and renders the
     # face for the BLUEPRINT section-five death line (content safety not
     # connected means the door stays shut), yet the registry held ZERO AC-UGR*
