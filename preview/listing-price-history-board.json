@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-25 17:05:16Z",
+ "generated_utc": "2026-11-27 14:09:24Z",
  "face": "api_price_history",
  "scope": "listing",
  "listings": [
@@ -80,7 +80,7 @@
  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
  "report": "preview/listing-price-history-board.html",
  "sources": {
-  "driver": "247bef8cbd1d589f",
+  "driver": "bf13b23e52777be5",
   "copy": "fafd24215d77bbdb",
   "apimarket": "82a49194bef85737",
   "report": "3a83dce99c9e2bd4"

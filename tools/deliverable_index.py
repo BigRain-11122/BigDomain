@@ -329,6 +329,10 @@ PAIR_PRODUCERS = {
     # render, one json, no back-hop block), so it names its producer instead of
     # leaving AC-DIX21/23 a named absence when it is newest.
     "buyer-answer-wait-board.json": "tools/buyer_answer_wait_board.py",
+    # R3581: same single-writer shape - one render, one json, no back-hop block
+    # - so the asking-price history board names its producer rather than a
+    # recipe. It carried no row until this round, when it became the newest pair.
+    "listing-price-history-board.json": "tools/listing_price_history_board.py",
 }
 # R3392 (AC-DIX21 recipe arm). One pair on this page cannot be reproduced by ONE
 # command, and until now the law had only two answers - name a producer or print
