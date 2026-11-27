@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-24 11:52:21Z",
+ "generated_utc": "2026-11-27 15:47:17Z",
  "face": "api_purchase_dossier",
  "board_face": "api_board",
  "source_face": "api_sales",
@@ -127,7 +127,7 @@
  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
  "report": "preview/purchase-dossier-board.html",
  "sources": {
-  "driver": "ccd1550e142f259f",
+  "driver": "ffc3dfd780eec4f7",
   "copy": "b7f1409f96742bbe",
   "apimarket": "82a49194bef85737",
   "report": "3a83dce99c9e2bd4"
