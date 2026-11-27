@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-24 14:04:02Z",
+ "generated_utc": "2026-11-27 21:03:33Z",
  "face": "api_seller_refund_reasons",
  "board_face": "api_board",
  "source_face": "api_seller_refund_reasons",
@@ -110,7 +110,7 @@
  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
  "report": "preview/seller-refund-reasons-board.html",
  "sources": {
-  "driver": "a08c520bc79df218",
+  "driver": "b4b798f96de4d620",
   "copy": "1f7e0e35de5ca5d1",
   "apimarket": "82a49194bef85737",
   "report": "3a83dce99c9e2bd4"
