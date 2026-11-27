@@ -1,0 +1,50 @@
+R3543 closeout evidence (2026-11-27, BigDomain OSLoop)
+======================================================
+Product: tools/lobby_ws_report.py (P-47 item 1 lobby WebSocket handshake face)
+         closes at its birth site - it re-derives docs/status-export.json
+         in process after its sizes fixed-point loop, guarded by ROOT's own
+         preview/ so a scratch render derives nothing.
+
+Criterion: AC-PWC21 (pinned in src/os/backlog.md before any code change)
+  arm a  closed shape + call after the loop (last _write(json_text, JSON_PATH),
+         after the loop-failure branch) + zero calls in render/build_evidence
+  arm b  helper holds only board_face_landing.refresh_export_face(ROOT)
+  arm c  WRITTEN / REFUSED <note> / SKIPPED <Type>, exactly one call with ROOT
+  arm d  landing once, scratch zero, --check zero; delete -> gap, move -> order red
+
+Readings measured this round
+----------------------------
+python -m unittest src.os.test_preview_writer_census
+  Ran 71 tests  OK            (was 67; four new arms)
+python tools/preview_writer_census.py            -> PWC (R3543) modules=119 closed=23 gap=86 reader=10
+python tools/preview_writer_census.py --check    -> PWC-CHECK VERDICT PASS read_only=True
+python tools/lobby_ws_report.py                  -> VERDICT PASS 8/8 fingerprint=fbdb7f517fb06222
+                                                    html=5952B json=3070B self_consistent=True face=WRITTEN
+python tools/lobby_ws_report.py --check          -> VERDICT PASS 8/8 landed fingerprint equal
+python src/os/suite_matrix_reconcile.py --check  -> DOC-CURRENT docs/sandbox-suite-matrix.md
+python tools/first_yuan_chain.py --check         -> VERDICT PASS legs=2 entries=2 tx=1 html=4403B read_only=True
+python tools/deliverable_index.py --check        -> 23/23 fingerprint=2666a5c9183989f3
+python tools/closeout_gate.py                    -> exit 0, ENTRY-PAGES faces=2 fail=0, CARRIER 59080B gate=78500
+python src/os/state_io.py --check                -> STATE IO CANON-CLEAN bytes=59080 crlf=100 bare_lf=0
+
+Measured correction recorded, not hidden
+-----------------------------------------
+1. The registry pin for os-preview-writer-census read 63 while the suite it
+   names already ran 67, so the previous round's claimed bump was not on disk.
+   This round writes the measured 71.
+2. The index/chain order is a fixed point, not a one-way order: chain quotes
+   index.html's byte size in its back-hop block, so writing chain then index
+   makes chain stale (56337 vs 56466) and writing index then chain leaves the
+   index band without the caveat. Iterating chain -> index -> chain -> index
+   converges once index bytes stop moving (56466 both passes), and only then
+   do both pages read PASS.
+
+Honest boundaries
+-----------------
+- only the birth-site coupling changed; render/build_evidence/run_measurement,
+  the sizes fixed point, the --check semantics and export_round.BOARD_PAGES are
+  untouched; both landed halves keep their shape
+- 86 gaps stay named in preview/preview-writer-census.json; none is claimed closed
+- S4U still unregistered; the three qa/crawl-* modifications are not this window's
+- ZERO payment capability, no network beyond loopback: the five physical pieces
+  still gate every buyer

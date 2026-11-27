@@ -2036,5 +2036,166 @@ class PWC20SixteenthProducerClosed(unittest.TestCase):
             shutil.rmtree(tmp, ignore_errors=True)
 
 
+def lws_closure_positions(text):
+    """(present, after_landing, readers_clean, shared_only) for AC-PWC21."""
+    if "def main(" not in text:
+        return (False, False, False, False)
+    body = text.rpartition("def main(")[2].split("\ndef ")[0]
+    at = body.find("_refresh_face(")
+    present = at != -1
+    last_write = body.rfind("_write(json_text, JSON_PATH)")
+    # the sizes fixed-point loop may write the pair up to six times, so the
+    # closure must sit AFTER the loop, not inside it
+    loop_end = body.find('print("VERDICT FAIL size fixed point did not converge")')
+    after = (present and last_write != -1 and loop_end != -1
+             and at > last_write and at > loop_end)
+    readers = True
+    for name in ("def render(", "def build_evidence(", "def run_measurement("):
+        if name in text:
+            reader_body = text.rpartition(name)[2].split("\ndef ")[0]
+            if "_refresh_face(" in reader_body:
+                readers = False
+    helper = text.rpartition("def _refresh_face(")[2].split("\ndef ")[0]
+    shared = "board_face_landing.refresh_export_face(ROOT)" in helper
+    no_local_writer = ".write(" not in helper
+    return (present, after, readers and present, shared and no_local_writer)
+
+
+class PWC21SeventeenthProducerClosed(unittest.TestCase):
+    """AC-PWC21: lobby_ws_report re-derives the face on its landing path only."""
+
+    def _source(self):
+        with io.open(os.path.join(TOOLS, "lobby_ws_report.py"),
+                     encoding="utf-8") as f:
+            return f.read()
+
+    def test_closed_and_ordered_after_the_landing(self):
+        text = self._source()
+        kind, _html, writes, closes = MOD.classify_source(text)
+        self.assertEqual(kind, "closed")
+        self.assertGreaterEqual(writes, 2)
+        self.assertGreaterEqual(closes, 1)
+        self.assertEqual(lws_closure_positions(text), (True, True, True, True))
+
+    def test_negative_controls_delete_and_move(self):
+        text = self._source()
+        deleted = text.replace(
+            "    face = _refresh_face(HTML_PATH, JSON_PATH)\n", "").replace(
+            "board_face_landing.refresh_export_face(ROOT)",
+            "None  # control: shared call removed")
+        self.assertEqual(MOD.classify_source(deleted)[0], "gap")
+        self.assertFalse(lws_closure_positions(deleted)[0])
+        moved = text.replace(
+            "    face = _refresh_face(HTML_PATH, JSON_PATH)\n", "").replace(
+            "        html_bytes = _write(doc, HTML_PATH)",
+            "        html_bytes = _write(doc, HTML_PATH)\n"
+            "        face = _refresh_face(HTML_PATH, JSON_PATH)"
+            "  # control: moved inside the loop", 1)
+        pos = lws_closure_positions(moved)
+        self.assertTrue(pos[0])
+        self.assertFalse(pos[1])
+
+    def test_refresh_is_shared_and_named(self):
+        import lobby_ws_report as LWS
+        calls = []
+
+        class Fake(object):
+            def __init__(self, ok, note):
+                self.ok, self.note = ok, note
+
+            def refresh_export_face(self, root):
+                calls.append(root)
+                return (self.ok, self.note, {})
+
+        class Boom(object):
+            def refresh_export_face(self, root):
+                raise RuntimeError("no writer here")
+
+        pair = (os.path.join(LWS.ROOT, "preview", "lobby-ws-report.html"),
+                os.path.join(LWS.ROOT, "preview", "lobby-ws-report.json"))
+        self.assertTrue(LWS._landing_is_default(*pair))
+        saved = sys.modules.get("board_face_landing")
+        try:
+            sys.modules["board_face_landing"] = Fake(True, "")
+            self.assertEqual(LWS._refresh_face(*pair), "WRITTEN")
+            self.assertEqual(calls, [LWS.ROOT])
+            sys.modules["board_face_landing"] = Fake(False, "E_BFL_FACE_UNPROVEN")
+            self.assertEqual(LWS._refresh_face(*pair),
+                             "REFUSED E_BFL_FACE_UNPROVEN")
+            sys.modules["board_face_landing"] = Boom()
+            self.assertEqual(LWS._refresh_face(*pair), "SKIPPED RuntimeError")
+            self.assertEqual(len(calls), 2)
+        finally:
+            if saved is None:
+                sys.modules.pop("board_face_landing", None)
+            else:
+                sys.modules["board_face_landing"] = saved
+
+    def test_landing_derives_once_and_scratch_and_check_derive_none(self):
+        """A landing in this root's own preview derives once; scratch and --check do not."""
+        import lobby_ws_report as LWS
+        calls = []
+
+        class Fake(object):
+            def refresh_export_face(self, root):
+                calls.append(root)
+                return (True, "", {})
+
+        facts = {
+            "uri": "ws://127.0.0.1:0/ws",
+            "risk_text": "stand-in risk text",
+            "hello": {"payload": {"v": 1, "rooms": ["lobby"]}},
+            "risk": {"payload": {"text": "stand-in risk text"}},
+            "broadcast": {"type": "chat.broadcast"},
+            "census": {"id": "c1", "served": ["name"],
+                       "whitelist": ["name", "tier"]},
+            "shipped_sha": {},
+        }
+        ev = {cid: {"pass": True, "measured": "synthetic row for %s" % cid}
+              for cid, _intent in LWS.CRITERIA}
+        tmp = tempfile.mkdtemp(prefix="lws-")
+        inner = os.path.join(tmp, "preview")
+        os.makedirs(inner)
+        saved_mod = sys.modules.get("board_face_landing")
+        saved = (LWS.ROOT, LWS.PREVIEW, LWS.HTML_PATH, LWS.JSON_PATH,
+                 LWS.build_evidence)
+        saved_stdout = sys.stdout
+        try:
+            sys.modules["board_face_landing"] = Fake()
+            LWS.ROOT = tmp
+            LWS.PREVIEW = inner
+            LWS.HTML_PATH = os.path.join(inner, "lobby-ws-report.html")
+            LWS.JSON_PATH = os.path.join(inner, "lobby-ws-report.json")
+            LWS.build_evidence = lambda: (ev, facts)
+            sys.stdout = io.StringIO()
+            LWS.main([])
+            self.assertEqual(calls, [tmp])
+            self.assertEqual(len(calls), 1)
+
+            # scratch render: both halves land away from this root's preview
+            scratch = os.path.join(tmp, "scratch")
+            os.makedirs(scratch, exist_ok=True)
+            LWS.HTML_PATH = os.path.join(scratch, "o.html")
+            LWS.JSON_PATH = os.path.join(scratch, "o.json")
+            LWS.main([])
+            self.assertEqual(len(calls), 1)
+
+            # --check reads and never reaches the landing writes
+            LWS.HTML_PATH = os.path.join(inner, "lobby-ws-report.html")
+            LWS.JSON_PATH = os.path.join(inner, "lobby-ws-report.json")
+            before = len(calls)
+            rc = LWS.main(["--check"])
+            self.assertEqual(len(calls), before)
+            self.assertIn(rc, (0, 2, 3))
+        finally:
+            sys.stdout = saved_stdout
+            LWS.ROOT, LWS.PREVIEW, LWS.HTML_PATH, LWS.JSON_PATH, LWS.build_evidence = saved
+            if saved_mod is None:
+                sys.modules.pop("board_face_landing", None)
+            else:
+                sys.modules["board_face_landing"] = saved_mod
+            shutil.rmtree(tmp, ignore_errors=True)
+
+
 if __name__ == "__main__":
     unittest.main()

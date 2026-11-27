@@ -1,7 +1,7 @@
 {
  "artifact": "lobby-ws-report",
  "face": "P-47 item-1 lobby WebSocket handshake",
- "uri": "ws://127.0.0.1:59971/ws",
+ "uri": "ws://127.0.0.1:61677/ws",
  "verdict": "PASS",
  "passed": 8,
  "total": 8,
@@ -22,13 +22,13 @@
    "id": "AC-LWS3",
    "intent": "pay.grant_sandbox grants and the next chat reaches a second client as chat.broadcast",
    "pass": true,
-   "measured": "granted=True mock=True token_prefix=sbx- evt=True peer_frame=chat.broadcast peer_actor=res-c60a5945"
+   "measured": "granted=True mock=True token_prefix=sbx- evt=True peer_frame=chat.broadcast peer_actor=res-d9db5347"
   },
   {
    "id": "AC-LWS4",
    "intent": "server-authoritative actor and ai_generated=false on a human broadcast",
    "pass": true,
-   "measured": "client_supplied_actor=forged-actor server_actor=res-c60a5945 client_supplied_ai_generated=true server_ai_generated=False"
+   "measured": "client_supplied_actor=forged-actor server_actor=res-d9db5347 client_supplied_ai_generated=true server_ai_generated=False"
   },
   {
    "id": "AC-LWS5",
@@ -52,12 +52,12 @@
    "id": "AC-LWS8",
    "intent": "all connect targets loopback, no cloud call, shipped four files byte-identical",
    "pass": true,
-   "measured": "connect_targets=['ws://127.0.0.1'] external=[] shipped_sha={'server.py': 'fa1c0bd6', 'store.py': '56378213', 'sec_gate.py': 'e44e87bf', 'config.json': 'ab7cc978'}"
+   "measured": "connect_targets=['ws://127.0.0.1'] external=[] shipped_sha={'server.py': '3bc82d4c', 'store.py': '56378213', 'sec_gate.py': 'e44e87bf', 'config.json': 'ab7cc978'}"
   }
  ],
  "fingerprint": "fbdb7f517fb06222",
  "shipped_sha256": {
-  "server.py": "fa1c0bd679ed3ad52196d98db5c69c616eef365dc56ebc034b32232459d5aae5",
+  "server.py": "3bc82d4c54b593d48e4bb5b3dea02f8a050374bc67a9b471220d18a85b38b929",
   "store.py": "563782138fcb2177271b2ca861a116aa942835c9a0148a9325bfdec9a0e16e2e",
   "sec_gate.py": "e44e87bf4cfa770c4508103eca609022cb7778e078d3311a975e6385ab90ae15",
   "config.json": "ab7cc97834f4950d068139f0236564fdad57a3646b88ef2a8bf7100ae9285f58"
@@ -68,7 +68,7 @@
   "production criteria AC-P1..P5 are pre-registered and not executed"
  ],
  "sizes": {
-  "html": 6693,
-  "json": 3144
+  "html": 5952,
+  "json": 3070
  }
 }
