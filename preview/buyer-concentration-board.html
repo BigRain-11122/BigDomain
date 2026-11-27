@@ -39,7 +39,7 @@ footer{color:var(--muted);font-size:12px;margin:20px 0 8px}
 code{font-size:12.5px;background:#f2f4f7;padding:1px 5px;border-radius:4px}
 </style></head><body><main>
 <h1>买家支出集中度对账单</h1>
-<div class=meta>我这个买家的钱，是不是压在一家店／一个类目上 &middot; 出厂面只读实调生成，数字由面自带法则校验后才渲染 2026-11-24 15:06:47Z &middot; <code>api_buyer_concentration</code></div>
+<div class=meta>我这个买家的钱，是不是压在一家店／一个类目上 &middot; 出厂面只读实调生成，数字由面自带法则校验后才渲染 2026-11-27 09:02:53Z &middot; <code>api_buyer_concentration</code></div>
 <h2>买家一览</h2>
 <div class=card><table><tr><th>买家</th><th class=n>成交</th><th class=n>退款</th><th class=n>毛支出</th><th class=n>已退</th><th class=n>净支出</th><th class=n>卖家数</th><th class=n>类目数</th><th>集中度字样</th></tr><tr class=buyer data-buyer="usr:bob"><td class="">usr:bob</td><td class="n">2</td><td class="n">1</td><td class="n">13</td><td class="n">10</td><td class="n">3</td><td class="n">1</td><td class="n">1</td><td><span class=badge tight>仅一家</span></td></tr><tr class=buyer data-buyer="usr:carol"><td class="">usr:carol</td><td class="n">1</td><td class="n">0</td><td class="n">10</td><td class="n">0</td><td class="n">10</td><td class="n">1</td><td class="n">1</td><td><span class=badge tight>仅一家</span></td></tr><tr class=buyer data-buyer="usr:erin"><td class="">usr:erin</td><td class="n">1</td><td class="n">1</td><td class="n">5</td><td class="n">5</td><td class="n">0</td><td class="n">1</td><td class="n">1</td><td><span class=badge tight>净支出不为正：全额退款后净额为零，占比／累计／指数均无定义，故一律印破折号而不写 0。</span></td></tr></table></div>
 <h2>卖家轴（谁拿走了我的钱） &middot; <code>usr:bob</code></h2>
@@ -59,5 +59,5 @@ code{font-size:12.5px;background:#f2f4f7;padding:1px 5px;border-radius:4px}
 <p style="margin-top:10px"><span class=badge>AIGC 生成标识：本页由沙箱读数自动生成，非人工撰述</span></p></div>
 <h2>复现命令</h2>
 <div class=card><code>python tools/buyer_concentration_board.py --check</code></div>
-<footer>BigDomain OSLoop &middot; 2026-11-24 15:06:47Z &middot; 本页由 tools/buyer_concentration_board.py 生成，不手改</footer>
+<footer>BigDomain OSLoop &middot; 2026-11-27 09:02:53Z &middot; 本页由 tools/buyer_concentration_board.py 生成，不手改</footer>
 </main></body></html>

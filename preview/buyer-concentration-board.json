@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-24 15:06:47Z",
+ "generated_utc": "2026-11-27 09:02:53Z",
  "face": "api_buyer_concentration",
  "board_face": "api_board",
  "sales_face": "api_sales",
@@ -160,7 +160,7 @@
  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
  "report": "preview/buyer-concentration-board.html",
  "sources": {
-  "driver": "d2511543f3626b91",
+  "driver": "d7e2437a8a10b7df",
   "copy": "a320063e33df2c12",
   "apimarket": "82a49194bef85737",
   "report": "3a83dce99c9e2bd4"
