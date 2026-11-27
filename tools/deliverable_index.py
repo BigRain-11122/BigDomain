@@ -256,6 +256,10 @@ PAIR_PRODUCERS = {
     # R3428: same single-writer shape - one render, one json, no back-hop block
     # - so the buyer concentration page names its producer.
     "buyer-concentration-board.json": "tools/buyer_concentration_board.py",
+    # R3561: same single-writer shape - one render, one json, no back-hop block
+    # - so the buyer repurchase-rhythm page names its producer instead of
+    # leaving AC-DIX21/23 a named absence the moment it is newest.
+    "buyer-gap-board.json": "tools/buyer_gap_board.py",
     # R3429: same single-writer shape - one render, one json, no back-hop block
     # - so the seller monthly returning-buyer page names its producer.
     "seller-repeat-months-board.json": "tools/seller_repeat_months_board.py",
