@@ -578,14 +578,30 @@ def check(meas, out, jout, diag=None):
     return fails
 
 
-def _refresh_face():
-    """AC-PWC13 (R3535): landing this pair and re-deriving the CEO face are ONE run.
+def _landing_is_default(html_path, json_path):
+    """AC-PGM4 (R3611): True only when both halves land under THIS root's preview/.
+
+    The wanted folder is computed from ROOT, not from the rebindable --out and
+    --json flags, so a run that redirects its outputs cannot pose as the root.
+    """
+    want = os.path.realpath(os.path.join(ROOT, "preview"))
+    for path in (html_path, json_path):
+        if os.path.dirname(os.path.realpath(path)) != want:
+            return False
+    return True
+
+
+def _refresh_face(html_path, json_path):
+    """AC-PWC13 (R3535) / AC-PGM4..AC-PGM5 (R3611): landing this pair and
+    re-deriving the CEO face are ONE run, and only for a root landing.
 
     The one definition lives in src/os/board_face_landing.py, so no second writer
     is kept here. ROOT is passed explicitly, so a private world derives that
     world's face. Refusals are named, never raised: both halves are already on
     disk when this runs, so the caller's exit code stays its own.
     """
+    if not _landing_is_default(html_path, json_path):
+        return "SKIPPED scratch"
     try:
         os_src = os.path.join(ROOT, "src", "os")
         if os_src not in sys.path:
@@ -633,7 +649,7 @@ def main(argv):
             fh.write("\n")
         if meas["sizes"]["json"] == os.path.getsize(args.json):
             break
-    face = _refresh_face()
+    face = _refresh_face(args.out, args.json)
     size = os.path.getsize(args.out)
     jsize = os.path.getsize(args.json)
     print("PAYMENT GATE REPORT html=%dB json=%dB channels=%s accepted=%d "

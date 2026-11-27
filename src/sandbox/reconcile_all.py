@@ -7659,8 +7659,12 @@ SUITES = [
     # from disk, AC-PAYG1 no longer echoes the verdict, and the landed face
     # owes a green --check; the suite prints 14 criteria, so the row moves
     # 11 -> 14.
+    # R3611: AC-PGM4..6 join as 15..17 - the face writer carries the ROOT
+    # landing guard, a scratch run prints SKIPPED scratch and leaves this
+    # root's export untouched, and the writer stays single-call with both
+    # paths; the suite prints 17 criteria, so the row moves 14 -> 17.
     ("os-payment-gate-report",
-     os.path.join("..", "os", "test_payment_gate_report.py"), 14),
+     os.path.join("..", "os", "test_payment_gate_report.py"), 17),
     # R2807: tools/qa_log.py writes every window's evidence (tools/battery_shard.py
     # calls its do_write directly) yet all 691 registered suites covered zero
     # AC-QAL* tokens, so its seven criteria were guarded only by its own

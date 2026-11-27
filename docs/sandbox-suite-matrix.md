@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 832 | 7310 | 675/675 | R2739 |
+| 832 | 7313 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -757,7 +757,7 @@
 | 718 | os-export-parity-difference-order-field | ../os/test_export_parity_difference_order_field.py | 6 | no-evidence | - |
 | 719 | os-ship-checklist | ../os/test_ship_checklist.py | 8 | no-evidence | - |
 | 720 | os-export-round | ../os/test_export_round.py | 55 | no-evidence | - |
-| 721 | os-payment-gate-report | ../os/test_payment_gate_report.py | 14 | no-evidence | - |
+| 721 | os-payment-gate-report | ../os/test_payment_gate_report.py | 17 | no-evidence | - |
 | 722 | os-qa-log | ../os/test_qa_log.py | 35 | no-evidence | - |
 | 723 | os-carrier-dialect-pin | ../os/test_carrier_dialect_pin.py | 8 | no-evidence | - |
 | 724 | os-census-nul-class | ../os/test_census_nul_class.py | 7 | no-evidence | - |
@@ -869,7 +869,7 @@
 | 830 | claim-census | test_claim_census.py | 10 | no-evidence | - |
 | 831 | os-stage-residue | ../os/test_stage_residue.py | 4 | no-evidence | - |
 | 832 | os-corpus-supply-chain | ../os/test_corpus_supply_chain.py | 7 | no-evidence | - |
-|  | 合计 |  | 7310 | green 675 / FAIL 0 / no-evidence 157 |  |
+|  | 合计 |  | 7313 | green 675 / FAIL 0 / no-evidence 157 |  |
 
 ## 证据出处
 

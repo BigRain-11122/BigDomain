@@ -28,6 +28,7 @@ Source discipline: pure ASCII, stdlib only, no clock dependency in assertions,
 no network, no shell.
 """
 import ast
+import contextlib
 import hashlib
 import importlib.util
 import io
@@ -46,6 +47,7 @@ PAY_DIR = os.path.join(ROOT, 'src', 'sandbox', 'pay')
 CONFIG = os.path.join(PAY_DIR, 'config.json')
 PREVIEW_HTML = os.path.join(ROOT, 'preview', 'payment-gate-report.html')
 PREVIEW_JSON = os.path.join(ROOT, 'preview', 'payment-gate-report.json')
+EXPORT_FACE = os.path.join(ROOT, 'docs', 'status-export.json')
 REGISTRY = os.path.join(ROOT, 'src', 'sandbox', 'reconcile_all.py')
 SERIAL = 'PUB_KEY_ID_R2806_SUITE'
 FAILS = []
@@ -112,6 +114,7 @@ def main():
     world = tempfile.mkdtemp(prefix='paygb-')
     knowledge = {}
     pre_preview = (digest(PREVIEW_HTML), digest(PREVIEW_JSON))
+    pre_export = stamp(EXPORT_FACE) if os.path.isfile(EXPORT_FACE) else None
     pre_cfg = digest(CONFIG)
     try:
         adapters, v3 = load_pay()
@@ -436,6 +439,46 @@ def main():
            landed.get('verdict') == 'PASS' and rc_self == 0
            and all(c['pass'] for c in landed.get('criteria', [])),
            'verdict=%s rc_check=%d' % (landed.get('verdict'), rc_self))
+
+        # ---- AC-PGM4..AC-PGM6 (R3611): the landing guard the board named ----
+        # AC-PGM4: the guard is computed from ROOT, not from the flags.
+        d_html = os.path.join(ROOT, 'preview', 'payment-gate-report.html')
+        d_json = os.path.join(ROOT, 'preview', 'payment-gate-report.json')
+        vec = (
+            mod._landing_is_default(d_html, d_json),
+            mod._landing_is_default(html, d_json),
+            mod._landing_is_default(d_html, js),
+            mod._landing_is_default(html, js),
+        )
+        ok('AC-PGM4 guard reads ROOT: (default/only-html/only-json/both) = (True,False,False,False)',
+           vec == (True, False, False, False), 'vec=%s' % (vec,))
+
+        # AC-PGM5: a private world's run must not re-derive THIS root's face.
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc_p5 = mod.main(['--out', html, '--json', js])
+        face_tok = mod._refresh_face(html, js)
+        now_export = stamp(EXPORT_FACE) if os.path.isfile(EXPORT_FACE) else None
+        ok('AC-PGM5 a scratch landing prints SKIPPED scratch and leaves the root face untouched',
+           rc_p5 in (0, 2)
+           and 'face export=SKIPPED scratch' in buf.getvalue()
+           and face_tok == 'SKIPPED scratch'
+           and now_export == pre_export,
+           'rc=%d tok=%s face_unchanged=%s' % (
+               rc_p5, face_tok, now_export == pre_export))
+
+        # AC-PGM6: one definition, one call, no local writer, and the call
+        # carries BOTH landing paths.
+        helper = tool_src.split('def _refresh_face(')[1].split('def main(')[0]
+        ok('AC-PGM6 the face writer stays single and its call carries both paths',
+           tool_src.count('refresh_export_face') == 1
+           and tool_src.count('_refresh_face(') == 2
+           and '_refresh_face(args.out, args.json)' in tool_src
+           and '.write(' not in helper,
+           'refs=%d calls=%d local_write=%s' % (
+               tool_src.count('refresh_export_face'),
+               tool_src.count('_refresh_face('),
+               '.write(' in helper))
     finally:
         shutil.rmtree(world, ignore_errors=True)
 
