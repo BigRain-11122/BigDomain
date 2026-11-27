@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-24 05:27:21Z",
+ "generated_utc": "2026-11-27 01:17:42Z",
  "face": "api_seller_quality",
  "seller_count": 2,
  "listing_count": 3,
@@ -81,7 +81,7 @@
  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
  "report": "preview/seller-quality-scorecard.html",
  "sources": {
-  "driver": "71978397fd2a25a3",
+  "driver": "140cbd6334651ee6",
   "copy": "ae76e8fbf278355d",
   "apimarket": "82a49194bef85737",
   "report": "3a83dce99c9e2bd4"

@@ -3,8 +3,8 @@
     "src/os/board_face_landing.py",
     "src/os/export_round.py"
   ],
-  "generated_at": "2026-11-27T09:03:18+08:00",
-  "round": "R3548",
+  "generated_at": "2026-11-27T09:19:25+08:00",
+  "round": "R3549",
   "rows": [
     {
       "face_calls": 0,
@@ -585,15 +585,6 @@
       "face_calls": 0,
       "kind": "gap",
       "landing_paths": [
-        "seller-quality-scorecard.html"
-      ],
-      "path": "tools/seller_quality_scorecard.py",
-      "write_calls": 9
-    },
-    {
-      "face_calls": 0,
-      "kind": "gap",
-      "landing_paths": [
         "seller-rating-months-board.html"
       ],
       "path": "tools/seller_rating_months_board.py",
@@ -975,6 +966,15 @@
       "face_calls": 1,
       "kind": "closed",
       "landing_paths": [
+        "seller-quality-scorecard.html"
+      ],
+      "path": "tools/seller_quality_scorecard.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 1,
+      "kind": "closed",
+      "landing_paths": [
         "preview/ceo-blockers.html",
         "preview/face-sweep.html",
         "preview/lobby-ws-report.html",
@@ -1038,13 +1038,6 @@
     {
       "face_calls": 0,
       "kind": "reader",
-      "landing_paths": [],
-      "path": "src/os/state_R3548.py",
-      "write_calls": 0
-    },
-    {
-      "face_calls": 0,
-      "kind": "reader",
       "landing_paths": [
         "apimarket-report.html"
       ],
@@ -1097,11 +1090,11 @@
     }
   ],
   "totals": {
-    "closed": 28,
+    "closed": 29,
     "excluded": 2,
-    "gap": 81,
-    "modules": 120,
-    "reader": 11,
+    "gap": 80,
+    "modules": 119,
+    "reader": 10,
     "writers": 109
   }
 }
