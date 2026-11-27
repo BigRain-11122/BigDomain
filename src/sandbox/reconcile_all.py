@@ -8097,9 +8097,11 @@ SUITES = [
     # tools/seller_answer_months_board.py, same fixed-point loop, same closure
     # after it; the pin moves to the measured 267. R3593 (AC-PWC71):
     # tools/seller_reply_months_board.py, same fixed-point loop, same closure
-    # after it; the pin moves to the measured 271.
+    # after it; the pin moves to the measured 271. R3594 (AC-PWC72):
+    # tools/seller_rating_months_board.py, same fixed-point loop, same closure
+    # after it; the pin moves to the measured 275.
     ("os-preview-writer-census",
-     os.path.join("..", "os", "test_preview_writer_census.py"), 271),
+     os.path.join("..", "os", "test_preview_writer_census.py"), 275),
     # R2814. tools/ugc_gate_report.py carries AC-UGR1..AC-UGR9 and renders the
     # face for the BLUEPRINT section-five death line (content safety not
     # connected means the door stays shut), yet the registry held ZERO AC-UGR*

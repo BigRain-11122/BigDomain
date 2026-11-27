@@ -21,9 +21,9 @@ code{background:#f3f5f7;padding:2px 5px;border-radius:3px;font-size:12px}
 footer{margin-top:22px;font-size:12px;color:#5b6572}
 </style></head><body>
 <h1>BigDomain · 第一笔收入路径（19.9 元）</h1>
-<div class="sub">六条承载面状态与阻塞边全部由盘上报告现读，结论按固定规则现算 · 生成时间 2026-11-26T20:01:00Z UTC · 派生自 preview/first-yuan.json</div>
+<div class="sub">六条承载面状态与阻塞边全部由盘上报告现读，结论按固定规则现算 · 生成时间 2026-11-27T18:13:03Z UTC · 派生自 preview/first-yuan.json</div>
 <table><thead><tr><th>#</th><th>承载面</th><th>现读状态</th><th>判定</th><th>来源</th><th>字节</th></tr></thead>
-<tbody><tr class="ok"><td>C1</td><td>大厅 WebSocket 握手面</td><td>verdict=PASS</td><td>PASS</td><td>preview/lobby-ws-report.json</td><td>3144 B</td></tr><tr class="ok"><td>C2</td><td>城市观测面</td><td>verdict=PASS</td><td>PASS</td><td>preview/city-face-report.json</td><td>5197 B</td></tr><tr class="ok"><td>C3</td><td>19.9 支付通道面</td><td>verdict=PASS</td><td>PASS</td><td>preview/payment-gate-report.json</td><td>7177 B</td></tr><tr class="ok"><td>C4</td><td>权益 / 月卡面</td><td>verdict=PASS</td><td>PASS</td><td>preview/membership-benefit-report.json</td><td>10099 B</td></tr><tr class="ok"><td>C5</td><td>代币双式账本面</td><td>reconcile_rc=0 refused=2 tx=3 entries=6</td><td>PASS</td><td>preview/ledger-business-report.json</td><td>1233 B</td></tr><tr class="bad"><td>C6</td><td>UGC 安全闸面</td><td>hole_status=LIVE</td><td>BLOCKED</td><td>preview/ugc-gate-report.json</td><td>20170 B</td></tr></tbody></table>
+<tbody><tr class="ok"><td>C1</td><td>大厅 WebSocket 握手面</td><td>verdict=PASS</td><td>PASS</td><td>preview/lobby-ws-report.json</td><td>3070 B</td></tr><tr class="ok"><td>C2</td><td>城市观测面</td><td>verdict=PASS</td><td>PASS</td><td>preview/city-face-report.json</td><td>5197 B</td></tr><tr class="bad"><td>C3</td><td>19.9 支付通道面</td><td>verdict=FAIL AC-PAYG8</td><td>BLOCKED</td><td>preview/payment-gate-report.json</td><td>7018 B</td></tr><tr class="ok"><td>C4</td><td>权益 / 月卡面</td><td>verdict=PASS</td><td>PASS</td><td>preview/membership-benefit-report.json</td><td>9817 B</td></tr><tr class="ok"><td>C5</td><td>代币双式账本面</td><td>reconcile_rc=0 refused=2 tx=3 entries=6</td><td>PASS</td><td>preview/ledger-business-report.json</td><td>1174 B</td></tr><tr class="bad"><td>C6</td><td>UGC 安全闸面</td><td>hole_status=LIVE</td><td>BLOCKED</td><td>preview/ugc-gate-report.json</td><td>20170 B</td></tr></tbody></table>
 <div class="banner"><h2>窗口结论：BLOCKED-PHYSICAL</h2><div>首位阻塞边：物理件未到位 3 项（具名清单见 preview/ceo-blockers.html）；UGC 闸现读 hole_status=LIVE</div></div>
 <div class="cols">
 <div class="card"><h3>物理件（CEO 保留面）3 项</h3><ul><li>具名：3 项待 CEO 交件</li><li>完整清单见 <code>preview/ceo-blockers.html</code></li></ul></div>
@@ -31,8 +31,5 @@ footer{margin-top:22px;font-size:12px;color:#5b6572}
 <div class="card"><h3>代码开放债 13 行</h3><ul><li>backlog-encoding-R3431R3432</li><li>loop-s4u-reconcile</li><li>product-face-R2527</li><li>product-face-R2529</li><li>product-face-R2535</li><li>product-face-R2537</li><li>product-face-R2539</li><li>product-face-R2559</li><li>product-face-R2565</li><li>product-face-R2602</li><li>product-face-R2742b</li><li>product-face-R2751</li><li>reconcile-battery-R2757</li></ul></div>
 </div>
 <div class="card" style="margin-top:16px"><h3>常驻合规面</h3><ul><li>AI 生成内容全程显式标识 + 隐式水印双轨</li><li>msgSecCheck 前置闸：未接入前 UGC 不开放</li><li>非投顾定性：本平台不构成投资建议</li></ul></div>
-<footer>只读面：本页不含任何写路径，重渲染请显式执行 <code>python tools/first_yuan_path.py --write</code>。尺寸 3917 B / 2606 B（自指记录）。</footer>
-<div class="backhop" data-back-hop="1" data-back-face="first-yuan.html" data-back-rule="内部/CEO 读数面：回到全站清单页，从这里挑下一页" data-back-bytes="56466" data-back-controls="2" style="border-top:1px solid rgba(128,128,128,.35);margin:22px 0 0;padding:10px 0 0;font-size:13px;line-height:1.6">
-<span style="opacity:.75">这是读数页，没有可填的东西。</span> 回到可点的那一页：<a href="index.html" data-back-target="1">index.html</a> <span style="opacity:.7">&middot; 2 个控件 · 56466B</span> <span style="opacity:.6">（内部/CEO 读数面：回到全站清单页，从这里挑下一页；浏览器后退也行）</span>
-</div>
+<footer>只读面：本页不含任何写路径，重渲染请显式执行 <code>python tools/first_yuan_path.py --write</code>。尺寸 3929 B / 2628 B（自指记录）。</footer>
 </body></html>
