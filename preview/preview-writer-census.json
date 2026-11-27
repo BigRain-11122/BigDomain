@@ -3,8 +3,8 @@
     "src/os/board_face_landing.py",
     "src/os/export_round.py"
   ],
-  "generated_at": "2026-11-28T05:02:38+08:00",
-  "round": "R3605",
+  "generated_at": "2026-11-28T05:11:34+08:00",
+  "round": "R3606",
   "rows": [
     {
       "face_calls": 0,
@@ -190,15 +190,6 @@
         "watch-alerts-board.html"
       ],
       "path": "tools/watch_alerts_board.py",
-      "write_calls": 9
-    },
-    {
-      "face_calls": 0,
-      "kind": "gap",
-      "landing_paths": [
-        "watch-conversion-board.html"
-      ],
-      "path": "tools/watch_conversion_board.py",
       "write_calls": 9
     },
     {
@@ -1004,6 +995,15 @@
       "write_calls": 10
     },
     {
+      "face_calls": 1,
+      "kind": "closed",
+      "landing_paths": [
+        "watch-conversion-board.html"
+      ],
+      "path": "tools/watch_conversion_board.py",
+      "write_calls": 9
+    },
+    {
       "face_calls": 0,
       "kind": "reader",
       "landing_paths": [],
@@ -1090,9 +1090,9 @@
     }
   ],
   "totals": {
-    "closed": 86,
+    "closed": 87,
     "excluded": 2,
-    "gap": 23,
+    "gap": 22,
     "modules": 119,
     "reader": 10,
     "writers": 109
