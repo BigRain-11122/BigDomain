@@ -159,6 +159,13 @@ E_CLG_CARRIER_UNREADABLE = "E_CLG_CARRIER_UNREADABLE"
 # non-zero count refuses while the layout is canonical, because a writer
 # that emits multi-line items is broken whatever its name.
 E_CLG_CARRIER_NEWLINE = "E_CLG_CARRIER_NEWLINE"
+# R3614 (AC-CGA1..AC-CGA6): the carrier as the NEXT writer will see it. The
+# three refusals above judge the carrier's own shape; they cannot see the
+# two diseases the append face already names (a tail anchor that no longer
+# ends the file, a log with no tokens ledger row), so a closeout could read
+# PASS while the next append was refused. The reading is taken by calling
+# logs_toolkit.append_check in process - one definition, no second regex.
+E_CLG_CARRIER_APPEND = "E_CLG_CARRIER_APPEND"
 # R3219: the replacement ledger's two pathologies (a bad row, a latest row
 # whose new_sha16 no longer matches the file on disk). Named so a reader can
 # act; an absent ledger is rows=0 and never a refusal.
@@ -250,6 +257,9 @@ def check_carrier(root):
       * a NON-CANONICAL layout - the fold door cannot read it, so any debt is
         unpayable by construction;
       * OVER the line with no window to fold (`log_items < 2`).
+    R3614 adds a third: the carrier is also asked through the append face's
+    own read-only check, so a tail anchor or a missing tokens row that would
+    refuse the NEXT append now refuses this closeout instead.
     An over-line carrier that is canonical and foldable is NOT refused: it is
     published as `fold_needed=true` on the CARRIER row so the debt is visible
     at every closeout without turning an honest mid-round state into a red.
@@ -292,6 +302,17 @@ def check_carrier(root):
         return False, "CARRIER FAIL %s %s" % (E_CLG_CARRIER_NEWLINE, row)
     if fold_needed and items < 2:
         return False, "CARRIER FAIL %s %s" % (E_CLG_CARRIER_FOLD, row)
+    # R3614 (AC-CGA1..AC-CGA4): ask the append face itself, in process, then
+    # publish its two readings on this same row. The call is the shared
+    # definition - no tail regex, no ledger regex and no gate constant is
+    # restated here - so the closeout and the next writer cannot disagree.
+    try:
+        going = LT.append_check(state)
+    except LT.AppendCheckError as exc:
+        return False, "CARRIER FAIL %s %s %s" % (
+            E_CLG_CARRIER_APPEND, row, exc)
+    row = ("%s append_ok=true caliber=%d ledger=%s"
+           % (row, going["caliber"], going["ledger"]))
     return True, row
 
 

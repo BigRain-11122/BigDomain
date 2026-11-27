@@ -9165,6 +9165,15 @@ SUITES = [
     # every row above: a mid-list insert shifts each later suite's shard.
     ("os-logs-append-check",
      os.path.join("..", "os", "test_logs_append_check.py"), 23),
+    # R3614: the closeout carrier row now also asks the append face in
+    # process, so a carrier whose tail anchor no longer ends the file or whose
+    # log carries no tokens row refuses the closeout instead of being caught by
+    # the next writer. Criteria AC-CGA1..AC-CGA6 were pinned in
+    # src/os/backlog.md at R3614, before the tool changed and this suite
+    # existed. Appended at the END for the same reason as every row above: a
+    # mid-list insert shifts each later suite's shard.
+    ("os-closeout-carrier-append",
+     os.path.join("..", "os", "test_closeout_carrier_append.py"), 19),
     ]
 
 FAILS = 0

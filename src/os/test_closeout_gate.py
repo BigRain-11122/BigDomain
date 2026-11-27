@@ -115,6 +115,20 @@ def snapshot(world):
     return rows
 
 
+def carrier_text(items):
+    """The R2246 canonical carrier, shaped exactly as the real state.json is.
+
+    R3614: the closeout carrier row now also asks the append face in process,
+    so a fixture carrier must be one the next writer would accept - the tail
+    ends at the closing brace (APPEND_TAIL_RE) and the log carries a parseable
+    tokens ledger row. The correction is to the fixtures, no criterion relaxed.
+    """
+    pad = " " * 16
+    rows = ",\r\n".join('%s"%s"' % (pad, x.replace("\\", "\\\\")
+                                    .replace('"', '\\"')) for x in items)
+    return '{\r\n  "log": [\r\n%s\r\n  ],\r\n%s"tick":1\r\n}' % (rows, pad)
+
+
 def build_root(tmp, dated=True):
     """A private repo ROOT for the R3093 faces: one log, one registry row, one pin.
 
@@ -135,8 +149,8 @@ def build_root(tmp, dated=True):
     # carrier suite, where it is the arm under test.
     with open(os.path.join(tmp, "src", "os", "state.json"), "w",
               encoding="utf-8", newline="") as fh:
-        fh.write('{\r\n  "log": [\r\n%s"%s"\r\n  ],\r\n  "tick": 1\r\n}\r\n'
-                 % (" " * 16, line.replace("\\", "\\\\").replace('"', '\\"')))
+        fh.write(carrier_text([
+            line, "R5000 tokens: local=~1k api=0 api_reason=fixture world"]))
     with open(os.path.join(tmp, "src", "os", "fixture_suite.py"), "w",
               encoding="utf-8", newline="\n") as fh:
         fh.write('print("SUITE PASS 1/1")\n')
@@ -501,9 +515,9 @@ def main():
         # carrier face before the law this arm asks is reached.
         with open(os.path.join(gate9, "src", "os", "state.json"), "w",
                   encoding="utf-8", newline="") as fh:
-            fh.write('{\r\n  "log": [\r\n%s"%s"\r\n  ],\r\n  "tick": 1\r\n}\r\n'
-                     % (" " * 16,
-                        "2026-11-20 R5009 PRODUCT: a fixture round main"))
+            fh.write(carrier_text([
+                "2026-11-20 R5009 PRODUCT: a fixture round main",
+                "R5009 tokens: local=~1k api=0 api_reason=fixture world"]))
         with open(os.path.join(gate9, "docs", "sandbox-suite-matrix.md"),
                   "wb") as fh:
             fh.write(doc_text9.encode("utf-8"))

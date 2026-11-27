@@ -418,6 +418,7 @@
     "os-city-face-report",
     "os-closeout",
     "os-closeout-carrier",
+    "os-closeout-carrier-append",
     "os-closeout-export-parity-dialect-wire",
     "os-closeout-export-parity-text-binding",
     "os-closeout-export-parity-wire",
