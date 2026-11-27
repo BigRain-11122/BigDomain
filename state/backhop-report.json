@@ -202,8 +202,8 @@
   },
   "first-yuan.html": {
    "back": "index.html",
-   "bytes_after": 4593,
-   "bytes_before": 4593,
+   "bytes_after": 4599,
+   "bytes_before": 4599,
    "face": "first-yuan.html",
    "how": "inserted",
    "rule_reason": "内部/CEO 读数面：回到全站清单页，从这里挑下一页",
@@ -265,8 +265,8 @@
   },
   "payment-gate-report.html": {
    "back": "index.html",
-   "bytes_after": 7682,
-   "bytes_before": 7682,
+   "bytes_after": 7715,
+   "bytes_before": 7715,
    "face": "payment-gate-report.html",
    "how": "inserted",
    "rule_reason": "内部/CEO 读数面：回到全站清单页，从这里挑下一页",
@@ -284,13 +284,13 @@
   "ugc-gate-report.html": {
    "back": "index.html",
    "bytes_after": 28799,
-   "bytes_before": 28112,
+   "bytes_before": 28799,
    "face": "ugc-gate-report.html",
    "how": "inserted",
    "rule_reason": "内部/CEO 读数面：回到全站清单页，从这里挑下一页",
-   "sizes_patched": true
+   "sizes_patched": false
   }
  },
  "law": "a read-only face must show the reader a clickable way back to an operable page",
- "sizes_patched": 1
+ "sizes_patched": 0
 }

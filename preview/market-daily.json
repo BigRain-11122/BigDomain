@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-24 08:04:16Z",
+ "generated_utc": "2026-11-27 13:04:02Z",
  "face": "api_market_daily",
  "day_count": 34,
  "active_day_count": 6,
@@ -531,7 +531,7 @@
  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
  "report": "preview/market-daily.html",
  "sources": {
-  "driver": "68433014ee08a2e5",
+  "driver": "353bdb3b8a3f1b78",
   "copy": "e6f370987cb1234f",
   "apimarket": "82a49194bef85737",
   "report": "3a83dce99c9e2bd4"
