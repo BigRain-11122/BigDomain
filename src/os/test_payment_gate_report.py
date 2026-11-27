@@ -1,4 +1,6 @@
-"""Battery suite for tools/payment_gate_report.py - criteria AC-PAYGB1..AC-PAYGB11.
+"""Battery suite for tools/payment_gate_report.py - criteria AC-PAYGB1..AC-PAYGB11
+plus AC-PGM1..AC-PGM3 (R3610: the import law resolves from disk, AC-PAYG1 stops
+echoing the verdict, and the landed face owes a green --check).
 
 R2860: the pinned range above grew twice (AC-PAYGB10/11 at R2817) while the
 registry row moved only 9 -> 10, and this suite's own literal "declares 10"
@@ -254,11 +256,6 @@ def main():
 
         # ---- AC-PAYGB8: source purity on both files ----
         suite_src = read(os.path.abspath(__file__))
-        allowed = {'argparse', 'copy', 'datetime', 'hashlib', 'html', 'json',
-                   'os', 'sys', 'adapters', 'v3', 'value_domain'}
-        suite_allowed = {'ast', 'hashlib', 'importlib', 'io', 'json', 'os',
-                         're', 'shutil', 'sys', 'tempfile', 'time',
-                         'datetime', 'adapters', 'v3'}
         def imp_names(text):
             names = set()
             for ln in text.splitlines():
@@ -270,6 +267,21 @@ def main():
             return names
         tool_imp = imp_names(tool_src)
         suite_imp = imp_names(suite_src)
+        # AC-PGM4 (R3610): one law for both files, resolved from disk - stdlib
+        # or a module file under tools/, src/os/ or the pay sandbox. The
+        # hand-kept whitelist this replaced had drifted from the shipped wiring
+        # (board_face_landing) and was red against its own tool.
+        def shipped(name):
+            if name in sys.stdlib_module_names:
+                return True
+            for base in (os.path.join(ROOT, 'tools'),
+                         os.path.join(ROOT, 'src', 'os'), PAY_DIR):
+                if (os.path.isfile(os.path.join(base, name + '.py'))
+                        or os.path.isdir(os.path.join(base, name))):
+                    return True
+            return False
+        tool_extra = sorted(n for n in tool_imp if not shipped(n))
+        suite_extra = sorted(n for n in suite_imp if not shipped(n))
         # A literal scan would match this block itself and the tool's own
         # guard, so the criterion is measured on USE: a banned module must not
         # be imported and must not be dereferenced.
@@ -280,13 +292,13 @@ def main():
             r'\b(?:socket|urllib|requests)\.\w', suite_src)
         ascii_tool = all(ord(c) < 128 for c in tool_src)
         ascii_suite = all(ord(c) < 128 for c in suite_src)
-        ok('AC-PAYGB8 both sources ASCII, whitelisted imports, zero network',
+        ok('AC-PAYGB8 both sources ASCII, resolved imports, zero network',
            ascii_tool and ascii_suite
-           and tool_imp <= allowed and suite_imp <= suite_allowed
+           and not tool_extra and not suite_extra
            and not net_tool and not net_suite,
-           'tool_imp=%s suite_extra=%s net=%s ascii=%s/%s' % (
+           'tool_imp=%s extra=%s net=%s ascii=%s/%s' % (
                ','.join(sorted(tool_imp)),
-               ','.join(sorted(suite_imp - suite_allowed)),
+               ','.join(tool_extra + suite_extra),
                net_tool + net_suite, ascii_tool, ascii_suite))
 
         # ---- AC-PAYGB9: --check is read-only and its tamper gate weighs ----
@@ -378,6 +390,52 @@ def main():
            rc_sha == 2 and any('config drift' in f for f in f_sha)
            and not any('sizes' in f for f in f_sha),
            'rc=%d fails=%s' % (rc_sha, f_sha))
+
+        # ---- AC-PGM1..AC-PGM3 (R3610): the audit's law and the row it fixed ----
+        # AC-PGM1: the resolver reads disk, so the wired local module resolves
+        # and only a fabricated third party is refused.
+        ok('AC-PGM1 imports resolve from disk: shipped modules resolve, a fabricated third party is refused',
+           mod._shipped('json') is True
+           and mod._shipped('board_face_landing') is True
+           and mod._shipped('value_domain') is True
+           and mod._shipped('zz_third_party_dep') is False,
+           'json=%s wired=%s value=%s bogus=%s' % (
+               mod._shipped('json'), mod._shipped('board_face_landing'),
+               mod._shipped('value_domain'), mod._shipped('zz_third_party_dep')))
+
+        # AC-PGM2: one red criterion must not print as two. Blanking the
+        # disclaimer reddens AC-PAYG7 alone; AC-PAYG1 keeps its own meaning.
+        blank = json.loads(cfg_src)
+        blank['compliance']['disclaimer'] = ' '
+        blank_cfg = os.path.join(world, 'cfg-blank.json')
+        with io.open(blank_cfg, 'w', encoding='utf-8', newline='\n') as fh:
+            json.dump(blank, fh, ensure_ascii=False)
+        b_html = os.path.join(world, 'b.html')
+        b_js = os.path.join(world, 'b.json')
+        old_cfg = mod.CONFIG
+        mod.CONFIG = blank_cfg
+        try:
+            rc_blank = mod.main(['--out', b_html, '--json', b_js])
+        finally:
+            mod.CONFIG = old_cfg
+        banked = json.loads(read(b_js))
+        rows_b = {c['id']: c for c in banked.get('criteria', [])}
+        ok('AC-PGM2 a lone AC-PAYG7 red leaves AC-PAYG1 true (no verdict echo)',
+           rc_blank == 2 and banked.get('verdict') == 'FAIL AC-PAYG7'
+           and rows_b.get('AC-PAYG7', {}).get('pass') is False
+           and rows_b.get('AC-PAYG1', {}).get('pass') is True,
+           'rc=%d verdict=%s g1=%s g7=%s' % (
+               rc_blank, banked.get('verdict'),
+               rows_b.get('AC-PAYG1', {}).get('pass'),
+               rows_b.get('AC-PAYG7', {}).get('pass')))
+
+        # AC-PGM3: the repaired face owes a green end to end, read by its own
+        # gate on the artifacts this suite's private world just landed.
+        rc_self = mod.main(['--check', '--out', html, '--json', js])
+        ok('AC-PGM3 landed face verdict=PASS 8/8 and its own --check exits 0',
+           landed.get('verdict') == 'PASS' and rc_self == 0
+           and all(c['pass'] for c in landed.get('criteria', [])),
+           'verdict=%s rc_check=%d' % (landed.get('verdict'), rc_self))
     finally:
         shutil.rmtree(world, ignore_errors=True)
 

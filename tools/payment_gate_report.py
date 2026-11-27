@@ -192,6 +192,23 @@ def _acceptance(fn):
     return True, "verify ok"
 
 
+def _shipped(name):
+    """AC-PGM1 (R3610): stdlib or a shipped local module, resolved from disk.
+
+    A hand-kept whitelist fell behind once already - the R3535 face wiring
+    added "board_face_landing" and the audit stayed red, so the page that
+    decides whether the 19.9 channel may be connected printed FAIL.
+    """
+    if name in sys.stdlib_module_names:
+        return True
+    for base in (os.path.dirname(os.path.abspath(__file__)),
+                 os.path.join(ROOT, "src", "os"), PAY_DIR):
+        if (os.path.isfile(os.path.join(base, name + ".py"))
+                or os.path.isdir(os.path.join(base, name))):
+            return True
+    return False
+
+
 def collect():
     """Measure the shipped faces. Never writes to src/."""
     if not os.path.isfile(CONFIG):
@@ -309,9 +326,10 @@ def collect():
                           for tok in ("socket", "urllib", "requests")))
     imports = sorted({ln.split()[1].split(".")[0] for ln in import_lines
                       if ln.startswith("import ")})
-    allowed = {"argparse", "copy", "datetime", "hashlib", "html", "json",
-               "os", "sys", "adapters", "v3", "value_domain"}
-    imports_ok = all(name in allowed for name in imports)
+    # AC-PGM1 (R3610): the law is stdlib plus shipped local module, resolved
+    # from disk by _shipped(), never a hand-kept whitelist.
+    unresolved = [name for name in imports if not _shipped(name)]
+    imports_ok = not unresolved
 
     meas = {
         "generated_utc": _now().strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -369,13 +387,35 @@ def collect():
              len(meas["compliance"]["aigc_marking_note"].encode("utf-8")))},
         {"id": "AC-PAYG8", "text": CHECKS[7][1],
          "pass": ascii_ok and net_hits == 0 and imports_ok,
-         "measured": "ascii=%s network_refs=%d imports_ok=%s imports=%s" % (
-             ascii_ok, net_hits, imports_ok, ",".join(imports))},
+         "measured": ("ascii=%s network_refs=%d imports_ok=%s imports=%s"
+                      " unresolved=%s") % (
+             ascii_ok, net_hits, imports_ok, ",".join(imports),
+             ",".join(unresolved) or "-")},
     ]
     failed = [c["id"] for c in meas["criteria"] if c["pass"] is False]
     meas["verdict"] = "PASS" if not failed else "FAIL " + ",".join(failed)
-    meas["criteria"][0]["pass"] = bool(meas["verdict"] == "PASS")
-    meas["criteria"][0]["measured"] = "criteria rows=%d" % len(meas["criteria"])
+    meas["criteria"][0]["measured"] = "criteria rows=%d, html landed" % len(
+        meas["criteria"])
+    return meas
+
+
+def settle(meas, out):
+    """AC-PGM2 (R3610): judge AC-PAYG1 by its own words, after the landing.
+
+    It used to be set to "verdict == PASS", so one red criterion printed as two
+    and a landing claim was made by an unrelated test. The row now reads the
+    two facts its text names: the table is complete and the html half is on
+    disk with bytes. The json half and both sizes stay with check().
+    """
+    size = os.path.getsize(out) if os.path.isfile(out) else 0
+    rows = len(meas["criteria"])
+    meas["criteria"][0]["pass"] = rows == len(CHECKS) and size > 0
+    # The measured text stays free of the byte count on purpose: check()
+    # compares fresh against landed strings, and the two halves land at
+    # different sizes across runs.
+    meas["criteria"][0]["measured"] = "criteria rows=%d, html landed" % rows
+    failed = [c["id"] for c in meas["criteria"] if c["pass"] is False]
+    meas["verdict"] = "PASS" if not failed else "FAIL " + ",".join(failed)
     return meas
 
 
@@ -579,6 +619,7 @@ def main(argv):
     os.makedirs(os.path.dirname(args.out), exist_ok=True)
     with open(args.out, "w", encoding="utf-8", newline="\n") as fh:
         fh.write(doc)
+    meas = settle(meas, args.out)
     # BD-PROP-010: the json states the size of both artifacts it belongs to.
     # The html is already on disk and never reads this key, so only the json's
     # own byte count is self-referential; iterate to the fixed point.

@@ -265,8 +265,8 @@
   },
   "payment-gate-report.html": {
    "back": "index.html",
-   "bytes_after": 7715,
-   "bytes_before": 7715,
+   "bytes_after": 7729,
+   "bytes_before": 7729,
    "face": "payment-gate-report.html",
    "how": "inserted",
    "rule_reason": "内部/CEO 读数面：回到全站清单页，从这里挑下一页",

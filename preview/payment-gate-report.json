@@ -34,8 +34,8 @@
   "criteria": [
     {
       "id": "AC-PAYG1",
-      "measured": "criteria rows=8",
-      "pass": false,
+      "measured": "criteria rows=8, html landed",
+      "pass": true,
       "text": "html+json landed, criteria table non-empty"
     },
     {
@@ -76,12 +76,12 @@
     },
     {
       "id": "AC-PAYG8",
-      "measured": "ascii=True network_refs=0 imports_ok=False imports=adapters,argparse,board_face_landing,copy,datetime,hashlib,html,json,os,sys,v3,value_domain",
-      "pass": false,
+      "measured": "ascii=True network_refs=0 imports_ok=True imports=adapters,argparse,board_face_landing,copy,datetime,hashlib,html,json,os,sys,v3,value_domain unresolved=-",
+      "pass": true,
       "text": "tool source ASCII, stdlib+shipped imports (incl. the shared value_domain module), zero network refs"
     }
   ],
-  "generated_utc": "2026-11-26T21:46:52Z",
+  "generated_utc": "2026-11-27T21:50:31Z",
   "legacy_negative": [
     {
       "case": "tampered signature",
@@ -99,7 +99,7 @@
     },
     {
       "case": "stale timestamp",
-      "detail": "E_CALLBACK_REJECTED: ts outside +-300s window (delta=400s)",
+      "detail": "E_CALLBACK_REJECTED: ts outside +-300s window (delta=401s)",
       "expect": "已拒",
       "got": "已拒",
       "ok": true
@@ -154,8 +154,8 @@
     }
   ],
   "sizes": {
-    "html": 7715,
-    "json": 7018
+    "html": 7729,
+    "json": 7032
   },
   "source": {
     "ascii": true,
@@ -174,7 +174,7 @@
       "value_domain"
     ],
     "network_refs": 0,
-    "sha256": "3cfa5b8d870603fe103ced713a1d17371d564f79ae9ab6491fc97f3477096da3"
+    "sha256": "b0d19ace9a0f5b901abed43f3f9eaf14d6990ca8f5011b2aff5697c09ea72ea6"
   },
   "v3_negative": [
     {
@@ -193,7 +193,7 @@
     },
     {
       "case": "stale timestamp",
-      "detail": "E_CALLBACK_REJECTED: ts outside +-300s window (delta=400s)",
+      "detail": "E_CALLBACK_REJECTED: ts outside +-300s window (delta=401s)",
       "expect": "已拒",
       "got": "已拒",
       "ok": true
@@ -215,5 +215,5 @@
     "headers_required": 4,
     "ok": true
   },
-  "verdict": "FAIL AC-PAYG8"
+  "verdict": "PASS"
 }

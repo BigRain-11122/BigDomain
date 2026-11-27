@@ -7655,8 +7655,12 @@ SUITES = [
     # "declares 10" agreed with each other and with nothing else. The suite's
     # own inventory is AC-PAYGB1..11 (PAYGB9b/9c are sub-assertions of 9), so
     # the row moves 10 -> 11 and the literal left the suite (AC-PER1/AC-PER3).
+    # R3610: AC-PGM1..3 join as 12..14 - the audit's import law now resolves
+    # from disk, AC-PAYG1 no longer echoes the verdict, and the landed face
+    # owes a green --check; the suite prints 14 criteria, so the row moves
+    # 11 -> 14.
     ("os-payment-gate-report",
-     os.path.join("..", "os", "test_payment_gate_report.py"), 11),
+     os.path.join("..", "os", "test_payment_gate_report.py"), 14),
     # R2807: tools/qa_log.py writes every window's evidence (tools/battery_shard.py
     # calls its do_write directly) yet all 691 registered suites covered zero
     # AC-QAL* tokens, so its seven criteria were guarded only by its own
