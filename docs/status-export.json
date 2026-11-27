@@ -3,15 +3,15 @@
     "board_pages_skipped": ["preview/face-sweep.html (8900B)"],
     "current": "2026-11-28 R3596 PRODUCT: the seventieth gap producer from the R3527 census closes at its birth site - tools/seller_repeat_months_board.py, the one openable page that answers whether this month was carried by regulars or by newcomers (per-seller KPI cards, a per-month table with the returning-share bar, peak/new/quiet badges, the face laws card and the AIGC and not-advice notices, all printed from the shipped api_seller_repeat_months face with api_board seller enumeration over a one-off demo world), now re-derives docs/status-export.json IN PROCESS through the shared board_face_landing.refresh_export_face(ROOT) after its sizes fixed-point loop, and only when both halves land under THIS root own preview/ - a --out/--json redirection derives nothing; the census moves from closed=75 gap=34 to closed=76 gap=33.",
     "do": "2026-11-25 R3456 PRODUCT: the answer-revision question now has a door - api_answer_history (live with AC-AMAW1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so 'which answer was rewritten, what did it say before, what does it say now and how often did it change' could only be read by calling the sandbox from a shell - while api_seller_answers and api_listing_qna publish only the CURRENT wording.",
-    "last_artifact": "preview/seller-repeat-months-board.html (6957B) + preview/seller-repeat-months-board.json (1970B) [2026-11-28 mtime]",
-    "latest_artifact": "preview/seller-repeat-months-board.html (6957B) + preview/seller-repeat-months-board.json (1970B) [2026-11-28 mtime]",
+    "last_artifact": "preview/seller-repeat-months-board.html (6957B) + preview/seller-repeat-months-board.json (1970B) [2026-11-28 commit]",
+    "latest_artifact": "preview/seller-repeat-months-board.html (6957B) + preview/seller-repeat-months-board.json (1970B) [2026-11-28 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\seller-repeat-months-board.html",
     "latest_artifact_note": "",
     "latest_evidence": "qa/round-R3564.log (1288B, 2026-11-27, sha256 c36ba280a17e)",
     "newest_pair_on_disk_is_board": true,
     "next_milestone": "[R3596] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）—— 12-01 或之后开窗先把刷新轮排最前（P-2026-09-24-56），毕=更新字段＋文件④更新记录行。(1) **S4U 仍未落地**（第一百三十三次承账）：`BigDomain-OSLoop` 任务存在但 `Principal.LogonType=Interactive`，正法=提权会话跑 `src/os/register_loop_task.ps1` 后读回须为 `S4U`；宁缺不错。(2) **33 家缺口已列名**（`preview/preview-writer-census.json`，本窗 `closed=76 gap=33`）：下窗只动一家活线生产者，判据沿用 `AC-PWC74` 形状（源码位置量+两条负控+共享定义+落地守卫）；开工前先实测 `classify_source` 确认 `kind=gap`（本轮 `seller_answer_months_board.py` 实测已 closed 即跳过）。(3) **绿序本窗实证**：产品落页（自动派生面）→普查 `--write`→产品再落→矩阵 `src/os/suite_matrix_reconcile.py --write`/`--check`（必读 `DOC-CURRENT`）→链裸跑＋`--check`→产品再落→index `--write`＋`--check` 23/23→`tools/closeout_order.py --write`＋`--check` 4/4→`tools/closeout_gate.py`（PASS files=5082 flags=0）→`export_round.py` 裸跑→`closeout_order --check`。**工具入口坑**：收口两件在 `tools/`，矩阵在 `src/os/`。(4) **PS 重定向编码坑（本窗实弹）**：`python .. (truncated)",
-    "next_milestone_due": "2026-11-30T03:04:09+08:00",
-    "updated_at": "2026-11-28T03:04:09+08:00",
+    "next_milestone_due": "2026-11-30T03:06:21+08:00",
+    "updated_at": "2026-11-28T03:06:21+08:00",
     "heartbeat": {
       "tick": 3579,
       "state_tick": 3596,
@@ -27,7 +27,7 @@
       "over7": 0,
       "dup_rows": 0,
       "distinct": 72,
-      "collapsed": 0,
+      "collapsed": 1,
       "labels_refreshed": 0,
       "notes_stale": 0,
       "note_claims": 0,
@@ -36,7 +36,7 @@
     }
   },
   "current": "2026-11-28 R3596 PRODUCT: the seventieth gap producer from the R3527 census closes at its birth site - tools/seller_repeat_months_board.py, the one openable page that answers whether this month was carried by regulars or by newcomers (per-seller KPI cards, a per-month table with the returning-share bar, peak/new/quiet badges, the face laws card and the AIGC and not-advice notices, all printed from the shipped api_seller_repeat_months face with api_board seller enumeration over a one-off demo world), now re-derives docs/status-export.json IN PROCESS through the shared board_face_landing.refresh_export_face(ROOT) after its sizes fixed-point loop, and only when both halves land under THIS root own preview/ - a --out/--json redirection derives nothing; the census moves from closed=75 gap=34 to closed=76 gap=33.",
-  "claims": {"claimed": 43, "captured": 24, "contradicted": 0, "uncaptured": 19, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-28T03:04:09+08:00"},
+  "claims": {"claimed": 43, "captured": 24, "contradicted": 0, "uncaptured": 19, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-28T03:06:21+08:00"},
   "chain": {"present": true, "rows": 106, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -66,12 +66,12 @@
     }
   ],
   "do": "2026-11-28 R3596 PRODUCT: the seventieth gap producer from the R3527 census closes at its birth site - tools/seller_repeat_months_board.py, the one openable page that answers whether this month was carried by regulars or by newcomers (per-seller KPI cards, a per-month table with the returning-share bar, peak/new/quiet badges, the face laws card and the AIGC and not-advice notices, all printed from the shipped api_seller_repeat_months face with api_board seller enumeration over a one-off demo world), now re-derives docs/status-export.json IN PROCESS through the shared board_face_landing.refresh_export_face(ROOT) after its sizes fixed-point loop, and only when both halves land under THIS root own preview/ - a --out/--json redirection derives nothing; the census moves from closed=75 gap=34 to closed=76 gap=33.",
-  "export_ts": "2026-11-28T03:04:09+08:00",
-  "latest_artifact": "preview/seller-repeat-months-board.html (6957B) + preview/seller-repeat-months-board.json (1970B) [2026-11-28 mtime]",
+  "export_ts": "2026-11-28T03:06:21+08:00",
+  "latest_artifact": "preview/seller-repeat-months-board.html (6957B) + preview/seller-repeat-months-board.json (1970B) [2026-11-28 commit]",
   "latest_evidence": "qa/round-R3564.log (1288B, 2026-11-27, sha256 c36ba280a17e)",
   "next_milestone": "[R3596] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）—— 12-01 或之后开窗先把刷新轮排最前（P-2026-09-24-56），毕=更新字段＋文件④更新记录行。(1) **S4U 仍未落地**（第一百三十三次承账）：`BigDomain-OSLoop` 任务存在但 `Principal.LogonType=Interactive`，正法=提权会话跑 `src/os/register_loop_task.ps1` 后读回须为 `S4U`；宁缺不错。(2) **33 家缺口已列名**（`preview/preview-writer-census.json`，本窗 `closed=76 gap=33`）：下窗只动一家活线生产者，判据沿用 `AC-PWC74` 形状（源码位置量+两条负控+共享定义+落地守卫）；开工前先实测 `classify_source` 确认 `kind=gap`（本轮 `seller_answer_months_board.py` 实测已 closed 即跳过）。(3) **绿序本窗实证**：产品落页（自动派生面）→普查 `--write`→产品再落→矩阵 `src/os/suite_matrix_reconcile.py --write`/`--check`（必读 `DOC-CURRENT`）→链裸跑＋`--check`→产品再落→index `--write`＋`--check` 23/23→`tools/closeout_order.py --write`＋`--check` 4/4→`tools/closeout_gate.py`（PASS files=5082 flags=0）→`export_round.py` 裸跑→`closeout_order --check`。**工具入口坑**：收口两件在 `tools/`，矩阵在 `src/os/`。(4) **PS 重定向编码坑（本窗实弹）**：`python .. (truncated)",
   "outs": [
-    "preview/seller-repeat-months-board.html (6957B) + preview/seller-repeat-months-board.json (1970B) [2026-11-28 mtime]",
+    "preview/seller-repeat-months-board.html (6957B) + preview/seller-repeat-months-board.json (1970B) [2026-11-28 commit]",
     "preview/preview-writer-census.html (17619B) + preview/preview-writer-census.json (25196B) [2026-11-28 mtime]",
     "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-28 mtime] (halves differ: html [2026-11-28 mtime] + json [2026-11-16 commit]; later=html)",
     "preview/first-yuan.html (4611B) + preview/first-yuan.json (2628B) [2026-11-28 commit]",
@@ -207,8 +207,8 @@
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
   "self_drive": {"window": "2026-11-22..2026-11-28", "window_days": 7, "log_lines_in_window": 36, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 30, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
-  "state_bytes": 36627,
-  "next_milestone_due": "2026-11-30T03:04:09+08:00",
+  "state_bytes": 36675,
+  "next_milestone_due": "2026-11-30T03:06:21+08:00",
   "heartbeat": {
     "tick": 3579,
     "state_tick": 3596,
@@ -224,7 +224,7 @@
     "over7": 0,
     "dup_rows": 0,
     "distinct": 72,
-    "collapsed": 0,
+    "collapsed": 1,
     "labels_refreshed": 0,
     "notes_stale": 0,
     "note_claims": 0,
