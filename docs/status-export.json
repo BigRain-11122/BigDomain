@@ -3,15 +3,15 @@
     "board_pages_skipped": [],
     "current": "2026-11-27 R3558 PRODUCT: the thirty-second gap producer from the R3527 census closes at its birth site - tools/buyer_answer_wait_board.py, the one openable page that shows what buyers asked, how long the answer took and how many were answered, now re-derives docs/status-export.json IN PROCESS through the shared board_face_landing.refresh_export_face(ROOT) after its sizes fixed-point loop (that loop rewrites the JSON up to six times, so the closure sits after the loop, not inside it), and only when both halves land under THIS root own preview/ - a --out/--json redirection derives nothing; the census moves from closed=37 gap=72 to closed=38 gap=71. The same round records that the pair now names its producer in tools/deliverable_index.py so the index can grade it once it is newest.",
     "do": "2026-11-25 R3456 PRODUCT: the answer-revision question now has a door - api_answer_history (live with AC-AMAW1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so 'which answer was rewritten, what did it say before, what does it say now and how often did it change' could only be read by calling the sandbox from a shell - while api_seller_answers and api_listing_qna publish only the CURRENT wording.",
-    "last_artifact": "preview/preview-writer-census.html (17391B) + preview/preview-writer-census.json (25082B) [2026-11-27 commit]",
-    "latest_artifact": "preview/preview-writer-census.html (17391B) + preview/preview-writer-census.json (25082B) [2026-11-27 commit]",
-    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\preview-writer-census.html",
+    "last_artifact": "preview/buyer-answer-wait-board.html (8364B) + preview/buyer-answer-wait-board.json (3107B) [2026-11-27 mtime]",
+    "latest_artifact": "preview/buyer-answer-wait-board.html (8364B) + preview/buyer-answer-wait-board.json (3107B) [2026-11-27 mtime]",
+    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\buyer-answer-wait-board.html",
     "latest_artifact_note": "",
     "latest_evidence": "qa/round-R3558.log (2632B, 2026-11-27, sha256 bc4f7c820465)",
     "newest_pair_on_disk_is_board": false,
     "next_milestone": "[R3558] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先把刷新轮排最前，毕=更新字段＋文件④更新记录行。 (1) S4U 仍未落地（第九十七次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回；宁缺不错。 (2) **71 家缺口已列名**（`preview/preview-writer-census.json`，本轮 `closed=38 gap=71`）：下窗只动一家活线生产者，判据沿用 `AC-PWC36` 形状（源码位置量＋两条负控＋共享定义＋按 ROOT 的落地守卫＋循环收敛后的闭包）。下一批候选按普查实测挑：`tools/buyer_cohort_board.py`（wc=9），再下按普查降序；`tools/qa_log.py`（多落页）与 `src/os/registry_counter_census.py`（收口件）仍不接。 (3) `replay-receipt` 可豁免性仍待 L3 签发或驳回。 (4) **载体 `state.json` 现 76392 B（阈 78500，余量仅 2108）**——下窗写 state **之前必须先折叠**：`python src/os/state_fold_run.py --fold --round R3559`（本窗 `--check` 读 `FOLD-CLEAR margin=2108 log_lines=91`，余量已不够再写一轮）。 (5) tick 口径：本轮 3557→3558，下轮 R3559。 (6) 承账不变：`qa_log --ledger-check broken=5`、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写、电池页待重派生。 (7) **本窗新实测（写进下窗第一步）**：①`--help` 对 `tools/preview_writer_census.py` 与 `tools/deliverable_index.py` **不是帮助**，是**直接执行写**（普查页/索引当场落盘并重派生 CEO 面）——探针只能读源码，禁带任何 flag 裸跑这两个工具。②**收敛序本窗两测**：`索引 --write` → `链页裸跑` → `链页 --check` → `索引 --check`；先写索引再跑链页 ⇒ `AC-DIX21/23` 红（实测 `VERDICT FAIL 21/23`），补齐后 `23/23 PASS`。③矩阵写者=`src/os/suite_matrix_reconcile.py (truncated)",
-    "next_milestone_due": "2026-11-29T16:19:32+08:00",
-    "updated_at": "2026-11-27T16:19:32+08:00",
+    "next_milestone_due": "2026-11-29T16:20:51+08:00",
+    "updated_at": "2026-11-27T16:20:51+08:00",
     "heartbeat": {
       "tick": 3548,
       "state_tick": 3558,
@@ -36,7 +36,7 @@
     }
   },
   "current": "2026-11-27 R3558 PRODUCT: the thirty-second gap producer from the R3527 census closes at its birth site - tools/buyer_answer_wait_board.py, the one openable page that shows what buyers asked, how long the answer took and how many were answered, now re-derives docs/status-export.json IN PROCESS through the shared board_face_landing.refresh_export_face(ROOT) after its sizes fixed-point loop (that loop rewrites the JSON up to six times, so the closure sits after the loop, not inside it), and only when both halves land under THIS root own preview/ - a --out/--json redirection derives nothing; the census moves from closed=37 gap=72 to closed=38 gap=71. The same round records that the pair now names its producer in tools/deliverable_index.py so the index can grade it once it is newest.",
-  "claims": {"claimed": 43, "captured": 24, "contradicted": 0, "uncaptured": 19, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-27T16:19:32+08:00"},
+  "claims": {"claimed": 43, "captured": 24, "contradicted": 0, "uncaptured": 19, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-27T16:20:51+08:00"},
   "chain": {"present": true, "rows": 106, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -66,14 +66,14 @@
     }
   ],
   "do": "2026-11-27 R3558 PRODUCT: the thirty-second gap producer from the R3527 census closes at its birth site - tools/buyer_answer_wait_board.py, the one openable page that shows what buyers asked, how long the answer took and how many were answered, now re-derives docs/status-export.json IN PROCESS through the shared board_face_landing.refresh_export_face(ROOT) after its sizes fixed-point loop (that loop rewrites the JSON up to six times, so the closure sits after the loop, not inside it), and only when both halves land under THIS root own preview/ - a --out/--json redirection derives nothing; the census moves from closed=37 gap=72 to closed=38 gap=71. The same round records that the pair now names its producer in tools/deliverable_index.py so the index can grade it once it is newest.",
-  "export_ts": "2026-11-27T16:19:32+08:00",
-  "latest_artifact": "preview/preview-writer-census.html (17391B) + preview/preview-writer-census.json (25082B) [2026-11-27 commit]",
+  "export_ts": "2026-11-27T16:20:51+08:00",
+  "latest_artifact": "preview/buyer-answer-wait-board.html (8364B) + preview/buyer-answer-wait-board.json (3107B) [2026-11-27 mtime]",
   "latest_evidence": "qa/round-R3558.log (2632B, 2026-11-27, sha256 bc4f7c820465)",
   "next_milestone": "[R3558] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先把刷新轮排最前，毕=更新字段＋文件④更新记录行。 (1) S4U 仍未落地（第九十七次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回；宁缺不错。 (2) **71 家缺口已列名**（`preview/preview-writer-census.json`，本轮 `closed=38 gap=71`）：下窗只动一家活线生产者，判据沿用 `AC-PWC36` 形状（源码位置量＋两条负控＋共享定义＋按 ROOT 的落地守卫＋循环收敛后的闭包）。下一批候选按普查实测挑：`tools/buyer_cohort_board.py`（wc=9），再下按普查降序；`tools/qa_log.py`（多落页）与 `src/os/registry_counter_census.py`（收口件）仍不接。 (3) `replay-receipt` 可豁免性仍待 L3 签发或驳回。 (4) **载体 `state.json` 现 76392 B（阈 78500，余量仅 2108）**——下窗写 state **之前必须先折叠**：`python src/os/state_fold_run.py --fold --round R3559`（本窗 `--check` 读 `FOLD-CLEAR margin=2108 log_lines=91`，余量已不够再写一轮）。 (5) tick 口径：本轮 3557→3558，下轮 R3559。 (6) 承账不变：`qa_log --ledger-check broken=5`、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写、电池页待重派生。 (7) **本窗新实测（写进下窗第一步）**：①`--help` 对 `tools/preview_writer_census.py` 与 `tools/deliverable_index.py` **不是帮助**，是**直接执行写**（普查页/索引当场落盘并重派生 CEO 面）——探针只能读源码，禁带任何 flag 裸跑这两个工具。②**收敛序本窗两测**：`索引 --write` → `链页裸跑` → `链页 --check` → `索引 --check`；先写索引再跑链页 ⇒ `AC-DIX21/23` 红（实测 `VERDICT FAIL 21/23`），补齐后 `23/23 PASS`。③矩阵写者=`src/os/suite_matrix_reconcile.py (truncated)",
   "outs": [
-    "preview/preview-writer-census.html (17391B) + preview/preview-writer-census.json (25082B) [2026-11-27 commit]",
-    "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-27 mtime] (halves differ: html [2026-11-27 mtime] + json [2026-11-16 commit]; later=html)",
     "preview/buyer-answer-wait-board.html (8364B) + preview/buyer-answer-wait-board.json (3107B) [2026-11-27 mtime]",
+    "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-27 mtime] (halves differ: html [2026-11-27 mtime] + json [2026-11-16 commit]; later=html)",
+    "preview/preview-writer-census.html (17391B) + preview/preview-writer-census.json (25082B) [2026-11-27 commit]",
     "preview/watch-category-mix-board.html (10926B) + preview/watch-category-mix-board.json (3919B) [2026-11-27 commit]",
     "preview/provider-identity-board.html (7193B) + preview/provider-identity-board.json (1893B) [2026-11-27 mtime]",
     "preview/category-history-board.html (14475B) + preview/category-history-board.json (5779B) [2026-11-27 mtime]",
@@ -171,7 +171,7 @@
   },
   "self_drive": {"window": "2026-11-21..2026-11-27", "window_days": 7, "log_lines_in_window": 90, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 52, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
   "state_bytes": 77744,
-  "next_milestone_due": "2026-11-29T16:19:32+08:00",
+  "next_milestone_due": "2026-11-29T16:20:51+08:00",
   "heartbeat": {
     "tick": 3548,
     "state_tick": 3558,
