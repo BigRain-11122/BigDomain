@@ -260,6 +260,10 @@ PAIR_PRODUCERS = {
     # - so the buyer repurchase-rhythm page names its producer instead of
     # leaving AC-DIX21/23 a named absence the moment it is newest.
     "buyer-gap-board.json": "tools/buyer_gap_board.py",
+    # R3562: same single-writer shape - one render, one json, no back-hop block
+    # - so the resident ledger statement page names its producer instead of
+    # leaving AC-DIX21/23 a named absence the moment it is newest.
+    "buyer-ledger-board.json": "tools/buyer_ledger_board.py",
     # R3429: same single-writer shape - one render, one json, no back-hop block
     # - so the seller monthly returning-buyer page names its producer.
     "seller-repeat-months-board.json": "tools/seller_repeat_months_board.py",
