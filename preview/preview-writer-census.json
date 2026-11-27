@@ -3,8 +3,8 @@
     "src/os/board_face_landing.py",
     "src/os/export_round.py"
   ],
-  "generated_at": "2026-11-27T20:48:53+08:00",
-  "round": "R3575",
+  "generated_at": "2026-11-27T21:12:42+08:00",
+  "round": "R3576",
   "rows": [
     {
       "face_calls": 0,
@@ -240,15 +240,6 @@
       ],
       "path": "tools/price_reaction_board.py",
       "write_calls": 4
-    },
-    {
-      "face_calls": 0,
-      "kind": "gap",
-      "landing_paths": [
-        "public-listings-board.html"
-      ],
-      "path": "tools/public_listings_board.py",
-      "write_calls": 9
     },
     {
       "face_calls": 0,
@@ -921,6 +912,15 @@
       "face_calls": 1,
       "kind": "closed",
       "landing_paths": [
+        "public-listings-board.html"
+      ],
+      "path": "tools/public_listings_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 1,
+      "kind": "closed",
+      "landing_paths": [
         "refund-latency-board.html"
       ],
       "path": "tools/refund_latency_board.py",
@@ -1090,9 +1090,9 @@
     }
   ],
   "totals": {
-    "closed": 56,
+    "closed": 57,
     "excluded": 2,
-    "gap": 53,
+    "gap": 52,
     "modules": 119,
     "reader": 10,
     "writers": 109
