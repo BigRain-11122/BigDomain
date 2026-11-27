@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-24 17:04:52Z",
+ "generated_utc": "2026-11-27 21:22:07Z",
  "face": "api_watch_alerts",
  "board_face": "api_board",
  "scope": "buyer",
@@ -130,7 +130,7 @@
  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
  "report": "preview/watch-alerts-board.html",
  "sources": {
-  "driver": "8f898d72bd3abc1f",
+  "driver": "62d5a382e5642427",
   "copy": "f0e330e37f9dc259",
   "apimarket": "82a49194bef85737",
   "report": "3a83dce99c9e2bd4"
