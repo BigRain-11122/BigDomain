@@ -8267,6 +8267,18 @@ SUITES = [
     # mapping.
     ("os-logs-toolkit",
      os.path.join("..", "os", "test_logs_toolkit.py"), 274),
+    # R3612: the append face that ends the hand-written state.json surgery. The
+    # nine rounds before it produced three self-inflicted carrier defects (an
+    # indent-collapsing json.dump rewrite at R3604, a missing and then a
+    # trailing comma at R3606, four-space rows at R3609), so the surgery now
+    # derives the item indent from the document, adds exactly one comma, bumps
+    # the tick in place, and re-parses and re-profiles before and after the
+    # write. Criteria AC-LAP1..AC-LAP8 were pinned in src/os/backlog.md at
+    # R3612, before the subcommand and this suite existed. Appended at the END
+    # for the same reason as every row above: a mid-list insert shifts each
+    # later suite's shard.
+    ("os-logs-append",
+     os.path.join("..", "os", "test_logs_append.py"), 20),
     # R2918: the census that answers "which registry rows can the battery
     # reader refute at run time" with a MEASURED list (readable / unparsed /
     # silent, pinned in src/os/registry_counter_census_pin.json) instead of the

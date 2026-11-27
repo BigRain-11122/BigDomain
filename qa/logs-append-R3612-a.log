@@ -1,0 +1,23 @@
+# logs-append suite run a rc=0
+  | PASS AC-LAP1 plan prints one exact line and exits 0 rc=0 out='APPEND PLAN round=R3612 tick=8 lines=2 bytes=98->146 gate=78500 verdict=OK'
+  | PASS AC-LAP1 bad round shape is E_LAP_ROUND exit 2 rc=2
+  | PASS AC-LAP1 missing file is E_LAP_NO_FILE exit 3 and creates nothing rc=3 created=False
+  | PASS AC-LAP2 execute appends with the document caliber and one comma rc=0 prefix=True crlf=True indent=True tick=8
+  | PASS AC-LAP2 negative control: without the comma the carrier is invalid JSON negative=True
+  | PASS AC-LAP2 caliber follows the document, not a constant rc=0
+  | PASS AC-LAP3 E_LAP_NO_ANCHOR refuses without touching the carrier rc=2 clean=True
+  | PASS AC-LAP3 E_LAP_EOL refuses without touching the carrier rc=2 clean=True
+  | PASS AC-LAP3 E_LAP_INDENT refuses without touching the carrier rc=2 clean=True
+  | PASS AC-LAP3 E_LAP_MULTILINE refuses without touching the carrier rc=2 clean=True
+  | PASS AC-LAP3 E_LAP_EMPTY refuses without touching the carrier rc=2 clean=True
+  | PASS AC-LAP3 E_LAP_TICK refuses without touching the carrier rc=2 clean=True
+  | PASS AC-LAP4 a post size over the gate is refused, not written rc=2 unchanged=True
+  | PASS AC-LAP5 two sequential appends keep order and bump the tick rc=0/0 tick=3 log=['seed', 'second', 'third']
+  | PASS AC-LAP6 dry-run is read-only and creates no scratch file rc=0 unchanged=True
+  | PASS AC-LAP7 the face stays stdlib, ASCII and clock-free banned=[] non_ascii=0 same=True
+  | PASS AC-LAP8 live dry-run reads OK and leaves the carrier untouched rc=0 unchanged=True
+  | PASS AC-LAP8 the twelve older faces are still registered handlers=['append', 'catalog', 'census', 'eol', 'fold', 'gauge', 'inventory', 'prune', 'rounds', 'summary', 'tail', 'weights']
+  | PASS AC-LAP8 leftover scratch is a leak and must be absent removed=True
+  | PASS AC-LAP8 registry row declares this run total declared=20 expected=20 rows=1
+suite: 20 assertions over 8 criteria
+SUITE PASS 20/20

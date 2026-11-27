@@ -538,6 +538,7 @@
     "os-lobby-session-trace",
     "os-lobby-ws-report-face",
     "os-log-floor",
+    "os-logs-append",
     "os-logs-inventory",
     "os-logs-toolkit",
     "os-machine-gate",

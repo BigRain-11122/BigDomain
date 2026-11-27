@@ -1476,6 +1476,134 @@ CEN_HDR_SUB = re.compile(r'^##\s*\u00a7?(R\d+)\b')
 CEN_HDR_SUB_FOLD = re.compile(r'^##\s*Fold (R\d+)\b')
 
 
+APPEND_TAIL_RE = re.compile(
+    r'\r\n  \],\r\n(?P<tick_ind>[ ]*)"tick":(?P<tick>\d+)\r\n\}$')
+
+
+class AppendError(ValueError):
+    """Named refusal from the append face (AC-LAP3); str() is the code."""
+
+
+def append_plan(path, lines, tick=None):
+    """Read-only plan for appending log lines to a state.json carrier.
+
+    The append is the surgery this loop performed by hand for nine rounds,
+    with three self-inflicted defects (a json.dump rewrite that collapsed the
+    indent, a missing comma, a trailing comma). One document-derived rule
+    replaces the hand work: the item indent comes from the log block itself,
+    the old last item gains exactly one comma, and the result is re-parsed and
+    re-profiled before anything is written.
+
+    Refuses with a named AppendError instead of guessing: a missing anchor, a
+    bare-LF carrier, a non-uniform indent block, an empty or multi-line item
+    and a non-increasing tick are all diseases, not inputs.
+    """
+    with open(path, 'rb') as f:
+        raw = f.read()
+    text = raw.decode('utf-8')
+    prof = eol_profile(raw)
+    if not prof['log_block_found']:
+        raise AppendError('E_LAP_NO_LOG_BLOCK')
+    if prof['bare_lf'] or prof['lone_cr']:
+        raise AppendError('E_LAP_EOL')
+    caliber = prof['indent_caliber']
+    if caliber not in (2, 16):
+        raise AppendError('E_LAP_INDENT')
+    m = APPEND_TAIL_RE.search(text)
+    if m is None or m.end() != len(text):
+        raise AppendError('E_LAP_NO_ANCHOR')
+    if not lines:
+        raise AppendError('E_LAP_EMPTY')
+    for item in lines:
+        if not item or not item.strip():
+            raise AppendError('E_LAP_EMPTY')
+        if '\r' in item or '\n' in item:
+            raise AppendError('E_LAP_MULTILINE')
+    before_tick = int(m.group('tick'))
+    after_tick = before_tick + 1 if tick is None else tick
+    if after_tick <= before_tick:
+        raise AppendError('E_LAP_TICK')
+    indent = ' ' * caliber
+    prefix = text[:m.start()]
+    body = ''.join(',' + '\r\n' + indent + json.dumps(item)
+                   for item in lines)
+    suffix = ('\r\n  ],\r\n' + m.group('tick_ind')
+              + '"tick":' + str(after_tick) + '\r\n}')
+    new_text = prefix + body + suffix
+    old = json.loads(text)
+    new = json.loads(new_text)
+    post = eol_profile(new_text.encode('utf-8'))
+    ok_shape = (raw.startswith(prefix.encode('utf-8'))
+                and new.get('log') == list(old.get('log') or []) + list(lines)
+                and new.get('tick') == after_tick
+                and post['bare_lf'] == 0 and post['lone_cr'] == 0
+                and post['indent_anomaly'] == 0
+                and post['indent_caliber'] == caliber
+                and post['log_item_lines'] == prof['log_item_lines'] + len(lines))
+    if not ok_shape:
+        raise AppendError('E_LAP_SELFCHECK')
+    return {
+        'path': path,
+        'lines': list(lines),
+        'caliber': caliber,
+        'tick_before': before_tick,
+        'tick_after': after_tick,
+        'bytes_before': len(raw),
+        'post_bytes': len(new_text.encode('utf-8')),
+        'new_text': new_text,
+    }
+
+
+def append_execute(plan):
+    """Write the planned text atomically, then re-read and compare bytes."""
+    blob = plan['new_text'].encode('utf-8')
+    path = plan['path']
+    fd, tmp = tempfile.mkstemp(dir=os.path.dirname(path), prefix='.lap-')
+    try:
+        with os.fdopen(fd, 'wb') as f:
+            f.write(blob)
+        os.replace(tmp, path)
+    except OSError:
+        if os.path.exists(tmp):
+            os.remove(tmp)
+        raise
+    with open(path, 'rb') as f:
+        return f.read() == blob
+
+
+def cmd_append(args):
+    if not re.match(r'^R\d{3,5}$', args.round or ''):
+        print('error: E_LAP_ROUND %r' % (args.round,), file=sys.stderr)
+        return 2
+    path = args.file or os.path.join(args.root, 'src', 'os', 'state.json')
+    if not os.path.isfile(path):
+        print('error: E_LAP_NO_FILE %s' % path, file=sys.stderr)
+        return 3
+    try:
+        plan = append_plan(path, args.line or [], args.tick)
+    except AppendError as e:
+        print('APPEND REFUSED %s' % e)
+        return 2
+    fits = plan['post_bytes'] <= GATE
+    head = ('APPEND %s round=%s tick=%d lines=%d bytes=%d->%d gate=%d'
+            % ('OK' if (args.execute and fits) else 'PLAN', args.round,
+               plan['tick_after'], len(plan['lines']),
+               plan['bytes_before'], plan['post_bytes'], GATE))
+    if not fits:
+        print('%s verdict=REFUSED E_LAP_GATE '
+              '(fold first: python src/os/logs_toolkit.py fold --plan-only)'
+              % head)
+        return 2
+    if not args.execute:
+        print('%s verdict=OK' % head)
+        return 0
+    if not append_execute(plan):
+        print('error: E_LAP_VERIFY', file=sys.stderr)
+        return 3
+    print('%s verified=true' % head)
+    return 0
+
+
 def header_rounds(line):
     """Round tokens of one "# --- " line, or None when it is not a header.
 
@@ -1777,13 +1905,23 @@ def main(argv=None):
                     help='summary file whose text may name the window rounds')
     pr.add_argument('--strict', action='store_true',
                     help='exit 4 when any window round would be lost')
+    pa = sub.add_parser('append', help='state.json log append surgery (verify-then-write)')
+    pa.add_argument('--round', required=True, help='round label e.g. R3612')
+    pa.add_argument('--line', action='append', default=[],
+                    help='log line to append, kept in the order given (repeatable)')
+    pa.add_argument('--tick', type=int, default=None,
+                    help='new tick (default: current + 1; must exceed current)')
+    pa.add_argument('--file', default=None,
+                    help='target state file (default: src/os/state.json)')
+    pa.add_argument('--execute', action='store_true',
+                    help='perform surgery (default: dry-run, zero mutation)')
 
     args = p.parse_args(argv)
     handlers = {'gauge': cmd_gauge, 'weights': cmd_weights,
                 'inventory': cmd_inventory, 'tail': cmd_tail,
                 'prune': cmd_prune, 'catalog': cmd_catalog, 'fold': cmd_fold,
                 'census': cmd_census, 'eol': cmd_eol, 'summary': cmd_summary,
-                'rounds': cmd_rounds}
+                'rounds': cmd_rounds, 'append': cmd_append}
     if args.cmd not in handlers:
         return 2
     try:

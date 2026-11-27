@@ -81,7 +81,7 @@
       "text": "tool source ASCII, stdlib+shipped imports (incl. the shared value_domain module), zero network refs"
     }
   ],
-  "generated_utc": "2026-11-27T22:01:01Z",
+  "generated_utc": "2026-11-27T22:16:15Z",
   "legacy_negative": [
     {
       "case": "tampered signature",
