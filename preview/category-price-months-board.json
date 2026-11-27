@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-24 18:49:45Z",
+ "generated_utc": "2026-11-27 11:26:31Z",
  "face": "api_category_price_months",
  "scope": "market",
  "month_count": 1,
@@ -34,7 +34,7 @@
  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
  "report": "preview/category-price-months-board.html",
  "sources": {
-  "driver": "9ca1cb5995fc7032",
+  "driver": "173453572cf88681",
   "copy": "62781444be4d28f4",
   "apimarket": "82a49194bef85737",
   "report": "3a83dce99c9e2bd4"

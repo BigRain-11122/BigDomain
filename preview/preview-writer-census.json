@@ -3,8 +3,8 @@
     "src/os/board_face_landing.py",
     "src/os/export_round.py"
   ],
-  "generated_at": "2026-11-27T19:03:20+08:00",
-  "round": "R3566",
+  "generated_at": "2026-11-27T19:23:44+08:00",
+  "round": "R3567",
   "rows": [
     {
       "face_calls": 0,
@@ -122,15 +122,6 @@
       ],
       "path": "tools/apimarket_schema_banner.py",
       "write_calls": 1
-    },
-    {
-      "face_calls": 0,
-      "kind": "gap",
-      "landing_paths": [
-        "category-price-months-board.html"
-      ],
-      "path": "tools/category_price_months_board.py",
-      "write_calls": 9
     },
     {
       "face_calls": 0,
@@ -688,6 +679,15 @@
       "face_calls": 1,
       "kind": "closed",
       "landing_paths": [
+        "category-price-months-board.html"
+      ],
+      "path": "tools/category_price_months_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 1,
+      "kind": "closed",
+      "landing_paths": [
         "ceo-blockers.html",
         "preview/index.html",
         "preview/ledger-business-report.html",
@@ -1090,9 +1090,9 @@
     }
   ],
   "totals": {
-    "closed": 47,
+    "closed": 48,
     "excluded": 2,
-    "gap": 62,
+    "gap": 61,
     "modules": 119,
     "reader": 10,
     "writers": 109
