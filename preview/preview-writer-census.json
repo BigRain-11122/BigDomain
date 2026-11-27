@@ -3,7 +3,7 @@
     "src/os/board_face_landing.py",
     "src/os/export_round.py"
   ],
-  "generated_at": "2026-11-27T15:27:15+08:00",
+  "generated_at": "2026-11-27T15:52:53+08:00",
   "round": "R3556",
   "rows": [
     {
@@ -637,15 +637,6 @@
       "face_calls": 0,
       "kind": "gap",
       "landing_paths": [
-        "watch-category-mix-board.html"
-      ],
-      "path": "tools/watch_category_mix_board.py",
-      "write_calls": 10
-    },
-    {
-      "face_calls": 0,
-      "kind": "gap",
-      "landing_paths": [
         "watch-conversion-board.html"
       ],
       "path": "tools/watch_conversion_board.py",
@@ -1004,6 +995,15 @@
       "write_calls": 4
     },
     {
+      "face_calls": 1,
+      "kind": "closed",
+      "landing_paths": [
+        "watch-category-mix-board.html"
+      ],
+      "path": "tools/watch_category_mix_board.py",
+      "write_calls": 10
+    },
+    {
       "face_calls": 0,
       "kind": "reader",
       "landing_paths": [],
@@ -1090,9 +1090,9 @@
     }
   ],
   "totals": {
-    "closed": 36,
+    "closed": 37,
     "excluded": 2,
-    "gap": 73,
+    "gap": 72,
     "modules": 119,
     "reader": 10,
     "writers": 109

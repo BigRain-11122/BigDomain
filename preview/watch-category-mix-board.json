@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-24 23:25:09Z",
+ "generated_utc": "2026-11-27 07:55:24Z",
  "face": "api_buyer_watch_category_mix",
  "scope": "buyers",
  "market": {
@@ -163,7 +163,7 @@
  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
  "report": "preview/watch-category-mix-board.html",
  "sources": {
-  "driver": "faeb16db459c26e7",
+  "driver": "e6eb80d79352442f",
   "copy": "66ac7bc80e4bb48d",
   "apimarket": "82a49194bef85737",
   "report": "3a83dce99c9e2bd4"

@@ -1,0 +1,51 @@
+R3557 EVIDENCE (BigDomain OSLoop) - 2026-11-27
+
+[scope]
+target=tools/watch_category_mix_board.py (AC-PWC35, census gap #31 of the R3527 list)
+suites=src/os/test_preview_writer_census.py + producer own battery
+network=none beyond loopback; payment capability=zero
+
+[read-only measurement before any write]
+classify_source kind=gap write_calls=10 closes=0 landing_paths=[watch-category-mix-board.html]
+html half = main() 698-699 open(args.out,'w') + fh.write(doc)
+json half = main() 702-704 open(args.json,'w') + json.dump + fh.write('\n')
+sizes fixed point = main() 707-717, break at 716 (up to six rewrites of the json)
+--check branch = 663-671, returns before any landing
+readers = read_copy, read_world, read_empty, _market, check_laws, build_html,
+          check_sizes, check_sources, sha16, source_fingerprints, payload_of
+ROOT already exists at line 57; OUT_HTML/OUT_JSON at 64-65 are ROOT-derived but
+rebindable via --out/--json, so the landing guard is computed from ROOT/preview.
+
+[after wiring]
+SUITE PASS Ran 127 tests OK (was 123; four new arms under AC-PWC35,
+  two negative controls: delete-call reads gap, move-into-loop reads order-false)
+real run  -> WATCH-CATEGORY-MIX preview/watch-category-mix-board.html bytes=10926
+             buyers=4 market_watches=13 face=WRITTEN
+check run -> WATCH-CATEGORY-MIX CHECK PASS fails=0 html=10926B json=3919B
+census    -> PWC (R3556) modules=119 closed=37 gap=72 reader=10 face export=WRITTEN
+matrix    -> WRITTEN docs/sandbox-suite-matrix.md 85800 bytes, 832 rows; row 743 = 127
+chain     -> VERDICT PASS legs=2 entries=2 tx=1 reconcile_rc=0 html=4403B
+index     -> VERDICT PASS 23/23
+closeout  -> CLOSEOUT-GATE PASS files=5077 flags=0 census=PASS matrix=DOC-CURRENT
+state     -> tick 3556 -> 3557, log 86 items, carrier bytes 72973 (gate 78500)
+
+[measured closeout order this window]
+1. product page lands (writes both halves, then derives the CEO face in process)
+2. census page re-derives (it would otherwise take latest_artifact)
+3. matrix reconcile --write (pin 123 -> 127 first, else the doc stays STALE-CONTENT)
+4. deliverable_index --write
+5. first_yuan_chain (no flag = render)
+6. first_yuan_chain --check   (PASS; the chain embeds the index bytes)
+7. deliverable_index --check (PASS 23/23; it runs the chain --check for the newest pair)
+reversed orders measured red: index after chain => E_STALE on the chain page;
+chain after index without rewriting the index => AC-DIX21 red (chain --check rc=2).
+
+[honest notes]
+- tools/deliverable_index.py gained a PAIR_PRODUCERS row for
+  watch-category-mix-board.json because the moment that pair became the newest one
+  the index could only print a named absence and AC-DIX21/23 went red. This is the
+  documented purpose of that table, not a loosening of the arm.
+- src/sandbox/reconcile_all.py pin moved 123 -> 127 at the measured suite count.
+- 72 gaps stay named in preview/preview-writer-census.json; none is claimed closed.
+- read_world()/read_empty() still leave demo stacks in the system temp folder.
+- S4U is still unregistered; the three qa/crawl-* changes are not this window's.
