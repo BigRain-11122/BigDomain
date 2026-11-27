@@ -3,15 +3,15 @@
     "board_pages_skipped": ["preview/face-sweep.html (8900B)"],
     "current": "2026-11-28 R3595 PRODUCT: the sixty-ninth gap producer from the R3527 census closes at its birth site - tools/seller_refund_months_board.py, the one openable page that answers how much money came back this month, who paid it and whether a seller refund pressure is heavier than the market (per-seller KPI cards, a per-month table with the refund bar and a refund-only row marker, the market lifetime rate, the laws card and the AIGC and not-advice notices, all printed from the shipped api_seller_refund_months face with api_board seller enumeration over a one-off demo world), now re-derives docs/status-export.json IN PROCESS through the shared board_face_landing.refresh_export_face(ROOT) after its sizes fixed-point loop, and only when both halves land under THIS root own preview/ - a --out/--json redirection derives nothing; the census moves from closed=74 gap=35 to closed=75 gap=34.",
     "do": "2026-11-25 R3456 PRODUCT: the answer-revision question now has a door - api_answer_history (live with AC-AMAW1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so 'which answer was rewritten, what did it say before, what does it say now and how often did it change' could only be read by calling the sandbox from a shell - while api_seller_answers and api_listing_qna publish only the CURRENT wording.",
-    "last_artifact": "preview/first-yuan.html (4611B) + preview/first-yuan.json (2628B) [2026-11-28 mtime]",
-    "latest_artifact": "preview/first-yuan.html (4611B) + preview/first-yuan.json (2628B) [2026-11-28 mtime]",
+    "last_artifact": "preview/first-yuan.html (4611B) + preview/first-yuan.json (2628B) [2026-11-28 commit]",
+    "latest_artifact": "preview/first-yuan.html (4611B) + preview/first-yuan.json (2628B) [2026-11-28 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan.html",
     "latest_artifact_note": "",
     "latest_evidence": "qa/round-R3564.log (1288B, 2026-11-27, sha256 c36ba280a17e)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3594] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）—— 12-01 或之后开窗先把刷新轮排最前，毕=更新字段+文件④更新记录行。(1) **S4U 仍未落地**（第一百三十一次承账）：`BigDomain-OSLoop` 任务存在但 `Principal.LogonType=Interactive`，正法=提权会话跑 `src/os/register_loop_task.ps1` 后读回须为 `S4U`；宁缺不错。(2) **35 家缺口已列名**（`preview/preview-writer-census.json`，本轮 `closed=74 gap=35`）：下窗只动一家活线生产者，判据沿用 `AC-PWC72` 形状（源码位置量+两条负控+共享定义+落地守卫）。下一批候选= `tools/seller_refund_months_board.py`、`tools/seller_repeat_months_board.py`、`tools/seller_answer_months_board.py`（若后者仍 gap）。(3) **绿序配方本轮实测三次失败后定格**：必须是「链写 → 索引写」迭代到收敛（`chain --check` PASS 且 `index --check` 23/23）→ 面扫写 → 全只读复核；索引写会打回链面（`claims age` 绑 `export_ts`），单跑一次易红。(4) **两条既有红面如实录**（非本窗所致）：`tools/payment_gate_report.py --check` = `FAIL fails=2`（`AC-PAYG1` products=5 tiers=0 / `AC-PAYG8`），与 `membership_face` 读到的 tiers=1 不一致，属数据面待裁；`tools/membership_face.py` 陈旧页本轮已重派生治愈。(5) 载体余量：state 本窗收口 67785B／闸 78500（余 10715B）。(6) tick 口径：本轮 3593→3594，下轮 R3595。(7) 承账不变：`qa_log --ledger-check broken=5`、全量 battery 未实跑、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写。",
-    "next_milestone_due": "2026-11-30T02:40:01+08:00",
-    "updated_at": "2026-11-28T02:40:01+08:00",
+    "next_milestone": "[R3595] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）—— 12-01 或之后开窗先把刷新轮排最前，毕=更新字段＋文件④更新记录行。(1) **S4U 仍未落地**（第一百三十二次承账）：`BigDomain-OSLoop` 任务存在但 `Principal.LogonType=Interactive`，正法=提权会话跑 `src/os/register_loop_task.ps1` 后读回须为 `S4U`；宁缺不错（禁用 `Get-ScheduledTaskPrincipal`，本机无此 cmdlet 会给出假阴性）。(2) **34 家缺口已列名**（`preview/preview-writer-census.json`，本窗 `closed=75 gap=34`）：下窗只动一家活线生产者，判据沿用 `AC-PWC73` 形状（源码位置量+两条负控+共享定义+落地守卫）；下一批候选= `tools/seller_repeat_months_board.py`、`tools/seller_answer_months_board.py`（后者若已被他窗闭合则跳过；开工前先实测 `classify_source` 确认 `kind=gap`）。(3) **本窗绿序两遍实证**：产品落页（自动派生面）→普查 `--write`→产品再落→矩阵 `src/os/suite_matrix_reconcile.py --write`/`--check`（必读 `DOC-CURRENT`）→链裸跑＋`--check`→产品再落→index `--write`＋`--check` 23/23→`closeout_order --write`＋`--check` 4/4→`closeout_gate`（`PASS files=5082 flags=0`）→`export_round.py` 裸跑→`closeout_order --check`（末次派生后仍 4/4）。**工具入口坑**：矩阵工具是 `src/os/suite_matrix_reconcile.py`，不是 `tools/` 下的同名件（本窗误调一次 `tools/suite_matrix_reconcile.py` 报文件不存在）。(4) **本窗折叠**：`--fold --fold-no 5 --start 2 --end 46`，75→31 行、74012→30487B、margin 48013；窗口用 `state_fold_run.choose_window(ROOT, raw, state, covered, start=2, label='R<n>')` (truncated)",
+    "next_milestone_due": "2026-11-30T02:44:14+08:00",
+    "updated_at": "2026-11-28T02:44:14+08:00",
     "heartbeat": {
       "tick": 3579,
       "state_tick": 3595,
@@ -36,7 +36,7 @@
     }
   },
   "current": "2026-11-28 R3595 PRODUCT: the sixty-ninth gap producer from the R3527 census closes at its birth site - tools/seller_refund_months_board.py, the one openable page that answers how much money came back this month, who paid it and whether a seller refund pressure is heavier than the market (per-seller KPI cards, a per-month table with the refund bar and a refund-only row marker, the market lifetime rate, the laws card and the AIGC and not-advice notices, all printed from the shipped api_seller_refund_months face with api_board seller enumeration over a one-off demo world), now re-derives docs/status-export.json IN PROCESS through the shared board_face_landing.refresh_export_face(ROOT) after its sizes fixed-point loop, and only when both halves land under THIS root own preview/ - a --out/--json redirection derives nothing; the census moves from closed=74 gap=35 to closed=75 gap=34.",
-  "claims": {"claimed": 43, "captured": 24, "contradicted": 0, "uncaptured": 19, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-28T02:40:01+08:00"},
+  "claims": {"claimed": 43, "captured": 24, "contradicted": 0, "uncaptured": 19, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-28T02:44:14+08:00"},
   "chain": {"present": true, "rows": 106, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -66,12 +66,12 @@
     }
   ],
   "do": "2026-11-28 R3595 PRODUCT: the sixty-ninth gap producer from the R3527 census closes at its birth site - tools/seller_refund_months_board.py, the one openable page that answers how much money came back this month, who paid it and whether a seller refund pressure is heavier than the market (per-seller KPI cards, a per-month table with the refund bar and a refund-only row marker, the market lifetime rate, the laws card and the AIGC and not-advice notices, all printed from the shipped api_seller_refund_months face with api_board seller enumeration over a one-off demo world), now re-derives docs/status-export.json IN PROCESS through the shared board_face_landing.refresh_export_face(ROOT) after its sizes fixed-point loop, and only when both halves land under THIS root own preview/ - a --out/--json redirection derives nothing; the census moves from closed=74 gap=35 to closed=75 gap=34.",
-  "export_ts": "2026-11-28T02:40:01+08:00",
-  "latest_artifact": "preview/first-yuan.html (4611B) + preview/first-yuan.json (2628B) [2026-11-28 mtime]",
+  "export_ts": "2026-11-28T02:44:14+08:00",
+  "latest_artifact": "preview/first-yuan.html (4611B) + preview/first-yuan.json (2628B) [2026-11-28 commit]",
   "latest_evidence": "qa/round-R3564.log (1288B, 2026-11-27, sha256 c36ba280a17e)",
-  "next_milestone": "[R3594] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）—— 12-01 或之后开窗先把刷新轮排最前，毕=更新字段+文件④更新记录行。(1) **S4U 仍未落地**（第一百三十一次承账）：`BigDomain-OSLoop` 任务存在但 `Principal.LogonType=Interactive`，正法=提权会话跑 `src/os/register_loop_task.ps1` 后读回须为 `S4U`；宁缺不错。(2) **35 家缺口已列名**（`preview/preview-writer-census.json`，本轮 `closed=74 gap=35`）：下窗只动一家活线生产者，判据沿用 `AC-PWC72` 形状（源码位置量+两条负控+共享定义+落地守卫）。下一批候选= `tools/seller_refund_months_board.py`、`tools/seller_repeat_months_board.py`、`tools/seller_answer_months_board.py`（若后者仍 gap）。(3) **绿序配方本轮实测三次失败后定格**：必须是「链写 → 索引写」迭代到收敛（`chain --check` PASS 且 `index --check` 23/23）→ 面扫写 → 全只读复核；索引写会打回链面（`claims age` 绑 `export_ts`），单跑一次易红。(4) **两条既有红面如实录**（非本窗所致）：`tools/payment_gate_report.py --check` = `FAIL fails=2`（`AC-PAYG1` products=5 tiers=0 / `AC-PAYG8`），与 `membership_face` 读到的 tiers=1 不一致，属数据面待裁；`tools/membership_face.py` 陈旧页本轮已重派生治愈。(5) 载体余量：state 本窗收口 67785B／闸 78500（余 10715B）。(6) tick 口径：本轮 3593→3594，下轮 R3595。(7) 承账不变：`qa_log --ledger-check broken=5`、全量 battery 未实跑、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写。",
+  "next_milestone": "[R3595] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）—— 12-01 或之后开窗先把刷新轮排最前，毕=更新字段＋文件④更新记录行。(1) **S4U 仍未落地**（第一百三十二次承账）：`BigDomain-OSLoop` 任务存在但 `Principal.LogonType=Interactive`，正法=提权会话跑 `src/os/register_loop_task.ps1` 后读回须为 `S4U`；宁缺不错（禁用 `Get-ScheduledTaskPrincipal`，本机无此 cmdlet 会给出假阴性）。(2) **34 家缺口已列名**（`preview/preview-writer-census.json`，本窗 `closed=75 gap=34`）：下窗只动一家活线生产者，判据沿用 `AC-PWC73` 形状（源码位置量+两条负控+共享定义+落地守卫）；下一批候选= `tools/seller_repeat_months_board.py`、`tools/seller_answer_months_board.py`（后者若已被他窗闭合则跳过；开工前先实测 `classify_source` 确认 `kind=gap`）。(3) **本窗绿序两遍实证**：产品落页（自动派生面）→普查 `--write`→产品再落→矩阵 `src/os/suite_matrix_reconcile.py --write`/`--check`（必读 `DOC-CURRENT`）→链裸跑＋`--check`→产品再落→index `--write`＋`--check` 23/23→`closeout_order --write`＋`--check` 4/4→`closeout_gate`（`PASS files=5082 flags=0`）→`export_round.py` 裸跑→`closeout_order --check`（末次派生后仍 4/4）。**工具入口坑**：矩阵工具是 `src/os/suite_matrix_reconcile.py`，不是 `tools/` 下的同名件（本窗误调一次 `tools/suite_matrix_reconcile.py` 报文件不存在）。(4) **本窗折叠**：`--fold --fold-no 5 --start 2 --end 46`，75→31 行、74012→30487B、margin 48013；窗口用 `state_fold_run.choose_window(ROOT, raw, state, covered, start=2, label='R<n>')` (truncated)",
   "outs": [
-    "preview/first-yuan.html (4611B) + preview/first-yuan.json (2628B) [2026-11-28 mtime]",
+    "preview/first-yuan.html (4611B) + preview/first-yuan.json (2628B) [2026-11-28 commit]",
     "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-28 mtime] (halves differ: html [2026-11-28 mtime] + json [2026-11-16 commit]; later=html)",
     "preview/seller-refund-months-board.html (8218B) + preview/seller-refund-months-board.json (3940B) [2026-11-28 mtime]",
     "preview/preview-writer-census.html (17613B) + preview/preview-writer-census.json (25193B) [2026-11-28 mtime]",
@@ -205,9 +205,9 @@
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
-  "self_drive": {"window": "2026-11-22..2026-11-28", "window_days": 7, "log_lines_in_window": 73, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 61, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
-  "state_bytes": 74012,
-  "next_milestone_due": "2026-11-30T02:40:01+08:00",
+  "self_drive": {"window": "2026-11-22..2026-11-28", "window_days": 7, "log_lines_in_window": 29, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 24, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
+  "state_bytes": 30487,
+  "next_milestone_due": "2026-11-30T02:44:14+08:00",
   "heartbeat": {
     "tick": 3579,
     "state_tick": 3595,
