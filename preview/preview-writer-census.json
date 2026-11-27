@@ -3,8 +3,8 @@
     "src/os/board_face_landing.py",
     "src/os/export_round.py"
   ],
-  "generated_at": "2026-11-27T18:32:44+08:00",
-  "round": "R3564",
+  "generated_at": "2026-11-27T18:49:03+08:00",
+  "round": "R3565",
   "rows": [
     {
       "face_calls": 0,
@@ -122,15 +122,6 @@
       ],
       "path": "tools/apimarket_schema_banner.py",
       "write_calls": 1
-    },
-    {
-      "face_calls": 0,
-      "kind": "gap",
-      "landing_paths": [
-        "buyer-refund-months-board.html"
-      ],
-      "path": "tools/buyer_refund_months_board.py",
-      "write_calls": 9
     },
     {
       "face_calls": 0,
@@ -667,6 +658,15 @@
       "face_calls": 1,
       "kind": "closed",
       "landing_paths": [
+        "buyer-refund-months-board.html"
+      ],
+      "path": "tools/buyer_refund_months_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 1,
+      "kind": "closed",
+      "landing_paths": [
         "buyer-trial.html",
         "membership-face.html",
         "merchant-onboard.html",
@@ -1090,9 +1090,9 @@
     }
   ],
   "totals": {
-    "closed": 45,
+    "closed": 46,
     "excluded": 2,
-    "gap": 64,
+    "gap": 63,
     "modules": 119,
     "reader": 10,
     "writers": 109
