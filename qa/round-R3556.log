@@ -1,0 +1,85 @@
+WROTE ..\..\..\..\AppData\Local\Temp\sth-nxbsl1ld\start-here.html html=41370B operable=6 faces=108 missing=6
+face export=WRITTEN
+PWC-CHECK VERDICT FAIL read_only=True
+  missing half preview-writer-census.json
+  missing half preview-writer-census.html
+PWC (R42) modules=3 closed=1 gap=1 reader=1 face export=SKIPPED AttributeError
+PWC-CHECK VERDICT PASS read_only=True modules=3 closed=1 gap=1 reader=1
+VERDICT PASS steps=11 frames=17 refusals=6 types=7 codes=4 html=9092B json=8008B rc=0
+  cap: sent=4000 outcome=REFUSED code=E_TEXT_TOO_LONG received=None
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\merchant_onboard.py:90: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\state\\merchant-onboard-items.json' mode='r' encoding='utf-8'>
+  return json.load(io.open(ITEMS, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\merchant_onboard.py:69: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\payment-gate-report.json' mode='r' encoding='utf-8'>
+  pay = json.load(io.open(SOURCE, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\merchant_onboard.py:75: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\buyer-trial.json' mode='r' encoding='utf-8'>
+  trial = json.load(io.open(TRIAL, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\buyer_trial.py:127: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\index.html' mode='r' encoding='utf-8'>
+  text = io.open(path, encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\payment_gate_report.py:298: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\tools\\payment_gate_report.py'>
+  source = open(__file__, "rb").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\merchant_onboard.py:115: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\payment-gate-report.json' mode='r' encoding='utf-8'>
+  doc = json.load(io.open(SOURCE, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\merchant_onboard.py:554: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\merchant-onboard.json' mode='r' encoding='utf-8'>
+  landed = json.load(io.open(OUT_JSON, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\merchant_onboard.py:555: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\merchant-onboard.html' mode='r' encoding='utf-8'>
+  page = io.open(OUT_HTML, encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\buyer_trial.py:127: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\buyer-trial.html' mode='r' encoding='utf-8'>
+  text = io.open(path, encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\buyer_trial.py:127: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\money-path-demo.html' mode='r' encoding='utf-8'>
+  text = io.open(path, encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\buyer_trial.py:127: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\journey-19.9.html' mode='r' encoding='utf-8'>
+  text = io.open(path, encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\buyer_trial.py:127: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\start-here.html' mode='r' encoding='utf-8'>
+  text = io.open(path, encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\buyer_trial.py:79: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\payment-gate-report.json' mode='r' encoding='utf-8'>
+  doc = json.load(io.open(SOURCE, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\buyer_trial.py:582: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\buyer-trial.json' mode='r' encoding='utf-8'>
+  landed = json.load(io.open(OUT_JSON, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\buyer_trial.py:583: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\buyer-trial.html' mode='r' encoding='utf-8'>
+  page = io.open(OUT_HTML, encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\buyer_trial.py:127: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\membership-face.html' mode='r' encoding='utf-8'>
+  text = io.open(path, encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\buyer_trial.py:127: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\merchant-onboard.html' mode='r' encoding='utf-8'>
+  text = io.open(path, encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\buyer_trial.py:127: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\lobby-session-trace.html' mode='r' encoding='utf-8'>
+  text = io.open(path, encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\lobby_protocol_map.py:327: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\AppData\\Local\\Temp\\lpm-pwc-ys5cu_c9\\preview\\lobby-protocol-map.html' mode='r' encoding='utf-8'>
+  elif open(HTML, encoding="utf-8").read() != html:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\lobby_protocol_map.py:332: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\AppData\\Local\\Temp\\lpm-pwc-ys5cu_c9\\preview\\lobby-protocol-map.json' mode='r' encoding='utf-8'>
+  disk = json.load(open(JSON_OUT, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\lobby_protocol_map.py:339: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\tools\\lobby_protocol_map.py' mode='r' encoding='utf-8'>
+  src = open(os.path.abspath(__file__), encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\lobby_protocol_map.py:345: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\AppData\\Local\\Temp\\lpm-pwc-ys5cu_c9\\preview\\lobby-protocol-map.json' mode='r' encoding='utf-8'>
+  landed_onward = json.load(open(JSON_OUT, encoding="utf-8")).get("onward")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\first_yuan_path.py:287: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan.html' mode='r' encoding='utf-8'>
+  html = io.open(hp, encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\first_yuan_path.py:288: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan.json' mode='r' encoding='utf-8'>
+  raw = io.open(jp, encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+----------------------------------------------------------------------
+Ran 123 tests in 16.283s
+
+OK
