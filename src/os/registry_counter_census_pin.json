@@ -484,6 +484,7 @@
     "os-export-publish-wire-identity",
     "os-export-round",
     "os-face-sweep",
+    "os-face-sweep-carrier",
     "os-face-walk-static",
     "os-filing-checklist",
     "os-first-yuan-chain",

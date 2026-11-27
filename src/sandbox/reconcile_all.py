@@ -9174,6 +9174,13 @@ SUITES = [
     # mid-list insert shifts each later suite's shard.
     ("os-closeout-carrier-append",
      os.path.join("..", "os", "test_closeout_carrier_append.py"), 19),
+    # R3615: the opening scan (tools/face_sweep.py --gates) publishes the state
+    # carrier's writability through the append face's own check, so the cheapest
+    # station of a round asks the question the writer will ask at the last one.
+    # Criteria AC-FSC1..AC-FSC6 were pinned in src/os/backlog.md at R3615,
+    # before the tool changed and this suite existed.
+    ("os-face-sweep-carrier",
+     os.path.join("..", "os", "test_face_sweep_carrier.py"), 6),
     ]
 
 FAILS = 0

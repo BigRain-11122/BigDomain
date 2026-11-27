@@ -1,7 +1,7 @@
 {
   "ceo_face": {
     "board_pages_skipped": ["preview/face-sweep.html (8877B)"],
-    "current": "2026-11-28 R3614 PRODUCT: the closeout carrier row now asks the same face that will write next - tools/closeout_gate.py check_carrier calls logs_toolkit.append_check in process after its three standing refusals and appends append_ok/caliber/ledger to the CARRIER row, refusing by name (CARRIER FAIL E_CLG_CARRIER_APPEND plus the append face code) when a tail anchor no longer ends the file or the log carries no parseable tokens row; before this a carrier could close green and be refused by the very next append, which is the most expensive place to learn it.",
+    "current": "2026-11-28 R3615 PRODUCT: the cheapest station of a round now asks the question the most expensive one asks. tools/face_sweep.py --gates - the read-only opening scan that renders nothing and writes nothing - publishes one CARRIER row (append_ok, caliber, ledger, bytes, margin) taken from logs_toolkit.append_check called in process, names a refusal as CARRIER FAIL E_FSW_CARRIER plus the writer's own code, appends carrier=HEALTHY|UNHEALTHY to the GATES summary and exits 2 when the carrier cannot take the next line. Until now that reading had exactly one consumer, closeout_gate at the last minute, so a carrier whose tail anchor broke or whose log lost its tokens row could read green for a whole round and refuse the writer at closeout. The live opening scan reads GATES PASS gates=13 green=13 red=0 red_ids=none mutated=none carrier=HEALTHY with CARRIER append_ok=true caliber=16 ledger=R3614 bytes=41739 margin=36761.",
     "do": "2026-11-25 R3456 PRODUCT: the answer-revision question now has a door - api_answer_history (live with AC-AMAW1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so 'which answer was rewritten, what did it say before, what does it say now and how often did it change' could only be read by calling the sandbox from a shell - while api_seller_answers and api_listing_qna publish only the CURRENT wording.",
     "last_artifact": "preview/preview-writer-census.html (17697B) + preview/preview-writer-census.json (25235B) [2026-11-28 mtime]",
     "latest_artifact": "preview/preview-writer-census.html (17697B) + preview/preview-writer-census.json (25235B) [2026-11-28 mtime]",
@@ -10,12 +10,12 @@
     "latest_evidence": "qa/logs-append-R3612-b.log (1981B, 2026-11-28, sha256 8a1e2e573c5b)",
     "newest_pair_on_disk_is_board": true,
     "next_milestone": "[R3614] next window (<=48h): (0) **载体先折叠**：本窗收口 `CARRIER bytes=72261 gate=78500 margin=6239`（`fold_needed=false`）——余量已小于一轮日志（本轮六行 5764B），下窗**加 log 前必须先折**：`python src/os/state_fold_run.py --check` 读 `FOLD-DUE`，窗口用 `state_fold_run.choose_window(...)` 现算，折刀正法 `python src/os/logs_toolkit.py fold --execute ...`；追加一律走 `python src/os/logs_toolkit.py append --round R#### --line .. (truncated)",
-    "next_milestone_due": "2026-11-30T07:12:39+08:00",
-    "updated_at": "2026-11-28T07:12:39+08:00",
+    "next_milestone_due": "2026-11-30T07:33:10+08:00",
+    "updated_at": "2026-11-28T07:33:10+08:00",
     "heartbeat": {
       "tick": 3579,
-      "state_tick": 3614,
-      "lag": 35,
+      "state_tick": 3615,
+      "lag": 36,
       "verdict": "FLAG",
       "reason": "heartbeat_row_debt"
     },
@@ -35,8 +35,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-28 R3614 PRODUCT: the closeout carrier row now asks the same face that will write next - tools/closeout_gate.py check_carrier calls logs_toolkit.append_check in process after its three standing refusals and appends append_ok/caliber/ledger to the CARRIER row, refusing by name (CARRIER FAIL E_CLG_CARRIER_APPEND plus the append face code) when a tail anchor no longer ends the file or the log carries no parseable tokens row; before this a carrier could close green and be refused by the very next append, which is the most expensive place to learn it.",
-  "claims": {"claimed": 45, "captured": 24, "contradicted": 0, "uncaptured": 21, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-28T07:12:39+08:00"},
+  "current": "2026-11-28 R3615 PRODUCT: the cheapest station of a round now asks the question the most expensive one asks. tools/face_sweep.py --gates - the read-only opening scan that renders nothing and writes nothing - publishes one CARRIER row (append_ok, caliber, ledger, bytes, margin) taken from logs_toolkit.append_check called in process, names a refusal as CARRIER FAIL E_FSW_CARRIER plus the writer's own code, appends carrier=HEALTHY|UNHEALTHY to the GATES summary and exits 2 when the carrier cannot take the next line. Until now that reading had exactly one consumer, closeout_gate at the last minute, so a carrier whose tail anchor broke or whose log lost its tokens row could read green for a whole round and refuse the writer at closeout. The live opening scan reads GATES PASS gates=13 green=13 red=0 red_ids=none mutated=none carrier=HEALTHY with CARRIER append_ok=true caliber=16 ledger=R3614 bytes=41739 margin=36761.",
+  "claims": {"claimed": 46, "captured": 24, "contradicted": 0, "uncaptured": 22, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-28T07:33:10+08:00"},
   "chain": {"present": true, "rows": 106, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -65,8 +65,8 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-28 R3614 PRODUCT: the closeout carrier row now asks the same face that will write next - tools/closeout_gate.py check_carrier calls logs_toolkit.append_check in process after its three standing refusals and appends append_ok/caliber/ledger to the CARRIER row, refusing by name (CARRIER FAIL E_CLG_CARRIER_APPEND plus the append face code) when a tail anchor no longer ends the file or the log carries no parseable tokens row; before this a carrier could close green and be refused by the very next append, which is the most expensive place to learn it.",
-  "export_ts": "2026-11-28T07:12:39+08:00",
+  "do": "2026-11-28 R3615 PRODUCT: the cheapest station of a round now asks the question the most expensive one asks. tools/face_sweep.py --gates - the read-only opening scan that renders nothing and writes nothing - publishes one CARRIER row (append_ok, caliber, ledger, bytes, margin) taken from logs_toolkit.append_check called in process, names a refusal as CARRIER FAIL E_FSW_CARRIER plus the writer's own code, appends carrier=HEALTHY|UNHEALTHY to the GATES summary and exits 2 when the carrier cannot take the next line. Until now that reading had exactly one consumer, closeout_gate at the last minute, so a carrier whose tail anchor broke or whose log lost its tokens row could read green for a whole round and refuse the writer at closeout. The live opening scan reads GATES PASS gates=13 green=13 red=0 red_ids=none mutated=none carrier=HEALTHY with CARRIER append_ok=true caliber=16 ledger=R3614 bytes=41739 margin=36761.",
+  "export_ts": "2026-11-28T07:33:10+08:00",
   "latest_artifact": "preview/preview-writer-census.html (17697B) + preview/preview-writer-census.json (25235B) [2026-11-28 mtime]",
   "latest_evidence": "qa/logs-append-R3612-b.log (1981B, 2026-11-28, sha256 8a1e2e573c5b)",
   "next_milestone": "[R3614] next window (<=48h): (0) **载体先折叠**：本窗收口 `CARRIER bytes=72261 gate=78500 margin=6239`（`fold_needed=false`）——余量已小于一轮日志（本轮六行 5764B），下窗**加 log 前必须先折**：`python src/os/state_fold_run.py --check` 读 `FOLD-DUE`，窗口用 `state_fold_run.choose_window(...)` 现算，折刀正法 `python src/os/logs_toolkit.py fold --execute ...`；追加一律走 `python src/os/logs_toolkit.py append --round R#### --line .. (truncated)",
@@ -211,20 +211,20 @@
     "shortfall_total": 15,
     "verdict": "FLOOR-DEBT"
   },
-  "results": [["3614", "OSLoop 执行 tick"]],
+  "results": [["3615", "OSLoop 执行 tick"]],
   "results_archive": {
     "bytes": 336680,
     "count": 179,
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
-  "self_drive": {"window": "2026-11-22..2026-11-28", "window_days": 7, "log_lines_in_window": 39, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 32, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
-  "state_bytes": 41739,
-  "next_milestone_due": "2026-11-30T07:12:39+08:00",
+  "self_drive": {"window": "2026-11-22..2026-11-28", "window_days": 7, "log_lines_in_window": 45, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 37, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
+  "state_bytes": 47491,
+  "next_milestone_due": "2026-11-30T07:33:10+08:00",
   "heartbeat": {
     "tick": 3579,
-    "state_tick": 3614,
-    "lag": 35,
+    "state_tick": 3615,
+    "lag": 36,
     "verdict": "FLAG",
     "reason": "heartbeat_row_debt"
   },

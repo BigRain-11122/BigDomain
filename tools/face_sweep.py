@@ -45,6 +45,14 @@ OUT_JSON = os.path.join(ROOT, "preview", "face-sweep.json")
 
 SCHEMA = "face-sweep-v1"
 
+# R3615 (AC-FSC1..AC-FSC6): the state carrier's writability is asked at the
+# opening scan too. The only consumer of that reading used to be the closeout
+# gate, which sits at the most expensive station of a round; the carrier can
+# then be red from the first minute and be discovered at the last one.
+CARRIER = os.path.join(ROOT, "src", "os", "state.json")
+SRC_OS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "src", "os")
+E_FSW_CARRIER = "E_FSW_CARRIER"
+
 # id, label, driver, html, json, meaning.  The driver is invoked as: python <driver> --check
 # R2903: the row order is a READING order, not a shelf order. The money proof leads because
 # it is the only row whose failure is a revenue fact rather than housekeeping; AC-FSW13
@@ -561,6 +569,44 @@ def sweep(opts):
     return 0 if passing == len(rows) else 2
 
 
+def _src_os():
+    """src/os on sys.path, imported lazily so a face world can patch CARRIER.
+
+    Resolved from this file's own install path, not from ROOT: the suite
+    repoints ROOT at a throwaway world and the shipped modules still have to
+    be found where they really live (same shape as tools/closeout_gate.py).
+    """
+    path = SRC_OS
+    if path not in sys.path:
+        sys.path.insert(0, path)
+    return path
+
+
+def carrier_face(path=None):
+    """One CARRIER row from the append face's own read-only check.
+
+    Returns (ok, line). The judge is `logs_toolkit.append_check`, so this row
+    cannot disagree with the writer about a tail anchor, a tokens row or the
+    gate (AC-FSC2). Read-only: append_check opens the file for reading only.
+    """
+    target = path or CARRIER
+    _src_os()
+    try:
+        import logs_toolkit as LT
+    except ImportError as exc:
+        return False, "CARRIER FAIL %s import: %s" % (E_FSW_CARRIER, exc)
+    try:
+        going = LT.append_check(target)
+    except (IOError, OSError) as exc:
+        return False, "CARRIER FAIL %s %s: %s" % (E_FSW_CARRIER,
+                                                  type(exc).__name__, exc)
+    except ValueError as exc:
+        return False, "CARRIER FAIL %s %s" % (E_FSW_CARRIER, exc)
+    return True, ("CARRIER append_ok=true caliber=%d ledger=%s bytes=%d margin=%d"
+                  % (going["caliber"], going["ledger"],
+                     going["bytes"], going["margin"]))
+
+
 def gates(opts):
     """Run every face's own --check and print the reading; render nothing, write nothing.
 
@@ -588,10 +634,15 @@ def gates(opts):
     # exits zero: the loop must never mutate a CEO page while reading it.
     mut = [r["id"] for r in rows if r.get("mutated")]
     bad = red + [i for i in mut if i not in red]
-    print("GATES %s gates=%d green=%d red=%d red_ids=%s mutated=%s"
-          % ("PASS" if not bad else "FLAG", len(rows), len(passing), len(red),
-             ",".join(red) or "none", ",".join(mut) or "none"))
-    return 0 if not bad else 2
+    # R3615: the carrier is printed as its own row before the summary, and its
+    # health is a separate field - a red carrier never borrows a face's name.
+    carrier_ok, carrier_line = carrier_face()
+    print(carrier_line)
+    print("GATES %s gates=%d green=%d red=%d red_ids=%s mutated=%s carrier=%s"
+          % ("PASS" if not bad and carrier_ok else "FLAG", len(rows), len(passing), len(red),
+             ",".join(red) or "none", ",".join(mut) or "none",
+             "HEALTHY" if carrier_ok else "UNHEALTHY"))
+    return 0 if not bad and carrier_ok else 2
 
 
 def check():
