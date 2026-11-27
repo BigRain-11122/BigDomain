@@ -3,8 +3,8 @@
     "src/os/board_face_landing.py",
     "src/os/export_round.py"
   ],
-  "generated_at": "2026-11-28T01:30:33+08:00",
-  "round": "R3592",
+  "generated_at": "2026-11-28T01:55:45+08:00",
+  "round": "R3593",
   "rows": [
     {
       "face_calls": 0,
@@ -264,15 +264,6 @@
         "seller-repeat-months-board.html"
       ],
       "path": "tools/seller_repeat_months_board.py",
-      "write_calls": 9
-    },
-    {
-      "face_calls": 0,
-      "kind": "gap",
-      "landing_paths": [
-        "seller-reply-months-board.html"
-      ],
-      "path": "tools/seller_reply_months_board.py",
       "write_calls": 9
     },
     {
@@ -939,6 +930,15 @@
       "face_calls": 1,
       "kind": "closed",
       "landing_paths": [
+        "seller-reply-months-board.html"
+      ],
+      "path": "tools/seller_reply_months_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 1,
+      "kind": "closed",
+      "landing_paths": [
         "seller-revenue-board.html"
       ],
       "path": "tools/seller_revenue_board.py",
@@ -1090,9 +1090,9 @@
     }
   ],
   "totals": {
-    "closed": 72,
+    "closed": 73,
     "excluded": 2,
-    "gap": 37,
+    "gap": 36,
     "modules": 119,
     "reader": 10,
     "writers": 109
