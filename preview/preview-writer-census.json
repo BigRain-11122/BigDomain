@@ -3,8 +3,8 @@
     "src/os/board_face_landing.py",
     "src/os/export_round.py"
   ],
-  "generated_at": "2026-11-28T03:47:54+08:00",
-  "round": "R3599",
+  "generated_at": "2026-11-28T03:56:55+08:00",
+  "round": "R3600",
   "rows": [
     {
       "face_calls": 0,
@@ -219,15 +219,6 @@
         "seller-refund-reasons-board.html"
       ],
       "path": "tools/seller_refund_reasons_board.py",
-      "write_calls": 9
-    },
-    {
-      "face_calls": 0,
-      "kind": "gap",
-      "landing_paths": [
-        "similar-listing-board.html"
-      ],
-      "path": "tools/similar_listing_board.py",
       "write_calls": 9
     },
     {
@@ -969,6 +960,15 @@
       "face_calls": 1,
       "kind": "closed",
       "landing_paths": [
+        "similar-listing-board.html"
+      ],
+      "path": "tools/similar_listing_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 1,
+      "kind": "closed",
+      "landing_paths": [
         ".html",
         "index.html",
         "start-here.html"
@@ -1090,9 +1090,9 @@
     }
   ],
   "totals": {
-    "closed": 80,
+    "closed": 81,
     "excluded": 2,
-    "gap": 29,
+    "gap": 28,
     "modules": 119,
     "reader": 10,
     "writers": 109
