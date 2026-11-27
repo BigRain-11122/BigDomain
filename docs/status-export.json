@@ -10,8 +10,8 @@
     "latest_evidence": "qa/round-R3544.log (2616B, 2026-11-27, sha256 cae85d12daf3)",
     "newest_pair_on_disk_is_board": false,
     "next_milestone": "[R3545] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先把刷新轮排最前，毕=更新字段＋文件④更新记录行。 (1) S4U 仍未落地（第八十四次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回；宁缺不错。 (2) **84 家缺口已列名**（`preview/preview-writer-census.json`）：下窗只动一家活线生产者，判据沿用 `AC-PWC23` 形状（源码位置量＋两条负控＋共享定义＋落地守卫）。下一批活线候选按普查实测挑：`tools/platform_live_report.py`（单落页点，两笔写）、`tools/ledger_business_report.py`、`tools/seller_quality_scorecard.py`、`tools/market_hour_heatmap.py`；`tools/status_export_fresh.py` 的 `landing_paths` 为空=它是导出面写者本身，需单列判据。 (3) `replay-receipt` 可豁免性仍待 L3 签发或驳回——窗口禁自行翻计数。 (4) 载体 `state.json` 现 63823B（阈 78500，余量 14677），写前仍建议 `state_fold_run.py --fold --dry-run`。 (5) tick 口径：本轮 3544→3545，下轮 R3546。 (6) 承账不变：`qa_log --ledger-check broken=5`、`769` 判据未被分片路径覆盖、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写；电池页在判据 7051 后仍待重派生（历史两次分离派发皆空日志被杀，换承载法后再试）。 (7) 定序律重申：先写 `state.json` tick，再落普查页（`round_label()` 读 tick）；commit 之后必须再派生一次 CEO 面（提交把产品对排序戳改成 committer time）。",
-    "next_milestone_due": "2026-11-29T08:29:20+08:00",
-    "updated_at": "2026-11-27T08:29:20+08:00",
+    "next_milestone_due": "2026-11-29T08:29:59+08:00",
+    "updated_at": "2026-11-27T08:29:59+08:00",
     "heartbeat": {
       "tick": 3522,
       "state_tick": 3545,
@@ -36,7 +36,7 @@
     }
   },
   "current": "2026-11-27 R3545 MEASURED, read-only first: classify_source read tools/core_loop_walkthrough.py as kind=gap write_calls=2 face_calls=0 landing_paths=[core-loop-walkthrough.html] with both halves written in main() (JSON 363-364, HTML 365-366 the LAST write), check() opening twice for reading only and main() returning from --check before any landing; build() stages an export dir under src/sandbox/ugc and removes it itself, which this round does not change; AC-PWC23 was pinned in src/os/backlog.md before any code byte moved.",
-  "claims": {"claimed": 43, "captured": 24, "contradicted": 0, "uncaptured": 19, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-27T08:29:20+08:00"},
+  "claims": {"claimed": 43, "captured": 24, "contradicted": 0, "uncaptured": 19, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-27T08:29:59+08:00"},
   "chain": {"present": true, "rows": 106, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -66,7 +66,7 @@
     }
   ],
   "do": "2026-11-27 R3545 MEASURED, read-only first: classify_source read tools/core_loop_walkthrough.py as kind=gap write_calls=2 face_calls=0 landing_paths=[core-loop-walkthrough.html] with both halves written in main() (JSON 363-364, HTML 365-366 the LAST write), check() opening twice for reading only and main() returning from --check before any landing; build() stages an export dir under src/sandbox/ugc and removes it itself, which this round does not change; AC-PWC23 was pinned in src/os/backlog.md before any code byte moved.",
-  "export_ts": "2026-11-27T08:29:20+08:00",
+  "export_ts": "2026-11-27T08:29:59+08:00",
   "latest_artifact": "preview/preview-writer-census.html (17313B) + preview/preview-writer-census.json (25043B) [2026-11-27 commit]",
   "latest_evidence": "qa/round-R3544.log (2616B, 2026-11-27, sha256 cae85d12daf3)",
   "next_milestone": "[R3545] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先把刷新轮排最前，毕=更新字段＋文件④更新记录行。 (1) S4U 仍未落地（第八十四次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回；宁缺不错。 (2) **84 家缺口已列名**（`preview/preview-writer-census.json`）：下窗只动一家活线生产者，判据沿用 `AC-PWC23` 形状（源码位置量＋两条负控＋共享定义＋落地守卫）。下一批活线候选按普查实测挑：`tools/platform_live_report.py`（单落页点，两笔写）、`tools/ledger_business_report.py`、`tools/seller_quality_scorecard.py`、`tools/market_hour_heatmap.py`；`tools/status_export_fresh.py` 的 `landing_paths` 为空=它是导出面写者本身，需单列判据。 (3) `replay-receipt` 可豁免性仍待 L3 签发或驳回——窗口禁自行翻计数。 (4) 载体 `state.json` 现 63823B（阈 78500，余量 14677），写前仍建议 `state_fold_run.py --fold --dry-run`。 (5) tick 口径：本轮 3544→3545，下轮 R3546。 (6) 承账不变：`qa_log --ledger-check broken=5`、`769` 判据未被分片路径覆盖、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写；电池页在判据 7051 后仍待重派生（历史两次分离派发皆空日志被杀，换承载法后再试）。 (7) 定序律重申：先写 `state.json` tick，再落普查页（`round_label()` 读 tick）；commit 之后必须再派生一次 CEO 面（提交把产品对排序戳改成 committer time）。",
@@ -158,9 +158,9 @@
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
-  "self_drive": {"window": "2026-11-21..2026-11-27", "window_days": 7, "log_lines_in_window": 98, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 24, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
-  "state_bytes": 65823,
-  "next_milestone_due": "2026-11-29T08:29:20+08:00",
+  "self_drive": {"window": "2026-11-21..2026-11-27", "window_days": 7, "log_lines_in_window": 99, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 24, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
+  "state_bytes": 66488,
+  "next_milestone_due": "2026-11-29T08:29:59+08:00",
   "heartbeat": {
     "tick": 3522,
     "state_tick": 3545,
