@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-24 22:27:49Z",
+ "generated_utc": "2026-11-27 11:38:33Z",
  "face": "api_category_question_months",
  "scope": "market",
  "envelope": {
@@ -196,7 +196,7 @@
  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
  "report": "preview/category-question-months-board.html",
  "sources": {
-  "driver": "8ed33ba34e29e80c",
+  "driver": "f44e6a63001d55c1",
   "copy": "e4287fce870aa2e2",
   "apimarket": "82a49194bef85737",
   "report": "3a83dce99c9e2bd4"

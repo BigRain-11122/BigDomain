@@ -299,6 +299,9 @@ PAIR_PRODUCERS = {
     "listing-view-board.json": "tools/listing_view_board.py",
     # R3439: the category price months page is a single-writer product too.
     "category-price-months-board.json": "tools/category_price_months_board.py",
+    # R3569: the category question months page is a single-writer product too.
+    "category-question-months-board.json":
+        "tools/category_question_months_board.py",
     # R3440: the refund latency page is a single-writer product too.
     "refund-latency-board.json": "tools/refund_latency_board.py",
     # R3441: the category velocity months page is a single-writer product too.
