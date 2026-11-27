@@ -3,8 +3,8 @@
     "src/os/board_face_landing.py",
     "src/os/export_round.py"
   ],
-  "generated_at": "2026-11-27T19:37:52+08:00",
-  "round": "R3568",
+  "generated_at": "2026-11-27T19:47:28+08:00",
+  "round": "R3569",
   "rows": [
     {
       "face_calls": 0,
@@ -122,15 +122,6 @@
       ],
       "path": "tools/apimarket_schema_banner.py",
       "write_calls": 1
-    },
-    {
-      "face_calls": 0,
-      "kind": "gap",
-      "landing_paths": [
-        "category-refund-months.html"
-      ],
-      "path": "tools/category_refund_months.py",
-      "write_calls": 9
     },
     {
       "face_calls": 0,
@@ -688,6 +679,15 @@
       "face_calls": 1,
       "kind": "closed",
       "landing_paths": [
+        "category-refund-months.html"
+      ],
+      "path": "tools/category_refund_months.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 1,
+      "kind": "closed",
+      "landing_paths": [
         "ceo-blockers.html",
         "preview/index.html",
         "preview/ledger-business-report.html",
@@ -1090,9 +1090,9 @@
     }
   ],
   "totals": {
-    "closed": 49,
+    "closed": 50,
     "excluded": 2,
-    "gap": 60,
+    "gap": 59,
     "modules": 119,
     "reader": 10,
     "writers": 109
