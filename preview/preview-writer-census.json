@@ -3,8 +3,8 @@
     "src/os/board_face_landing.py",
     "src/os/export_round.py"
   ],
-  "generated_at": "2026-11-28T02:16:40+08:00",
-  "round": "R3594",
+  "generated_at": "2026-11-28T02:36:22+08:00",
+  "round": "R3595",
   "rows": [
     {
       "face_calls": 0,
@@ -228,15 +228,6 @@
         "seller-price-demand-board.html"
       ],
       "path": "tools/seller_price_demand_board.py",
-      "write_calls": 9
-    },
-    {
-      "face_calls": 0,
-      "kind": "gap",
-      "landing_paths": [
-        "seller-refund-months-board.html"
-      ],
-      "path": "tools/seller_refund_months_board.py",
       "write_calls": 9
     },
     {
@@ -930,6 +921,15 @@
       "face_calls": 1,
       "kind": "closed",
       "landing_paths": [
+        "seller-refund-months-board.html"
+      ],
+      "path": "tools/seller_refund_months_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 1,
+      "kind": "closed",
+      "landing_paths": [
         "seller-reply-months-board.html"
       ],
       "path": "tools/seller_reply_months_board.py",
@@ -1090,9 +1090,9 @@
     }
   ],
   "totals": {
-    "closed": 74,
+    "closed": 75,
     "excluded": 2,
-    "gap": 35,
+    "gap": 34,
     "modules": 119,
     "reader": 10,
     "writers": 109

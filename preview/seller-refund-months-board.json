@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-24 12:59:38Z",
+ "generated_utc": "2026-11-27 18:37:03Z",
  "face": "api_seller_refund_months",
  "board_face": "api_board",
  "source_face": "api_seller_refund_months",
@@ -150,7 +150,7 @@
  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
  "report": "preview/seller-refund-months-board.html",
  "sources": {
-  "driver": "04988b490dd2504b",
+  "driver": "f287ca34f0682c69",
   "copy": "e28881d6af850ac8",
   "apimarket": "82a49194bef85737",
   "report": "3a83dce99c9e2bd4"
