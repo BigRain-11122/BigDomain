@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-24 15:23:28Z",
+ "generated_utc": "2026-11-27 19:03:25Z",
  "face": "api_seller_repeat_months",
  "board_face": "api_board",
  "scope": "seller",
@@ -63,7 +63,7 @@
  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
  "report": "preview/seller-repeat-months-board.html",
  "sources": {
-  "driver": "2841218ff8dcf403",
+  "driver": "036e31488a69d7c3",
   "copy": "81bccd0f2fc1b4fc",
   "apimarket": "82a49194bef85737",
   "report": "3a83dce99c9e2bd4"
