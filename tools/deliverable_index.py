@@ -307,6 +307,9 @@ PAIR_PRODUCERS = {
     # R3441: the category velocity months page is a single-writer product too.
     "category-velocity-months-board.json":
         "tools/category_velocity_months_board.py",
+    # R3572: the category watch months page is a single-writer product too.
+    "category-watch-months-board.json":
+        "tools/category_watch_months_board.py",
     # R3442: the monthly repricing cadence page is a single-writer product too.
     "seller-price-cadence-board.json": "tools/seller_price_cadence_board.py",
     # R3557: the buyer watch category mix page is a single-writer product too
