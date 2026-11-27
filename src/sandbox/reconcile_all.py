@@ -8016,9 +8016,12 @@ SUITES = [
     # closure sits after it; the pin moves to the measured 103.
     # R3552 (AC-PWC30): the same shape now grades tools/seller_ledger_board.py,
     # whose two landing halves also sit inside a sizes fixed-point loop, so the
-    # closure sits after it; the pin moves to the measured 107.
+    # closure sits after it; the pin moved to the measured 107.
+    # R3553 (AC-PWC31): the same shape now grades tools/refund_latency_board.py,
+    # whose landing halves also sit inside a sizes fixed-point loop, so the
+    # closure sits after it; the pin moves to the measured 111.
     ("os-preview-writer-census",
-     os.path.join("..", "os", "test_preview_writer_census.py"), 107),
+     os.path.join("..", "os", "test_preview_writer_census.py"), 111),
     # R2814. tools/ugc_gate_report.py carries AC-UGR1..AC-UGR9 and renders the
     # face for the BLUEPRINT section-five death line (content safety not
     # connected means the door stays shut), yet the registry held ZERO AC-UGR*

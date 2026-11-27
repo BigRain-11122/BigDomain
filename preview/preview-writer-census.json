@@ -3,8 +3,8 @@
     "src/os/board_face_landing.py",
     "src/os/export_round.py"
   ],
-  "generated_at": "2026-11-27T09:52:29+08:00",
-  "round": "R3551",
+  "generated_at": "2026-11-27T10:11:57+08:00",
+  "round": "R3553",
   "rows": [
     {
       "face_calls": 0,
@@ -477,15 +477,6 @@
       "face_calls": 0,
       "kind": "gap",
       "landing_paths": [
-        "refund-latency-board.html"
-      ],
-      "path": "tools/refund_latency_board.py",
-      "write_calls": 9
-    },
-    {
-      "face_calls": 0,
-      "kind": "gap",
-      "landing_paths": [
         "refund-propensity-board.html"
       ],
       "path": "tools/refund_propensity_board.py",
@@ -939,6 +930,15 @@
       "face_calls": 1,
       "kind": "closed",
       "landing_paths": [
+        "refund-latency-board.html"
+      ],
+      "path": "tools/refund_latency_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 1,
+      "kind": "closed",
+      "landing_paths": [
         "seller-ledger-board.html"
       ],
       "path": "tools/seller_ledger_board.py",
@@ -1090,9 +1090,9 @@
     }
   ],
   "totals": {
-    "closed": 32,
+    "closed": 33,
     "excluded": 2,
-    "gap": 77,
+    "gap": 76,
     "modules": 119,
     "reader": 10,
     "writers": 109
