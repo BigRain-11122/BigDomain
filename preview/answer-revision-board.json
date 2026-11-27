@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-25 00:10:17Z",
+ "generated_utc": "2026-11-27 02:25:00Z",
  "face": "api_answer_history",
  "scope": "answers",
  "market": {
@@ -127,7 +127,7 @@
  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
  "report": "preview/answer-revision-board.html",
  "sources": {
-  "driver": "1b13a13463696d45",
+  "driver": "15c5224031c1e3eb",
   "copy": "f2a01d755463bd3b",
   "apimarket": "82a49194bef85737",
   "report": "3a83dce99c9e2bd4"
