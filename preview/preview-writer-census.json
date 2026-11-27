@@ -3,7 +3,7 @@
     "src/os/board_face_landing.py",
     "src/os/export_round.py"
   ],
-  "generated_at": "2026-11-27T10:22:54+08:00",
+  "generated_at": "2026-11-27T10:32:44+08:00",
   "round": "R3554",
   "rows": [
     {
@@ -212,15 +212,6 @@
       ],
       "path": "tools/buyer_watch_months_board.py",
       "write_calls": 9
-    },
-    {
-      "face_calls": 0,
-      "kind": "gap",
-      "landing_paths": [
-        "category-history-board.html"
-      ],
-      "path": "tools/category_history_board.py",
-      "write_calls": 10
     },
     {
       "face_calls": 0,
@@ -706,6 +697,15 @@
       "face_calls": 1,
       "kind": "closed",
       "landing_paths": [
+        "category-history-board.html"
+      ],
+      "path": "tools/category_history_board.py",
+      "write_calls": 10
+    },
+    {
+      "face_calls": 1,
+      "kind": "closed",
+      "landing_paths": [
         "ceo-blockers.html",
         "preview/index.html",
         "preview/ledger-business-report.html",
@@ -1090,9 +1090,9 @@
     }
   ],
   "totals": {
-    "closed": 34,
+    "closed": 35,
     "excluded": 2,
-    "gap": 75,
+    "gap": 74,
     "modules": 119,
     "reader": 10,
     "writers": 109
