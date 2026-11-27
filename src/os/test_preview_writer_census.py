@@ -12462,5 +12462,171 @@ class PWC86WatchAlertsProducerClosed(unittest.TestCase):
             shutil.rmtree(tmp, ignore_errors=True)
 
 
+def cfr_closure_positions(text):
+    """(present, after_last_write, readers_clean, shared_only) for AC-PWC87.
+
+    tools/city_face_report.py settles its payload sizes inside main()'s
+    fixed-point loop (`for _ in range(6)` until the measured sizes equal the
+    recorded ones), and it lays the pair down AFTER that loop ends (a
+    non-converging loop returns 2 at the E_SIZES line). The coupling must come
+    after both facts, so the ordering arm asks for both.
+    """
+    if "def main(" not in text:
+        return (False, False, False, False)
+    body = text.rpartition("def main(")[2].split("\ndef ")[0]
+    at = body.find("_refresh_face(args.out, args.json)")
+    present = at != -1
+    loop_tail = body.find(
+        'print("E_SIZES document sizes did not converge")')
+    last_write = body.find("handle.write(payload)")
+    after = (present and loop_tail != -1 and last_write != -1
+             and at > loop_tail and at > last_write)
+    readers = True
+    for name in ("def _esc(", "def _pass(", "def _load(", "def _http(",
+                 "def measure(", "def verify(", "def source_face(",
+                 "def fingerprint(", "def render_html(", "def _document("):
+        if name in text:
+            reader_body = text.rpartition(name)[2].split("\ndef ")[0]
+            if "_refresh_face(" in reader_body:
+                readers = False
+    helper = text.rpartition("def _refresh_face(")[2].split("\ndef ")[0]
+    shared = "board_face_landing.refresh_export_face(ROOT)" in helper
+    no_local_writer = ".write(" not in helper
+    return (present, after, readers and present, shared and no_local_writer)
+
+
+class PWC87CityFaceReportProducerClosed(unittest.TestCase):
+    """AC-PWC87: the city face report derives the CEO face on landing.
+
+    That tool's measure() reads the shipped lobby config and data under this
+    repository, so the behavioural arms run the real measurement and land only
+    into a private temp preview; nothing of this repository's preview/ moves.
+    """
+
+    def _source(self):
+        with io.open(os.path.join(TOOLS, "city_face_report.py"),
+                     encoding="utf-8") as f:
+            return f.read()
+
+    def test_closed_and_ordered_after_the_last_landing_write(self):
+        text = self._source()
+        kind, _html, writes, closes = MOD.classify_source(text)
+        self.assertEqual(kind, "closed")
+        self.assertGreaterEqual(writes, 1)
+        self.assertGreaterEqual(closes, 1)
+        self.assertEqual(cfr_closure_positions(text), (True, True, True, True))
+
+    def test_negative_controls_delete_and_move(self):
+        text = self._source()
+        deleted = text.replace(
+            "    face = _refresh_face(args.out, args.json)\n", "").replace(
+            "board_face_landing.refresh_export_face(ROOT)",
+            "None  # control: shared call removed")
+        self.assertEqual(MOD.classify_source(deleted)[0], "gap")
+        self.assertFalse(cfr_closure_positions(deleted)[0])
+        moved = text.replace(
+            "    face = _refresh_face(args.out, args.json)\n", "").replace(
+            "    for _ in range(6):",
+            "    face = _refresh_face(args.out, args.json)  "
+            "# control: moved before the loop and before the landing writes\n"
+            "    for _ in range(6):", 1)
+        pos = cfr_closure_positions(moved)
+        self.assertTrue(pos[0])
+        self.assertFalse(pos[1])
+
+    def test_refresh_is_shared_and_named(self):
+        import city_face_report as CFR
+        calls = []
+
+        class Fake(object):
+            def __init__(self, ok, note):
+                self.ok, self.note = ok, note
+
+            def refresh_export_face(self, root):
+                calls.append(root)
+                return (self.ok, self.note, {})
+
+        class Boom(object):
+            def refresh_export_face(self, root):
+                raise RuntimeError("no writer here")
+
+        tmp = tempfile.mkdtemp(prefix="cfr-face-")
+        preview = os.path.join(tmp, "preview")
+        os.makedirs(preview, exist_ok=True)
+        html = os.path.join(preview, "city-face-report.html")
+        js = os.path.join(preview, "city-face-report.json")
+        saved_root = CFR.ROOT
+        saved = sys.modules.get("board_face_landing")
+        try:
+            CFR.ROOT = tmp
+            sys.modules["board_face_landing"] = Fake(True, "")
+            self.assertEqual(CFR._refresh_face(html, js), "WRITTEN")
+            self.assertEqual(calls, [tmp])
+            sys.modules["board_face_landing"] = Fake(False, "stale")
+            self.assertEqual(CFR._refresh_face(html, js), "REFUSED stale")
+            sys.modules["board_face_landing"] = Boom()
+            self.assertEqual(CFR._refresh_face(html, js),
+                             "SKIPPED RuntimeError")
+            self.assertEqual(CFR._refresh_face(os.path.join(tmp, "a.html"),
+                                               os.path.join(tmp, "a.json")),
+                             "SKIPPED scratch")
+            self.assertEqual(len(calls), 2)
+        finally:
+            CFR.ROOT = saved_root
+            if saved is None:
+                sys.modules.pop("board_face_landing", None)
+            else:
+                sys.modules["board_face_landing"] = saved
+            shutil.rmtree(tmp, ignore_errors=True)
+
+    def test_landing_derives_once_and_scratch_and_check_derive_none(self):
+        """A landing in this world's own preview derives once; scratch and --check do not."""
+        import city_face_report as CFR
+        calls = []
+
+        class Fake(object):
+            def refresh_export_face(self, root):
+                calls.append(root)
+                return (True, "", {})
+
+        tmp = tempfile.mkdtemp(prefix="cfr-pwc-")
+        preview = os.path.join(tmp, "preview")
+        os.makedirs(preview, exist_ok=True)
+        html = os.path.join(preview, "city-face-report.html")
+        js = os.path.join(preview, "city-face-report.json")
+        saved_root = CFR.ROOT
+        saved = sys.modules.get("board_face_landing")
+        saved_stdout = sys.stdout
+        try:
+            sys.modules["board_face_landing"] = Fake()
+            CFR.ROOT = tmp
+            sys.stdout = io.StringIO()
+            rc = CFR.main(["--out", html, "--json", js])
+            self.assertEqual(rc, 0)
+            self.assertEqual(calls, [tmp])
+            self.assertTrue(os.path.isfile(html))
+            self.assertTrue(os.path.isfile(js))
+
+            scratch_html = os.path.join(tmp, "scratch.html")
+            scratch_js = os.path.join(tmp, "scratch.json")
+            rc = CFR.main(["--out", scratch_html,
+                           "--json", scratch_js])
+            self.assertEqual(rc, 0)
+            self.assertEqual(len(calls), 1)
+
+            calls[:] = []
+            rc = CFR.main(["--check", "--out", html, "--json", js])
+            self.assertEqual(calls, [])
+            self.assertIn(rc, (0, 2))
+        finally:
+            sys.stdout = saved_stdout
+            CFR.ROOT = saved_root
+            if saved is None:
+                sys.modules.pop("board_face_landing", None)
+            else:
+                sys.modules["board_face_landing"] = saved
+            shutil.rmtree(tmp, ignore_errors=True)
+
+
 if __name__ == "__main__":
     unittest.main()

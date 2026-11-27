@@ -2,7 +2,7 @@
  "generated_by": "tools/city_face_report.py",
  "p47_item": 1,
  "title": "城市观测面验收报告",
- "generated_utc": "2026-11-15T00:03:27.829099Z",
+ "generated_utc": "2026-11-27T21:35:34.941103Z",
  "facts": {
   "city": {
    "whitelist": [
@@ -188,6 +188,6 @@
  "verdict": "PASS",
  "sizes": {
   "html": 7988,
-  "json": 5197
+  "json": 5004
  }
 }

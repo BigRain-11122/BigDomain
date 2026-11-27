@@ -8128,9 +8128,12 @@ SUITES = [
     # tools/watch_conversion_board.py, same fixed-point loop, same closure
     # after it; the pin moves to the measured 327. R3608 (AC-PWC86):
     # tools/watch_alerts_board.py, same fixed-point loop, same closure after
-    # it; the pin moves to the measured 331.
+    # it; the pin moves to the measured 331. R3609 (AC-PWC87):
+    # tools/city_face_report.py, which sizes its payload inside the same
+    # fixed-point loop and lays the pair after it; the pin moves to the
+    # measured 335.
     ("os-preview-writer-census",
-     os.path.join("..", "os", "test_preview_writer_census.py"), 331),
+     os.path.join("..", "os", "test_preview_writer_census.py"), 335),
     # R2814. tools/ugc_gate_report.py carries AC-UGR1..AC-UGR9 and renders the
     # face for the BLUEPRINT section-five death line (content safety not
     # connected means the door stays shut), yet the registry held ZERO AC-UGR*
