@@ -40,7 +40,7 @@ footer{color:var(--muted);font-size:12px;margin:20px 0 8px}
 code{font-size:12.5px;background:#f2f4f7;padding:1px 5px;border-radius:4px}
 </style></head><body><main>
 <h1>买家退款倾向对账单</h1>
-<div class=meta>每位居民的退款次数占比、退款金额占比、市场基线与平滑率 &middot; 生成 2026-11-24 12:14:01Z &middot; <code>api_buyer_refund_propensity</code></div>
+<div class=meta>每位居民的退款次数占比、退款金额占比、市场基线与平滑率 &middot; 生成 2026-11-27 16:21:17Z &middot; <code>api_buyer_refund_propensity</code></div>
 <h2>逐买家读数</h2>
 <div class=card><div><span>居民数</span><b>3</b></div><div><span>市场购次</span><b>4</b></div><div><span>市场退款次</span><b>2</b></div><div><span>市场退款率</span><b>50.0%</b></div><div><span>平滑强度 K</span><b>10</b></div></div>
 <div class=card><table><tr><th>居民</th><th class=n>购次</th><th class=n>退款次</th><th class=n>未退款次</th><th class=n>毛花费</th><th class=n>已退</th><th class=n>净花费</th><th class=n>退款率(笔)</th><th class=n>退款率(金额)</th><th class=n>对市场偏离(百分点)</th><th class=n>平滑率</th><th>退款率条</th></tr><tr class="buyer" data-buyer="usr:bob"><td class="">usr:bob</td><td class="n">2</td><td class="n">1</td><td class="n">1</td><td class="n">13</td><td class="n">10</td><td class="n">3</td><td class="n">50.0%</td><td class="n">76.9%</td><td class="n delta">+0.0pp</td><td class="n">50.0%</td><td class=bar-cell><div class=bar><i style="width:50.0%"></i><u style="left:50.0%"></u></div></td></tr><tr class="buyer below" data-buyer="usr:carol"><td class="">usr:carol</td><td class="n">1</td><td class="n">0</td><td class="n">1</td><td class="n">10</td><td class="n">0</td><td class="n">10</td><td class="n">0.0%</td><td class="n">0.0%</td><td class="n delta neg">-50.0pp 低于市场</td><td class="n">45.5%</td><td class=bar-cell><div class=bar><i style="width:0.0%"></i><u style="left:50.0%"></u></div></td></tr><tr class="buyer above" data-buyer="usr:erin"><td class="">usr:erin</td><td class="n">1</td><td class="n">1</td><td class="n">0</td><td class="n">5</td><td class="n">5</td><td class="n">0</td><td class="n">100.0%</td><td class="n">100.0%</td><td class="n delta">+50.0pp 高于市场</td><td class="n">54.5%</td><td class=bar-cell><div class=bar><i style="width:100.0%"></i><u style="left:50.0%"></u></div></td></tr></table></div>
@@ -55,5 +55,5 @@ code{font-size:12.5px;background:#f2f4f7;padding:1px 5px;border-radius:4px}
 <p style="margin-top:10px"><span class=badge>AIGC 生成标识：本页由脚本从沙箱面渲染，非人工撰写</span></p></div>
 <h2>复现</h2>
 <div class=card><code>python tools/refund_propensity_board.py</code></div>
-<footer>BigDomain OSLoop &middot; 2026-11-24 12:14:01Z &middot; 本页由 tools/refund_propensity_board.py 生成，不手改</footer>
+<footer>BigDomain OSLoop &middot; 2026-11-27 16:21:17Z &middot; 本页由 tools/refund_propensity_board.py 生成，不手改</footer>
 </main></body></html>
