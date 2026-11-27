@@ -1,0 +1,14 @@
+APPLIED R3554 changed=True bytes=39602 lf_only=True bom=False
+do->2026-11-27 R3554 PRODUCT: the twenty-eighth gap producer from the R3527 census closes at its birth site - tools/answer_revision_board.py, the page that answers 
+latest_artifact->preview/category-history-board.html (14475B) + preview/category-history-board.json (5779B) [2026-11-27 mtime]
+next_milestone->R3554 [R3554] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=20... due=2026-11-29T10:34:03+08:00
+VERDICT R3554 PASS: do, ceo_face.current and current all name R3554
+state_bytes=57513 export_bytes=39602 archive=logs/status-export-legacy-2026-11.json
+export_ts=2026-11-27T10:34:03+08:00
+chain rows=106 broken=5 path=state/qa_replacements.jsonl
+claims claimed=43 captured=24 uncaptured=19 contradicted=0 historic=0 rows=106 present=true
+claims age=2026-11-27T10:34:03+08:00 (pinned to export_ts by AC-SXF33)
+CATEGORY-HISTORY preview/category-history-board.html bytes=14475 listings=11 revisions=8 buckets=5 face=WRITTEN
+CATEGORY-HISTORY CHECK PASS fails=0 html=14475B json=5779B
+CLOSEOUT-GATE REFUSED reason=E_CLG_DRIFT files=5076 flags=1 reader_refused=0 gating=flags
+[flag] new-dialect: round-R3555.log (class=ps-utf16)
