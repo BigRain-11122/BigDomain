@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-24 09:05:22Z",
+ "generated_utc": "2026-11-27 01:30:12Z",
  "face": "api_revenue_months",
  "board_face": "api_board",
  "seller_count": 2,
@@ -92,7 +92,7 @@
  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
  "report": "preview/seller-revenue-board.html",
  "sources": {
-  "driver": "36b0f1ea565e88e8",
+  "driver": "55a24e849a9a09ee",
   "copy": "9a5838eb06aac47e",
   "apimarket": "82a49194bef85737",
   "report": "3a83dce99c9e2bd4"
