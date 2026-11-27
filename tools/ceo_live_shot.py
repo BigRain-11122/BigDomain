@@ -586,6 +586,42 @@ def gallery(rows, report, path, proof=None, page_dir=None):
     os.replace(tmp, path)
 
 
+def _landing_is_default(html_path, json_path):
+    """True only when both halves land under THIS root's own preview/.
+
+    The wanted folder is computed from REPO, not from the rebindable
+    --report-json flag, so a run that redirects its JSON half lands a split
+    pair and cannot pose as this repository's own product.
+    """
+    want = os.path.realpath(os.path.join(REPO, "preview"))
+    for path in (html_path, json_path):
+        if os.path.dirname(os.path.realpath(path)) != want:
+            return False
+    return True
+
+
+def _refresh_face(html_path, json_path):
+    """AC-PWC62 (R3584): landing this pair and re-deriving the CEO face are ONE run.
+
+    The one definition lives in src/os/board_face_landing.py, so no second
+    writer is kept here. REPO is passed explicitly, so a private world derives
+    that world's face. Refusals are named, never raised: the page pair is
+    already on disk, so a refusal must not turn a photographed run into a
+    traceback.
+    """
+    if not _landing_is_default(html_path, json_path):
+        return "SKIPPED scratch"
+    try:
+        os_src = os.path.join(REPO, "src", "os")
+        if os_src not in sys.path:
+            sys.path.insert(0, os_src)
+        import board_face_landing
+        ok, note, _proof = board_face_landing.refresh_export_face(REPO)
+        return "WRITTEN" if ok else "REFUSED %s" % note
+    except Exception as exc:  # the landing already happened; name the refusal
+        return "SKIPPED %s" % type(exc).__name__
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(
         description="photograph every live sandbox face and build a gallery")
@@ -702,7 +738,12 @@ def main(argv=None):
                       indent=2)
             handle.write("\n")
         os.replace(tmp, args.report_json)
+        gallery_path = os.path.join(PREVIEW, "live-sandbox.html")
+        face = _refresh_face(gallery_path, args.report_json)
         print(json.dumps(payload, ensure_ascii=False, sort_keys=True))
+        print("LIVE-SANDBOX %s faces=%d photographed=%d errors=%d face=%s"
+              % (payload["gallery"], payload["faces"],
+                 payload["photographed"], payload["with_errors"], face))
         # R2988: the face verdict now reaches the exit code without a flag.
         # `args.check` is still parsed so old command lines keep working, but
         # it no longer decides whether a failure is told or swallowed.

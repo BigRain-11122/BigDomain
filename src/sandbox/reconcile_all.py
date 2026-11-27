@@ -8077,9 +8077,11 @@ SUITES = [
     # same closure after it. R3582 (AC-PWC60): tools/market_provider_months_board.py
     # joins the same shape; the pin moves to the measured 227. R3583 (AC-PWC61):
     # tools/market_relist_months_board.py joins the same shape; the pin moves to
-    # the measured 231.
+    # the measured 231. R3584 (AC-PWC62): tools/ceo_live_shot.py joins the same
+    # shape at its own last landing (the json half), no fixed-point loop in that
+    # tool; the pin moves to the measured 235.
     ("os-preview-writer-census",
-     os.path.join("..", "os", "test_preview_writer_census.py"), 231),
+     os.path.join("..", "os", "test_preview_writer_census.py"), 235),
     # R2814. tools/ugc_gate_report.py carries AC-UGR1..AC-UGR9 and renders the
     # face for the BLUEPRINT section-five death line (content safety not
     # connected means the door stays shut), yet the registry held ZERO AC-UGR*

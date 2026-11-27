@@ -3,8 +3,8 @@
     "src/os/board_face_landing.py",
     "src/os/export_round.py"
   ],
-  "generated_at": "2026-11-27T22:58:21+08:00",
-  "round": "R3583",
+  "generated_at": "2026-11-27T23:15:12+08:00",
+  "round": "R3584",
   "rows": [
     {
       "face_calls": 0,
@@ -122,15 +122,6 @@
       ],
       "path": "tools/apimarket_schema_banner.py",
       "write_calls": 1
-    },
-    {
-      "face_calls": 0,
-      "kind": "gap",
-      "landing_paths": [
-        "live-sandbox.html"
-      ],
-      "path": "tools/ceo_live_shot.py",
-      "write_calls": 7
     },
     {
       "face_calls": 0,
@@ -596,6 +587,15 @@
       ],
       "path": "tools/ceo_blockers.py",
       "write_calls": 2
+    },
+    {
+      "face_calls": 1,
+      "kind": "closed",
+      "landing_paths": [
+        "live-sandbox.html"
+      ],
+      "path": "tools/ceo_live_shot.py",
+      "write_calls": 7
     },
     {
       "face_calls": 1,
@@ -1090,9 +1090,9 @@
     }
   ],
   "totals": {
-    "closed": 63,
+    "closed": 64,
     "excluded": 2,
-    "gap": 46,
+    "gap": 45,
     "modules": 119,
     "reader": 10,
     "writers": 109

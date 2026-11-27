@@ -9,81 +9,44 @@ h2{margin:0 0 4px;font-size:16px}code{background:#1a1f2c;padding:2px 6px;border-
 ul{margin:6px 0;padding-left:18px;font-size:12px;color:#8b93a7}
 </style></head><body>
 <header><h1>BigDomain sandbox - photographed live</h1>
-<p>Faces photographed: <span class='k'>18/18</span> - sandbox report <code>ok=True</code>, mock only, no charge, no merchant id needed.</p>
+<p>Faces photographed: <span class='k'>9/9</span> - sandbox report <code>ok=True</code>, mock only, no charge, no merchant id needed.</p>
 <p>Run it yourself: <code>python src/sandbox/start_all.py</code> then open the URL it prints. This page is a snapshot, not a server.</p>
-<p>Repeatable proof: <span class='k'>two passes agree</span> - 9/9 faces agreed across two passes on the same sandbox (second pass shot after the lobby action; its images are <code>*-p2.png</code>).</p>
 </header>
 <section><h2>Hub - the one door - <span class='k'>ok</span></h2>
-<p>Every face the sandbox serves, with its own live probe</p><p><code>http://127.0.0.1:49254/hub/</code> - http 200</p>
+<p>Every face the sandbox serves, with its own live probe</p><p><code>http://127.0.0.1:50374/hub/</code> - http 200</p>
 <img src='live/hub.png' alt='Hub - the one door'>
 </section>
 <section><h2>Lobby - realtime rooms - <span class='k'>ok</span></h2>
-<p>WebSocket rooms, presence and chat</p><p><code>http://127.0.0.1:49253/lobby/</code> - http 200</p>
+<p>WebSocket rooms, presence and chat</p><p><code>http://127.0.0.1:50373/lobby/</code> - http 200</p>
 <img src='live/lobby.png' alt='Lobby - realtime rooms'>
 </section>
 <section><h2>City - world read API - <span class='k'>ok</span></h2>
-<p>The silicon-city data the lobby reads</p><p><code>http://127.0.0.1:49251/city/</code> - http 200</p>
+<p>The silicon-city data the lobby reads</p><p><code>http://127.0.0.1:50369/city/</code> - http 200</p>
 <img src='live/city.png' alt='City - world read API'>
 </section>
 <section><h2>Gate - content console - <span class='k'>ok</span></h2>
-<p>The msgSecCheck-style admission gate</p><p><code>http://127.0.0.1:49252/gate/</code> - http 200</p>
+<p>The msgSecCheck-style admission gate</p><p><code>http://127.0.0.1:50370/gate/</code> - http 200</p>
 <img src='live/gate.png' alt='Gate - content console'>
 </section>
 <section><h2>UGC - submission console - <span class='k'>ok</span></h2>
-<p>Creator submissions through the gate</p><p><code>http://127.0.0.1:49257/ugc/</code> - http 200</p>
+<p>Creator submissions through the gate</p><p><code>http://127.0.0.1:50377/ugc/</code> - http 200</p>
 <img src='live/ugc.png' alt='UGC - submission console'>
 </section>
 <section><h2>Ledger - token console - <span class='k'>ok</span></h2>
-<p>The two-form token ledger</p><p><code>http://127.0.0.1:49256/ledger/</code> - http 200</p>
+<p>The two-form token ledger</p><p><code>http://127.0.0.1:50376/ledger/</code> - http 200</p>
 <img src='live/ledger.png' alt='Ledger - token console'>
 </section>
 <section><h2>Checkout - 19.9 mock - <span class='k'>ok</span></h2>
-<p>The membership purchase demonstrable without a merchant id</p><p><code>http://127.0.0.1:49255/checkout/</code> - http 200</p>
+<p>The membership purchase demonstrable without a merchant id</p><p><code>http://127.0.0.1:50375/checkout/</code> - http 200</p>
 <img src='live/checkout.png' alt='Checkout - 19.9 mock'>
 </section>
 <section><h2>Member - membership page - <span class='k'>ok</span></h2>
-<p>Two-form token balance, tiers and the expiring-reminder face</p><p><code>http://127.0.0.1:49259/member/</code> - http 200</p>
+<p>Two-form token balance, tiers and the expiring-reminder face</p><p><code>http://127.0.0.1:50379/member/</code> - http 200</p>
 <img src='live/member.png' alt='Member - membership page'>
 </section>
 <section><h2>Panel - control surface - <span class='k'>ok</span></h2>
-<p>Start and stop verbs per face, with measured ports</p><p><code>http://127.0.0.1:49258/panel/</code> - http 200</p>
+<p>Start and stop verbs per face, with measured ports</p><p><code>http://127.0.0.1:50378/panel/</code> - http 200</p>
 <img src='live/panel.png' alt='Panel - control surface'>
-</section>
-<section><h2>Hub - the one door - <span class='k'>ok</span></h2>
-<p>Every face the sandbox serves, with its own live probe</p><p><code>http://127.0.0.1:49254/hub/</code> - http 200</p>
-<img src='live/hub-p2.png' alt='Hub - the one door'>
-</section>
-<section><h2>Lobby - realtime rooms - <span class='k'>ok</span></h2>
-<p>WebSocket rooms, presence and chat</p><p><code>http://127.0.0.1:49253/lobby/</code> - http 200</p>
-<img src='live/lobby-p2.png' alt='Lobby - realtime rooms'>
-</section>
-<section><h2>City - world read API - <span class='k'>ok</span></h2>
-<p>The silicon-city data the lobby reads</p><p><code>http://127.0.0.1:49251/city/</code> - http 200</p>
-<img src='live/city-p2.png' alt='City - world read API'>
-</section>
-<section><h2>Gate - content console - <span class='k'>ok</span></h2>
-<p>The msgSecCheck-style admission gate</p><p><code>http://127.0.0.1:49252/gate/</code> - http 200</p>
-<img src='live/gate-p2.png' alt='Gate - content console'>
-</section>
-<section><h2>UGC - submission console - <span class='k'>ok</span></h2>
-<p>Creator submissions through the gate</p><p><code>http://127.0.0.1:49257/ugc/</code> - http 200</p>
-<img src='live/ugc-p2.png' alt='UGC - submission console'>
-</section>
-<section><h2>Ledger - token console - <span class='k'>ok</span></h2>
-<p>The two-form token ledger</p><p><code>http://127.0.0.1:49256/ledger/</code> - http 200</p>
-<img src='live/ledger-p2.png' alt='Ledger - token console'>
-</section>
-<section><h2>Checkout - 19.9 mock - <span class='k'>ok</span></h2>
-<p>The membership purchase demonstrable without a merchant id</p><p><code>http://127.0.0.1:49255/checkout/</code> - http 200</p>
-<img src='live/checkout-p2.png' alt='Checkout - 19.9 mock'>
-</section>
-<section><h2>Member - membership page - <span class='k'>ok</span></h2>
-<p>Two-form token balance, tiers and the expiring-reminder face</p><p><code>http://127.0.0.1:49259/member/</code> - http 200</p>
-<img src='live/member-p2.png' alt='Member - membership page'>
-</section>
-<section><h2>Panel - control surface - <span class='k'>ok</span></h2>
-<p>Start and stop verbs per face, with measured ports</p><p><code>http://127.0.0.1:49258/panel/</code> - http 200</p>
-<img src='live/panel-p2.png' alt='Panel - control surface'>
 </section>
 <div class="backhop" data-back-hop="1" data-back-face="live-sandbox.html" data-back-rule="内部/CEO 读数面：回到全站清单页，从这里挑下一页" data-back-bytes="56466" data-back-controls="2" style="border-top:1px solid rgba(128,128,128,.35);margin:22px 0 0;padding:10px 0 0;font-size:13px;line-height:1.6">
 <span style="opacity:.75">这是读数页，没有可填的东西。</span> 回到可点的那一页：<a href="index.html" data-back-target="1">index.html</a> <span style="opacity:.7">&middot; 2 个控件 · 56466B</span> <span style="opacity:.6">（内部/CEO 读数面：回到全站清单页，从这里挑下一页；浏览器后退也行）</span>

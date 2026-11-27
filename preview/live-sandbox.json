@@ -2,21 +2,11 @@
   "chargeable": false,
   "faces": 9,
   "gallery": "preview/live-sandbox.html",
-  "hub_url": "http://127.0.0.1:49254/hub/",
+  "hub_url": "http://127.0.0.1:50374/hub/",
   "mock": true,
   "ok": true,
-  "photographed": 18,
-  "proof": {
-    "agreements": 9,
-    "disagreed": [],
-    "disagreements": [],
-    "faces": 9,
-    "first_ok": true,
-    "ok": true,
-    "passes": 2,
-    "second_ok": true
-  },
-  "shoot_ts": "20261119-063633",
+  "photographed": 9,
+  "shoot_ts": "20261127-230858",
   "shots": [
     {
       "acted": [],
@@ -26,7 +16,7 @@
       "pass": 1,
       "png": "preview/live/hub.png",
       "status": 200,
-      "url": "http://127.0.0.1:49254/hub/",
+      "url": "http://127.0.0.1:50374/hub/",
       "why": ""
     },
     {
@@ -41,7 +31,7 @@
       "pass": 1,
       "png": "preview/live/lobby.png",
       "status": 200,
-      "url": "http://127.0.0.1:49253/lobby/",
+      "url": "http://127.0.0.1:50373/lobby/",
       "why": ""
     },
     {
@@ -52,7 +42,7 @@
       "pass": 1,
       "png": "preview/live/city.png",
       "status": 200,
-      "url": "http://127.0.0.1:49251/city/",
+      "url": "http://127.0.0.1:50369/city/",
       "why": ""
     },
     {
@@ -63,7 +53,7 @@
       "pass": 1,
       "png": "preview/live/gate.png",
       "status": 200,
-      "url": "http://127.0.0.1:49252/gate/",
+      "url": "http://127.0.0.1:50370/gate/",
       "why": ""
     },
     {
@@ -74,7 +64,7 @@
       "pass": 1,
       "png": "preview/live/ugc.png",
       "status": 200,
-      "url": "http://127.0.0.1:49257/ugc/",
+      "url": "http://127.0.0.1:50377/ugc/",
       "why": ""
     },
     {
@@ -85,7 +75,7 @@
       "pass": 1,
       "png": "preview/live/ledger.png",
       "status": 200,
-      "url": "http://127.0.0.1:49256/ledger/",
+      "url": "http://127.0.0.1:50376/ledger/",
       "why": ""
     },
     {
@@ -96,7 +86,7 @@
       "pass": 1,
       "png": "preview/live/checkout.png",
       "status": 200,
-      "url": "http://127.0.0.1:49255/checkout/",
+      "url": "http://127.0.0.1:50375/checkout/",
       "why": ""
     },
     {
@@ -107,7 +97,7 @@
       "pass": 1,
       "png": "preview/live/member.png",
       "status": 200,
-      "url": "http://127.0.0.1:49259/member/",
+      "url": "http://127.0.0.1:50379/member/",
       "why": ""
     },
     {
@@ -118,113 +108,10 @@
       "pass": 1,
       "png": "preview/live/panel.png",
       "status": 200,
-      "url": "http://127.0.0.1:49258/panel/",
-      "why": ""
-    },
-    {
-      "acted": [],
-      "errors": [],
-      "face": "hub",
-      "ok": true,
-      "pass": 2,
-      "png": "preview/live/hub-p2.png",
-      "status": 200,
-      "url": "http://127.0.0.1:49254/hub/",
-      "why": ""
-    },
-    {
-      "acted": [
-        "connected",
-        "ticket",
-        "message"
-      ],
-      "errors": [],
-      "face": "lobby",
-      "ok": true,
-      "pass": 2,
-      "png": "preview/live/lobby-p2.png",
-      "status": 200,
-      "url": "http://127.0.0.1:49253/lobby/",
-      "why": ""
-    },
-    {
-      "acted": [],
-      "errors": [],
-      "face": "city",
-      "ok": true,
-      "pass": 2,
-      "png": "preview/live/city-p2.png",
-      "status": 200,
-      "url": "http://127.0.0.1:49251/city/",
-      "why": ""
-    },
-    {
-      "acted": [],
-      "errors": [],
-      "face": "gate",
-      "ok": true,
-      "pass": 2,
-      "png": "preview/live/gate-p2.png",
-      "status": 200,
-      "url": "http://127.0.0.1:49252/gate/",
-      "why": ""
-    },
-    {
-      "acted": [],
-      "errors": [],
-      "face": "ugc",
-      "ok": true,
-      "pass": 2,
-      "png": "preview/live/ugc-p2.png",
-      "status": 200,
-      "url": "http://127.0.0.1:49257/ugc/",
-      "why": ""
-    },
-    {
-      "acted": [],
-      "errors": [],
-      "face": "ledger",
-      "ok": true,
-      "pass": 2,
-      "png": "preview/live/ledger-p2.png",
-      "status": 200,
-      "url": "http://127.0.0.1:49256/ledger/",
-      "why": ""
-    },
-    {
-      "acted": [],
-      "errors": [],
-      "face": "checkout",
-      "ok": true,
-      "pass": 2,
-      "png": "preview/live/checkout-p2.png",
-      "status": 200,
-      "url": "http://127.0.0.1:49255/checkout/",
-      "why": ""
-    },
-    {
-      "acted": [],
-      "errors": [],
-      "face": "member",
-      "ok": true,
-      "pass": 2,
-      "png": "preview/live/member-p2.png",
-      "status": 200,
-      "url": "http://127.0.0.1:49259/member/",
-      "why": ""
-    },
-    {
-      "acted": [],
-      "errors": [],
-      "face": "panel",
-      "ok": true,
-      "pass": 2,
-      "png": "preview/live/panel-p2.png",
-      "status": 200,
-      "url": "http://127.0.0.1:49258/panel/",
+      "url": "http://127.0.0.1:50378/panel/",
       "why": ""
     }
   ],
-  "shots_total": 18,
+  "shots_total": 9,
   "with_errors": 0
 }

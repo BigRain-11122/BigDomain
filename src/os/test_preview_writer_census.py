@@ -8493,5 +8493,157 @@ class PWC61FiftySeventhProducerClosed(unittest.TestCase):
             shutil.rmtree(tmp, ignore_errors=True)
 
 
+def cpcl_closure_positions(text):
+    """(present, after_json_half, readers_clean, shared_only) for AC-PWC62."""
+    if "def main(" not in text:
+        return (False, False, False, False)
+    body = text.rpartition("def main(")[2].split("\ndef ")[0]
+    at = body.find("face = _refresh_face(")
+    present = at != -1
+    landed = body.find("os.replace(tmp, args.report_json)")
+    after = present and landed != -1 and at > landed
+    readers = True
+    for name in ("def wait_json(", "def _collision_pairs(",
+                 "def recorded_collisions(", "def report_collisions(",
+                 "def published_collisions(", "def exit_status(",
+                 "def refusal_of(", "def failure_artifact_path(",
+                 "def write_failure(", "def launcher_record_path(",
+                 "def drive_lobby(", "def compare_runs(", "def shoot(",
+                 "def gallery("):
+        if name in text:
+            reader_body = text.rpartition(name)[2].split("\ndef ")[0]
+            if "_refresh_face(" in reader_body:
+                readers = False
+    helper = text.rpartition("def _refresh_face(")[2].split("\ndef ")[0]
+    shared = "board_face_landing.refresh_export_face(REPO)" in helper
+    no_local_writer = ".write(" not in helper
+    return (present, after, readers and present, shared and no_local_writer)
+
+
+class PWC62FiftyEighthProducerClosed(unittest.TestCase):
+    """AC-PWC62: ceo_live_shot derives the face on landing only.
+
+    This producer needs a real launcher and a real browser, so `main()` cannot
+    be driven from a stdlib suite. The behavioural arms therefore grade the two
+    pieces that decide whether a landing derives at all - the guard and the
+    helper - and the end-to-end half is carried by a real run recorded on the
+    board, not by an assertion that could only ever be stubbed.
+    """
+
+    def _source(self):
+        with io.open(os.path.join(TOOLS, "ceo_live_shot.py"),
+                     encoding="utf-8") as f:
+            return f.read()
+
+    def test_closed_and_ordered_after_the_json_half(self):
+        text = self._source()
+        kind, _html, writes, closes = MOD.classify_source(text)
+        self.assertEqual(kind, "closed")
+        self.assertGreaterEqual(writes, 1)
+        self.assertGreaterEqual(closes, 1)
+        self.assertEqual(cpcl_closure_positions(text),
+                         (True, True, True, True))
+
+    def test_negative_controls_delete_and_move(self):
+        text = self._source()
+        deleted = text.replace(
+            "        face = _refresh_face(gallery_path, args.report_json)\n",
+            "").replace(
+            "board_face_landing.refresh_export_face(REPO)",
+            "None  # control: shared call removed")
+        self.assertEqual(MOD.classify_source(deleted)[0], "gap")
+        self.assertFalse(cpcl_closure_positions(deleted)[0])
+        moved = text.replace(
+            "        face = _refresh_face(gallery_path, args.report_json)\n",
+            "").replace(
+            "        os.replace(tmp, args.report_json)",
+            "        face = _refresh_face(gallery_path, args.report_json)  "
+            "# control: moved before the json half landed\n"
+            "        os.replace(tmp, args.report_json)", 1)
+        pos = cpcl_closure_positions(moved)
+        self.assertTrue(pos[0])
+        self.assertFalse(pos[1])
+
+    def test_refresh_is_shared_and_named(self):
+        import ceo_live_shot as LIVESHOT
+        calls = []
+
+        class Fake(object):
+            def __init__(self, ok, note):
+                self.ok, self.note = ok, note
+
+            def refresh_export_face(self, root):
+                calls.append(root)
+                return (self.ok, self.note, {})
+
+        class Boom(object):
+            def refresh_export_face(self, root):
+                raise RuntimeError("no writer here")
+
+        tmp = tempfile.mkdtemp(prefix="cpcl-face-")
+        preview = os.path.join(tmp, "preview")
+        os.makedirs(preview, exist_ok=True)
+        html = os.path.join(preview, "live-sandbox.html")
+        js = os.path.join(preview, "live-sandbox.json")
+        saved_repo = LIVESHOT.REPO
+        saved = sys.modules.get("board_face_landing")
+        try:
+            LIVESHOT.REPO = tmp
+            sys.modules["board_face_landing"] = Fake(True, "")
+            self.assertEqual(LIVESHOT._refresh_face(html, js), "WRITTEN")
+            self.assertEqual(calls, [tmp])
+            sys.modules["board_face_landing"] = Fake(False, "stale")
+            self.assertEqual(LIVESHOT._refresh_face(html, js),
+                             "REFUSED stale")
+            sys.modules["board_face_landing"] = Boom()
+            self.assertEqual(LIVESHOT._refresh_face(html, js),
+                             "SKIPPED RuntimeError")
+        finally:
+            LIVESHOT.REPO = saved_repo
+            if saved is None:
+                sys.modules.pop("board_face_landing", None)
+            else:
+                sys.modules["board_face_landing"] = saved
+            shutil.rmtree(tmp, ignore_errors=True)
+
+    def test_landing_derives_once_and_redirected_json_derives_none(self):
+        """Both halves in this world's preview derive once; a split pair does not."""
+        import ceo_live_shot as LIVESHOT
+        calls = []
+
+        class Fake(object):
+            def refresh_export_face(self, root):
+                calls.append(root)
+                return (True, "", {})
+
+        tmp = tempfile.mkdtemp(prefix="cpcl-pwc-")
+        preview = os.path.join(tmp, "preview")
+        outside = os.path.join(tmp, "elsewhere")
+        os.makedirs(preview, exist_ok=True)
+        os.makedirs(outside, exist_ok=True)
+        html = os.path.join(preview, "live-sandbox.html")
+        js = os.path.join(preview, "live-sandbox.json")
+        split_js = os.path.join(outside, "live-sandbox.json")
+        saved_repo = LIVESHOT.REPO
+        saved = sys.modules.get("board_face_landing")
+        try:
+            sys.modules["board_face_landing"] = Fake()
+            LIVESHOT.REPO = tmp
+            self.assertTrue(LIVESHOT._landing_is_default(html, js))
+            self.assertEqual(LIVESHOT._refresh_face(html, js), "WRITTEN")
+            self.assertEqual(calls, [tmp])
+            self.assertFalse(LIVESHOT._landing_is_default(html, split_js))
+            self.assertEqual(LIVESHOT._refresh_face(html, split_js),
+                             "SKIPPED scratch")
+            self.assertEqual(len(calls), 1)
+        finally:
+            LIVESHOT.REPO = saved_repo
+            if saved is None:
+                sys.modules.pop("board_face_landing", None)
+            else:
+                sys.modules["board_face_landing"] = saved
+            shutil.rmtree(tmp, ignore_errors=True)
+
+
 if __name__ == "__main__":
     unittest.main()
