@@ -296,6 +296,11 @@ PAIR_PRODUCERS = {
     # (one render, one json, no back-hop block), so it names its producer
     # instead of leaving AC-DIX21/23 a named absence when it is newest.
     "watch-category-mix-board.json": "tools/watch_category_mix_board.py",
+    # R3557: the preview writer census page is a single-writer product as well.
+    # Measured this window: rendering it in the closeout ring makes it the newest
+    # pair, and without a row here the index could only print a named absence,
+    # so AC-DIX21/23 went red every time the census was re-derived late.
+    "preview-writer-census.json": "tools/preview_writer_census.py",
 }
 # R3392 (AC-DIX21 recipe arm). One pair on this page cannot be reproduced by ONE
 # command, and until now the law had only two answers - name a producer or print
