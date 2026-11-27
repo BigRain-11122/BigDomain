@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-24 05:11:40Z",
+ "generated_utc": "2026-11-27 13:54:29Z",
  "face": "api_market_price_percentiles",
  "listing_count": 3,
  "live_listing_count": 3,
@@ -65,7 +65,7 @@
  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
  "report": "preview/market-price-percentiles.html",
  "sources": {
-  "driver": "6ea80a09f4c5c839",
+  "driver": "e51c7a5dd2954680",
   "copy": "519cc7ee9a7fb711",
   "apimarket": "82a49194bef85737",
   "report": "3a83dce99c9e2bd4"

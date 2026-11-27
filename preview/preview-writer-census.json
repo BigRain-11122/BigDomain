@@ -3,8 +3,8 @@
     "src/os/board_face_landing.py",
     "src/os/export_round.py"
   ],
-  "generated_at": "2026-11-27T21:37:47+08:00",
-  "round": "R3578",
+  "generated_at": "2026-11-27T21:47:49+08:00",
+  "round": "R3579",
   "rows": [
     {
       "face_calls": 0,
@@ -185,15 +185,6 @@
         "listing-price-history-board.html"
       ],
       "path": "tools/listing_price_history_board.py",
-      "write_calls": 9
-    },
-    {
-      "face_calls": 0,
-      "kind": "gap",
-      "landing_paths": [
-        "market-price-percentiles.html"
-      ],
-      "path": "tools/market_price_percentiles.py",
       "write_calls": 9
     },
     {
@@ -830,6 +821,15 @@
       "face_calls": 1,
       "kind": "closed",
       "landing_paths": [
+        "market-price-percentiles.html"
+      ],
+      "path": "tools/market_price_percentiles.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 1,
+      "kind": "closed",
+      "landing_paths": [
         "membership-benefit-report.html"
       ],
       "path": "tools/membership_benefit_report.py",
@@ -1090,9 +1090,9 @@
     }
   ],
   "totals": {
-    "closed": 59,
+    "closed": 60,
     "excluded": 2,
-    "gap": 50,
+    "gap": 49,
     "modules": 119,
     "reader": 10,
     "writers": 109
