@@ -9,9 +9,9 @@
     "latest_artifact_note": "",
     "latest_evidence": "qa/round-R3564.log (1288B, 2026-11-27, sha256 c36ba280a17e)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3586] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）—— 12-01 或之后开窗先把刷新轮排最前，毕=更新字段＋文件④更新记录行。 (1) S4U 仍未落地（第一百二十五次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回；宁缺不错。 (2) **43 家缺口已列名**（`preview/preview-writer-census.json`，本轮 `closed=66 gap=43`）：下窗只动一家活线生产者，判据沿用 `AC-PWC64` 形状。下一批候选按普查实测（均 `w=9 f=0` 单落页看板）：`tools/refund_exposure_board.py`、`tools/refund_propensity_board.py`、`tools/repeat_purchase_board.py`、`tools/reply_latency_board.py`、`tools/search_board.py`、`tools/seller_answer_months_board.py`；`tools/qa_log.py`、`src/os/registry_counter_census.py`、`tools/crawl_runner.py` 仍不接。 (3) `replay-receipt` 可豁免性仍待 L3 签发或驳回。 (4) tick 口径：本轮 3585→3586，下轮 R3587。 (5) 承账不变：`qa_log --ledger-check broken=5`、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写、电池页待重派生、S4U 未落地。 (6) **本窗实测（写进下窗第一步）**：①绿序=产品落页→普查重派生→产品复验→链裸跑→链 `--check`→index `--write`→`--check` 23/23→closeout_order `--write`→`--check` 4/4→closeout_gate；②**落页后必须补跑** `python src/os/suite_matrix_reconcile.py --write` 再 `--check`，否则 closeout_gate 读 `E_CLG_MATRIX`（本窗一次红步实证）；③状态追加后必须重跑 `src/os/export_round.py`→普查 `--write`→产品复验→链裸跑→链 `--check`→index `--write`→`--check`→closeout_order (truncated)",
-    "next_milestone_due": "2026-11-29T23:51:02+08:00",
-    "updated_at": "2026-11-27T23:51:02+08:00",
+    "next_milestone": "[R3586] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）—— 12-01 或之后开窗先把刷新轮排最前，毕=更新字段＋文件④更新记录行。 (1) **S4U 仍未落地（第一百二十五次承账，本窗已实测纠正口径）**：`BigDomain-OSLoop` 任务**确实存在**（`State=Running`、interval `PT5M`、User `sjs20`、RunLevel `Limited`），但 `Principal.LogonType=Interactive`——违反本机「一切车道任务一律 S4U」铁律；本窗跑了一次 `src/os/register_loop_task.ps1`，被系统拒绝（拒绝访问），脚本自报「既有定义未改动」，故 Interactive 定义原样留存。下窗正法=**提权会话**跑同一脚本后用 `(Get-ScheduledTask -TaskName BigDomain-OSLoop).Principal.LogonType` 读回须为 `S4U`；**禁用 `Get-ScheduledTaskPrincipal`（本机无此 cmdlet，会给出假阴性）**。 (2) **43 家缺口已列名**（`preview/preview-writer-census.json`，本轮 `closed=66 gap=43`）：下窗只动一家活线生产者，判据沿用 `AC-PWC64` 形状。下一批候选按普查实测（均 `w=9 f=0` 单落页看板）：`tools/refund_exposure_board.py`、`tools/refund_propensity_board.py`、`tools/repeat_purchase_board.py`、`tools/reply_latency_board.py`、`tools/search_board.py`、`tools/seller_answer_months_board.py`；`tools/qa_log.py`、`src/os/registry_counter_census.py`、`tools/crawl_runner.py` 仍不接。 (3) `replay-receipt` 可豁免性仍待 L3 签发或驳回。 (4) tick 口径：本轮 3585→3586，下轮 R3587。 (5) 承账不变：`qa_log --ledger-check broken=5`、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写、电池页待重派生、S4U 未落地。 (6) **本窗实测（写进下窗第一步）**：①绿序=产品落页→普查重派生→产品复验→链裸跑→链 (truncated)",
+    "next_milestone_due": "2026-11-29T23:55:55+08:00",
+    "updated_at": "2026-11-27T23:55:55+08:00",
     "heartbeat": {
       "tick": 3579,
       "state_tick": 3586,
@@ -36,7 +36,7 @@
     }
   },
   "current": "2026-11-27 R3586 PRODUCT: the sixtieth gap producer from the R3527 census closes at its birth site - tools/purchase_dossier_board.py, the one openable page that answers what actually happened to a single purchase (the listing, both parties, the four-leg money split, the refund block, the rating block, the claim block and the derived ticket state, all read from the shipped api_purchase_dossier face with api_board/api_sales enumeration over a one-off demo world), now re-derives docs/status-export.json IN PROCESS through the shared board_face_landing.refresh_export_face(ROOT) after its sizes fixed-point loop, and only when both halves land under THIS root own preview/ - a --out/--json redirection derives nothing; the census moves from closed=65 gap=44 to closed=66 gap=43.",
-  "claims": {"claimed": 45, "captured": 24, "contradicted": 0, "uncaptured": 21, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-27T23:51:02+08:00"},
+  "claims": {"claimed": 45, "captured": 24, "contradicted": 0, "uncaptured": 21, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-27T23:55:55+08:00"},
   "chain": {"present": true, "rows": 106, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -66,10 +66,10 @@
     }
   ],
   "do": "2026-11-27 R3586 PRODUCT: the sixtieth gap producer from the R3527 census closes at its birth site - tools/purchase_dossier_board.py, the one openable page that answers what actually happened to a single purchase (the listing, both parties, the four-leg money split, the refund block, the rating block, the claim block and the derived ticket state, all read from the shipped api_purchase_dossier face with api_board/api_sales enumeration over a one-off demo world), now re-derives docs/status-export.json IN PROCESS through the shared board_face_landing.refresh_export_face(ROOT) after its sizes fixed-point loop, and only when both halves land under THIS root own preview/ - a --out/--json redirection derives nothing; the census moves from closed=65 gap=44 to closed=66 gap=43.",
-  "export_ts": "2026-11-27T23:51:02+08:00",
+  "export_ts": "2026-11-27T23:55:55+08:00",
   "latest_artifact": "preview/purchase-dossier-board.html (10842B) + preview/purchase-dossier-board.json (3678B) [2026-11-27 mtime]",
   "latest_evidence": "qa/round-R3564.log (1288B, 2026-11-27, sha256 c36ba280a17e)",
-  "next_milestone": "[R3586] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）—— 12-01 或之后开窗先把刷新轮排最前，毕=更新字段＋文件④更新记录行。 (1) S4U 仍未落地（第一百二十五次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回；宁缺不错。 (2) **43 家缺口已列名**（`preview/preview-writer-census.json`，本轮 `closed=66 gap=43`）：下窗只动一家活线生产者，判据沿用 `AC-PWC64` 形状。下一批候选按普查实测（均 `w=9 f=0` 单落页看板）：`tools/refund_exposure_board.py`、`tools/refund_propensity_board.py`、`tools/repeat_purchase_board.py`、`tools/reply_latency_board.py`、`tools/search_board.py`、`tools/seller_answer_months_board.py`；`tools/qa_log.py`、`src/os/registry_counter_census.py`、`tools/crawl_runner.py` 仍不接。 (3) `replay-receipt` 可豁免性仍待 L3 签发或驳回。 (4) tick 口径：本轮 3585→3586，下轮 R3587。 (5) 承账不变：`qa_log --ledger-check broken=5`、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写、电池页待重派生、S4U 未落地。 (6) **本窗实测（写进下窗第一步）**：①绿序=产品落页→普查重派生→产品复验→链裸跑→链 `--check`→index `--write`→`--check` 23/23→closeout_order `--write`→`--check` 4/4→closeout_gate；②**落页后必须补跑** `python src/os/suite_matrix_reconcile.py --write` 再 `--check`，否则 closeout_gate 读 `E_CLG_MATRIX`（本窗一次红步实证）；③状态追加后必须重跑 `src/os/export_round.py`→普查 `--write`→产品复验→链裸跑→链 `--check`→index `--write`→`--check`→closeout_order (truncated)",
+  "next_milestone": "[R3586] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）—— 12-01 或之后开窗先把刷新轮排最前，毕=更新字段＋文件④更新记录行。 (1) **S4U 仍未落地（第一百二十五次承账，本窗已实测纠正口径）**：`BigDomain-OSLoop` 任务**确实存在**（`State=Running`、interval `PT5M`、User `sjs20`、RunLevel `Limited`），但 `Principal.LogonType=Interactive`——违反本机「一切车道任务一律 S4U」铁律；本窗跑了一次 `src/os/register_loop_task.ps1`，被系统拒绝（拒绝访问），脚本自报「既有定义未改动」，故 Interactive 定义原样留存。下窗正法=**提权会话**跑同一脚本后用 `(Get-ScheduledTask -TaskName BigDomain-OSLoop).Principal.LogonType` 读回须为 `S4U`；**禁用 `Get-ScheduledTaskPrincipal`（本机无此 cmdlet，会给出假阴性）**。 (2) **43 家缺口已列名**（`preview/preview-writer-census.json`，本轮 `closed=66 gap=43`）：下窗只动一家活线生产者，判据沿用 `AC-PWC64` 形状。下一批候选按普查实测（均 `w=9 f=0` 单落页看板）：`tools/refund_exposure_board.py`、`tools/refund_propensity_board.py`、`tools/repeat_purchase_board.py`、`tools/reply_latency_board.py`、`tools/search_board.py`、`tools/seller_answer_months_board.py`；`tools/qa_log.py`、`src/os/registry_counter_census.py`、`tools/crawl_runner.py` 仍不接。 (3) `replay-receipt` 可豁免性仍待 L3 签发或驳回。 (4) tick 口径：本轮 3585→3586，下轮 R3587。 (5) 承账不变：`qa_log --ledger-check broken=5`、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写、电池页待重派生、S4U 未落地。 (6) **本窗实测（写进下窗第一步）**：①绿序=产品落页→普查重派生→产品复验→链裸跑→链 (truncated)",
   "outs": [
     "preview/purchase-dossier-board.html (10842B) + preview/purchase-dossier-board.json (3678B) [2026-11-27 mtime]",
     "preview/preview-writer-census.html (17559B) + preview/preview-writer-census.json (25166B) [2026-11-27 mtime]",
@@ -196,9 +196,9 @@
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
-  "self_drive": {"window": "2026-11-21..2026-11-27", "window_days": 7, "log_lines_in_window": 61, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 51, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
-  "state_bytes": 63157,
-  "next_milestone_due": "2026-11-29T23:51:02+08:00",
+  "self_drive": {"window": "2026-11-21..2026-11-27", "window_days": 7, "log_lines_in_window": 62, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 52, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
+  "state_bytes": 64273,
+  "next_milestone_due": "2026-11-29T23:55:55+08:00",
   "heartbeat": {
     "tick": 3579,
     "state_tick": 3586,
