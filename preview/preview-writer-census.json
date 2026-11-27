@@ -3,8 +3,8 @@
     "src/os/board_face_landing.py",
     "src/os/export_round.py"
   ],
-  "generated_at": "2026-11-28T00:21:11+08:00",
-  "round": "R3588",
+  "generated_at": "2026-11-28T00:37:38+08:00",
+  "round": "R3589",
   "rows": [
     {
       "face_calls": 0,
@@ -193,15 +193,6 @@
       ],
       "path": "tools/refund_reasons_board.py",
       "write_calls": 8
-    },
-    {
-      "face_calls": 0,
-      "kind": "gap",
-      "landing_paths": [
-        "repeat-purchase-board.html"
-      ],
-      "path": "tools/repeat_purchase_board.py",
-      "write_calls": 9
     },
     {
       "face_calls": 0,
@@ -921,6 +912,15 @@
       "face_calls": 1,
       "kind": "closed",
       "landing_paths": [
+        "repeat-purchase-board.html"
+      ],
+      "path": "tools/repeat_purchase_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 1,
+      "kind": "closed",
+      "landing_paths": [
         "seller-ledger-board.html"
       ],
       "path": "tools/seller_ledger_board.py",
@@ -1090,9 +1090,9 @@
     }
   ],
   "totals": {
-    "closed": 68,
+    "closed": 69,
     "excluded": 2,
-    "gap": 41,
+    "gap": 40,
     "modules": 119,
     "reader": 10,
     "writers": 109
