@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-24 16:28:34Z",
+ "generated_utc": "2026-11-27 19:31:17Z",
  "face": "api_seller_supply",
  "board_face": "api_board",
  "scope": "seller",
@@ -125,7 +125,7 @@
  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
  "report": "preview/seller-supply-board.html",
  "sources": {
-  "driver": "cbb7dbdac4615af7",
+  "driver": "c057645ccbc77824",
   "copy": "7bdbaedf4c0f743d",
   "apimarket": "82a49194bef85737",
   "report": "3a83dce99c9e2bd4"
