@@ -3,8 +3,8 @@
     "src/os/board_face_landing.py",
     "src/os/export_round.py"
   ],
-  "generated_at": "2026-11-27T23:15:12+08:00",
-  "round": "R3584",
+  "generated_at": "2026-11-27T23:28:18+08:00",
+  "round": "R3585",
   "rows": [
     {
       "face_calls": 0,
@@ -371,15 +371,6 @@
       "landing_paths": [],
       "path": "tools/status_export_fresh.py",
       "write_calls": 3
-    },
-    {
-      "face_calls": 0,
-      "kind": "gap",
-      "landing_paths": [
-        "ticket-size-board.html"
-      ],
-      "path": "tools/ticket_size_board.py",
-      "write_calls": 9
     },
     {
       "face_calls": 0,
@@ -989,6 +980,15 @@
       "face_calls": 1,
       "kind": "closed",
       "landing_paths": [
+        "ticket-size-board.html"
+      ],
+      "path": "tools/ticket_size_board.py",
+      "write_calls": 9
+    },
+    {
+      "face_calls": 1,
+      "kind": "closed",
+      "landing_paths": [
         "ugc-gate-report.html"
       ],
       "path": "tools/ugc_gate_report.py",
@@ -1090,9 +1090,9 @@
     }
   ],
   "totals": {
-    "closed": 64,
+    "closed": 65,
     "excluded": 2,
-    "gap": 45,
+    "gap": 44,
     "modules": 119,
     "reader": 10,
     "writers": 109

@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-24 19:59:20Z",
+ "generated_utc": "2026-11-27 15:28:26Z",
  "face": "api_market_ticket_size",
  "faces": [
   "api_market_ticket_size",
@@ -246,7 +246,7 @@
  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
  "report": "preview/ticket-size-board.html",
  "sources": {
-  "driver": "bab310fe0c9c0372",
+  "driver": "62f92d8876dae53f",
   "copy": "c01b2f7aba39acdd",
   "apimarket": "82a49194bef85737",
   "report": "3a83dce99c9e2bd4"
