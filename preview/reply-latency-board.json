@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-24 14:19:22Z",
+ "generated_utc": "2026-11-27 17:02:55Z",
  "face": "api_rating_reply_latency",
  "board_face": "api_board",
  "source_face": "api_rating_reply_latency",
@@ -117,7 +117,7 @@
  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
  "report": "preview/reply-latency-board.html",
  "sources": {
-  "driver": "25436afe957e6020",
+  "driver": "53662a58d14a8bd4",
   "copy": "9b05d6fd4d1cc036",
   "apimarket": "82a49194bef85737",
   "report": "3a83dce99c9e2bd4"
