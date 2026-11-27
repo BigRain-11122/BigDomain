@@ -1,0 +1,14 @@
+R3562 evidence (2026-11-27)
+
+SUITE   python src/os/test_preview_writer_census.py -> Ran 147 tests, OK (was 143)
+LAND    python tools/buyer_ledger_board.py -> BUYER-LEDGER preview/buyer-ledger-board.html bytes=7734 buyers=3 entries=9 face=WRITTEN
+CHECK   python tools/buyer_ledger_board.py --check -> BUYER-LEDGER CHECK PASS fails=0 html=7734B json=4231B
+CENSUS  python tools/preview_writer_census.py -> modules=119 closed=42 gap=67 reader=10
+MATRIX  python src/os/suite_matrix_reconcile.py --write -> 85800 bytes, 832 rows; check -> DOC-CURRENT
+INDEX   python tools/deliverable_index.py --write -> faces=9 defects=0; --check -> VERDICT PASS 23/23
+CHAIN   python tools/first_yuan_chain.py -> RENDER legs=2 entries=2 tx=1; --check -> VERDICT PASS legs=2 entries=2 tx=1
+FACE    latest_artifact = preview/buyer-ledger-board.html (7734B) + preview/buyer-ledger-board.json (4231B)
+GATE    python tools/closeout_gate.py -> CLOSEOUT-GATE PASS files=5080 flags=0 census=PASS matrix=DOC-CURRENT
+
+Order measured: index --write -> chain render -> chain --check -> index --check read green;
+the reverse order left E_STALE and 21/23 red on two attempts.
