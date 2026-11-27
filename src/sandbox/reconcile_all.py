@@ -8118,9 +8118,11 @@ SUITES = [
     # after it; the pin moves to the measured 307. R3603 (AC-PWC81):
     # tools/price_reaction_board.py, its fixed point lives inside
     # build_payload() and the landing is write_outputs(), so the closure sits
-    # after that call; the pin moves to the measured 311.
+    # after that call; the pin moves to the measured 311. R3604 (AC-PWC82):
+    # tools/seller_price_demand_board.py, same fixed-point loop, same closure
+    # after it; the pin moves to the measured 315.
     ("os-preview-writer-census",
-     os.path.join("..", "os", "test_preview_writer_census.py"), 311),
+     os.path.join("..", "os", "test_preview_writer_census.py"), 315),
     # R2814. tools/ugc_gate_report.py carries AC-UGR1..AC-UGR9 and renders the
     # face for the BLUEPRINT section-five death line (content safety not
     # connected means the door stays shut), yet the registry held ZERO AC-UGR*

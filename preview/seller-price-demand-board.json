@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-24 20:14:44Z",
+ "generated_utc": "2026-11-27 20:42:45Z",
  "face": "api_seller_price_demand_months",
  "scope": "market",
  "market": {
@@ -184,7 +184,7 @@
  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
  "report": "preview/seller-price-demand-board.html",
  "sources": {
-  "driver": "d861d79c277f6d64",
+  "driver": "b6e0364f95c618d4",
   "copy": "4bd7f3aaa1de4e6e",
   "apimarket": "82a49194bef85737",
   "report": "3a83dce99c9e2bd4"
