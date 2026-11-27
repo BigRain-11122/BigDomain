@@ -1,0 +1,58 @@
+R3558 evidence log - AC-PWC36 closes the thirty-second census gap at its birth site
+target: tools/buyer_answer_wait_board.py
+landing: preview/buyer-answer-wait-board.html + preview/buyer-answer-wait-board.json
+
+1. read-only first (no write before the PIN line)
+classify_source(tools/buyer_answer_wait_board.py)
+  kind=gap write_calls=9 face_calls=0 landing_paths=['buyer-answer-wait-board.html']
+  HTML half at main() lines 685-686
+  JSON half at 689-691, then the six-pass sizes fixed-point loop at 694-703
+  convergence test at 702: if payload["sizes"]["json"] == os.path.getsize(args.json)
+  --check branch returns at 655-666 before any open(...,"w")
+
+2. suite (after wiring)
+python src/os/test_preview_writer_census.py
+  Ran 131 tests in 16.875s
+  OK
+  (was 127; four new arms under AC-PWC36 with two negative controls)
+
+3. real landing
+python tools/buyer_answer_wait_board.py
+  APPLIED R3557 changed=True bytes=40556 lf_only=True bom=False
+  latest_artifact->preview/buyer-answer-wait-board.html (8364B) + preview/buyer-answer-wait-board.json (3107B)
+  BUYER-ANSWER-WAIT preview/buyer-answer-wait-board.html bytes=8364 buyers=2 months=4 answered=4 face=WRITTEN
+
+4. read-only check
+python tools/buyer_answer_wait_board.py --check
+  BUYER-ANSWER-WAIT CHECK PASS fails=0 html=8364B json=3107B
+
+5. census re-derivation
+python tools/preview_writer_census.py
+  PWC (R3557) modules=119 closed=38 gap=71 reader=10 face=WRITTEN
+  (was closed=37 gap=72)
+
+6. matrix
+python src/os/suite_matrix_reconcile.py --write
+  WRITTEN docs/sandbox-suite-matrix.md
+  85800 bytes, 832 rows, evidence=qa/reconcile-all-R2739.log
+
+7. closeout order that measured green (first attempt red on purpose of measurement)
+index --write -> chain bare run -> chain --check -> index --check
+  first attempt: index written BEFORE the chain run
+    FAIL AC-DIX23 pair=first-yuan-chain.json producer=tools/first_yuan_chain.py
+    VERDICT FAIL 21/23 fingerprint=d3d635a74c85ba91
+  corrected order:
+    DELIVERABLE INDEX faces=9 defects=0 index=56466B
+    RENDER legs=2 prices=... entries=2 tx=1 reconcile_rc=0 html=4403B json=4806B
+    VERDICT PASS legs=2 entries=2 tx=1 reconcile_rc=0 html=4403B read_only=True
+    VERDICT PASS 23/23 fingerprint=f69bdc35b59a5dfc
+
+8. measured trap recorded
+--help on tools/preview_writer_census.py and tools/deliverable_index.py does not
+print usage: it EXECUTES the writer. A probe of either tool must be a source
+read, never a bare run with a flag.
+
+9. carrier
+python src/os/state_fold_run.py --check
+  STATE FOLD bytes=76392 gate=78500 margin=2108 log_lines=91 verdict=FOLD-CLEAR
+  (the next window must fold before writing state)

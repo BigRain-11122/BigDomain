@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-24 21:53:46Z",
+ "generated_utc": "2026-11-27 08:12:08Z",
  "face": "api_buyer_answer_wait",
  "scope": "buyer",
  "buyers": [
@@ -109,7 +109,7 @@
  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
  "report": "preview/buyer-answer-wait-board.html",
  "sources": {
-  "driver": "8dcd0935338b0ae1",
+  "driver": "cd2d837701f2b253",
   "copy": "579691e42b13ab32",
   "apimarket": "82a49194bef85737",
   "report": "3a83dce99c9e2bd4"
