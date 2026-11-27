@@ -3,15 +3,15 @@
     "board_pages_skipped": [],
     "current": "2026-11-27 R3548 PRODUCT: the twenty-second gap producer from the R3527 census closes at its birth site - tools/market_hour_heatmap.py, the one openable page that shows which hour and weekday actually sell (a 24x7 heat grid of 168 cells printed by the run), now re-derives docs/status-export.json IN PROCESS through the shared board_face_landing.refresh_export_face(ROOT) after its sizes fixed-point loop (that loop rewrites the JSON up to six times, so the closure sits after the loop, not inside it), and only when both halves land under THIS root own preview/ - a --out/--json redirection derives nothing; the census moves from closed=27 gap=82 to closed=28 gap=81.",
     "do": "2026-11-25 R3456 PRODUCT: the answer-revision question now has a door - api_answer_history (live with AC-AMAW1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so 'which answer was rewritten, what did it say before, what does it say now and how often did it change' could only be read by calling the sandbox from a shell - while api_seller_answers and api_listing_qna publish only the CURRENT wording.",
-    "last_artifact": "preview/market-hour-heatmap.html (27204B) + preview/market-hour-heatmap.json (19565B) [2026-11-27 mtime]",
-    "latest_artifact": "preview/market-hour-heatmap.html (27204B) + preview/market-hour-heatmap.json (19565B) [2026-11-27 mtime]",
+    "last_artifact": "preview/market-hour-heatmap.html (27204B) + preview/market-hour-heatmap.json (19565B) [2026-11-27 commit]",
+    "latest_artifact": "preview/market-hour-heatmap.html (27204B) + preview/market-hour-heatmap.json (19565B) [2026-11-27 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\market-hour-heatmap.html",
     "latest_artifact_note": "",
     "latest_evidence": "qa/round-R3544.log (2616B, 2026-11-27, sha256 cae85d12daf3)",
     "newest_pair_on_disk_is_board": false,
     "next_milestone": "[R3548] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先把刷新轮排最前，毕=更新字段＋文件④更新记录行。 (1) S4U 仍未落地（第八十七次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回。 (2) **81 家缺口已列名**（`preview/preview-writer-census.json`）：下窗只动一家活线生产者，判据沿用 `AC-PWC26` 形状（源码位置量＋两条负控＋共享定义＋按 ROOT 的落地守卫＋循环收敛后的闭包）。下一批候选按普查实测挑：`tools/seller_quality_scorecard.py`（`wc=9`）、`tools/seller_revenue_board.py`（`wc=9`）；多落页生产者仍单点预算不接。 (3) `replay-receipt` 可豁免性仍待 L3 签发或驳回。 (4) 载体 `state.json` 现 32451B（阈 78500，余量 46049），下窗写 state 前仍建议 `python src/os/state_fold_run.py --fold --dry-run` 看是否到期。 (5) tick 口径：本轮 3547→3548，下轮 R3549。 (6) 承账不变：`qa_log --ledger-check broken=5`、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写、电池页待重派生。 (7) **验收提醒**：`git commit` 在本机 PS 里因 stderr 走 NativeCommandError 报退出码 1，但提交与钩子实际成功（看 `[main <sha>]` 行），勿据此误判失败；`first_yuan_chain.py` 无 `--write` 开关，裸跑即写、`--check` 只读。",
-    "next_milestone_due": "2026-11-29T09:06:05+08:00",
-    "updated_at": "2026-11-27T09:06:05+08:00",
+    "next_milestone_due": "2026-11-29T09:07:02+08:00",
+    "updated_at": "2026-11-27T09:07:02+08:00",
     "heartbeat": {
       "tick": 3522,
       "state_tick": 3548,
@@ -36,7 +36,7 @@
     }
   },
   "current": "2026-11-27 R3548 PRODUCT: the twenty-second gap producer from the R3527 census closes at its birth site - tools/market_hour_heatmap.py, the one openable page that shows which hour and weekday actually sell (a 24x7 heat grid of 168 cells printed by the run), now re-derives docs/status-export.json IN PROCESS through the shared board_face_landing.refresh_export_face(ROOT) after its sizes fixed-point loop (that loop rewrites the JSON up to six times, so the closure sits after the loop, not inside it), and only when both halves land under THIS root own preview/ - a --out/--json redirection derives nothing; the census moves from closed=27 gap=82 to closed=28 gap=81.",
-  "claims": {"claimed": 43, "captured": 24, "contradicted": 0, "uncaptured": 19, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-27T09:06:05+08:00"},
+  "claims": {"claimed": 43, "captured": 24, "contradicted": 0, "uncaptured": 19, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-27T09:07:02+08:00"},
   "chain": {"present": true, "rows": 106, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -66,12 +66,12 @@
     }
   ],
   "do": "2026-11-27 R3548 PRODUCT: the twenty-second gap producer from the R3527 census closes at its birth site - tools/market_hour_heatmap.py, the one openable page that shows which hour and weekday actually sell (a 24x7 heat grid of 168 cells printed by the run), now re-derives docs/status-export.json IN PROCESS through the shared board_face_landing.refresh_export_face(ROOT) after its sizes fixed-point loop (that loop rewrites the JSON up to six times, so the closure sits after the loop, not inside it), and only when both halves land under THIS root own preview/ - a --out/--json redirection derives nothing; the census moves from closed=27 gap=82 to closed=28 gap=81.",
-  "export_ts": "2026-11-27T09:06:05+08:00",
-  "latest_artifact": "preview/market-hour-heatmap.html (27204B) + preview/market-hour-heatmap.json (19565B) [2026-11-27 mtime]",
+  "export_ts": "2026-11-27T09:07:02+08:00",
+  "latest_artifact": "preview/market-hour-heatmap.html (27204B) + preview/market-hour-heatmap.json (19565B) [2026-11-27 commit]",
   "latest_evidence": "qa/round-R3544.log (2616B, 2026-11-27, sha256 cae85d12daf3)",
   "next_milestone": "[R3548] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先把刷新轮排最前，毕=更新字段＋文件④更新记录行。 (1) S4U 仍未落地（第八十七次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回。 (2) **81 家缺口已列名**（`preview/preview-writer-census.json`）：下窗只动一家活线生产者，判据沿用 `AC-PWC26` 形状（源码位置量＋两条负控＋共享定义＋按 ROOT 的落地守卫＋循环收敛后的闭包）。下一批候选按普查实测挑：`tools/seller_quality_scorecard.py`（`wc=9`）、`tools/seller_revenue_board.py`（`wc=9`）；多落页生产者仍单点预算不接。 (3) `replay-receipt` 可豁免性仍待 L3 签发或驳回。 (4) 载体 `state.json` 现 32451B（阈 78500，余量 46049），下窗写 state 前仍建议 `python src/os/state_fold_run.py --fold --dry-run` 看是否到期。 (5) tick 口径：本轮 3547→3548，下轮 R3549。 (6) 承账不变：`qa_log --ledger-check broken=5`、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写、电池页待重派生。 (7) **验收提醒**：`git commit` 在本机 PS 里因 stderr 走 NativeCommandError 报退出码 1，但提交与钩子实际成功（看 `[main <sha>]` 行），勿据此误判失败；`first_yuan_chain.py` 无 `--write` 开关，裸跑即写、`--check` 只读。",
   "outs": [
-    "preview/market-hour-heatmap.html (27204B) + preview/market-hour-heatmap.json (19565B) [2026-11-27 mtime]",
+    "preview/market-hour-heatmap.html (27204B) + preview/market-hour-heatmap.json (19565B) [2026-11-27 commit]",
     "preview/preview-writer-census.html (17433B) + preview/preview-writer-census.json (25201B) [2026-11-27 mtime]",
     "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-27 mtime] (halves differ: html [2026-11-27 mtime] + json [2026-11-16 commit]; later=html)",
     "preview/ledger-business-report.html (5276B) + preview/ledger-business-report.json (1174B) [2026-11-27 mtime]",
@@ -163,7 +163,7 @@
   },
   "self_drive": {"window": "2026-11-21..2026-11-27", "window_days": 7, "log_lines_in_window": 39, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 13, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
   "state_bytes": 32451,
-  "next_milestone_due": "2026-11-29T09:06:05+08:00",
+  "next_milestone_due": "2026-11-29T09:07:02+08:00",
   "heartbeat": {
     "tick": 3522,
     "state_tick": 3548,
