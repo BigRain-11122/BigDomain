@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-24 06:04:20Z",
+ "generated_utc": "2026-11-27 12:37:32Z",
  "face": "api_listing_position",
  "board_face": "api_board",
  "listing_count": 3,
@@ -211,7 +211,7 @@
  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
  "report": "preview/listing-position-board.html",
  "sources": {
-  "driver": "05d7049a0d7e173c",
+  "driver": "3d87ab8b4e9c5e37",
   "copy": "6e5fddef7f38751f",
   "apimarket": "82a49194bef85737",
   "report": "3a83dce99c9e2bd4"
