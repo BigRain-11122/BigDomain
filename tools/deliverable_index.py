@@ -288,6 +288,10 @@ PAIR_PRODUCERS = {
     # R3435: the resident purchase library is a single-writer product (one
     # render, one json, no back-hop block), so it names its producer.
     "library-board.json": "tools/library_board.py",
+    # R3574: the listing metadata history page is a single-writer product (one
+    # render, one json, no back-hop block), so it names its producer.
+    "listing-metadata-history-board.json":
+        "tools/listing_metadata_history_board.py",
     # R3436: the watch-to-purchase funnel is a single-writer product (one
     # render, one json, no back-hop block), so it names its producer.
     "watch-conversion-board.json": "tools/watch_conversion_board.py",

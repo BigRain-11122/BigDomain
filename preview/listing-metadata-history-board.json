@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-25 17:14:26Z",
+ "generated_utc": "2026-11-27 12:29:52Z",
  "face": "api_metadata_history",
  "scope": "listing",
  "listings": [
@@ -108,7 +108,7 @@
  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
  "report": "preview/listing-metadata-history-board.html",
  "sources": {
-  "driver": "87dadfc2c19b4568",
+  "driver": "1e4d42c15ec97ee6",
   "copy": "cee9a5344e078e7b",
   "apimarket": "82a49194bef85737",
   "report": "3a83dce99c9e2bd4"
