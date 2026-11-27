@@ -2830,5 +2830,161 @@ class PWC25TwentiethProducerClosed(unittest.TestCase):
             shutil.rmtree(tmp, ignore_errors=True)
 
 
+def mhh_closure_positions(text):
+    """(present, after_loop, readers_clean, shared_only) for AC-PWC26."""
+    if "def main(" not in text:
+        return (False, False, False, False)
+    body = text.rpartition("def main(")[2].split("\ndef ")[0]
+    at = body.find("_refresh_face(args.out, args.json)")
+    present = at != -1
+    loop_end = body.find(
+        'if payload["sizes"]["json"] == os.path.getsize(args.json):')
+    after = present and loop_end != -1 and at > loop_end
+    readers = True
+    for name in ("def read_face(", "def build_html(",
+                 "def check_sizes(", "def check_sources("):
+        if name in text:
+            reader_body = text.rpartition(name)[2].split("\ndef ")[0]
+            if "_refresh_face(" in reader_body:
+                readers = False
+    helper = text.rpartition("def _refresh_face(")[2].split("\ndef ")[0]
+    shared = "board_face_landing.refresh_export_face(ROOT)" in helper
+    no_local_writer = ".write(" not in helper
+    return (present, after, readers and present, shared and no_local_writer)
+
+
+class PWC26TwentyFirstProducerClosed(unittest.TestCase):
+    """AC-PWC26: market_hour_heatmap re-derives the face on its landing path only.
+
+    That tool's read_face() builds a demo stack in a private temp dir, so the
+    behavioural arms write only into their own world; nothing of this
+    repository's preview/ or ledger moves.
+    """
+
+    def _source(self):
+        with io.open(os.path.join(TOOLS, "market_hour_heatmap.py"),
+                     encoding="utf-8") as f:
+            return f.read()
+
+    def test_closed_and_ordered_after_the_fixed_point_loop(self):
+        text = self._source()
+        kind, _html, writes, closes = MOD.classify_source(text)
+        self.assertEqual(kind, "closed")
+        self.assertGreaterEqual(writes, 1)
+        self.assertGreaterEqual(closes, 1)
+        self.assertEqual(mhh_closure_positions(text), (True, True, True, True))
+
+    def test_negative_controls_delete_and_move(self):
+        text = self._source()
+        deleted = text.replace(
+            "    face = _refresh_face(args.out, args.json)\n", "").replace(
+            "board_face_landing.refresh_export_face(ROOT)",
+            "None  # control: shared call removed")
+        self.assertEqual(MOD.classify_source(deleted)[0], "gap")
+        self.assertFalse(mhh_closure_positions(deleted)[0])
+        moved = text.replace(
+            "    face = _refresh_face(args.out, args.json)\n", "").replace(
+            "    for _ in range(6):",
+            "    face = _refresh_face(args.out, args.json)  "
+            "# control: moved into the loop before the last landing write\n"
+            "    for _ in range(6):", 1)
+        pos = mhh_closure_positions(moved)
+        self.assertTrue(pos[0])
+        self.assertFalse(pos[1])
+
+    def test_refresh_is_shared_and_named(self):
+        import market_hour_heatmap as MHH
+        calls = []
+
+        class Fake(object):
+            def __init__(self, ok, note):
+                self.ok, self.note = ok, note
+
+            def refresh_export_face(self, root):
+                calls.append(root)
+                return (self.ok, self.note, {})
+
+        class Boom(object):
+            def refresh_export_face(self, root):
+                raise RuntimeError("no writer here")
+
+        tmp = tempfile.mkdtemp(prefix="mhh-face-")
+        saved_root = MHH.ROOT
+        saved = sys.modules.get("board_face_landing")
+        try:
+            MHH.ROOT = tmp
+            os.makedirs(os.path.join(tmp, "preview"), exist_ok=True)
+            html = os.path.join(tmp, "preview", "market-hour-heatmap.html")
+            js = os.path.join(tmp, "preview", "market-hour-heatmap.json")
+            self.assertTrue(MHH._landing_is_default(html, js))
+            self.assertFalse(MHH._landing_is_default(
+                os.path.join(tmp, "a.html"), js))
+            sys.modules["board_face_landing"] = Fake(True, "")
+            self.assertEqual(MHH._refresh_face(html, js), "WRITTEN")
+            self.assertEqual(calls, [tmp])
+            sys.modules["board_face_landing"] = Fake(
+                False, "E_BFL_FACE_UNPROVEN")
+            self.assertEqual(MHH._refresh_face(html, js),
+                             "REFUSED E_BFL_FACE_UNPROVEN")
+            sys.modules["board_face_landing"] = Boom()
+            self.assertEqual(MHH._refresh_face(html, js),
+                             "SKIPPED RuntimeError")
+            self.assertEqual(len(calls), 2)
+        finally:
+            MHH.ROOT = saved_root
+            if saved is None:
+                sys.modules.pop("board_face_landing", None)
+            else:
+                sys.modules["board_face_landing"] = saved
+            shutil.rmtree(tmp, ignore_errors=True)
+
+    def test_landing_derives_once_and_scratch_and_check_derive_none(self):
+        """A landing in this world's own preview derives once; scratch and --check do not."""
+        import market_hour_heatmap as MHH
+        calls = []
+
+        class Fake(object):
+            def refresh_export_face(self, root):
+                calls.append(root)
+                return (True, "", {})
+
+        tmp = tempfile.mkdtemp(prefix="mhh-pwc-")
+        preview = os.path.join(tmp, "preview")
+        os.makedirs(preview, exist_ok=True)
+        html = os.path.join(preview, "market-hour-heatmap.html")
+        js = os.path.join(preview, "market-hour-heatmap.json")
+        saved_root = MHH.ROOT
+        saved = sys.modules.get("board_face_landing")
+        saved_stdout = sys.stdout
+        try:
+            sys.modules["board_face_landing"] = Fake()
+            MHH.ROOT = tmp
+            sys.stdout = io.StringIO()
+            rc = MHH.main(["prog", "--out", html, "--json", js])
+            self.assertEqual(rc, 0)
+            self.assertEqual(calls, [tmp])
+            self.assertTrue(os.path.isfile(html))
+            self.assertTrue(os.path.isfile(js))
+
+            scratch_html = os.path.join(tmp, "scratch.html")
+            scratch_js = os.path.join(tmp, "scratch.json")
+            rc = MHH.main(["prog", "--out", scratch_html, "--json", scratch_js])
+            self.assertEqual(rc, 0)
+            self.assertEqual(len(calls), 1)
+
+            calls[:] = []
+            rc = MHH.main(["prog", "--check", "--out", html, "--json", js])
+            self.assertEqual(calls, [])
+            self.assertIn(rc, (0, 2))
+        finally:
+            sys.stdout = saved_stdout
+            MHH.ROOT = saved_root
+            if saved is None:
+                sys.modules.pop("board_face_landing", None)
+            else:
+                sys.modules["board_face_landing"] = saved
+            shutil.rmtree(tmp, ignore_errors=True)
+
+
 if __name__ == "__main__":
     unittest.main()

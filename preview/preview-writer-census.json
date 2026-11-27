@@ -3,8 +3,8 @@
     "src/os/board_face_landing.py",
     "src/os/export_round.py"
   ],
-  "generated_at": "2026-11-27T08:49:47+08:00",
-  "round": "R3547",
+  "generated_at": "2026-11-27T09:03:18+08:00",
+  "round": "R3548",
   "rows": [
     {
       "face_calls": 0,
@@ -392,15 +392,6 @@
         "market-daily.html"
       ],
       "path": "tools/market_daily_board.py",
-      "write_calls": 8
-    },
-    {
-      "face_calls": 0,
-      "kind": "gap",
-      "landing_paths": [
-        "market-hour-heatmap.html"
-      ],
-      "path": "tools/market_hour_heatmap.py",
       "write_calls": 8
     },
     {
@@ -902,6 +893,15 @@
       "face_calls": 1,
       "kind": "closed",
       "landing_paths": [
+        "market-hour-heatmap.html"
+      ],
+      "path": "tools/market_hour_heatmap.py",
+      "write_calls": 8
+    },
+    {
+      "face_calls": 1,
+      "kind": "closed",
+      "landing_paths": [
         "membership-benefit-report.html"
       ],
       "path": "tools/membership_benefit_report.py",
@@ -1039,7 +1039,7 @@
       "face_calls": 0,
       "kind": "reader",
       "landing_paths": [],
-      "path": "src/os/state_R3547.py",
+      "path": "src/os/state_R3548.py",
       "write_calls": 0
     },
     {
@@ -1097,9 +1097,9 @@
     }
   ],
   "totals": {
-    "closed": 27,
+    "closed": 28,
     "excluded": 2,
-    "gap": 82,
+    "gap": 81,
     "modules": 120,
     "reader": 11,
     "writers": 109
