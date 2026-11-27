@@ -2197,5 +2197,147 @@ class PWC21SeventeenthProducerClosed(unittest.TestCase):
             shutil.rmtree(tmp, ignore_errors=True)
 
 
+def lpm_closure_positions(text):
+    """(present, after_landing, readers_clean, shared_only) for AC-PWC22."""
+    if "def write_artifacts(" not in text:
+        return (False, False, False, False)
+    body = text.rpartition("def write_artifacts(")[2].split("\ndef ")[0]
+    at = body.find("_refresh_face(HTML, JSON_OUT)")
+    present = at != -1
+    last_write = body.rfind("f.write(js)")
+    after = present and last_write != -1 and at > last_write
+    readers = True
+    for name in ("def check(", "def payload(", "def render_html("):
+        if name in text:
+            reader_body = text.rpartition(name)[2].split("\ndef ")[0]
+            if "_refresh_face(" in reader_body:
+                readers = False
+    helper = text.rpartition("def _refresh_face(")[2].split("\ndef ")[0]
+    shared = "board_face_landing.refresh_export_face(ROOT)" in helper
+    no_local_writer = ".write(" not in helper
+    return (present, after, readers and present, shared and no_local_writer)
+
+
+class PWC22EighteenthProducerClosed(unittest.TestCase):
+    """AC-PWC22: lobby_protocol_map re-derives the face on its landing path only."""
+
+    def _source(self):
+        with io.open(os.path.join(TOOLS, "lobby_protocol_map.py"),
+                     encoding="utf-8") as f:
+            return f.read()
+
+    def test_closed_and_ordered_after_the_landing(self):
+        text = self._source()
+        kind, _html, writes, closes = MOD.classify_source(text)
+        self.assertEqual(kind, "closed")
+        self.assertGreaterEqual(writes, 2)
+        self.assertGreaterEqual(closes, 1)
+        self.assertEqual(lpm_closure_positions(text), (True, True, True, True))
+
+    def test_negative_controls_delete_and_move(self):
+        text = self._source()
+        deleted = text.replace(
+            '    p["face"] = _refresh_face(HTML, JSON_OUT)\n', "").replace(
+            "board_face_landing.refresh_export_face(ROOT)",
+            "None  # control: shared call removed")
+        self.assertEqual(MOD.classify_source(deleted)[0], "gap")
+        self.assertFalse(lpm_closure_positions(deleted)[0])
+        moved = text.replace(
+            '    p["face"] = _refresh_face(HTML, JSON_OUT)\n', "").replace(
+            '    with open(JSON_OUT, "w", encoding="utf-8", newline="\\n") as f:',
+            '    p["face"] = _refresh_face(HTML, JSON_OUT)  # control: moved\n'
+            '    with open(JSON_OUT, "w", encoding="utf-8", newline="\\n") as f:', 1)
+        pos = lpm_closure_positions(moved)
+        self.assertTrue(pos[0])
+        self.assertFalse(pos[1])
+
+    def test_refresh_is_shared_and_named(self):
+        import lobby_protocol_map as LPM
+        calls = []
+
+        class Fake(object):
+            def __init__(self, ok, note):
+                self.ok, self.note = ok, note
+
+            def refresh_export_face(self, root):
+                calls.append(root)
+                return (self.ok, self.note, {})
+
+        class Boom(object):
+            def refresh_export_face(self, root):
+                raise RuntimeError("no writer here")
+
+        pair = (os.path.join(LPM.ROOT, "preview", "lobby-protocol-map.html"),
+                os.path.join(LPM.ROOT, "preview", "lobby-protocol-map.json"))
+        self.assertTrue(LPM._landing_is_default(*pair))
+        saved = sys.modules.get("board_face_landing")
+        try:
+            sys.modules["board_face_landing"] = Fake(True, "")
+            self.assertEqual(LPM._refresh_face(*pair), "WRITTEN")
+            self.assertEqual(calls, [LPM.ROOT])
+            sys.modules["board_face_landing"] = Fake(False, "E_BFL_FACE_UNPROVEN")
+            self.assertEqual(LPM._refresh_face(*pair),
+                             "REFUSED E_BFL_FACE_UNPROVEN")
+            sys.modules["board_face_landing"] = Boom()
+            self.assertEqual(LPM._refresh_face(*pair), "SKIPPED RuntimeError")
+            self.assertEqual(len(calls), 2)
+        finally:
+            if saved is None:
+                sys.modules.pop("board_face_landing", None)
+            else:
+                sys.modules["board_face_landing"] = saved
+
+    def test_landing_derives_once_and_scratch_and_check_derive_none(self):
+        """A landing in this root's own preview derives once; scratch and --check do not."""
+        import lobby_protocol_map as LPM
+        calls = []
+
+        class Fake(object):
+            def refresh_export_face(self, root):
+                calls.append(root)
+                return (True, "", {})
+
+        tmp = tempfile.mkdtemp(prefix="lpm-pwc-")
+        write(os.path.join(tmp, "docs", "spec", "lobby-websocket-spec.md"),
+              "# spec\n\n## one\n\nThe server answers `sys.hello` first.\n\n"
+              "| # | row | method |\n|---|---|---|\n| AC-S1 | hello | assert |\n")
+        write(os.path.join(tmp, "src", "sandbox", "lobby", "server.py"),
+              "HELLO = 'sys.hello'\n")
+        saved_mod = sys.modules.get("board_face_landing")
+        saved = (LPM.ROOT, LPM.SPEC, LPM.IMPL, LPM.HTML, LPM.JSON_OUT)
+        saved_stdout = sys.stdout
+        try:
+            sys.modules["board_face_landing"] = Fake()
+            LPM.ROOT = tmp
+            LPM.SPEC = os.path.join(tmp, "docs", "spec", "lobby-websocket-spec.md")
+            LPM.IMPL = os.path.join(tmp, "src", "sandbox", "lobby", "server.py")
+            LPM.HTML = os.path.join(tmp, "preview", "lobby-protocol-map.html")
+            LPM.JSON_OUT = os.path.join(tmp, "preview", "lobby-protocol-map.json")
+            sys.stdout = io.StringIO()
+            LPM.write_artifacts()
+            self.assertEqual(calls, [tmp])
+            scratch = os.path.join(tmp, "scratch")
+            os.makedirs(scratch, exist_ok=True)
+            LPM.HTML = os.path.join(scratch, "o.html")
+            LPM.JSON_OUT = os.path.join(scratch, "o.json")
+            LPM.write_artifacts()
+            self.assertEqual(len(calls), 1)
+            LPM.HTML = os.path.join(tmp, "preview", "lobby-protocol-map.html")
+            LPM.JSON_OUT = os.path.join(tmp, "preview", "lobby-protocol-map.json")
+            before = len(calls)
+            sys.argv = ["lobby_protocol_map.py", "--check"]
+            rc = LPM.main()
+            self.assertEqual(len(calls), before)
+            self.assertIn(rc, (0, 2, 3))
+        finally:
+            sys.stdout = saved_stdout
+            LPM.ROOT, LPM.SPEC, LPM.IMPL, LPM.HTML, LPM.JSON_OUT = saved
+            if saved_mod is None:
+                sys.modules.pop("board_face_landing", None)
+            else:
+                sys.modules["board_face_landing"] = saved_mod
+            shutil.rmtree(tmp, ignore_errors=True)
+
+
 if __name__ == "__main__":
     unittest.main()

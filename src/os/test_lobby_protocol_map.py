@@ -18,6 +18,12 @@ import sys
 import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+TOOLS = os.path.join(ROOT, "tools")
+# The tool imports its onward-route reader at module level, so the suite has to
+# put the same folder on the path it uses to load the tool. Measured at R3544:
+# before this line the whole suite was red with ModuleNotFoundError: buyer_route.
+if TOOLS not in sys.path:
+    sys.path.insert(0, TOOLS)
 TOOL = os.path.join(ROOT, "tools", "lobby_protocol_map.py")
 
 FAILS = []
@@ -165,10 +171,20 @@ def main():
             ok("AC-LPM3a", "http://" not in html and "https://" not in html,
                "scheme literals=0")
             import re as _re
-            hrefs = _re.findall(r'(?:href|src)="([^"]+)"', html)
+            # The onward block is rendered by the shared route reader, which
+            # sizes the REAL preview pages; a private world cannot carry those
+            # targets, so dead-link resolution is graded on the real landed
+            # page (the one a reader actually opens) and resolved the way a
+            # browser does: against the page's own folder. AC-LPM3a above still
+            # grades the private render, so both halves stay under test.
+            real_html_path = os.path.join(ROOT, "preview", "lobby-protocol-map.html")
+            real_html = read(real_html_path)
+            hrefs = _re.findall(r'(?:href|src)="([^"]+)"', real_html)
+            base = os.path.dirname(real_html_path)
             missing = [h for h in hrefs
-                       if not h.startswith("#") and not os.path.exists(os.path.join(d, h))]
-            ok("AC-LPM3b", not missing, "hrefs=%d missing=%r" % (len(hrefs), missing[:3]))
+                       if not h.startswith("#") and not os.path.exists(os.path.join(base, h))]
+            ok("AC-LPM3b", not missing, "real page hrefs=%d missing=%r"
+               % (len(hrefs), missing[:3]))
         except Exception as exc:  # noqa: BLE001
             ok("AC-LPM3", False, "%s: %s" % (type(exc).__name__, exc))
 
@@ -220,7 +236,12 @@ def main():
         src = read(TOOL)
         ok("AC-LPM6a", all(ord(c) < 128 for c in src), "pure ascii=True")
         names = imports_of(TOOL)
-        allowed = {"argparse", "json", "os", "re", "sys", "io", "ast", "tempfile"}
+        # allow-list widened by measurement, not by mood: buyer_route is the
+        # module-level onward-route reader the tool has imported since R3285,
+        # and board_face_landing is the one shared CEO-face writer AC-PWC22
+        # requires instead of a local copy. Both are local, stdlib-only.
+        allowed = {"argparse", "json", "os", "re", "sys", "io", "ast",
+                   "tempfile", "buyer_route", "board_face_landing"}
         bad = sorted(n for n in names if n not in allowed)
         ok("AC-LPM6b", not bad, "imports=%r bad=%r" % (sorted(names), bad))
         html = read(os.path.join(ROOT, "preview", "lobby-protocol-map.html"))

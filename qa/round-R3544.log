@@ -1,0 +1,59 @@
+ROUND R3544 EVIDENCE - 2026-11-27 - BigDomain OSLoop
+====================================================
+
+[1] five-still scan (read-only, before any write)
+DEC ids=141 rows=438
+DEC new=['T-20261109-01']  (citation of already-adjudicated work)
+DEC gone=['D-20261026-24', 'D-20261101-19', 'D-20261106-04', 'D-20261114-0']
+LEDGER hits=0
+GORD tail unchanged at 2026-11-20 22:5x
+GIT 'M qa/crawl-baselines.json / M qa/crawl-failure-days.jsonl / M qa/crawl-log.jsonl' (not this window)
+INDEXLOCK False
+STATE bytes=58980 tick=3543 bench=2026-11-24
+
+[2] baseline of the target producer's own suite BEFORE the work (red, pre-existing)
+python src/os/test_lobby_protocol_map.py
+  ModuleNotFoundError: No module named 'buyer_route'
+  (tools/ never put on sys.path although the tool imports buyer_route since R3285)
+
+[3] census row read (read-only)
+tools/lobby_protocol_map.py  wc=4 fc=0 lp=['lobby-protocol-map.html']
+
+[4] suite after the wiring
+python -m unittest src.os.test_preview_writer_census
+  Ran 75 tests in 10.938s
+  OK
+  (was 71; +4 arms under AC-PWC22 with two negative controls delete+move)
+
+python src/os/test_lobby_protocol_map.py
+  suite: 17 assertions over 6 criteria
+  SUITE PASS 17/17
+
+[5] real landing + read-only check
+python tools/lobby_protocol_map.py
+  wrote preview/lobby-protocol-map.html 29069B and .json 27924B criteria=32 messages=17 uncovered=0
+  APPLIED latest_artifact->preview/lobby-protocol-map.html (29069B) + preview/lobby-protocol-map.json (27924B)
+python tools/lobby_protocol_map.py --check
+  LOBBY PROTOCOL MAP PASS criteria=32 messages=17 uncovered=0 file_refs=13 route_hops=4 html=29069B fails=0
+
+[6] census re-derivation (after state tick 3544)
+python tools/preview_writer_census.py
+  PWC (R3544) modules=119 closed=24 gap=85 reader=10 face export=WRITTEN
+python tools/preview_writer_census.py --check
+  PWC-CHECK VERDICT PASS read_only=True modules=119 closed=24 gap=85 reader=10
+
+[7] registry / matrix / index / chain
+python src/os/registry_counter_census.py --check
+  VERDICT PASS pinned=832
+python src/os/suite_matrix_reconcile.py --check
+  DOC-CURRENT docs/sandbox-suite-matrix.md  (832 rows, 7047 criteria)
+python tools/deliverable_index.py --check
+  VERDICT PASS 23/23 fingerprint=3211ba5ea9985daa
+python tools/first_yuan_chain.py --check
+  VERDICT PASS legs=2 entries=2 tx=1 reconcile_rc=0 html=4403B read_only=True
+
+[8] carrier + CEO face
+python src/os/state_io.py --check
+  STATE IO CANON-CLEAN bytes=63275 crlf=105 bare_lf=0 lone_cr=0 log_items=95 off_indent=0
+python tools/status_export_fresh.py --check
+  VERDICT R3544 PASS: do, ceo_face.current and current all name R3544

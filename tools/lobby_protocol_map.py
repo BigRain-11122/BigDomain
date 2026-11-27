@@ -260,6 +260,40 @@ footer{margin-top:34px;color:#6b757e;font-size:12px}
     }
 
 
+def _landing_is_default(html_path, json_path):
+    """True only when both halves land under THIS root's own preview/.
+
+    The wanted folder is computed from ROOT, not from any rebindable output
+    constant, so a world that repoints its outputs cannot pose as the root.
+    """
+    want = os.path.realpath(os.path.join(ROOT, "preview"))
+    for path in (html_path, json_path):
+        if os.path.dirname(os.path.realpath(path)) != want:
+            return False
+    return True
+
+
+def _refresh_face(html_path, json_path):
+    """AC-PWC22 (R3544): landing this pair and re-deriving the CEO face are ONE run.
+
+    The one definition lives in src/os/board_face_landing.py, so no second
+    writer is kept here. ROOT is passed explicitly, so a private world derives
+    that world's face. Refusals are named, never raised: both halves are
+    already on disk when this runs, so the caller's exit code stays its own.
+    """
+    if not _landing_is_default(html_path, json_path):
+        return "SKIPPED scratch"
+    try:
+        os_src = os.path.join(ROOT, "src", "os")
+        if os_src not in sys.path:
+            sys.path.insert(0, os_src)
+        import board_face_landing
+        ok, note, _proof = board_face_landing.refresh_export_face(ROOT)
+        return "WRITTEN" if ok else "REFUSED %s" % note
+    except Exception as exc:  # a private world may carry no shared writer
+        return "SKIPPED %s" % type(exc).__name__
+
+
 def write_artifacts():
     p = payload()
     html = render_html(p)
@@ -280,6 +314,7 @@ def write_artifacts():
         f.write(html)
     with open(JSON_OUT, "w", encoding="utf-8", newline="\n") as f:
         f.write(js)
+    p["face"] = _refresh_face(HTML, JSON_OUT)
     return p
 
 
