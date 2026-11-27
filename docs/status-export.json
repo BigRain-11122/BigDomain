@@ -10,8 +10,8 @@
     "latest_evidence": "qa/round-R3544.log (2616B, 2026-11-27, sha256 cae85d12daf3)",
     "newest_pair_on_disk_is_board": false,
     "next_milestone": "[R3552] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先把刷新轮排最前，毕=更新字段＋文件④更新记录行。 (1) S4U 仍未落地（第九十一次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回；宁缺不错。 (2) **77 家缺口已列名**（`preview/preview-writer-census.json`）：下窗只动一家活线生产者，判据沿用 `AC-PWC30` 形状（源码位置量＋两条负控＋共享定义＋按 ROOT 的落地守卫＋循环收敛后的闭包）。下一批候选按普查实测挑：`tools/refund_latency_board.py`（wc=9，落 refund-latency-board.html）；多落页生产者仍单点预算不接。 (3) `replay-receipt` 可豁免性仍待 L3 签发或驳回。 (4) 载体 `state.json` 现 49488B（阈 78500，余量 29012），下窗写 state 前仍建议 `python src/os/state_fold_run.py --fold --dry-run` 看是否到期。 (5) tick 口径：本轮 3551→3552，下轮 R3553。 (6) 承账不变：`qa_log --ledger-check broken=5`、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写、电池页待重派生。 (7) **本轮新实测（写进下窗第一步）**：①`tools/preview_writer_census.py` 与 `tools/deliverable_index.py` **不识别 `--help`**——探针带 `--help` 会直接跑真活（前者重派生普查页并改写 `latest_artifact`，后者真写索引），查开关请读源码别用 `--help`；②`latest_artifact` 取「盘上最新的非 BOARD_PAGES 产品对半」（`BOARD_PAGES` 仅 ceo-blockers/face-sweep/battery-shard-report/index），故普查页/链页落地都会抢走它——**收口顺序=普查/注册表/矩阵 → 索引/链页 → 产品页最后一笔 → 导出刷新**，产品页晚于链页落盘时 `first_yuan_chain --check` 仍 PASS（链页 html 不嵌 mtime）。 (8) **验收提醒**：`git commit` 在本机 PS 里因 stderr 走 NativeCommandError 报退出码 (truncated)",
-    "next_milestone_due": "2026-11-29T10:13:38+08:00",
-    "updated_at": "2026-11-27T10:13:38+08:00",
+    "next_milestone_due": "2026-11-29T10:14:22+08:00",
+    "updated_at": "2026-11-27T10:14:22+08:00",
     "heartbeat": {
       "tick": 3548,
       "state_tick": 3553,
@@ -27,7 +27,7 @@
       "over7": 0,
       "dup_rows": 0,
       "distinct": 31,
-      "collapsed": 1,
+      "collapsed": 0,
       "labels_refreshed": 0,
       "notes_stale": 0,
       "note_claims": 0,
@@ -36,7 +36,7 @@
     }
   },
   "current": "2026-11-27 R3553 PRODUCT: the twenty-seventh gap producer from the R3527 census closes at its birth site - tools/refund_latency_board.py, the page that answers how long the money took to come back (six bands, five aggregates over refunded rows only, two named crossings and a contiguous monthly leg, all printed from the shipped api_refund_latency face over a one-off demo world), now re-derives docs/status-export.json IN PROCESS through the shared board_face_landing.refresh_export_face(ROOT) after its sizes fixed-point loop (that loop rewrites the JSON up to six times, so the closure sits after the loop, not inside it), and only when both halves land under THIS root own preview/ - a --out/--json redirection derives nothing; the census moves from closed=32 gap=77 to closed=33 gap=76.",
-  "claims": {"claimed": 43, "captured": 24, "contradicted": 0, "uncaptured": 19, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-27T10:13:38+08:00"},
+  "claims": {"claimed": 43, "captured": 24, "contradicted": 0, "uncaptured": 19, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-27T10:14:22+08:00"},
   "chain": {"present": true, "rows": 106, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -66,7 +66,7 @@
     }
   ],
   "do": "2026-11-27 R3553 PRODUCT: the twenty-seventh gap producer from the R3527 census closes at its birth site - tools/refund_latency_board.py, the page that answers how long the money took to come back (six bands, five aggregates over refunded rows only, two named crossings and a contiguous monthly leg, all printed from the shipped api_refund_latency face over a one-off demo world), now re-derives docs/status-export.json IN PROCESS through the shared board_face_landing.refresh_export_face(ROOT) after its sizes fixed-point loop (that loop rewrites the JSON up to six times, so the closure sits after the loop, not inside it), and only when both halves land under THIS root own preview/ - a --out/--json redirection derives nothing; the census moves from closed=32 gap=77 to closed=33 gap=76.",
-  "export_ts": "2026-11-27T10:13:38+08:00",
+  "export_ts": "2026-11-27T10:14:22+08:00",
   "latest_artifact": "preview/refund-latency-board.html (7033B) + preview/refund-latency-board.json (2842B) [2026-11-27 mtime]",
   "latest_evidence": "qa/round-R3544.log (2616B, 2026-11-27, sha256 cae85d12daf3)",
   "next_milestone": "[R3552] next window (<=48h): (0) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先把刷新轮排最前，毕=更新字段＋文件④更新记录行。 (1) S4U 仍未落地（第九十一次承账）——需提权会话跑 `src/os/register_loop_task.ps1` 后读回；宁缺不错。 (2) **77 家缺口已列名**（`preview/preview-writer-census.json`）：下窗只动一家活线生产者，判据沿用 `AC-PWC30` 形状（源码位置量＋两条负控＋共享定义＋按 ROOT 的落地守卫＋循环收敛后的闭包）。下一批候选按普查实测挑：`tools/refund_latency_board.py`（wc=9，落 refund-latency-board.html）；多落页生产者仍单点预算不接。 (3) `replay-receipt` 可豁免性仍待 L3 签发或驳回。 (4) 载体 `state.json` 现 49488B（阈 78500，余量 29012），下窗写 state 前仍建议 `python src/os/state_fold_run.py --fold --dry-run` 看是否到期。 (5) tick 口径：本轮 3551→3552，下轮 R3553。 (6) 承账不变：`qa_log --ledger-check broken=5`、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写、电池页待重派生。 (7) **本轮新实测（写进下窗第一步）**：①`tools/preview_writer_census.py` 与 `tools/deliverable_index.py` **不识别 `--help`**——探针带 `--help` 会直接跑真活（前者重派生普查页并改写 `latest_artifact`，后者真写索引），查开关请读源码别用 `--help`；②`latest_artifact` 取「盘上最新的非 BOARD_PAGES 产品对半」（`BOARD_PAGES` 仅 ceo-blockers/face-sweep/battery-shard-report/index），故普查页/链页落地都会抢走它——**收口顺序=普查/注册表/矩阵 → 索引/链页 → 产品页最后一笔 → 导出刷新**，产品页晚于链页落盘时 `first_yuan_chain --check` 仍 PASS（链页 html 不嵌 mtime）。 (8) **验收提醒**：`git commit` 在本机 PS 里因 stderr 走 NativeCommandError 报退出码 (truncated)",
@@ -167,7 +167,7 @@
   },
   "self_drive": {"window": "2026-11-21..2026-11-27", "window_days": 7, "log_lines_in_window": 64, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 33, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
   "state_bytes": 54810,
-  "next_milestone_due": "2026-11-29T10:13:38+08:00",
+  "next_milestone_due": "2026-11-29T10:14:22+08:00",
   "heartbeat": {
     "tick": 3548,
     "state_tick": 3553,
@@ -183,7 +183,7 @@
     "over7": 0,
     "dup_rows": 0,
     "distinct": 31,
-    "collapsed": 1,
+    "collapsed": 0,
     "labels_refreshed": 0,
     "notes_stale": 0,
     "note_claims": 0,
