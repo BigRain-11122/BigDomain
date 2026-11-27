@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-24 07:16:38Z",
+ "generated_utc": "2026-11-27 10:32:08Z",
  "face": "api_buyer_rating_pattern",
  "board_face": "api_board",
  "ratings_face": "api_ratings",
@@ -66,7 +66,7 @@
  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
  "report": "preview/buyer-rating-pattern-board.html",
  "sources": {
-  "driver": "c0775a75a1896c03",
+  "driver": "979f7deffb3790ed",
   "copy": "adc5aad8032c5269",
   "apimarket": "82a49194bef85737",
   "report": "3a83dce99c9e2bd4"
