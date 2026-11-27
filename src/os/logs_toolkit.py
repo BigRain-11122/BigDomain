@@ -1480,8 +1480,75 @@ APPEND_TAIL_RE = re.compile(
     r'\r\n  \],\r\n(?P<tick_ind>[ ]*)"tick":(?P<tick>\d+)\r\n\}$')
 
 
+LEDGER_ROW_RE = re.compile(r'^R\d{3,5} tokens: local=\S+ api=\d+ '
+                           r'api_reason=.+$')
+
+
 class AppendError(ValueError):
     """Named refusal from the append face (AC-LAP3); str() is the code."""
+
+
+class AppendCheckError(ValueError):
+    """Named refusal from the read-only append check (AC-LAC3)."""
+
+
+def append_check(path):
+    """Read-only health reading of a state.json carrier before an append.
+
+    The same diseases the write face refuses are measured here first, so a
+    sweep or a closeout chain can ask "can this carrier still take a line?"
+    without faking an append. Nothing is written and nothing is derived.
+    """
+    with open(path, 'rb') as f:
+        raw = f.read()
+    try:
+        text = raw.decode('utf-8')
+        doc = json.loads(text)
+    except (UnicodeDecodeError, json.JSONDecodeError):
+        raise AppendCheckError('E_LAC_PARSE')
+    if not isinstance(doc, dict):
+        raise AppendCheckError('E_LAC_PARSE')
+    log = doc.get('log')
+    if not isinstance(log, list) or not log:
+        raise AppendCheckError('E_LAC_LOG')
+    for item in log:
+        if not isinstance(item, str) or not item.strip():
+            raise AppendCheckError('E_LAC_LOG')
+    prof = eol_profile(raw)
+    if not prof['log_block_found']:
+        raise AppendCheckError('E_LAC_LAYOUT')
+    if prof['bare_lf'] or prof['lone_cr']:
+        raise AppendCheckError('E_LAC_EOL')
+    caliber = prof['indent_caliber']
+    if caliber not in (2, 16) or prof['indent_anomaly']:
+        raise AppendCheckError('E_LAC_LAYOUT')
+    m = APPEND_TAIL_RE.search(text)
+    if m is None or m.end() != len(text):
+        raise AppendCheckError('E_LAC_ANCHOR')
+    ledger = None
+    for item in reversed(log):
+        if LEDGER_ROW_RE.match(item):
+            ledger = item
+            break
+    if ledger is None:
+        raise AppendCheckError('E_LAC_LEDGER')
+    tokens = ledger.split(' ', 2)
+    api = re.search(r'\bapi=(\d+)\b', ledger)
+    if api is None:
+        raise AppendCheckError('E_LAC_LEDGER')
+    margin = GATE - len(raw)
+    if margin < 0:
+        raise AppendCheckError('E_LAC_GATE')
+    return {
+        'bytes': len(raw),
+        'gate': GATE,
+        'margin': margin,
+        'tick': int(m.group('tick')),
+        'log': len(log),
+        'caliber': caliber,
+        'ledger': tokens[0],
+        'api': int(api.group(1)),
+    }
 
 
 def append_plan(path, lines, tick=None):
@@ -1572,10 +1639,24 @@ def append_execute(plan):
 
 
 def cmd_append(args):
+    path = args.file or os.path.join(args.root, 'src', 'os', 'state.json')
+    if getattr(args, 'check', False):
+        if not os.path.isfile(path):
+            print('error: E_LAC_NO_FILE %s' % path, file=sys.stderr)
+            return 3
+        try:
+            facts = append_check(path)
+        except AppendCheckError as e:
+            print('APPEND CHECK FAIL code=%s file=%s' % (e, path))
+            return 2
+        print('APPEND CHECK PASS bytes=%d gate=%d margin=%d tick=%d '
+              'log=%d ledger=%s api=%d'
+              % (facts['bytes'], facts['gate'], facts['margin'],
+                 facts['tick'], facts['log'], facts['ledger'], facts['api']))
+        return 0
     if not re.match(r'^R\d{3,5}$', args.round or ''):
         print('error: E_LAP_ROUND %r' % (args.round,), file=sys.stderr)
         return 2
-    path = args.file or os.path.join(args.root, 'src', 'os', 'state.json')
     if not os.path.isfile(path):
         print('error: E_LAP_NO_FILE %s' % path, file=sys.stderr)
         return 3
@@ -1906,7 +1987,12 @@ def main(argv=None):
     pr.add_argument('--strict', action='store_true',
                     help='exit 4 when any window round would be lost')
     pa = sub.add_parser('append', help='state.json log append surgery (verify-then-write)')
-    pa.add_argument('--round', required=True, help='round label e.g. R3612')
+    pa.add_argument('--round', default=None,
+                    help='round label e.g. R3612 (required unless --check)')
+    pa.add_argument('--check', action='store_true',
+                    help='read-only carrier health reading: parses, layout, '
+                         'append anchor, last ledger row and gate margin; '
+                         'writes and derives nothing (exit 0 pass, 2 fail)')
     pa.add_argument('--line', action='append', default=[],
                     help='log line to append, kept in the order given (repeatable)')
     pa.add_argument('--tick', type=int, default=None,

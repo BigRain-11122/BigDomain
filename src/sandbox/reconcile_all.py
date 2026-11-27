@@ -9154,6 +9154,17 @@ SUITES = [
     # int() store produced rather than from the caller's raw value.
     ("os-corpus-supply-chain",
      os.path.join("..", "os", "test_corpus_supply_chain.py"), 7),
+    # R3613: the read-only half of the append face. Until it existed, asking
+    # "can this carrier still take a line?" meant faking an append or reading
+    # the tool source, so neither a sweep nor the closeout chain could take
+    # that reading without side effects. It measures the same diseases the
+    # write face refuses (parse, log shape, EOL, item caliber, append anchor,
+    # newest ledger row, gate margin) and writes nothing. Criteria
+    # AC-LAC1..AC-LAC6 were pinned in src/os/backlog.md at R3613, before the
+    # flag and this suite existed. Appended at the END for the same reason as
+    # every row above: a mid-list insert shifts each later suite's shard.
+    ("os-logs-append-check",
+     os.path.join("..", "os", "test_logs_append_check.py"), 23),
     ]
 
 FAILS = 0

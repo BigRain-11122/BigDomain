@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 833 | 7333 | 675/675 | R2739 |
+| 834 | 7356 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -870,7 +870,8 @@
 | 831 | claim-census | test_claim_census.py | 10 | no-evidence | - |
 | 832 | os-stage-residue | ../os/test_stage_residue.py | 4 | no-evidence | - |
 | 833 | os-corpus-supply-chain | ../os/test_corpus_supply_chain.py | 7 | no-evidence | - |
-|  | 合计 |  | 7333 | green 675 / FAIL 0 / no-evidence 158 |  |
+| 834 | os-logs-append-check | ../os/test_logs_append_check.py | 23 | no-evidence | - |
+|  | 合计 |  | 7356 | green 675 / FAIL 0 / no-evidence 159 |  |
 
 ## 证据出处
 

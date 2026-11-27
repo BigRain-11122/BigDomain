@@ -1,21 +1,21 @@
 {
   "ceo_face": {
     "board_pages_skipped": ["preview/face-sweep.html (8877B)"],
-    "current": "2026-11-28 R3612 PRODUCT: this window's new artifact is not another page but the face every page and every round depends on - state.json itself. In the nine rounds before this one the loop wrote its own log row by hand and hurt the carrier three times (R3604 collapsed the item indent with a full json.dump rewrite and closeout_gate refused with indent_anomaly=39, R3606 first omitted the old last item comma and then added a trailing one and only a json.loads assert before the write caught it, R3609 wrote seven rows at four spaces and the gate refused with indent_anomaly=7). src/os/logs_toolkit.py grew one subcommand, append, that performs that surgery from document-derived rules instead of from memory: the item indent is read off the log block itself (two or sixteen, and a mixed block refuses), the old last item gains exactly one comma, each new item is JSON-encoded on its own CRLF line, the tick is rewritten in the same indent slot, and the whole text is re-parsed and re-profiled before anything is written and again after the atomic replace. Dry run is the default and prints the predicted tick, byte span and gate verdict; an over-gate append is refused by name with the fold command in the message instead of being written and discovered later. This window's own log rows are the first live use of the face.",
+    "current": "2026-11-28 R3613 PRODUCT: the append face gains its read-only half - `python src/os/logs_toolkit.py append --check [--file F]` prints one carrier health line (`APPEND CHECK PASS bytes=N gate=78500 margin=M tick=T log=L ledger=R#### api=K`) and refuses by name (`E_LAC_PARSE`/`E_LAC_LOG`/`E_LAC_EOL`/`E_LAC_LAYOUT`/`E_LAC_ANCHOR`/`E_LAC_LEDGER`/`E_LAC_GATE`, missing file `E_LAC_NO_FILE` exit 3), measuring exactly the diseases the write face already refuses (same GATE, same APPEND_TAIL_RE, same eol_profile/caliber, newest tokens row) and writing nothing; until now asking whether a carrier could still take a line meant faking an append or reading the source, so neither a sweep nor the closeout chain could take that reading without side effects.",
     "do": "2026-11-25 R3456 PRODUCT: the answer-revision question now has a door - api_answer_history (live with AC-AMAW1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so 'which answer was rewritten, what did it say before, what does it say now and how often did it change' could only be read by calling the sandbox from a shell - while api_seller_answers and api_listing_qna publish only the CURRENT wording.",
-    "last_artifact": "preview/payment-gate-report.html (7729B) + preview/payment-gate-report.json (7032B) [2026-11-28 mtime]",
-    "latest_artifact": "preview/payment-gate-report.html (7729B) + preview/payment-gate-report.json (7032B) [2026-11-28 mtime]",
-    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\payment-gate-report.html",
+    "last_artifact": "preview/preview-writer-census.html (17697B) + preview/preview-writer-census.json (25235B) [2026-11-28 mtime]",
+    "latest_artifact": "preview/preview-writer-census.html (17697B) + preview/preview-writer-census.json (25235B) [2026-11-28 mtime]",
+    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\preview-writer-census.html",
     "latest_artifact_note": "",
     "latest_evidence": "qa/logs-append-R3612-b.log (1981B, 2026-11-28, sha256 8a1e2e573c5b)",
     "newest_pair_on_disk_is_board": true,
     "next_milestone": "[R3613] next window (<=48h): (0) **载体**：本窗收口 `bytes=66497 gate=78500 margin=12003`——下窗开窗先跑 `src/os/state_fold_run.py --check`，读 `FOLD-DUE` 才折，窗口用 `state_fold_run.choose_window(...)` 现算；**新正法：此后一切 state 日志追加一律走 `python src/os/logs_toolkit.py append --round R#### --line ... [--execute]`，禁手写字节手术**（缩进取文档、原末条恰补一号、tick 自动 +1、超闸拒写并给出折回命令、缺省 dry-run）。(1) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先把刷新轮排最前（P-2026-09-24-56），毕=更新字段＋文件④更新记录行。(2) **S4U 仍未落地**（第一百四十九次承账）：`BigDomain-OSLoop` 任务 `Principal.LogonType=Interactive`，正法=提权会话跑 `src/os/register_loop_task.ps1` 后读回须为 `S4U`；宁缺不错。(3) 普查仍 `closed=89 gap=20`（本窗未加页面、未把计数器装扮成页面）；下窗拉活顺序=P1 正典板可认领项 → `state/queue/tech.md` 队头 → `state/queue/explore.md` 队头。(4) tech L64 常设线下一候选=`append` 的**写前计划面接进收口链**（先报后写）或给 `append` 加 `--check`（只校验末轮账本行可解析），仍须判据先立再动手。(5) tick 口径：本轮 3611→3612，下轮 R3613。(6) 承账不变：`qa_log --ledger-check broken=5`、全量 battery 未实跑、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写、电池页待重派生、reconcile 证据走读仍 12/756。",
-    "next_milestone_due": "2026-11-30T06:30:36+08:00",
-    "updated_at": "2026-11-28T06:30:36+08:00",
+    "next_milestone_due": "2026-11-30T06:46:33+08:00",
+    "updated_at": "2026-11-28T06:46:33+08:00",
     "heartbeat": {
       "tick": 3579,
-      "state_tick": 3612,
-      "lag": 33,
+      "state_tick": 3613,
+      "lag": 34,
       "verdict": "FLAG",
       "reason": "heartbeat_row_debt"
     },
@@ -35,8 +35,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-28 R3612 PRODUCT: this window's new artifact is not another page but the face every page and every round depends on - state.json itself. In the nine rounds before this one the loop wrote its own log row by hand and hurt the carrier three times (R3604 collapsed the item indent with a full json.dump rewrite and closeout_gate refused with indent_anomaly=39, R3606 first omitted the old last item comma and then added a trailing one and only a json.loads assert before the write caught it, R3609 wrote seven rows at four spaces and the gate refused with indent_anomaly=7). src/os/logs_toolkit.py grew one subcommand, append, that performs that surgery from document-derived rules instead of from memory: the item indent is read off the log block itself (two or sixteen, and a mixed block refuses), the old last item gains exactly one comma, each new item is JSON-encoded on its own CRLF line, the tick is rewritten in the same indent slot, and the whole text is re-parsed and re-profiled before anything is written and again after the atomic replace. Dry run is the default and prints the predicted tick, byte span and gate verdict; an over-gate append is refused by name with the fold command in the message instead of being written and discovered later. This window's own log rows are the first live use of the face.",
-  "claims": {"claimed": 45, "captured": 24, "contradicted": 0, "uncaptured": 21, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-28T06:30:36+08:00"},
+  "current": "2026-11-28 R3613 PRODUCT: the append face gains its read-only half - `python src/os/logs_toolkit.py append --check [--file F]` prints one carrier health line (`APPEND CHECK PASS bytes=N gate=78500 margin=M tick=T log=L ledger=R#### api=K`) and refuses by name (`E_LAC_PARSE`/`E_LAC_LOG`/`E_LAC_EOL`/`E_LAC_LAYOUT`/`E_LAC_ANCHOR`/`E_LAC_LEDGER`/`E_LAC_GATE`, missing file `E_LAC_NO_FILE` exit 3), measuring exactly the diseases the write face already refuses (same GATE, same APPEND_TAIL_RE, same eol_profile/caliber, newest tokens row) and writing nothing; until now asking whether a carrier could still take a line meant faking an append or reading the source, so neither a sweep nor the closeout chain could take that reading without side effects.",
+  "claims": {"claimed": 45, "captured": 24, "contradicted": 0, "uncaptured": 21, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-28T06:46:33+08:00"},
   "chain": {"present": true, "rows": 106, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -65,17 +65,17 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-28 R3612 PRODUCT: this window's new artifact is not another page but the face every page and every round depends on - state.json itself. In the nine rounds before this one the loop wrote its own log row by hand and hurt the carrier three times (R3604 collapsed the item indent with a full json.dump rewrite and closeout_gate refused with indent_anomaly=39, R3606 first omitted the old last item comma and then added a trailing one and only a json.loads assert before the write caught it, R3609 wrote seven rows at four spaces and the gate refused with indent_anomaly=7). src/os/logs_toolkit.py grew one subcommand, append, that performs that surgery from document-derived rules instead of from memory: the item indent is read off the log block itself (two or sixteen, and a mixed block refuses), the old last item gains exactly one comma, each new item is JSON-encoded on its own CRLF line, the tick is rewritten in the same indent slot, and the whole text is re-parsed and re-profiled before anything is written and again after the atomic replace. Dry run is the default and prints the predicted tick, byte span and gate verdict; an over-gate append is refused by name with the fold command in the message instead of being written and discovered later. This window's own log rows are the first live use of the face.",
-  "export_ts": "2026-11-28T06:30:36+08:00",
-  "latest_artifact": "preview/payment-gate-report.html (7729B) + preview/payment-gate-report.json (7032B) [2026-11-28 mtime]",
+  "do": "2026-11-28 R3613 PRODUCT: the append face gains its read-only half - `python src/os/logs_toolkit.py append --check [--file F]` prints one carrier health line (`APPEND CHECK PASS bytes=N gate=78500 margin=M tick=T log=L ledger=R#### api=K`) and refuses by name (`E_LAC_PARSE`/`E_LAC_LOG`/`E_LAC_EOL`/`E_LAC_LAYOUT`/`E_LAC_ANCHOR`/`E_LAC_LEDGER`/`E_LAC_GATE`, missing file `E_LAC_NO_FILE` exit 3), measuring exactly the diseases the write face already refuses (same GATE, same APPEND_TAIL_RE, same eol_profile/caliber, newest tokens row) and writing nothing; until now asking whether a carrier could still take a line meant faking an append or reading the source, so neither a sweep nor the closeout chain could take that reading without side effects.",
+  "export_ts": "2026-11-28T06:46:33+08:00",
+  "latest_artifact": "preview/preview-writer-census.html (17697B) + preview/preview-writer-census.json (25235B) [2026-11-28 mtime]",
   "latest_evidence": "qa/logs-append-R3612-b.log (1981B, 2026-11-28, sha256 8a1e2e573c5b)",
   "next_milestone": "[R3613] next window (<=48h): (0) **载体**：本窗收口 `bytes=66497 gate=78500 margin=12003`——下窗开窗先跑 `src/os/state_fold_run.py --check`，读 `FOLD-DUE` 才折，窗口用 `state_fold_run.choose_window(...)` 现算；**新正法：此后一切 state 日志追加一律走 `python src/os/logs_toolkit.py append --round R#### --line ... [--execute]`，禁手写字节手术**（缩进取文档、原末条恰补一号、tick 自动 +1、超闸拒写并给出折回命令、缺省 dry-run）。(1) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先把刷新轮排最前（P-2026-09-24-56），毕=更新字段＋文件④更新记录行。(2) **S4U 仍未落地**（第一百四十九次承账）：`BigDomain-OSLoop` 任务 `Principal.LogonType=Interactive`，正法=提权会话跑 `src/os/register_loop_task.ps1` 后读回须为 `S4U`；宁缺不错。(3) 普查仍 `closed=89 gap=20`（本窗未加页面、未把计数器装扮成页面）；下窗拉活顺序=P1 正典板可认领项 → `state/queue/tech.md` 队头 → `state/queue/explore.md` 队头。(4) tech L64 常设线下一候选=`append` 的**写前计划面接进收口链**（先报后写）或给 `append` 加 `--check`（只校验末轮账本行可解析），仍须判据先立再动手。(5) tick 口径：本轮 3611→3612，下轮 R3613。(6) 承账不变：`qa_log --ledger-check broken=5`、全量 battery 未实跑、Docker 缺位、三个 `qa/crawl-*` 改动件非本窗所写、电池页待重派生、reconcile 证据走读仍 12/756。",
   "outs": [
-    "preview/payment-gate-report.html (7729B) + preview/payment-gate-report.json (7032B) [2026-11-28 mtime]",
-    "preview/membership-face.html (10881B) + preview/membership-face.json (7051B) [2026-11-28 mtime]",
-    "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-28 mtime] (halves differ: html [2026-11-28 mtime] + json [2026-11-16 commit]; later=html)",
-    "preview/membership-benefit-report.html (10915B) + preview/membership-benefit-report.json (9817B) [2026-11-28 mtime]",
     "preview/preview-writer-census.html (17697B) + preview/preview-writer-census.json (25235B) [2026-11-28 mtime]",
+    "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-28 mtime] (halves differ: html [2026-11-28 mtime] + json [2026-11-16 commit]; later=html)",
+    "preview/payment-gate-report.html (7729B) + preview/payment-gate-report.json (7032B) [2026-11-28 commit]",
+    "preview/membership-face.html (10881B) + preview/membership-face.json (7051B) [2026-11-28 mtime]",
+    "preview/membership-benefit-report.html (10915B) + preview/membership-benefit-report.json (9817B) [2026-11-28 mtime]",
     "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 mtime] (halves differ: html [2026-11-28 mtime] + json [2026-11-27 commit]; later=html)",
     "preview/city-face-report.html (7988B) + preview/city-face-report.json (5004B) [2026-11-28 commit]",
     "preview/watch-alerts-board.html (9758B) + preview/watch-alerts-board.json (3660B) [2026-11-28 mtime]",
@@ -211,20 +211,20 @@
     "shortfall_total": 15,
     "verdict": "FLOOR-DEBT"
   },
-  "results": [["3612", "OSLoop 执行 tick"]],
+  "results": [["3613", "OSLoop 执行 tick"]],
   "results_archive": {
     "bytes": 336680,
     "count": 179,
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
-  "self_drive": {"window": "2026-11-22..2026-11-28", "window_days": 7, "log_lines_in_window": 55, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 47, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
-  "state_bytes": 66497,
-  "next_milestone_due": "2026-11-30T06:30:36+08:00",
+  "self_drive": {"window": "2026-11-22..2026-11-28", "window_days": 7, "log_lines_in_window": 61, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 51, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
+  "state_bytes": 72261,
+  "next_milestone_due": "2026-11-30T06:46:33+08:00",
   "heartbeat": {
     "tick": 3579,
-    "state_tick": 3612,
-    "lag": 33,
+    "state_tick": 3613,
+    "lag": 34,
     "verdict": "FLAG",
     "reason": "heartbeat_row_debt"
   },
