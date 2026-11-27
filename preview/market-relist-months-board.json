@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-24 22:45:09Z",
+ "generated_utc": "2026-11-27 14:51:48Z",
  "face": "api_market_relist_months",
  "scope": "market",
  "envelope": {
@@ -89,7 +89,7 @@
  "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
  "report": "preview/market-relist-months-board.html",
  "sources": {
-  "driver": "3bd2ab69e7683fd5",
+  "driver": "13340f86eac68545",
   "copy": "8a85d14e91acf484",
   "apimarket": "82a49194bef85737",
   "report": "3a83dce99c9e2bd4"
