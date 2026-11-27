@@ -11479,5 +11479,169 @@ class PWC80SeventySixthProducerClosed(unittest.TestCase):
             shutil.rmtree(tmp, ignore_errors=True)
 
 
+def prb_closure_positions(text):
+    """(present, after_last_write, readers_clean, shared_only) for AC-PWC81.
+
+    This tool settles its payload sizes inside build_payload()'s fixed-point
+    loop (`for _pass in range(8)` until the recorded json size equals the
+    computed one), so the last byte of the pair is laid down by write_outputs()
+    and the coupling must come after that call in main().
+    """
+    if "def main(" not in text:
+        return (False, False, False, False)
+    body = text.rpartition("def main(")[2].split("\ndef ")[0]
+    at = body.find("_refresh_face(args.out, args.json)")
+    present = at != -1
+    land = body.find("write_outputs(")
+    settled = ("for _pass in range(8):" in text
+               and 'if payload["sizes"].get("json") == size:' in text)
+    after = present and land != -1 and at > land and settled
+    readers = True
+    for name in ("def read_copy(", "def seed_world(", "def read_world(",
+                 "def block_problems(", "def rollup(", "def fmt_rate(",
+                 "def fmt_int(", "def text(", "def card(", "def bar(",
+                 "def direction_rows(", "def kpi_block(", "def render(",
+                 "def build_payload(", "def write_outputs(", "def sha16(",
+                 "def source_fingerprints("):
+        if name in text:
+            reader_body = text.rpartition(name)[2].split("\ndef ")[0]
+            if "_refresh_face(" in reader_body:
+                readers = False
+    helper = text.rpartition("def _refresh_face(")[2].split("\ndef ")[0]
+    shared = "board_face_landing.refresh_export_face(ROOT)" in helper
+    no_local_writer = ".write(" not in helper
+    return (present, after, readers and present, shared and no_local_writer)
+
+
+class PWC81SeventySeventhProducerClosed(unittest.TestCase):
+    """AC-PWC81: price_reaction_board derives the face on landing only.
+
+    That tool's read_world() builds a private temp world, so the behavioural
+    arms write only into their own world; nothing of this repository's
+    preview/ or ledger moves.
+    """
+
+    def _source(self):
+        with io.open(os.path.join(TOOLS, "price_reaction_board.py"),
+                     encoding="utf-8") as f:
+            return f.read()
+
+    def test_closed_and_ordered_after_the_fixed_point_loop(self):
+        text = self._source()
+        kind, _html, writes, closes = MOD.classify_source(text)
+        self.assertEqual(kind, "closed")
+        self.assertGreaterEqual(writes, 1)
+        self.assertGreaterEqual(closes, 1)
+        self.assertEqual(prb_closure_positions(text),
+                         (True, True, True, True))
+
+    def test_negative_controls_delete_and_move(self):
+        text = self._source()
+        deleted = text.replace(
+            "    face = _refresh_face(args.out, args.json)\n", "").replace(
+            "board_face_landing.refresh_export_face(ROOT)",
+            "None  # control: shared call removed")
+        self.assertEqual(MOD.classify_source(deleted)[0], "gap")
+        self.assertFalse(prb_closure_positions(deleted)[0])
+        moved = text.replace(
+            "    face = _refresh_face(args.out, args.json)\n", "").replace(
+            "    html_size, json_size = write_outputs(",
+            "    face = _refresh_face(args.out, args.json)  "
+            "# control: moved before the landing write\n"
+            "    html_size, json_size = write_outputs(", 1)
+        pos = prb_closure_positions(moved)
+        self.assertTrue(pos[0])
+        self.assertFalse(pos[1])
+
+    def test_refresh_is_shared_and_named(self):
+        import price_reaction_board as PRB
+        calls = []
+
+        class Fake(object):
+            def __init__(self, ok, note):
+                self.ok, self.note = ok, note
+
+            def refresh_export_face(self, root):
+                calls.append(root)
+                return (self.ok, self.note, {})
+
+        class Boom(object):
+            def refresh_export_face(self, root):
+                raise RuntimeError("no writer here")
+
+        tmp = tempfile.mkdtemp(prefix="prb-face-")
+        preview = os.path.join(tmp, "preview")
+        os.makedirs(preview, exist_ok=True)
+        html = os.path.join(preview, "price-reaction-board.html")
+        js = os.path.join(preview, "price-reaction-board.json")
+        saved_root = PRB.ROOT
+        saved = sys.modules.get("board_face_landing")
+        try:
+            PRB.ROOT = tmp
+            sys.modules["board_face_landing"] = Fake(True, "")
+            self.assertEqual(PRB._refresh_face(html, js), "WRITTEN")
+            self.assertEqual(calls, [tmp])
+            sys.modules["board_face_landing"] = Fake(False, "stale")
+            self.assertEqual(PRB._refresh_face(html, js), "REFUSED stale")
+            sys.modules["board_face_landing"] = Boom()
+            self.assertEqual(PRB._refresh_face(html, js),
+                             "SKIPPED RuntimeError")
+        finally:
+            PRB.ROOT = saved_root
+            if saved is None:
+                sys.modules.pop("board_face_landing", None)
+            else:
+                sys.modules["board_face_landing"] = saved
+            shutil.rmtree(tmp, ignore_errors=True)
+
+    def test_landing_derives_once_and_scratch_and_check_derive_none(self):
+        """A landing in this world's own preview derives once; scratch and --check do not."""
+        import price_reaction_board as PRB
+        calls = []
+
+        class Fake(object):
+            def refresh_export_face(self, root):
+                calls.append(root)
+                return (True, "", {})
+
+        tmp = tempfile.mkdtemp(prefix="prb-pwc-")
+        preview = os.path.join(tmp, "preview")
+        os.makedirs(preview, exist_ok=True)
+        html = os.path.join(preview, "price-reaction-board.html")
+        js = os.path.join(preview, "price-reaction-board.json")
+        saved_root = PRB.ROOT
+        saved = sys.modules.get("board_face_landing")
+        saved_stdout = sys.stdout
+        try:
+            sys.modules["board_face_landing"] = Fake()
+            PRB.ROOT = tmp
+            sys.stdout = io.StringIO()
+            rc = PRB.main(["--out", html, "--json", js])
+            self.assertEqual(rc, 0)
+            self.assertEqual(calls, [tmp])
+            self.assertTrue(os.path.isfile(html))
+            self.assertTrue(os.path.isfile(js))
+
+            scratch_html = os.path.join(tmp, "scratch.html")
+            scratch_js = os.path.join(tmp, "scratch.json")
+            rc = PRB.main(["--out", scratch_html,
+                           "--json", scratch_js])
+            self.assertEqual(rc, 0)
+            self.assertEqual(len(calls), 1)
+
+            calls[:] = []
+            rc = PRB.main(["--check", "--out", html, "--json", js])
+            self.assertEqual(calls, [])
+            self.assertIn(rc, (0, 2))
+        finally:
+            sys.stdout = saved_stdout
+            PRB.ROOT = saved_root
+            if saved is None:
+                sys.modules.pop("board_face_landing", None)
+            else:
+                sys.modules["board_face_landing"] = saved
+            shutil.rmtree(tmp, ignore_errors=True)
+
+
 if __name__ == "__main__":
     unittest.main()

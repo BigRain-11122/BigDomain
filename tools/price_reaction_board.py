@@ -30,7 +30,10 @@ Exit codes: 0 rendered or verified, 2 a landed size or recorded input moved,
             3 the shipped face, a law, or the label copy refused.
 
 AC-BPRB1..AC-BPRB6 are pre-registered in src/os/backlog.md (R3437 PIN)
-BEFORE this file existed.
+BEFORE this file existed. AC-PWC81 (R3603) couples the landing and the CEO
+face: the pair and docs/status-export.json are derived in ONE run through the
+shared src/os/board_face_landing.py, and only when both halves land under this
+root's own preview/.
 
 ASCII source, stdlib only, no network. Chinese labels live in
 preview/price-reaction-board-copy.json and appear in the rendered document
@@ -558,7 +561,7 @@ def render(payload, labels):
     return "".join(parts)
 
 
-def build_payload():
+def build_payload(out=OUT_HTML):
     labels = read_copy()
     blocks, buyers, disclaimer = read_world()
     for block in blocks:
@@ -579,7 +582,7 @@ def build_payload():
         "buyers": blocks,
         "market": market,
         "disclaimer": disclaimer,
-        "report": os.path.relpath(OUT_HTML, ROOT).replace(os.sep, "/"),
+        "report": os.path.relpath(out, ROOT).replace(os.sep, "/"),
         "sources": source_fingerprints(),
         "sizes": {},
     }
@@ -598,21 +601,21 @@ def build_payload():
     return payload, document, labels, blob
 
 
-def write_outputs(payload, document, blob):
-    with open(OUT_HTML, "w", encoding="utf-8", newline="\n") as fh:
+def write_outputs(payload, document, blob, out=OUT_HTML, js=OUT_JSON):
+    with open(out, "w", encoding="utf-8", newline="\n") as fh:
         fh.write(document)
-    with open(OUT_JSON, "w", encoding="utf-8", newline="\n") as fh:
+    with open(js, "w", encoding="utf-8", newline="\n") as fh:
         fh.write(blob)
-    if os.path.getsize(OUT_JSON) != payload["sizes"]["json"]:
+    if os.path.getsize(js) != payload["sizes"]["json"]:
         raise FaceError("json size did not settle on disk")
-    return (os.path.getsize(OUT_HTML), os.path.getsize(OUT_JSON))
+    return (os.path.getsize(out), os.path.getsize(js))
 
 
-def check():
-    if not os.path.exists(OUT_JSON) or not os.path.exists(OUT_HTML):
+def check(out=OUT_HTML, js=OUT_JSON):
+    if not os.path.exists(js) or not os.path.exists(out):
         print("E_PRB_FACE landed pair missing")
         return 3
-    with open(OUT_JSON, "r", encoding="utf-8") as fh:
+    with open(js, "r", encoding="utf-8") as fh:
         payload = json.load(fh)
     keys = set(payload.keys())
     if keys != set(PAYLOAD_KEYS):
@@ -631,13 +634,13 @@ def check():
             print("E_PRB_LAW %s" % "; ".join(problems))
             return 2
     sizes = payload["sizes"]
-    if sizes.get("html") != os.path.getsize(OUT_HTML):
+    if sizes.get("html") != os.path.getsize(out):
         print("E_PRB_FACE recorded html size moved")
         return 2
-    if sizes.get("json") != os.path.getsize(OUT_JSON):
+    if sizes.get("json") != os.path.getsize(js):
         print("E_PRB_FACE recorded json size moved")
         return 2
-    page = open(OUT_HTML, "r", encoding="utf-8").read()
+    page = open(out, "r", encoding="utf-8").read()
     for marker in ('data-market', 'data-buyer', 'data-direction'):
         if marker not in page:
             print("E_PRB_FACE page marker missing: %s" % marker)
@@ -647,23 +650,61 @@ def check():
     return 0
 
 
+def _landing_is_default(html_path, json_path):
+    """True only when both halves land under THIS root's own preview/.
+
+    The wanted folder is computed from ROOT, not from the rebindable --out and
+    --json flags, so a run that redirects its outputs cannot pose as the root.
+    """
+    want = os.path.realpath(os.path.join(ROOT, "preview"))
+    for path in (html_path, json_path):
+        if os.path.dirname(os.path.realpath(path)) != want:
+            return False
+    return True
+
+
+def _refresh_face(html_path, json_path):
+    """AC-PWC81 (R3603): landing this pair and re-deriving the face are ONE run.
+
+    The one definition lives in src/os/board_face_landing.py, so no second
+    writer is kept here. ROOT is passed explicitly, so a private world derives
+    that world's face. Refusals are named, never raised: the landing already
+    happened, so a refusal must not turn a good page into a traceback.
+    """
+    if not _landing_is_default(html_path, json_path):
+        return "SKIPPED scratch"
+    try:
+        os_src = os.path.join(ROOT, "src", "os")
+        if os_src not in sys.path:
+            sys.path.insert(0, os_src)
+        import board_face_landing
+        ok, note, _proof = board_face_landing.refresh_export_face(ROOT)
+        return "WRITTEN" if ok else "REFUSED %s" % note
+    except Exception as exc:  # the landing already happened; name the refusal
+        return "SKIPPED %s" % type(exc).__name__
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser()
+    parser.add_argument("--out", default=OUT_HTML)
+    parser.add_argument("--json", default=OUT_JSON)
     parser.add_argument("--check", action="store_true")
     args = parser.parse_args(argv)
     if args.check:
-        return check()
+        return check(args.out, args.json)
     try:
-        payload, document, labels, blob = build_payload()
+        payload, document, labels, blob = build_payload(args.out)
     except FaceError as exc:
         print("%s %s" % (exc.code, exc))
         return 3
     except LawError as exc:
         print("%s %s" % (exc.code, exc))
         return 3
-    html_size, json_size = write_outputs(payload, document, blob)
-    print("PRICE-REACTION CHECK PASS fails=0 html=%dB json=%dB"
-          % (html_size, json_size))
+    html_size, json_size = write_outputs(payload, document, blob,
+                                         args.out, args.json)
+    face = _refresh_face(args.out, args.json)
+    print("PRICE-REACTION CHECK PASS fails=0 html=%dB json=%dB face=%s"
+          % (html_size, json_size, face))
     return 0
 
 

@@ -273,7 +273,7 @@
   ],
   "disclaimer": "sandbox stand-in disclaimer: developer API marketplace is a service listing face, not investment advice",
   "face": "api_buyer_price_reaction",
-  "generated_utc": "2026-11-24T18:08:11Z",
+  "generated_utc": "2026-11-27T20:34:34Z",
   "market": {
     "avg_delta": -1,
     "buyer_id": null,
@@ -350,7 +350,7 @@
   "sources": {
     "apimarket": "82a49194bef85737",
     "copy": "8dff3acf7cebbb48",
-    "driver": "fd8c9caae6302671",
+    "driver": "01c8b4f75c32059e",
     "report": "3a83dce99c9e2bd4"
   }
 }
