@@ -28,7 +28,7 @@ This suite grades both questions on fixture worlds:
            token shape stays byte-identical, the closeout carrier passes the
            values through, and publishing writes nothing
 
-  AC-CGEF1..6  the CEO front door (R3375): the two pages a reader opens are
+  AC-CGEF1..7  the CEO front door (R3375, R3622 named-miss guard): the two pages a reader opens are
            asked at closeout by each writer's OWN `--check`, a non-zero from
            either REFUSES by name E_CLG_ENTRY_PAGES quoting that writer's last
            line, the face writes no page byte, it repeats the writer's rc
@@ -868,7 +868,7 @@ def main():
            % (word, tree_v.get("ledger_rows"), tree_v.get("ledger_broken"),
               tree_row))
 
-    # AC-CGEF1..6 (R3375): the two pages a reader actually opens are asked at
+    # AC-CGEF1..7 (R3375, R3622): the two pages a reader actually opens are asked at
     # closeout, by each writer's own `--check`, and a non-zero from either
     # refuses. WHY (measured at R3374): the entry page sat one generation
     # stale while every closeout read PASS.
@@ -933,11 +933,24 @@ def main():
                  "--check"], cwd=ROOT, stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL)
             direct[face] = proc.returncode
+
+        def _row_rc_law(row, rcs):
+            # AC-CGEF5 law, shared with AC-CGEF7 (R3622): the closeout row
+            # must repeat every writer's OWN --check rc. A row that does not
+            # exist is a NAMED miss, never an exception - at R3621 pgrow[0]
+            # raised IndexError whenever an earlier face refused before the
+            # front door was ever asked.
+            if not row:
+                return False, "row=absent"
+            return (all(("%s=rc%d" % (face, rc)) in row
+                        for face, rc in rcs.items()),
+                    "row=%s" % row)
+
+        fifth_ok, fifth_msg = _row_rc_law(pgrow[0] if pgrow else "", direct)
         ok("AC-CGEF5 the row repeats each writer's own --check rc "
            "(no second rule)",
-           all(("%s=rc%d" % (face, rc)) in pgrow[0]
-               for face, rc in direct.items()),
-           "direct=%s row=%s" % (direct, pgrow[0] if pgrow else ""))
+           fifth_ok,
+           "direct=%s %s" % (direct, fifth_msg))
 
         bare = os.path.join(tmp_pg, "bare")
         os.makedirs(bare)
@@ -945,6 +958,23 @@ def main():
         ok("AC-CGEF6 a world with no front door is NAMED, never skipped",
            ab_ok is True and ab_lines[0] == "ENTRY-PAGES absent=no-preview",
            "row=%s" % ab_lines[0])
+
+        # AC-CGEF7 (R3622): a closeout refused BEFORE the front-door step
+        # publishes no ENTRY-PAGES row at all. The AC-CGEF5 law must read that
+        # as a named miss, never an IndexError - the assertion above it used to
+        # raise on exactly this world.
+        root_pre, _pre_reg, _pre_pin = build_root(
+            os.path.join(tmp_pg, "root-prepages"), dated=False)
+        pre_lines, pre_rc, pre_v = CG.evaluate(live, live_base, root=root_pre)
+        pre_row = [ln for ln in pre_lines if ln.startswith("ENTRY-PAGES")]
+        seventh_ok, seventh_msg = _row_rc_law(
+            pre_row[0] if pre_row else "", direct)
+        ok("AC-CGEF7 a refusal before the front door names the missing row",
+           pre_rc == 2 and pre_v.get("reason") == "E_CLG_ROUND_MAIN"
+           and pre_row == [] and seventh_ok is False
+           and seventh_msg == "row=absent",
+           "rc=%s reason=%s rows=%d %s"
+           % (pre_rc, pre_v.get("reason"), len(pre_row), seventh_msg))
 
     total = len(CHECKS)
     acs = set()

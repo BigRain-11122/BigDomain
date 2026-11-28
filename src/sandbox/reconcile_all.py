@@ -8350,8 +8350,10 @@ SUITES = [
     # R3220 added AC-CLG14, the chain reading published but never gated (13 -> 14).
     # R3221 added AC-CLG15..16, the same counts as VALUES on the verdict (14 -> 16).
     # R3375 added AC-CGEF1..6, the CEO front door asked at closeout (16 -> 22).
+    # R3622 added AC-CGEF7, the same row law reading a refusal that lands
+    # before the front door as a named miss instead of an IndexError (22 -> 23).
     ("os-closeout-gate",
-     os.path.join("..", "os", "test_closeout_gate.py"), 22),
+     os.path.join("..", "os", "test_closeout_gate.py"), 23),
     # R2935: R2934 photographed the sandbox for the first time, but one pass is
     # a SNAPSHOT - it cannot tell "alive" from "painted cleanly this time". The
     # ruling is not to run a browser under the registry law but to move the LAW
