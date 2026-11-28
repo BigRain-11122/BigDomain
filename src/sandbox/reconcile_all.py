@@ -9199,6 +9199,13 @@ SUITES = [
     # before the tool changed and this suite existed.
     ("os-export-chain-adjudication",
      os.path.join("..", "os", "test_export_chain_adjudication.py"), 5),
+    # R3620: the chain page republishes the export's own eight-key chain block
+    # (present/rows/broken/path + partial/declared/unexplained/adjudication)
+    # through status_export_fresh.chain_face, so the page a reader opens states
+    # the judgement beside the count. Criteria AC-FYCQ1..AC-FYCQ5 were pinned in
+    # src/os/backlog.md at R3620, before the tool changed and this suite existed.
+    ("os-first-yuan-record-chain",
+     os.path.join("..", "os", "test_first_yuan_chain_record_chain.py"), 5),
     ]
 
 FAILS = 0

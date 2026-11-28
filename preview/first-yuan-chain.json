@@ -146,12 +146,23 @@
     "zero_delta": true
   },
   "protocol_version": "fyc-v1",
+  "record_chain": {
+    "adjudication": "OK",
+    "broken": 5,
+    "declared": 1,
+    "partial": 5,
+    "path": "state/qa_replacements.jsonl",
+    "present": true,
+    "rows": 106,
+    "unexplained": 0
+  },
   "scope": {
     "merchant": "none - no merchant id, no signature, no gateway call",
     "monthly_row": "the monthly product row is a real row in src/sandbox/pay/config.json (D-20261116-05); no temp row is injected",
     "msgseccheck": "not called - the sandbox wordlists are local mocks",
     "network": "none",
-    "real_purchase": "gated on the CEO physical pieces"
+    "real_purchase": "gated on the CEO physical pieces",
+    "record_chain": "the repository's own replacement ledger, read by the same chain_face() the CEO export uses; it is not the payment chain above"
   },
   "tool": "first_yuan_chain"
 }

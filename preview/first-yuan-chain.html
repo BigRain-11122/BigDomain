@@ -42,6 +42,18 @@ at render time.</p>
 <li>shipped reconcile script: <span class="ok">rc=0</span> &nbsp; RECONCILE PASS (8/8 checks)</li>
 </ul>
 
+<h2>The record chain behind this page</h2>
+<ul>
+<li>ledger <code>state/qa_replacements.jsonl</code>: present=True rows=106 broken=5</li>
+<li>breaks: partial=5 declared=1 unexplained=0 &nbsp; <span class="ok">adjudication=OK</span></li>
+</ul>
+<p class="sub">A break is a row whose <code>old_sha16</code> no longer matches the
+previous row's <code>new_sha16</code>; the adjudication above says whether each one
+is an explained partial write. This block is the repository's own replacement
+ledger, read by the same <code>chain_face()</code> that fills the CEO export &mdash;
+it is not the payment chain above. A face that could not be asked reads
+<code>UNADJUDICATED</code> with dashes, never OK.</p>
+
 <div class="warn">
 <strong>Honest scope.</strong> No merchant, no payment signature and no network call
 was made. <code>msgSecCheck</code> was NOT called - the sandbox content gates are local

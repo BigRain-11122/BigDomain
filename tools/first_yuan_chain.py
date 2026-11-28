@@ -55,6 +55,11 @@ ACCOUNTS = ("sys.probe.one", "sys.probe.two")
 HEX_ID = re.compile(r"^[0-9a-f]{8,}$")
 ISO_TS = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$")
 
+# AC-FYCQ1 (R3620): the eight keys the CEO export's chain block carries, in the
+# order that block publishes them. The page republishes them verbatim.
+CHAIN_KEYS = ("present", "rows", "broken", "path",
+              "partial", "declared", "unexplained", "adjudication")
+
 
 class Refuse(Exception):
     def __init__(self, code, detail=""):
@@ -258,6 +263,33 @@ def ledger_face(db_path, cfg_path):
             "zero_delta": not unbalanced}
 
 
+def record_chain_face():
+    """AC-FYCQ1 (R3620): the page republishes the export's chain block, unaltered.
+
+    `chain_face(ROOT)` in tools/status_export_fresh.py is the ONE producer of
+    the CEO face's `chain` block: it fills the counts from
+    `closeout_gate.check_ledger` and the qualification from
+    `qa_log.chain_reading`, which asks `qa_chain_diagnose` in process. Parsing
+    the ledger again here would let the page and the export disagree about the
+    same bytes, so this helper only asks and republishes.
+
+    A face that cannot be asked publishes nulls under UNADJUDICATED: "asked and
+    got nothing" is never defaulted to OK or 0.
+    """
+    try:
+        for path in (os.path.join(ROOT, "tools"),
+                     os.path.join(ROOT, "src", "os")):
+            if path not in sys.path:
+                sys.path.insert(0, path)
+        import status_export_fresh as named_face
+        block = named_face.chain_face(ROOT)
+        return dict((key, block.get(key)) for key in CHAIN_KEYS)
+    except Exception:
+        blind = dict((key, None) for key in CHAIN_KEYS)
+        blind["adjudication"] = "UNADJUDICATED"
+        return blind
+
+
 def build_payload():
     world = build_world()
     try:
@@ -299,11 +331,15 @@ def build_payload():
                  "credits": (leg["activation"] or {}).get("credits_balance")}
                 for leg in legs],
         },
+        "record_chain": record_chain_face(),
         "scope": {
             "network": "none",
             "merchant": "none - no merchant id, no signature, no gateway call",
             "msgseccheck": "not called - the sandbox wordlists are local mocks",
             "real_purchase": "gated on the CEO physical pieces",
+            "record_chain": "the repository's own replacement ledger, read by"
+                            " the same chain_face() the CEO export uses; it is"
+                            " not the payment chain above",
             "monthly_row": "the monthly product row is a real row in"
                            " src/sandbox/pay/config.json (D-20261116-05);"
                            " no temp row is injected",
@@ -314,6 +350,11 @@ def build_payload():
 
 def money_text(cent):
     return "%.2f" % (cent / 100.0) if cent is not None else "-"
+
+
+def shown(value):
+    """AC-FYCQ3: an unasked value renders as a dash, never as a zero."""
+    return "-" if value is None else str(value)
 
 
 def price_section(payload):
@@ -397,6 +438,7 @@ def _render_html(payload):
     value_html = ('<ul>%s</ul>' % "".join(value_lines)
                   if cmp_row["value_differs"]
                   else "<p>The two legs delivered identical value.</p>")
+    rec = payload["record_chain"]
     return """<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <title>First-yuan chain - one purchase through pay, member and ledger</title>
@@ -440,6 +482,18 @@ at render time.</p>
 <li>shipped reconcile script: <span class="%s">rc=%d</span> &nbsp; %s</li>
 </ul>
 
+<h2>The record chain behind this page</h2>
+<ul>
+<li>ledger <code>%s</code>: present=%s rows=%s broken=%s</li>
+<li>breaks: partial=%s declared=%s unexplained=%s &nbsp; <span class="%s">adjudication=%s</span></li>
+</ul>
+<p class="sub">A break is a row whose <code>old_sha16</code> no longer matches the
+previous row's <code>new_sha16</code>; the adjudication above says whether each one
+is an explained partial write. This block is the repository's own replacement
+ledger, read by the same <code>chain_face()</code> that fills the CEO export &mdash;
+it is not the payment chain above. A face that could not be asked reads
+<code>UNADJUDICATED</code> with dashes, never OK.</p>
+
 <div class="warn">
 <strong>Honest scope.</strong> No merchant, no payment signature and no network call
 was made. <code>msgSecCheck</code> was NOT called - the sandbox content gates are local
@@ -466,7 +520,13 @@ compare bytes honestly.</div>
        "yes" if money_row["zero_delta"] else "no",
        "ok" if money_row["reconcile_rc"] == 0 else "bad",
        money_row["reconcile_rc"],
-       html.escape(money_row["reconcile_line"]))
+       html.escape(money_row["reconcile_line"]),
+       html.escape(str(rec["path"])),
+       shown(rec["present"]), shown(rec["rows"]), shown(rec["broken"]),
+       shown(rec["partial"]), shown(rec["declared"]),
+       shown(rec["unexplained"]),
+       "ok" if rec["adjudication"] == "OK" else "bad",
+       html.escape(str(rec["adjudication"])))
 
 
 def dumps(payload):
@@ -630,6 +690,19 @@ def do_check():
     if not money["zero_delta"] or money["reconcile_rc"] != 0:
         fails.append("E_MONEY unbalanced=%d reconcile_rc=%d"
                      % (money["unbalanced_transactions"], money["reconcile_rc"]))
+    # AC-FYCQ2/AC-FYCQ3 (R3620): the record-chain section is a judgement, so
+    # its absence is a red rather than a cosmetic difference - and a value the
+    # face could not measure must reach the page as a dash, never as a zero.
+    rec = payload["record_chain"]
+    if "The record chain behind this page" not in got_html:
+        fails.append("E_RECORD_CHAIN section missing from page")
+    if "adjudication=" not in got_html:
+        fails.append("E_RECORD_CHAIN adjudication label missing from page")
+    if html.escape(str(rec["adjudication"])) not in got_html:
+        fails.append("E_RECORD_CHAIN adjudication %r missing from page"
+                     % rec["adjudication"])
+    if rec["broken"] is None and "broken=-" not in got_html:
+        fails.append("E_RECORD_CHAIN unmeasured break count not shown as dash")
     after = (os.stat(HTML_PATH).st_size, os.stat(HTML_PATH).st_mtime_ns,
              os.stat(JSON_PATH).st_size, os.stat(JSON_PATH).st_mtime_ns)
     if before != after:
