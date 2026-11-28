@@ -916,7 +916,7 @@ def pgr_closure_positions(text, last_landing='fh.write("\\n")'):
     if "def main(" not in text:
         return (False, False, False, False)
     body = text.rpartition("def main(")[2]
-    at = body.find("_refresh_face()")
+    at = body.find("_refresh_face(")
     present = at != -1
     landing_at = body.rfind(last_landing)
     after = present and landing_at != -1 and at > landing_at
@@ -948,7 +948,7 @@ class PWC13NinthProducerClosed(unittest.TestCase):
     def test_negative_controls_delete_and_move(self):
         text = self._source()
         deleted = text.replace(
-            "    face = _refresh_face()",
+            "    face = _refresh_face(args.out, args.json)",
             "    face = None  # control: closure call removed").replace(
             "board_face_landing.refresh_export_face(ROOT)",
             "None  # control: shared call removed")
@@ -980,13 +980,22 @@ class PWC13NinthProducerClosed(unittest.TestCase):
 
         saved = sys.modules.get("board_face_landing")
         try:
+            default = (PGR.DEFAULT_OUT, PGR.DEFAULT_JSON)
+            scratch_dir = os.path.join(tempfile.gettempdir(), "pwc13-scratch")
+            scratch = (os.path.join(scratch_dir, "payment-gate-report.html"),
+                       os.path.join(scratch_dir, "payment-gate-report.json"))
             sys.modules["board_face_landing"] = Fake(True, "")
-            self.assertEqual(PGR._refresh_face(), "WRITTEN")
+            # R3611 AC-PGM4: a pair that does not land under THIS root's
+            # preview/ may not pose as the root landing, so no face is derived.
+            self.assertEqual(PGR._refresh_face(*scratch), "SKIPPED scratch")
+            self.assertEqual(calls, [])
+            self.assertEqual(PGR._refresh_face(*default), "WRITTEN")
             self.assertEqual(calls, [PGR.ROOT])
             sys.modules["board_face_landing"] = Fake(False, "E_BFL_FACE_UNPROVEN")
-            self.assertEqual(PGR._refresh_face(), "REFUSED E_BFL_FACE_UNPROVEN")
+            self.assertEqual(PGR._refresh_face(*default),
+                             "REFUSED E_BFL_FACE_UNPROVEN")
             sys.modules["board_face_landing"] = Boom()
-            self.assertEqual(PGR._refresh_face(), "SKIPPED RuntimeError")
+            self.assertEqual(PGR._refresh_face(*default), "SKIPPED RuntimeError")
             self.assertEqual(len(calls), 2)
         finally:
             if saved is None:
@@ -1005,16 +1014,22 @@ class PWC13NinthProducerClosed(unittest.TestCase):
                 return (True, "", {})
 
         tmp = tempfile.mkdtemp(prefix="pgr-")
-        out = os.path.join(tmp, "payment-gate-report.html")
-        jout = os.path.join(tmp, "payment-gate-report.json")
         saved = sys.modules.get("board_face_landing")
         saved_stdout = sys.stdout
+        saved_root = PGR.ROOT
         try:
             sys.modules["board_face_landing"] = Fake()
+            # R3611 AC-PGM4: only a pair landing under THIS root's preview/
+            # may re-derive the face, so the one-derive world is a private root.
+            preview = os.path.join(tmp, "preview")
+            os.makedirs(preview)
+            out = os.path.join(preview, "payment-gate-report.html")
+            jout = os.path.join(preview, "payment-gate-report.json")
+            PGR.ROOT = tmp
             sys.stdout = io.StringIO()
             rc = PGR.main(["--out", out, "--json", jout])
             sys.stdout = saved_stdout
-            self.assertEqual(calls, [PGR.ROOT])
+            self.assertEqual(calls, [tmp])
             self.assertEqual(len(calls), 1)
             self.assertTrue(os.path.isfile(out))
             self.assertTrue(os.path.isfile(jout))
@@ -1027,8 +1042,23 @@ class PWC13NinthProducerClosed(unittest.TestCase):
                 sys.stdout = saved_stdout
             self.assertEqual(calls, [])
             self.assertIn(rc2, (0, 2))
+            # and the real root derives nothing from a scratch pair
+            PGR.ROOT = saved_root
+            calls[:] = []
+            scratch = os.path.join(tmp, "scratch")
+            os.makedirs(scratch)
+            sys.stdout = io.StringIO()
+            try:
+                PGR.main(["--out", os.path.join(
+                    scratch, "payment-gate-report.html"),
+                    "--json", os.path.join(scratch,
+                                           "payment-gate-report.json")])
+            finally:
+                sys.stdout = saved_stdout
+            self.assertEqual(calls, [])
         finally:
             sys.stdout = saved_stdout
+            PGR.ROOT = saved_root
             if saved is None:
                 sys.modules.pop("board_face_landing", None)
             else:
