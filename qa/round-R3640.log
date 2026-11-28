@@ -1,0 +1,91 @@
+R3640 evidence log (2026-11-28). All readings below were printed by the named
+commands in this window; nothing here is remembered from an earlier round.
+
+OPENING (five-still scan)
+  group ledger @BigDomain lines .... 0  (no dispatch owed)
+  docs/decisions.md ................ 251006 bytes, mtime 2026-11-19 06:07:46
+                                     (byte-identical to R3580..R3639 scans)
+  state_fold_run --check ........... FOLD-CLEAR bytes=72217 gate=78500
+                                     margin=6283 log_lines=80
+  logs_toolkit append --check ...... APPEND CHECK PASS tick=3639 log=80
+                                     ledger=R3639 api=0
+  logs_toolkit fold --plan-only .... minimal_window_lines=0, pre_bytes=72217
+                                     under target 75500 -> no fold owed
+  git status --short ............... only the three qa/crawl-* files this
+                                     window did not write; no index.lock
+  git log -1 ....................... 767e83a1 battery page re-measured ...
+
+THE TWO RED SUITES, MEASURED BEFORE ANY EDIT
+  src/os/test_ledger_lines.py ...... FAIL AC-LGR8 / SUITE FAIL 7/8
+  src/os/test_ledger_baseline.py ... FAIL AC-LGB8 / SUITE FAIL 7/8
+  tmp/probe_R3640_ledger_gate.py ... baseline state/ledger_gaps.json
+                                     shipped missing=[3625]
+                                     scope errors=[] coverage_floor=True
+                                     live_ledger=13 scope_ledger=2434
+                                     live rounds_without_ledger=[]
+                                     live ledger_without_round=[]
+                                     2090/2095 absent from archived_missing
+                                     R2090 and R2095 tokens rows present
+                                     gated clean=True new_missing=[]
+                                     stale_missing=[3625]
+  tmp/probe_R3640_r3625.py ......... archived_missing=[2072,3112,3436,3458,
+                                     3459,3610,3625]; archive holds 2 R3625
+                                     lines and zero "R3625 tokens:" row
+
+REPAIR (data, not code)
+  state/ledger_gaps.json ........... missing [] / orphan [], note names the
+                                     R3638 fold and the archived reading
+
+AFTER
+  test_ledger_lines.py ............. SUITE PASS 8/8  (run twice)
+  test_ledger_baseline.py .......... SUITE PASS 8/8  (run twice)
+  ledger_lines.py --check .......... rounds_without_ledger: none
+                                     VERDICT CLEAN
+  tmp/probe_R3640_negctl.py ........ rounds_without_ledger=[900]
+                                     new_missing=[900] clean=False
+                                     AC-LGX2 PASS
+                                     (first control fixture failed on its own
+                                     defect: api_reason below the ledger law's
+                                     floor made both rounds read as gaps)
+  tmp/bsr_R3640_run.py ............. rc=0 elapsed=492.4s
+  battery_shard_report --check ..... checks=8 verdict=RED ... VERDICT PASS
+                                     (ends PASS at 8 of 8 checks)
+  page families .................... lobby 7/7, os-export 23/23, os-queue
+                                     16/16, os-ledger 14/15 (red
+                                     os-ledger-archive), os-battery 3/4 (red
+                                     os-battery-shard), os-deliverable 1/1
+  page rows ........................ os-ledger-lines PASS 8/8
+                                     os-ledger-baseline PASS 8/8
+                                     os-ledger-archive FAIL 10/16
+  page totals ...................... green_families=4 red_families=2
+                                     selected=66 selected_criteria=628
+                                     uncovered_suites=781 cover_pct=7.8
+
+CLOSEOUT RING
+  append ........................... APPEND OK round=R3640 tick=3640
+                                     bytes=72217->77429 verified=true
+  export_round 3640 ................ state_bytes=77429 export_bytes=46423
+  heartbeat --write 3640 ........... HEARTBEAT-WRITE tick=3640
+  registry_counter_census .......... rows=847 readable=846 silent=1
+  suite_matrix_reconcile ........... DOC-CURRENT (evidence walk 12/756)
+  status_export_fresh --apply ...... APPLIED R3640 changed=True
+  deliverable_index --write/--check . 23/23 PASS (written after the chain page)
+  first_yuan_chain / --check ....... RENDER html=5397B json=5180B
+                                     VERDICT PASS read_only=True
+  face_sweep ....................... VERDICT PASS 13/13
+  closeout_order --write/--check ... VERDICT PASS checks=4/4
+  closeout_gate .................... PASS files=5092 flags=0 reader_refused=0
+                                     round_main=OK census=PASS
+                                     matrix=DOC-CURRENT
+                                     CARRIER margin=1071 fold_needed=false
+
+TWO IN-WINDOW DEFECTS PAID, NOT HIDDEN
+  1. deliverable_index was written before the chain page was re-derived, so
+     AC-DIX21 read "html is not the fresh derivation" (rc=2) and the face went
+     red; re-deriving the chain page and then re-writing the index reads 23/23.
+  2. the first negative-control fixture (see above) was diseased, not the law.
+
+NOT CLAIMED: the full battery was not run; S4U is still an Interactive logon;
+Docker is absent; the reconcile evidence walk still decodes 12 of 756; the
+three qa/crawl-* files are not this window's. ZERO payment capability and no
+network beyond loopback, so the five physical pieces still gate every buyer.
