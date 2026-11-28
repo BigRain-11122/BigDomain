@@ -1,0 +1,11 @@
+ROUND R3639 EVIDENCE (battery shard page re-derivation) 2026-11-28
+STEP 1 five-still scan: ledger @BigDomain count=0; decisions.md bytes=251006 mtime=2026-11-19 06:07:46 (identical to R3580..R3638 scans); orders head unchanged; benchmarks_refreshed=2026-11-24 (due 2026-12-01); git status = three qa/crawl-* files not this window's; no index.lock; git log -1 = 044bcef9 pair clock law.
+STEP 2 carrier at open: STATE FOLD bytes=67223 gate=78500 margin=11277 log_lines=74 verdict=FOLD-CLEAR; APPEND CHECK PASS bytes=67223 gate=78500 margin=11277 tick=3638 log=74 ledger=R3638 api=0.
+STEP 3 faces at open: export_round --check = VERDICT PASS; face_sweep = VERDICT PASS 13/13 fingerprint=056c330623e4e693; battery page = BSR-CHECK RED E_REGISTRY_DRIFT,E_REGISTRY_DRIFT:OS export,E_REGISTRY_DRIFT:OS ledger,E_REGISTRY_DRIFT:OS battery,E_TOTALS_UNCOVERED,E_TOTALS_COVER.
+STEP 4 registry cost measured before the run: total rows=847; family selection lobby 7/118, os-export 23/195, os-queue 16/98, os-ledger 15/126, os-battery 4/63, os-deliverable 1/28 = 66 suites / 628 criteria.
+STEP 5 first attempt: bare run piped through Select-Object produced no output and was cancelled at 5.0 minutes; page mtime stayed 2026-11-27 06:06:18 (zero bytes landed).
+STEP 6 driven run (tmp/bsr_R3639_run.py, log tmp/bsr_R3639.log): family wall times 192.7s / 53.3s / 14.6s / 14.4s / 97.9s / 114.4s; landed json=19201B html=17302B verdict=RED families=6 selected=66 criteria=628 uncovered=781.
+STEP 7 red suites named from the fresh rows: os-ledger-lines rc=2 suite=FAIL 7/8 crit=8; os-ledger-archive rc=2 suite=FAIL 10/16 crit=16; os-ledger-baseline rc=2 suite=FAIL 7/8 crit=8; os-battery-shard rc=2 suite=FAIL 31/32 crit=32.
+STEP 8 gate after the run: BSR-CHECK name=battery-shard-report checks=8 html=17302B json=19201B bytes_html=17302 bytes_json=19201 verdict=RED read_only=True; BSR-CHECK VERDICT PASS.
+STEP 9 untouched-face proof: git diff --stat on tools/battery_shard_report.py, tools/battery_shard.py, src/os/test_battery_shard_report.py is empty.
+HONEST: the four reds are pre-existing; no source changed; page coverage is 66/847 by design; full battery not run; S4U still Interactive; Docker absent; reconcile walk 12/756.

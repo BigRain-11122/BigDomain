@@ -1,20 +1,20 @@
 {
   "ceo_face": {
-    "board_pages_skipped": ["preview/face-sweep.html (8877B)"],
-    "current": "2026-11-28 R3638 PRODUCT: the CEO face can no longer be refused by its own grader for being born one commit early. Measured before the edit: export_round --check read VERDICT FAIL 1 with the sole red AC-EXPW1 latest_artifact is not the newest product pair on disk, while a probe read the same pair, same bytes, same date on both sides - only the clock token differed (face [2026-11-28 mtime], derivation [2026-11-28 commit]). The writer runs BEFORE the commit that ships it, so the winning half is dirty then and clean after; whole-line equality therefore asked the face to predict its own commit and reddened the opening scan of every product round. clock_lag_lawful now lets the clock LAG exactly one step on an unchanged date and never LEAD; identity and every bracket date are still graded by equality.",
+    "board_pages_skipped": ["preview/face-sweep.html (8877B)", "preview/battery-shard-report.html (17302B)"],
+    "current": "2026-11-28 R3639 PRODUCT: the CEO battery page is measured again instead of remembered. At round open --check read BSR-CHECK RED with E_REGISTRY_DRIFT on the whole registry and on three named families plus E_TOTALS_UNCOVERED and E_TOTALS_COVER, because check_payload compares each family selection against the LIVE registry while the landed page still held 843 rows against a 847-row registry - every round that adds a suite widens the same drift. This window paid the measurement: the zero-argument tools/battery_shard_report.py ran all six guarded families (66 suites, 628 criteria) and landed preview/battery-shard-report.json 19201B plus .html 17302B, and --check now reads checks=8 verdict=RED read_only=True followed by BSR-CHECK VERDICT PASS, so all six drift and totals codes are gone and the remaining RED is four real red suites rather than stale arithmetic.",
     "do": "2026-11-25 R3456 PRODUCT: the answer-revision question now has a door - api_answer_history (live with AC-AMAW1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so 'which answer was rewritten, what did it say before, what does it say now and how often did it change' could only be read by calling the sandbox from a shell - while api_seller_answers and api_listing_qna publish only the CURRENT wording.",
     "last_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 commit] (halves differ: html [2026-11-28 commit] + json [2026-11-27 commit]; later=html)",
     "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 commit] (halves differ: html [2026-11-28 commit] + json [2026-11-27 commit]; later=html)",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ugc-gate-report.html",
-    "latest_artifact_note": "",
-    "latest_evidence": "qa/round-R3637.log (2722B, 2026-11-28, sha256 c2a42e2b9192)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/round-R3639.log (2212B, 2026-11-28, sha256 4eef2fe49411)",
+    "latest_evidence": "qa/round-R3639.log (2212B, 2026-11-28, sha256 4eef2fe49411)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3638] next window (<=48h): (0) **载体**：开窗仍先 `python src/os/state_fold_run.py --check` 与 `python src/os/logs_toolkit.py append --check`；**一轮只 append 一次**且必须带 `--round R####`，主行必须 `YYYY-MM-DD R#### LABEL:`（本窗 `tmp/append_R3638.py` 为 ASCII 驱动范式，六行一次写入）。(1) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先把刷新轮排最前（P-2026-09-24-56）。(2) **S4U 仍未落地**（承账）：`BigDomain-OSLoop` 任务 `Principal.LogonType=Interactive`，正法=提权会话跑 `src/os/register_loop_task.ps1` 后读回须为 `S4U`。(3) **本窗点名的可认领候选（今日不造活）**：①**电池页重派生**（页 843 行 vs 注册表 846 行，`BSR-CHECK` 三 drift + 两 totals）是真活但需全量电池，若当目标先立判据（跑哪几族/允许多久/失败如何记），禁把 RED 改「容忍」；②`ledger_lines.load_archive` 与 `read_archive_view` 两套读法并存（实测合并零性能收益，只是法面单一化，收益不足先记账）；③本窗新法给 `docs/status-export.json` 的 `latest_artifact` 留下「mtime 可滞后」语义，若日后要收窄，正法=把面改到 commit 之后重写（post-commit refresh），不是再加宽判据。(4) **本窗绿序（实测一遍过，照抄）**：`logs_toolkit append --round R#### --execute`（主行+账本行一次写完）→ `src/os/export_round.py <tick>` → `src/os/heartbeat.py --write <tick>` → `src/os/registry_counter_census.py --write-pin` → `src/os/suite_matrix_reconcile.py --write/--check` → `tools/status_export_fresh.py --apply`（**板面回写必须先于它**）→ `tools/deliverable_index.py --write` → (truncated)",
-    "next_milestone_due": "2026-11-30T12:45:29+08:00",
-    "updated_at": "2026-11-28T12:45:29+08:00",
+    "next_milestone": "[R3639] next window (<=48h): (0) **carrier**: open with `python src/os/state_fold_run.py --check` and `python src/os/logs_toolkit.py append --check`; **one append per round** with `--round R####`, main line `YYYY-MM-DD R#### LABEL:`; margin was 11277 at open, so a long round may need a fold first. (1) **benchmarks refresh due 2026-12-01** (`benchmarks_refreshed=2026-11-24`) - open with the refresh round when that day arrives (P-2026-09-24-56). (2) **S4U still not landed**: `BigDomain-OSLoop` `Principal.LogonType=Interactive`; the lawful fix is an elevated session running `src/os/register_loop_task.ps1` with a read-back `S4U`. (3) **the four reds this window put on the CEO face are the real queue** - `os-ledger-lines` 7/8, `os-ledger-baseline` 7/8, `os-battery-shard` 31/32 and `os-ledger-archive` 10/16 (truncated)",
+    "next_milestone_due": "2026-11-30T13:17:29+08:00",
+    "updated_at": "2026-11-28T13:17:29+08:00",
     "heartbeat": {
-      "tick": 3638,
-      "state_tick": 3638,
+      "tick": 3639,
+      "state_tick": 3639,
       "lag": 0,
       "verdict": "PASS",
       "reason": "fresh"
@@ -35,8 +35,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-28 R3638 PRODUCT: the CEO face can no longer be refused by its own grader for being born one commit early. Measured before the edit: export_round --check read VERDICT FAIL 1 with the sole red AC-EXPW1 latest_artifact is not the newest product pair on disk, while a probe read the same pair, same bytes, same date on both sides - only the clock token differed (face [2026-11-28 mtime], derivation [2026-11-28 commit]). The writer runs BEFORE the commit that ships it, so the winning half is dirty then and clean after; whole-line equality therefore asked the face to predict its own commit and reddened the opening scan of every product round. clock_lag_lawful now lets the clock LAG exactly one step on an unchanged date and never LEAD; identity and every bracket date are still graded by equality.",
-  "claims": {"claimed": 12, "captured": 1, "contradicted": 0, "uncaptured": 11, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-28T12:45:29+08:00"},
+  "current": "2026-11-28 R3639 PRODUCT: the CEO battery page is measured again instead of remembered. At round open --check read BSR-CHECK RED with E_REGISTRY_DRIFT on the whole registry and on three named families plus E_TOTALS_UNCOVERED and E_TOTALS_COVER, because check_payload compares each family selection against the LIVE registry while the landed page still held 843 rows against a 847-row registry - every round that adds a suite widens the same drift. This window paid the measurement: the zero-argument tools/battery_shard_report.py ran all six guarded families (66 suites, 628 criteria) and landed preview/battery-shard-report.json 19201B plus .html 17302B, and --check now reads checks=8 verdict=RED read_only=True followed by BSR-CHECK VERDICT PASS, so all six drift and totals codes are gone and the remaining RED is four real red suites rather than stale arithmetic.",
+  "claims": {"claimed": 12, "captured": 1, "contradicted": 0, "uncaptured": 11, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-28T13:17:29+08:00"},
   "chain": {"present": true, "rows": 106, "broken": 5, "path": "state/qa_replacements.jsonl", "partial": 5, "declared": 1, "unexplained": 0, "adjudication": "OK", "excused": 1},
   "depts": [
     {
@@ -65,11 +65,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-28 R3638 PRODUCT: the CEO face can no longer be refused by its own grader for being born one commit early. Measured before the edit: export_round --check read VERDICT FAIL 1 with the sole red AC-EXPW1 latest_artifact is not the newest product pair on disk, while a probe read the same pair, same bytes, same date on both sides - only the clock token differed (face [2026-11-28 mtime], derivation [2026-11-28 commit]). The writer runs BEFORE the commit that ships it, so the winning half is dirty then and clean after; whole-line equality therefore asked the face to predict its own commit and reddened the opening scan of every product round. clock_lag_lawful now lets the clock LAG exactly one step on an unchanged date and never LEAD; identity and every bracket date are still graded by equality.",
-  "export_ts": "2026-11-28T12:45:29+08:00",
+  "do": "2026-11-28 R3639 PRODUCT: the CEO battery page is measured again instead of remembered. At round open --check read BSR-CHECK RED with E_REGISTRY_DRIFT on the whole registry and on three named families plus E_TOTALS_UNCOVERED and E_TOTALS_COVER, because check_payload compares each family selection against the LIVE registry while the landed page still held 843 rows against a 847-row registry - every round that adds a suite widens the same drift. This window paid the measurement: the zero-argument tools/battery_shard_report.py ran all six guarded families (66 suites, 628 criteria) and landed preview/battery-shard-report.json 19201B plus .html 17302B, and --check now reads checks=8 verdict=RED read_only=True followed by BSR-CHECK VERDICT PASS, so all six drift and totals codes are gone and the remaining RED is four real red suites rather than stale arithmetic.",
+  "export_ts": "2026-11-28T13:17:29+08:00",
   "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 commit] (halves differ: html [2026-11-28 commit] + json [2026-11-27 commit]; later=html)",
-  "latest_evidence": "qa/round-R3637.log (2722B, 2026-11-28, sha256 c2a42e2b9192)",
-  "next_milestone": "[R3638] next window (<=48h): (0) **载体**：开窗仍先 `python src/os/state_fold_run.py --check` 与 `python src/os/logs_toolkit.py append --check`；**一轮只 append 一次**且必须带 `--round R####`，主行必须 `YYYY-MM-DD R#### LABEL:`（本窗 `tmp/append_R3638.py` 为 ASCII 驱动范式，六行一次写入）。(1) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先把刷新轮排最前（P-2026-09-24-56）。(2) **S4U 仍未落地**（承账）：`BigDomain-OSLoop` 任务 `Principal.LogonType=Interactive`，正法=提权会话跑 `src/os/register_loop_task.ps1` 后读回须为 `S4U`。(3) **本窗点名的可认领候选（今日不造活）**：①**电池页重派生**（页 843 行 vs 注册表 846 行，`BSR-CHECK` 三 drift + 两 totals）是真活但需全量电池，若当目标先立判据（跑哪几族/允许多久/失败如何记），禁把 RED 改「容忍」；②`ledger_lines.load_archive` 与 `read_archive_view` 两套读法并存（实测合并零性能收益，只是法面单一化，收益不足先记账）；③本窗新法给 `docs/status-export.json` 的 `latest_artifact` 留下「mtime 可滞后」语义，若日后要收窄，正法=把面改到 commit 之后重写（post-commit refresh），不是再加宽判据。(4) **本窗绿序（实测一遍过，照抄）**：`logs_toolkit append --round R#### --execute`（主行+账本行一次写完）→ `src/os/export_round.py <tick>` → `src/os/heartbeat.py --write <tick>` → `src/os/registry_counter_census.py --write-pin` → `src/os/suite_matrix_reconcile.py --write/--check` → `tools/status_export_fresh.py --apply`（**板面回写必须先于它**）→ `tools/deliverable_index.py --write` → (truncated)",
+  "latest_evidence": "qa/round-R3639.log (2212B, 2026-11-28, sha256 4eef2fe49411)",
+  "next_milestone": "[R3639] next window (<=48h): (0) **carrier**: open with `python src/os/state_fold_run.py --check` and `python src/os/logs_toolkit.py append --check`; **one append per round** with `--round R####`, main line `YYYY-MM-DD R#### LABEL:`; margin was 11277 at open, so a long round may need a fold first. (1) **benchmarks refresh due 2026-12-01** (`benchmarks_refreshed=2026-11-24`) - open with the refresh round when that day arrives (P-2026-09-24-56). (2) **S4U still not landed**: `BigDomain-OSLoop` `Principal.LogonType=Interactive`; the lawful fix is an elevated session running `src/os/register_loop_task.ps1` with a read-back `S4U`. (3) **the four reds this window put on the CEO face are the real queue** - `os-ledger-lines` 7/8, `os-ledger-baseline` 7/8, `os-battery-shard` 31/32 and `os-ledger-archive` 10/16 (truncated)",
   "outs": [
     "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 commit] (halves differ: html [2026-11-28 commit] + json [2026-11-27 commit]; later=html)",
     "preview/first-yuan-chain.html (5397B) + preview/first-yuan-chain.json (5180B) [2026-11-28 commit]",
@@ -211,19 +211,19 @@
     "shortfall_total": 15,
     "verdict": "FLOOR-DEBT"
   },
-  "results": [["3638", "OSLoop 执行 tick"]],
+  "results": [["3639", "OSLoop 执行 tick"]],
   "results_archive": {
     "bytes": 336680,
     "count": 179,
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
-  "self_drive": {"window": "2026-11-22..2026-11-28", "window_days": 7, "log_lines_in_window": 73, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 61, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
-  "state_bytes": 67223,
-  "next_milestone_due": "2026-11-30T12:45:29+08:00",
+  "self_drive": {"window": "2026-11-22..2026-11-28", "window_days": 7, "log_lines_in_window": 79, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 66, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
+  "state_bytes": 72217,
+  "next_milestone_due": "2026-11-30T13:17:29+08:00",
   "heartbeat": {
-    "tick": 3638,
-    "state_tick": 3638,
+    "tick": 3639,
+    "state_tick": 3639,
     "lag": 0,
     "verdict": "PASS",
     "reason": "fresh"
