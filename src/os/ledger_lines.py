@@ -833,39 +833,51 @@ BLOCK_RECEIPT_RE = re.compile(
 RECEIPT_PART_RE = re.compile(r"^[a-z][a-z \-]*$")
 
 
-def block_receipts(paths):
+def block_receipts(paths, views=None):
     """Every block-part receipt in the archives, keyed by round (R3496).
 
     A parenthetical that is not a part list (measured: a fold-execution line
     writes 'R3459 CEO-face block (lines 122:125)', a line RANGE) is refused
     here rather than read as an enumeration - a receipt must name parts in
     words, and every item is checked against that shape.
+
+    R3635: `views` (read_archive_view dicts) may be handed in, and then no
+    archive is opened here at all - the caller's view IS the archive world
+    it claims, and its numbered lines are what the scan reads.
     """
     out = {}
+
+    def scan(name, pairs):
+        for line_no, text in pairs:
+            for match in BLOCK_RECEIPT_RE.finditer(text):
+                parts = [item.strip()
+                         for item in match.group(2).split(",")
+                         if item.strip()]
+                if len(parts) < 2:
+                    continue
+                if not all(RECEIPT_PART_RE.match(item) for item in parts):
+                    continue
+                out.setdefault(int(match.group(1)), []).append({
+                    "file": name,
+                    "line": line_no,
+                    "parts": parts,
+                    "omits_budget": receipt_admissible(parts),
+                    "span": text[:200],
+                })
+
+    if views is not None:
+        for view in views:
+            scan(view["name"], view["lines"])
+        return out
     for path in paths:
         try:
             handle = io.open(path, "r", encoding="utf-8")
         except (IOError, OSError):
             continue
         try:
-            for line_no, raw in enumerate(handle, 1):
-                text = raw.rstrip("\n").rstrip("\r")
-                for match in BLOCK_RECEIPT_RE.finditer(text):
-                    parts = [item.strip()
-                             for item in match.group(2).split(",")
-                             if item.strip()]
-                    if len(parts) < 2:
-                        continue
-                    if not all(RECEIPT_PART_RE.match(item)
-                               for item in parts):
-                        continue
-                    out.setdefault(int(match.group(1)), []).append({
-                        "file": os.path.basename(path),
-                        "line": line_no,
-                        "parts": parts,
-                        "omits_budget": receipt_admissible(parts),
-                        "span": text[:200],
-                    })
+            scan(os.path.basename(path),
+                 ((line_no, raw.rstrip("\n").rstrip("\r"))
+                  for line_no, raw in enumerate(handle, 1)))
         finally:
             handle.close()
     return out
@@ -960,8 +972,19 @@ def fold_carry_exemption(round_no, narrative_texts, ledger_rounds,
     return False, "narrative-lacks-span"
 
 
-def load_archive_windows(path):
-    """Split ONE archive section file into its fold windows (R2914).
+def read_archive_view(path):
+    """ONE open of one archive: numbered raw lines plus fold windows (R3635).
+
+    Three readers used to open the same file separately - the window view,
+    the block-receipt scan and the budget-bound scan - so one evidence run
+    opened every archive four times (measured: 12 opens over three files,
+    tmp/probe_R3635_opens.py). The bytes do not differ between them, so the
+    view is built here, once, and handed to every consumer.
+
+    `lines` is every physical line with its 1-based line number and no line
+    ending, which is what block receipts and budget bounds read (they match
+    inside comment lines too). `windows` is the load_archive_windows view,
+    built in the same pass so the two cannot disagree about the file.
 
     A window opens at a '# --- R<n>' marker line and runs until the next
     marker of the same file; the marker's own round number is what the
@@ -972,6 +995,7 @@ def load_archive_windows(path):
     as load_archive does, so the two readers cannot disagree about what a
     window holds.
     """
+    lines = []
     windows = []
     current = None
     ordinal = 0
@@ -983,6 +1007,7 @@ def load_archive_windows(path):
     try:
         for line_no, raw in enumerate(handle, 1):
             text = raw.rstrip("\n").rstrip("\r")
+            lines.append((line_no, text))
             if text.startswith(COMMENT_PREFIX):
                 match = FOLD_MARKER_RE.match(text)
                 if match is not None:
@@ -1006,7 +1031,17 @@ def load_archive_windows(path):
                               "%s is not valid utf-8: %s" % (path, exc))
     finally:
         handle.close()
-    return windows
+    return {"path": path, "name": os.path.basename(path),
+            "lines": lines, "windows": windows}
+
+
+def load_archive_windows(path):
+    """Split ONE archive section file into its fold windows (R2914).
+
+    R3635: delegates to read_archive_view so the split has one definition;
+    the window shape and every field it carries are unchanged.
+    """
+    return read_archive_view(path)["windows"]
 
 
 def provenance_counts(paths):

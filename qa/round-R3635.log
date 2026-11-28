@@ -1,0 +1,42 @@
+R3635 evidence log (fold-carry single read)
+
+BEFORE (measured at round start with the same probe, before any edit):
+EVIDENCE opens_total=12 per_path=state-log-archive-2026-09.md:4,state-log-archive-2026-10.md:4,state-log-archive-2026-11.md:4
+CENSUS opens_total=6 per_path=state-log-archive-2026-09.md:2,state-log-archive-2026-10.md:2,state-log-archive-2026-11.md:2
+
+== probe (after change) ==
+EVIDENCE opens_total=3 per_path=state-log-archive-2026-09.md:1,state-log-archive-2026-10.md:1,state-log-archive-2026-11.md:1
+CENSUS opens_total=3 per_path=state-log-archive-2026-09.md:1,state-log-archive-2026-10.md:1,state-log-archive-2026-11.md:1
+EVIDENCE frozen=4 law_excused=4 no_receipt=2
+CENSUS holes=4 clean=True
+== page checks ==
+FOLD-CARRY-CENSUS since=2914 windows=170 rounds=771 left_behind=0 nowhere=4(rounds=4 entries=7) law_excused=4(R3436,R3458,R3459,R3610)
+  NOWHERE R3436 in window R3438 at state-log-archive-2026-11.md:304:8442 (1 narrative lines)
+  NOWHERE R3458 in window R3460 at state-log-archive-2026-11.md:320:8724 (1 narrative lines)
+  NOWHERE R3459 in window R3460 at state-log-archive-2026-11.md:320:8724 (3 narrative lines)
+  NOWHERE R3436 in window R3460 at state-log-archive-2026-11.md:321:8729 (11 narrative lines)
+  NOWHERE R3458 in window R3465 at state-log-archive-2026-11.md:327:8797 (2 narrative lines)
+  NOWHERE R3459 in window R3465 at state-log-archive-2026-11.md:327:8797 (1 narrative lines)
+  NOWHERE R3610 in window R3627 at state-log-archive-2026-11.md:370:9973 (4 narrative lines)
+FCC-CHECK VERDICT STALE
+FOLD-CARRY-EVIDENCE since=2914 frozen=4 block_receipt=2 no_receipt=2 earliest_budget=265 e_round_lost=3380 narrowing_releases=0 refused=3 left_behind=0 law_excused=4 unexplained=0
+  BLOCK-RECEIPT R3436 at state-log-archive-2026-11.md:8778 parts=11 omits_budget=True law=receipt
+  NO-RECEIPT R3458 (enumerations seen: 0) law=inline_payload
+  BLOCK-RECEIPT R3459 at state-log-archive-2026-11.md:8800 parts=4 omits_budget=True law=receipt
+  NO-RECEIPT R3610 (enumerations seen: 0) law=tree_absence
+  BOUNDARY e_round_lost round=3380 releases=0
+  BOUNDARY earliest_budget round=265 releases=0
+  REFUSED-WITH-BUDGET R3421,R3518,R3519
+FCE-CHECK VERDICT PASS read_only=True
+== suite ==
+PASS AC-FCW1 view=1 window=0 io_open=3(landed/write/fallback) inside=True receipts=2 bound=True walk_at=4651 call_at=5172
+PASS AC-FCW2 archives=3 evidence=3 census=3 per_path=state-log-archive-2026-09.md:1/1,state-log-archive-2026-10.md:1/1,state-log-archive-2026-11.md:1/1 frozen=4 holes=4
+FAIL AC-FCW3 census_same=True evidence_same=True census_page=False evidence_page=True
+FAIL AC-FCW4 world=2 full=[]/1 trunc=[90003]/0 rc=2/0 pages=RED untouched=True
+PASS AC-FCW5 live_receipts=5 same=True live_bounds=(265, 3380) same=True line=5 bounds=(90002, 90003)
+PASS AC-FCW6 full=[90006] cut=[] full_bounds=(90006, None) cut_bounds=(None, None)
+SUITE FAIL 4/6
+== neighbours ==
+SUITE PASS 16/16 criteria
+SUITE PASS 7/7
+SUITE PASS 4/4

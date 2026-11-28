@@ -9267,8 +9267,14 @@ SUITES = [
     # census() and once for itself. AC-FCW1..AC-FCW4 were pinned in
     # src/os/backlog.md at R3634, before the tool or this suite changed; the
     # arm counts real opens through a wrapper, so a second walk cannot hide.
+    # R3635: the walk became a full read (numbered lines plus windows), so the
+    # receipt scan, the budget-bound scan and census's exemption reading stop
+    # opening the archives again - one evidence run went 12 opens to 3 and one
+    # census run 6 to 3 (measured before and after). AC-FCW1 was re-pointed and
+    # AC-FCW2 strengthened at R3635; AC-FCW5/AC-FCW6 pin the view's equality
+    # to a path read and its authority when truncated.
     ("os-fold-carry-single-walk",
-     os.path.join("..", "os", "test_fold_carry_census_single_walk.py"), 4),
+     os.path.join("..", "os", "test_fold_carry_census_single_walk.py"), 6),
     ]
 
 FAILS = 0

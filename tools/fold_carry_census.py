@@ -57,12 +57,34 @@ LABEL = "fold-carry-census"
 LOSS_RE = re.compile(r"refuses\s+by\s+name\s+\(E_ROUND_LOST\)")
 
 
-def receipt_index(paths):
+def receipt_index(paths, views=None):
     """Every block-part receipt in the archives, keyed by round."""
-    return LL.block_receipts(paths)
+    return LL.block_receipts(paths, views=views)
 
 
-def budget_line_bounds(paths, live_lines):
+def _raw_lines(paths, views):
+    """(line_no, text) for every archive line, from a view or from a file.
+
+    R3635: the evidence face used to open each archive three more times after
+    the window walk - once for receipts and once for the budget bounds, plus
+    the exemption reading inside census. A view already holds the numbered
+    lines, so a caller that hands one in never has its files opened again.
+    """
+    if views is not None:
+        for view in views:
+            for item in view["lines"]:
+                yield item
+        return
+    for path in paths:
+        handle = io.open(path, "r", encoding="utf-8")
+        try:
+            for line_no, raw in enumerate(handle, 1):
+                yield line_no, raw.rstrip("\n").rstrip("\r")
+        finally:
+            handle.close()
+
+
+def budget_line_bounds(paths, live_lines, views=None):
     """Earliest surviving budget-line round, and the E_ROUND_LOST round."""
     earliest = None
     for line in live_lines:
@@ -71,37 +93,33 @@ def budget_line_bounds(paths, live_lines):
             round_no = int(hit.group(1))
             earliest = round_no if earliest is None else min(earliest, round_no)
     lost_at = None
-    for path in paths:
-        handle = io.open(path, "r", encoding="utf-8")
-        try:
-            for raw in handle:
-                text = raw.rstrip("\n").rstrip("\r")
-                hit = LL.LEDGER_PRESENCE_RE.match(text)
-                if hit is not None:
-                    round_no = int(hit.group(1))
-                    earliest = (round_no if earliest is None
-                                else min(earliest, round_no))
-                if not LOSS_RE.search(text):
-                    continue
-                hit = LL.NARRATIVE_RE.match(text)
-                if hit is None:
-                    continue
-                round_no = int(hit.group(1))
-                lost_at = round_no if lost_at is None else min(lost_at, round_no)
-        finally:
-            handle.close()
+    for _line_no, text in _raw_lines(paths, views):
+        hit = LL.LEDGER_PRESENCE_RE.match(text)
+        if hit is not None:
+            round_no = int(hit.group(1))
+            earliest = (round_no if earliest is None
+                        else min(earliest, round_no))
+        if not LOSS_RE.search(text):
+            continue
+        hit = LL.NARRATIVE_RE.match(text)
+        if hit is None:
+            continue
+        round_no = int(hit.group(1))
+        lost_at = round_no if lost_at is None else min(lost_at, round_no)
     return earliest, lost_at
 
 
 def _archive_walk(paths):
-    """Every archive window, materialised once per file (AC-FCW1, R3634).
+    """Every archive read ONCE: numbered lines plus fold windows (R3635).
 
-    The census and the evidence face used to walk the archives separately, so
-    one `--evidence` run read the same 27944 archive lines twice (measured:
-    six walks over three files). Nothing about the data differs between the
-    two, so the walk is built here - the one call site - and handed in.
+    R3634 made the census and the evidence face share one window walk; the
+    receipt scan, the budget-bound scan and census's own exemption reading
+    still opened the same files again, so one `--evidence` run opened each
+    archive four times (measured: 12 opens over three files). The view holds
+    both readings, so every consumer takes this one read and no face opens
+    an archive itself.
     """
-    return [(path, list(LL.load_archive_windows(path))) for path in paths]
+    return [LL.read_archive_view(path) for path in paths]
 
 
 def evidence(min_round=None, _walk=None):
@@ -118,8 +136,8 @@ def evidence(min_round=None, _walk=None):
     walk = _archive_walk(paths) if _walk is None else _walk
     report = census(min_round, _walk=walk)
     live = LL.load_state_log(STATE)
-    receipts = receipt_index(paths)
-    earliest, lost_at = budget_line_bounds(paths, live)
+    receipts = receipt_index(paths, views=walk)
+    earliest, lost_at = budget_line_bounds(paths, live, views=walk)
     # R3633: the law's own kind is asked of the law's own vocabulary. Without
     # it this page spoke two receipt kinds while the table carried four, so
     # R3458 (inline payload) and R3610 (tree absence) were published as "no
@@ -127,8 +145,8 @@ def evidence(min_round=None, _walk=None):
     live_rounds = LL.tree_presence_rounds(live)
     archive_rounds = set()
     narratives = {}
-    for path, file_windows in walk:
-        for window in file_windows:
+    for view in walk:
+        for window in view["windows"]:
             for line in window["lines"]:
                 presence = LL.LEDGER_PRESENCE_RE.match(line)
                 if presence is not None:
@@ -260,8 +278,8 @@ def census(min_round=None, _walk=None):
     # sits in a later file reads as a hole. Measured while writing this: a
     # one-pass draft reported 22 holes over 19 rounds where the audit reports
     # 6 over 3 - the whole difference was file order.
-    for path, file_windows in walk:
-        for window in file_windows:
+    for view in walk:
+        for window in view["windows"]:
             for line in window["lines"]:
                 hit = LL.LEDGER_PRESENCE_RE.match(line)
                 if hit is not None:
@@ -300,7 +318,7 @@ def census(min_round=None, _walk=None):
     # with the receipts this page just read, so the page can say both "three
     # frozen holes" and "the law excuses all three by name" without either
     # number swallowing the other.
-    receipts = LL.block_receipts(paths)
+    receipts = LL.block_receipts(paths, views=walk)
     exempted = []
     for row in nowhere:
         verdict, why = LL.fold_carry_exemption(
