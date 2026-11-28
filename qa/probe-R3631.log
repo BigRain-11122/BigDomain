@@ -1,0 +1,30 @@
+R3631 PROBE mode=before
+module sha256=05a75ec85698b227cf5226a8e4a9a4eefbc9045322fc3d1af600137fd60978ee
+live R3625 lines=2 tokens_rows=0
+  live| 2026-11-28 R3625 CLOSE: AC-CGEF8 green end to end - closeout suite 72 assertions over 24 criteria (was 69/23), all twelve REFUSED verdict dicts publis
+  live| 2026-11-28 R3626 GROUP SCAN (content-addressed, read before any work): the group ledger answered 0 lines for @BigDomain (Select-String count 0) so no 
+live rounds_without_ledger=[3625] ledger_without_round=[]
+live baseline missing=[] orphan=[]
+live new_missing=[3625] new_orphan=[] stale_missing=[] clean=False
+live verdict=VERDICT DIRTY
+control rounds_without_ledger=[3625] new_missing=[3625] verdict=VERDICT DIRTY
+R3631 PROBE mode=before
+module sha256=05a75ec85698b227cf5226a8e4a9a4eefbc9045322fc3d1af600137fd60978ee
+live R3625 lines=2 tokens_rows=0
+  live| 2026-11-28 R3625 CLOSE: AC-CGEF8 green end to end - closeout suite 72 assertions over 24 criteria (was 69/23), all twelve REFUSED verdict dicts publis
+  live| 2026-11-28 R3626 GROUP SCAN (content-addressed, read before any work): the group ledger answered 0 lines for @BigDomain (Select-String count 0) so no 
+live rounds_without_ledger=[3625] ledger_without_round=[]
+live baseline missing=[] orphan=[]
+live new_missing=[3625] new_orphan=[] stale_missing=[] clean=False
+live verdict=VERDICT DIRTY
+control rounds_without_ledger=[901] new_missing=[901] verdict=VERDICT DIRTY
+R3631 PROBE mode=after
+module sha256=05a75ec85698b227cf5226a8e4a9a4eefbc9045322fc3d1af600137fd60978ee
+live R3625 lines=2 tokens_rows=0
+  live| 2026-11-28 R3625 CLOSE: AC-CGEF8 green end to end - closeout suite 72 assertions over 24 criteria (was 69/23), all twelve REFUSED verdict dicts publis
+  live| 2026-11-28 R3626 GROUP SCAN (content-addressed, read before any work): the group ledger answered 0 lines for @BigDomain (Select-String count 0) so no 
+live rounds_without_ledger=[3625] ledger_without_round=[]
+live baseline missing=[3625] orphan=[]
+live new_missing=[] new_orphan=[] stale_missing=[] clean=True
+live verdict=VERDICT CLEAN
+control rounds_without_ledger=[901] new_missing=[901] verdict=VERDICT DIRTY

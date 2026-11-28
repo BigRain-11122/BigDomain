@@ -1,20 +1,20 @@
 {
   "ceo_face": {
     "board_pages_skipped": ["preview/face-sweep.html (8877B)"],
-    "current": "2026-11-28 R3630 PRODUCT: a published assumption about the archive counts is now a measured fact. The R3629 board note claimed the round-main counts accumulate per archive pass and that a round split across two files would be judged twice, and it told the next window to build a cross-file merged round set. A read-only fixture measured the opposite: load_archive_lines() hands audit_archive() the UNION and the reading is keyed by round number, so a round whose narrative half sits in state-log-archive-2026-07.md and whose ledger half sits in -08.md reads rounds_total=1 with without_main=[], without_label=[], rounds_without_ledger=[] and ledger_without_round=[]. No production module changed; the claim is guarded instead, by AC-ARM4 in test_ledger_archive_round_main.py, with a negative control proving the union still names a round that carries no ledger anywhere.",
+    "current": "2026-11-28 R3631 PRODUCT: the live ledger gate is honest again, and the legacy suite's reds were separated into one real repair and one measured root cause. state/ledger_gaps.json now declares round 3625 BY NAME - the duplicate label R3623's corrective append pinned onto the live tick, whose spend sits under the single 'R3623 tokens:' row and whose ledger line the append law correctly refuses to forge (E_LAP_ROUND_ORPHAN) - so the live face reads new_missing=[] stale_missing=[] clean=True verdict VERDICT CLEAN while a private narrative-only round 901 still reads new_missing=[901] VERDICT DIRTY. With the gap declared, src/os/test_ledger_archive.py moved 8/16 -> 10/16: AC-LGA7 and AC-LGA8 flipped green, and the six arms that stay red (AC-LGA9/10/11/13/15/16) were each measured down to ONE shared fact - the November archive holds the R3610 block with no budget line anywhere (zero 'R3610 tokens:' row in logs/*.md and in the live state log), so audit_fold_carry reads FOLD-CARRY FAIL E_LFC_CARRY gaps=R3610(w3627) split=52 same_window=54 exempt=4(R3112,R3436,R3458,R3459) and those six arms all end on a real_carry clean=True test or on a same_window round missing from the presence set.",
     "do": "2026-11-25 R3456 PRODUCT: the answer-revision question now has a door - api_answer_history (live with AC-AMAW1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so 'which answer was rewritten, what did it say before, what does it say now and how often did it change' could only be read by calling the sandbox from a shell - while api_seller_answers and api_listing_qna publish only the CURRENT wording.",
     "last_artifact": "preview/preview-writer-census.html (17697B) + preview/preview-writer-census.json (25235B) [2026-11-28 commit]",
     "latest_artifact": "preview/preview-writer-census.html (17697B) + preview/preview-writer-census.json (25235B) [2026-11-28 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\preview-writer-census.html",
-    "latest_artifact_note": "",
-    "latest_evidence": "qa/logs-append-R3612-b.log (1981B, 2026-11-28, sha256 8a1e2e573c5b)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/probe-R3631.log (2151B, 2026-11-28, sha256 4ff9fc022921)",
+    "latest_evidence": "qa/probe-R3631.log (2151B, 2026-11-28, sha256 4ff9fc022921)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3629] next window (<=48h): (0) **载体**：本窗收口 `CARRIER bytes=73526 gate=78500 margin=4974 append_ok=true caliber=16 ledger=R3629 log_items=79 round_main=OK`——开窗先 `python src/os/state_fold_run.py --check` 与 `python src/os/logs_toolkit.py append --check`；余量已薄（<5k），读到 `FOLD-DUE` 或余量 < 一轮就先折；折叠窗**先取整块轮缘**（被 `E_ROUND_LOST` 点名的指针写进 `--summary-sentence` 再跑）；**一轮只 append 一次**，主行必须 `YYYY-MM-DD R#### LABEL:` 形状。(1) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——当日或之后开窗先把刷新轮排最前（P-2026-09-24-56）。(2) **S4U 仍未落地**（承账）：`BigDomain-OSLoop` 任务 `Principal.LogonType=Interactive`，正法=提权会话跑 `src/os/register_loop_task.ps1` 后读回须为 `S4U`。(3) **本窗新点名的可认领候选**：① `audit_archive` 的轮主行读数现只在 `ledger_lines --archives` 命令行面发布，`preview/face-sweep` 与 CEO 导出面仍不消费它（今日无需求，记下不造活）；② 该读数是**每次归档 pass** 累计，被两个文件分割的轮会被判两次——要做分割安全就需跨文件合并轮集，先立判据（PIN）再动；③ **旧套件预存负债可认领**：`src/os/test_ledger_archive.py` 实测 8/16（AC-LGA7/8/9/10/11/13/15/16），对 HEAD 模块与本窗模块同名同数——非本窗回归，修不修需先读内容定性。(4) **本窗绿序（实测一遍过，照抄）**：`logs_toolkit append --execute`（dated 主行+账本行）→ `export_round` → `heartbeat --write <tick>` → `registry_counter_census --write-pin` → `suite_matrix_reconcile --write/--check` → `status_export_fresh --apply` → `deliverable_index (truncated)",
-    "next_milestone_due": "2026-11-30T10:46:59+08:00",
-    "updated_at": "2026-11-28T10:46:59+08:00",
+    "next_milestone": "[R3631] next window (<=48h): (0) **载体**：本窗收口 `CARRIER bytes=40079 gate=78500 margin=38421 append_ok=true caliber=16 ledger=R3631 log_items=44 round_main=OK`——开窗先 `python src/os/state_fold_run.py --check` 与 `python src/os/logs_toolkit.py append --check`；**一轮只 append 一次**，主行必须 `YYYY-MM-DD R#### LABEL:`。(1) **本窗唯一真候选（已预测量，禁再诊断一遍）**：`FOLD_CARRY_EXEMPT` 收下 R3610 需要一种**尚不存在的证据种**——`block_receipts` 实测 R3436/R3459 `omits_budget=True`、R3421/R3518/R3519 `False`、**R3610 无收据**（R3627 折摘要 `fold 23 moves the R3610 and R3611 round blocks into the archive` 没有括号分部清单）。正法=新种「块内无预算行 + 全树零 presence 行」的可重放收据（建档时同时给负控：同名散文在未具名轮仍红），预期六臂（LGA9/10/11/13/15/16）全绿=16/16；**禁**先放宽断言或删臂。(2) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先把刷新轮排最前（P-2026-09-24-56）。(3) **S4U 仍未落地**（承账）：`BigDomain-OSLoop` 任务 `Principal.LogonType=Interactive`，正法=提权会话跑 `src/os/register_loop_task.ps1` 后读回须为 `S4U`。(4) 承账不变：全量 battery 未实跑、Docker 缺位、电池页待重派生、reconcile 证据走读 12/756、三个 `qa/crawl-*` 改动件非本窗所写。",
+    "next_milestone_due": "2026-11-30T10:59:16+08:00",
+    "updated_at": "2026-11-28T10:59:16+08:00",
     "heartbeat": {
-      "tick": 3630,
-      "state_tick": 3630,
+      "tick": 3631,
+      "state_tick": 3631,
       "lag": 0,
       "verdict": "PASS",
       "reason": "fresh"
@@ -35,8 +35,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-28 R3630 PRODUCT: a published assumption about the archive counts is now a measured fact. The R3629 board note claimed the round-main counts accumulate per archive pass and that a round split across two files would be judged twice, and it told the next window to build a cross-file merged round set. A read-only fixture measured the opposite: load_archive_lines() hands audit_archive() the UNION and the reading is keyed by round number, so a round whose narrative half sits in state-log-archive-2026-07.md and whose ledger half sits in -08.md reads rounds_total=1 with without_main=[], without_label=[], rounds_without_ledger=[] and ledger_without_round=[]. No production module changed; the claim is guarded instead, by AC-ARM4 in test_ledger_archive_round_main.py, with a negative control proving the union still names a round that carries no ledger anywhere.",
-  "claims": {"claimed": 54, "captured": 24, "contradicted": 0, "uncaptured": 30, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-28T10:46:59+08:00"},
+  "current": "2026-11-28 R3631 PRODUCT: the live ledger gate is honest again, and the legacy suite's reds were separated into one real repair and one measured root cause. state/ledger_gaps.json now declares round 3625 BY NAME - the duplicate label R3623's corrective append pinned onto the live tick, whose spend sits under the single 'R3623 tokens:' row and whose ledger line the append law correctly refuses to forge (E_LAP_ROUND_ORPHAN) - so the live face reads new_missing=[] stale_missing=[] clean=True verdict VERDICT CLEAN while a private narrative-only round 901 still reads new_missing=[901] VERDICT DIRTY. With the gap declared, src/os/test_ledger_archive.py moved 8/16 -> 10/16: AC-LGA7 and AC-LGA8 flipped green, and the six arms that stay red (AC-LGA9/10/11/13/15/16) were each measured down to ONE shared fact - the November archive holds the R3610 block with no budget line anywhere (zero 'R3610 tokens:' row in logs/*.md and in the live state log), so audit_fold_carry reads FOLD-CARRY FAIL E_LFC_CARRY gaps=R3610(w3627) split=52 same_window=54 exempt=4(R3112,R3436,R3458,R3459) and those six arms all end on a real_carry clean=True test or on a same_window round missing from the presence set.",
+  "claims": {"claimed": 54, "captured": 24, "contradicted": 0, "uncaptured": 30, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-28T10:59:16+08:00"},
   "chain": {"present": true, "rows": 106, "broken": 5, "path": "state/qa_replacements.jsonl", "partial": 5, "declared": 1, "unexplained": 0, "adjudication": "OK", "excused": 1},
   "depts": [
     {
@@ -65,11 +65,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-28 R3630 PRODUCT: a published assumption about the archive counts is now a measured fact. The R3629 board note claimed the round-main counts accumulate per archive pass and that a round split across two files would be judged twice, and it told the next window to build a cross-file merged round set. A read-only fixture measured the opposite: load_archive_lines() hands audit_archive() the UNION and the reading is keyed by round number, so a round whose narrative half sits in state-log-archive-2026-07.md and whose ledger half sits in -08.md reads rounds_total=1 with without_main=[], without_label=[], rounds_without_ledger=[] and ledger_without_round=[]. No production module changed; the claim is guarded instead, by AC-ARM4 in test_ledger_archive_round_main.py, with a negative control proving the union still names a round that carries no ledger anywhere.",
-  "export_ts": "2026-11-28T10:46:59+08:00",
+  "do": "2026-11-28 R3631 PRODUCT: the live ledger gate is honest again, and the legacy suite's reds were separated into one real repair and one measured root cause. state/ledger_gaps.json now declares round 3625 BY NAME - the duplicate label R3623's corrective append pinned onto the live tick, whose spend sits under the single 'R3623 tokens:' row and whose ledger line the append law correctly refuses to forge (E_LAP_ROUND_ORPHAN) - so the live face reads new_missing=[] stale_missing=[] clean=True verdict VERDICT CLEAN while a private narrative-only round 901 still reads new_missing=[901] VERDICT DIRTY. With the gap declared, src/os/test_ledger_archive.py moved 8/16 -> 10/16: AC-LGA7 and AC-LGA8 flipped green, and the six arms that stay red (AC-LGA9/10/11/13/15/16) were each measured down to ONE shared fact - the November archive holds the R3610 block with no budget line anywhere (zero 'R3610 tokens:' row in logs/*.md and in the live state log), so audit_fold_carry reads FOLD-CARRY FAIL E_LFC_CARRY gaps=R3610(w3627) split=52 same_window=54 exempt=4(R3112,R3436,R3458,R3459) and those six arms all end on a real_carry clean=True test or on a same_window round missing from the presence set.",
+  "export_ts": "2026-11-28T10:59:16+08:00",
   "latest_artifact": "preview/preview-writer-census.html (17697B) + preview/preview-writer-census.json (25235B) [2026-11-28 commit]",
-  "latest_evidence": "qa/logs-append-R3612-b.log (1981B, 2026-11-28, sha256 8a1e2e573c5b)",
-  "next_milestone": "[R3629] next window (<=48h): (0) **载体**：本窗收口 `CARRIER bytes=73526 gate=78500 margin=4974 append_ok=true caliber=16 ledger=R3629 log_items=79 round_main=OK`——开窗先 `python src/os/state_fold_run.py --check` 与 `python src/os/logs_toolkit.py append --check`；余量已薄（<5k），读到 `FOLD-DUE` 或余量 < 一轮就先折；折叠窗**先取整块轮缘**（被 `E_ROUND_LOST` 点名的指针写进 `--summary-sentence` 再跑）；**一轮只 append 一次**，主行必须 `YYYY-MM-DD R#### LABEL:` 形状。(1) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——当日或之后开窗先把刷新轮排最前（P-2026-09-24-56）。(2) **S4U 仍未落地**（承账）：`BigDomain-OSLoop` 任务 `Principal.LogonType=Interactive`，正法=提权会话跑 `src/os/register_loop_task.ps1` 后读回须为 `S4U`。(3) **本窗新点名的可认领候选**：① `audit_archive` 的轮主行读数现只在 `ledger_lines --archives` 命令行面发布，`preview/face-sweep` 与 CEO 导出面仍不消费它（今日无需求，记下不造活）；② 该读数是**每次归档 pass** 累计，被两个文件分割的轮会被判两次——要做分割安全就需跨文件合并轮集，先立判据（PIN）再动；③ **旧套件预存负债可认领**：`src/os/test_ledger_archive.py` 实测 8/16（AC-LGA7/8/9/10/11/13/15/16），对 HEAD 模块与本窗模块同名同数——非本窗回归，修不修需先读内容定性。(4) **本窗绿序（实测一遍过，照抄）**：`logs_toolkit append --execute`（dated 主行+账本行）→ `export_round` → `heartbeat --write <tick>` → `registry_counter_census --write-pin` → `suite_matrix_reconcile --write/--check` → `status_export_fresh --apply` → `deliverable_index (truncated)",
+  "latest_evidence": "qa/probe-R3631.log (2151B, 2026-11-28, sha256 4ff9fc022921)",
+  "next_milestone": "[R3631] next window (<=48h): (0) **载体**：本窗收口 `CARRIER bytes=40079 gate=78500 margin=38421 append_ok=true caliber=16 ledger=R3631 log_items=44 round_main=OK`——开窗先 `python src/os/state_fold_run.py --check` 与 `python src/os/logs_toolkit.py append --check`；**一轮只 append 一次**，主行必须 `YYYY-MM-DD R#### LABEL:`。(1) **本窗唯一真候选（已预测量，禁再诊断一遍）**：`FOLD_CARRY_EXEMPT` 收下 R3610 需要一种**尚不存在的证据种**——`block_receipts` 实测 R3436/R3459 `omits_budget=True`、R3421/R3518/R3519 `False`、**R3610 无收据**（R3627 折摘要 `fold 23 moves the R3610 and R3611 round blocks into the archive` 没有括号分部清单）。正法=新种「块内无预算行 + 全树零 presence 行」的可重放收据（建档时同时给负控：同名散文在未具名轮仍红），预期六臂（LGA9/10/11/13/15/16）全绿=16/16；**禁**先放宽断言或删臂。(2) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先把刷新轮排最前（P-2026-09-24-56）。(3) **S4U 仍未落地**（承账）：`BigDomain-OSLoop` 任务 `Principal.LogonType=Interactive`，正法=提权会话跑 `src/os/register_loop_task.ps1` 后读回须为 `S4U`。(4) 承账不变：全量 battery 未实跑、Docker 缺位、电池页待重派生、reconcile 证据走读 12/756、三个 `qa/crawl-*` 改动件非本窗所写。",
   "outs": [
     "preview/preview-writer-census.html (17697B) + preview/preview-writer-census.json (25235B) [2026-11-28 commit]",
     "preview/first-yuan-chain.html (5397B) + preview/first-yuan-chain.json (5180B) [2026-11-28 mtime]",
@@ -211,19 +211,19 @@
     "shortfall_total": 15,
     "verdict": "FLOOR-DEBT"
   },
-  "results": [["3630", "OSLoop 执行 tick"]],
+  "results": [["3631", "OSLoop 执行 tick"]],
   "results_archive": {
     "bytes": 336680,
     "count": 179,
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
-  "self_drive": {"window": "2026-11-22..2026-11-28", "window_days": 7, "log_lines_in_window": 35, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 30, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
-  "state_bytes": 34722,
-  "next_milestone_due": "2026-11-30T10:46:59+08:00",
+  "self_drive": {"window": "2026-11-22..2026-11-28", "window_days": 7, "log_lines_in_window": 41, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 35, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
+  "state_bytes": 40079,
+  "next_milestone_due": "2026-11-30T10:59:16+08:00",
   "heartbeat": {
-    "tick": 3630,
-    "state_tick": 3630,
+    "tick": 3631,
+    "state_tick": 3631,
     "lag": 0,
     "verdict": "PASS",
     "reason": "fresh"
