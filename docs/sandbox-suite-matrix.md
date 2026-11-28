@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 844 | 7470 | 675/675 | R2739 |
+| 845 | 7474 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -881,7 +881,8 @@
 | 842 | os-logs-append-round-main | ../os/test_logs_append_round_main.py | 18 | no-evidence | - |
 | 843 | os-logs-append-round-orphan | ../os/test_logs_append_round_orphan.py | 17 | no-evidence | - |
 | 844 | os-ledger-archive-round-main | ../os/test_ledger_archive_round_main.py | 19 | no-evidence | - |
-|  | 合计 |  | 7470 | green 675 / FAIL 0 / no-evidence 169 |  |
+| 845 | os-fold-carry-evidence-law | ../os/test_fold_carry_evidence_law.py | 4 | no-evidence | - |
+|  | 合计 |  | 7474 | green 675 / FAIL 0 / no-evidence 170 |  |
 
 ## 证据出处
 

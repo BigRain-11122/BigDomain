@@ -9254,6 +9254,14 @@ SUITES = [
     # suite existed.
     ("os-ledger-archive-round-main",
      os.path.join("..", "os", "test_ledger_archive_round_main.py"), 19),
+    # R3633: the evidence face spoke two receipt kinds while the exemption
+    # table already carried four, so two rounds the law excused by name were
+    # published as "no receipt". AC-FCEX1..AC-FCEX4 were pinned in
+    # src/os/backlog.md at R3633, before the law module, the tool or this
+    # suite changed; the class axis keeps its receipt fact and the law axis
+    # is published beside it.
+    ("os-fold-carry-evidence-law",
+     os.path.join("..", "os", "test_fold_carry_evidence_law.py"), 4),
     ]
 
 FAILS = 0

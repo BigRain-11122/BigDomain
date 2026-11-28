@@ -801,6 +801,31 @@ FOLD_CARRY_EXEMPT = {
     },
 }
 
+# R3633: the kind vocabulary is owned here, beside the table, because a reader
+# with its own copy falls behind the law silently - measured: the evidence
+# census still spoke two receipt kinds while the table already carried four,
+# so two rounds the law excused by name were published as "no receipt".
+FOLD_CARRY_EXEMPT_KINDS = ("receipt", "tree_absence", "inline_payload",
+                           "narrative_span")
+# R3633: the one kind that says the round was never a work round at all (its
+# own words carry the span), so it is not a hole. Named here so no reader has
+# to compare a bare string of its own.
+FOLD_CARRY_NOT_A_HOLE_KIND = "narrative_span"
+
+
+def exemption_kind(round_no):
+    """Which ONE evidence kind the table names for a round, else None.
+
+    A measurement, never a verdict: whether the entry's evidence still holds
+    is asked by fold_carry_exemption(). An entry naming no kind, or more than
+    one, answers None rather than a guess, because a guess would publish a
+    kind the law does not act on.
+    """
+    entry = FOLD_CARRY_EXEMPT.get(round_no) or {}
+    seen = [kind for kind in FOLD_CARRY_EXEMPT_KINDS if kind in entry]
+    return seen[0] if len(seen) == 1 else None
+
+
 # R3496: the receipt reader lives beside the law, not in a tool, so the
 # exemption and the census cannot disagree about what a receipt is.
 BLOCK_RECEIPT_RE = re.compile(

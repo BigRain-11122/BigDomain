@@ -17,6 +17,7 @@
     3459,
     3610
   ],
+  "law_excused": 4,
   "left_behind": 0,
   "narrowing_releases": 0,
   "no_receipt": 2,
@@ -28,6 +29,9 @@
   "rows": [
     {
       "class": "block-receipt",
+      "law_kind": "receipt",
+      "law_ok": true,
+      "law_why": "frozen hole: the fold summary for this block enumerates all eleven parts and names no budget part, so no budget line existed when the block was folded",
       "receipt": {
         "file": "state-log-archive-2026-11.md",
         "line": 8778,
@@ -52,12 +56,18 @@
     },
     {
       "class": "no-receipt",
+      "law_kind": "inline_payload",
+      "law_ok": true,
+      "law_why": "frozen hole: the round appended its budget payload to its own last narrative line instead of emitting a presence line, and no presence line exists anywhere",
       "receipt": null,
       "receipts_total": 0,
       "round": 3458
     },
     {
       "class": "block-receipt",
+      "law_kind": "receipt",
+      "law_ok": true,
+      "law_why": "frozen hole: the fold summary for this block enumerates all four parts and names no budget part, so no budget line existed when the block was folded",
       "receipt": {
         "file": "state-log-archive-2026-11.md",
         "line": 8800,
@@ -75,11 +85,15 @@
     },
     {
       "class": "no-receipt",
+      "law_kind": "tree_absence",
+      "law_ok": true,
+      "law_why": "frozen hole: the round closed without a budget row, and no presence line for it exists in any archive or the live log, so the fold had nothing to carry",
       "receipt": null,
       "receipts_total": 0,
       "round": 3610
     }
   ],
   "since": 2914,
-  "tool": "fold-carry-census-evidence"
+  "tool": "fold-carry-census-evidence",
+  "unexplained": 0
 }

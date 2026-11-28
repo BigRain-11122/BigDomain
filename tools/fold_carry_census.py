@@ -108,17 +108,44 @@ def evidence(min_round=None):
     live = LL.load_state_log(STATE)
     receipts = receipt_index(paths)
     earliest, lost_at = budget_line_bounds(paths, live)
+    # R3633: the law's own kind is asked of the law's own vocabulary. Without
+    # it this page spoke two receipt kinds while the table carried four, so
+    # R3458 (inline payload) and R3610 (tree absence) were published as "no
+    # receipt" beside a law that excuses both by name.
+    live_rounds = LL.tree_presence_rounds(live)
+    archive_rounds = set()
+    narratives = {}
+    for path in paths:
+        for window in LL.load_archive_windows(path):
+            for line in window["lines"]:
+                presence = LL.LEDGER_PRESENCE_RE.match(line)
+                if presence is not None:
+                    archive_rounds.add(int(presence.group(1)))
+                if window["round"] < report["since"]:
+                    continue
+                if LL.classify(line) == "round":
+                    narratives.setdefault(
+                        int(LL.NARRATIVE_RE.match(line).group(1)),
+                        []).append(line)
     rows = []
     for round_no in report["nowhere_rounds"]:
         found = [item for item in receipts.get(round_no, [])
                  if item["omits_budget"]]
         # Strongest receipt first: the enumeration that names the most parts.
         found.sort(key=lambda item: -len(item["parts"]))
+        # Same arguments the census hands the law, so the two faces cannot
+        # disagree about whether a hole is excused.
+        law_ok, law_why = LL.fold_carry_exemption(
+            round_no, narratives.get(round_no, []),
+            archive_rounds | live_rounds, receipts, live_rounds=live_rounds)
         rows.append({
             "round": round_no,
             "class": "block-receipt" if found else "no-receipt",
             "receipt": found[0] if found else None,
             "receipts_total": len(receipts.get(round_no, [])),
+            "law_ok": law_ok,
+            "law_kind": LL.exemption_kind(round_no),
+            "law_why": law_why,
         })
     holes = list(report["nowhere_rounds"])
     boundaries = {}
@@ -147,6 +174,10 @@ def evidence(min_round=None):
             item["releases"] or 0 for item in boundaries.values()),
         "receipts_refused": refused,
         "left_behind": len(report["left_behind"]),
+        # R3633: the law's reading beside the receipt reading, so a hole the
+        # law excuses by name never reads the same as one nothing explains.
+        "law_excused": len([row for row in rows if row["law_ok"]]),
+        "unexplained": len([row for row in rows if not row["law_ok"]]),
         "clean": report["clean"] and len(rows) == len(holes),
     }
 
@@ -155,13 +186,15 @@ def evidence_line(report):
     """One ASCII line: what the receipts say and what narrowing would do."""
     return ("FOLD-CARRY-EVIDENCE since=%d frozen=%d block_receipt=%d "
             "no_receipt=%d earliest_budget=%s e_round_lost=%s "
-            "narrowing_releases=%d refused=%d left_behind=%d"
+            "narrowing_releases=%d refused=%d left_behind=%d "
+            "law_excused=%d unexplained=%d"
             % (report["since"], len(report["frozen_rounds"]),
                report["block_receipt"], report["no_receipt"],
                report["boundaries"]["earliest_budget"]["round"],
                report["boundaries"]["e_round_lost"]["round"],
                report["narrowing_releases"], len(report["receipts_refused"]),
-               report["left_behind"]))
+               report["left_behind"], report["law_excused"],
+               report["unexplained"]))
 
 
 def presence_rounds(lines):
@@ -184,10 +217,10 @@ def classify_round(round_no, archive_rounds, live_rounds, narratives):
     """
     if round_no in archive_rounds:
         return None
-    entry = LL.FOLD_CARRY_EXEMPT.get(round_no) or {}
-    if "narrative_span" in entry:
+    if LL.exemption_kind(round_no) == LL.FOLD_CARRY_NOT_A_HOLE_KIND:
         # The round's own words prove it was never a work round, so it is not
-        # a hole at all - the pre-R3496 class, unchanged.
+        # a hole at all - the pre-R3496 class, unchanged, now asked of the
+        # law's named constant instead of this tool's own copy of the string.
         verdict, _why = LL.fold_carry_exemption(round_no, narratives,
                                                 archive_rounds)
         if verdict:
@@ -326,13 +359,17 @@ def main(argv):
         print(evidence_line(report))
         for row in report["rows"]:
             receipt = row["receipt"]
+            if row["law_ok"]:
+                law = "law=%s" % (row["law_kind"] or "(kind-unnamed)")
+            else:
+                law = "law=refused:%s" % row["law_why"]
             if receipt is None:
-                print("  NO-RECEIPT R%d (enumerations seen: %d)"
-                      % (row["round"], row["receipts_total"]))
+                print("  NO-RECEIPT R%d (enumerations seen: %d) %s"
+                      % (row["round"], row["receipts_total"], law))
                 continue
-            print("  BLOCK-RECEIPT R%d at %s:%d parts=%d omits_budget=%s"
+            print("  BLOCK-RECEIPT R%d at %s:%d parts=%d omits_budget=%s %s"
                   % (row["round"], receipt["file"], receipt["line"],
-                     len(receipt["parts"]), receipt["omits_budget"]))
+                     len(receipt["parts"]), receipt["omits_budget"], law))
         for name in sorted(report["boundaries"]):
             item = report["boundaries"][name]
             print("  BOUNDARY %s round=%s releases=%s"
