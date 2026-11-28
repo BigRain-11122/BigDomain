@@ -9253,7 +9253,7 @@ SUITES = [
     # pinned in src/os/backlog.md at R3629, before the module changed and this
     # suite existed.
     ("os-ledger-archive-round-main",
-     os.path.join("..", "os", "test_ledger_archive_round_main.py"), 14),
+     os.path.join("..", "os", "test_ledger_archive_round_main.py"), 19),
     ]
 
 FAILS = 0

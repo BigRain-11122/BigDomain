@@ -1,7 +1,10 @@
 """test_ledger_archive_round_main.py - the archive face counts rounds whose main line was never confirmed.
 
 Criteria AC-ARM1..AC-ARM3 were pinned in src/os/backlog.md at R3629 BEFORE
-src/os/ledger_lines.py changed and before this file existed.
+src/os/ledger_lines.py changed and before this file existed. AC-ARM4 was
+pinned at R3630, after a read-only measurement showed the R3629 board note
+over-stated the split-round risk: the union is keyed by round number, so a
+round whose narrative and ledger halves sit in two archive files reads once.
 
 The measured gap (this window, read off the live tree): check_round_main_shape()
 judges exactly ONE round - the newest - and says so ("older rounds deliberately
@@ -171,6 +174,53 @@ def main():
            scoped['clean'] is True
            and LL.format_report(scoped)[-1] == 'VERDICT CLEAN')
 
+        # ---- AC-ARM4 a round split across two archive files is counted once.
+        # Pinned at R3630 before this arm existed: the R3629 board note claimed
+        # the counts are accumulated per archive pass and that a split round
+        # would be judged twice. Measured on this fixture instead: the union is
+        # taken by load_archive_lines() and keyed by round number, so a split
+        # round reads once and pairs across files. The negative control below
+        # keeps that claim honest - a union that silently swallowed a really
+        # unpaired round would red here.
+        split = os.path.join(base, 'split')
+        split_first = os.path.join(split, 'state-log-archive-2026-07.md')
+        split_second = os.path.join(split, 'state-log-archive-2026-08.md')
+        write(split_first, '2026-07-01 R0901 PRODUCT: main half in one file\n')
+        write(split_second,
+              'R0901 tokens: local=~1k api=0 api_reason=other half file\n')
+        split_before = (stamp(split_first), stamp(split_second))
+        split_report = LL.audit_archive(LL.load_archive_lines(split))
+        split_again = LL.audit_archive(LL.load_archive_lines(split))
+        split_after = (stamp(split_first), stamp(split_second))
+        ok('AC-ARM4 a round split across two archive files is counted once',
+           split_report['rounds_total'] == 1,
+           'rounds_total=%d' % split_report['rounds_total'])
+        ok('AC-ARM4 neither round-main reading names the split round',
+           split_report['rounds_without_main'] == []
+           and split_report['rounds_without_label'] == [],
+           'without_main=%r without_label=%r'
+           % (split_report['rounds_without_main'],
+              split_report['rounds_without_label']))
+        ok('AC-ARM4 the presence pairing pairs across the two files',
+           split_report['rounds_without_ledger'] == []
+           and split_report['ledger_without_round'] == [],
+           'without_ledger=%r without_round=%r'
+           % (split_report['rounds_without_ledger'],
+              split_report['ledger_without_round']))
+        lonely = os.path.join(base, 'lonely')
+        write(os.path.join(lonely, 'state-log-archive-2026-09.md'),
+              '2026-09-01 R0902 PRODUCT: this round has no ledger anywhere\n')
+        lonely_report = LL.audit_archive(LL.load_archive_lines(lonely))
+        ok('AC-ARM4 negative control - an unpaired round is still named',
+           lonely_report['rounds_total'] == 1
+           and lonely_report['rounds_without_ledger'] == [902],
+           'rounds_total=%d without_ledger=%r'
+           % (lonely_report['rounds_total'],
+              lonely_report['rounds_without_ledger']))
+        ok('AC-ARM4 the split reading is read-only and deterministic',
+           split_before == split_after and split_again == split_report,
+           'before=%r after=%r' % (split_before, split_after))
+
         # ---- hygiene and wiring.
         net = LL.network_imports(src)
         ok('AC-ARM3 the module still imports nothing that touches the network',
@@ -179,7 +229,7 @@ def main():
             reg = fh.read()
         ok('AC-ARM3 the suite is wired in the registry',
            '("os-ledger-archive-round-main",' in reg
-           and 'test_ledger_archive_round_main.py"), 14)' in reg)
+           and 'test_ledger_archive_round_main.py"), 19)' in reg)
         try:
             io.open(os.path.abspath(__file__), encoding='ascii').read()
             ascii_ok = True
@@ -188,7 +238,8 @@ def main():
         ok('AC-ARM3 this suite source is pure ASCII', ascii_ok)
         crit = sorted(set(re.findall(r'AC-ARM\d', ' '.join(CHECKS))))
         ok('AC-ARM3 every declared criterion is measured',
-           crit == ['AC-ARM1', 'AC-ARM2', 'AC-ARM3'], ','.join(crit))
+           crit == ['AC-ARM1', 'AC-ARM2', 'AC-ARM3', 'AC-ARM4'],
+           ','.join(crit))
     finally:
         shutil.rmtree(base, ignore_errors=True)
     total = len(CHECKS)
