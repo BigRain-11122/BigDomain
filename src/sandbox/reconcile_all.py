@@ -9206,6 +9206,15 @@ SUITES = [
     # src/os/backlog.md at R3620, before the tool changed and this suite existed.
     ("os-first-yuan-record-chain",
      os.path.join("..", "os", "test_first_yuan_chain_record_chain.py"), 5),
+    # R3621: the CEO face's chain block published broken=5 beside
+    # partial+declared=6 and named neither the difference nor the row behind
+    # it; the block now carries `excused`, filled from the SAME ledger_report
+    # the count station already read, so broken + excused reconciles with the
+    # adjudicated breaks on the export and on the chain page. Criteria
+    # AC-EXE1..AC-EXE5 were pinned in src/os/backlog.md at R3621, before the
+    # tools changed and this suite existed.
+    ("os-export-chain-excused",
+     os.path.join("..", "os", "test_export_chain_excused.py"), 5),
     ]
 
 FAILS = 0

@@ -917,6 +917,14 @@ def chain_face(root):
     # here would let the two faces disagree about the same bytes.
     block.update(adjudication_face(
         QL.chain_reading(os.path.join(root, "state", QL.LEDGER_NAME))))
+    # R3621 (AC-EXE2): `broken` counts the links that are still unexplained by
+    # the count station, while the adjudicator counts every unlinked row - the
+    # difference is exactly the rows that station excuses on their own later
+    # declaration. Published from the SAME check_ledger report above, so the
+    # block can be reconciled: broken + excused == partial + declared +
+    # unexplained. `None` if that reading ever stops carrying it, because
+    # inventing a 0 would name a row that was never measured.
+    block["excused"] = reading.get("excused")
     return block
 
 

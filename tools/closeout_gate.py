@@ -366,7 +366,11 @@ def check_ledger(root, reading=None):
                         "bad": len(report["bad"]),
                         "stale": len(report["stale"]),
                         "missing": len(report["missing"]),
-                        "broken": len(report["broken"])})
+                        "broken": len(report["broken"]),
+                        # R3621 (AC-EXE1): the rows the SAME report excuses,
+                        # published so a consumer can reconcile its break
+                        # count instead of guessing at the difference.
+                        "excused": len(report["excused"])})
     lines = ["LEDGER %s rows=%d names=%d bad=%d stale=%d missing=%d broken=%d "
              "path=%s"
              % (report["verdict"], report["rows"], report["names"],

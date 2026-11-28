@@ -41,8 +41,8 @@ CRITERIA = ("AC-EXA1", "AC-EXA2", "AC-EXA3", "AC-EXA4", "AC-EXA5")
 FAILS = []
 CHECKS = [0]
 
-NEW_KEYS = ["adjudication", "broken", "declared", "partial", "path",
-            "present", "rows", "unexplained"]
+NEW_KEYS = ["adjudication", "broken", "declared", "excused", "partial",
+            "path", "present", "rows", "unexplained"]
 OLD_ORDER = ["present", "rows", "broken", "path"]
 
 
@@ -231,7 +231,8 @@ def additive_arm(red_root):
     # Four arms pin it, not the three the PIN row counted (measured here).
     old_suite = io.open(os.path.join(BASE, "test_status_export_fresh.py"),
                         encoding="utf-8").read()
-    pinned = '"adjudication", "broken", "declared", "partial", "path"'
+    pinned = ('"adjudication", "broken", "declared", "excused", "partial", '
+              '"path"')
     exact = old_suite.count(pinned) == 4
     stale_old = '["broken", "path", "present", "rows"]' in old_suite
     registry = io.open(os.path.join(ROOT, "src", "sandbox", "reconcile_all.py"),

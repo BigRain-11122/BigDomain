@@ -118,7 +118,7 @@ def blind_arm():
     stand_in["adjudication"] = "UNADJUDICATED"
     dashes = all(FY.shown(stand_in[key]) == "-"
                  for key in ("present", "rows", "broken", "partial",
-                             "declared", "unexplained"))
+                             "declared", "unexplained", "excused"))
     round_trip = json.loads(json.dumps(stand_in, sort_keys=True))
     nulls_kept = (round_trip["broken"] is None
                   and round_trip["partial"] is None

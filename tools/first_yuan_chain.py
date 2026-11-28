@@ -55,10 +55,12 @@ ACCOUNTS = ("sys.probe.one", "sys.probe.two")
 HEX_ID = re.compile(r"^[0-9a-f]{8,}$")
 ISO_TS = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$")
 
-# AC-FYCQ1 (R3620): the eight keys the CEO export's chain block carries, in the
-# order that block publishes them. The page republishes them verbatim.
+# AC-FYCQ1 (R3620): the nine keys the CEO export's chain block carries, in the
+# order that block publishes them. The page republishes them verbatim, so a
+# reader of the page and a reader of the export read the same block.
 CHAIN_KEYS = ("present", "rows", "broken", "path",
-              "partial", "declared", "unexplained", "adjudication")
+              "partial", "declared", "unexplained", "adjudication",
+              "excused")
 
 
 class Refuse(Exception):
@@ -484,12 +486,16 @@ at render time.</p>
 
 <h2>The record chain behind this page</h2>
 <ul>
-<li>ledger <code>%s</code>: present=%s rows=%s broken=%s</li>
+<li>ledger <code>%s</code>: present=%s rows=%s broken=%s excused=%s</li>
 <li>breaks: partial=%s declared=%s unexplained=%s &nbsp; <span class="%s">adjudication=%s</span></li>
 </ul>
 <p class="sub">A break is a row whose <code>old_sha16</code> no longer matches the
 previous row's <code>new_sha16</code>; the adjudication above says whether each one
-is an explained partial write. This block is the repository's own replacement
+is an explained partial write. <strong>excused</strong> names the unlinked rows the
+ledger's count station withholds from <code>broken</code> because the later row
+declares it replaced a progress partial, so the two readings close:
+<code>broken + excused</code> equals <code>partial + declared + unexplained</code>.
+This block is the repository's own replacement
 ledger, read by the same <code>chain_face()</code> that fills the CEO export &mdash;
 it is not the payment chain above. A face that could not be asked reads
 <code>UNADJUDICATED</code> with dashes, never OK.</p>
@@ -523,6 +529,7 @@ compare bytes honestly.</div>
        html.escape(money_row["reconcile_line"]),
        html.escape(str(rec["path"])),
        shown(rec["present"]), shown(rec["rows"]), shown(rec["broken"]),
+       shown(rec["excused"]),
        shown(rec["partial"]), shown(rec["declared"]),
        shown(rec["unexplained"]),
        "ok" if rec["adjudication"] == "OK" else "bad",
@@ -703,6 +710,22 @@ def do_check():
                      % rec["adjudication"])
     if rec["broken"] is None and "broken=-" not in got_html:
         fails.append("E_RECORD_CHAIN unmeasured break count not shown as dash")
+    # AC-EXE4 (R3621): the two stations must CLOSE. `broken` is what the count
+    # station still charges; `excused` is what it withholds on the later row's
+    # own declaration, and the adjudicator counts both - so the two readings
+    # reconcile only when broken + excused equals the adjudicated breaks. A
+    # value either station could not read is skipped rather than counted as 0.
+    if "excused=" not in got_html:
+        fails.append("E_RECORD_CHAIN excused label missing from page")
+    five = [rec.get(key) for key in ("broken", "excused", "partial",
+                                     "declared", "unexplained")]
+    if all(isinstance(value, int) and not isinstance(value, bool)
+           for value in five):
+        broken, excused, partial, declared, unexplained = five
+        if broken + excused != partial + declared + unexplained:
+            fails.append("E_RECORD_CHAIN unreconciled broken=%d excused=%d "
+                         "breaks=%d+%d+%d"
+                         % (broken, excused, partial, declared, unexplained))
     after = (os.stat(HTML_PATH).st_size, os.stat(HTML_PATH).st_mtime_ns,
              os.stat(JSON_PATH).st_size, os.stat(JSON_PATH).st_mtime_ns)
     if before != after:

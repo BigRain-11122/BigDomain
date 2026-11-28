@@ -150,6 +150,7 @@
     "adjudication": "OK",
     "broken": 5,
     "declared": 1,
+    "excused": 1,
     "partial": 5,
     "path": "state/qa_replacements.jsonl",
     "present": true,

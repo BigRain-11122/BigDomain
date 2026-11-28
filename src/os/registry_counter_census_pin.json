@@ -464,6 +464,7 @@
     "os-evidence-writer-dir",
     "os-exempt-review",
     "os-export-chain-adjudication",
+    "os-export-chain-excused",
     "os-export-closeout-gate-parity",
     "os-export-composed-landed-bom-precedence",
     "os-export-composed-landed-bom-precedence-fifth-wave",

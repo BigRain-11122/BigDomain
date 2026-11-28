@@ -762,7 +762,7 @@ def run(root):
     arm_q = (read_absent.get("present") is False
              and read_empty.get("present") is True
              and row_absent == row_empty)
-    arm_r = sorted(face_rows) == ["adjudication", "broken", "declared", "partial", "path",
+    arm_r = sorted(face_rows) == ["adjudication", "broken", "declared", "excused", "partial", "path",
                                         "present", "rows", "unexplained"]
     write_json(sx.STATE, {"tick": 9, "log": [NARRATIVE]})
     sx.apply(export, sx.STATE, sx.BACKLOG, sx.PREVIEW)
@@ -844,7 +844,7 @@ def run(root):
     chain_keys = sorted(json.loads(export_text)["chain"])
     do_text = json.loads(export_text)["do"]
     record("AC-SXFB22", rc_gate_red == 0 and len(mirror_lines) == 1 and arm_tokens
-           and chain_keys == ["adjudication", "broken", "declared", "partial", "path",
+           and chain_keys == ["adjudication", "broken", "declared", "excused", "partial", "path",
                                         "present", "rows", "unexplained"]
            and do_text == NARRATIVE,
            "gate=%d lines=%d tokens=%s chain=%s do=%s"
@@ -941,7 +941,7 @@ def run(root):
         "%Y-%m-%dT%H:%M:%S+08:00")
     record("AC-SXFB25", rc_seven_once == 0 and rc_seven_twice == 0
            and seven_once == seven_twice
-           and sorted(seven_doc["chain"]) == ["adjudication", "broken", "declared", "partial", "path",
+           and sorted(seven_doc["chain"]) == ["adjudication", "broken", "declared", "excused", "partial", "path",
                                         "present", "rows", "unexplained"]
            and seven_doc["do"] == NARRATIVE
            and seven_doc["next_milestone_due"] == expected_due
@@ -1030,7 +1030,7 @@ def run(root):
     add_tokens = len(add_lines) == 1 and "rows=" not in add_lines[0]
     record("AC-SXFB34", rc_add_once == 0 and rc_add_twice == 0
            and add_once == add_twice
-           and sorted(add_doc["chain"]) == ["adjudication", "broken", "declared", "partial", "path",
+           and sorted(add_doc["chain"]) == ["adjudication", "broken", "declared", "excused", "partial", "path",
                                         "present", "rows", "unexplained"]
            and add_doc["do"] == NARRATIVE
            and add_doc["next_milestone_due"] == expected_due_add
