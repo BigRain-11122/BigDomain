@@ -409,6 +409,35 @@ def ledger_report(path=None, evidence_dir=None):
             "broken": broken, "excused": excused}
 
 
+def chain_reading(path=None):
+    """R3616 (AC-LADJ1..3): the break QUALIFICATION, asked of its owner.
+
+    `ledger_report` publishes `broken` as a count and refuses to say what a
+    break is (AC-QALB34). tools/qa_chain_diagnose.py owns that judgement
+    (AC-QCH1..6) and reads the same ledger through this module's own parser.
+    The count station therefore asks the qualification station in-process
+    instead of letting a round quote a bare `broken=5` as if five records had
+    been lost.
+
+    Returns None when the adjudicator cannot be imported or read: "asked and
+    got nothing" is published as UNADJUDICATED, never defaulted to OK.
+    """
+    try:
+        if BASE not in sys.path:
+            sys.path.insert(0, BASE)
+        import qa_chain_diagnose as adjudicator
+        data = adjudicator.report(path)
+    except Exception:
+        return None
+    unexplained = len(data["unexplained"])
+    partial = len([b for b in data["breaks"]
+                   if b["kind"] == adjudicator.KIND_PARTIAL])
+    return {"verdict": data["verdict"],
+            "partial": partial,
+            "declared": len(data["breaks"]) - partial - unexplained,
+            "unexplained": unexplained}
+
+
 def do_ledger_check(path=None):
     """R3218 (AC-QALB30..32): read the replacement ledger back, read-only.
 
@@ -442,6 +471,19 @@ def do_ledger_check(path=None):
         sys.stdout.write("QA-LEDGER detail excused name=%s prev_line=%d "
                          "line=%d prev_kind=%s\n"
                          % (name, prev_line, line, PREV_KIND_PROGRESS))
+    # R3616 (AC-LADJ1): a bare `broken=N` in this station is a count without
+    # its qualification. The owner of that judgement answers it here, and its
+    # verdict never moves this face's exit code (a reading, not a ruling).
+    if report["broken"]:
+        reading = chain_reading(path)
+        if reading is None:
+            sys.stdout.write("QA-LEDGER adjudication chain=UNADJUDICATED\n")
+        else:
+            sys.stdout.write(
+                "QA-LEDGER adjudication chain=%s partial=%d declared=%d "
+                "unexplained=%d source=qa_chain_diagnose\n"
+                % (reading["verdict"], reading["partial"],
+                   reading["declared"], reading["unexplained"]))
     return 0 if report["verdict"] == "OK" else 2
 
 

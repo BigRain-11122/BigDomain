@@ -283,6 +283,25 @@ def main():
                 elif s.startswith('from ') and ' import ' in s:
                     names.add(s.split()[1].split('.')[0])
             return names
+
+        # R3616: the two literal sets above are about STDLIB, and a hand-kept
+        # list can never learn the company's own modules (the shape R3610
+        # repaired in payment_gate_report). A name is therefore allowed when it
+        # is in the stdlib set OR resolves to a file under the shipped package
+        # roots; a third-party name still has no file there, so the law is not
+        # weakened. The network ban below is untouched.
+        def shipped_local(name, roots):
+            if not name.isidentifier():
+                return False
+            for root in roots:
+                if os.path.isfile(os.path.join(root, name + '.py')):
+                    return True
+                if os.path.isdir(os.path.join(root, name)):
+                    return True
+            return False
+        shipped_roots = (os.path.join(ROOT, 'tools'),
+                         os.path.join(ROOT, 'src', 'os'),
+                         os.path.join(ROOT, 'src', 'sandbox', 'pay'))
         tool_imp = imp_names(tool_src)
         suite_imp = imp_names(suite_src)
         banned = {'socket', 'urllib', 'requests', 'http', 'subprocess'}
@@ -299,12 +318,22 @@ def main():
            and pre_self == post_self
            and all(ord(c) < 128 for c in tool_src)
            and all(ord(c) < 128 for c in suite_src)
-           and tool_imp <= tool_allowed and suite_imp <= suite_allowed
+           and all(n in tool_allowed or shipped_local(n, shipped_roots)
+                   for n in tool_imp)
+           and all(n in suite_allowed or shipped_local(n, shipped_roots)
+                   for n in suite_imp)
+           # negative control: the disk law must not open the door to a name
+           # no shipped root carries.
+           and not shipped_local('zz_third_party_dep', shipped_roots)
            and not net_tool and not net_suite,
-           'rc=%d verdict=%s qa_stable=%s tool_extra=%s suite_extra=%s net=%s'
+           'rc=%d verdict=%s qa_stable=%s tool_extra=%s suite_extra=%s '
+           'third_party_admitted=%s net=%s'
            % (rc_self, 'VERDICT PASS 9/9' in out_self, pre_self == post_self,
-              ','.join(sorted(tool_imp - tool_allowed)),
-              ','.join(sorted(suite_imp - suite_allowed)),
+              ','.join(sorted(n for n in tool_imp - tool_allowed
+                              if not shipped_local(n, shipped_roots))),
+              ','.join(sorted(n for n in suite_imp - suite_allowed
+                              if not shipped_local(n, shipped_roots))),
+              shipped_local('zz_third_party_dep', shipped_roots),
               net_tool + net_suite))
 
         # ---- AC-QALB8: a NUL-bearing source is refused, not certified ------

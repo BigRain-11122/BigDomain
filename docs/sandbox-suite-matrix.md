@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 836 | 7381 | 675/675 | R2739 |
+| 837 | 7384 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -871,9 +871,10 @@
 | 832 | os-stage-residue | ../os/test_stage_residue.py | 4 | no-evidence | - |
 | 833 | os-corpus-supply-chain | ../os/test_corpus_supply_chain.py | 7 | no-evidence | - |
 | 834 | os-logs-append-check | ../os/test_logs_append_check.py | 23 | no-evidence | - |
-| 835 | os-closeout-carrier-append | ../os/test_closeout_carrier_append.py | 19 | no-evidence | - |
-| 836 | os-face-sweep-carrier | ../os/test_face_sweep_carrier.py | 6 | no-evidence | - |
-|  | 合计 |  | 7381 | green 675 / FAIL 0 / no-evidence 161 |  |
+| 835 | os-ledger-adjudication | ../os/test_ledger_adjudication.py | 3 | no-evidence | - |
+| 836 | os-closeout-carrier-append | ../os/test_closeout_carrier_append.py | 19 | no-evidence | - |
+| 837 | os-face-sweep-carrier | ../os/test_face_sweep_carrier.py | 6 | no-evidence | - |
+|  | 合计 |  | 7384 | green 675 / FAIL 0 / no-evidence 162 |  |
 
 ## 证据出处
 

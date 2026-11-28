@@ -9165,6 +9165,15 @@ SUITES = [
     # every row above: a mid-list insert shifts each later suite's shard.
     ("os-logs-append-check",
      os.path.join("..", "os", "test_logs_append_check.py"), 23),
+    # R3616: the count station of the replacement ledger (tools/qa_log.py
+    # --ledger-check) published a bare `broken=N`; the qualification station
+    # (tools/qa_chain_diagnose.py, AC-QCH1..6) owns that judgement, and the
+    # count station now asks it in process. Criteria AC-LADJ1..AC-LADJ3 were
+    # pinned in src/os/backlog.md at R3616, before the tool changed and this
+    # suite existed. Appended at the END for the same reason as every row
+    # above: a mid-list insert shifts each later suite's shard.
+    ("os-ledger-adjudication",
+     os.path.join("..", "os", "test_ledger_adjudication.py"), 3),
     # R3614: the closeout carrier row now also asks the append face in
     # process, so a carrier whose tail anchor no longer ends the file or whose
     # log carries no tokens row refuses the closeout instead of being caught by

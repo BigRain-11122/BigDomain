@@ -1,21 +1,21 @@
 {
   "ceo_face": {
     "board_pages_skipped": ["preview/face-sweep.html (8877B)"],
-    "current": "2026-11-28 R3615 PRODUCT: the cheapest station of a round now asks the question the most expensive one asks. tools/face_sweep.py --gates - the read-only opening scan that renders nothing and writes nothing - publishes one CARRIER row (append_ok, caliber, ledger, bytes, margin) taken from logs_toolkit.append_check called in process, names a refusal as CARRIER FAIL E_FSW_CARRIER plus the writer's own code, appends carrier=HEALTHY|UNHEALTHY to the GATES summary and exits 2 when the carrier cannot take the next line. Until now that reading had exactly one consumer, closeout_gate at the last minute, so a carrier whose tail anchor broke or whose log lost its tokens row could read green for a whole round and refuse the writer at closeout. The live opening scan reads GATES PASS gates=13 green=13 red=0 red_ids=none mutated=none carrier=HEALTHY with CARRIER append_ok=true caliber=16 ledger=R3614 bytes=41739 margin=36761.",
+    "current": "2026-11-28 R3618 PRODUCT: the station every round quotes stopped saying half of what it knows. tools/qa_log.py --ledger-check printed a bare broken=5 while tools/qa_chain_diagnose.py (AC-QCH1..6) already judged all five explained, so one fact read as loss at the count station and as explained at the qualification station; do_ledger_check now asks that owner in process through one new helper chain_reading(path) and prints exactly one line when - and only when - a break exists: QA-LEDGER adjudication chain=OK|RED partial=N declared=N unexplained=N source=qa_chain_diagnose. The helper carries no second chain law (it asserts new_sha16 nowhere) and no second kind vocabulary; an unavailable adjudicator is published as chain=UNADJUDICATED rather than defaulted to OK, and the face's exit code still follows ledger_report alone, because a qualification is a reading and not a ruling.",
     "do": "2026-11-25 R3456 PRODUCT: the answer-revision question now has a door - api_answer_history (live with AC-AMAW1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so 'which answer was rewritten, what did it say before, what does it say now and how often did it change' could only be read by calling the sandbox from a shell - while api_seller_answers and api_listing_qna publish only the CURRENT wording.",
-    "last_artifact": "preview/preview-writer-census.html (17697B) + preview/preview-writer-census.json (25235B) [2026-11-28 commit]",
-    "latest_artifact": "preview/preview-writer-census.html (17697B) + preview/preview-writer-census.json (25235B) [2026-11-28 commit]",
+    "last_artifact": "preview/preview-writer-census.html (17697B) + preview/preview-writer-census.json (25235B) [2026-11-28 mtime]",
+    "latest_artifact": "preview/preview-writer-census.html (17697B) + preview/preview-writer-census.json (25235B) [2026-11-28 mtime]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\preview-writer-census.html",
     "latest_artifact_note": "",
     "latest_evidence": "qa/logs-append-R3612-b.log (1981B, 2026-11-28, sha256 8a1e2e573c5b)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3615] next window (<=48h): (0) **载体**：本窗收口 `CARRIER bytes=49075 gate=78500 margin=29425 log_items=47 append_ok=true caliber=16 ledger=R3615`（`FOLD-CLEAR`）——开窗先跑 `python src/os/state_fold_run.py --check`，读 `FOLD-DUE` 才折；一切 state 追加只走 `python src/os/logs_toolkit.py append --round R#### --line .. (truncated)",
-    "next_milestone_due": "2026-11-30T07:38:18+08:00",
-    "updated_at": "2026-11-28T07:38:18+08:00",
+    "next_milestone": "[R3618] next window (<=48h): (0) **载体与标签律（本窗实测并已付清）**：`AC-EXPW1` 要求 CEO 面 `current` 以**载体 tick** 的 `R<tick>` 起头，而本窗首写行用了轮号 R3616（载体已是 3617→append 后 3618），于是 `export_round` 以 `ok=False` 拒写、普查面读 `export=REFUSED`；正法=**行标签取「本次 append 之后的 tick」**，且 `logs_toolkit append` 每轮只调一次（一次 +1）。本窗把六行标签对齐到 R3618，逐字节复核 `json.loads`＋`append --check` 后载体 `bytes=56008 gate=78500 margin=22492 index=16 ledger=R3618`——**下窗开窗第一步：`python src/os/logs_toolkit.py append --check` 读 tick，再按 tick+1 写标签**。(1) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先把刷新轮排最前（P-2026-09-24-56），毕=更新字段＋文件④更新记录行。(2) **S4U 仍未落地**（第一百五十三次承账）：`BigDomain-OSLoop` 任务 `Principal.LogonType=Interactive`，正法=提权会话跑 `src/os/register_loop_task.ps1` 后读回须为 `S4U`；宁缺不错。(3) **新点名的可认领项**：`docs/status-export.json` 的 `chain` 块（`present/rows/broken/path`）仍只印计数，定性读数不在此面；正法=在同一派生处进程内调 `tools/qa_chain_diagnose.report()` 增 `partial/declared/unexplained/verdict` 四键，**判据须先立（PIN 行）再改**，且 `export_round` 的 `--check` 与三份既有套件须零回归。(4) **本窗绿序实证（顺序即判据）**：`export_round` → `preview_writer_census --write` → `registry_counter_census --write-pin` → `deliverable_index --write` → `first_yuan_chain` 渲染 → `first_yuan_chain --check` → (truncated)",
+    "next_milestone_due": "2026-11-30T08:01:25+08:00",
+    "updated_at": "2026-11-28T08:01:25+08:00",
     "heartbeat": {
       "tick": 3579,
-      "state_tick": 3616,
-      "lag": 37,
+      "state_tick": 3618,
+      "lag": 39,
       "verdict": "FLAG",
       "reason": "heartbeat_row_debt"
     },
@@ -35,8 +35,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-28 R3615 PRODUCT: the cheapest station of a round now asks the question the most expensive one asks. tools/face_sweep.py --gates - the read-only opening scan that renders nothing and writes nothing - publishes one CARRIER row (append_ok, caliber, ledger, bytes, margin) taken from logs_toolkit.append_check called in process, names a refusal as CARRIER FAIL E_FSW_CARRIER plus the writer's own code, appends carrier=HEALTHY|UNHEALTHY to the GATES summary and exits 2 when the carrier cannot take the next line. Until now that reading had exactly one consumer, closeout_gate at the last minute, so a carrier whose tail anchor broke or whose log lost its tokens row could read green for a whole round and refuse the writer at closeout. The live opening scan reads GATES PASS gates=13 green=13 red=0 red_ids=none mutated=none carrier=HEALTHY with CARRIER append_ok=true caliber=16 ledger=R3614 bytes=41739 margin=36761.",
-  "claims": {"claimed": 47, "captured": 24, "contradicted": 0, "uncaptured": 23, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-28T07:38:18+08:00"},
+  "current": "2026-11-28 R3618 PRODUCT: the station every round quotes stopped saying half of what it knows. tools/qa_log.py --ledger-check printed a bare broken=5 while tools/qa_chain_diagnose.py (AC-QCH1..6) already judged all five explained, so one fact read as loss at the count station and as explained at the qualification station; do_ledger_check now asks that owner in process through one new helper chain_reading(path) and prints exactly one line when - and only when - a break exists: QA-LEDGER adjudication chain=OK|RED partial=N declared=N unexplained=N source=qa_chain_diagnose. The helper carries no second chain law (it asserts new_sha16 nowhere) and no second kind vocabulary; an unavailable adjudicator is published as chain=UNADJUDICATED rather than defaulted to OK, and the face's exit code still follows ledger_report alone, because a qualification is a reading and not a ruling.",
+  "claims": {"claimed": 48, "captured": 24, "contradicted": 0, "uncaptured": 24, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-28T08:01:25+08:00"},
   "chain": {"present": true, "rows": 106, "broken": 5, "path": "state/qa_replacements.jsonl"},
   "depts": [
     {
@@ -65,13 +65,13 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-28 R3615 PRODUCT: the cheapest station of a round now asks the question the most expensive one asks. tools/face_sweep.py --gates - the read-only opening scan that renders nothing and writes nothing - publishes one CARRIER row (append_ok, caliber, ledger, bytes, margin) taken from logs_toolkit.append_check called in process, names a refusal as CARRIER FAIL E_FSW_CARRIER plus the writer's own code, appends carrier=HEALTHY|UNHEALTHY to the GATES summary and exits 2 when the carrier cannot take the next line. Until now that reading had exactly one consumer, closeout_gate at the last minute, so a carrier whose tail anchor broke or whose log lost its tokens row could read green for a whole round and refuse the writer at closeout. The live opening scan reads GATES PASS gates=13 green=13 red=0 red_ids=none mutated=none carrier=HEALTHY with CARRIER append_ok=true caliber=16 ledger=R3614 bytes=41739 margin=36761.",
-  "export_ts": "2026-11-28T07:38:18+08:00",
-  "latest_artifact": "preview/preview-writer-census.html (17697B) + preview/preview-writer-census.json (25235B) [2026-11-28 commit]",
+  "do": "2026-11-28 R3618 PRODUCT: the station every round quotes stopped saying half of what it knows. tools/qa_log.py --ledger-check printed a bare broken=5 while tools/qa_chain_diagnose.py (AC-QCH1..6) already judged all five explained, so one fact read as loss at the count station and as explained at the qualification station; do_ledger_check now asks that owner in process through one new helper chain_reading(path) and prints exactly one line when - and only when - a break exists: QA-LEDGER adjudication chain=OK|RED partial=N declared=N unexplained=N source=qa_chain_diagnose. The helper carries no second chain law (it asserts new_sha16 nowhere) and no second kind vocabulary; an unavailable adjudicator is published as chain=UNADJUDICATED rather than defaulted to OK, and the face's exit code still follows ledger_report alone, because a qualification is a reading and not a ruling.",
+  "export_ts": "2026-11-28T08:01:25+08:00",
+  "latest_artifact": "preview/preview-writer-census.html (17697B) + preview/preview-writer-census.json (25235B) [2026-11-28 mtime]",
   "latest_evidence": "qa/logs-append-R3612-b.log (1981B, 2026-11-28, sha256 8a1e2e573c5b)",
-  "next_milestone": "[R3615] next window (<=48h): (0) **载体**：本窗收口 `CARRIER bytes=49075 gate=78500 margin=29425 log_items=47 append_ok=true caliber=16 ledger=R3615`（`FOLD-CLEAR`）——开窗先跑 `python src/os/state_fold_run.py --check`，读 `FOLD-DUE` 才折；一切 state 追加只走 `python src/os/logs_toolkit.py append --round R#### --line .. (truncated)",
+  "next_milestone": "[R3618] next window (<=48h): (0) **载体与标签律（本窗实测并已付清）**：`AC-EXPW1` 要求 CEO 面 `current` 以**载体 tick** 的 `R<tick>` 起头，而本窗首写行用了轮号 R3616（载体已是 3617→append 后 3618），于是 `export_round` 以 `ok=False` 拒写、普查面读 `export=REFUSED`；正法=**行标签取「本次 append 之后的 tick」**，且 `logs_toolkit append` 每轮只调一次（一次 +1）。本窗把六行标签对齐到 R3618，逐字节复核 `json.loads`＋`append --check` 后载体 `bytes=56008 gate=78500 margin=22492 index=16 ledger=R3618`——**下窗开窗第一步：`python src/os/logs_toolkit.py append --check` 读 tick，再按 tick+1 写标签**。(1) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先把刷新轮排最前（P-2026-09-24-56），毕=更新字段＋文件④更新记录行。(2) **S4U 仍未落地**（第一百五十三次承账）：`BigDomain-OSLoop` 任务 `Principal.LogonType=Interactive`，正法=提权会话跑 `src/os/register_loop_task.ps1` 后读回须为 `S4U`；宁缺不错。(3) **新点名的可认领项**：`docs/status-export.json` 的 `chain` 块（`present/rows/broken/path`）仍只印计数，定性读数不在此面；正法=在同一派生处进程内调 `tools/qa_chain_diagnose.report()` 增 `partial/declared/unexplained/verdict` 四键，**判据须先立（PIN 行）再改**，且 `export_round` 的 `--check` 与三份既有套件须零回归。(4) **本窗绿序实证（顺序即判据）**：`export_round` → `preview_writer_census --write` → `registry_counter_census --write-pin` → `deliverable_index --write` → `first_yuan_chain` 渲染 → `first_yuan_chain --check` → (truncated)",
   "outs": [
-    "preview/preview-writer-census.html (17697B) + preview/preview-writer-census.json (25235B) [2026-11-28 commit]",
+    "preview/preview-writer-census.html (17697B) + preview/preview-writer-census.json (25235B) [2026-11-28 mtime]",
     "preview/first-yuan-chain.html (4403B) + preview/first-yuan-chain.json (4806B) [2026-11-28 mtime] (halves differ: html [2026-11-28 mtime] + json [2026-11-16 commit]; later=html)",
     "preview/payment-gate-report.html (7729B) + preview/payment-gate-report.json (7032B) [2026-11-28 commit]",
     "preview/membership-face.html (10881B) + preview/membership-face.json (7051B) [2026-11-28 mtime]",
@@ -211,20 +211,20 @@
     "shortfall_total": 15,
     "verdict": "FLOOR-DEBT"
   },
-  "results": [["3616", "OSLoop 执行 tick"]],
+  "results": [["3618", "OSLoop 执行 tick"]],
   "results_archive": {
     "bytes": 336680,
     "count": 179,
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
-  "self_drive": {"window": "2026-11-22..2026-11-28", "window_days": 7, "log_lines_in_window": 46, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 38, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
-  "state_bytes": 49075,
-  "next_milestone_due": "2026-11-30T07:38:18+08:00",
+  "self_drive": {"window": "2026-11-22..2026-11-28", "window_days": 7, "log_lines_in_window": 53, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 44, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
+  "state_bytes": 56008,
+  "next_milestone_due": "2026-11-30T08:01:25+08:00",
   "heartbeat": {
     "tick": 3579,
-    "state_tick": 3616,
-    "lag": 37,
+    "state_tick": 3618,
+    "lag": 39,
     "verdict": "FLAG",
     "reason": "heartbeat_row_debt"
   },
