@@ -976,6 +976,60 @@ def main():
            "rc=%s reason=%s rows=%d %s"
            % (pre_rc, pre_v.get("reason"), len(pre_row), seventh_msg))
 
+        # AC-CGEF8 (R3623): a closeout refused BEFORE the front door must SAY
+        # the door was never asked instead of omitting the key - a reader of a
+        # REFUSED report could not tell "not asked" from "already passed".
+        miss_base = os.path.join(tmp_pg, "no-such-baseline.json")
+        nb_lines, nb_rc, nb_v = CG.evaluate(live, miss_base, root=ROOT)
+        empty_pg = os.path.join(tmp_pg, "empty-target")
+        os.makedirs(empty_pg)
+        empty_pg_base = os.path.join(empty_pg, CENSUS.BASELINE_NAME)
+        with open(empty_pg_base, "w", encoding="utf-8") as fh:
+            fh.write('{"cmd-raw": [], "pwsh-capture": [], "ps-utf16": [], '
+                     '"nul-bytes": [], "other": []}\n')
+        em_lines, em_rc, em_v = CG.evaluate(empty_pg, empty_pg_base, root=ROOT)
+        ok("AC-CGEF8 arm a - three early refusals all name the unasked door",
+           nb_rc == 2 and nb_v.get("reason") == "E_CLG_NO_BASELINE"
+           and nb_v.get("entry_pages") == "NOT-ASKED"
+           and em_rc == 2 and em_v.get("reason") == "E_CLG_EMPTY"
+           and em_v.get("entry_pages") == "NOT-ASKED"
+           and pre_v.get("entry_pages") == "NOT-ASKED",
+           "no_baseline=%r empty=%r pre=%r"
+           % (nb_v.get("entry_pages"), em_v.get("entry_pages"),
+              pre_v.get("entry_pages")))
+
+        gate_tree = ast.parse(io.open(os.path.join(ROOT, "tools",
+                                                   "closeout_gate.py"),
+                                     encoding="utf-8").read())
+        refused_dicts = []
+        for node in ast.walk(gate_tree):
+            if not isinstance(node, ast.Dict):
+                continue
+            keys = {}
+            for knode, vnode in zip(node.keys, node.values):
+                if isinstance(knode, ast.Constant) and isinstance(knode.value,
+                                                                 str):
+                    keys[knode.value] = vnode
+            vnode = keys.get("verdict")
+            if isinstance(vnode, ast.Constant) and vnode.value == "REFUSED":
+                refused_dicts.append(keys)
+        missing_door = [
+            keys for keys in refused_dicts
+            if not (isinstance(keys.get("entry_pages"), ast.Constant)
+                    and keys["entry_pages"].value in ("NOT-ASKED", "FAIL"))]
+        ok("AC-CGEF8 arm b - no REFUSED verdict in the gate may omit the key",
+           len(refused_dicts) >= 10 and missing_door == [],
+           "refused_dicts=%d missing=%d"
+           % (len(refused_dicts), len(missing_door)))
+
+        ok("AC-CGEF8 arm c - the PASS reading and the verdict lines never moved",
+           pg_v.get("entry_pages") == "OK"
+           and pg_lines[0].startswith("CLOSEOUT-GATE PASS")
+           and pre_lines[0].startswith("CLOSEOUT-GATE REFUSED ")
+           and "entry_pages" not in pre_lines[0],
+           "pass=%r refused_line=%s"
+           % (pg_v.get("entry_pages"), pre_lines[0]))
+
     total = len(CHECKS)
     acs = set()
     for name in CHECKS:

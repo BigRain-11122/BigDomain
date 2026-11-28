@@ -662,12 +662,14 @@ def evaluate(target, baseline, root=None, registry=None, census_pin=None,
                    "baseline=%s" % os.path.basename(baseline))
         out.extend(census_lines)
         return out, 2, {"verdict": "REFUSED",
-                        "reason": "E_CLG_NO_BASELINE"}
+                        "reason": "E_CLG_NO_BASELINE",
+                        "entry_pages": "NOT-ASKED"}
     if census_rc == 3:
         out.append("CLOSEOUT-GATE REFUSED reason=E_CLG_EMPTY target=%s"
                    % os.path.abspath(target))
         out.extend(census_lines)
-        return out, 2, {"verdict": "REFUSED", "reason": "E_CLG_EMPTY"}
+        return out, 2, {"verdict": "REFUSED", "reason": "E_CLG_EMPTY",
+                        "entry_pages": "NOT-ASKED"}
     try:
         flags = _token(census_lines, GATING_FACE)
         refused = _token(census_lines, "reader_refused")
@@ -681,7 +683,8 @@ def evaluate(target, baseline, root=None, registry=None, census_pin=None,
     except GateRowError as exc:
         out.append("CLOSEOUT-GATE REFUSED reason=E_CLG_ROW detail=%s" % exc)
         out.extend(census_lines)
-        return out, 2, {"verdict": "REFUSED", "reason": "E_CLG_ROW"}
+        return out, 2, {"verdict": "REFUSED", "reason": "E_CLG_ROW",
+                        "entry_pages": "NOT-ASKED"}
 
     if flags == 0:
         verdict = {"verdict": "PASS", "files": count, "flags": flags,
@@ -709,7 +712,7 @@ def evaluate(target, baseline, root=None, registry=None, census_pin=None,
                 out.append(cr_line)
                 verdict = {"verdict": "REFUSED", "reason": "E_CLG_CARRIER",
                            "files": count, "flags": flags,
-                           "carrier": "FAIL"}
+                           "carrier": "FAIL", "entry_pages": "NOT-ASKED"}
                 return out, 2, _pub(verdict)
             carrier_row = cr_line
             # R3093: the two laws a round could slip past. Read-only, cheap,
@@ -724,7 +727,8 @@ def evaluate(target, baseline, root=None, registry=None, census_pin=None,
                 out.append("E_RMS_UNREADABLE %s" % exc)
                 verdict = {"verdict": "REFUSED",
                            "reason": "E_CLG_ROUND_MAIN", "files": count,
-                           "flags": flags, "round_main": "UNREADABLE"}
+                           "flags": flags, "round_main": "UNREADABLE",
+                           "entry_pages": "NOT-ASKED"}
                 return out, 2, _pub(verdict)
             if not rm_ok:
                 out.append("CLOSEOUT-GATE REFUSED reason=E_CLG_ROUND_MAIN "
@@ -732,7 +736,8 @@ def evaluate(target, baseline, root=None, registry=None, census_pin=None,
                 out.append(rm_line)
                 verdict = {"verdict": "REFUSED",
                            "reason": "E_CLG_ROUND_MAIN", "files": count,
-                           "flags": flags, "round_main": "FAIL"}
+                           "flags": flags, "round_main": "FAIL",
+                           "entry_pages": "NOT-ASKED"}
                 return out, 2, _pub(verdict)
             try:
                 cen_ok, cen_line = _timed(face_ms, "census", check_census,
@@ -745,7 +750,8 @@ def evaluate(target, baseline, root=None, registry=None, census_pin=None,
                 out.append("E_RCC_UNREADABLE %s" % exc)
                 verdict = {"verdict": "REFUSED", "reason": "E_CLG_CENSUS",
                            "files": count, "flags": flags,
-                           "round_main": "OK", "census": "UNREADABLE"}
+                           "round_main": "OK", "census": "UNREADABLE",
+                           "entry_pages": "NOT-ASKED"}
                 return out, 2, _pub(verdict)
             if not cen_ok:
                 out.append("CLOSEOUT-GATE REFUSED reason=E_CLG_CENSUS "
@@ -754,7 +760,8 @@ def evaluate(target, baseline, root=None, registry=None, census_pin=None,
                 out.append(cen_line)
                 verdict = {"verdict": "REFUSED", "reason": "E_CLG_CENSUS",
                            "files": count, "flags": flags,
-                           "round_main": "OK", "census": "FAIL"}
+                           "round_main": "OK", "census": "FAIL",
+                           "entry_pages": "NOT-ASKED"}
                 return out, 2, _pub(verdict)
             if matrix is not False:
                 # R3094: the derived document is asked LAST, after every face
@@ -776,7 +783,8 @@ def evaluate(target, baseline, root=None, registry=None, census_pin=None,
                     verdict = {"verdict": "REFUSED", "reason": "E_CLG_MATRIX",
                                "files": count, "flags": flags,
                                "round_main": "OK", "census": "PASS",
-                               "matrix": "FAIL"}
+                               "matrix": "FAIL",
+                               "entry_pages": "NOT-ASKED"}
                     return out, 2, _pub(verdict)
                 verdict["matrix"] = "DOC-CURRENT"
                 tail_matrix = " matrix=DOC-CURRENT"
@@ -810,7 +818,8 @@ def evaluate(target, baseline, root=None, registry=None, census_pin=None,
                     verdict = {"verdict": "REFUSED", "reason": E_CLG_LEDGER,
                                "files": count, "flags": flags,
                                "round_main": "OK", "census": "PASS",
-                               "ledger": "RED"}
+                               "ledger": "RED",
+                               "entry_pages": "NOT-ASKED"}
                     _ledger_values(verdict, ledger_reading)
                     return out, 2, _pub(verdict)
                 ledger_row = lg_lines[0]
@@ -906,7 +915,8 @@ def evaluate(target, baseline, root=None, registry=None, census_pin=None,
             out.append(line)
     drift = {"verdict": "REFUSED", "reason": "E_CLG_DRIFT",
              "files": count, "flags": flags,
-             "reader_refused": refused, "gating": GATING_FACE}
+             "reader_refused": refused, "gating": GATING_FACE,
+             "entry_pages": "NOT-ASKED"}
     return out, 2, (_pub(drift) if root is not None else drift)
 
 

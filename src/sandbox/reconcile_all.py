@@ -8353,7 +8353,7 @@ SUITES = [
     # R3622 added AC-CGEF7, the same row law reading a refusal that lands
     # before the front door as a named miss instead of an IndexError (22 -> 23).
     ("os-closeout-gate",
-     os.path.join("..", "os", "test_closeout_gate.py"), 23),
+     os.path.join("..", "os", "test_closeout_gate.py"), 24),  # R3623: +AC-CGEF8
     # R2935: R2934 photographed the sandbox for the first time, but one pass is
     # a SNAPSHOT - it cannot tell "alive" from "painted cleanly this time". The
     # ruling is not to run a browser under the registry law but to move the LAW

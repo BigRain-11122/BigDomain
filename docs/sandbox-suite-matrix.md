@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 840 | 7400 | 675/675 | R2739 |
+| 840 | 7401 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -792,7 +792,7 @@
 | 753 | os-registry-counter-census | ../os/test_registry_counter_census.py | 13 | no-evidence | - |
 | 754 | os-evidence-read | ../os/test_evidence_read.py | 5 | no-evidence | - |
 | 755 | os-face-walk-static | ../os/test_face_walk_static.py | 5 | no-evidence | - |
-| 756 | os-closeout-gate | ../os/test_closeout_gate.py | 23 | no-evidence | - |
+| 756 | os-closeout-gate | ../os/test_closeout_gate.py | 24 | no-evidence | - |
 | 757 | os-live-proof | ../os/test_live_proof.py | 13 | no-evidence | - |
 | 758 | os-platform-live-report | ../os/test_platform_live_report.py | 8 | no-evidence | - |
 | 759 | os-ledger-business-report | ../os/test_ledger_business_report.py | 8 | no-evidence | - |
@@ -877,7 +877,7 @@
 | 838 | os-export-chain-adjudication | ../os/test_export_chain_adjudication.py | 5 | no-evidence | - |
 | 839 | os-first-yuan-record-chain | ../os/test_first_yuan_chain_record_chain.py | 5 | no-evidence | - |
 | 840 | os-export-chain-excused | ../os/test_export_chain_excused.py | 5 | no-evidence | - |
-|  | 合计 |  | 7400 | green 675 / FAIL 0 / no-evidence 165 |  |
+|  | 合计 |  | 7401 | green 675 / FAIL 0 / no-evidence 165 |  |
 
 ## 证据出处
 
