@@ -1093,6 +1093,11 @@ def run():
             and [item["round"] for item in arm_g["gaps"]] == [7105]
             and [item["why"] for item in arm_g["exemption_refusals"]]
             == ["no-tree-provided"]
+            # g2 (R3644): the refused round is still published as a
+            # same-window diagnostic, while the excused one (arm i) is not -
+            # an excuse removes the hole, never the diagnostic of a hole
+            and [item["round"] for item in arm_g["same_window_gaps"]]
+            == [7105]
             # h: one live presence line for the named round refuses it
             and arm_h["clean"] is False
             and [item["why"] for item in arm_h["exemption_refusals"]]
@@ -1105,6 +1110,7 @@ def run():
             and arm_i["clean"] is True
             and [item["round"] for item in arm_i["exemptions"]] == [7105]
             and "exempt=1(R7105)" in LL.format_fold_carry(arm_i)
+            and arm_i["same_window_gaps"] == []
             # k: payload prose belongs to the inline kind, never to absence
             and arm_k["clean"] is False
             and [item["why"] for item in arm_k["exemption_refusals"]]
@@ -1115,7 +1121,12 @@ def run():
             and not [key for key in LL.FOLD_CARRY_EXEMPT if key >= 7000]
             and real_excused["clean"] is True
             and real_excused["exemption_refusals"] == []
-            and 3610 in [item["round"] for item in real_excused["exemptions"]],
+            and 3610 in [item["round"] for item in real_excused["exemptions"]]
+            # R3644: the second tree_absence round is named on the shipped
+            # tree too, and naming it keeps it out of the same-window list
+            and 3625 in [item["round"] for item in real_excused["exemptions"]]
+            and all(item["round"] != 3625
+                    for item in real_excused["same_window_gaps"]),
             "AC-LGA16 an exemption is refused by name when its receipt names "
             "a budget part or when it records no evidence kind, and neither a "
             "budget-free summary nor an inline payload excuses a round the "

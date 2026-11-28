@@ -176,8 +176,8 @@ def main():
     census_once, per_census = once_each(seen_census)
     ok("AC-FCW2",
        evidence_once and census_once
-       and len(counted["frozen_rounds"]) == 4
-       and len(plain["nowhere_rounds"]) == 4,
+       and len(counted["frozen_rounds"]) == 5
+       and len(plain["nowhere_rounds"]) == 5,
        "archives=%d evidence=%d census=%d per_path=%s frozen=%d holes=%d"
        % (len(paths), len(seen_evidence), len(seen_census),
           ",".join("%s:%d/%d" % (os.path.basename(key),

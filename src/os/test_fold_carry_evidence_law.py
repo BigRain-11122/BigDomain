@@ -46,9 +46,11 @@ import ledger_lines as LL  # noqa: E402
 FAILS = []
 CHECKS = []
 
-# The four kinds the table carries, written here as the PIN's expectation.
+# The kinds the table carries, written here as the PIN's expectation.
+# R3644: R3625 joins as the second tree_absence round once the law named it.
 EXPECTED_KINDS = {3436: "receipt", 3458: "inline_payload",
-                  3459: "receipt", 3610: "tree_absence"}
+                  3459: "receipt", 3610: "tree_absence",
+                  3625: "tree_absence"}
 
 
 def ok(name, cond, detail=""):
@@ -208,8 +210,8 @@ def main():
             and stat_sig(PAGE) == sig_page and stat_sig(STATE) == sig_state
             and [stat_sig(path) for path in paths] == sig_archives)
     ok("AC-FCEX4",
-       table == [3112, 3436, 3458, 3459, 3610] and single_kind
-       and excused == [3112, 3436, 3458, 3459, 3610]
+       table == [3112, 3436, 3458, 3459, 3610, 3625] and single_kind
+       and excused == [3112, 3436, 3458, 3459, 3610, 3625]
        and audit["gaps"] == [] and LL.exemption_kind(90001) is None
        and banned is None and same,
        "table=%s single_kind=%s excused=%s gaps=%d repo_untouched=%s"

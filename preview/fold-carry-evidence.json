@@ -15,12 +15,13 @@
     3436,
     3458,
     3459,
-    3610
+    3610,
+    3625
   ],
-  "law_excused": 4,
+  "law_excused": 5,
   "left_behind": 0,
   "narrowing_releases": 0,
-  "no_receipt": 2,
+  "no_receipt": 3,
   "receipts_refused": [
     3421,
     3518,
@@ -91,6 +92,15 @@
       "receipt": null,
       "receipts_total": 0,
       "round": 3610
+    },
+    {
+      "class": "no-receipt",
+      "law_kind": "tree_absence",
+      "law_ok": true,
+      "law_why": "frozen hole: the label-only round written after a corrective append advanced the tick twice, so no budget row was ever written and no presence line exists in any archive or the live log",
+      "receipt": null,
+      "receipts_total": 0,
+      "round": 3625
     }
   ],
   "since": 2914,

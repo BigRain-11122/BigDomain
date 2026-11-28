@@ -1,5 +1,5 @@
 {
-  "archive_ledger_rounds": 2389,
+  "archive_ledger_rounds": 2401,
   "clean": true,
   "exempted": [
     {
@@ -36,10 +36,15 @@
       "round": 3610,
       "why": "frozen hole: the round closed without a budget row, and no presence line for it exists in any archive or the live log, so the fold had nothing to carry",
       "window": 3627
+    },
+    {
+      "round": 3625,
+      "why": "frozen hole: the label-only round written after a corrective append advanced the tick twice, so no budget row was ever written and no presence line exists in any archive or the live log",
+      "window": 3638
     }
   ],
   "left_behind": [],
-  "live_ledger_rounds": 11,
+  "live_ledger_rounds": 7,
   "nowhere": [
     {
       "class": "nowhere",
@@ -110,16 +115,27 @@
       "round": 3610,
       "why": "no ledger line in the archives or the live ring",
       "window": 3627
+    },
+    {
+      "class": "nowhere",
+      "file": "state-log-archive-2026-11.md",
+      "file_ordinal": 373,
+      "line": 10047,
+      "narrative_lines": 1,
+      "round": 3625,
+      "why": "no ledger line in the archives or the live ring",
+      "window": 3638
     }
   ],
   "nowhere_rounds": [
     3436,
     3458,
     3459,
-    3610
+    3610,
+    3625
   ],
-  "rounds": 771,
+  "rounds": 784,
   "since": 2914,
   "tool": "fold-carry-census",
-  "windows": 170
+  "windows": 174
 }

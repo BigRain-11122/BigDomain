@@ -799,6 +799,25 @@ FOLD_CARRY_EXEMPT = {
                 "log, so the fold had nothing to carry"),
         "tree_absence": {"presence_lines": 0},
     },
+    # R3644: the same kind, measured on the second round of that shape. R3625
+    # is the label-only round written after a corrective append advanced the
+    # tick twice - its own close line says the label is pinned to the live
+    # tick so the export face can anchor on it - so no work was done under
+    # that label and no budget row was ever written. Measured this window on
+    # the shipped tree: zero presence lines for R3625 in all three archives
+    # (it reaches fold-carry as the sole gap in window 3638, whose other
+    # lines belong to R3623 and R3626) and zero in the live ring, and the
+    # round's own narrative carries no inline payload. It is the same
+    # re-proved evidence as R3610, not a widening: a round that gained a
+    # presence line anywhere, lost its narrative, or carried payload prose
+    # is refused by name.
+    3625: {
+        "why": ("frozen hole: the label-only round written after a "
+                "corrective append advanced the tick twice, so no budget row "
+                "was ever written and no presence line exists in any archive "
+                "or the live log"),
+        "tree_absence": {"presence_lines": 0},
+    },
 }
 
 # R3633: the kind vocabulary is owned here, beside the table, because a reader
