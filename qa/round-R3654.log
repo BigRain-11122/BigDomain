@@ -1,0 +1,61 @@
+R3654 evidence log - battery page grades the UGC line
+=====================================================
+
+1. read-only costing (no source byte moved yet)
+   python tmp/probe_R3654.py
+     registry rows=849 criteria=7541 base=...\src\sandbox cap=600
+     prefix=ugc selected=30 criteria=251
+   python tools/battery_shard.py --match ugc
+     SHARD scope=SHARD registry_suites=849 registry_criteria=7541 selected=30
+           selected_criteria=251 cap=600s leg_cap=0s overrides=1 exact=0 state=RUNNING
+     SHARD rc=0 scope=SHARD selected=30 executed=30 green=30 criteria=251
+           crit_mismatch=0 elapsed=37.3s crit_checked=30 crit_unchecked=0
+
+2. criteria pinned in src/os/backlog.md before the FAMILIES row was written
+   AC-BSUGC1 page family equals an independent registry re-selection
+   AC-BSUGC2 totals arithmetic closes on 140/1241/709/16.5
+   AC-BSUGC3 page suite stays 21/21, --check PASS zero drift, --control CONFIRMED
+
+3. page suite before the pass (one FAMILIES row added)
+   python src/os/test_battery_shard_report.py
+     PASS AC-BSRB1 suites=849 criteria=7541 families=9 exp_equal=True literals=0
+     SUITE PASS 21/21
+
+4. two runs, one cancelled, one accepted
+   (a) bare run: killed by the 5-minute silence gate, no output at all, page pair
+       unchanged at 30200B/25784B mtime 17:51:40 (zero bytes landed)
+   (b) python -u tmp/drive_R3654.py: BEAT every 20s, writer finished at t=580s;
+       page landed 37599B json / 31391B html mtime 18:21:09; the driver itself then
+       crashed on a bytes/str join of already-complete output (no work lost)
+
+5. independent grading of the landed page
+   python tmp/probe_R3654_page.py
+     PASS AC-BSUGC1a page=849 live=849
+     PASS AC-BSUGC1b page=7541 live=7541
+     PASS AC-BSUGC1c page=9 families=9
+     PASS row:each family page==live, rc=0, red=[]
+     PASS AC-BSUGC2a totals=140 rows=140 unique=140
+     PASS AC-BSUGC2b totals=1241 rows=1241
+     PASS AC-BSUGC2c uncovered=709 live=709
+     PASS AC-BSUGC2d page=16.5 live=16.5
+     PASS AC-BSUGC3a red=[]
+     PASS AC-BSUGC3b verdict=PASS
+     PROBE PASS fails=0
+
+6. shipped faces
+   python tools/battery_shard_report.py --check
+     BSR-CHECK name=battery-shard-report checks=8 html=31391B json=37599B verdict=PASS
+   python tools/battery_shard_report.py --control
+     BSR-CONTROL tampered=... delta=+7 named=E_REGISTRY_DRIFT:...,E_TOTALS_CRITERIA
+     BSR-CONTROL VERDICT CONFIRMED
+
+7. closeout ring
+   APPEND CHECK PASS bytes=58059 gate=78500 margin=20441 tick=3654 log=68 ledger=R3654 api=0
+   VERDICT PASS 13/13 (face sweep) / VERDICT PASS 23/23 (deliverable index)
+   VERDICT PASS legs=2 entries=2 tx=1 reconcile_rc=0 (first-yuan chain)
+   CLOSEOUT-GATE PASS files=5096 flags=0 round_main=OK census=PASS matrix=DOC-CURRENT
+
+8. ordering trap re-proved this window
+   deliverable_index --write refreshes the export face, so a chain rendered before it
+   reads VERDICT FAIL E_STALE. The green order is index --write, then the chain bare
+   render, then both --check - the chain must be the last exporter.

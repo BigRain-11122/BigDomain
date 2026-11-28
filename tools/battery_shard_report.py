@@ -113,6 +113,12 @@ FAMILIES = (
     # cheapest full-green widening the registry offers. Prefix "member" overlaps
     # no other family prefix.
     ("member", "\u4f1a\u5458\u9762", "\u4f1a\u5458\u5230\u671f\u3001\u6a2a\u5e45\u961f\u5217\u3001\u6301\u4e45\u5316\u9762"),
+    # R3654: the UGC line is the posting surface every creator touches, and its
+    # 30 suites were measured green in 37.3s (251 criteria) - the cheapest
+    # remaining full-green widening, while ledger (304 suites, 1140.5s) and
+    # funnel (19 suites, 184.3s) do not fit one window. Prefix "ugc" overlaps
+    # no other family prefix.
+    ("ugc", "UGC \u9762", "msgSecCheck \u7ebf\u8def\u4e0e\u9762\u3001\u5ba1\u6838\u5e2d\u3001\u6c34\u4f4d\u65e5\u5fd7\u3001\u6c60/\u6392\u7a7a/\u6279\u6b21\u6301\u4e45\u5316"),
 )
 
 LINKS = ("index.html", "lobby-session-trace.html", "ledger-reconcile-face.html")

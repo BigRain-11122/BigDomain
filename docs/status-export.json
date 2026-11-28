@@ -1,7 +1,7 @@
 {
   "ceo_face": {
-    "board_pages_skipped": ["preview/face-sweep.html (8877B)", "preview/battery-shard-report.html (25784B)"],
-    "current": "2026-11-28 R3653 PRODUCT: the CEO battery page grades the membership line. The page covered 88 of 849 suites over seven families and 761 suites were never selected. The registry was measured read-only by prefix first: member selects 22 suites and 173 criteria, and a standalone graded leg read SHARD rc=0 selected=22 executed=22 green=22 criteria=173 crit_mismatch=0 in 9.8s - faster than the 37.8s the last full leg estimated and green with nothing unmeasured, while ledger (304 suites, 1140.5s) and funnel (19 suites, 184.3s) stay out of reach of one window. One row was added to FAMILIES (prefix member, guards = expiry, the banner queue and every persisted face) and the shipped writer was run bare behind a twenty-second heartbeat: it landed eight families with selected=110, criteria=990, uncovered=739 and cover_pct 13.0, verdict PASS, every family rc=0 (7/23/16/16/4/1/21/22 selected, the member family in 9.5s), json 30200B and html 25784B, and the same pass re-derived the export face.",
+    "board_pages_skipped": ["preview/face-sweep.html (8877B)", "preview/battery-shard-report.html (31391B)"],
+    "current": "2026-11-28 R3654 PRODUCT: the CEO battery page grades the UGC line, the posting surface every creator touches. Read-only first: the live registry selects 30 ugc suites / 251 criteria, and a standalone graded leg read SHARD rc=0 selected=30 executed=30 green=30 criteria=251 crit_mismatch=0 elapsed=37.3s - faster than the 60.8s the 2026-11-15 leg estimated and green with nothing unmeasured. One row was added to FAMILIES (prefix ugc, guards = msgSecCheck wire and face, review desk, the water journal, pool/drain/batch persistence) and the shipped writer ran behind a 20s beat driver: the page landed nine families with selected=140, criteria=1241, uncovered=709 and cover_pct 16.5, verdict PASS, every family rc=0, json 37599B and html 31391B.",
     "do": "2026-11-25 R3456 PRODUCT: the answer-revision question now has a door - api_answer_history (live with AC-AMAW1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so 'which answer was rewritten, what did it say before, what does it say now and how often did it change' could only be read by calling the sandbox from a shell - while api_seller_answers and api_listing_qna publish only the CURRENT wording.",
     "last_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 commit] (halves differ: html [2026-11-28 commit] + json [2026-11-27 commit]; later=html)",
     "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 commit] (halves differ: html [2026-11-28 commit] + json [2026-11-27 commit]; later=html)",
@@ -9,12 +9,12 @@
     "latest_artifact_note": "",
     "latest_evidence": "qa/probe-R3650.log (1203B, 2026-11-28, sha256 0dfa9bb09733)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3653] next window (<=48h): (0) **carrier**: `python src/os/state_fold_run.py --check` and `python src/os/logs_toolkit.py append --check` first; the carrier reads 53150/78500 (margin 25350) so no fold is owed; one append per round with `--round R####` (tmp/append_R3653.py is the ASCII driver, and it passes `--line` flags because the tool takes no stdin). (1) **benchmarks refresh due 2026-12-01** (benchmarks_refreshed=2026-11-24) — the refresh round falls due at the next window on or after that date (P-2026-09-24-56). (2) **S4U still not landed**: BigDomain-OSLoop Principal.LogonType=Interactive; lawful fix = elevated session running src/os/register_loop_task.ps1, read back must be S4U. (3) **next pullable, all measured**: (a) the page now reads 110/849 (13.0%) and **739 suites stay uncovered**; by the last full leg `ugc` is 30 suites 60.8s with 3 unmeasured and `funnel` 19 suites 184.3s, while `ledger` 304 suites costs 1140.5s with one 408.8s suite and stays out of one window — `ugc` is the next one-row widening if a full pass can be paid; the member family this window cost 9.5s of the 540s pass, so the pass itself dominates (truncated)",
-    "next_milestone_due": "2026-11-30T17:57:45+08:00",
-    "updated_at": "2026-11-28T17:57:45+08:00",
+    "next_milestone": "[R3654] next window (<=48h): (0) **carrier**: `python src/os/state_fold_run.py --check` and `python src/os/logs_toolkit.py append --check` first; the carrier reads 58059/78500 (margin 20441) so no fold is owed, and this window's six-line append cost 4909 bytes. One append per round with `--round R####` and `--line` flags (tmp/append_R3654.py is the ASCII driver; the tool takes no stdin). (1) **benchmarks refresh due 2026-12-01** (benchmarks_refreshed=2026-11-24): the next window on or after that date opens with the refresh round (P-2026-09-24-56). (2) **S4U still not landed**: BigDomain-OSLoop Principal.LogonType=Interactive; lawful fix = elevated session running src/os/register_loop_task.ps1, read back must be S4U. (3) **next pullable, all measured**: (a) the page reads 140/849 (16.5%) and 709 suites stay uncovered; `funnel` is 19 suites / 184.3s by the 2026-11-15 leg and is the next one-row widening, while `ledger` (304 suites, 1140.5s incl one 408.8s suite) needs its own plan; note this window's ugc leg came in at 37.3s against a 60.8s estimate, so old legs bound cost loosely in the conservative direction - measure the funnel leg standalone before writing its row (truncated)",
+    "next_milestone_due": "2026-11-30T18:28:16+08:00",
+    "updated_at": "2026-11-28T18:28:16+08:00",
     "heartbeat": {
-      "tick": 3653,
-      "state_tick": 3653,
+      "tick": 3654,
+      "state_tick": 3654,
       "lag": 0,
       "verdict": "PASS",
       "reason": "fresh"
@@ -35,8 +35,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-28 R3653 PRODUCT: the CEO battery page grades the membership line. The page covered 88 of 849 suites over seven families and 761 suites were never selected. The registry was measured read-only by prefix first: member selects 22 suites and 173 criteria, and a standalone graded leg read SHARD rc=0 selected=22 executed=22 green=22 criteria=173 crit_mismatch=0 in 9.8s - faster than the 37.8s the last full leg estimated and green with nothing unmeasured, while ledger (304 suites, 1140.5s) and funnel (19 suites, 184.3s) stay out of reach of one window. One row was added to FAMILIES (prefix member, guards = expiry, the banner queue and every persisted face) and the shipped writer was run bare behind a twenty-second heartbeat: it landed eight families with selected=110, criteria=990, uncovered=739 and cover_pct 13.0, verdict PASS, every family rc=0 (7/23/16/16/4/1/21/22 selected, the member family in 9.5s), json 30200B and html 25784B, and the same pass re-derived the export face.",
-  "claims": {"claimed": 17, "captured": 2, "contradicted": 0, "uncaptured": 15, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-28T17:57:45+08:00"},
+  "current": "2026-11-28 R3654 PRODUCT: the CEO battery page grades the UGC line, the posting surface every creator touches. Read-only first: the live registry selects 30 ugc suites / 251 criteria, and a standalone graded leg read SHARD rc=0 selected=30 executed=30 green=30 criteria=251 crit_mismatch=0 elapsed=37.3s - faster than the 60.8s the 2026-11-15 leg estimated and green with nothing unmeasured. One row was added to FAMILIES (prefix ugc, guards = msgSecCheck wire and face, review desk, the water journal, pool/drain/batch persistence) and the shipped writer ran behind a 20s beat driver: the page landed nine families with selected=140, criteria=1241, uncovered=709 and cover_pct 16.5, verdict PASS, every family rc=0, json 37599B and html 31391B.",
+  "claims": {"claimed": 18, "captured": 2, "contradicted": 0, "uncaptured": 16, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-28T18:28:16+08:00"},
   "chain": {"present": true, "rows": 106, "broken": 5, "path": "state/qa_replacements.jsonl", "partial": 5, "declared": 1, "unexplained": 0, "adjudication": "OK", "landed_ok": 6, "landed_missing": 0, "rewritten": 0, "excused": 1},
   "depts": [
     {
@@ -65,11 +65,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-28 R3653 PRODUCT: the CEO battery page grades the membership line. The page covered 88 of 849 suites over seven families and 761 suites were never selected. The registry was measured read-only by prefix first: member selects 22 suites and 173 criteria, and a standalone graded leg read SHARD rc=0 selected=22 executed=22 green=22 criteria=173 crit_mismatch=0 in 9.8s - faster than the 37.8s the last full leg estimated and green with nothing unmeasured, while ledger (304 suites, 1140.5s) and funnel (19 suites, 184.3s) stay out of reach of one window. One row was added to FAMILIES (prefix member, guards = expiry, the banner queue and every persisted face) and the shipped writer was run bare behind a twenty-second heartbeat: it landed eight families with selected=110, criteria=990, uncovered=739 and cover_pct 13.0, verdict PASS, every family rc=0 (7/23/16/16/4/1/21/22 selected, the member family in 9.5s), json 30200B and html 25784B, and the same pass re-derived the export face.",
-  "export_ts": "2026-11-28T17:57:45+08:00",
+  "do": "2026-11-28 R3654 PRODUCT: the CEO battery page grades the UGC line, the posting surface every creator touches. Read-only first: the live registry selects 30 ugc suites / 251 criteria, and a standalone graded leg read SHARD rc=0 selected=30 executed=30 green=30 criteria=251 crit_mismatch=0 elapsed=37.3s - faster than the 60.8s the 2026-11-15 leg estimated and green with nothing unmeasured. One row was added to FAMILIES (prefix ugc, guards = msgSecCheck wire and face, review desk, the water journal, pool/drain/batch persistence) and the shipped writer ran behind a 20s beat driver: the page landed nine families with selected=140, criteria=1241, uncovered=709 and cover_pct 16.5, verdict PASS, every family rc=0, json 37599B and html 31391B.",
+  "export_ts": "2026-11-28T18:28:16+08:00",
   "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 commit] (halves differ: html [2026-11-28 commit] + json [2026-11-27 commit]; later=html)",
   "latest_evidence": "qa/probe-R3650.log (1203B, 2026-11-28, sha256 0dfa9bb09733)",
-  "next_milestone": "[R3653] next window (<=48h): (0) **carrier**: `python src/os/state_fold_run.py --check` and `python src/os/logs_toolkit.py append --check` first; the carrier reads 53150/78500 (margin 25350) so no fold is owed; one append per round with `--round R####` (tmp/append_R3653.py is the ASCII driver, and it passes `--line` flags because the tool takes no stdin). (1) **benchmarks refresh due 2026-12-01** (benchmarks_refreshed=2026-11-24) — the refresh round falls due at the next window on or after that date (P-2026-09-24-56). (2) **S4U still not landed**: BigDomain-OSLoop Principal.LogonType=Interactive; lawful fix = elevated session running src/os/register_loop_task.ps1, read back must be S4U. (3) **next pullable, all measured**: (a) the page now reads 110/849 (13.0%) and **739 suites stay uncovered**; by the last full leg `ugc` is 30 suites 60.8s with 3 unmeasured and `funnel` 19 suites 184.3s, while `ledger` 304 suites costs 1140.5s with one 408.8s suite and stays out of one window — `ugc` is the next one-row widening if a full pass can be paid; the member family this window cost 9.5s of the 540s pass, so the pass itself dominates (truncated)",
+  "next_milestone": "[R3654] next window (<=48h): (0) **carrier**: `python src/os/state_fold_run.py --check` and `python src/os/logs_toolkit.py append --check` first; the carrier reads 58059/78500 (margin 20441) so no fold is owed, and this window's six-line append cost 4909 bytes. One append per round with `--round R####` and `--line` flags (tmp/append_R3654.py is the ASCII driver; the tool takes no stdin). (1) **benchmarks refresh due 2026-12-01** (benchmarks_refreshed=2026-11-24): the next window on or after that date opens with the refresh round (P-2026-09-24-56). (2) **S4U still not landed**: BigDomain-OSLoop Principal.LogonType=Interactive; lawful fix = elevated session running src/os/register_loop_task.ps1, read back must be S4U. (3) **next pullable, all measured**: (a) the page reads 140/849 (16.5%) and 709 suites stay uncovered; `funnel` is 19 suites / 184.3s by the 2026-11-15 leg and is the next one-row widening, while `ledger` (304 suites, 1140.5s incl one 408.8s suite) needs its own plan; note this window's ugc leg came in at 37.3s against a 60.8s estimate, so old legs bound cost loosely in the conservative direction - measure the funnel leg standalone before writing its row (truncated)",
   "outs": [
     "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 commit] (halves differ: html [2026-11-28 commit] + json [2026-11-27 commit]; later=html)",
     "preview/first-yuan-chain.html (5397B) + preview/first-yuan-chain.json (5180B) [2026-11-28 commit]",
@@ -211,19 +211,19 @@
     "shortfall_total": 15,
     "verdict": "FLOOR-DEBT"
   },
-  "results": [["3653", "OSLoop 执行 tick"]],
+  "results": [["3654", "OSLoop 执行 tick"]],
   "results_archive": {
     "bytes": 336680,
     "count": 179,
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
-  "self_drive": {"window": "2026-11-22..2026-11-28", "window_days": 7, "log_lines_in_window": 61, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 52, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
-  "state_bytes": 53150,
-  "next_milestone_due": "2026-11-30T17:57:45+08:00",
+  "self_drive": {"window": "2026-11-22..2026-11-28", "window_days": 7, "log_lines_in_window": 67, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 57, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
+  "state_bytes": 58059,
+  "next_milestone_due": "2026-11-30T18:28:16+08:00",
   "heartbeat": {
-    "tick": 3653,
-    "state_tick": 3653,
+    "tick": 3654,
+    "state_tick": 3654,
     "lag": 0,
     "verdict": "PASS",
     "reason": "fresh"
