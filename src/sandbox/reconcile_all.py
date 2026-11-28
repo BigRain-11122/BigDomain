@@ -5324,6 +5324,16 @@ SUITES = [
     # scratch cross-check.)
     ("os-suite-matrix-reconcile",
      os.path.join("..", "os", "test_suite_matrix_reconcile.py"), 15),
+    # R3649: the walk bound of the matrix reconciliation - the DECLARED
+    # ceiling counts ATTEMPTS so a corrupt pile starves instead of walking
+    # past it, skipped candidates are published as unreadable, the accepted
+    # leg's rank rides along only when `decoded` cannot imply it, and the
+    # --check face names the leg it accepted on its DOC-CURRENT branch.
+    # (AC-EDW1..AC-EDW4 pre-registered in src/os/backlog.md at R3649 BEFORE
+    # any module byte moved.)
+    ("os-suite-matrix-reconcile-walk-bound",
+     os.path.join("..", "os", "test_suite_matrix_reconcile_walk_bound.py"),
+     11),
     # R2602: the evidence face of the matrix reconciliation - a PASS leg that
     # differs from the leg the document records reads its own word naming BOTH
     # legs, the candidate walk reports what it decoded, a MISSING document can

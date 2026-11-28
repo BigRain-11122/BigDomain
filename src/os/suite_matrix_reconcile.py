@@ -546,21 +546,56 @@ def newest_pass_leg_scanned(qa_dir=None, ceiling=None, names=None):
              and (wanted is None or name in wanted)]
     paths.sort(key=lambda p: (-os.path.getmtime(p), os.path.basename(p)))
     decoded = 0
+    unreadable = 0
+    scanned = 0
     for path in paths:
-        if decoded >= ceiling:
+        if scanned >= ceiling:
             # AC-EDMC3: the bound ENGAGED, so it is named on the walk. When it
             # does not engage the walk keeps the exact R2602 shape
             # {"considered", "decoded"} and nothing else.
-            return None, None, {"considered": len(paths), "decoded": decoded,
-                                "ceiling": ceiling, "bounded": True}
+            return None, None, _walk_block(len(paths), decoded, unreadable,
+                                           ceiling=ceiling, bounded=True)
+        # AC-EDW1 (R3649): the bound counts ATTEMPTS, not successes. Bound to
+        # the readable half only, a pile of unreadable candidates walked past
+        # its declared ceiling (measured: 70 bad files above one PASS leg at
+        # ceiling=64 still answered PASS), so the cost the block publishes is
+        # not the cost the walk paid.
+        scanned += 1
         try:
             _, run = SM.parse_evidence(path)
         except (OSError, UnicodeDecodeError):
+            # AC-EDW2 (R3649): a candidate that cannot be read is counted, so
+            # a walk that skipped seventy files no longer prints the same
+            # line as a walk that read one of one.
+            unreadable += 1
             continue
         decoded += 1
         if run and run["verdict"] == "PASS":
-            return path, run, {"considered": len(paths), "decoded": decoded}
-    return None, None, {"considered": len(paths), "decoded": decoded}
+            return path, run, _walk_block(len(paths), decoded, unreadable,
+                                          leg_rank=scanned)
+    return None, None, _walk_block(len(paths), decoded, unreadable)
+
+
+def _walk_block(considered, decoded, unreadable, leg_rank=None, ceiling=None,
+                bounded=False):
+    """The published cost of a walk, additive over the R2602 shape.
+
+    A clean world keeps exactly {"considered", "decoded"} (the whole-dict pins
+    AC-EDMB2/AC-EDMB7 compare by equality), plus "ceiling"/"bounded" when the
+    bound engaged. AC-EDW2 publishes "unreadable" only when files were
+    skipped, and AC-EDW3 publishes "leg_rank" only when the position of the
+    accepted leg cannot be read off `decoded` - i.e. when skipped files sat
+    above it. A key that carries no news is not added."""
+    block = {"considered": considered, "decoded": decoded}
+    if unreadable:
+        block["unreadable"] = unreadable
+    if leg_rank is not None and leg_rank != decoded:
+        block["leg_rank"] = leg_rank
+    if ceiling is not None:
+        block["ceiling"] = ceiling
+    if bounded:
+        block["bounded"] = True
+    return block
 
 
 def leg_candidate_names(qa_dir=None):
@@ -1128,6 +1163,12 @@ def main(argv):
         print(json.dumps(result, sort_keys=True))
     else:
         print("%s %s" % (result["verdict"], result["doc"]))
+        # AC-EDW4 (R3649): the check face names the leg it accepted. Until
+        # this line the leg lived only inside the rendered document, so a
+        # reader of `DOC-CURRENT ... evidence-walk considered=756 decoded=12`
+        # could not tell a stopped walk from a hole in the pile.
+        if result["verdict"] == WORD_CURRENT and "evidence" in result:
+            print("  evidence=%s" % result["evidence"])
         if result["verdict"] in (WORD_ROWS, WORD_STALE):
             print("  doc-rows=%d registry-rows=%d (%d criteria)"
                   " evidence=%s leg=%s/%s shipped-check=%d"

@@ -1,0 +1,13 @@
+SECTION A - before the edit (same probe, pre-fix module, 2026-11-28 15:22 local):
+PRE-FIX pile: considered=71 decoded=1 walk={'considered': 71, 'decoded': 1}
+PRE-FIX answer: path=a-pass.log verdict=PASS
+PRE-FIX bound honoured: False
+PRE-FIX unreadable counted: False
+
+SECTION B - after the edit (re-runnable now):
+POST-FIX pile: considered=71 decoded=0 walk={'considered': 71, 'decoded': 0, 'unreadable': 64, 'ceiling': 64, 'bounded': True}
+POST-FIX answer: path=None verdict=None
+POST-FIX bound honoured: True
+POST-FIX unreadable counted: True
+POST-FIX reachability control at ceiling=80: path=a-pass.log walk={'considered': 71, 'decoded': 1, 'unreadable': 70, 'leg_rank': 71}
+LIVE leg=reconcile-all-R2739.log walk=walk-leg

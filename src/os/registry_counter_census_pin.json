@@ -768,6 +768,7 @@
     "os-suite-matrix-reconcile-second-table-separator",
     "os-suite-matrix-reconcile-shape",
     "os-suite-matrix-reconcile-table-shape",
+    "os-suite-matrix-reconcile-walk-bound",
     "os-suite-output-audit",
     "os-ticket-size-board",
     "os-tree-snapshot",
