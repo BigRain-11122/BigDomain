@@ -780,6 +780,25 @@ FOLD_CARRY_EXEMPT = {
             "parts": ["product", "landed", "two measured controls", "honest"],
         },
     },
+    # R3632: the FOURTH kind, for a round that closed without writing a
+    # budget row at all. Its evidence is the only one the fold-carry law
+    # actually needs - whether a pairing was lost - re-proved from the tree
+    # on every read: no presence line for the round exists in ANY archive
+    # (the caller's precondition) and none exists in the live log (handed
+    # in by the caller), so no ledger line can have been left behind, and
+    # the round's own narrative carries no inline payload (that shape has
+    # its own kind and must not be relabelled as an absence).
+    # Measured: R3610 is a full work round (group scan, product, measured,
+    # honest) with zero presence lines in the archives and in the live
+    # log, and no 'tokens: local=' prose inside its block; its fold (knife
+    # 23) wrote a summary with no parenthetical part list, so the block
+    # receipt kind cannot reach it and no kind was invented in its place.
+    3610: {
+        "why": ("frozen hole: the round closed without a budget row, and no "
+                "presence line for it exists in any archive or the live "
+                "log, so the fold had nothing to carry"),
+        "tree_absence": {"presence_lines": 0},
+    },
 }
 
 # R3496: the receipt reader lives beside the law, not in a tool, so the
@@ -833,8 +852,27 @@ def receipt_admissible(parts):
     return bool(lowered) and "tokens" not in lowered
 
 
+BUDGET_PAYLOAD_RE = re.compile(r"tokens:\s*local=")
+
+
+def tree_presence_rounds(lines):
+    """The rounds that carry a ledger line in one stream (R3632).
+
+    The ONE place a presence round set is built from lines, so the live
+    half of the tree-absence receipt and the archive half cannot disagree
+    about what a presence line is. Accepts the live log's string list and
+    the archive's line list alike.
+    """
+    out = set()
+    for line in lines or []:
+        hit = LEDGER_PRESENCE_RE.match(line)
+        if hit is not None:
+            out.add(int(hit.group(1)))
+    return out
+
+
 def fold_carry_exemption(round_no, narrative_texts, ledger_rounds,
-                         receipts=None):
+                         receipts=None, live_rounds=None):
     """Admit or refuse ONE named exemption; it never widens on its own.
 
     Returns (verdict, why). verdict is True only when the round is in the
@@ -866,6 +904,22 @@ def fold_carry_exemption(round_no, narrative_texts, ledger_rounds,
         if any(not item["omits_budget"] for item in seen):
             return False, "receipt-has-budget"
         return False, "receipt-lacks-span"
+    absence = entry.get("tree_absence")
+    if absence is not None:
+        # R3632: the recorded number is a MEASURED claim rather than prose,
+        # and anything but zero asks for a tree this kind cannot excuse.
+        if absence.get("presence_lines") != 0:
+            return False, "receipt-mismatch"
+        if not narrative_texts:
+            return False, "narrative-missing"
+        for text in narrative_texts:
+            if BUDGET_PAYLOAD_RE.search(text):
+                return False, "narrative-has-payload"
+        if live_rounds is None:
+            return False, "no-tree-provided"
+        if round_no in live_rounds:
+            return False, "tree-has-presence"
+        return True, entry.get("why", "tree absence")
     payload = entry.get("inline_payload")
     if payload is not None:
         for text in narrative_texts:
@@ -981,7 +1035,7 @@ def provenance_counts(paths):
     return {"tracked": hits, "total": len(ordered)}
 
 
-def audit_fold_carry(paths, min_round=None, provenance=None):
+def audit_fold_carry(paths, min_round=None, provenance=None, live_lines=None):
     """Ask the FOLD-CARRY law of every window opened at or after the pin.
 
     For each such window, every round whose NARRATIVE sits inside it must
@@ -997,6 +1051,12 @@ def audit_fold_carry(paths, min_round=None, provenance=None):
     with no post-pin window the gate reports itself VACUOUS rather than
     passing on nothing, so a green reading cannot be confused with a
     measured one.
+
+    R3632: `live_lines` is the live state log's line list, handed in by the
+    caller that already loaded it. It is asked only by the tree-absence
+    receipt, whose claim is about the whole tree; a caller that passes
+    nothing leaves that receipt unprovable and it refuses by name rather
+    than defaulting to absent.
     """
     if min_round is None:
         min_round = FOLD_CARRY_PIN
@@ -1012,6 +1072,12 @@ def audit_fold_carry(paths, min_round=None, provenance=None):
     receipts = None
     if any("receipt" in entry for entry in FOLD_CARRY_EXEMPT.values()):
         receipts = block_receipts(paths)
+    # R3632: the tree-absence receipt asks the OTHER half of the tree as
+    # well, so a caller that never hands in the live log cannot get one -
+    # "no evidence supplied" refuses rather than defaulting to absent.
+    live_rounds = None
+    if live_lines is not None:
+        live_rounds = tree_presence_rounds(live_lines)
     for path in paths:
         for window in load_archive_windows(path):
             for line in window["lines"]:
@@ -1068,7 +1134,7 @@ def audit_fold_carry(paths, min_round=None, provenance=None):
             if round_no not in archive_rounds:
                 verdict, why = fold_carry_exemption(
                     round_no, narrative_text.get(round_no, []),
-                    archive_rounds, receipts)
+                    archive_rounds, receipts, live_rounds=live_rounds)
                 if verdict:
                     exemptions.append({"window": window["round"],
                                        "round": round_no,
@@ -1646,7 +1712,8 @@ def main(argv=None):
             carry_paths = archive_files(archives_dir)
             report = audit_fold_carry(carry_paths, since_round,
                                       provenance=provenance_counts(
-                                          carry_paths))
+                                          carry_paths),
+                                      live_lines=log)
         else:
             if archives_dir is not None:
                 report = audit_scope(

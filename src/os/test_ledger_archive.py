@@ -328,7 +328,8 @@ def run():
         rc_noarch, out_noarch, err_noarch = run_cli(
             [state_path, "--check", "--fold-carry", "--since", "5000"])
         real_carry = LL.audit_fold_carry(LL.archive_files(
-            LL.default_logs_dir(STATE)))
+            LL.default_logs_dir(STATE)),
+            live_lines=LL.load_state_log(STATE))
         check(LL.FOLD_CARRY_PIN == 2914
               and good["clean"] is True and good["vacuous"] is False
               and good["windows"] == 1 and good["rounds"] == 2
@@ -426,7 +427,8 @@ def run():
                     rounds_n += 1
                     if round_no not in shape_rounds:
                         shape_gaps.append((window["round"], round_no))
-        real_carry2 = LL.audit_fold_carry(real_paths)
+        real_carry2 = LL.audit_fold_carry(
+            real_paths, live_lines=LL.load_state_log(STATE))
         check(closed["clean"] is True and closed["gaps"] == []
               and closed["windows"] == 1 and closed["rounds"] == 1
               and rc_dat == 0 and out_dat.startswith("FOLD-CARRY OK")
@@ -499,7 +501,8 @@ def run():
         real_logs = LL.default_logs_dir(STATE)
         real_archives = LL.load_archive_lines(real_logs)
         real_scope = LL.audit_scope(real_archives, live)
-        real_carry = LL.audit_fold_carry(LL.archive_files(real_logs))
+        real_carry = LL.audit_fold_carry(
+            LL.archive_files(real_logs), live_lines=live)
         presence_rounds = set()
         presence_count = 0
         classify_count = 0
@@ -591,7 +594,8 @@ def run():
         good_report = LL.audit_archive(LL.load_archive(good_only))
         real_logs3 = LL.default_logs_dir(STATE)
         real_payload = LL.audit_archive(LL.load_archive_lines(real_logs3))
-        real_carry3 = LL.audit_fold_carry(LL.archive_files(real_logs3))
+        real_carry3 = LL.audit_fold_carry(
+            LL.archive_files(real_logs3), live_lines=LL.load_state_log(STATE))
         real_scope3 = LL.audit_scope(
             LL.load_archive_lines(real_logs3), live)
 
@@ -600,7 +604,7 @@ def run():
         # in a post-pin window while its presence line is not in THAT window;
         # several rounds may share one window (a fold moves a range), so the
         # reading is a list of pairs, never one entry per window.
-        def same_window_recount(paths):
+        def same_window_recount(paths, live_rounds=None):
             archive_rounds = set()
             for path in paths:
                 for window in LL.load_archive_windows(path):
@@ -630,7 +634,8 @@ def run():
                     for round_no in sorted(narratives):
                         verdict, _why = LL.fold_carry_exemption(
                             round_no, seen_narrative.get(round_no, []),
-                            archive_rounds, receipts)
+                            archive_rounds, receipts,
+                            live_rounds=live_rounds)
                         if verdict or round_no in here:
                             continue
                         out.append((window["round"], round_no))
@@ -689,7 +694,8 @@ def run():
               # one window holds.
               and sorted((item["window"], item["round"]) for item
                          in real_carry3["same_window_gaps"])
-              == same_window_recount(LL.archive_files(real_logs3)),
+              == same_window_recount(LL.archive_files(real_logs3),
+                                     live_rounds=LL.tree_presence_rounds(live)),
               "AC-LGA12 the cross-window diagnostics locate their window, "
               "and the archive payload reading is published without gating")
 
@@ -926,7 +932,8 @@ def run():
                     hit = LL.LEDGER_PRESENCE_RE.match(item)
                     if hit is not None:
                         archive_rounds.add(int(hit.group(1)))
-        real_excused = LL.audit_fold_carry(real_paths)
+        real_excused = LL.audit_fold_carry(
+            real_paths, live_lines=LL.load_state_log(STATE))
         excused_line = LL.format_fold_carry(excused)
         check(
             # a: an ordinary missing ledger line still reds, unnamed
@@ -1025,6 +1032,25 @@ def run():
             # prose on the NAMED round must be admitted.
             named_e = LL.fold_carry_exemption(
                 7005, ["R7005 fixture %s" % payload], set())
+            # R3632 AC-TAB3: the fourth kind - whole-tree absence - and its
+            # refusals. Every arm is a private fixture world, never history,
+            # and the live half is handed in explicitly.
+            absent = {"why": "fixture: tree absence",
+                      "tree_absence": {"presence_lines": 0}}
+            LL.FOLD_CARRY_EXEMPT[7105] = dict(absent)
+            arm_g = arms_window(7101, [narrative(7105)])
+            arm_h = LL.audit_fold_carry(
+                [arms_file], 3000,
+                live_lines=["R7105 tokens: local=1k api=0 "
+                            "api_reason=fixture"])
+            LL.FOLD_CARRY_EXEMPT[7105] = {
+                "why": "fixture: tree absence recorded as one",
+                "tree_absence": {"presence_lines": 1}}
+            arm_j = LL.audit_fold_carry([arms_file], 3000, live_lines=[])
+            LL.FOLD_CARRY_EXEMPT[7105] = dict(absent)
+            arm_i = LL.audit_fold_carry([arms_file], 3000, live_lines=[])
+            LL.FOLD_CARRY_EXEMPT[7106] = dict(absent)
+            arm_k = arms_window(7101, ["R7106 fixture %s" % payload])
         finally:
             LL.FOLD_CARRY_EXEMPT.clear()
             LL.FOLD_CARRY_EXEMPT.update(shipped)
@@ -1062,10 +1088,34 @@ def run():
             #    the probe entries are gone, and the real tree still reads
             #    clean with exactly its shipped exemptions
             and named_e[0] is True
+            # g: without the live half the absence is unprovable - refused
+            and arm_g["clean"] is False
+            and [item["round"] for item in arm_g["gaps"]] == [7105]
+            and [item["why"] for item in arm_g["exemption_refusals"]]
+            == ["no-tree-provided"]
+            # h: one live presence line for the named round refuses it
+            and arm_h["clean"] is False
+            and [item["why"] for item in arm_h["exemption_refusals"]]
+            == ["tree-has-presence"]
+            # j: the recorded count is a measured claim, not prose
+            and arm_j["clean"] is False
+            and [item["why"] for item in arm_j["exemption_refusals"]]
+            == ["receipt-mismatch"]
+            # i: both halves absent and no payload - excused and named
+            and arm_i["clean"] is True
+            and [item["round"] for item in arm_i["exemptions"]] == [7105]
+            and "exempt=1(R7105)" in LL.format_fold_carry(arm_i)
+            # k: payload prose belongs to the inline kind, never to absence
+            and arm_k["clean"] is False
+            and [item["why"] for item in arm_k["exemption_refusals"]]
+            == ["narrative-has-payload"]
+            # v: the same absence shape on an UN-NAMED round still reds
+            and plain_gap["clean"] is False and plain_gap["exemptions"] == []
             and set(LL.FOLD_CARRY_EXEMPT) == set(shipped)
             and not [key for key in LL.FOLD_CARRY_EXEMPT if key >= 7000]
             and real_excused["clean"] is True
-            and real_excused["exemption_refusals"] == [],
+            and real_excused["exemption_refusals"] == []
+            and 3610 in [item["round"] for item in real_excused["exemptions"]],
             "AC-LGA16 an exemption is refused by name when its receipt names "
             "a budget part or when it records no evidence kind, and neither a "
             "budget-free summary nor an inline payload excuses a round the "

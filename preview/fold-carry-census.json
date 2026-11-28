@@ -1,5 +1,5 @@
 {
-  "archive_ledger_rounds": 2260,
+  "archive_ledger_rounds": 2389,
   "clean": true,
   "exempted": [
     {
@@ -31,10 +31,15 @@
       "round": 3459,
       "why": "frozen hole: the fold summary for this block enumerates all four parts and names no budget part, so no budget line existed when the block was folded",
       "window": 3465
+    },
+    {
+      "round": 3610,
+      "why": "frozen hole: the round closed without a budget row, and no presence line for it exists in any archive or the live log, so the fold had nothing to carry",
+      "window": 3627
     }
   ],
   "left_behind": [],
-  "live_ledger_rounds": 5,
+  "live_ledger_rounds": 7,
   "nowhere": [
     {
       "class": "nowhere",
@@ -95,15 +100,26 @@
       "round": 3459,
       "why": "no ledger line in the archives or the live ring",
       "window": 3465
+    },
+    {
+      "class": "nowhere",
+      "file": "state-log-archive-2026-11.md",
+      "file_ordinal": 370,
+      "line": 9973,
+      "narrative_lines": 4,
+      "round": 3610,
+      "why": "no ledger line in the archives or the live ring",
+      "window": 3627
     }
   ],
   "nowhere_rounds": [
     3436,
     3458,
-    3459
+    3459,
+    3610
   ],
-  "rounds": 640,
+  "rounds": 771,
   "since": 2914,
   "tool": "fold-carry-census",
-  "windows": 145
+  "windows": 170
 }

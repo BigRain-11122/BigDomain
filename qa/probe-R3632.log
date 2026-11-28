@@ -1,0 +1,64 @@
+R3632 evidence - the fourth fold-carry evidence kind (tree_absence)
+====================================================================
+
+1. Whole-tree probe BEFORE any edit (read-only, tmp/probe_R3632_lga16.py style)
+   3610 in live presence        = False
+   3610 in archive presence     = False
+   3610 narrative lines         = 4   (GROUP SCAN / PRODUCT / MEASURED / HONEST)
+   payload inside that block    = [False, False, False, False]
+   -> the round is a full work round that never wrote a budget row, and no
+      presence line for it exists in any archive or in the live log.
+
+2. Why the two existing kinds cannot reach it
+   block_receipts: knife 23 summary is
+     "fold 23 moves the R3610 and R3611 round blocks into the archive"
+     -> no parenthetical part list, so block_receipts returns nothing.
+   inline_payload: the block carries no "tokens: local=" prose.
+
+3. Legacy suite BEFORE the change
+   SUITE FAIL 10/16 criteria
+   red: AC-LGA9 AC-LGA10 AC-LGA11 AC-LGA13 AC-LGA15 AC-LGA16
+   the six reds all end on the same fact: gaps=R3610(w3627)
+
+4. Intermediary readings while the change was written (named, not hidden)
+   run a: 10/16 (table entry in, real-tree call sites still without live half)
+   run b: 14/16 (five call sites patched; AC-LGA12 and AC-LGA16 still red)
+   run c: 15/16 (suite independent same_window_recount now gets the live half;
+           AC-LGA16 red because the payload arm refused as no-tree-provided
+           before the block was read)
+   final: 16/16 twice
+
+5. Private-world arms (python tmp/probe_R3632_lga16.py)
+   g  no live log supplied          -> clean=False gaps=[7105] why=no-tree-provided
+   h  one live presence line 7105   -> clean=False why=tree-has-presence
+   j  recorded presence_lines=1     -> clean=False why=receipt-mismatch
+   i  both halves absent, no payload-> clean=True  exempt=1(R7105)
+   k  payload prose inside block    -> clean=False gaps=[7106] why=narrative-has-payload
+
+6. Live faces AFTER the change
+   python src/os/ledger_lines.py --check --archives logs --fold-carry
+     FOLD-CARRY OK since=2914 windows=170 rounds=771 skipped=725 split=52
+     same_window=53 dup=11 exempt=5(R3112,R3436,R3458,R3459,R3610)
+     loc=file@line prov=tracked=1/3
+   python src/os/test_ledger_archive.py    -> SUITE PASS 16/16 criteria (twice)
+   python src/os/test_fold_carry_evidence.py -> SUITE PASS 7/7
+   python src/os/test_logs_append.py          -> SUITE PASS 20/20
+   python src/os/test_logs_append_check.py    -> SUITE PASS 23/23
+   python src/os/test_logs_append_round_main.py  -> SUITE PASS 18/18
+   python src/os/test_logs_append_round_orphan.py-> SUITE PASS 17/17
+   python tools/fold_carry_census.py --check           -> FCC-CHECK VERDICT PASS
+   python tools/fold_carry_census.py --evidence --check-> FCE-CHECK VERDICT PASS
+     FOLD-CARRY-EVIDENCE since=2914 frozen=4 block_receipt=2 no_receipt=2
+     earliest_budget=265 e_round_lost=3380 narrowing_releases=0 refused=3
+     left_behind=0
+
+7. Module hash after the change
+   src/os/ledger_lines.py sha256
+   63ed89a12bfd61424e66754216934aa7e905c51ee5a6c357ea6db33adea9c8b4
+
+8. Out-of-range files this window changed (named)
+   src/os/test_ledger_archive.py    five real-tree call sites + recount param
+                                    + six AC-LGA16 arms + criterion arm f
+   tools/fold_carry_census.py       exempted loop hands in the live ring
+   preview/fold-carry-census.json   regenerated 3713B
+   preview/fold-carry-evidence.json regenerated 1962B

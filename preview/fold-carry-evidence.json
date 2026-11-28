@@ -14,13 +14,16 @@
   "frozen_rounds": [
     3436,
     3458,
-    3459
+    3459,
+    3610
   ],
   "left_behind": 0,
   "narrowing_releases": 0,
-  "no_receipt": 1,
+  "no_receipt": 2,
   "receipts_refused": [
-    3421
+    3421,
+    3518,
+    3519
   ],
   "rows": [
     {
@@ -69,6 +72,12 @@
       },
       "receipts_total": 1,
       "round": 3459
+    },
+    {
+      "class": "no-receipt",
+      "receipt": null,
+      "receipts_total": 0,
+      "round": 3610
     }
   ],
   "since": 2914,

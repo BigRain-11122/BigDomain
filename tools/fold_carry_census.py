@@ -259,7 +259,8 @@ def census(min_round=None):
     for row in nowhere:
         verdict, why = LL.fold_carry_exemption(
             row["round"], round_narrative.get(row["round"], []),
-            archive_rounds | live_rounds, receipts)
+            archive_rounds | live_rounds, receipts,
+            live_rounds=live_rounds)
         if verdict:
             exempted.append({"round": row["round"],
                              "window": row["window"],
