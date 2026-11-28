@@ -514,6 +514,7 @@
     "os-journey-demo-face",
     "os-ledger-adjudication",
     "os-ledger-archive",
+    "os-ledger-archive-round-main",
     "os-ledger-baseline",
     "os-ledger-business-report",
     "os-ledger-closeout",

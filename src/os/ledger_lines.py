@@ -498,6 +498,17 @@ def audit_archive(lines):
     dated = 0
     unshaped = 0
     unshaped_codes = {}
+    # R3629 AC-ARM1..AC-ARM3: the main-line reading the newest-round law has
+    # always refused to ask of history. check_round_main_shape() judges ONE
+    # round (the newest) and says so; the archive holds 2109 folded rounds of
+    # which, measured this window, 68 carry no dated line at all and 847
+    # carry dated lines without an UPPERCASE label - 915 rounds whose main
+    # line no face has ever confirmed. Counted through the SAME two regexes
+    # the round-main law uses, so the reading cannot drift from the ruling.
+    # Published only: the archives are frozen history and pre-law rounds
+    # legitimately have no label, so neither number may gate.
+    main_dated = {}
+    main_labelled = {}
     for raw in lines:
         line = raw if isinstance(raw, str) else str(raw)
         kind = classify_archive(line)
@@ -520,7 +531,14 @@ def audit_archive(lines):
                 unshaped += 1
                 unshaped_codes[exc.code] = unshaped_codes.get(exc.code, 0) + 1
         elif kind == "round":
-            round_rounds.append(int(NARRATIVE_RE.match(line).group(1)))
+            round_no = int(NARRATIVE_RE.match(line).group(1))
+            round_rounds.append(round_no)
+            main_dated.setdefault(round_no, 0)
+            main_labelled.setdefault(round_no, 0)
+            if ROUND_MAIN_RE.match(line):
+                main_dated[round_no] += 1
+            if ROUND_LABEL_RE.match(line):
+                main_labelled[round_no] += 1
     return {
         "total_lines": len(lines),
         "ledger_lines": kinds["ledger"],
@@ -530,6 +548,12 @@ def audit_archive(lines):
         "dated_ledger_lines": dated,
         "unshaped_ledger_lines": unshaped,
         "unshaped_codes": unshaped_codes,
+        "rounds_total": len(main_dated),
+        "rounds_without_main": sorted(
+            round_no for round_no, count in main_dated.items() if count == 0),
+        "rounds_without_label": sorted(
+            round_no for round_no, count in main_dated.items()
+            if count > 0 and main_labelled.get(round_no, 0) == 0),
         "rounds_without_ledger": sorted(set(round_rounds)
                                         - set(ledger_rounds)),
         "ledger_without_round": sorted(set(ledger_rounds)
@@ -1274,6 +1298,15 @@ def audit_scope(archive_lines, live_lines, tail=None):
     out["archive_unshaped_ledger_lines"] = archive_report[
         "unshaped_ledger_lines"]
     out["archive_unshaped_codes"] = archive_report["unshaped_codes"]
+    # R3629 AC-ARM3: the same three readings, published on the union face.
+    # check_round_main_shape() asked its question of one round only; a reader
+    # of this face can now see how many archived rounds that ruling never
+    # covered, split by the same two codes it uses. PUBLISHED only.
+    out["archive_rounds"] = archive_report["rounds_total"]
+    out["archive_rounds_without_main"] = archive_report[
+        "rounds_without_main"]
+    out["archive_rounds_without_label"] = archive_report[
+        "rounds_without_label"]
     out["live_ledger_lines"] = live_full["ledger_lines"]
     out["live_round_lines"] = live_full["round_lines"]
     out["total_lines"] = archive_report["total_lines"] + live_full["total_lines"]
@@ -1332,13 +1365,20 @@ def format_report(report):
                       len(report["archived_orphan"])))
         # R3087 AC-LGA12: the payload reading a reader never had. Published
         # only - the archives are frozen, so neither number may gate.
-        out.append("archive_payload: dated=%d unshaped=%d codes=%s"
+        # R3629 AC-ARM3: the round-main reading rides the same published
+        # line - rounds folded, rounds with no dated main and rounds dated
+        # but unlabelled. Still one line, still no effect on VERDICT.
+        out.append("archive_payload: dated=%d unshaped=%d codes=%s "
+                   "rounds=%d no_main=%d no_label=%d"
                    % (report["archive_dated_ledger_lines"],
                       report["archive_unshaped_ledger_lines"],
                       ",".join("%s:%d" % (code, count) for code, count
                                in sorted(
                                    report["archive_unshaped_codes"].items()))
-                      or "none"))
+                      or "none",
+                      report["archive_rounds"],
+                      len(report["archive_rounds_without_main"]),
+                      len(report["archive_rounds_without_label"])))
     for item in report["errors"]:
         out.append("error %s line %d: %s"
                    % (item["code"], item["line"], item["detail"]))

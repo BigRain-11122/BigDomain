@@ -9241,6 +9241,19 @@ SUITES = [
     # existed.
     ("os-logs-append-round-orphan",
      os.path.join("..", "os", "test_logs_append_round_orphan.py"), 17),
+    # R3629: check_round_main_shape() judges one round (the newest) by design,
+    # so the main line of every FOLDED round was never asked about by any face
+    # - measured this window: 2109 archived rounds, 68 with no dated line and
+    # 847 dated but unlabelled. audit_archive() now derives rounds_total /
+    # rounds_without_main / rounds_without_label through the SAME two regexes
+    # the round-main law uses, audit_scope() republishes them and the
+    # archive_payload line carries the counts. PUBLISHED only: the archives are
+    # frozen history whose pre-law rounds legitimately carry no label, so the
+    # VERDICT and the exit code do not move. Criteria AC-ARM1..AC-ARM3 were
+    # pinned in src/os/backlog.md at R3629, before the module changed and this
+    # suite existed.
+    ("os-ledger-archive-round-main",
+     os.path.join("..", "os", "test_ledger_archive_round_main.py"), 14),
     ]
 
 FAILS = 0
