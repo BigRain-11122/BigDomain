@@ -3,15 +3,15 @@
     "board_pages_skipped": ["preview/face-sweep.html (8877B)"],
     "current": "2026-11-28 R3620 PRODUCT: the chain page a reader opens now states the judgement beside the count. preview/first-yuan-chain.html printed the money chain as entries/transactions/balanced/unbalanced plus a reconcile rc, so unbalanced=0 was read on luck rather than on a stated ruling; the same disease was repaired at the command-line station at R3618 and on the CEO export at R3619. tools/first_yuan_chain.py gained record_chain_face(), which asks tools/status_export_fresh.chain_face(ROOT) - the ONE producer of the export chain block, filling counts from closeout_gate.check_ledger and the qualification from qa_log.chain_reading - and republishes its eight keys (present/rows/broken/path/partial/declared/unexplained/adjudication) into the payload record_chain and a new page section titled The record chain behind this page, with one scope sentence saying it is the repository replacement ledger and not the payment chain above. A face that cannot be asked renders UNADJUDICATED with dashes, never OK or 0.",
     "do": "2026-11-25 R3456 PRODUCT: the answer-revision question now has a door - api_answer_history (live with AC-AMAW1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so 'which answer was rewritten, what did it say before, what does it say now and how often did it change' could only be read by calling the sandbox from a shell - while api_seller_answers and api_listing_qna publish only the CURRENT wording.",
-    "last_artifact": "preview/first-yuan-chain.html (5102B) + preview/first-yuan-chain.json (5162B) [2026-11-28 mtime]",
-    "latest_artifact": "preview/first-yuan-chain.html (5102B) + preview/first-yuan-chain.json (5162B) [2026-11-28 mtime]",
+    "last_artifact": "preview/first-yuan-chain.html (5102B) + preview/first-yuan-chain.json (5162B) [2026-11-28 commit]",
+    "latest_artifact": "preview/first-yuan-chain.html (5102B) + preview/first-yuan-chain.json (5162B) [2026-11-28 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
     "latest_artifact_note": "",
     "latest_evidence": "qa/logs-append-R3612-b.log (1981B, 2026-11-28, sha256 8a1e2e573c5b)",
     "newest_pair_on_disk_is_board": true,
     "next_milestone": "[R3620] next window (<=48h): (0) **载体**：本窗收口 `CARRIER bytes=66199 gate=78500 margin=12301 append_ok=true caliber=16 ledger=R3620 log_items=66`——开窗先 `python src/os/state_fold_run.py --check` 与 `python src/os/logs_toolkit.py append --check`（读 tick，行标签取本次 append 之后的 tick），读 `FOLD-DUE` 才折；追加一律走 `logs_toolkit append --round R#### --line .. (truncated)",
-    "next_milestone_due": "2026-11-30T08:35:36+08:00",
-    "updated_at": "2026-11-28T08:35:36+08:00",
+    "next_milestone_due": "2026-11-30T08:39:10+08:00",
+    "updated_at": "2026-11-28T08:39:10+08:00",
     "heartbeat": {
       "tick": 3579,
       "state_tick": 3620,
@@ -36,7 +36,7 @@
     }
   },
   "current": "2026-11-28 R3620 PRODUCT: the chain page a reader opens now states the judgement beside the count. preview/first-yuan-chain.html printed the money chain as entries/transactions/balanced/unbalanced plus a reconcile rc, so unbalanced=0 was read on luck rather than on a stated ruling; the same disease was repaired at the command-line station at R3618 and on the CEO export at R3619. tools/first_yuan_chain.py gained record_chain_face(), which asks tools/status_export_fresh.chain_face(ROOT) - the ONE producer of the export chain block, filling counts from closeout_gate.check_ledger and the qualification from qa_log.chain_reading - and republishes its eight keys (present/rows/broken/path/partial/declared/unexplained/adjudication) into the payload record_chain and a new page section titled The record chain behind this page, with one scope sentence saying it is the repository replacement ledger and not the payment chain above. A face that cannot be asked renders UNADJUDICATED with dashes, never OK or 0.",
-  "claims": {"claimed": 51, "captured": 24, "contradicted": 0, "uncaptured": 27, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-28T08:35:36+08:00"},
+  "claims": {"claimed": 51, "captured": 24, "contradicted": 0, "uncaptured": 27, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-28T08:39:10+08:00"},
   "chain": {"present": true, "rows": 106, "broken": 5, "path": "state/qa_replacements.jsonl", "partial": 5, "declared": 1, "unexplained": 0, "adjudication": "OK"},
   "depts": [
     {
@@ -66,12 +66,12 @@
     }
   ],
   "do": "2026-11-28 R3620 PRODUCT: the chain page a reader opens now states the judgement beside the count. preview/first-yuan-chain.html printed the money chain as entries/transactions/balanced/unbalanced plus a reconcile rc, so unbalanced=0 was read on luck rather than on a stated ruling; the same disease was repaired at the command-line station at R3618 and on the CEO export at R3619. tools/first_yuan_chain.py gained record_chain_face(), which asks tools/status_export_fresh.chain_face(ROOT) - the ONE producer of the export chain block, filling counts from closeout_gate.check_ledger and the qualification from qa_log.chain_reading - and republishes its eight keys (present/rows/broken/path/partial/declared/unexplained/adjudication) into the payload record_chain and a new page section titled The record chain behind this page, with one scope sentence saying it is the repository replacement ledger and not the payment chain above. A face that cannot be asked renders UNADJUDICATED with dashes, never OK or 0.",
-  "export_ts": "2026-11-28T08:35:36+08:00",
-  "latest_artifact": "preview/first-yuan-chain.html (5102B) + preview/first-yuan-chain.json (5162B) [2026-11-28 mtime]",
+  "export_ts": "2026-11-28T08:39:10+08:00",
+  "latest_artifact": "preview/first-yuan-chain.html (5102B) + preview/first-yuan-chain.json (5162B) [2026-11-28 commit]",
   "latest_evidence": "qa/logs-append-R3612-b.log (1981B, 2026-11-28, sha256 8a1e2e573c5b)",
   "next_milestone": "[R3620] next window (<=48h): (0) **载体**：本窗收口 `CARRIER bytes=66199 gate=78500 margin=12301 append_ok=true caliber=16 ledger=R3620 log_items=66`——开窗先 `python src/os/state_fold_run.py --check` 与 `python src/os/logs_toolkit.py append --check`（读 tick，行标签取本次 append 之后的 tick），读 `FOLD-DUE` 才折；追加一律走 `logs_toolkit append --round R#### --line .. (truncated)",
   "outs": [
-    "preview/first-yuan-chain.html (5102B) + preview/first-yuan-chain.json (5162B) [2026-11-28 mtime]",
+    "preview/first-yuan-chain.html (5102B) + preview/first-yuan-chain.json (5162B) [2026-11-28 commit]",
     "preview/preview-writer-census.html (17697B) + preview/preview-writer-census.json (25235B) [2026-11-28 mtime]",
     "preview/payment-gate-report.html (7729B) + preview/payment-gate-report.json (7032B) [2026-11-28 commit]",
     "preview/membership-face.html (10881B) + preview/membership-face.json (7051B) [2026-11-28 mtime]",
@@ -220,7 +220,7 @@
   },
   "self_drive": {"window": "2026-11-22..2026-11-28", "window_days": 7, "log_lines_in_window": 65, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 54, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
   "state_bytes": 66199,
-  "next_milestone_due": "2026-11-30T08:35:36+08:00",
+  "next_milestone_due": "2026-11-30T08:39:10+08:00",
   "heartbeat": {
     "tick": 3579,
     "state_tick": 3620,
