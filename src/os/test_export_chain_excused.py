@@ -45,10 +45,12 @@ FAILS = []
 CHECKS = [0]
 
 OLD_ORDER = ["present", "rows", "broken", "path"]
-NEW_KEYS = ["adjudication", "broken", "declared", "excused", "partial",
-            "path", "present", "rows", "unexplained"]
-EIGHT_KEYS = ["adjudication", "broken", "declared", "partial", "path",
-              "present", "rows", "unexplained"]
+NEW_KEYS = ["adjudication", "broken", "declared", "excused", "landed_missing",
+            "landed_ok", "partial", "path", "present", "rewritten", "rows",
+            "unexplained"]
+ELEVEN_KEYS = ["adjudication", "broken", "declared", "landed_missing",
+               "landed_ok", "partial", "path", "present", "rewritten", "rows",
+               "unexplained"]
 IDENTITY = ("broken", "excused", "partial", "declared", "unexplained")
 
 HTML_PATH = os.path.join(ROOT, "preview", "first-yuan-chain.html")
@@ -261,12 +263,12 @@ def additive_arm(mixed):
     block = sx.chain_face(mixed)
     eight = dict((key, value) for key, value in block.items()
                  if key != "excused")
-    unchanged = (sorted(eight) == EIGHT_KEYS
+    unchanged = (sorted(eight) == ELEVEN_KEYS
                  and block["broken"] == 1 and block["rows"] == 4)
     live = json.loads(io.open(EXPORT_PATH, encoding="utf-8").read())["chain"]
     live_eight = dict((key, value) for key, value in live.items()
                       if key != "excused")
-    live_old = sorted(live_eight) == EIGHT_KEYS
+    live_old = sorted(live_eight) == ELEVEN_KEYS
 
     ascii_ok = True
     for name in ("closeout_gate.py", "status_export_fresh.py",
@@ -288,7 +290,8 @@ def additive_arm(mixed):
 
     old_suite = io.open(os.path.join(BASE, "test_status_export_fresh.py"),
                         encoding="utf-8").read()
-    pinned = '"adjudication", "broken", "declared", "excused", "partial"'
+    pinned = ('"adjudication", "broken", "declared", "excused", '
+              '"landed_missing"')
     exact = old_suite.count(pinned) == 4
     stale = '"adjudication", "broken", "declared", "partial", "path"' in old_suite
 

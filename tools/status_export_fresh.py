@@ -867,14 +867,25 @@ def adjudication_face(reading):
 
     `reading is None` means asked and got nothing; that is published as
     UNADJUDICATED with null numbers, never defaulted to OK/0.
+
+    R3648 (AC-EXV1): a classification is not a verification. R3647 taught the
+    adjudicator to compare every break's last row with the evidence file on
+    disk, and this face still published only the kind, so a reader could not
+    tell five breaks whose files are present from five whose files were
+    silently rewritten. `landed_ok`, `landed_missing` and `rewritten` are
+    passed through from the same reading - counted there, never here.
     """
     if reading is None:
         return {"partial": None, "declared": None, "unexplained": None,
-                "adjudication": "UNADJUDICATED"}
+                "adjudication": "UNADJUDICATED", "landed_ok": None,
+                "landed_missing": None, "rewritten": None}
     return {"partial": reading["partial"],
             "declared": reading["declared"],
             "unexplained": reading["unexplained"],
-            "adjudication": reading["verdict"]}
+            "adjudication": reading["verdict"],
+            "landed_ok": reading.get("landed_ok"),
+            "landed_missing": reading.get("landed_missing"),
+            "rewritten": reading.get("rewritten")}
 
 
 def chain_face(root):

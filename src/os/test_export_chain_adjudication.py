@@ -41,8 +41,9 @@ CRITERIA = ("AC-EXA1", "AC-EXA2", "AC-EXA3", "AC-EXA4", "AC-EXA5")
 FAILS = []
 CHECKS = [0]
 
-NEW_KEYS = ["adjudication", "broken", "declared", "excused", "partial",
-            "path", "present", "rows", "unexplained"]
+NEW_KEYS = ["adjudication", "broken", "declared", "excused", "landed_missing",
+            "landed_ok", "partial", "path", "present", "rewritten", "rows",
+            "unexplained"]
 OLD_ORDER = ["present", "rows", "broken", "path"]
 
 
@@ -177,6 +178,9 @@ def unreadable_arm(red_root):
     ok = (landed["adjudication"] == "UNADJUDICATED"
           and landed["partial"] is None and landed["declared"] is None
           and landed["unexplained"] is None
+          and landed["landed_ok"] is None
+          and landed["landed_missing"] is None
+          and landed["rewritten"] is None
           and landed["broken"] == 1)
     restored = sx.chain_face(red_root)
 
@@ -199,9 +203,20 @@ def live_arm():
                  and block.get("adjudication") == live["verdict"]
                  and block.get("broken") == len(report["broken"])
                  and isinstance(block.get("present"), bool))
-    check("AC-EXA4", keys_ok and values_ok,
-          "live export chain keys=%s, block=%s, live reading=%r"
-          % (",".join(sorted(block)), json.dumps(block, sort_keys=True), live))
+    # R3648 (AC-EXV4): the landed counts are graded against the SAME live
+    # reading the command-line station uses, so the CEO face cannot publish a
+    # verification nobody performed.
+    landed_ok = (live is not None
+                 and block.get("landed_ok") == live["landed_ok"]
+                 and block.get("landed_missing") == live["landed_missing"]
+                 and block.get("rewritten") == live["rewritten"]
+                 and block.get("landed_ok") + block.get("landed_missing")
+                 + block.get("rewritten") <= block.get("partial", 0)
+                 + block.get("declared", 0) + block.get("unexplained", 0))
+    check("AC-EXA4", keys_ok and values_ok and landed_ok,
+          "live export chain keys=%s, block=%s, live reading=%r, landed=%s"
+          % (",".join(sorted(block)), json.dumps(block, sort_keys=True), live,
+             landed_ok))
 
 
 def additive_arm(red_root):
@@ -226,13 +241,15 @@ def additive_arm(red_root):
                      for token in ("import socket", "import urllib",
                                    "import http", "import requests"))
 
-    # The old arms still pin the block EXACTLY, at the new eight keys: a
+    # The old arms still pin the block EXACTLY, at the new twelve keys: a
     # dropped or added key reddens them, so the contract is not loosened.
     # Four arms pin it, not the three the PIN row counted (measured here).
+    # R3648: the literal moved with the key set by name - it now names the
+    # landed head rather than the R3619 five.
     old_suite = io.open(os.path.join(BASE, "test_status_export_fresh.py"),
                         encoding="utf-8").read()
-    pinned = ('"adjudication", "broken", "declared", "excused", "partial", '
-              '"path"')
+    pinned = ('"adjudication", "broken", "declared", "excused", '
+              '"landed_missing"')
     exact = old_suite.count(pinned) == 4
     stale_old = '["broken", "path", "present", "rows"]' in old_suite
     registry = io.open(os.path.join(ROOT, "src", "sandbox", "reconcile_all.py"),

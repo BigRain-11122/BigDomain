@@ -1,7 +1,7 @@
 {
   "ceo_face": {
     "board_pages_skipped": ["preview/face-sweep.html (8877B)"],
-    "current": "2026-11-28 R3647 PRODUCT: the chain face stopped excusing breaks with a measurement from months ago. tools/qa_chain_diagnose.py gained landed_state() and report(path, evidence_dir): for every break the LAST row's identity (new_bytes plus new_sha16) is compared byte for byte with the evidence file on disk, and the published line now carries landed_ok / landed_missing / rewritten beside the old counts, with one landed= token per break line. An unrecorded rewrite of the evidence file - exactly the damage this ledger exists to catch - now reads landed=mismatch and turns the verdict RED with exit 2; a file removed by retention reads landed=missing and is never called damage on that ground alone.",
+    "current": "2026-11-28 R3648 MEASURED, read-only first: the board asked whether any downstream face consumes archived_orphan_ranges and the answer is a measured NEGATIVE - a full-repo search finds only the producer src/os/ledger_lines.py and the pins in src/os/test_ledger_scope_ids.py, so publishing it further would have been wiring for nobody. The same read turned up the real gap: the export chain block carried partial/declared/unexplained/excused/adjudication, i.e. WHICH KIND each break is, and never whether the evidence behind it still exists, while R3647 had just taught the adjudicator to compare every break's last row with the file on disk (landed_ok=6 landed_missing=0 rewritten=0 on the live ledger). Criteria AC-EXV1..AC-EXV5 were pinned in src/os/backlog.md BEFORE any module or suite byte changed.",
     "do": "2026-11-25 R3456 PRODUCT: the answer-revision question now has a door - api_answer_history (live with AC-AMAW1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so 'which answer was rewritten, what did it say before, what does it say now and how often did it change' could only be read by calling the sandbox from a shell - while api_seller_answers and api_listing_qna publish only the CURRENT wording.",
     "last_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 commit] (halves differ: html [2026-11-28 commit] + json [2026-11-27 commit]; later=html)",
     "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 commit] (halves differ: html [2026-11-28 commit] + json [2026-11-27 commit]; later=html)",
@@ -9,12 +9,12 @@
     "latest_artifact_note": "",
     "latest_evidence": "qa/round-R3642-pwc.log (46948B, 2026-11-28, sha256 e47d64f142a9)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3647] next window (<=48h): (0) **carrier**: `python src/os/state_fold_run.py --check` and `python src/os/logs_toolkit.py append --check` first; one append per round with `--round R####`, main line `YYYY-MM-DD R#### LABEL:`. (1) **benchmarks refresh due 2026-12-01** (benchmarks_refreshed=2026-11-24) - the refresh round falls due at the next window on or after that date (P-2026-09-24-56). (2) **S4U still not landed**: BigDomain-OSLoop Principal.LogonType=Interactive; lawful fix = elevated session running src/os/register_loop_task.ps1, read back must be S4U. (3) **next pullable**: (a) `archived_orphan_ranges` is published on the CLI scope line only - decide by measurement whether any downstream face (status-export silicon window) consumes it; (b) widening the battery page: `os-probe` was MEASURED this window at >300s for 53 suites (cancelled, zero bytes landed), so pick a family by measured cost before pinning it - the 191s lobby leg already eats most of a window (truncated)",
-    "next_milestone_due": "2026-11-30T15:13:59+08:00",
-    "updated_at": "2026-11-28T15:13:59+08:00",
+    "next_milestone": "[R3648] next window (<=48h): (0) **carrier**: `python src/os/state_fold_run.py --check` and `python src/os/logs_toolkit.py append --check` first; one append per round with `--round R####`, main line `YYYY-MM-DD R#### LABEL:` (tmp/append_R3648.py is the ASCII driver). (1) **benchmarks refresh due 2026-12-01** (benchmarks_refreshed=2026-11-24) - the refresh round falls due at the next window on or after that date (P-2026-09-24-56). (2) **S4U still not landed**: BigDomain-OSLoop Principal.LogonType=Interactive; lawful fix = elevated session running src/os/register_loop_task.ps1, read back must be S4U. (3) **next pullable**: (a) the reconcile evidence walk still decodes 12 of 756 (printed by `suite_matrix_reconcile.py --write` as `evidence-walk considered=756 decoded=12 ceiling=64`) - a real coverage hole with a shipped ceiling, unclaimed for many rounds and worth measuring before it is widened; (b) the CEO battery page was NOT re-derived this window and its landed pair now predates R3645's page write - re-derive only by running the shipped writer, never by editing the numbers (truncated)",
+    "next_milestone_due": "2026-11-30T15:26:23+08:00",
+    "updated_at": "2026-11-28T15:26:23+08:00",
     "heartbeat": {
-      "tick": 3647,
-      "state_tick": 3647,
+      "tick": 3648,
+      "state_tick": 3648,
       "lag": 0,
       "verdict": "PASS",
       "reason": "fresh"
@@ -35,9 +35,9 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-28 R3647 PRODUCT: the chain face stopped excusing breaks with a measurement from months ago. tools/qa_chain_diagnose.py gained landed_state() and report(path, evidence_dir): for every break the LAST row's identity (new_bytes plus new_sha16) is compared byte for byte with the evidence file on disk, and the published line now carries landed_ok / landed_missing / rewritten beside the old counts, with one landed= token per break line. An unrecorded rewrite of the evidence file - exactly the damage this ledger exists to catch - now reads landed=mismatch and turns the verdict RED with exit 2; a file removed by retention reads landed=missing and is never called damage on that ground alone.",
-  "claims": {"claimed": 16, "captured": 2, "contradicted": 0, "uncaptured": 14, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-28T15:13:59+08:00"},
-  "chain": {"present": true, "rows": 106, "broken": 5, "path": "state/qa_replacements.jsonl", "partial": 5, "declared": 1, "unexplained": 0, "adjudication": "OK", "excused": 1},
+  "current": "2026-11-28 R3648 MEASURED, read-only first: the board asked whether any downstream face consumes archived_orphan_ranges and the answer is a measured NEGATIVE - a full-repo search finds only the producer src/os/ledger_lines.py and the pins in src/os/test_ledger_scope_ids.py, so publishing it further would have been wiring for nobody. The same read turned up the real gap: the export chain block carried partial/declared/unexplained/excused/adjudication, i.e. WHICH KIND each break is, and never whether the evidence behind it still exists, while R3647 had just taught the adjudicator to compare every break's last row with the file on disk (landed_ok=6 landed_missing=0 rewritten=0 on the live ledger). Criteria AC-EXV1..AC-EXV5 were pinned in src/os/backlog.md BEFORE any module or suite byte changed.",
+  "claims": {"claimed": 16, "captured": 2, "contradicted": 0, "uncaptured": 14, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-28T15:26:23+08:00"},
+  "chain": {"present": true, "rows": 106, "broken": 5, "path": "state/qa_replacements.jsonl", "partial": 5, "declared": 1, "unexplained": 0, "adjudication": "OK", "landed_ok": 6, "landed_missing": 0, "rewritten": 0, "excused": 1},
   "depts": [
     {
       "n": "OSLoop 自领池（L0·唯一执行面）",
@@ -65,11 +65,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-28 R3647 PRODUCT: the chain face stopped excusing breaks with a measurement from months ago. tools/qa_chain_diagnose.py gained landed_state() and report(path, evidence_dir): for every break the LAST row's identity (new_bytes plus new_sha16) is compared byte for byte with the evidence file on disk, and the published line now carries landed_ok / landed_missing / rewritten beside the old counts, with one landed= token per break line. An unrecorded rewrite of the evidence file - exactly the damage this ledger exists to catch - now reads landed=mismatch and turns the verdict RED with exit 2; a file removed by retention reads landed=missing and is never called damage on that ground alone.",
-  "export_ts": "2026-11-28T15:13:59+08:00",
+  "do": "2026-11-28 R3648 MEASURED, read-only first: the board asked whether any downstream face consumes archived_orphan_ranges and the answer is a measured NEGATIVE - a full-repo search finds only the producer src/os/ledger_lines.py and the pins in src/os/test_ledger_scope_ids.py, so publishing it further would have been wiring for nobody. The same read turned up the real gap: the export chain block carried partial/declared/unexplained/excused/adjudication, i.e. WHICH KIND each break is, and never whether the evidence behind it still exists, while R3647 had just taught the adjudicator to compare every break's last row with the file on disk (landed_ok=6 landed_missing=0 rewritten=0 on the live ledger). Criteria AC-EXV1..AC-EXV5 were pinned in src/os/backlog.md BEFORE any module or suite byte changed.",
+  "export_ts": "2026-11-28T15:26:23+08:00",
   "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 commit] (halves differ: html [2026-11-28 commit] + json [2026-11-27 commit]; later=html)",
   "latest_evidence": "qa/round-R3642-pwc.log (46948B, 2026-11-28, sha256 e47d64f142a9)",
-  "next_milestone": "[R3647] next window (<=48h): (0) **carrier**: `python src/os/state_fold_run.py --check` and `python src/os/logs_toolkit.py append --check` first; one append per round with `--round R####`, main line `YYYY-MM-DD R#### LABEL:`. (1) **benchmarks refresh due 2026-12-01** (benchmarks_refreshed=2026-11-24) - the refresh round falls due at the next window on or after that date (P-2026-09-24-56). (2) **S4U still not landed**: BigDomain-OSLoop Principal.LogonType=Interactive; lawful fix = elevated session running src/os/register_loop_task.ps1, read back must be S4U. (3) **next pullable**: (a) `archived_orphan_ranges` is published on the CLI scope line only - decide by measurement whether any downstream face (status-export silicon window) consumes it; (b) widening the battery page: `os-probe` was MEASURED this window at >300s for 53 suites (cancelled, zero bytes landed), so pick a family by measured cost before pinning it - the 191s lobby leg already eats most of a window (truncated)",
+  "next_milestone": "[R3648] next window (<=48h): (0) **carrier**: `python src/os/state_fold_run.py --check` and `python src/os/logs_toolkit.py append --check` first; one append per round with `--round R####`, main line `YYYY-MM-DD R#### LABEL:` (tmp/append_R3648.py is the ASCII driver). (1) **benchmarks refresh due 2026-12-01** (benchmarks_refreshed=2026-11-24) - the refresh round falls due at the next window on or after that date (P-2026-09-24-56). (2) **S4U still not landed**: BigDomain-OSLoop Principal.LogonType=Interactive; lawful fix = elevated session running src/os/register_loop_task.ps1, read back must be S4U. (3) **next pullable**: (a) the reconcile evidence walk still decodes 12 of 756 (printed by `suite_matrix_reconcile.py --write` as `evidence-walk considered=756 decoded=12 ceiling=64`) - a real coverage hole with a shipped ceiling, unclaimed for many rounds and worth measuring before it is widened; (b) the CEO battery page was NOT re-derived this window and its landed pair now predates R3645's page write - re-derive only by running the shipped writer, never by editing the numbers (truncated)",
   "outs": [
     "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 commit] (halves differ: html [2026-11-28 commit] + json [2026-11-27 commit]; later=html)",
     "preview/first-yuan-chain.html (5397B) + preview/first-yuan-chain.json (5180B) [2026-11-28 commit]",
@@ -211,19 +211,19 @@
     "shortfall_total": 15,
     "verdict": "FLOOR-DEBT"
   },
-  "results": [["3647", "OSLoop 执行 tick"]],
+  "results": [["3648", "OSLoop 执行 tick"]],
   "results_archive": {
     "bytes": 336680,
     "count": 179,
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
-  "self_drive": {"window": "2026-11-22..2026-11-28", "window_days": 7, "log_lines_in_window": 69, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 57, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
-  "state_bytes": 62965,
-  "next_milestone_due": "2026-11-30T15:13:59+08:00",
+  "self_drive": {"window": "2026-11-22..2026-11-28", "window_days": 7, "log_lines_in_window": 76, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 63, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
+  "state_bytes": 68181,
+  "next_milestone_due": "2026-11-30T15:26:23+08:00",
   "heartbeat": {
-    "tick": 3647,
-    "state_tick": 3647,
+    "tick": 3648,
+    "state_tick": 3648,
     "lag": 0,
     "verdict": "PASS",
     "reason": "fresh"

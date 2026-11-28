@@ -432,10 +432,20 @@ def chain_reading(path=None):
     unexplained = len(data["unexplained"])
     partial = len([b for b in data["breaks"]
                    if b["kind"] == adjudicator.KIND_PARTIAL])
+    # R3648 (AC-EXV2): the landed counts are DERIVED from the same report, not
+    # measured here - `landed_state()` owns that comparison and lives in the
+    # adjudicator. A second sha/byte check in this helper would let the CEO
+    # face and the command-line station disagree about the same evidence.
     return {"verdict": data["verdict"],
             "partial": partial,
             "declared": len(data["breaks"]) - partial - unexplained,
-            "unexplained": unexplained}
+            "unexplained": unexplained,
+            "landed_ok": len([b for b in data["breaks"]
+                              if b["landed"] == adjudicator.LANDED_MATCH]),
+            "landed_missing": len(
+                [b for b in data["breaks"]
+                 if b["landed"] == adjudicator.LANDED_MISSING]),
+            "rewritten": len(data["rewritten"])}
 
 
 def do_ledger_check(path=None):
