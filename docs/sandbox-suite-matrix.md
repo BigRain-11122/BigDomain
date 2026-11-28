@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 848 | 7522 | 675/675 | R2739 |
+| 848 | 7527 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -513,7 +513,7 @@
 | 474 | os-queue-floor | ../os/test_queue_floor.py | 8 | green | 1.2 |
 | 475 | os-state-fold | ../os/test_state_fold.py | 8 | green | 1.0 |
 | 476 | os-backlog-fold | ../os/test_backlog_fold.py | 6 | no-evidence | - |
-| 477 | os-qa-chain | ../os/test_qa_chain.py | 6 | no-evidence | - |
+| 477 | os-qa-chain | ../os/test_qa_chain.py | 11 | no-evidence | - |
 | 478 | os-state-fold-run | ../os/test_state_fold_run.py | 18 | green | 0.2 |
 | 479 | os-fold-round-block-boundary | ../os/test_fold_round_block_boundary.py | 6 | green | 0.4 |
 | 480 | os-state-io | ../os/test_state_io.py | 12 | green | 1.5 |
@@ -885,7 +885,7 @@
 | 846 | os-fold-carry-evidence-law | ../os/test_fold_carry_evidence_law.py | 4 | no-evidence | - |
 | 847 | os-fold-carry-single-walk | ../os/test_fold_carry_census_single_walk.py | 6 | no-evidence | - |
 | 848 | os-export-pair-clock | ../os/test_export_pair_clock.py | 15 | no-evidence | - |
-|  | 合计 |  | 7522 | green 675 / FAIL 0 / no-evidence 173 |  |
+|  | 合计 |  | 7527 | green 675 / FAIL 0 / no-evidence 173 |  |
 
 ## 证据出处
 

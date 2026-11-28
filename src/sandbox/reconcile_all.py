@@ -5196,7 +5196,7 @@ SUITES = [
     # partial now declares itself, the row records what it replaced, and the
     # diagnosis classifies each break on shipped facts only.
     ("os-qa-chain",
-     os.path.join("..", "os", "test_qa_chain.py"), 6),
+     os.path.join("..", "os", "test_qa_chain.py"), 11),
     # R2567: the fold FACE state_fold.py never shipped (AC-SFOLD1..AC-SFOLD6
     # pinned at R2548): shipped predicate reused, archive copy proved byte-equal,
     # ledger coverage read THROUGH the archive, layout writer/reader agreement,
