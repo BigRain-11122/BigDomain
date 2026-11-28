@@ -3,15 +3,15 @@
     "board_pages_skipped": ["preview/face-sweep.html (8877B)"],
     "current": "2026-11-28 R3650 PRODUCT, measured first: BSR-CHECK read RED E_REGISTRY_DRIFT,E_REGISTRY_DRIFT:OS ledger face,E_TOTALS_UNCOVERED while the census read rows=849 and the page still carried 848 with uncovered=781, one fact with two names. The shipped writer was run bare and landed json 19403B plus html 17476B: registry 849 suites 7538 criteria, 6 families, selected=67 criteria=651 uncovered=782 cover 7.9 percent, and the same pass re-derived the export face. Re-reads: --check VERDICT PASS with zero drift, --control VERDICT CONFIRMED on a +7 tamper. Cost named: the first attempt was cancelled by the five-minute silence gate with zero bytes landed, because the writer prints nothing until done, so the accepted run rode a twenty-second heartbeat and took 500s.",
     "do": "2026-11-25 R3456 PRODUCT: the answer-revision question now has a door - api_answer_history (live with AC-AMAW1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so 'which answer was rewritten, what did it say before, what does it say now and how often did it change' could only be read by calling the sandbox from a shell - while api_seller_answers and api_listing_qna publish only the CURRENT wording.",
-    "last_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 mtime] (halves differ: html [2026-11-28 mtime] + json [2026-11-27 commit]; later=html)",
-    "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 mtime] (halves differ: html [2026-11-28 mtime] + json [2026-11-27 commit]; later=html)",
-    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ugc-gate-report.html",
+    "last_artifact": "preview/first-yuan-chain.html (5397B) + preview/first-yuan-chain.json (5180B) [2026-11-28 commit]",
+    "latest_artifact": "preview/first-yuan-chain.html (5397B) + preview/first-yuan-chain.json (5180B) [2026-11-28 commit]",
+    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan-chain.html",
     "latest_artifact_note": "",
     "latest_evidence": "qa/probe-R3650.log (1203B, 2026-11-28, sha256 0dfa9bb09733)",
     "newest_pair_on_disk_is_board": true,
     "next_milestone": "[R3650] next window (<=48h): (0) **carrier**: `python src/os/state_fold_run.py --check` and `python src/os/logs_toolkit.py append --check` first; **the carrier reads 77342/78500 (margin 1158) so a fold is owed before any append** — knife 28 was attempted this window over log lines 1..12 and REFUSED `token-missing,round-split,live-dirty,carry-gap` (the window cut R3636 mid-round at line 12; extend to the R3636 tokens row and read the carry table before retrying, do not widen the gate). (1) **benchmarks refresh due 2026-12-01** (benchmarks_refreshed=2026-11-24). (2) **S4U still not landed**: BigDomain-OSLoop Principal.LogonType=Interactive; lawful fix = elevated session running src/os/register_loop_task.ps1, read back must be S4U. (3) **TOP PULLABLE — the writer order that reddened two families**: `tools/battery_shard_report.py` runs the six families BEFORE it re-derives the export face, so any family that grades that face grades the previous round's face (proven this window: HEAD export 44730B sha 6c9eb527 reproduces exactly `5/6 rc=1` and `pass 16 fail 3 rc=2` (truncated)",
-    "next_milestone_due": "2026-11-30T16:03:04+08:00",
-    "updated_at": "2026-11-28T16:03:04+08:00",
+    "next_milestone_due": "2026-11-30T16:08:18+08:00",
+    "updated_at": "2026-11-28T16:08:18+08:00",
     "heartbeat": {
       "tick": 3650,
       "state_tick": 3650,
@@ -36,7 +36,7 @@
     }
   },
   "current": "2026-11-28 R3650 PRODUCT, measured first: BSR-CHECK read RED E_REGISTRY_DRIFT,E_REGISTRY_DRIFT:OS ledger face,E_TOTALS_UNCOVERED while the census read rows=849 and the page still carried 848 with uncovered=781, one fact with two names. The shipped writer was run bare and landed json 19403B plus html 17476B: registry 849 suites 7538 criteria, 6 families, selected=67 criteria=651 uncovered=782 cover 7.9 percent, and the same pass re-derived the export face. Re-reads: --check VERDICT PASS with zero drift, --control VERDICT CONFIRMED on a +7 tamper. Cost named: the first attempt was cancelled by the five-minute silence gate with zero bytes landed, because the writer prints nothing until done, so the accepted run rode a twenty-second heartbeat and took 500s.",
-  "claims": {"claimed": 21, "captured": 2, "contradicted": 0, "uncaptured": 19, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-28T16:03:04+08:00"},
+  "claims": {"claimed": 21, "captured": 2, "contradicted": 0, "uncaptured": 19, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-28T16:08:18+08:00"},
   "chain": {"present": true, "rows": 106, "broken": 5, "path": "state/qa_replacements.jsonl", "partial": 5, "declared": 1, "unexplained": 0, "adjudication": "OK", "landed_ok": 6, "landed_missing": 0, "rewritten": 0, "excused": 1},
   "depts": [
     {
@@ -66,13 +66,13 @@
     }
   ],
   "do": "2026-11-28 R3650 PRODUCT, measured first: BSR-CHECK read RED E_REGISTRY_DRIFT,E_REGISTRY_DRIFT:OS ledger face,E_TOTALS_UNCOVERED while the census read rows=849 and the page still carried 848 with uncovered=781, one fact with two names. The shipped writer was run bare and landed json 19403B plus html 17476B: registry 849 suites 7538 criteria, 6 families, selected=67 criteria=651 uncovered=782 cover 7.9 percent, and the same pass re-derived the export face. Re-reads: --check VERDICT PASS with zero drift, --control VERDICT CONFIRMED on a +7 tamper. Cost named: the first attempt was cancelled by the five-minute silence gate with zero bytes landed, because the writer prints nothing until done, so the accepted run rode a twenty-second heartbeat and took 500s.",
-  "export_ts": "2026-11-28T16:03:04+08:00",
-  "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 mtime] (halves differ: html [2026-11-28 mtime] + json [2026-11-27 commit]; later=html)",
+  "export_ts": "2026-11-28T16:08:18+08:00",
+  "latest_artifact": "preview/first-yuan-chain.html (5397B) + preview/first-yuan-chain.json (5180B) [2026-11-28 commit]",
   "latest_evidence": "qa/probe-R3650.log (1203B, 2026-11-28, sha256 0dfa9bb09733)",
   "next_milestone": "[R3650] next window (<=48h): (0) **carrier**: `python src/os/state_fold_run.py --check` and `python src/os/logs_toolkit.py append --check` first; **the carrier reads 77342/78500 (margin 1158) so a fold is owed before any append** — knife 28 was attempted this window over log lines 1..12 and REFUSED `token-missing,round-split,live-dirty,carry-gap` (the window cut R3636 mid-round at line 12; extend to the R3636 tokens row and read the carry table before retrying, do not widen the gate). (1) **benchmarks refresh due 2026-12-01** (benchmarks_refreshed=2026-11-24). (2) **S4U still not landed**: BigDomain-OSLoop Principal.LogonType=Interactive; lawful fix = elevated session running src/os/register_loop_task.ps1, read back must be S4U. (3) **TOP PULLABLE — the writer order that reddened two families**: `tools/battery_shard_report.py` runs the six families BEFORE it re-derives the export face, so any family that grades that face grades the previous round's face (proven this window: HEAD export 44730B sha 6c9eb527 reproduces exactly `5/6 rc=1` and `pass 16 fail 3 rc=2` (truncated)",
   "outs": [
+    "preview/first-yuan-chain.html (5397B) + preview/first-yuan-chain.json (5180B) [2026-11-28 commit]",
     "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 mtime] (halves differ: html [2026-11-28 mtime] + json [2026-11-27 commit]; later=html)",
-    "preview/first-yuan-chain.html (5397B) + preview/first-yuan-chain.json (5180B) [2026-11-28 mtime] (halves differ: html [2026-11-28 mtime] + json [2026-11-28 commit]; later=html)",
     "preview/preview-writer-census.html (17697B) + preview/preview-writer-census.json (25235B) [2026-11-28 commit]",
     "preview/payment-gate-report.html (7729B) + preview/payment-gate-report.json (7032B) [2026-11-28 commit]",
     "preview/membership-face.html (10881B) + preview/membership-face.json (7051B) [2026-11-28 mtime]",
@@ -220,7 +220,7 @@
   },
   "self_drive": {"window": "2026-11-22..2026-11-28", "window_days": 7, "log_lines_in_window": 88, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 73, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
   "state_bytes": 77342,
-  "next_milestone_due": "2026-11-30T16:03:04+08:00",
+  "next_milestone_due": "2026-11-30T16:08:18+08:00",
   "heartbeat": {
     "tick": 3650,
     "state_tick": 3650,
