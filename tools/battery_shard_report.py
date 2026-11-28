@@ -124,6 +124,15 @@ FAMILIES = (
     # 17.7s (151 criteria) after one test-hygiene repair. The 184.3s the
     # 2026-11-15 leg estimated was the old leg's cost, not this family's.
     ("funnel", "funnel \u9762", "\u9996\u5143\u94fe\u8def\u3001SKU \u6876\u4e0e\u6392\u5e8f\u3001\u8def\u7531\u3001\u5b88\u6052\u4e0e\u6c34\u4f4d\u65e5\u5fd7"),
+    # R3656: ledger is the last big family and does not fit one window (304
+    # suites, and 986.3s of that sits under ledger-apimarket alone), so it is
+    # split by measured sub-prefix. ledger-apidev guards the API developer line
+    # (key lifecycle, rate limits, reject windows, the usage log) and its 23
+    # suites were measured green in 5.6s (200 criteria) once the registry source
+    # was restored to pure ASCII - two of those suites read it with the ascii
+    # codec and had been dying on three stray bytes. Prefix "ledger-apidev"
+    # overlaps no other family.
+    ("ledger-apidev", "API \u5f00\u53d1\u8005\u9762", "\u5bc6\u94a5\u751f\u547d\u5468\u671f\u3001\u9650\u6d41\u3001\u62d2\u5426\u7a97\u53e3\u3001\u7528\u91cf\u65e5\u5fd7"),
 )
 
 LINKS = ("index.html", "lobby-session-trace.html", "ledger-reconcile-face.html")

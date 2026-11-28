@@ -5093,7 +5093,7 @@ SUITES = [
     # process - the tracked set comes from the repository index (DIRC v2
     # only; 3/4 and a bad magic are refused by name), so a reader of a
     # published FOLD-CARRY locator can say which of the three archives git
-    # actually backs (measured live: 11鏈?tracked, 09/10 not, 656872B /
+    # actually backs (measured live: 11 tracked, 09/10 not, 656872B /
     # 6666 entries, agreeing with 'git ls-files logs' on all rows).
     # (AC-APR1..AC-APR6 pinned in src/os/backlog.md R3091 BEFORE the file.)
     ("os-archive-provenance",
