@@ -1,81 +1,82 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
-<title>BigDomain 分片电池面 R3651</title>
+<title>BigDomain 分片电池面 R3652</title>
 <style>body{font-family:system-ui,'Microsoft YaHei',sans-serif;margin:28px;max-width:1000px;line-height:1.6;color:#222}h1{font-size:22px;margin:0 0 6px}h2{font-size:16px;margin:22px 0 8px;border-bottom:1px solid #ddd;padding-bottom:4px}table{border-collapse:collapse;width:100%;font-size:13px}th,td{border:1px solid #ddd;padding:5px 7px;text-align:left}th{background:#f4f4f4}td.n{text-align:right;font-variant-numeric:tabular-nums}.pass{color:#0a6b28;font-weight:600}.red{color:#a11;font-weight:600}.note{background:#fbf7e6;border-left:4px solid #d9b74a;padding:9px 12px;margin:12px 0;font-size:13px}code{background:#f2f2f2;padding:1px 4px}</style></head><body>
-<h1>BigDomain 分片电池面 · R3651</h1>
-<div>渲染自 <code>tools/battery_shard_report.py</code>（跑 <code>tools/battery_shard.py</code> 的真实 stdout）· 2026-11-28T17:22:05</div>
-<div class="note"><b>本页是分片，不是全量电池：它只跑下列族，未覆盖的 761 套件仍是欠账。</b><br>全表册 849 套件 / 7541 判据；本页覆盖 88 套件 / 817 判据（10.4%），未覆盖 761 套件。<br>分片不构成电池覆盖——<code>battery_shard.py</code> 自己拒绝 <code>--claim full</code>。</div>
+<h1>BigDomain 分片电池面 · R3652</h1>
+<div>渲染自 <code>tools/battery_shard_report.py</code>（跑 <code>tools/battery_shard.py</code> 的真实 stdout）· 2026-11-28T17:51:40</div>
+<div class="note"><b>本页是分片，不是全量电池：它只跑下列族，未覆盖的 739 套件仍是欠账。</b><br>全表册 849 套件 / 7541 判据；本页覆盖 110 套件 / 990 判据（13.0%），未覆盖 739 套件。<br>分片不构成电池覆盖——<code>battery_shard.py</code> 自己拒绝 <code>--claim full</code>。</div>
 <h2>结论</h2>
-<p>VERDICT <span class="pass">PASS</span> · 绿族 7 / 7 · 族内套件 88 / 88 执行绿 · 判据 817 · 判据数不一致 0 · 未比较判据 0（7/7 族已申报）</p>
+<p>VERDICT <span class="pass">PASS</span> · 绿族 8 / 8 · 族内套件 110 / 110 执行绿 · 判据 990 · 判据数不一致 0 · 未比较判据 0（8/8 族已申报）</p>
 <h2>族读数</h2><table><tr><th>族</th><th>标签前缀</th><th>守护面</th><th>rc</th><th>套件</th><th>判据</th><th>未比较</th><th>绿/执行</th><th>耗时</th><th>结论</th></tr>
-<tr><td>大厅实时层</td><td><code>lobby</code></td><td>会话、房间、限流、UGC 闸、持久化</td><td class="n">0</td><td class="n">7</td><td class="n">118</td><td class="n">0</td><td class="n">7 / 7</td><td class="n">192.2s</td><td class="pass">GREEN</td></tr>
-<tr><td>OS 导出面</td><td><code>os-export</code></td><td>导出新鲜度、发布路径、一致性</td><td class="n">0</td><td class="n">23</td><td class="n">195</td><td class="n">0</td><td class="n">23 / 23</td><td class="n">49.9s</td><td class="pass">GREEN</td></tr>
+<tr><td>大厅实时层</td><td><code>lobby</code></td><td>会话、房间、限流、UGC 闸、持久化</td><td class="n">0</td><td class="n">7</td><td class="n">118</td><td class="n">0</td><td class="n">7 / 7</td><td class="n">192.4s</td><td class="pass">GREEN</td></tr>
+<tr><td>OS 导出面</td><td><code>os-export</code></td><td>导出新鲜度、发布路径、一致性</td><td class="n">0</td><td class="n">23</td><td class="n">195</td><td class="n">0</td><td class="n">23 / 23</td><td class="n">53.2s</td><td class="pass">GREEN</td></tr>
 <tr><td>OS 队列面</td><td><code>os-queue</code></td><td>队头/队尾/占位/盖章/交付</td><td class="n">0</td><td class="n">16</td><td class="n">98</td><td class="n">0</td><td class="n">16 / 16</td><td class="n">13.8s</td><td class="pass">GREEN</td></tr>
-<tr><td>OS 台账面</td><td><code>os-ledger</code></td><td>双式记账、对账闸、台账归档、判据前缀</td><td class="n">0</td><td class="n">16</td><td class="n">149</td><td class="n">0</td><td class="n">16 / 16</td><td class="n">14.9s</td><td class="pass">GREEN</td></tr>
-<tr><td>OS 电池面</td><td><code>os-battery</code></td><td>分片器、全量电池口径、自测试</td><td class="n">0</td><td class="n">4</td><td class="n">66</td><td class="n">0</td><td class="n">4 / 4</td><td class="n">105.7s</td><td class="pass">GREEN</td></tr>
-<tr><td>OS 交付面</td><td><code>os-deliverable</code></td><td>入口页生成器、链接覆盖</td><td class="n">0</td><td class="n">1</td><td class="n">28</td><td class="n">0</td><td class="n">1 / 1</td><td class="n">111.4s</td><td class="pass">GREEN</td></tr>
-<tr><td>支付面</td><td><code>pay</code></td><td>支付管道、回调验签、重投幂等、订单开关</td><td class="n">0</td><td class="n">21</td><td class="n">163</td><td class="n">0</td><td class="n">21 / 21</td><td class="n">17.2s</td><td class="pass">GREEN</td></tr>
+<tr><td>OS 台账面</td><td><code>os-ledger</code></td><td>双式记账、对账闸、台账归档、判据前缀</td><td class="n">0</td><td class="n">16</td><td class="n">149</td><td class="n">0</td><td class="n">16 / 16</td><td class="n">14.3s</td><td class="pass">GREEN</td></tr>
+<tr><td>OS 电池面</td><td><code>os-battery</code></td><td>分片器、全量电池口径、自测试</td><td class="n">0</td><td class="n">4</td><td class="n">66</td><td class="n">0</td><td class="n">4 / 4</td><td class="n">106.4s</td><td class="pass">GREEN</td></tr>
+<tr><td>OS 交付面</td><td><code>os-deliverable</code></td><td>入口页生成器、链接覆盖</td><td class="n">0</td><td class="n">1</td><td class="n">28</td><td class="n">0</td><td class="n">1 / 1</td><td class="n">111.8s</td><td class="pass">GREEN</td></tr>
+<tr><td>支付面</td><td><code>pay</code></td><td>支付管道、回调验签、重投幂等、订单开关</td><td class="n">0</td><td class="n">21</td><td class="n">163</td><td class="n">0</td><td class="n">21 / 21</td><td class="n">17.5s</td><td class="pass">GREEN</td></tr>
+<tr><td>会员面</td><td><code>member</code></td><td>会员到期、横幅队列、持久化面</td><td class="n">0</td><td class="n">22</td><td class="n">173</td><td class="n">0</td><td class="n">22 / 22</td><td class="n">9.5s</td><td class="pass">GREEN</td></tr>
 </table>
 <h2>逐套件行</h2>
 <h3 style="font-size:14px;margin:16px 0 6px">大厅实时层 （7 行）</h3>
 <table><tr><th>标签</th><th>rc</th><th>pass</th><th>fail</th><th>套件自报</th><th>判据</th><th>秒</th></tr>
-<tr><td><code>lobby</code></td><td class="n">0</td><td class="n">79</td><td class="n">0</td><td>PASS 79/79</td><td class="n">79</td><td class="n">42.5</td></tr>
-<tr><td><code>lobby-hub-ledger</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">21.6</td></tr>
-<tr><td><code>lobby-hub-ugc</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">41.4</td></tr>
-<tr><td><code>lobby-hub-panel</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">81.5</td></tr>
-<tr><td><code>lobby-hub-member</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">4.8</td></tr>
+<tr><td><code>lobby</code></td><td class="n">0</td><td class="n">79</td><td class="n">0</td><td>PASS 79/79</td><td class="n">79</td><td class="n">42.6</td></tr>
+<tr><td><code>lobby-hub-ledger</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">21.2</td></tr>
+<tr><td><code>lobby-hub-ugc</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">41.2</td></tr>
+<tr><td><code>lobby-hub-panel</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">82.0</td></tr>
+<tr><td><code>lobby-hub-member</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">4.9</td></tr>
 <tr><td><code>lobby-persist</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">0.2</td></tr>
 <tr><td><code>lobby-chat-mute-idem</code></td><td class="n">0</td><td class="n">8</td><td class="n">0</td><td>PASS 8/8</td><td class="n">8</td><td class="n">0.3</td></tr>
 </table>
 <h3 style="font-size:14px;margin:16px 0 6px">OS 导出面 （23 行）</h3>
 <table><tr><th>标签</th><th>rc</th><th>pass</th><th>fail</th><th>套件自报</th><th>判据</th><th>秒</th></tr>
-<tr><td><code>os-export-freshness</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">0.7</td></tr>
-<tr><td><code>os-export-composed-landed-face</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">0.1</td></tr>
+<tr><td><code>os-export-freshness</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">0.8</td></tr>
+<tr><td><code>os-export-composed-landed-face</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">0.2</td></tr>
 <tr><td><code>os-export-composed-landed-wordspace</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">0.1</td></tr>
-<tr><td><code>os-export-composed-landed-bom-precedence</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">0.1</td></tr>
-<tr><td><code>os-export-composed-landed-bom-precedence-second-wave</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">0.1</td></tr>
+<tr><td><code>os-export-composed-landed-bom-precedence</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">0.2</td></tr>
+<tr><td><code>os-export-composed-landed-bom-precedence-second-wave</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">0.2</td></tr>
 <tr><td><code>os-export-composed-landed-bom-precedence-third-wave</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">0.2</td></tr>
 <tr><td><code>os-export-composed-landed-bom-precedence-fourth-wave</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">0.2</td></tr>
 <tr><td><code>os-export-composed-landed-bom-precedence-fifth-wave</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">0.2</td></tr>
 <tr><td><code>os-export-composed-landed-bom-precedence-sixth-wave</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">0.2</td></tr>
 <tr><td><code>os-export-composed-landed-bom-precedence-seventh-wave</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">0.2</td></tr>
-<tr><td><code>os-export-publish-wire-identity</code></td><td class="n">0</td><td class="n">9</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">1.1</td></tr>
-<tr><td><code>os-export-publish-from-import-law</code></td><td class="n">0</td><td class="n">8</td><td class="n">0</td><td>PASS 8/6</td><td class="n">6</td><td class="n">1.2</td></tr>
+<tr><td><code>os-export-publish-wire-identity</code></td><td class="n">0</td><td class="n">9</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">1.3</td></tr>
+<tr><td><code>os-export-publish-from-import-law</code></td><td class="n">0</td><td class="n">8</td><td class="n">0</td><td>PASS 8/6</td><td class="n">6</td><td class="n">1.4</td></tr>
 <tr><td><code>os-export-driver-queue-face</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">0.5</td></tr>
-<tr><td><code>os-export-consistency-queue-face</code></td><td class="n">0</td><td class="n">19</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">0.8</td></tr>
-<tr><td><code>os-export-closeout-gate-parity</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">0.9</td></tr>
-<tr><td><code>os-export-publish-path-guard</code></td><td class="n">0</td><td class="n">8</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">0.9</td></tr>
+<tr><td><code>os-export-consistency-queue-face</code></td><td class="n">0</td><td class="n">19</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">1.0</td></tr>
+<tr><td><code>os-export-closeout-gate-parity</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">1.1</td></tr>
+<tr><td><code>os-export-publish-path-guard</code></td><td class="n">0</td><td class="n">8</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">1.0</td></tr>
 <tr><td><code>os-export-driver-self-drive-health</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">0.4</td></tr>
 <tr><td><code>os-export-driver-health-verdict</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">0.1</td></tr>
 <tr><td><code>os-export-parity-difference-order-field</code></td><td class="n">0</td><td class="n">55</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">0.4</td></tr>
-<tr><td><code>os-export-round</code></td><td class="n">0</td><td class="n">185</td><td class="n">0</td><td>PASS 185/185</td><td class="n">55</td><td class="n">39.6</td></tr>
+<tr><td><code>os-export-round</code></td><td class="n">0</td><td class="n">185</td><td class="n">0</td><td>PASS 185/185</td><td class="n">55</td><td class="n">41.5</td></tr>
 <tr><td><code>os-export-chain-adjudication</code></td><td class="n">0</td><td class="n">5</td><td class="n">0</td><td>PASS 5/5</td><td class="n">5</td><td class="n">0.2</td></tr>
 <tr><td><code>os-export-chain-excused</code></td><td class="n">0</td><td class="n">5</td><td class="n">0</td><td>PASS 5/5</td><td class="n">5</td><td class="n">0.5</td></tr>
-<tr><td><code>os-export-pair-clock</code></td><td class="n">0</td><td class="n">15</td><td class="n">0</td><td>PASS 15/15</td><td class="n">15</td><td class="n">1.2</td></tr>
+<tr><td><code>os-export-pair-clock</code></td><td class="n">0</td><td class="n">15</td><td class="n">0</td><td>PASS 15/15</td><td class="n">15</td><td class="n">1.5</td></tr>
 </table>
 <h3 style="font-size:14px;margin:16px 0 6px">OS 队列面 （16 行）</h3>
 <table><tr><th>标签</th><th>rc</th><th>pass</th><th>fail</th><th>套件自报</th><th>判据</th><th>秒</th></tr>
-<tr><td><code>os-queue-floor</code></td><td class="n">0</td><td class="n">8</td><td class="n">0</td><td>PASS 8/8</td><td class="n">8</td><td class="n">1.0</td></tr>
-<tr><td><code>os-queue-row</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">1.0</td></tr>
-<tr><td><code>os-queue-only</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">1.3</td></tr>
+<tr><td><code>os-queue-floor</code></td><td class="n">0</td><td class="n">8</td><td class="n">0</td><td>PASS 8/8</td><td class="n">8</td><td class="n">0.9</td></tr>
+<tr><td><code>os-queue-row</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">1.1</td></tr>
+<tr><td><code>os-queue-only</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">1.1</td></tr>
 <tr><td><code>os-queue-floor-decl</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">0.9</td></tr>
-<tr><td><code>os-queue-only-floor-wire</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">1.2</td></tr>
+<tr><td><code>os-queue-only-floor-wire</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">1.3</td></tr>
 <tr><td><code>os-queue-head</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">1.0</td></tr>
 <tr><td><code>os-queue-row-exempt</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">0.5</td></tr>
 <tr><td><code>os-queue-done-stamp</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">0.6</td></tr>
-<tr><td><code>os-queue-done-stamp-exempt</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">1.6</td></tr>
-<tr><td><code>os-queue-occupancy</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">0.8</td></tr>
-<tr><td><code>os-queue-head-delivered</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">0.7</td></tr>
-<tr><td><code>os-queue-floor-delivered-wire</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">0.7</td></tr>
-<tr><td><code>os-queue-floor-reading-wire</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">0.7</td></tr>
+<tr><td><code>os-queue-done-stamp-exempt</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">1.5</td></tr>
+<tr><td><code>os-queue-occupancy</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">0.7</td></tr>
+<tr><td><code>os-queue-head-delivered</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">0.8</td></tr>
+<tr><td><code>os-queue-floor-delivered-wire</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">0.8</td></tr>
+<tr><td><code>os-queue-floor-reading-wire</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">0.8</td></tr>
 <tr><td><code>os-queue-floor-export-face</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">0.3</td></tr>
 <tr><td><code>os-queue-export-freshness-gate</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">0.9</td></tr>
 <tr><td><code>os-queue-export-gate-wire</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">0.6</td></tr>
 </table>
 <h3 style="font-size:14px;margin:16px 0 6px">OS 台账面 （16 行）</h3>
 <table><tr><th>标签</th><th>rc</th><th>pass</th><th>fail</th><th>套件自报</th><th>判据</th><th>秒</th></tr>
-<tr><td><code>os-ledger-page</code></td><td class="n">0</td><td class="n">12</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">1.7</td></tr>
+<tr><td><code>os-ledger-page</code></td><td class="n">0</td><td class="n">12</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">1.6</td></tr>
 <tr><td><code>os-ledger-lines</code></td><td class="n">0</td><td class="n">8</td><td class="n">0</td><td>PASS 8/8</td><td class="n">8</td><td class="n">1.0</td></tr>
-<tr><td><code>os-ledger-archive</code></td><td class="n">0</td><td class="n">16</td><td class="n">0</td><td>PASS 16/16</td><td class="n">16</td><td class="n">4.2</td></tr>
+<tr><td><code>os-ledger-archive</code></td><td class="n">0</td><td class="n">16</td><td class="n">0</td><td>PASS 16/16</td><td class="n">16</td><td class="n">4.3</td></tr>
 <tr><td><code>os-ledger-baseline</code></td><td class="n">0</td><td class="n">8</td><td class="n">0</td><td>PASS 8/8</td><td class="n">8</td><td class="n">1.3</td></tr>
 <tr><td><code>os-ledger-fold-kind</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">0.1</td></tr>
 <tr><td><code>os-ledger-fold-kind-dateprefix</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">0.2</td></tr>
@@ -85,48 +86,73 @@
 <tr><td><code>os-ledger-round-main-shape</code></td><td class="n">0</td><td class="n">9</td><td class="n">0</td><td>PASS 9/9</td><td class="n">9</td><td class="n">0.4</td></tr>
 <tr><td><code>os-ledger-tokens-prefix-repair</code></td><td class="n">0</td><td class="n">8</td><td class="n">0</td><td>PASS 8/8</td><td class="n">8</td><td class="n">0.2</td></tr>
 <tr><td><code>os-ledger-reconcile-face</code></td><td class="n">0</td><td class="n">9</td><td class="n">0</td><td>PASS 9/9</td><td class="n">9</td><td class="n">1.6</td></tr>
-<tr><td><code>os-ledger-business-report</code></td><td class="n">0</td><td class="n">8</td><td class="n">0</td><td>PASS 8/8</td><td class="n">8</td><td class="n">1.6</td></tr>
-<tr><td><code>os-ledger-adjudication</code></td><td class="n">0</td><td class="n">3</td><td class="n">0</td><td>PASS 3/3</td><td class="n">3</td><td class="n">0.3</td></tr>
-<tr><td><code>os-ledger-archive-round-main</code></td><td class="n">0</td><td class="n">19</td><td class="n">0</td><td>PASS 19/19</td><td class="n">19</td><td class="n">0.2</td></tr>
+<tr><td><code>os-ledger-business-report</code></td><td class="n">0</td><td class="n">8</td><td class="n">0</td><td>PASS 8/8</td><td class="n">8</td><td class="n">1.4</td></tr>
+<tr><td><code>os-ledger-adjudication</code></td><td class="n">0</td><td class="n">3</td><td class="n">0</td><td>PASS 3/3</td><td class="n">3</td><td class="n">0.2</td></tr>
+<tr><td><code>os-ledger-archive-round-main</code></td><td class="n">0</td><td class="n">19</td><td class="n">0</td><td>PASS 19/19</td><td class="n">19</td><td class="n">0.1</td></tr>
 <tr><td><code>os-ledger-scope-ids</code></td><td class="n">0</td><td class="n">23</td><td class="n">0</td><td>PASS 23/23</td><td class="n">23</td><td class="n">0.3</td></tr>
 </table>
 <h3 style="font-size:14px;margin:16px 0 6px">OS 电池面 （4 行）</h3>
 <table><tr><th>标签</th><th>rc</th><th>pass</th><th>fail</th><th>套件自报</th><th>判据</th><th>秒</th></tr>
-<tr><td><code>os-battery-followup</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">8.0</td></tr>
-<tr><td><code>os-battery-followup-help-wire</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">5.4</td></tr>
-<tr><td><code>os-battery-shard</code></td><td class="n">0</td><td class="n">32</td><td class="n">0</td><td>PASS 32/32</td><td class="n">32</td><td class="n">84.5</td></tr>
+<tr><td><code>os-battery-followup</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">7.2</td></tr>
+<tr><td><code>os-battery-followup-help-wire</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">5.1</td></tr>
+<tr><td><code>os-battery-shard</code></td><td class="n">0</td><td class="n">32</td><td class="n">0</td><td>PASS 32/32</td><td class="n">32</td><td class="n">86.1</td></tr>
 <tr><td><code>os-battery-shard-report</code></td><td class="n">0</td><td class="n">21</td><td class="n">0</td><td>PASS 21/21</td><td class="n">21</td><td class="n">7.9</td></tr>
 </table>
 <h3 style="font-size:14px;margin:16px 0 6px">OS 交付面 （1 行）</h3>
 <table><tr><th>标签</th><th>rc</th><th>pass</th><th>fail</th><th>套件自报</th><th>判据</th><th>秒</th></tr>
-<tr><td><code>os-deliverable-index</code></td><td class="n">0</td><td class="n">28</td><td class="n">0</td><td>PASS 28/28</td><td class="n">28</td><td class="n">111.4</td></tr>
+<tr><td><code>os-deliverable-index</code></td><td class="n">0</td><td class="n">28</td><td class="n">0</td><td>PASS 28/28</td><td class="n">28</td><td class="n">111.8</td></tr>
 </table>
 <h3 style="font-size:14px;margin:16px 0 6px">支付面 （21 行）</h3>
 <table><tr><th>标签</th><th>rc</th><th>pass</th><th>fail</th><th>套件自报</th><th>判据</th><th>秒</th></tr>
-<tr><td><code>pay</code></td><td class="n">0</td><td class="n">16</td><td class="n">0</td><td>PASS 16/16</td><td class="n">16</td><td class="n">1.6</td></tr>
-<tr><td><code>pay-v3</code></td><td class="n">0</td><td class="n">14</td><td class="n">0</td><td>PASS 14/14</td><td class="n">14</td><td class="n">0.3</td></tr>
-<tr><td><code>pay-v3-real</code></td><td class="n">0</td><td class="n">9</td><td class="n">0</td><td>PASS 9/9</td><td class="n">9</td><td class="n">0.5</td></tr>
+<tr><td><code>pay</code></td><td class="n">0</td><td class="n">16</td><td class="n">0</td><td>PASS 16/16</td><td class="n">16</td><td class="n">1.7</td></tr>
+<tr><td><code>pay-v3</code></td><td class="n">0</td><td class="n">14</td><td class="n">0</td><td>PASS 14/14</td><td class="n">14</td><td class="n">0.2</td></tr>
+<tr><td><code>pay-v3-real</code></td><td class="n">0</td><td class="n">9</td><td class="n">0</td><td>PASS 9/9</td><td class="n">9</td><td class="n">0.4</td></tr>
 <tr><td><code>pay-v3-window</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">0.4</td></tr>
 <tr><td><code>pay-notify</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">0.4</td></tr>
 <tr><td><code>pay-notify-bannerlimit</code></td><td class="n">0</td><td class="n">8</td><td class="n">0</td><td>PASS 8/8</td><td class="n">8</td><td class="n">0.3</td></tr>
 <tr><td><code>pay-notify-bannerwin</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">0.3</td></tr>
 <tr><td><code>pay-notify-bannerroll</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">0.3</td></tr>
-<tr><td><code>pay-notify-bannerpersist</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">0.3</td></tr>
-<tr><td><code>pay-authorize-persist</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">0.5</td></tr>
+<tr><td><code>pay-notify-bannerpersist</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">0.6</td></tr>
+<tr><td><code>pay-authorize-persist</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">0.3</td></tr>
 <tr><td><code>pay-authorize-idem</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">1.5</td></tr>
-<tr><td><code>pay-notify-wiring</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">1.0</td></tr>
-<tr><td><code>pay-authorize</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">0.3</td></tr>
-<tr><td><code>pay-notify-revoke</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">5.4</td></tr>
-<tr><td><code>pay-revoke-reconcile</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">0.9</td></tr>
-<tr><td><code>pay-channel-matrix</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">0.5</td></tr>
-<tr><td><code>pay-channel-window</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">0.6</td></tr>
-<tr><td><code>pay-channel-persist</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">0.3</td></tr>
-<tr><td><code>pay-channel-migrate-persist</code></td><td class="n">0</td><td class="n">5</td><td class="n">0</td><td>PASS 5/5</td><td class="n">5</td><td class="n">0.3</td></tr>
+<tr><td><code>pay-notify-wiring</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">0.9</td></tr>
+<tr><td><code>pay-authorize</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">0.4</td></tr>
+<tr><td><code>pay-notify-revoke</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">5.3</td></tr>
+<tr><td><code>pay-revoke-reconcile</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">1.0</td></tr>
+<tr><td><code>pay-channel-matrix</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">0.6</td></tr>
+<tr><td><code>pay-channel-window</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">0.8</td></tr>
+<tr><td><code>pay-channel-persist</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">0.2</td></tr>
+<tr><td><code>pay-channel-migrate-persist</code></td><td class="n">0</td><td class="n">5</td><td class="n">0</td><td>PASS 5/5</td><td class="n">5</td><td class="n">0.2</td></tr>
 <tr><td><code>pay-reconcile-persist</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">1.3</td></tr>
-<tr><td><code>pay-sweep-persist</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">0.2</td></tr>
+<tr><td><code>pay-sweep-persist</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">0.3</td></tr>
+</table>
+<h3 style="font-size:14px;margin:16px 0 6px">会员面 （22 行）</h3>
+<table><tr><th>标签</th><th>rc</th><th>pass</th><th>fail</th><th>套件自报</th><th>判据</th><th>秒</th></tr>
+<tr><td><code>member-face</code></td><td class="n">0</td><td class="n">6</td><td class="n">0</td><td>PASS 6/6</td><td class="n">6</td><td class="n">0.8</td></tr>
+<tr><td><code>member</code></td><td class="n">0</td><td class="n">25</td><td class="n">0</td><td>PASS 16/16</td><td class="n">16</td><td class="n">1.3</td></tr>
+<tr><td><code>member-entry</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">0.1</td></tr>
+<tr><td><code>member-entrytier-persist</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">0.3</td></tr>
+<tr><td><code>member-refund-recovery</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">1.1</td></tr>
+<tr><td><code>member-expiring</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">0.7</td></tr>
+<tr><td><code>member-reminder-scanwire</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">0.3</td></tr>
+<tr><td><code>member-banner-board</code></td><td class="n">0</td><td class="n">17</td><td class="n">0</td><td>PASS 17/17</td><td class="n">17</td><td class="n">0.5</td></tr>
+<tr><td><code>member-banner-roll</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">0.2</td></tr>
+<tr><td><code>member-banner-queue-window</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">0.2</td></tr>
+<tr><td><code>member-banner-queue-limit</code></td><td class="n">0</td><td class="n">8</td><td class="n">0</td><td>PASS 8/8</td><td class="n">8</td><td class="n">0.2</td></tr>
+<tr><td><code>member-banner-queue-caproll</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">0.2</td></tr>
+<tr><td><code>member-banner-queue-persist</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">0.2</td></tr>
+<tr><td><code>member-banner-board-persist</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">0.2</td></tr>
+<tr><td><code>member-expiring-dist</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">0.4</td></tr>
+<tr><td><code>member-expiring-soon-persist</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">0.3</td></tr>
+<tr><td><code>member-balanceface-persist</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">0.3</td></tr>
+<tr><td><code>member-privileges-persist</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">0.3</td></tr>
+<tr><td><code>member-birthcert-persist</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">0.3</td></tr>
+<tr><td><code>member-expiring-dist-persist</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">0.3</td></tr>
+<tr><td><code>member-refund-recovery-persist</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">0.8</td></tr>
+<tr><td><code>member-reminder-persist</code></td><td class="n">0</td><td class="n">7</td><td class="n">0</td><td>PASS 7/7</td><td class="n">7</td><td class="n">0.4</td></tr>
 </table>
 <h2>诚实注</h2><ul>
-<li>封面上的每个数都解析自分片器本次 stdout，源码不带这些数字的字面量；注册表大小取自本页跑的 7 族各自打印的 <code>SHARD scope=</code> 行，互不一致即拒渲染。</li>
+<li>封面上的每个数都解析自分片器本次 stdout，源码不带这些数字的字面量；注册表大小取自本页跑的 8 族各自打印的 <code>SHARD scope=</code> 行，互不一致即拒渲染。</li>
 <li>耗时逐次不同，所以 <code>--check</code> 不重跑套件；它复算的是json 逐字节重序列化、html 逐字节重渲染、各族判据数与注册表重新选择相等、汇总算术自洽、verdict=各族 rc 最大值映射。</li>
 <li>「未比较」取自每族尾行自报的 <code>crit_unchecked=</code>；该族尾行早于这个字段（R3081 之前）时页面写「未申报」，而不是实测的 0。</li>
 <li>本页不证明未被选中族的状态，也不替代全量电池；未覆盖套件数见首屏。</li>

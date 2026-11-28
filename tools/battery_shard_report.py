@@ -108,6 +108,11 @@ FAMILIES = (
     # full leg measured its 21 suites at 45.1s - the cheapest real widening on
     # the registry. Prefix "pay" overlaps no other family prefix.
     ("pay", "\u652f\u4ed8\u9762", "\u652f\u4ed8\u7ba1\u9053\u3001\u56de\u8c03\u9a8c\u7b7e\u3001\u91cd\u6295\u5e42\u7b49\u3001\u8ba2\u5355\u5f00\u5173"),
+    # R3653: the member line guards expiry, the banner queue and every persisted
+    # face, and its 22 suites were measured green in 9.8s (173 criteria), the
+    # cheapest full-green widening the registry offers. Prefix "member" overlaps
+    # no other family prefix.
+    ("member", "\u4f1a\u5458\u9762", "\u4f1a\u5458\u5230\u671f\u3001\u6a2a\u5e45\u961f\u5217\u3001\u6301\u4e45\u5316\u9762"),
 )
 
 LINKS = ("index.html", "lobby-session-trace.html", "ledger-reconcile-face.html")
