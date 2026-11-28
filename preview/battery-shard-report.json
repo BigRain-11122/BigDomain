@@ -4,7 +4,7 @@
       "crit_mismatch": 0,
       "crit_unchecked": 0,
       "crit_unchecked_seen": 1,
-      "elapsed_s": 191.0,
+      "elapsed_s": 192.0,
       "executed": 7,
       "green": 7,
       "guards": "会话、房间、限流、UGC 闸、持久化",
@@ -13,7 +13,7 @@
       "parse": "ok",
       "rc": 0,
       "red": [],
-      "registry_criteria": 7538,
+      "registry_criteria": 7541,
       "registry_suites": 849,
       "selected": 7,
       "selected_criteria": 118,
@@ -21,7 +21,7 @@
         {
           "crit": 79,
           "detail": "yes",
-          "elapsed_s": 42.5,
+          "elapsed_s": 42.2,
           "fail": 0,
           "label": "lobby",
           "pass": 79,
@@ -31,7 +31,7 @@
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 21.0,
+          "elapsed_s": 21.3,
           "fail": 0,
           "label": "lobby-hub-ledger",
           "pass": 6,
@@ -51,7 +51,7 @@
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 81.0,
+          "elapsed_s": 82.1,
           "fail": 0,
           "label": "lobby-hub-panel",
           "pass": 6,
@@ -94,18 +94,16 @@
       "crit_mismatch": 0,
       "crit_unchecked": 0,
       "crit_unchecked_seen": 1,
-      "elapsed_s": 53.9,
+      "elapsed_s": 50.7,
       "executed": 23,
-      "green": 22,
+      "green": 23,
       "guards": "导出新鲜度、发布路径、一致性",
       "key": "OS 导出面",
       "match": "os-export",
       "parse": "ok",
-      "rc": 2,
-      "red": [
-        "os-export-consistency-queue-face"
-      ],
-      "registry_criteria": 7538,
+      "rc": 0,
+      "red": [],
+      "registry_criteria": 7541,
       "registry_suites": 849,
       "selected": 23,
       "selected_criteria": 195,
@@ -123,7 +121,7 @@
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 0.2,
+          "elapsed_s": 0.1,
           "fail": 0,
           "label": "os-export-composed-landed-face",
           "pass": 6,
@@ -143,7 +141,7 @@
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 0.2,
+          "elapsed_s": 0.1,
           "fail": 0,
           "label": "os-export-composed-landed-bom-precedence",
           "pass": 6,
@@ -153,7 +151,7 @@
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 0.2,
+          "elapsed_s": 0.1,
           "fail": 0,
           "label": "os-export-composed-landed-bom-precedence-second-wave",
           "pass": 6,
@@ -163,7 +161,7 @@
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 0.2,
+          "elapsed_s": 0.1,
           "fail": 0,
           "label": "os-export-composed-landed-bom-precedence-third-wave",
           "pass": 6,
@@ -183,7 +181,7 @@
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 0.2,
+          "elapsed_s": 0.1,
           "fail": 0,
           "label": "os-export-composed-landed-bom-precedence-fifth-wave",
           "pass": 6,
@@ -193,7 +191,7 @@
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 0.3,
+          "elapsed_s": 0.2,
           "fail": 0,
           "label": "os-export-composed-landed-bom-precedence-sixth-wave",
           "pass": 6,
@@ -223,7 +221,7 @@
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 1.4,
+          "elapsed_s": 1.2,
           "fail": 0,
           "label": "os-export-publish-from-import-law",
           "pass": 8,
@@ -243,12 +241,12 @@
         {
           "crit": 7,
           "detail": "yes",
-          "elapsed_s": 0.8,
-          "fail": 3,
+          "elapsed_s": 0.9,
+          "fail": 0,
           "label": "os-export-consistency-queue-face",
-          "pass": 16,
-          "rc": 2,
-          "suite": "FAIL 0/7"
+          "pass": 19,
+          "rc": 0,
+          "suite": "PASS 7/7"
         },
         {
           "crit": 6,
@@ -263,7 +261,7 @@
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 1.1,
+          "elapsed_s": 0.9,
           "fail": 0,
           "label": "os-export-publish-path-guard",
           "pass": 8,
@@ -303,7 +301,7 @@
         {
           "crit": 55,
           "detail": "yes",
-          "elapsed_s": 42.0,
+          "elapsed_s": 40.5,
           "fail": 0,
           "label": "os-export-round",
           "pass": 185,
@@ -333,7 +331,7 @@
         {
           "crit": 15,
           "detail": "yes",
-          "elapsed_s": 2.0,
+          "elapsed_s": 1.1,
           "fail": 0,
           "label": "os-export-pair-clock",
           "pass": 15,
@@ -346,18 +344,16 @@
       "crit_mismatch": 0,
       "crit_unchecked": 0,
       "crit_unchecked_seen": 1,
-      "elapsed_s": 15.2,
+      "elapsed_s": 15.3,
       "executed": 16,
-      "green": 15,
+      "green": 16,
       "guards": "队头/队尾/占位/盖章/交付",
       "key": "OS 队列面",
       "match": "os-queue",
       "parse": "ok",
-      "rc": 2,
-      "red": [
-        "os-queue-floor-export-face"
-      ],
-      "registry_criteria": 7538,
+      "rc": 0,
+      "red": [],
+      "registry_criteria": 7541,
       "registry_suites": 849,
       "selected": 16,
       "selected_criteria": 98,
@@ -365,7 +361,7 @@
         {
           "crit": 8,
           "detail": "yes",
-          "elapsed_s": 1.1,
+          "elapsed_s": 1.0,
           "fail": 0,
           "label": "os-queue-floor",
           "pass": 8,
@@ -375,7 +371,7 @@
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 1.2,
+          "elapsed_s": 1.1,
           "fail": 0,
           "label": "os-queue-row",
           "pass": 6,
@@ -385,7 +381,7 @@
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 1.2,
+          "elapsed_s": 1.6,
           "fail": 0,
           "label": "os-queue-only",
           "pass": 6,
@@ -395,7 +391,7 @@
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 1.0,
+          "elapsed_s": 0.9,
           "fail": 0,
           "label": "os-queue-floor-decl",
           "pass": 6,
@@ -405,7 +401,7 @@
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 1.4,
+          "elapsed_s": 1.3,
           "fail": 0,
           "label": "os-queue-only-floor-wire",
           "pass": 6,
@@ -415,7 +411,7 @@
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 1.2,
+          "elapsed_s": 1.1,
           "fail": 0,
           "label": "os-queue-head",
           "pass": 6,
@@ -435,7 +431,7 @@
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 0.6,
+          "elapsed_s": 0.7,
           "fail": 0,
           "label": "os-queue-done-stamp",
           "pass": 6,
@@ -495,17 +491,17 @@
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 0.3,
-          "fail": 1,
+          "elapsed_s": 0.4,
+          "fail": 0,
           "label": "os-queue-floor-export-face",
-          "pass": 5,
-          "rc": 1,
-          "suite": "FAIL 5/6"
+          "pass": 6,
+          "rc": 0,
+          "suite": "PASS 6/6"
         },
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 1.0,
+          "elapsed_s": 1.1,
           "fail": 0,
           "label": "os-queue-export-freshness-gate",
           "pass": 6,
@@ -515,7 +511,7 @@
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 0.8,
+          "elapsed_s": 0.6,
           "fail": 0,
           "label": "os-queue-export-gate-wire",
           "pass": 6,
@@ -528,7 +524,7 @@
       "crit_mismatch": 0,
       "crit_unchecked": 0,
       "crit_unchecked_seen": 1,
-      "elapsed_s": 14.1,
+      "elapsed_s": 14.9,
       "executed": 16,
       "green": 16,
       "guards": "双式记账、对账闸、台账归档、判据前缀",
@@ -537,7 +533,7 @@
       "parse": "ok",
       "rc": 0,
       "red": [],
-      "registry_criteria": 7538,
+      "registry_criteria": 7541,
       "registry_suites": 849,
       "selected": 16,
       "selected_criteria": 149,
@@ -565,7 +561,7 @@
         {
           "crit": 16,
           "detail": "yes",
-          "elapsed_s": 4.3,
+          "elapsed_s": 4.6,
           "fail": 0,
           "label": "os-ledger-archive",
           "pass": 16,
@@ -575,7 +571,7 @@
         {
           "crit": 8,
           "detail": "yes",
-          "elapsed_s": 1.2,
+          "elapsed_s": 1.3,
           "fail": 0,
           "label": "os-ledger-baseline",
           "pass": 8,
@@ -615,7 +611,7 @@
         {
           "crit": 8,
           "detail": "yes",
-          "elapsed_s": 0.6,
+          "elapsed_s": 0.5,
           "fail": 0,
           "label": "os-ledger-closeout",
           "pass": 8,
@@ -665,7 +661,7 @@
         {
           "crit": 8,
           "detail": "yes",
-          "elapsed_s": 1.4,
+          "elapsed_s": 1.6,
           "fail": 0,
           "label": "os-ledger-business-report",
           "pass": 8,
@@ -708,7 +704,7 @@
       "crit_mismatch": 0,
       "crit_unchecked": 0,
       "crit_unchecked_seen": 1,
-      "elapsed_s": 95.0,
+      "elapsed_s": 106.3,
       "executed": 4,
       "green": 4,
       "guards": "分片器、全量电池口径、自测试",
@@ -717,15 +713,15 @@
       "parse": "ok",
       "rc": 0,
       "red": [],
-      "registry_criteria": 7538,
+      "registry_criteria": 7541,
       "registry_suites": 849,
       "selected": 4,
-      "selected_criteria": 63,
+      "selected_criteria": 66,
       "suites": [
         {
           "crit": 7,
           "detail": "yes",
-          "elapsed_s": 6.9,
+          "elapsed_s": 7.4,
           "fail": 0,
           "label": "os-battery-followup",
           "pass": 7,
@@ -735,7 +731,7 @@
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 5.0,
+          "elapsed_s": 5.2,
           "fail": 0,
           "label": "os-battery-followup-help-wire",
           "pass": 6,
@@ -745,7 +741,7 @@
         {
           "crit": 32,
           "detail": "yes",
-          "elapsed_s": 82.1,
+          "elapsed_s": 85.0,
           "fail": 0,
           "label": "os-battery-shard",
           "pass": 32,
@@ -753,14 +749,14 @@
           "suite": "PASS 32/32"
         },
         {
-          "crit": 18,
+          "crit": 21,
           "detail": "yes",
-          "elapsed_s": 1.0,
+          "elapsed_s": 8.8,
           "fail": 0,
           "label": "os-battery-shard-report",
-          "pass": 18,
+          "pass": 21,
           "rc": 0,
-          "suite": "PASS 18/18"
+          "suite": "PASS 21/21"
         }
       ]
     },
@@ -768,7 +764,7 @@
       "crit_mismatch": 0,
       "crit_unchecked": 0,
       "crit_unchecked_seen": 1,
-      "elapsed_s": 109.5,
+      "elapsed_s": 125.0,
       "executed": 1,
       "green": 1,
       "guards": "入口页生成器、链接覆盖",
@@ -777,7 +773,7 @@
       "parse": "ok",
       "rc": 0,
       "red": [],
-      "registry_criteria": 7538,
+      "registry_criteria": 7541,
       "registry_suites": 849,
       "selected": 1,
       "selected_criteria": 28,
@@ -785,7 +781,7 @@
         {
           "crit": 28,
           "detail": "yes",
-          "elapsed_s": 109.5,
+          "elapsed_s": 125.0,
           "fail": 0,
           "label": "os-deliverable-index",
           "pass": 28,
@@ -795,24 +791,24 @@
       ]
     }
   ],
-  "generated_at": "2026-11-28T15:54:06",
+  "generated_at": "2026-11-28T16:40:44",
   "not_the_battery": "本页是分片，不是全量电池：它只跑下列族，未覆盖的 782 套件仍是欠账。",
   "registry": {
-    "criteria": 7538,
+    "criteria": 7541,
     "suites": 849
   },
-  "round": "R3649",
+  "round": "R3650",
   "totals": {
     "cover_pct": 7.9,
     "crit_mismatch": 0,
     "crit_unchecked": 0,
     "crit_unchecked_seen": 6,
     "families": 6,
-    "green_families": 4,
-    "red_families": 2,
+    "green_families": 6,
+    "red_families": 0,
     "selected": 67,
-    "selected_criteria": 651,
+    "selected_criteria": 654,
     "uncovered_suites": 782
   },
-  "verdict": "RED"
+  "verdict": "PASS"
 }

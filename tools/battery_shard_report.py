@@ -510,9 +510,9 @@ def do_control():
 
 USAGE = (
     "usage: battery_shard_report.py [--check | --control | --help]\n"
-    "       (no flag)  measure the three shard families and write\n"
-    "                  preview/battery-shard-report.json + .html, then\n"
-    "                  re-derive the CEO face\n"
+    "       (no flag)  re-derive the CEO face, measure the six shard\n"
+    "                  families, write preview/battery-shard-report.json +\n"
+    "                  .html, then re-derive the CEO face again\n"
     "  --check    re-read the landed pair against the live registry, write nothing\n"
     "  --control  prove the checker still refuses a mutated pair, write nothing\n"
     "  --help     print this text and exit 0\n")
@@ -541,6 +541,21 @@ def main(argv):
             return do_check()
         if "--control" in args:
             return do_control()
+        # AC-BSRW1/AC-BSRW2 (R3651): the face the families grade must be the
+        # face of THIS tree. Measured at R3650: two families that grade
+        # docs/status-export.json read the PREVIOUS round's face, because the
+        # only re-derivation sat after the write, so a whole pass landed a page
+        # whose own families were decided against a stale face (the 44730B
+        # 6c9eb527 face reproduced 5/6 rc=1 and pass 16 fail 3 rc=2 exactly).
+        # The pre-apply therefore runs BEFORE any family. Its refusal is named
+        # and cheap: a face that cannot be re-derived is news at the second
+        # tier, not after 500s of child processes.
+        face_ok, face_note, face = refresh_export_face()
+        if not face_ok:
+            print("E_BSR_FACE_PRE_REFUSED %s" % face_note)
+            return 2
+        print("BSR face pre=WRITTEN stamp=%s latest=%s bytes=%s"
+              % (face.get("stamp"), face.get("latest"), face.get("bytes")))
         payload = measure()
         html_text = render_html(payload)
         write_atomic(OUT_JSON, dumps(payload))
@@ -554,7 +569,10 @@ def main(argv):
                  payload["totals"]["uncovered_suites"]))
         # AC-BSRB13 (R3524): a board landing that leaves the CEO face naming an
         # older skipped list is half a write, so the shipped writer runs here,
-        # in this process, after both halves are on disk.
+        # in this process, after both halves are on disk. AC-BSRW3 (R3651): the
+        # pre-apply at the top of this branch does not replace this one - the
+        # landing itself changes the skipped audit, so the face is re-derived
+        # once more AFTER the pair lands.
         face_ok, face_note, face = refresh_export_face()
         if not face_ok:
             print("BSR face RED %s" % face_note)

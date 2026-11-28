@@ -7962,7 +7962,7 @@ SUITES = [
     # and the landed report pair, the tool and this registry are stat-signed
     # before and after.
     ("os-battery-shard-report",
-     os.path.join("..", "os", "test_battery_shard_report.py"), 18),
+     os.path.join("..", "os", "test_battery_shard_report.py"), 21),
     # R3525. R3524 coupled one board-page producer to the CEO face by hand; the
     # census this round found the same birth-site gap on the other three writers
     # of export_round.BOARD_PAGES, so the law is one shared definition

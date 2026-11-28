@@ -515,20 +515,31 @@ def main():
     # rather than promised by a comment. R3523 measured the defect: a detached
     # landing aged the export face in place and three suites reddened.
     def face_order(src):
+        """R3524 law, re-read at R3651.
+
+        Two calls now exist: a pre-apply that runs before any family (the
+        R3651 order law) and the post-apply this arm was pinned for. The face
+        graded here is the LAST one, so the control stays alive: a world where
+        only the pre-apply survives must read 'before', and a world with
+        neither must read 'absent'.
+        """
         land = src.find("write_atomic(OUT_HTML")
-        call = src.find("= refresh_export_face()")
+        call = src.rfind("= refresh_export_face()")
         if land < 0 or call < 0:
             return "absent"
         return "after" if call > land else "before"
 
+    call_line = "        face_ok, face_note, face = refresh_export_face()\n"
+
+    def drop_call(src, which):
+        idx = src.rfind(call_line) if which == "last" else src.find(call_line)
+        if idx < 0:
+            return src
+        return src[:idx] + src[idx + len(call_line):]
+
     real_order = face_order(src_tool)
-    moved = src_tool.replace(
-        "        html_text = render_html(payload)\n",
-        "        _ = refresh_export_face()\n"
-        "        html_text = render_html(payload)\n", 1)
-    moved_order = face_order(moved)
-    cut = src_tool.replace(
-        "        face_ok, face_note, face = refresh_export_face()\n", "", 1)
+    moved_order = face_order(drop_call(src_tool, "last"))
+    cut = src_tool.replace(call_line, "")
     cut_order = face_order(cut)
     coupling_ok = (real_order == "after" and moved_order == "before"
                    and cut_order == "absent"
@@ -705,16 +716,111 @@ def main():
        "check=%s control=%s both=%s bare=%s"
        % (r_check, r_control, r_both, r_bare))
 
+    # AC-BSRW1..AC-BSRW3 (R3651): the face is applied BEFORE the families and
+    # once more after the pair lands. Both faces are recorded, so the order is
+    # read off events rather than promised by a comment.
+    order_world = tempfile.mkdtemp(prefix="bsr_order_")
+    order_preview = os.path.join(order_world, "preview")
+    os.makedirs(order_preview)
+    for name in ("index.html", "lobby-session-trace.html",
+                 "ledger-reconcile-face.html"):
+        with open(os.path.join(order_preview, name), "wb") as fh:
+            fh.write(b"x\n")
+    keep_order = (bsr.FAMILIES, bsr.run_family, bsr.PREVIEW, bsr.OUT_JSON,
+                  bsr.OUT_HTML, bsr.refresh_export_face)
+    bsr.PREVIEW = order_preview
+    bsr.OUT_JSON = os.path.join(order_preview, "battery-shard-report.json")
+    bsr.OUT_HTML = os.path.join(order_preview, "battery-shard-report.html")
+    bsr.FAMILIES = (("pa-", "fam-a", "a"), ("pb-", "fam-b", "b"))
+    events = []
+
+    def rec_family(prefix):
+        events.append(("family", prefix,
+                       os.path.exists(bsr.OUT_JSON)
+                       or os.path.exists(bsr.OUT_HTML)))
+        return (0, stream(700, 5000, GREEN_ROWS, (0, 2, 2, 1.0)))
+
+    def rec_face():
+        events.append(("face", "-",
+                       os.path.exists(bsr.OUT_JSON)
+                       and os.path.exists(bsr.OUT_HTML)))
+        return (True, "", {"stamp": "S", "latest": "L", "bytes": 1,
+                           "gate": "CURRENT"})
+
+    bsr.run_family = rec_family
+    bsr.refresh_export_face = rec_face
+    try:
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc_order = bsr.main(["battery_shard_report.py"])
+        kinds = [e[0] for e in events]
+    finally:
+        (bsr.FAMILIES, bsr.run_family, bsr.PREVIEW, bsr.OUT_JSON,
+         bsr.OUT_HTML, bsr.refresh_export_face) = keep_order
+    order_ok = (kinds == ["face", "family", "family", "face"]
+                and rc_order == 0)
+    no_early_family = bool(kinds) and kinds[0] == "face"
+    ok("AC-BSRW1", order_ok and no_early_family,
+       "order=%s rc=%d first=%s"
+       % ("->".join(kinds), rc_order, kinds[0] if kinds else "NONE"))
+
+    # AC-BSRW3 - the second face call sees BOTH halves on disk while the first
+    # one saw neither, so the post-apply kept its R3524 meaning.
+    halves_ok = (len(events) == 4 and events[0][2] is False
+                 and events[3][2] is True)
+    ordered_landed = (
+        os.path.exists(os.path.join(order_preview,
+                                    "battery-shard-report.json"))
+        and os.path.exists(os.path.join(order_preview,
+                                        "battery-shard-report.html")))
+    ok("AC-BSRW3", halves_ok and ordered_landed,
+       "pre_halves=%s post_halves=%s landed=%s"
+       % (events[0][2] if events else "NONE",
+          events[3][2] if len(events) == 4 else "NONE", ordered_landed))
+
+    # AC-BSRW2 - a refused pre-apply is named, spends ZERO families and leaves
+    # zero page bytes: the refusal is bought before the 500s, not after it.
+    refusal_world = tempfile.mkdtemp(prefix="bsr_pre_")
+    refusal_preview = os.path.join(refusal_world, "preview")
+    os.makedirs(refusal_preview)
+    keep_ref = (bsr.FAMILIES, bsr.run_family, bsr.PREVIEW, bsr.OUT_JSON,
+                bsr.OUT_HTML, bsr.refresh_export_face)
+    bsr.PREVIEW = refusal_preview
+    bsr.OUT_JSON = os.path.join(refusal_preview, "battery-shard-report.json")
+    bsr.OUT_HTML = os.path.join(refusal_preview, "battery-shard-report.html")
+    bsr.FAMILIES = (("pa-", "fam-a", "a"),)
+    spent = []
+    bsr.run_family = lambda prefix: spent.append(prefix)
+    bsr.refresh_export_face = lambda: (
+        False, "E_BSR_FACE_UNPROVEN ok=False queue=STALE", {})
+    try:
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc_pre = bsr.main(["battery_shard_report.py"])
+        pre_out = buf.getvalue()
+        pre_files = sorted(os.listdir(refusal_preview))
+    finally:
+        (bsr.FAMILIES, bsr.run_family, bsr.PREVIEW, bsr.OUT_JSON,
+         bsr.OUT_HTML, bsr.refresh_export_face) = keep_ref
+    ok("AC-BSRW2",
+       rc_pre == 2 and not spent and pre_files == []
+       and "E_BSR_FACE_PRE_REFUSED" in pre_out,
+       "rc=%d families=%d files=%d named=%s"
+       % (rc_pre, len(spent), len(pre_files),
+          "E_BSR_FACE_PRE_REFUSED" in pre_out))
+    shutil.rmtree(order_world, ignore_errors=True)
+    shutil.rmtree(refusal_world, ignore_errors=True)
+
     # AC-BSRU4 - zero regression, and the registry declares the arm count the
-    # suite really runs (14 before this pin, 18 after).
-    prior_green = (len(CHECKS) == 17 and not FAILS)
+    # suite really runs (14 before this pin, 18 after it, 21 with R3651).
+    prior_green = (len(CHECKS) == 20 and not FAILS)
     row = re.search(
         r'"os-battery-shard-report",\s*'
         r'os\.path\.join\("\.\.", "os", "test_battery_shard_report\.py"\),'
         r'\s*(\d+)\)', read_text(REGISTRY))
     declared = int(row.group(1)) if row else -1
-    ok("AC-BSRU4", prior_green and declared == 18,
-       "prior_green=%s prior_arms=%d declared=%d want=18"
+    ok("AC-BSRU4", prior_green and declared == 21,
+       "prior_green=%s prior_arms=%d declared=%d want=21"
        % (prior_green, len(CHECKS), declared))
 
     total = len(CHECKS)

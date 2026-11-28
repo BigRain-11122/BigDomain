@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 849 | 7538 | 675/675 | R2739 |
+| 849 | 7541 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -778,7 +778,7 @@
 | 739 | os-battery-shard | ../os/test_battery_shard.py | 32 | no-evidence | - |
 | 740 | os-suite-output-audit | ../os/test_suite_output_audit.py | 6 | no-evidence | - |
 | 741 | os-suite-closing-row-census | ../os/test_suite_closing_row_census.py | 24 | no-evidence | - |
-| 742 | os-battery-shard-report | ../os/test_battery_shard_report.py | 18 | no-evidence | - |
+| 742 | os-battery-shard-report | ../os/test_battery_shard_report.py | 21 | no-evidence | - |
 | 743 | os-board-face-landing | ../os/test_board_face_landing.py | 7 | no-evidence | - |
 | 744 | os-preview-writer-census | ../os/test_preview_writer_census.py | 335 | no-evidence | - |
 | 745 | os-ugc-gate-report | ../os/test_ugc_gate_report.py | 50 | no-evidence | - |
@@ -886,7 +886,7 @@
 | 847 | os-fold-carry-evidence-law | ../os/test_fold_carry_evidence_law.py | 4 | no-evidence | - |
 | 848 | os-fold-carry-single-walk | ../os/test_fold_carry_census_single_walk.py | 6 | no-evidence | - |
 | 849 | os-export-pair-clock | ../os/test_export_pair_clock.py | 15 | no-evidence | - |
-|  | 合计 |  | 7538 | green 675 / FAIL 0 / no-evidence 174 |  |
+|  | 合计 |  | 7541 | green 675 / FAIL 0 / no-evidence 174 |  |
 
 ## 证据出处
 
