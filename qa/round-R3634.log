@@ -1,0 +1,43 @@
+R3634 evidence - single archive walk shared by the two FOLD-CARRY faces
+======================================================================
+Window: 2026-11-28, tick 3633 -> 3634.
+Claim: R3633 board head item (3)(2) - census() and evidence() each walked the
+archives, so one --evidence run read every archive file twice.
+
+BEFORE (read-only probe tmp/probe_R3634_walk.py, live tree, pre-change code)
+  WALK archives_on_disk=3
+  WALK calls_total=6 calls_per_path=state-log-archive-2026-09.md:2,
+       state-log-archive-2026-10.md:2,state-log-archive-2026-11.md:2
+  WALK report frozen=4 law_excused=4
+
+BEFORE fixtures (pre-change reports, byte-exact, stored for comparison)
+  qa/fcw-before-census.json   3713B sha256 22d725c7090e57d65e433504e233e68b7a052ec6be8daeefe7dc4f6a062d00c8
+  qa/fcw-before-evidence.json 2906B sha256 56d4a3cdee5d19783336a5ed7807cec8d6b1b5f84a5851c13f4b1cae99b6e1b8
+
+AFTER (same probe, post-change code)
+  WALK calls_total=3 calls_per_path=2026-09:1,2026-10:1,2026-11:1
+  census  report bytes 3713 sha 22d725c7090e57d6 same_as_before=True
+  evidence report bytes 2906 sha 56d4a3cdee5d1978 same_as_before=True
+
+PAGE STATE AT ROUND OPENING (measured before any edit)
+  FCC-CHECK VERDICT STALE   (preview/fold-carry-census.json on disk 3713B sha 38aecd79, tree had moved)
+  FCE-CHECK VERDICT PASS    (preview/fold-carry-evidence.json on disk 2906B sha 56d4a3cd)
+  After --write in this ring:
+  FCC-CHECK VERDICT PASS read_only=True
+  FCE-CHECK VERDICT PASS read_only=True
+
+SUITES
+  src/os/test_fold_carry_census_single_walk.py  SUITE PASS 4/4 (run twice)
+  src/os/test_fold_carry_evidence_law.py        SUITE PASS 4/4
+  src/os/test_fold_carry_evidence.py            SUITE PASS 7/7
+  src/os/test_ledger_archive.py                 SUITE PASS 16/16 criteria
+
+PAGES / REGISTRY
+  docs/sandbox-suite-matrix.md  846 rows, DOC-CURRENT
+  registry row                  os-fold-carry-single-walk(4)
+  registry counter census       rows=846 readable=845 unparsed=0 silent=1
+
+CLOSEOUT
+  APPEND CHECK PASS bytes=56403 gate=78500 margin=22097 tick=3634 log=62 ledger=R3634 api=0
+  GATES PASS gates=13 green=13 red=0 carrier=HEALTHY round_main=OK
+  CLOSEOUT-GATE PASS files=5086 flags=0 round_main=OK census=PASS matrix=DOC-CURRENT

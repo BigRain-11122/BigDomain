@@ -1,0 +1,125 @@
+{
+  "archive_ledger_rounds": 2389,
+  "clean": true,
+  "exempted": [
+    {
+      "round": 3436,
+      "why": "frozen hole: the fold summary for this block enumerates all eleven parts and names no budget part, so no budget line existed when the block was folded",
+      "window": 3438
+    },
+    {
+      "round": 3458,
+      "why": "frozen hole: the round appended its budget payload to its own last narrative line instead of emitting a presence line, and no presence line exists anywhere",
+      "window": 3460
+    },
+    {
+      "round": 3459,
+      "why": "frozen hole: the fold summary for this block enumerates all four parts and names no budget part, so no budget line existed when the block was folded",
+      "window": 3460
+    },
+    {
+      "round": 3436,
+      "why": "frozen hole: the fold summary for this block enumerates all eleven parts and names no budget part, so no budget line existed when the block was folded",
+      "window": 3460
+    },
+    {
+      "round": 3458,
+      "why": "frozen hole: the round appended its budget payload to its own last narrative line instead of emitting a presence line, and no presence line exists anywhere",
+      "window": 3465
+    },
+    {
+      "round": 3459,
+      "why": "frozen hole: the fold summary for this block enumerates all four parts and names no budget part, so no budget line existed when the block was folded",
+      "window": 3465
+    },
+    {
+      "round": 3610,
+      "why": "frozen hole: the round closed without a budget row, and no presence line for it exists in any archive or the live log, so the fold had nothing to carry",
+      "window": 3627
+    }
+  ],
+  "left_behind": [],
+  "live_ledger_rounds": 9,
+  "nowhere": [
+    {
+      "class": "nowhere",
+      "file": "state-log-archive-2026-11.md",
+      "file_ordinal": 304,
+      "line": 8442,
+      "narrative_lines": 1,
+      "round": 3436,
+      "why": "no ledger line in the archives or the live ring",
+      "window": 3438
+    },
+    {
+      "class": "nowhere",
+      "file": "state-log-archive-2026-11.md",
+      "file_ordinal": 320,
+      "line": 8724,
+      "narrative_lines": 1,
+      "round": 3458,
+      "why": "no ledger line in the archives or the live ring",
+      "window": 3460
+    },
+    {
+      "class": "nowhere",
+      "file": "state-log-archive-2026-11.md",
+      "file_ordinal": 320,
+      "line": 8724,
+      "narrative_lines": 3,
+      "round": 3459,
+      "why": "no ledger line in the archives or the live ring",
+      "window": 3460
+    },
+    {
+      "class": "nowhere",
+      "file": "state-log-archive-2026-11.md",
+      "file_ordinal": 321,
+      "line": 8729,
+      "narrative_lines": 11,
+      "round": 3436,
+      "why": "no ledger line in the archives or the live ring",
+      "window": 3460
+    },
+    {
+      "class": "nowhere",
+      "file": "state-log-archive-2026-11.md",
+      "file_ordinal": 327,
+      "line": 8797,
+      "narrative_lines": 2,
+      "round": 3458,
+      "why": "no ledger line in the archives or the live ring",
+      "window": 3465
+    },
+    {
+      "class": "nowhere",
+      "file": "state-log-archive-2026-11.md",
+      "file_ordinal": 327,
+      "line": 8797,
+      "narrative_lines": 1,
+      "round": 3459,
+      "why": "no ledger line in the archives or the live ring",
+      "window": 3465
+    },
+    {
+      "class": "nowhere",
+      "file": "state-log-archive-2026-11.md",
+      "file_ordinal": 370,
+      "line": 9973,
+      "narrative_lines": 4,
+      "round": 3610,
+      "why": "no ledger line in the archives or the live ring",
+      "window": 3627
+    }
+  ],
+  "nowhere_rounds": [
+    3436,
+    3458,
+    3459,
+    3610
+  ],
+  "rounds": 771,
+  "since": 2914,
+  "tool": "fold-carry-census",
+  "windows": 170
+}

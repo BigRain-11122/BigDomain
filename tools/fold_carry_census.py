@@ -93,7 +93,18 @@ def budget_line_bounds(paths, live_lines):
     return earliest, lost_at
 
 
-def evidence(min_round=None):
+def _archive_walk(paths):
+    """Every archive window, materialised once per file (AC-FCW1, R3634).
+
+    The census and the evidence face used to walk the archives separately, so
+    one `--evidence` run read the same 27944 archive lines twice (measured:
+    six walks over three files). Nothing about the data differs between the
+    two, so the walk is built here - the one call site - and handed in.
+    """
+    return [(path, list(LL.load_archive_windows(path))) for path in paths]
+
+
+def evidence(min_round=None, _walk=None):
     """Answer both decision questions from disk alone (R3495).
 
     A: does a named exemption need git? No - a fold summary written at fold
@@ -103,8 +114,9 @@ def evidence(min_round=None):
        BELOW the boundary is released. Both measured boundaries are older
        than every hole, so nothing is released.
     """
-    report = census(min_round)
     paths = LL.archive_files(LL.default_logs_dir(STATE))
+    walk = _archive_walk(paths) if _walk is None else _walk
+    report = census(min_round, _walk=walk)
     live = LL.load_state_log(STATE)
     receipts = receipt_index(paths)
     earliest, lost_at = budget_line_bounds(paths, live)
@@ -115,8 +127,8 @@ def evidence(min_round=None):
     live_rounds = LL.tree_presence_rounds(live)
     archive_rounds = set()
     narratives = {}
-    for path in paths:
-        for window in LL.load_archive_windows(path):
+    for path, file_windows in walk:
+        for window in file_windows:
             for line in window["lines"]:
                 presence = LL.LEDGER_PRESENCE_RE.match(line)
                 if presence is not None:
@@ -230,10 +242,11 @@ def classify_round(round_no, archive_rounds, live_rounds, narratives):
     return "nowhere"
 
 
-def census(min_round=None):
+def census(min_round=None, _walk=None):
     """Measure the shipped tree and answer the two-class split."""
     since = LL.FOLD_CARRY_PIN if min_round is None else min_round
     paths = LL.archive_files(LL.default_logs_dir(STATE))
+    walk = _archive_walk(paths) if _walk is None else _walk
     live = LL.load_state_log(STATE)
     live_rounds = presence_rounds(live)
     archive_rounds = set()
@@ -247,8 +260,8 @@ def census(min_round=None):
     # sits in a later file reads as a hole. Measured while writing this: a
     # one-pass draft reported 22 holes over 19 rounds where the audit reports
     # 6 over 3 - the whole difference was file order.
-    for path in paths:
-        for window in LL.load_archive_windows(path):
+    for path, file_windows in walk:
+        for window in file_windows:
             for line in window["lines"]:
                 hit = LL.LEDGER_PRESENCE_RE.match(line)
                 if hit is not None:

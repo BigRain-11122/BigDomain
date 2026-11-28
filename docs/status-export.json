@@ -1,20 +1,20 @@
 {
   "ceo_face": {
     "board_pages_skipped": ["preview/face-sweep.html (8877B)"],
-    "current": "2026-11-28 R3633 PRODUCT: the evidence face now answers what the law answers. tools/fold_carry_census.py --evidence published only two receipt kinds while ledger_lines.FOLD_CARRY_EXEMPT already carried four, so the live page printed NO-RECEIPT R3458 and NO-RECEIPT R3610 beside a law that excuses both by name (inline_payload, tree_absence) and a reader could not tell an unexplained frozen hole from an excused one. Each row now carries law_ok / law_kind / law_why taken from the law own vocabulary (new ledger_lines.exemption_kind and FOLD_CARRY_EXEMPT_KINDS, plus FOLD_CARRY_NOT_A_HOLE_KIND replacing the tool own string copy), the summary line ends on law_excused=N unexplained=N, and every hole prints exactly one law token: BLOCK-RECEIPT R3436 law=receipt, NO-RECEIPT R3458 law=inline_payload, BLOCK-RECEIPT R3459 law=receipt, NO-RECEIPT R3610 law=tree_absence. The class axis keeps its receipt fact, because R3436 and R3459 are both a block receipt and law-excused and one class would have to lie about one of them.",
+    "current": "2026-11-28 R3634 PRODUCT: one evidence run now opens each archive once instead of twice. The defect was measured before any edit (tmp/probe_R3634_walk.py: archives_on_disk=3 calls_total=6, two opens per file) because evidence() walked the archives itself after census() had already walked them for the same three files. tools/fold_carry_census.py gains one materialised walk, _archive_walk(paths), which is now the only LL.load_archive_windows call site in the tool; census(min_round, _walk=None) and evidence(min_round, _walk=None) accept it, evidence builds it once and hands it to census, and a caller that hands in a walk is never opened by either face. After the change the same probe reads calls_total=3 with one open per path, and both reports are byte-identical to the pre-change derivation stored in qa/fcw-before-census.json (sha256 22d725c7, 3713B) and qa/fcw-before-evidence.json (sha256 56d4a3cd, 2906B).",
     "do": "2026-11-25 R3456 PRODUCT: the answer-revision question now has a door - api_answer_history (live with AC-AMAW1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so 'which answer was rewritten, what did it say before, what does it say now and how often did it change' could only be read by calling the sandbox from a shell - while api_seller_answers and api_listing_qna publish only the CURRENT wording.",
     "last_artifact": "preview/preview-writer-census.html (17697B) + preview/preview-writer-census.json (25235B) [2026-11-28 commit]",
     "latest_artifact": "preview/preview-writer-census.html (17697B) + preview/preview-writer-census.json (25235B) [2026-11-28 commit]",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\preview-writer-census.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/probe-R3632.log (3488B, 2026-11-28, sha256 a95d9503d89c)",
-    "latest_evidence": "qa/probe-R3632.log (3488B, 2026-11-28, sha256 a95d9503d89c)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/round-R3634.log (2237B, 2026-11-28, sha256 2047236f28ef)",
+    "latest_evidence": "qa/round-R3634.log (2237B, 2026-11-28, sha256 2047236f28ef)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3633] next window (<=48h): (0) **载体**：本窗收口 `CARRIER bytes=50865 gate=78500 margin=27635 append_ok=true tick=3633 log=56 ledger=R3633 api=0`、`STATE FOLD verdict=FOLD-CLEAR`——开窗仍先 `python src/os/state_fold_run.py --check` 与 `python src/os/logs_toolkit.py append --check`；**一轮只 append 一次**，且 `append` 必须带 `--round R####`（本窗实锤：缺 `--round` 只报 `E_LAP_ROUND None`），主行必须 `YYYY-MM-DD R#### LABEL:`。(1) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先把刷新轮排最前（P-2026-09-24-56）。(2) **S4U 仍未落地**（承账）：`BigDomain-OSLoop` 任务 `Principal.LogonType=Interactive`，正法=提权会话跑 `src/os/register_loop_task.ps1` 后读回须为 `S4U`。(3) **本窗点名的可认领候选（今日不造活）**：①证据面的 `law_*` 三键现只发布在 `--evidence` 命令行与 `preview/fold-carry-evidence.json`，`face_sweep` 的 CARRIER/GATES 行与 `deliverable_index` 九面表不消费它（无现时需求）；②`census()` 与 `evidence()` 各自走一遍归档（两次 `load_archive_windows`），若要合一先立判据（一次 walk 供两面，且两页字节必须逐字节不变），禁凭手感重构。(4) **本窗绿序（实测一遍过，照抄）**：`logs_toolkit append --round R#### --execute`（主行+账本行一次写完）→ `src/os/export_round.py <tick>` → `src/os/heartbeat.py --write <tick>` → `src/os/registry_counter_census.py --write-pin` → `src/os/suite_matrix_reconcile.py --write/--check`（写 `docs/sandbox-suite-matrix.md`）→ (truncated)",
-    "next_milestone_due": "2026-11-30T11:27:52+08:00",
-    "updated_at": "2026-11-28T11:27:52+08:00",
+    "next_milestone": "[R3634] next window (<=48h): (0) **载体**：本窗收口 `CARRIER bytes=56403 gate=78500 margin=22097 append_ok=true tick=3634 log=62 ledger=R3634 api=0`、`STATE FOLD verdict=FOLD-CLEAR`——开窗仍先 `python src/os/state_fold_run.py --check` 与 `python src/os/logs_toolkit.py append --check`；一轮只 append 一次且必须 `--round R####`，主行必须 `YYYY-MM-DD R#### LABEL:`（本窗六行一次写入，`tmp/append_R3634.py` 为 ASCII 驱动范式）。(1) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先把刷新轮排最前（P-2026-09-24-56）。(2) **S4U 仍未落地**（承账）：`BigDomain-OSLoop` 任务 `Principal.LogonType=Interactive`，正法=提权会话跑 `src/os/register_loop_task.ps1` 后读回须为 `S4U`。(3) **本窗点名的可认领候选（今日不造活）**：①`evidence()` 里 `receipt_index(paths)` 与 `budget_line_bounds(paths, live)` 仍各自重读全部归档（本窗只治了 census↔evidence 那一对重复走树）；若要合一必须另立判据——两者解析口径与 `load_archive_windows` 不同（按行 vs 按窗口），且两页字节必须逐字节不变，禁凭手感合并；②census 页在开窗时就已 STALE，说明「页面新鲜度」目前只在收口环里被查，可考虑给面清扫加一行 age 读数（今日无需求实测，先记账）。(4) **本窗绿序（实测一遍过，照抄）**：`logs_toolkit append --round R#### --execute`（主行+账本行一次写完）→ `src/os/export_round.py <tick>` → `src/os/heartbeat.py --write <tick>` → `src/os/registry_counter_census.py --write-pin` → `src/os/suite_matrix_reconcile.py --write/--check` → `tools/status_export_fresh.py --apply` (truncated)",
+    "next_milestone_due": "2026-11-30T11:43:10+08:00",
+    "updated_at": "2026-11-28T11:43:10+08:00",
     "heartbeat": {
-      "tick": 3633,
-      "state_tick": 3633,
+      "tick": 3634,
+      "state_tick": 3634,
       "lag": 0,
       "verdict": "PASS",
       "reason": "fresh"
@@ -35,8 +35,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-28 R3633 PRODUCT: the evidence face now answers what the law answers. tools/fold_carry_census.py --evidence published only two receipt kinds while ledger_lines.FOLD_CARRY_EXEMPT already carried four, so the live page printed NO-RECEIPT R3458 and NO-RECEIPT R3610 beside a law that excuses both by name (inline_payload, tree_absence) and a reader could not tell an unexplained frozen hole from an excused one. Each row now carries law_ok / law_kind / law_why taken from the law own vocabulary (new ledger_lines.exemption_kind and FOLD_CARRY_EXEMPT_KINDS, plus FOLD_CARRY_NOT_A_HOLE_KIND replacing the tool own string copy), the summary line ends on law_excused=N unexplained=N, and every hole prints exactly one law token: BLOCK-RECEIPT R3436 law=receipt, NO-RECEIPT R3458 law=inline_payload, BLOCK-RECEIPT R3459 law=receipt, NO-RECEIPT R3610 law=tree_absence. The class axis keeps its receipt fact, because R3436 and R3459 are both a block receipt and law-excused and one class would have to lie about one of them.",
-  "claims": {"claimed": 54, "captured": 24, "contradicted": 0, "uncaptured": 30, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-28T11:27:52+08:00"},
+  "current": "2026-11-28 R3634 PRODUCT: one evidence run now opens each archive once instead of twice. The defect was measured before any edit (tmp/probe_R3634_walk.py: archives_on_disk=3 calls_total=6, two opens per file) because evidence() walked the archives itself after census() had already walked them for the same three files. tools/fold_carry_census.py gains one materialised walk, _archive_walk(paths), which is now the only LL.load_archive_windows call site in the tool; census(min_round, _walk=None) and evidence(min_round, _walk=None) accept it, evidence builds it once and hands it to census, and a caller that hands in a walk is never opened by either face. After the change the same probe reads calls_total=3 with one open per path, and both reports are byte-identical to the pre-change derivation stored in qa/fcw-before-census.json (sha256 22d725c7, 3713B) and qa/fcw-before-evidence.json (sha256 56d4a3cd, 2906B).",
+  "claims": {"claimed": 54, "captured": 24, "contradicted": 0, "uncaptured": 30, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-28T11:43:10+08:00"},
   "chain": {"present": true, "rows": 106, "broken": 5, "path": "state/qa_replacements.jsonl", "partial": 5, "declared": 1, "unexplained": 0, "adjudication": "OK", "excused": 1},
   "depts": [
     {
@@ -65,11 +65,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-28 R3633 PRODUCT: the evidence face now answers what the law answers. tools/fold_carry_census.py --evidence published only two receipt kinds while ledger_lines.FOLD_CARRY_EXEMPT already carried four, so the live page printed NO-RECEIPT R3458 and NO-RECEIPT R3610 beside a law that excuses both by name (inline_payload, tree_absence) and a reader could not tell an unexplained frozen hole from an excused one. Each row now carries law_ok / law_kind / law_why taken from the law own vocabulary (new ledger_lines.exemption_kind and FOLD_CARRY_EXEMPT_KINDS, plus FOLD_CARRY_NOT_A_HOLE_KIND replacing the tool own string copy), the summary line ends on law_excused=N unexplained=N, and every hole prints exactly one law token: BLOCK-RECEIPT R3436 law=receipt, NO-RECEIPT R3458 law=inline_payload, BLOCK-RECEIPT R3459 law=receipt, NO-RECEIPT R3610 law=tree_absence. The class axis keeps its receipt fact, because R3436 and R3459 are both a block receipt and law-excused and one class would have to lie about one of them.",
-  "export_ts": "2026-11-28T11:27:52+08:00",
+  "do": "2026-11-28 R3634 PRODUCT: one evidence run now opens each archive once instead of twice. The defect was measured before any edit (tmp/probe_R3634_walk.py: archives_on_disk=3 calls_total=6, two opens per file) because evidence() walked the archives itself after census() had already walked them for the same three files. tools/fold_carry_census.py gains one materialised walk, _archive_walk(paths), which is now the only LL.load_archive_windows call site in the tool; census(min_round, _walk=None) and evidence(min_round, _walk=None) accept it, evidence builds it once and hands it to census, and a caller that hands in a walk is never opened by either face. After the change the same probe reads calls_total=3 with one open per path, and both reports are byte-identical to the pre-change derivation stored in qa/fcw-before-census.json (sha256 22d725c7, 3713B) and qa/fcw-before-evidence.json (sha256 56d4a3cd, 2906B).",
+  "export_ts": "2026-11-28T11:43:10+08:00",
   "latest_artifact": "preview/preview-writer-census.html (17697B) + preview/preview-writer-census.json (25235B) [2026-11-28 commit]",
-  "latest_evidence": "qa/probe-R3632.log (3488B, 2026-11-28, sha256 a95d9503d89c)",
-  "next_milestone": "[R3633] next window (<=48h): (0) **载体**：本窗收口 `CARRIER bytes=50865 gate=78500 margin=27635 append_ok=true tick=3633 log=56 ledger=R3633 api=0`、`STATE FOLD verdict=FOLD-CLEAR`——开窗仍先 `python src/os/state_fold_run.py --check` 与 `python src/os/logs_toolkit.py append --check`；**一轮只 append 一次**，且 `append` 必须带 `--round R####`（本窗实锤：缺 `--round` 只报 `E_LAP_ROUND None`），主行必须 `YYYY-MM-DD R#### LABEL:`。(1) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先把刷新轮排最前（P-2026-09-24-56）。(2) **S4U 仍未落地**（承账）：`BigDomain-OSLoop` 任务 `Principal.LogonType=Interactive`，正法=提权会话跑 `src/os/register_loop_task.ps1` 后读回须为 `S4U`。(3) **本窗点名的可认领候选（今日不造活）**：①证据面的 `law_*` 三键现只发布在 `--evidence` 命令行与 `preview/fold-carry-evidence.json`，`face_sweep` 的 CARRIER/GATES 行与 `deliverable_index` 九面表不消费它（无现时需求）；②`census()` 与 `evidence()` 各自走一遍归档（两次 `load_archive_windows`），若要合一先立判据（一次 walk 供两面，且两页字节必须逐字节不变），禁凭手感重构。(4) **本窗绿序（实测一遍过，照抄）**：`logs_toolkit append --round R#### --execute`（主行+账本行一次写完）→ `src/os/export_round.py <tick>` → `src/os/heartbeat.py --write <tick>` → `src/os/registry_counter_census.py --write-pin` → `src/os/suite_matrix_reconcile.py --write/--check`（写 `docs/sandbox-suite-matrix.md`）→ (truncated)",
+  "latest_evidence": "qa/round-R3634.log (2237B, 2026-11-28, sha256 2047236f28ef)",
+  "next_milestone": "[R3634] next window (<=48h): (0) **载体**：本窗收口 `CARRIER bytes=56403 gate=78500 margin=22097 append_ok=true tick=3634 log=62 ledger=R3634 api=0`、`STATE FOLD verdict=FOLD-CLEAR`——开窗仍先 `python src/os/state_fold_run.py --check` 与 `python src/os/logs_toolkit.py append --check`；一轮只 append 一次且必须 `--round R####`，主行必须 `YYYY-MM-DD R#### LABEL:`（本窗六行一次写入，`tmp/append_R3634.py` 为 ASCII 驱动范式）。(1) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先把刷新轮排最前（P-2026-09-24-56）。(2) **S4U 仍未落地**（承账）：`BigDomain-OSLoop` 任务 `Principal.LogonType=Interactive`，正法=提权会话跑 `src/os/register_loop_task.ps1` 后读回须为 `S4U`。(3) **本窗点名的可认领候选（今日不造活）**：①`evidence()` 里 `receipt_index(paths)` 与 `budget_line_bounds(paths, live)` 仍各自重读全部归档（本窗只治了 census↔evidence 那一对重复走树）；若要合一必须另立判据——两者解析口径与 `load_archive_windows` 不同（按行 vs 按窗口），且两页字节必须逐字节不变，禁凭手感合并；②census 页在开窗时就已 STALE，说明「页面新鲜度」目前只在收口环里被查，可考虑给面清扫加一行 age 读数（今日无需求实测，先记账）。(4) **本窗绿序（实测一遍过，照抄）**：`logs_toolkit append --round R#### --execute`（主行+账本行一次写完）→ `src/os/export_round.py <tick>` → `src/os/heartbeat.py --write <tick>` → `src/os/registry_counter_census.py --write-pin` → `src/os/suite_matrix_reconcile.py --write/--check` → `tools/status_export_fresh.py --apply` (truncated)",
   "outs": [
     "preview/preview-writer-census.html (17697B) + preview/preview-writer-census.json (25235B) [2026-11-28 commit]",
     "preview/first-yuan-chain.html (5397B) + preview/first-yuan-chain.json (5180B) [2026-11-28 mtime]",
@@ -211,19 +211,19 @@
     "shortfall_total": 15,
     "verdict": "FLOOR-DEBT"
   },
-  "results": [["3633", "OSLoop 执行 tick"]],
+  "results": [["3634", "OSLoop 执行 tick"]],
   "results_archive": {
     "bytes": 336680,
     "count": 179,
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
-  "self_drive": {"window": "2026-11-22..2026-11-28", "window_days": 7, "log_lines_in_window": 53, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 45, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
-  "state_bytes": 50865,
-  "next_milestone_due": "2026-11-30T11:27:52+08:00",
+  "self_drive": {"window": "2026-11-22..2026-11-28", "window_days": 7, "log_lines_in_window": 59, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 50, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
+  "state_bytes": 56403,
+  "next_milestone_due": "2026-11-30T11:43:10+08:00",
   "heartbeat": {
-    "tick": 3633,
-    "state_tick": 3633,
+    "tick": 3634,
+    "state_tick": 3634,
     "lag": 0,
     "verdict": "PASS",
     "reason": "fresh"

@@ -9262,6 +9262,13 @@ SUITES = [
     # is published beside it.
     ("os-fold-carry-evidence-law",
      os.path.join("..", "os", "test_fold_carry_evidence_law.py"), 4),
+    # R3634: one evidence run walked every archive twice (measured: six opens
+    # over three files), because evidence() read the tree once through
+    # census() and once for itself. AC-FCW1..AC-FCW4 were pinned in
+    # src/os/backlog.md at R3634, before the tool or this suite changed; the
+    # arm counts real opens through a wrapper, so a second walk cannot hide.
+    ("os-fold-carry-single-walk",
+     os.path.join("..", "os", "test_fold_carry_census_single_walk.py"), 4),
     ]
 
 FAILS = 0

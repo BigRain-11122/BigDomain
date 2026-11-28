@@ -1,0 +1,99 @@
+{
+  "block_receipt": 2,
+  "boundaries": {
+    "e_round_lost": {
+      "releases": 0,
+      "round": 3380
+    },
+    "earliest_budget": {
+      "releases": 0,
+      "round": 265
+    }
+  },
+  "clean": true,
+  "frozen_rounds": [
+    3436,
+    3458,
+    3459,
+    3610
+  ],
+  "law_excused": 4,
+  "left_behind": 0,
+  "narrowing_releases": 0,
+  "no_receipt": 2,
+  "receipts_refused": [
+    3421,
+    3518,
+    3519
+  ],
+  "rows": [
+    {
+      "class": "block-receipt",
+      "law_kind": "receipt",
+      "law_ok": true,
+      "law_why": "frozen hole: the fold summary for this block enumerates all eleven parts and names no budget part, so no budget line existed when the block was folded",
+      "receipt": {
+        "file": "state-log-archive-2026-11.md",
+        "line": 8778,
+        "omits_budget": true,
+        "parts": [
+          "product",
+          "measured",
+          "landed",
+          "readings",
+          "evidence",
+          "controls",
+          "group scan",
+          "fold note",
+          "deviations",
+          "honest",
+          "tick"
+        ],
+        "span": "fold 811 moved the whole R3436 watch-conversion block (product, measured, landed, readings, evidence, controls, group scan, fold note, deviations, honest, tick) to the November archive verbatim; R3436"
+      },
+      "receipts_total": 1,
+      "round": 3436
+    },
+    {
+      "class": "no-receipt",
+      "law_kind": "inline_payload",
+      "law_ok": true,
+      "law_why": "frozen hole: the round appended its budget payload to its own last narrative line instead of emitting a presence line, and no presence line exists anywhere",
+      "receipt": null,
+      "receipts_total": 0,
+      "round": 3458
+    },
+    {
+      "class": "block-receipt",
+      "law_kind": "receipt",
+      "law_ok": true,
+      "law_why": "frozen hole: the fold summary for this block enumerates all four parts and names no budget part, so no budget line existed when the block was folded",
+      "receipt": {
+        "file": "state-log-archive-2026-11.md",
+        "line": 8800,
+        "omits_budget": true,
+        "parts": [
+          "product",
+          "landed",
+          "two measured controls",
+          "honest"
+        ],
+        "span": "fold 810 moved the whole R3459 CEO-face repair block (product, landed, two measured controls, honest) to the November archive verbatim; R3459 stays named here as the carried round pointer. | tokens: A"
+      },
+      "receipts_total": 1,
+      "round": 3459
+    },
+    {
+      "class": "no-receipt",
+      "law_kind": "tree_absence",
+      "law_ok": true,
+      "law_why": "frozen hole: the round closed without a budget row, and no presence line for it exists in any archive or the live log, so the fold had nothing to carry",
+      "receipt": null,
+      "receipts_total": 0,
+      "round": 3610
+    }
+  ],
+  "since": 2914,
+  "tool": "fold-carry-census-evidence",
+  "unexplained": 0
+}
