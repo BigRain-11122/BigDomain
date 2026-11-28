@@ -4,7 +4,7 @@
       "crit_mismatch": 0,
       "crit_unchecked": 0,
       "crit_unchecked_seen": 1,
-      "elapsed_s": 190.8,
+      "elapsed_s": 189.9,
       "executed": 7,
       "green": 7,
       "guards": "会话、房间、限流、UGC 闸、持久化",
@@ -21,7 +21,7 @@
         {
           "crit": 79,
           "detail": "yes",
-          "elapsed_s": 42.4,
+          "elapsed_s": 42.3,
           "fail": 0,
           "label": "lobby",
           "pass": 79,
@@ -31,7 +31,7 @@
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 20.6,
+          "elapsed_s": 21.0,
           "fail": 0,
           "label": "lobby-hub-ledger",
           "pass": 6,
@@ -41,7 +41,7 @@
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 41.1,
+          "elapsed_s": 40.0,
           "fail": 0,
           "label": "lobby-hub-ugc",
           "pass": 6,
@@ -61,7 +61,7 @@
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 4.9,
+          "elapsed_s": 4.8,
           "fail": 0,
           "label": "lobby-hub-member",
           "pass": 6,
@@ -94,7 +94,7 @@
       "crit_mismatch": 0,
       "crit_unchecked": 0,
       "crit_unchecked_seen": 1,
-      "elapsed_s": 48.6,
+      "elapsed_s": 54.1,
       "executed": 23,
       "green": 23,
       "guards": "导出新鲜度、发布路径、一致性",
@@ -111,7 +111,7 @@
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 0.8,
+          "elapsed_s": 0.7,
           "fail": 0,
           "label": "os-export-freshness",
           "pass": 6,
@@ -211,7 +211,7 @@
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 1.1,
+          "elapsed_s": 1.2,
           "fail": 0,
           "label": "os-export-publish-wire-identity",
           "pass": 9,
@@ -241,7 +241,7 @@
         {
           "crit": 7,
           "detail": "yes",
-          "elapsed_s": 0.8,
+          "elapsed_s": 0.9,
           "fail": 0,
           "label": "os-export-consistency-queue-face",
           "pass": 19,
@@ -261,7 +261,7 @@
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 0.9,
+          "elapsed_s": 1.0,
           "fail": 0,
           "label": "os-export-publish-path-guard",
           "pass": 8,
@@ -301,7 +301,7 @@
         {
           "crit": 55,
           "detail": "yes",
-          "elapsed_s": 38.4,
+          "elapsed_s": 43.5,
           "fail": 0,
           "label": "os-export-round",
           "pass": 185,
@@ -321,7 +321,7 @@
         {
           "crit": 5,
           "detail": "yes",
-          "elapsed_s": 0.5,
+          "elapsed_s": 0.6,
           "fail": 0,
           "label": "os-export-chain-excused",
           "pass": 5,
@@ -331,7 +331,7 @@
         {
           "crit": 15,
           "detail": "yes",
-          "elapsed_s": 1.1,
+          "elapsed_s": 1.2,
           "fail": 0,
           "label": "os-export-pair-clock",
           "pass": 15,
@@ -344,7 +344,7 @@
       "crit_mismatch": 0,
       "crit_unchecked": 0,
       "crit_unchecked_seen": 1,
-      "elapsed_s": 13.9,
+      "elapsed_s": 15.6,
       "executed": 16,
       "green": 16,
       "guards": "队头/队尾/占位/盖章/交付",
@@ -371,7 +371,7 @@
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 1.0,
+          "elapsed_s": 1.5,
           "fail": 0,
           "label": "os-queue-row",
           "pass": 6,
@@ -391,7 +391,7 @@
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 1.0,
+          "elapsed_s": 0.9,
           "fail": 0,
           "label": "os-queue-floor-decl",
           "pass": 6,
@@ -401,7 +401,7 @@
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 1.3,
+          "elapsed_s": 1.4,
           "fail": 0,
           "label": "os-queue-only-floor-wire",
           "pass": 6,
@@ -421,7 +421,7 @@
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 0.5,
+          "elapsed_s": 0.8,
           "fail": 0,
           "label": "os-queue-row-exempt",
           "pass": 6,
@@ -431,7 +431,7 @@
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 0.6,
+          "elapsed_s": 0.7,
           "fail": 0,
           "label": "os-queue-done-stamp",
           "pass": 6,
@@ -441,7 +441,7 @@
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 1.5,
+          "elapsed_s": 1.6,
           "fail": 0,
           "label": "os-queue-done-stamp-exempt",
           "pass": 6,
@@ -451,7 +451,7 @@
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 0.7,
+          "elapsed_s": 0.8,
           "fail": 0,
           "label": "os-queue-occupancy",
           "pass": 6,
@@ -471,7 +471,7 @@
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 0.7,
+          "elapsed_s": 0.9,
           "fail": 0,
           "label": "os-queue-floor-delivered-wire",
           "pass": 6,
@@ -481,7 +481,7 @@
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 0.9,
+          "elapsed_s": 0.8,
           "fail": 0,
           "label": "os-queue-floor-reading-wire",
           "pass": 6,
@@ -491,7 +491,7 @@
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 0.3,
+          "elapsed_s": 0.4,
           "fail": 0,
           "label": "os-queue-floor-export-face",
           "pass": 6,
@@ -501,7 +501,7 @@
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 0.8,
+          "elapsed_s": 1.0,
           "fail": 0,
           "label": "os-queue-export-freshness-gate",
           "pass": 6,
@@ -511,7 +511,7 @@
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 0.6,
+          "elapsed_s": 0.7,
           "fail": 0,
           "label": "os-queue-export-gate-wire",
           "pass": 6,
@@ -524,7 +524,7 @@
       "crit_mismatch": 0,
       "crit_unchecked": 0,
       "crit_unchecked_seen": 1,
-      "elapsed_s": 13.6,
+      "elapsed_s": 14.6,
       "executed": 16,
       "green": 16,
       "guards": "双式记账、对账闸、台账归档、判据前缀",
@@ -541,7 +541,7 @@
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 1.6,
+          "elapsed_s": 1.7,
           "fail": 0,
           "label": "os-ledger-page",
           "pass": 12,
@@ -551,7 +551,7 @@
         {
           "crit": 8,
           "detail": "yes",
-          "elapsed_s": 1.0,
+          "elapsed_s": 1.1,
           "fail": 0,
           "label": "os-ledger-lines",
           "pass": 8,
@@ -561,7 +561,7 @@
         {
           "crit": 16,
           "detail": "yes",
-          "elapsed_s": 3.9,
+          "elapsed_s": 4.3,
           "fail": 0,
           "label": "os-ledger-archive",
           "pass": 16,
@@ -571,7 +571,7 @@
         {
           "crit": 8,
           "detail": "yes",
-          "elapsed_s": 1.2,
+          "elapsed_s": 1.3,
           "fail": 0,
           "label": "os-ledger-baseline",
           "pass": 8,
@@ -611,7 +611,7 @@
         {
           "crit": 8,
           "detail": "yes",
-          "elapsed_s": 0.6,
+          "elapsed_s": 0.5,
           "fail": 0,
           "label": "os-ledger-closeout",
           "pass": 8,
@@ -641,7 +641,7 @@
         {
           "crit": 8,
           "detail": "yes",
-          "elapsed_s": 0.1,
+          "elapsed_s": 0.2,
           "fail": 0,
           "label": "os-ledger-tokens-prefix-repair",
           "pass": 8,
@@ -651,7 +651,7 @@
         {
           "crit": 9,
           "detail": "yes",
-          "elapsed_s": 1.6,
+          "elapsed_s": 1.4,
           "fail": 0,
           "label": "os-ledger-reconcile-face",
           "pass": 9,
@@ -661,7 +661,7 @@
         {
           "crit": 8,
           "detail": "yes",
-          "elapsed_s": 1.4,
+          "elapsed_s": 1.5,
           "fail": 0,
           "label": "os-ledger-business-report",
           "pass": 8,
@@ -704,7 +704,7 @@
       "crit_mismatch": 0,
       "crit_unchecked": 0,
       "crit_unchecked_seen": 1,
-      "elapsed_s": 107.0,
+      "elapsed_s": 103.4,
       "executed": 4,
       "green": 4,
       "guards": "分片器、全量电池口径、自测试",
@@ -721,7 +721,7 @@
         {
           "crit": 7,
           "detail": "yes",
-          "elapsed_s": 7.2,
+          "elapsed_s": 7.1,
           "fail": 0,
           "label": "os-battery-followup",
           "pass": 7,
@@ -731,7 +731,7 @@
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 5.4,
+          "elapsed_s": 5.2,
           "fail": 0,
           "label": "os-battery-followup-help-wire",
           "pass": 6,
@@ -741,7 +741,7 @@
         {
           "crit": 32,
           "detail": "yes",
-          "elapsed_s": 86.2,
+          "elapsed_s": 82.8,
           "fail": 0,
           "label": "os-battery-shard",
           "pass": 32,
@@ -764,7 +764,7 @@
       "crit_mismatch": 0,
       "crit_unchecked": 0,
       "crit_unchecked_seen": 1,
-      "elapsed_s": 117.5,
+      "elapsed_s": 121.3,
       "executed": 1,
       "green": 1,
       "guards": "入口页生成器、链接覆盖",
@@ -781,7 +781,7 @@
         {
           "crit": 28,
           "detail": "yes",
-          "elapsed_s": 117.5,
+          "elapsed_s": 121.3,
           "fail": 0,
           "label": "os-deliverable-index",
           "pass": 28,
@@ -794,7 +794,7 @@
       "crit_mismatch": 0,
       "crit_unchecked": 0,
       "crit_unchecked_seen": 1,
-      "elapsed_s": 18.1,
+      "elapsed_s": 20.0,
       "executed": 21,
       "green": 21,
       "guards": "支付管道、回调验签、重投幂等、订单开关",
@@ -811,7 +811,7 @@
         {
           "crit": 16,
           "detail": "yes",
-          "elapsed_s": 1.9,
+          "elapsed_s": 2.5,
           "fail": 0,
           "label": "pay",
           "pass": 16,
@@ -841,7 +841,7 @@
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 0.4,
+          "elapsed_s": 0.5,
           "fail": 0,
           "label": "pay-v3-window",
           "pass": 6,
@@ -851,7 +851,7 @@
         {
           "crit": 7,
           "detail": "yes",
-          "elapsed_s": 0.5,
+          "elapsed_s": 0.4,
           "fail": 0,
           "label": "pay-notify",
           "pass": 7,
@@ -861,7 +861,7 @@
         {
           "crit": 8,
           "detail": "yes",
-          "elapsed_s": 0.6,
+          "elapsed_s": 0.4,
           "fail": 0,
           "label": "pay-notify-bannerlimit",
           "pass": 8,
@@ -871,7 +871,7 @@
         {
           "crit": 7,
           "detail": "yes",
-          "elapsed_s": 0.4,
+          "elapsed_s": 0.3,
           "fail": 0,
           "label": "pay-notify-bannerwin",
           "pass": 7,
@@ -911,7 +911,7 @@
         {
           "crit": 7,
           "detail": "yes",
-          "elapsed_s": 1.5,
+          "elapsed_s": 2.0,
           "fail": 0,
           "label": "pay-authorize-idem",
           "pass": 7,
@@ -941,7 +941,7 @@
         {
           "crit": 7,
           "detail": "yes",
-          "elapsed_s": 5.4,
+          "elapsed_s": 5.7,
           "fail": 0,
           "label": "pay-notify-revoke",
           "pass": 7,
@@ -951,7 +951,7 @@
         {
           "crit": 7,
           "detail": "yes",
-          "elapsed_s": 1.0,
+          "elapsed_s": 1.1,
           "fail": 0,
           "label": "pay-revoke-reconcile",
           "pass": 7,
@@ -961,7 +961,7 @@
         {
           "crit": 7,
           "detail": "yes",
-          "elapsed_s": 0.5,
+          "elapsed_s": 0.6,
           "fail": 0,
           "label": "pay-channel-matrix",
           "pass": 7,
@@ -1001,7 +1001,7 @@
         {
           "crit": 7,
           "detail": "yes",
-          "elapsed_s": 1.4,
+          "elapsed_s": 1.7,
           "fail": 0,
           "label": "pay-reconcile-persist",
           "pass": 7,
@@ -1011,7 +1011,7 @@
         {
           "crit": 7,
           "detail": "yes",
-          "elapsed_s": 0.3,
+          "elapsed_s": 0.4,
           "fail": 0,
           "label": "pay-sweep-persist",
           "pass": 7,
@@ -1024,7 +1024,7 @@
       "crit_mismatch": 0,
       "crit_unchecked": 0,
       "crit_unchecked_seen": 1,
-      "elapsed_s": 9.4,
+      "elapsed_s": 11.0,
       "executed": 22,
       "green": 22,
       "guards": "会员到期、横幅队列、持久化面",
@@ -1051,7 +1051,7 @@
         {
           "crit": 16,
           "detail": "yes",
-          "elapsed_s": 1.4,
+          "elapsed_s": 1.5,
           "fail": 0,
           "label": "member",
           "pass": 25,
@@ -1081,7 +1081,7 @@
         {
           "crit": 7,
           "detail": "yes",
-          "elapsed_s": 0.7,
+          "elapsed_s": 1.0,
           "fail": 0,
           "label": "member-refund-recovery",
           "pass": 7,
@@ -1091,7 +1091,7 @@
         {
           "crit": 7,
           "detail": "yes",
-          "elapsed_s": 0.7,
+          "elapsed_s": 1.3,
           "fail": 0,
           "label": "member-expiring",
           "pass": 7,
@@ -1101,7 +1101,7 @@
         {
           "crit": 7,
           "detail": "yes",
-          "elapsed_s": 0.3,
+          "elapsed_s": 0.4,
           "fail": 0,
           "label": "member-reminder-scanwire",
           "pass": 7,
@@ -1111,7 +1111,7 @@
         {
           "crit": 17,
           "detail": "yes",
-          "elapsed_s": 0.5,
+          "elapsed_s": 0.6,
           "fail": 0,
           "label": "member-banner-board",
           "pass": 17,
@@ -1171,7 +1171,7 @@
         {
           "crit": 7,
           "detail": "yes",
-          "elapsed_s": 0.4,
+          "elapsed_s": 0.2,
           "fail": 0,
           "label": "member-banner-board-persist",
           "pass": 7,
@@ -1181,7 +1181,7 @@
         {
           "crit": 7,
           "detail": "yes",
-          "elapsed_s": 0.4,
+          "elapsed_s": 0.8,
           "fail": 0,
           "label": "member-expiring-dist",
           "pass": 7,
@@ -1201,7 +1201,7 @@
         {
           "crit": 7,
           "detail": "yes",
-          "elapsed_s": 0.5,
+          "elapsed_s": 0.4,
           "fail": 0,
           "label": "member-balanceface-persist",
           "pass": 7,
@@ -1221,7 +1221,7 @@
         {
           "crit": 7,
           "detail": "yes",
-          "elapsed_s": 0.3,
+          "elapsed_s": 0.7,
           "fail": 0,
           "label": "member-birthcert-persist",
           "pass": 7,
@@ -1241,7 +1241,7 @@
         {
           "crit": 7,
           "detail": "yes",
-          "elapsed_s": 0.3,
+          "elapsed_s": 0.4,
           "fail": 0,
           "label": "member-refund-recovery-persist",
           "pass": 7,
@@ -1264,7 +1264,7 @@
       "crit_mismatch": 0,
       "crit_unchecked": 0,
       "crit_unchecked_seen": 1,
-      "elapsed_s": 35.0,
+      "elapsed_s": 39.6,
       "executed": 30,
       "green": 30,
       "guards": "msgSecCheck 线路与面、审核席、水位日志、池/排空/批次持久化",
@@ -1291,7 +1291,7 @@
         {
           "crit": 37,
           "detail": "yes",
-          "elapsed_s": 6.4,
+          "elapsed_s": 7.2,
           "fail": 0,
           "label": "ugc",
           "pass": 37,
@@ -1311,7 +1311,7 @@
         {
           "crit": 5,
           "detail": "yes",
-          "elapsed_s": 9.0,
+          "elapsed_s": 10.5,
           "fail": 0,
           "label": "ugc-msgsec-wire",
           "pass": 5,
@@ -1321,7 +1321,7 @@
         {
           "crit": 5,
           "detail": "yes",
-          "elapsed_s": 10.3,
+          "elapsed_s": 10.6,
           "fail": 0,
           "label": "ugc-msgsec-gaps",
           "pass": 5,
@@ -1331,7 +1331,7 @@
         {
           "crit": 22,
           "detail": "yes",
-          "elapsed_s": 0.4,
+          "elapsed_s": 0.3,
           "fail": 0,
           "label": "ugc-sec-batch",
           "pass": 22,
@@ -1361,7 +1361,7 @@
         {
           "crit": 7,
           "detail": "yes",
-          "elapsed_s": 0.2,
+          "elapsed_s": 0.3,
           "fail": 0,
           "label": "ugc-sec-batch-rowpersist",
           "pass": 7,
@@ -1371,7 +1371,7 @@
         {
           "crit": 7,
           "detail": "yes",
-          "elapsed_s": 0.4,
+          "elapsed_s": 0.7,
           "fail": 0,
           "label": "ugc-pool-water",
           "pass": 7,
@@ -1401,7 +1401,7 @@
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 0.3,
+          "elapsed_s": 0.4,
           "fail": 0,
           "label": "ugc-batch-water",
           "pass": 6,
@@ -1411,7 +1411,7 @@
         {
           "crit": 6,
           "detail": "yes",
-          "elapsed_s": 0.3,
+          "elapsed_s": 0.5,
           "fail": 0,
           "label": "ugc-drain-water",
           "pass": 6,
@@ -1421,7 +1421,7 @@
         {
           "crit": 7,
           "detail": "yes",
-          "elapsed_s": 0.4,
+          "elapsed_s": 0.5,
           "fail": 0,
           "label": "ugc-submit-water",
           "pass": 7,
@@ -1431,7 +1431,7 @@
         {
           "crit": 7,
           "detail": "yes",
-          "elapsed_s": 0.5,
+          "elapsed_s": 0.7,
           "fail": 0,
           "label": "ugc-verdict-water",
           "pass": 7,
@@ -1441,7 +1441,7 @@
         {
           "crit": 7,
           "detail": "yes",
-          "elapsed_s": 0.6,
+          "elapsed_s": 0.7,
           "fail": 0,
           "label": "ugc-water-journal",
           "pass": 7,
@@ -1501,7 +1501,7 @@
         {
           "crit": 7,
           "detail": "yes",
-          "elapsed_s": 0.1,
+          "elapsed_s": 0.2,
           "fail": 0,
           "label": "ugc-water-journalroll",
           "pass": 7,
@@ -1511,7 +1511,7 @@
         {
           "crit": 7,
           "detail": "yes",
-          "elapsed_s": 0.2,
+          "elapsed_s": 0.3,
           "fail": 0,
           "label": "ugc-sec-batch-rowsroll",
           "pass": 7,
@@ -1521,7 +1521,7 @@
         {
           "crit": 7,
           "detail": "yes",
-          "elapsed_s": 0.2,
+          "elapsed_s": 0.7,
           "fail": 0,
           "label": "ugc-water-journalboardpersist",
           "pass": 7,
@@ -1541,7 +1541,7 @@
         {
           "crit": 7,
           "detail": "yes",
-          "elapsed_s": 0.7,
+          "elapsed_s": 0.6,
           "fail": 0,
           "label": "ugc-drain-waterpersist",
           "pass": 7,
@@ -1551,7 +1551,7 @@
         {
           "crit": 7,
           "detail": "yes",
-          "elapsed_s": 0.3,
+          "elapsed_s": 0.4,
           "fail": 0,
           "label": "ugc-pool-waterpersist",
           "pass": 7,
@@ -1561,7 +1561,7 @@
         {
           "crit": 7,
           "detail": "yes",
-          "elapsed_s": 0.5,
+          "elapsed_s": 0.6,
           "fail": 0,
           "label": "ugc-reviewdesk-persist",
           "pass": 7,
@@ -1584,7 +1584,7 @@
       "crit_mismatch": 0,
       "crit_unchecked": 0,
       "crit_unchecked_seen": 1,
-      "elapsed_s": 16.8,
+      "elapsed_s": 18.2,
       "executed": 19,
       "green": 19,
       "guards": "首元链路、SKU 桶与排序、路由、守恒与水位日志",
@@ -1601,7 +1601,7 @@
         {
           "crit": 8,
           "detail": "yes",
-          "elapsed_s": 0.7,
+          "elapsed_s": 0.9,
           "fail": 0,
           "label": "funnel",
           "pass": 8,
@@ -1611,7 +1611,7 @@
         {
           "crit": 7,
           "detail": "yes",
-          "elapsed_s": 0.3,
+          "elapsed_s": 0.5,
           "fail": 0,
           "label": "funnel-cli-gates",
           "pass": 7,
@@ -1621,7 +1621,7 @@
         {
           "crit": 8,
           "detail": "yes",
-          "elapsed_s": 0.8,
+          "elapsed_s": 0.7,
           "fail": 0,
           "label": "funnel-persist",
           "pass": 8,
@@ -1631,7 +1631,7 @@
         {
           "crit": 8,
           "detail": "yes",
-          "elapsed_s": 0.9,
+          "elapsed_s": 1.2,
           "fail": 0,
           "label": "funnel-rescan",
           "pass": 8,
@@ -1641,7 +1641,7 @@
         {
           "crit": 8,
           "detail": "yes",
-          "elapsed_s": 1.4,
+          "elapsed_s": 1.1,
           "fail": 0,
           "label": "funnel-rerollup",
           "pass": 8,
@@ -1651,7 +1651,7 @@
         {
           "crit": 8,
           "detail": "yes",
-          "elapsed_s": 0.9,
+          "elapsed_s": 1.1,
           "fail": 0,
           "label": "funnel-conservation",
           "pass": 8,
@@ -1671,7 +1671,7 @@
         {
           "crit": 8,
           "detail": "yes",
-          "elapsed_s": 0.5,
+          "elapsed_s": 0.6,
           "fail": 0,
           "label": "funnel-sku",
           "pass": 8,
@@ -1681,7 +1681,7 @@
         {
           "crit": 8,
           "detail": "yes",
-          "elapsed_s": 0.8,
+          "elapsed_s": 0.6,
           "fail": 0,
           "label": "funnel-route",
           "pass": 8,
@@ -1691,7 +1691,7 @@
         {
           "crit": 8,
           "detail": "yes",
-          "elapsed_s": 3.8,
+          "elapsed_s": 4.1,
           "fail": 0,
           "label": "funnel-cli-chain",
           "pass": 8,
@@ -1701,7 +1701,7 @@
         {
           "crit": 8,
           "detail": "yes",
-          "elapsed_s": 0.4,
+          "elapsed_s": 0.5,
           "fail": 0,
           "label": "funnel-inbox",
           "pass": 8,
@@ -1731,7 +1731,7 @@
         {
           "crit": 8,
           "detail": "yes",
-          "elapsed_s": 0.4,
+          "elapsed_s": 0.2,
           "fail": 0,
           "label": "funnel-route-persist",
           "pass": 8,
@@ -1741,7 +1741,7 @@
         {
           "crit": 8,
           "detail": "yes",
-          "elapsed_s": 0.4,
+          "elapsed_s": 0.9,
           "fail": 0,
           "label": "funnel-sku-gate",
           "pass": 8,
@@ -1761,7 +1761,7 @@
         {
           "crit": 8,
           "detail": "yes",
-          "elapsed_s": 2.0,
+          "elapsed_s": 1.9,
           "fail": 0,
           "label": "funnel-cli-env",
           "pass": 8,
@@ -1771,7 +1771,7 @@
         {
           "crit": 8,
           "detail": "yes",
-          "elapsed_s": 0.5,
+          "elapsed_s": 0.8,
           "fail": 0,
           "label": "funnel-sku-top-rank",
           "pass": 8,
@@ -1794,7 +1794,7 @@
       "crit_mismatch": 0,
       "crit_unchecked": 0,
       "crit_unchecked_seen": 1,
-      "elapsed_s": 6.2,
+      "elapsed_s": 5.9,
       "executed": 23,
       "green": 23,
       "guards": "密钥生命周期、限流、拒否窗口、用量日志",
@@ -1821,7 +1821,7 @@
         {
           "crit": 8,
           "detail": "yes",
-          "elapsed_s": 0.3,
+          "elapsed_s": 0.2,
           "fail": 0,
           "label": "ledger-apidev-lifecycle",
           "pass": 8,
@@ -1831,7 +1831,7 @@
         {
           "crit": 7,
           "detail": "yes",
-          "elapsed_s": 0.3,
+          "elapsed_s": 0.2,
           "fail": 0,
           "label": "ledger-apidev-rate",
           "pass": 7,
@@ -1841,7 +1841,7 @@
         {
           "crit": 7,
           "detail": "yes",
-          "elapsed_s": 0.3,
+          "elapsed_s": 0.2,
           "fail": 0,
           "label": "ledger-apidev-reject",
           "pass": 7,
@@ -1861,7 +1861,7 @@
         {
           "crit": 7,
           "detail": "yes",
-          "elapsed_s": 0.3,
+          "elapsed_s": 0.2,
           "fail": 0,
           "label": "ledger-apidev-rejectwin",
           "pass": 7,
@@ -1871,7 +1871,7 @@
         {
           "crit": 8,
           "detail": "yes",
-          "elapsed_s": 0.2,
+          "elapsed_s": 0.3,
           "fail": 0,
           "label": "ledger-apidev-usagewin",
           "pass": 8,
@@ -1881,7 +1881,7 @@
         {
           "crit": 8,
           "detail": "yes",
-          "elapsed_s": 0.7,
+          "elapsed_s": 0.3,
           "fail": 0,
           "label": "ledger-apidev-usagekind",
           "pass": 8,
@@ -1901,7 +1901,7 @@
         {
           "crit": 22,
           "detail": "yes",
-          "elapsed_s": 0.2,
+          "elapsed_s": 0.3,
           "fail": 0,
           "label": "ledger-apidev-lineage",
           "pass": 22,
@@ -1961,7 +1961,7 @@
         {
           "crit": 7,
           "detail": "yes",
-          "elapsed_s": 0.3,
+          "elapsed_s": 0.2,
           "fail": 0,
           "label": "ledger-apidev-lineagepersist",
           "pass": 7,
@@ -1971,7 +1971,7 @@
         {
           "crit": 7,
           "detail": "yes",
-          "elapsed_s": 0.2,
+          "elapsed_s": 0.3,
           "fail": 0,
           "label": "ledger-apidev-chainusagepersist",
           "pass": 7,
@@ -1981,7 +1981,7 @@
         {
           "crit": 7,
           "detail": "yes",
-          "elapsed_s": 0.2,
+          "elapsed_s": 0.3,
           "fail": 0,
           "label": "ledger-apidev-devboardpersist",
           "pass": 7,
@@ -1991,7 +1991,7 @@
         {
           "crit": 7,
           "detail": "yes",
-          "elapsed_s": 0.2,
+          "elapsed_s": 0.3,
           "fail": 0,
           "label": "ledger-apidev-usagelogpersist",
           "pass": 7,
@@ -2001,7 +2001,7 @@
         {
           "crit": 7,
           "detail": "yes",
-          "elapsed_s": 0.2,
+          "elapsed_s": 0.3,
           "fail": 0,
           "label": "ledger-apidev-keyviewpersist",
           "pass": 7,
@@ -2039,26 +2039,766 @@
           "suite": "PASS 7/7"
         }
       ]
+    },
+    {
+      "crit_mismatch": 0,
+      "crit_unchecked": 0,
+      "crit_unchecked_seen": 1,
+      "elapsed_s": 5.4,
+      "executed": 17,
+      "green": 17,
+      "guards": "试用漏斗、上限与持久化",
+      "key": "免费试用面",
+      "match": "ledger-freetrial",
+      "parse": "ok",
+      "rc": 0,
+      "red": [],
+      "registry_criteria": 7541,
+      "registry_suites": 849,
+      "selected": 17,
+      "selected_criteria": 125,
+      "suites": [
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.3,
+          "fail": 0,
+          "label": "ledger-freetrial",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.3,
+          "fail": 0,
+          "label": "ledger-freetrial-funnel",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.8,
+          "fail": 0,
+          "label": "ledger-freetrial-funnelwin",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.2,
+          "fail": 0,
+          "label": "ledger-freetrial-callmonth",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 8,
+          "detail": "yes",
+          "elapsed_s": 0.3,
+          "fail": 0,
+          "label": "ledger-freetrial-callkind",
+          "pass": 8,
+          "rc": 0,
+          "suite": "PASS 8/8"
+        },
+        {
+          "crit": 8,
+          "detail": "yes",
+          "elapsed_s": 0.2,
+          "fail": 0,
+          "label": "ledger-freetrial-callplan",
+          "pass": 8,
+          "rc": 0,
+          "suite": "PASS 8/8"
+        },
+        {
+          "crit": 8,
+          "detail": "yes",
+          "elapsed_s": 0.3,
+          "fail": 0,
+          "label": "ledger-freetrial-callengine",
+          "pass": 8,
+          "rc": 0,
+          "suite": "PASS 8/8"
+        },
+        {
+          "crit": 8,
+          "detail": "yes",
+          "elapsed_s": 0.4,
+          "fail": 0,
+          "label": "ledger-freetrial-callaccount",
+          "pass": 8,
+          "rc": 0,
+          "suite": "PASS 8/8"
+        },
+        {
+          "crit": 8,
+          "detail": "yes",
+          "elapsed_s": 0.3,
+          "fail": 0,
+          "label": "ledger-freetrial-capusage",
+          "pass": 8,
+          "rc": 0,
+          "suite": "PASS 8/8"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.3,
+          "fail": 0,
+          "label": "ledger-freetrial-caplimit",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.2,
+          "fail": 0,
+          "label": "ledger-freetrial-caproll",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.2,
+          "fail": 0,
+          "label": "ledger-freetrial-callroll",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.3,
+          "fail": 0,
+          "label": "ledger-freetrial-funnelroll",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.3,
+          "fail": 0,
+          "label": "ledger-freetrial-funnelcap",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.3,
+          "fail": 0,
+          "label": "ledger-freetrial-funnelpersist",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 8,
+          "detail": "yes",
+          "elapsed_s": 0.3,
+          "fail": 0,
+          "label": "ledger-freetrial-cappersist",
+          "pass": 8,
+          "rc": 0,
+          "suite": "PASS 8/8"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.3,
+          "fail": 0,
+          "label": "ledger-freetrial-fivepersist",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        }
+      ]
+    },
+    {
+      "crit_mismatch": 0,
+      "crit_unchecked": 0,
+      "crit_unchecked_seen": 1,
+      "elapsed_s": 3.5,
+      "executed": 11,
+      "green": 11,
+      "guards": "年书子集、授予宽度、零边界",
+      "key": "荣誉证书面",
+      "match": "ledger-honorcert",
+      "parse": "ok",
+      "rc": 0,
+      "red": [],
+      "registry_criteria": 7541,
+      "registry_suites": 849,
+      "selected": 11,
+      "selected_criteria": 77,
+      "suites": [
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.3,
+          "fail": 0,
+          "label": "ledger-honorcert",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.3,
+          "fail": 0,
+          "label": "ledger-honorcert-yearbook",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.8,
+          "fail": 0,
+          "label": "ledger-honorcert-persist",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 6,
+          "detail": "yes",
+          "elapsed_s": 0.3,
+          "fail": 0,
+          "label": "ledger-honorcert-yearbookpersist",
+          "pass": 6,
+          "rc": 0,
+          "suite": "PASS 6/6"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.2,
+          "fail": 0,
+          "label": "ledger-honorcert-multiyear",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.3,
+          "fail": 0,
+          "label": "ledger-honorcert-yearbookspersist",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.2,
+          "fail": 0,
+          "label": "ledger-honorcert-yearbooksubsetaxis",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.3,
+          "fail": 0,
+          "label": "ledger-honorcert-yearbook-zeroboundary",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.3,
+          "fail": 0,
+          "label": "ledger-honorcert-yearbook-zeroboundarygate",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 8,
+          "detail": "yes",
+          "elapsed_s": 0.2,
+          "fail": 0,
+          "label": "ledger-honorcert-grantwidthworld",
+          "pass": 8,
+          "rc": 0,
+          "suite": "PASS 8/8"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.2,
+          "fail": 0,
+          "label": "ledger-honorcert-grantgate-persist",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        }
+      ]
+    },
+    {
+      "crit_mismatch": 0,
+      "crit_unchecked": 0,
+      "crit_unchecked_seen": 1,
+      "elapsed_s": 5.4,
+      "executed": 21,
+      "green": 21,
+      "guards": "月度统计、重放、跨月边界",
+      "key": "展示统计面",
+      "match": "ledger-showcase",
+      "parse": "ok",
+      "rc": 0,
+      "red": [],
+      "registry_criteria": 7541,
+      "registry_suites": 849,
+      "selected": 21,
+      "selected_criteria": 147,
+      "suites": [
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.4,
+          "fail": 0,
+          "label": "ledger-showcase",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.2,
+          "fail": 0,
+          "label": "ledger-showcaseview-persist",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.2,
+          "fail": 0,
+          "label": "ledger-showcase-stats",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.2,
+          "fail": 0,
+          "label": "ledger-showcase-statslimit",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.2,
+          "fail": 0,
+          "label": "ledger-showcase-statsdual",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.2,
+          "fail": 0,
+          "label": "ledger-showcase-statsdual-persist",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.2,
+          "fail": 0,
+          "label": "ledger-showcase-statscap-persist",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.3,
+          "fail": 0,
+          "label": "ledger-showcase-statsboundary-persist",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.2,
+          "fail": 0,
+          "label": "ledger-showcase-statsgatepersist",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.3,
+          "fail": 0,
+          "label": "ledger-showcase-viewwindow-gatepersist",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.5,
+          "fail": 0,
+          "label": "ledger-showcase-viewwindow-persist",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.2,
+          "fail": 0,
+          "label": "ledger-showcase-viewwindow-replacepersist",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.2,
+          "fail": 0,
+          "label": "ledger-showcase-statsmonth",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.2,
+          "fail": 0,
+          "label": "ledger-showcase-statsmonth-persist",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.2,
+          "fail": 0,
+          "label": "ledger-showcase-statsmonthboundary-persist",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.2,
+          "fail": 0,
+          "label": "ledger-showcase-statsmonthretract-persist",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.2,
+          "fail": 0,
+          "label": "ledger-showcase-statsmonthreplace-persist",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.2,
+          "fail": 0,
+          "label": "ledger-showcase-statsmonth-rere-persist",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.2,
+          "fail": 0,
+          "label": "ledger-showcase-statsmonth-straddle-persist",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.2,
+          "fail": 0,
+          "label": "ledger-showcase-statsmonth-straddle2-persist",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.2,
+          "fail": 0,
+          "label": "ledger-showcase-statsmonth-straddle3-persist",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        }
+      ]
+    },
+    {
+      "crit_mismatch": 0,
+      "crit_unchecked": 0,
+      "crit_unchecked_seen": 1,
+      "elapsed_s": 1.5,
+      "executed": 7,
+      "green": 7,
+      "guards": "票券板、上限、会话与板持久化",
+      "key": "活动票券面",
+      "match": "ledger-eventtickets",
+      "parse": "ok",
+      "rc": 0,
+      "red": [],
+      "registry_criteria": 7541,
+      "registry_suites": 849,
+      "selected": 7,
+      "selected_criteria": 55,
+      "suites": [
+        {
+          "crit": 14,
+          "detail": "yes",
+          "elapsed_s": 0.2,
+          "fail": 0,
+          "label": "ledger-eventtickets",
+          "pass": 14,
+          "rc": 0,
+          "suite": "PASS 14/14"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.2,
+          "fail": 0,
+          "label": "ledger-eventtickets-boardwin",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.2,
+          "fail": 0,
+          "label": "ledger-eventtickets-boardlimit",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.2,
+          "fail": 0,
+          "label": "ledger-eventtickets-roll",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 6,
+          "detail": "yes",
+          "elapsed_s": 0.2,
+          "fail": 0,
+          "label": "ledger-eventtickets-telescope",
+          "pass": 6,
+          "rc": 0,
+          "suite": "PASS 6/6"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.2,
+          "fail": 0,
+          "label": "ledger-eventtickets-boardpersist",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.2,
+          "fail": 0,
+          "label": "ledger-eventtickets-sessionpersist",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        }
+      ]
+    },
+    {
+      "crit_mismatch": 0,
+      "crit_unchecked": 0,
+      "crit_unchecked_seen": 1,
+      "elapsed_s": 2.4,
+      "executed": 8,
+      "green": 8,
+      "guards": "策展合并、注册持久化、月度边界",
+      "key": "策展面",
+      "match": "ledger-curation",
+      "parse": "ok",
+      "rc": 0,
+      "red": [],
+      "registry_criteria": 7541,
+      "registry_suites": 849,
+      "selected": 8,
+      "selected_criteria": 69,
+      "suites": [
+        {
+          "crit": 24,
+          "detail": "yes",
+          "elapsed_s": 0.3,
+          "fail": 0,
+          "label": "ledger-curation",
+          "pass": 24,
+          "rc": 0,
+          "suite": "PASS 24/24"
+        },
+        {
+          "crit": 6,
+          "detail": "yes",
+          "elapsed_s": 0.2,
+          "fail": 0,
+          "label": "ledger-curation-hotpersist",
+          "pass": 6,
+          "rc": 0,
+          "suite": "PASS 6/6"
+        },
+        {
+          "crit": 6,
+          "detail": "yes",
+          "elapsed_s": 0.6,
+          "fail": 0,
+          "label": "ledger-curation-coldpersist",
+          "pass": 6,
+          "rc": 0,
+          "suite": "PASS 6/6"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.2,
+          "fail": 0,
+          "label": "ledger-curation-combined",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 6,
+          "detail": "yes",
+          "elapsed_s": 0.2,
+          "fail": 0,
+          "label": "ledger-curation-combinedpersist",
+          "pass": 6,
+          "rc": 0,
+          "suite": "PASS 6/6"
+        },
+        {
+          "crit": 6,
+          "detail": "yes",
+          "elapsed_s": 0.2,
+          "fail": 0,
+          "label": "ledger-curation-combinedboundary",
+          "pass": 6,
+          "rc": 0,
+          "suite": "PASS 6/6"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.3,
+          "fail": 0,
+          "label": "ledger-curation-combinedmonth",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        },
+        {
+          "crit": 7,
+          "detail": "yes",
+          "elapsed_s": 0.2,
+          "fail": 0,
+          "label": "ledger-curation-regpersist",
+          "pass": 7,
+          "rc": 0,
+          "suite": "PASS 7/7"
+        }
+      ]
     }
   ],
-  "generated_at": "2026-11-28T19:18:06",
-  "not_the_battery": "本页是分片，不是全量电池：它只跑下列族，未覆盖的 667 套件仍是欠账。",
+  "generated_at": "2026-11-28T19:41:22",
+  "not_the_battery": "本页是分片，不是全量电池：它只跑下列族，未覆盖的 603 套件仍是欠账。",
   "registry": {
     "criteria": 7541,
     "suites": 849
   },
-  "round": "R3655",
+  "round": "R3656",
   "totals": {
-    "cover_pct": 21.4,
+    "cover_pct": 29.0,
     "crit_mismatch": 0,
     "crit_unchecked": 0,
-    "crit_unchecked_seen": 11,
-    "families": 11,
-    "green_families": 11,
+    "crit_unchecked_seen": 16,
+    "families": 16,
+    "green_families": 16,
     "red_families": 0,
-    "selected": 182,
-    "selected_criteria": 1592,
-    "uncovered_suites": 667
+    "selected": 246,
+    "selected_criteria": 2065,
+    "uncovered_suites": 603
   },
   "verdict": "PASS"
 }

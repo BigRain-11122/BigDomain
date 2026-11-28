@@ -133,6 +133,19 @@ FAMILIES = (
     # codec and had been dying on three stray bytes. Prefix "ledger-apidev"
     # overlaps no other family.
     ("ledger-apidev", "API \u5f00\u53d1\u8005\u9762", "\u5bc6\u94a5\u751f\u547d\u5468\u671f\u3001\u9650\u6d41\u3001\u62d2\u5426\u7a97\u53e3\u3001\u7528\u91cf\u65e5\u5fd7"),
+    # R3657: the five cheap ledger sub-prefixes R3656 costed are taken in one
+    # pass - each leg was measured green standalone before these rows existed
+    # (freetrial 17/125 in 4.8s, honorcert 11/77 in 2.8s, showcase 21/147 in
+    # 6.2s, eventtickets 7/55 in 2.0s, curation 8/69 in 2.1s) and together they
+    # cost ~18s, which the pass already pays for its heavier families. Each
+    # prefix overlaps no other family prefix (AC-LSUB4 reads the table, not an
+    # eyeball). The showcase live leg reads 21/147 against the board's 20/140
+    # old-leg estimate, so the measured figure is the one recorded.
+    ("ledger-freetrial", "\u514d\u8d39\u8bd5\u7528\u9762", "\u8bd5\u7528\u6f0f\u6597\u3001\u4e0a\u9650\u4e0e\u6301\u4e45\u5316"),
+    ("ledger-honorcert", "\u8363\u8a89\u8bc1\u4e66\u9762", "\u5e74\u4e66\u5b50\u96c6\u3001\u6388\u4e88\u5bbd\u5ea6\u3001\u96f6\u8fb9\u754c"),
+    ("ledger-showcase", "\u5c55\u793a\u7edf\u8ba1\u9762", "\u6708\u5ea6\u7edf\u8ba1\u3001\u91cd\u653e\u3001\u8de8\u6708\u8fb9\u754c"),
+    ("ledger-eventtickets", "\u6d3b\u52a8\u7968\u5238\u9762", "\u7968\u5238\u677f\u3001\u4e0a\u9650\u3001\u4f1a\u8bdd\u4e0e\u677f\u6301\u4e45\u5316"),
+    ("ledger-curation", "\u7b56\u5c55\u9762", "\u7b56\u5c55\u5408\u5e76\u3001\u6ce8\u518c\u6301\u4e45\u5316\u3001\u6708\u5ea6\u8fb9\u754c"),
 )
 
 LINKS = ("index.html", "lobby-session-trace.html", "ledger-reconcile-face.html")
