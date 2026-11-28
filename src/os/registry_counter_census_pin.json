@@ -480,6 +480,7 @@
     "os-export-driver-queue-face",
     "os-export-driver-self-drive-health",
     "os-export-freshness",
+    "os-export-pair-clock",
     "os-export-parity-difference-order-field",
     "os-export-publish-from-import-law",
     "os-export-publish-path-guard",

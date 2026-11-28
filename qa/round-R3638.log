@@ -1,0 +1,60 @@
+# Round R3638 evidence (BigDomain OSLoop) - 2026-11-28
+# Produced by the round's own commands; readings pasted verbatim.
+
+## Opening five-still scan
+STATE FOLD bytes=71025 gate=78500 margin=7475 log_lines=78 verdict=FOLD-CLEAR archive=present
+APPEND CHECK PASS bytes=71025 gate=78500 margin=7475 tick=3637 log=78 ledger=R3637 api=0
+git status --short -> only qa/crawl-baselines.json, qa/crawl-failure-days.jsonl, qa/crawl-log.jsonl (not this window's)
+INDEX-LOCK=NO
+git log -1 -> 158819a2 backlog carrier fold (... [via BigDomain-OSLoop])
+evolution-ledger @BigDomain lines = 0
+decisions.md bytes=251006 mtime=11/19/2026 06:07:46 (unchanged, no new decision id)
+benchmarks_refreshed=2026-11-24 -> due 2026-12-01, not crossed
+
+## Fold (knife 25, before product work)
+fold plan: window 1:11 window_content_bytes=8190 round_pointer_lost=[] ledger_split_rounds=[] gate_ok=true predicted=63529
+fold execute: post_bytes=63529 predicted_eq_actual=true appendix_bytes=8398 archive_appended=true backup=logs/state-preop-R3638.bak
+APPEND CHECK PASS bytes=63529 gate=78500 margin=14971 tick=3637 log=68 ledger=R3637 api=0
+
+## The defect measured before any edit
+python src/os/export_round.py --check
+VERDICT FAIL 1
+  - AC-EXPW1 latest_artifact is not the newest product pair on disk
+probe: derived  = preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 commit] (halves differ: html [2026-11-28 commit] + json [2026-11-27 commit]; later=html)
+       face     = same pair, same bytes, same date, clock token mtime instead of commit
+
+## After the law (clock may lag one step on an unchanged date, never lead)
+python src/os/export_round.py --check
+VERDICT PASS tick=2026-11-28 R3637 MEASURED, r   (rc=0)
+
+## Suites
+python src/os/test_export_pair_clock.py         -> SUITE PASS 15/15 (four criteria, real git pair world built twice)
+python src/os/test_export_round.py              -> SUITE PASS 185/185 over 55 criteria (one arm repaired, named in the log)
+python src/sandbox/reconcile_all.py --only os-export-pair-clock
+REGISTRY rows=1 declared=0 inherited=1 missing=0 dup=0 zero=0 drift=0
+RUNTIME-CRIT graded=1 ungraded=0 drift=0
+RUNNER PARTIAL (selected 1/1 green, criteria=15, full battery NOT proven, 1.1s)
+
+## Closeout ring
+APPEND OK round=R3638 tick=3638 lines=6 bytes=63529->67223 gate=78500 verified=true
+VERDICT R3638 PASS: do, ceo_face.current and current all name R3638
+HEARTBEAT-WRITE tick=3638 bytes=10
+REGISTRY COUNTER CENSUS rows=847 readable=846 unparsed=0 silent=1 assembled_print_lines=305 (CACHE E_RCC_CACHE_PARTIAL reused=845/847)
+suite_matrix_reconcile --check -> DOC-CURRENT
+DELIVERABLE INDEX faces=9 defects=0 fingerprint=e51595688bdb8ea7 index=56454B
+first-yuan chain RENDER legs=2 reconcile_rc=0 zero_delta=True html=5397B json=5180B
+face_sweep --gates -> GATES PASS gates=13 green=13 red=0 red_ids=none mutated=none carrier=HEALTHY round_main=OK
+APPEND CHECK PASS bytes=67223 gate=78500 margin=11277 tick=3638 log=74 ledger=R3638 api=0
+status_export_fresh --check -> VERDICT R3638 PASS
+closeout_order --write/--check -> VERDICT PASS checks=4/4 read_only=True
+tools/closeout_gate.py -> CLOSEOUT-GATE PASS files=5090 flags=0 reader_refused=0 gating=flags round_main=OK census=PASS matrix=DOC-CURRENT
+  CARRIER bytes=67223 gate=78500 margin=11277 fold_needed=false layout_ok=true crlf=83 bare_lf=0 indent_anomaly=0 log_items=74
+  LEDGER OK rows=106 names=92 bad=0 stale=0 missing=0 broken=5
+  CLAIMS captured=1 uncaptured=11 contradicted=0 historic=0 rows=106 present=true
+
+## Not claimed this round
+- full battery not run; S4U still an Interactive logon; Docker absent
+- battery page still RED (page 843 rows vs registry 846) and NOT re-derived
+- reconcile evidence walk still decodes 12 of 756
+- the three qa/crawl-* modified files are not this window's
+- ZERO payment capability; no network beyond loopback; five physical pieces still gate every buyer

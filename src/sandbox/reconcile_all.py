@@ -9273,8 +9273,19 @@ SUITES = [
     # census run 6 to 3 (measured before and after). AC-FCW1 was re-pointed and
     # AC-FCW2 strengthened at R3635; AC-FCW5/AC-FCW6 pin the view's equality
     # to a path read and its authority when truncated.
-    ("os-fold-carry-single-walk",
-     os.path.join("..", "os", "test_fold_carry_census_single_walk.py"), 6),
+     ("os-fold-carry-single-walk",
+      os.path.join("..", "os", "test_fold_carry_census_single_walk.py"), 6),
+    # R3638: the face is written BEFORE the commit that ships it, so the half
+    # that won the stamp is dirty and renders 'mtime'; that commit makes the
+    # same content clean and the same pair re-derives as 'commit' for the same
+    # date. Whole-line equality asked the face to predict its own commit, so
+    # every product round opened with AC-EXPW1 red for one window (measured:
+    # VERDICT FAIL 1, same pair, same date, only the clock token differing).
+    # The clock may now LAG one step on an unchanged date and may never LEAD.
+    # Criteria AC-EXPCLK1..AC-EXPCLK4 were pinned in src/os/backlog.md at
+    # R3638, before the tool changed and this suite existed.
+    ("os-export-pair-clock",
+     os.path.join("..", "os", "test_export_pair_clock.py"), 15),
     ]
 
 FAILS = 0

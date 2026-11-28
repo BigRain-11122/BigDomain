@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 846 | 7484 | 675/675 | R2739 |
+| 847 | 7499 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -883,7 +883,8 @@
 | 844 | os-ledger-archive-round-main | ../os/test_ledger_archive_round_main.py | 19 | no-evidence | - |
 | 845 | os-fold-carry-evidence-law | ../os/test_fold_carry_evidence_law.py | 4 | no-evidence | - |
 | 846 | os-fold-carry-single-walk | ../os/test_fold_carry_census_single_walk.py | 6 | no-evidence | - |
-|  | 合计 |  | 7484 | green 675 / FAIL 0 / no-evidence 171 |  |
+| 847 | os-export-pair-clock | ../os/test_export_pair_clock.py | 15 | no-evidence | - |
+|  | 合计 |  | 7499 | green 675 / FAIL 0 / no-evidence 172 |  |
 
 ## 证据出处
 

@@ -507,6 +507,47 @@ def fmt_pair(pair):
 _fmt_pair = fmt_pair
 
 
+# R3638 AC-EXPCLK1..3: the face is written BEFORE the commit that ships it, so
+# the half that won the stamp is still dirty and renders 'mtime'; the same commit
+# then makes that content clean and the very same pair re-derives as 'commit'.
+# Equality on the whole line therefore asked the face to predict its own commit,
+# and every round that lands a new page opened with AC-EXPW1 red for one window.
+# The identity (both paths, both byte counts) and every bracket's DATE are still
+# graded by equality; the CLOCK may LAG exactly one step - 'mtime' where the
+# re-derivation now reads 'commit' with the same date - and may never LEAD, so a
+# face claiming 'commit' while the file is still dirty is still refused.
+PAIR_BRACKET_RE = re.compile(r'\[(\d{4}-\d{2}-\d{2}) (commit|mtime)\]')
+
+
+def clock_lag_lawful(named, derived):
+    """Is `named` the same face one commit earlier than `derived`?
+
+    Returns True only when the two lines differ in NOTHING but clock markers that
+    moved 'commit' -> 'mtime' on the same date; the identity text between the
+    brackets must be byte-equal. A lagging marker is a claim about a moment that
+    has passed, so the only way it can be false is a rewrite that keeps both the
+    bytes and both dates identical - which no number on this line can detect.
+    """
+    if not isinstance(named, str) or not isinstance(derived, str):
+        return False
+    if named == derived:
+        return True
+    if PAIR_BRACKET_RE.sub('[]', named) != PAIR_BRACKET_RE.sub('[]', derived):
+        return False
+    named_parts = PAIR_BRACKET_RE.findall(named)
+    derived_parts = PAIR_BRACKET_RE.findall(derived)
+    if not named_parts or len(named_parts) != len(derived_parts):
+        return False
+    lagged = 0
+    for (n_date, n_clock), (d_date, d_clock) in zip(named_parts, derived_parts):
+        if (n_date, n_clock) == (d_date, d_clock):
+            continue
+        if n_date != d_date or n_clock != 'mtime' or d_clock != 'commit':
+            return False
+        lagged += 1
+    return lagged > 0
+
+
 # R3142: a row in the artifact list names its own files, so its age can be
 # asked of the FILES. The label in the row cannot answer it: measured on the
 # live face, 16 of 56 rows carry any date token at all and 8 of those claim a
@@ -1416,7 +1457,7 @@ def check(repo):
     if refusal:
         fails.append(refusal)
     pair, skipped, newest_is_board = newest_artifact(repo)
-    if pair and cur.get('latest_artifact') != _fmt_pair(pair):
+    if pair and not clock_lag_lawful(cur.get('latest_artifact'), _fmt_pair(pair)):
         fails.append('AC-EXPW1 latest_artifact is not the newest product pair '
                      'on disk')
     named = str(cur.get('latest_artifact') or '')

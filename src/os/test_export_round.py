@@ -1088,7 +1088,8 @@ def main():
                          'AC-EXPD8 the derived line grades clean',
                          'AC-EXPD8 the marker-less pre-R2898 line reddens the '
                          'check',
-                         'AC-EXPD8 a face claiming the WRONG clock reddens it too',
+                         'AC-EXPD8 a face whose bracket disagrees with the '
+                         'derivation reddens it too',
                          'AC-EXPD9 both derivations publish the identical line',
                          'AC-EXPD9 group 1 of the line is still the DATE'):
                 ok(name, False, 'git unavailable in this environment')
@@ -1117,11 +1118,26 @@ def main():
                any('AC-EXPW1' in f for f in mod.check(wp)),
                'fails=%s' % mod.check(wp)[:2])
             wrong_clock = json.loads(json.dumps(built_p))
-            wrong_clock['ceo_face']['latest_artifact'] = re.sub(
-                r'commit\]$', 'mtime]', d_clean['latest'])
+            # R3638 AC-EXPCLK3: the R2898 arm asserted that ANY clock override
+            # reddens, which also refused the face this writer itself publishes
+            # before its own commit (same pair, same date, 'mtime' where the
+            # re-derivation reads 'commit'). The law now lets the clock lag on
+            # an UNCHANGED date and refuses everything else, so this arm keeps a
+            # clock-shaped negative control by moving the DATE with the clock.
+            lag = re.search(r'\[(\d{4})-(\d{2})-(\d{2}) (?:commit|mtime)\]$',
+                            d_clean['latest'])
+            if lag:
+                day = time.strftime(
+                    '%Y-%m-%d',
+                    time.localtime(
+                        time.mktime(time.strptime(lag.group(0)[1:11],
+                                                  '%Y-%m-%d')) - 86400))
+                wrong_clock['ceo_face']['latest_artifact'] = (
+                    d_clean['latest'][:lag.start()] + '[%s mtime]' % day)
             write(face_p, json.dumps(wrong_clock, ensure_ascii=False,
                                      indent=2) + '\n')
-            ok('AC-EXPD8 a face claiming the WRONG clock reddens it too',
+            ok('AC-EXPD8 a face whose bracket disagrees with the derivation '
+               'reddens it too',
                any('AC-EXPW1' in f for f in mod.check(wp)),
                'fails=%s' % mod.check(wp)[:2])
             write(face_p, json.dumps(built_p, ensure_ascii=False, indent=2)
