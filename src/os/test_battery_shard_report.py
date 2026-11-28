@@ -591,6 +591,132 @@ def main():
        "order=%s moved=%s cut=%s delegate=%s refuse=%s"
        % (real_order, moved_order, cut_order, delegate_ok, refuse_ok))
 
+    # ---- AC-BSRU1..AC-BSRU4 (R3636 pin): an unknown flag is refused BEFORE
+    # the measure-and-write rollout. R3636 measured the live defect: --help and
+    # the typo --chek each called measure() once, which launches the whole
+    # battery; one real window lost five minutes to it before being cancelled.
+    def pair_sig(path):
+        with io.open(path, "rb") as fh:
+            data = fh.read()
+        return (len(data), hashlib.sha256(data).hexdigest()[:16],
+                os.path.getmtime(path))
+
+    pair_before = (pair_sig(PAIR_JSON), pair_sig(PAIR_HTML))
+
+    class _Trap(object):
+        def __init__(self):
+            self.calls = 0
+
+        def __call__(self, *a, **k):
+            self.calls += 1
+            raise RuntimeError("MEASURE-CALLED")
+
+    forced = []
+    real_measure = bsr.measure
+    try:
+        for argv in (["x", "--help"], ["x", "-h"], ["x", "--chek"],
+                     ["x", "--Write"]):
+            trap = _Trap()
+            bsr.measure = trap
+            buf = io.StringIO()
+            try:
+                with contextlib.redirect_stdout(buf):
+                    rc = bsr.main(argv)
+            except RuntimeError:
+                rc = "MEASURED"
+            forced.append((argv[-1], rc, trap.calls, buf.getvalue()))
+    finally:
+        bsr.measure = real_measure
+    pair_after = (pair_sig(PAIR_JSON), pair_sig(PAIR_HTML))
+
+    def flag_row(tag):
+        return [r for r in forced if r[0] == tag][0]
+
+    help_ok = (flag_row("--help")[1] == 0 and flag_row("-h")[1] == 0
+               and all(flag_row(t)[2] == 0 for t in ("--help", "-h"))
+               and all("usage:" in flag_row(t)[3] for t in ("--help", "-h")))
+    bad_tags = ("--chek", "--Write")
+    bad_ok = all(flag_row(t)[1] == 2 and flag_row(t)[2] == 0
+                 and "usage:" in flag_row(t)[3]
+                 and "E_BSR_ARGS" in flag_row(t)[3] for t in bad_tags)
+    ok("AC-BSRU1", help_ok and bad_ok and pair_before == pair_after,
+       "help=%s bad=%s trap_calls=%d page_still=%s"
+       % (help_ok, bad_ok, sum(r[2] for r in forced),
+          pair_before == pair_after))
+
+    # AC-BSRU2 - the refusal returns before any measurement, read off source
+    # positions rather than promised by a comment.
+    guard_at = src_tool.find("if unknown:")
+    measure_at = src_tool.find("payload = measure()")
+    band = (src_tool[guard_at:measure_at]
+            if 0 <= guard_at < measure_at else "ABSENT")
+    source_ok = (0 <= guard_at < measure_at and band.count("measure(") == 0
+                 and src_tool.count("KNOWN_FLAGS") >= 2
+                 and "E_BSR_ARGS" in band)
+    ok("AC-BSRU2", source_ok,
+       "guard=%d measure=%d band_calls=%d known=%d"
+       % (guard_at, measure_at, band.count("measure("),
+          src_tool.count("KNOWN_FLAGS")))
+
+    # AC-BSRU3 - the two shipped flags keep their exact meaning, and the
+    # bare invocation still reaches the rollout.
+    mark = {"check": 0, "control": 0, "measure": 0}
+    real_check, real_control = bsr.do_check, bsr.do_control
+
+    def fake_check():
+        mark["check"] += 1
+        return 0
+
+    def fake_control():
+        mark["control"] += 1
+        return 0
+
+    def fake_measure():
+        mark["measure"] += 1
+        raise RuntimeError("MEASURE-CALLED")
+
+    def run_marked(argv):
+        for key in mark:
+            mark[key] = 0
+        buf = io.StringIO()
+        try:
+            with contextlib.redirect_stdout(buf):
+                rc = bsr.main(argv)
+        except RuntimeError:
+            rc = "MEASURED"
+        return rc, dict(mark)
+
+    try:
+        bsr.do_check, bsr.do_control, bsr.measure = (fake_check, fake_control,
+                                                     fake_measure)
+        r_check = run_marked(["x", "--check"])
+        r_control = run_marked(["x", "--control"])
+        r_both = run_marked(["x", "--check", "--control"])
+        r_bare = run_marked(["x"])
+    finally:
+        bsr.do_check, bsr.do_control, bsr.measure = (real_check, real_control,
+                                                     real_measure)
+    keep_ok = (r_check == (0, {"check": 1, "control": 0, "measure": 0})
+               and r_control == (0, {"check": 0, "control": 1, "measure": 0})
+               and r_both == (0, {"check": 1, "control": 0, "measure": 0})
+               and r_bare == ("MEASURED",
+                              {"check": 0, "control": 0, "measure": 1}))
+    ok("AC-BSRU3", keep_ok,
+       "check=%s control=%s both=%s bare=%s"
+       % (r_check, r_control, r_both, r_bare))
+
+    # AC-BSRU4 - zero regression, and the registry declares the arm count the
+    # suite really runs (14 before this pin, 18 after).
+    prior_green = (len(CHECKS) == 17 and not FAILS)
+    row = re.search(
+        r'"os-battery-shard-report",\s*'
+        r'os\.path\.join\("\.\.", "os", "test_battery_shard_report\.py"\),'
+        r'\s*(\d+)\)', read_text(REGISTRY))
+    declared = int(row.group(1)) if row else -1
+    ok("AC-BSRU4", prior_green and declared == 18,
+       "prior_green=%s prior_arms=%d declared=%d want=18"
+       % (prior_green, len(CHECKS), declared))
+
     total = len(CHECKS)
     passed = total - len(FAILS)
     if FAILS:

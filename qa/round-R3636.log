@@ -1,0 +1,11 @@
+# R3636 evidence (ASCII)
+suite_a_tail=
+SUITE PASS 18/18
+suite_b_tail=
+SUITE PASS 18/18
+dbl_identical=True
+probe(--help,--chek before fix)=-measure_calls:1,1
+probe(--help,--chek after fix)=rc 0/2 measure_calls=0,0
+page_pair_mtime=2026-11-27 06:06 (unchanged by refusal)
+p47_cores: lobby=79/79 ledger=11/11 ugc=37/37 pay=16/16 member=16/16
+battery_page_check: BSR-CHECK RED E_REGISTRY_DRIFT x3, E_TOTALS_UNCOVERED, E_TOTALS_COVER (page 843 rows vs registry 846; full battery NOT run)

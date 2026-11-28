@@ -508,9 +508,35 @@ def do_control():
     return 0
 
 
+USAGE = (
+    "usage: battery_shard_report.py [--check | --control | --help]\n"
+    "       (no flag)  measure the three shard families and write\n"
+    "                  preview/battery-shard-report.json + .html, then\n"
+    "                  re-derive the CEO face\n"
+    "  --check    re-read the landed pair against the live registry, write nothing\n"
+    "  --control  prove the checker still refuses a mutated pair, write nothing\n"
+    "  --help     print this text and exit 0\n")
+
+# R3636 AC-BSRU1: main() used to treat every argument it did not recognise as
+# the measure-and-write rollout, so a typo (or --help) silently launched the
+# whole battery: measured at R3636, --help and --chek each called measure()
+# once and one real window lost five minutes to it before being cancelled.
+# The flag set is therefore closed, and an unknown flag is refused here,
+# before any family runs.
+KNOWN_FLAGS = ("--check", "--control", "--help", "-h")
+
+
 def main(argv):
     args = list(argv[1:])
     try:
+        unknown = [a for a in args if a not in KNOWN_FLAGS]
+        if unknown:
+            print("BSR-REFUSED E_BSR_ARGS unknown=%s" % ",".join(unknown))
+            print(USAGE.rstrip("\n"))
+            return 2
+        if "--help" in args or "-h" in args:
+            print(USAGE.rstrip("\n"))
+            return 0
         if "--check" in args:
             return do_check()
         if "--control" in args:
