@@ -85,7 +85,36 @@ def scope_line(report):
 def tail_of(line):
     marker = 'archived_missing_ids='
     pos = line.find(marker)
-    return line[pos + len(marker):] if pos >= 0 else None
+    if pos < 0:
+        return None
+    return line[pos + len(marker):].split(' ')[0]
+
+
+def ranges_of(line):
+    marker = 'archived_orphan_ranges='
+    pos = line.find(marker)
+    if pos < 0:
+        return None
+    return line[pos + len(marker):].split(' ')[0]
+
+
+def expand_ranges(text):
+    """Parse a run list back into ids; the +N remainder is skipped."""
+    ids = []
+    for part in (text or '').split(','):
+        part = part.strip()
+        if not part or part.startswith('+'):
+            continue
+        if '-' in part:
+            lo, hi = part.split('-')
+            ids.extend(range(int(lo), int(hi) + 1))
+        else:
+            ids.append(int(part))
+    return ids
+
+
+def seg_count(text):
+    return len([p for p in (text or '').split(',') if p and not p.startswith('+')])
 
 
 def world(base, name, archive_text):
@@ -177,8 +206,78 @@ def main():
         ok('AC-AMID5 the scope line still opens on its four pinned fields',
            re.match(r'^scope: \S+ archive_lines=\d+ live_lines=\d+ '
                     r'archived_missing=\d+ archived_orphan=\d+ '
-                    r'archived_missing_ids=\S+$', line_live) is not None,
+                    r'archived_missing_ids=\S+ '
+                    r'archived_orphan_ranges=\S+$', line_live) is not None,
            line_live[:90])
+
+        # ---- AC-AOR2 a world with no orphan names none.
+        ok('AC-AOR2 a zero-orphan archive world reads archived_orphan_ranges=none',
+           scoped_clean['archived_orphan'] == []
+           and ranges_of(line_clean[0]) == 'none',
+           ranges_of(line_clean[0]))
+
+        # ---- AC-AOR3 runs collapse, singletons stay bare, ascending.
+        runs = ('R2003 tokens: local=~1k api=0 api_reason=fixture reason here\n'
+                'R2001 tokens: local=~1k api=0 api_reason=fixture reason here\n'
+                'R2002 tokens: local=~1k api=0 api_reason=fixture reason here\n'
+                'R2005 tokens: local=~1k api=0 api_reason=fixture reason here\n')
+        scoped_runs, lines_runs = world(base, 'runs', runs)
+        line_runs = scope_line(scoped_runs)
+        ok('AC-AOR3 a contiguous triple collapses and a lone id stays bare',
+           sorted(scoped_runs['archived_orphan']) == [2001, 2002, 2003, 2005]
+           and ranges_of(line_runs) == '2001-2003,2005',
+           ranges_of(line_runs))
+
+        # ---- AC-AOR4 the cap counts segments, not ids.
+        spread = ''.join('R30%02d tokens: local=~1k api=0 '
+                         'api_reason=fixture reason here\n' % n
+                         for n in (2, 4, 6, 8, 10, 12, 14, 16, 18, 20))
+        scoped_spread, lines_spread = world(base, 'spread', spread)
+        line_spread = scope_line(scoped_spread)
+        ok('AC-AOR4 ten isolated ids publish eight segments then +2',
+           len(scoped_spread['archived_orphan']) == 10
+           and ranges_of(line_spread)
+           == '3002,3004,3006,3008,3010,3012,3014,3016,+2',
+           ranges_of(line_spread))
+        ok('AC-AOR4 the cap is the shipped constant, not a local literal',
+           LL.ID_RANGE_CAP == 8
+           and LL.format_id_ranges([1, 3, 5, 7, 9, 11, 13, 15, 17]).endswith(',+1')
+           and LL.format_id_ranges([]) == 'none',
+           'cap=%d' % LL.ID_RANGE_CAP)
+
+        # ---- AC-AOR5 count and ranges derive from the same list, never gate.
+        live_ids = set(live_scoped['archived_orphan'])
+        run_ids = expand_ranges(ranges_of(line_live))
+        remainder = ranges_of(line_live).rsplit('+', 1)[-1]
+        ok('AC-AOR5 the live ranges name only ids the count holds',
+           set(run_ids) <= live_ids
+           and seg_count(ranges_of(line_live)) <= LL.ID_RANGE_CAP,
+           '%d named of %d counted' % (len(run_ids), len(live_ids)))
+        ok('AC-AOR5 segments plus the remainder bound the capped list',
+           not remainder.isdigit()
+           or seg_count(ranges_of(line_live)) + int(remainder)
+           >= 1,
+           ranges_of(line_live))
+        ok('AC-AOR5 an archive-only reading never moves the verdict',
+           lines_clean[-1] == lines_runs[-1] == lines_spread[-1]
+           == 'VERDICT CLEAN'
+           and scoped_runs['clean'] is True
+           and scoped_spread['clean'] is True,
+           '%s/%s' % (lines_runs[-1], lines_spread[-1]))
+
+        # ---- AC-AOR1 the new field appends after the pinned five.
+        ok('AC-AOR1 the orphan face appends after the pinned five fields',
+           line_live.find('archived_orphan_ranges=') > 0
+           and line_live.find('archived_missing_ids=')
+           < line_live.find('archived_orphan_ranges='),
+           line_live[:100])
+
+        # ---- AC-AOR6 the face is read-only and the module stays honest.
+        ok('AC-AOR6 the range renderer is pure and the archives stay untouched',
+           LL.format_id_ranges([7, 8, 9]) == '7-9'
+           and before == after
+           and LL.ID_RANGE_CAP == 8,
+           'before_equals_after=%s' % (before == after))
 
         # ---- AC-AMID5 hygiene and wiring.
         net = LL.network_imports(src)
@@ -188,17 +287,18 @@ def main():
             reg = fh.read()
         ok('AC-AMID5 the suite is wired in the registry',
            '("os-ledger-scope-ids",' in reg
-           and 'test_ledger_scope_ids.py"), 14)' in reg)
+           and 'test_ledger_scope_ids.py"), 23)' in reg)
         try:
             io.open(os.path.abspath(__file__), encoding='ascii').read()
             ascii_ok = True
         except UnicodeDecodeError:
             ascii_ok = False
         ok('AC-AMID5 this suite source is pure ASCII', ascii_ok)
-        crit = sorted(set(re.findall(r'AC-AMID\d', ' '.join(CHECKS))))
+        crit = sorted(set(re.findall(r'AC-(?:AMID|AOR)\d', ' '.join(CHECKS))))
         ok('AC-AMID5 every declared criterion is measured',
            crit == ['AC-AMID1', 'AC-AMID2', 'AC-AMID3', 'AC-AMID4',
-                    'AC-AMID5'],
+                    'AC-AMID5', 'AC-AOR1', 'AC-AOR2', 'AC-AOR3', 'AC-AOR4',
+                    'AC-AOR5', 'AC-AOR6'],
            ','.join(crit))
     finally:
         shutil.rmtree(base, ignore_errors=True)

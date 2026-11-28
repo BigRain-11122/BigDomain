@@ -1,20 +1,20 @@
 {
   "ceo_face": {
     "board_pages_skipped": ["preview/face-sweep.html (8877B)"],
-    "current": "2026-11-28 R3645 PRODUCT: the CEO battery page now reads what the tree actually is. Measured before any write: BSR-CHECK read RED with E_REGISTRY_DRIFT, E_REGISTRY_DRIFT on the OS ledger face and E_TOTALS_UNCOVERED, because the landed pair still carried an older registry size while the live registry had grown to 848 rows at R3642, and the three families R3644 returned to green had never reached that page. The shipped writer was then run bare: all six families through the shipped shard runner - lobby rc=0 7 suites/118 criteria 191.3s, os-export rc=0 23/195 53.6s, os-queue rc=0 16/98 15.5s, os-ledger rc=0 16/140 15.2s, os-battery rc=0 4/63 98.5s, os-deliverable rc=0 1/28 116.6s - landing json=19310B html=17484B verdict=PASS families=6 selected=67 criteria=642 uncovered=781, and the same process re-derived the export face (WRITTEN stamp 2026-11-28T14:39:15).",
+    "current": "2026-11-28 R3646 PRODUCT: the orphan half of the archive face now names what it counted. Open measurement: `scope:` has published archived_missing_ids since R3641 but still published only archived_orphan=<count>, and a read of the shipped logs answered archived_orphan=279 over a span of 267..2052 in long contiguous blocks (267-268, 450, 460, 468, 1192-1207, 2041-2052, ...), so a twelve-id tail would have named almost nothing a reader could act on. Delivered: one pure renderer `format_id_ranges` (runs collapse to a-b, singletons stay bare, segments capped at ID_RANGE_CAP=8 with a trailing +N) and one new field on the same published line, `archived_orphan_ranges=`. The live read is now archived_orphan_ranges=267-268,450,460,468,1192-1201,1203-1222,1224-1225,1227,+184 beside the unchanged archived_orphan=279, so a reader sees where the unlabelled stretches sit instead of one number. Suite grew 14 -> 23 criteria (AC-AOR1..AC-AOR6) and reads SUITE PASS 23/23; the two neighbours read os-ledger-archive 16/16 and os-ledger-lines 8/8 and the registry census reads 848 rows.",
     "do": "2026-11-25 R3456 PRODUCT: the answer-revision question now has a door - api_answer_history (live with AC-AMAW1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so 'which answer was rewritten, what did it say before, what does it say now and how often did it change' could only be read by calling the sandbox from a shell - while api_seller_answers and api_listing_qna publish only the CURRENT wording.",
-    "last_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 mtime] (halves differ: html [2026-11-28 mtime] + json [2026-11-27 commit]; later=html)",
-    "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 mtime] (halves differ: html [2026-11-28 mtime] + json [2026-11-27 commit]; later=html)",
+    "last_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 commit] (halves differ: html [2026-11-28 commit] + json [2026-11-27 commit]; later=html)",
+    "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 commit] (halves differ: html [2026-11-28 commit] + json [2026-11-27 commit]; later=html)",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ugc-gate-report.html",
     "latest_artifact_note": "",
     "latest_evidence": "qa/round-R3642-pwc.log (46948B, 2026-11-28, sha256 e47d64f142a9)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3645] next window (<=48h): (0) **carrier**: `python src/os/state_fold_run.py --check` and `python src/os/logs_toolkit.py append --check` first; one append per round with `--round R####`, main line `YYYY-MM-DD R#### LABEL:` (tmp/append_R3645.py is the ASCII driver). (1) **benchmarks refresh due 2026-12-01** (benchmarks_refreshed=2026-11-24) - schedule the refresh round then (P-2026-09-24-56). (2) **S4U still not landed**: BigDomain-OSLoop Principal.LogonType=Interactive; lawful fix = elevated session running src/os/register_loop_task.ps1, read back must be S4U. (3) **next pullable**: (a) the battery page covers 67 of 848 suites and 781 stay uncovered - widening a family is a real increment but every added family must be pinned before it runs, and the page's own note forbids calling a shard the battery; (b) `archived_orphan` still publishes a count only (reuse format_id_tail for the orphan tail and move the pins with it) (truncated)",
-    "next_milestone_due": "2026-11-30T14:44:39+08:00",
-    "updated_at": "2026-11-28T14:44:39+08:00",
+    "next_milestone": "[R3646] next window (<=48h): (0) **carrier**: `python src/os/state_fold_run.py --check` and `python src/os/logs_toolkit.py append --check` first; one append per round with `--round R####`, main line `YYYY-MM-DD R#### LABEL:` (tmp/append_R3646.py is the ASCII driver). (1) **benchmarks refresh due 2026-12-01** (benchmarks_refreshed=2026-11-24) - schedule the refresh round then (P-2026-09-24-56). (2) **S4U still not landed**: BigDomain-OSLoop Principal.LogonType=Interactive; lawful fix = elevated session running src/os/register_loop_task.ps1, read back must be S4U. (3) **next pullable**: (a) state/qa_replacements.jsonl chain still reads broken=5 (measured again this window: rows=106 broken=5) - a real data repair, not a publish face; (b) the battery page covers 67 of 848 suites and 781 stay uncovered - widening a family is a real increment but every added family must be pinned before it runs (truncated)",
+    "next_milestone_due": "2026-11-30T14:54:58+08:00",
+    "updated_at": "2026-11-28T14:54:58+08:00",
     "heartbeat": {
-      "tick": 3645,
-      "state_tick": 3645,
+      "tick": 3646,
+      "state_tick": 3646,
       "lag": 0,
       "verdict": "PASS",
       "reason": "fresh"
@@ -35,8 +35,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-28 R3645 PRODUCT: the CEO battery page now reads what the tree actually is. Measured before any write: BSR-CHECK read RED with E_REGISTRY_DRIFT, E_REGISTRY_DRIFT on the OS ledger face and E_TOTALS_UNCOVERED, because the landed pair still carried an older registry size while the live registry had grown to 848 rows at R3642, and the three families R3644 returned to green had never reached that page. The shipped writer was then run bare: all six families through the shipped shard runner - lobby rc=0 7 suites/118 criteria 191.3s, os-export rc=0 23/195 53.6s, os-queue rc=0 16/98 15.5s, os-ledger rc=0 16/140 15.2s, os-battery rc=0 4/63 98.5s, os-deliverable rc=0 1/28 116.6s - landing json=19310B html=17484B verdict=PASS families=6 selected=67 criteria=642 uncovered=781, and the same process re-derived the export face (WRITTEN stamp 2026-11-28T14:39:15).",
-  "claims": {"claimed": 14, "captured": 1, "contradicted": 0, "uncaptured": 13, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-28T14:44:39+08:00"},
+  "current": "2026-11-28 R3646 PRODUCT: the orphan half of the archive face now names what it counted. Open measurement: `scope:` has published archived_missing_ids since R3641 but still published only archived_orphan=<count>, and a read of the shipped logs answered archived_orphan=279 over a span of 267..2052 in long contiguous blocks (267-268, 450, 460, 468, 1192-1207, 2041-2052, ...), so a twelve-id tail would have named almost nothing a reader could act on. Delivered: one pure renderer `format_id_ranges` (runs collapse to a-b, singletons stay bare, segments capped at ID_RANGE_CAP=8 with a trailing +N) and one new field on the same published line, `archived_orphan_ranges=`. The live read is now archived_orphan_ranges=267-268,450,460,468,1192-1201,1203-1222,1224-1225,1227,+184 beside the unchanged archived_orphan=279, so a reader sees where the unlabelled stretches sit instead of one number. Suite grew 14 -> 23 criteria (AC-AOR1..AC-AOR6) and reads SUITE PASS 23/23; the two neighbours read os-ledger-archive 16/16 and os-ledger-lines 8/8 and the registry census reads 848 rows.",
+  "claims": {"claimed": 17, "captured": 4, "contradicted": 0, "uncaptured": 13, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-28T14:54:58+08:00"},
   "chain": {"present": true, "rows": 106, "broken": 5, "path": "state/qa_replacements.jsonl", "partial": 5, "declared": 1, "unexplained": 0, "adjudication": "OK", "excused": 1},
   "depts": [
     {
@@ -65,14 +65,14 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-28 R3645 PRODUCT: the CEO battery page now reads what the tree actually is. Measured before any write: BSR-CHECK read RED with E_REGISTRY_DRIFT, E_REGISTRY_DRIFT on the OS ledger face and E_TOTALS_UNCOVERED, because the landed pair still carried an older registry size while the live registry had grown to 848 rows at R3642, and the three families R3644 returned to green had never reached that page. The shipped writer was then run bare: all six families through the shipped shard runner - lobby rc=0 7 suites/118 criteria 191.3s, os-export rc=0 23/195 53.6s, os-queue rc=0 16/98 15.5s, os-ledger rc=0 16/140 15.2s, os-battery rc=0 4/63 98.5s, os-deliverable rc=0 1/28 116.6s - landing json=19310B html=17484B verdict=PASS families=6 selected=67 criteria=642 uncovered=781, and the same process re-derived the export face (WRITTEN stamp 2026-11-28T14:39:15).",
-  "export_ts": "2026-11-28T14:44:39+08:00",
-  "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 mtime] (halves differ: html [2026-11-28 mtime] + json [2026-11-27 commit]; later=html)",
+  "do": "2026-11-28 R3646 PRODUCT: the orphan half of the archive face now names what it counted. Open measurement: `scope:` has published archived_missing_ids since R3641 but still published only archived_orphan=<count>, and a read of the shipped logs answered archived_orphan=279 over a span of 267..2052 in long contiguous blocks (267-268, 450, 460, 468, 1192-1207, 2041-2052, ...), so a twelve-id tail would have named almost nothing a reader could act on. Delivered: one pure renderer `format_id_ranges` (runs collapse to a-b, singletons stay bare, segments capped at ID_RANGE_CAP=8 with a trailing +N) and one new field on the same published line, `archived_orphan_ranges=`. The live read is now archived_orphan_ranges=267-268,450,460,468,1192-1201,1203-1222,1224-1225,1227,+184 beside the unchanged archived_orphan=279, so a reader sees where the unlabelled stretches sit instead of one number. Suite grew 14 -> 23 criteria (AC-AOR1..AC-AOR6) and reads SUITE PASS 23/23; the two neighbours read os-ledger-archive 16/16 and os-ledger-lines 8/8 and the registry census reads 848 rows.",
+  "export_ts": "2026-11-28T14:54:58+08:00",
+  "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 commit] (halves differ: html [2026-11-28 commit] + json [2026-11-27 commit]; later=html)",
   "latest_evidence": "qa/round-R3642-pwc.log (46948B, 2026-11-28, sha256 e47d64f142a9)",
-  "next_milestone": "[R3645] next window (<=48h): (0) **carrier**: `python src/os/state_fold_run.py --check` and `python src/os/logs_toolkit.py append --check` first; one append per round with `--round R####`, main line `YYYY-MM-DD R#### LABEL:` (tmp/append_R3645.py is the ASCII driver). (1) **benchmarks refresh due 2026-12-01** (benchmarks_refreshed=2026-11-24) - schedule the refresh round then (P-2026-09-24-56). (2) **S4U still not landed**: BigDomain-OSLoop Principal.LogonType=Interactive; lawful fix = elevated session running src/os/register_loop_task.ps1, read back must be S4U. (3) **next pullable**: (a) the battery page covers 67 of 848 suites and 781 stay uncovered - widening a family is a real increment but every added family must be pinned before it runs, and the page's own note forbids calling a shard the battery; (b) `archived_orphan` still publishes a count only (reuse format_id_tail for the orphan tail and move the pins with it) (truncated)",
+  "next_milestone": "[R3646] next window (<=48h): (0) **carrier**: `python src/os/state_fold_run.py --check` and `python src/os/logs_toolkit.py append --check` first; one append per round with `--round R####`, main line `YYYY-MM-DD R#### LABEL:` (tmp/append_R3646.py is the ASCII driver). (1) **benchmarks refresh due 2026-12-01** (benchmarks_refreshed=2026-11-24) - schedule the refresh round then (P-2026-09-24-56). (2) **S4U still not landed**: BigDomain-OSLoop Principal.LogonType=Interactive; lawful fix = elevated session running src/os/register_loop_task.ps1, read back must be S4U. (3) **next pullable**: (a) state/qa_replacements.jsonl chain still reads broken=5 (measured again this window: rows=106 broken=5) - a real data repair, not a publish face; (b) the battery page covers 67 of 848 suites and 781 stay uncovered - widening a family is a real increment but every added family must be pinned before it runs (truncated)",
   "outs": [
-    "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 mtime] (halves differ: html [2026-11-28 mtime] + json [2026-11-27 commit]; later=html)",
-    "preview/first-yuan-chain.html (5397B) + preview/first-yuan-chain.json (5180B) [2026-11-28 mtime] (halves differ: html [2026-11-28 mtime] + json [2026-11-28 commit]; later=html)",
+    "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 commit] (halves differ: html [2026-11-28 commit] + json [2026-11-27 commit]; later=html)",
+    "preview/first-yuan-chain.html (5397B) + preview/first-yuan-chain.json (5180B) [2026-11-28 commit]",
     "preview/preview-writer-census.html (17697B) + preview/preview-writer-census.json (25235B) [2026-11-28 commit]",
     "preview/payment-gate-report.html (7729B) + preview/payment-gate-report.json (7032B) [2026-11-28 commit]",
     "preview/membership-face.html (10881B) + preview/membership-face.json (7051B) [2026-11-28 mtime]",
@@ -211,19 +211,19 @@
     "shortfall_total": 15,
     "verdict": "FLOOR-DEBT"
   },
-  "results": [["3645", "OSLoop 执行 tick"]],
+  "results": [["3646", "OSLoop 执行 tick"]],
   "results_archive": {
     "bytes": 336680,
     "count": 179,
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
-  "self_drive": {"window": "2026-11-22..2026-11-28", "window_days": 7, "log_lines_in_window": 57, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 47, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
-  "state_bytes": 52645,
-  "next_milestone_due": "2026-11-30T14:44:39+08:00",
+  "self_drive": {"window": "2026-11-22..2026-11-28", "window_days": 7, "log_lines_in_window": 63, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 52, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
+  "state_bytes": 58109,
+  "next_milestone_due": "2026-11-30T14:54:58+08:00",
   "heartbeat": {
-    "tick": 3645,
-    "state_tick": 3645,
+    "tick": 3646,
+    "state_tick": 3646,
     "lag": 0,
     "verdict": "PASS",
     "reason": "fresh"

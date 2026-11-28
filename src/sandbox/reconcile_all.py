@@ -9261,7 +9261,7 @@ SUITES = [
     # existed; the ids now ride the scope line as a capped tail and nothing
     # about the VERDICT moves.
     ("os-ledger-scope-ids",
-     os.path.join("..", "os", "test_ledger_scope_ids.py"), 14),
+     os.path.join("..", "os", "test_ledger_scope_ids.py"), 23),
     # R3633: the evidence face spoke two receipt kinds while the exemption
     # table already carried four, so two rounds the law excused by name were
     # published as "no receipt". AC-FCEX1..AC-FCEX4 were pinned in

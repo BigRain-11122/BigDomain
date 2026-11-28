@@ -1510,6 +1510,35 @@ def format_id_tail(ids, cap=ID_TAIL_CAP):
     return shown
 
 
+# R3646 AC-AOR4: the orphan half is published as RUNS, not as a tail, because
+# the shipped archives measured 279 orphans spanning 267..2052 in long
+# contiguous blocks (1192..1207, 2041..2052, ...). Twelve singletons out of
+# 279 would name almost nothing a reader could act on, while the run list
+# shows where the unlabelled stretches actually sit. The cap counts segments,
+# not ids, so the published line stays bounded either way.
+ID_RANGE_CAP = 8
+
+
+def format_id_ranges(ids, cap=ID_RANGE_CAP):
+    """A published id span: ascending runs collapsed to a-b, capped, never blank."""
+    ordered = sorted(set(ids))
+    if not ordered:
+        return "none"
+    segs = []
+    start = prev = ordered[0]
+    for n in ordered[1:]:
+        if n == prev + 1:
+            prev = n
+            continue
+        segs.append((start, prev))
+        start = prev = n
+    segs.append((start, prev))
+    shown = ["%d-%d" % (a, b) if b != a else "%d" % a for a, b in segs[:cap]]
+    if len(segs) > cap:
+        return "%s,+%d" % (",".join(shown), len(segs) - cap)
+    return ",".join(shown)
+
+
 def format_report(report):
     """Render the audit report as printable ASCII lines."""
     tail = report["tail"]
@@ -1524,12 +1553,13 @@ def format_report(report):
     if "scope" in report:
         out.append("scope: %s archive_lines=%d live_lines=%d "
                    "archived_missing=%d archived_orphan=%d "
-                   "archived_missing_ids=%s"
+                   "archived_missing_ids=%s archived_orphan_ranges=%s"
                    % (report["scope"], report["archive_lines"],
                       report["live_lines"],
                       len(report["archived_missing"]),
                       len(report["archived_orphan"]),
-                      format_id_tail(report["archived_missing"])))
+                      format_id_tail(report["archived_missing"]),
+                      format_id_ranges(report["archived_orphan"])))
         # R3087 AC-LGA12: the payload reading a reader never had. Published
         # only - the archives are frozen, so neither number may gate.
         # R3629 AC-ARM3: the round-main reading rides the same published
