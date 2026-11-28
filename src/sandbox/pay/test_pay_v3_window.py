@@ -169,7 +169,14 @@ def main():
     assert isinstance(adapter10, V3M.V3Channel), "w10 not V3"
 
     try:
-        V3M.datetime = freeze_v3_clock(FROZEN)
+        # R3652: the window arithmetic lives in adapters.now_utc(), which reads
+        # adapters' OWN datetime import. Freezing only v3.datetime left the
+        # verifier on the wall clock, so this suite went red 48 days after the
+        # fixed epoch (measured delta 4142541s against a 300s window). Freeze
+        # the module that actually reads the clock.
+        frozen = freeze_v3_clock(FROZEN)
+        V3M.datetime = frozen
+        A.datetime = frozen
 
         # AC-V3W2 first: one-past rejects on both edges (the absorber
         # order stays pending; rejections never move state)
@@ -255,13 +262,15 @@ def main():
                " delta==W+1 rejects: %s" % ev_rsa)
     finally:
         V3M.datetime = real_dt  # restore the real clock, no bleed
+        A.datetime = real_dt
 
     # AC-V3W6: honesty face - restored clock (real-clock grant still
     # works), pure ASCII, zero network, shipped config untouched
     a_real = fresh_placed_v3_order(w300, "share_observation", "v3w-acc-real")
     r_real = pay300.handle_callback(
         v3cb(w300, adapter300, a_real, "v3w-n-real"))
-    restored = V3M.datetime is real_dt and r_real["status"] == "granted"
+    restored = (V3M.datetime is real_dt and A.datetime is real_dt
+                and r_real["status"] == "granted")
     with open(os.path.join(BASE, "test_pay_v3_window.py"),
               "rb") as h:
         src = h.read()

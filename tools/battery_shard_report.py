@@ -104,6 +104,10 @@ FAMILIES = (
     ("os-ledger", "OS \u53f0\u8d26\u9762", "\u53cc\u5f0f\u8bb0\u8d26\u3001\u5bf9\u8d26\u95f8\u3001\u53f0\u8d26\u5f52\u6863\u3001\u5224\u636e\u524d\u7f00"),
     ("os-battery", "OS \u7535\u6c60\u9762", "\u5206\u7247\u5668\u3001\u5168\u91cf\u7535\u6c60\u53e3\u5f84\u3001\u81ea\u6d4b\u8bd5"),
     ("os-deliverable", "OS \u4ea4\u4ed8\u9762", "\u5165\u53e3\u9875\u751f\u6210\u5668\u3001\u94fe\u63a5\u8986\u76d6"),
+    # R3652: the payment line is the one every buyer is gated on, and the last
+    # full leg measured its 21 suites at 45.1s - the cheapest real widening on
+    # the registry. Prefix "pay" overlaps no other family prefix.
+    ("pay", "\u652f\u4ed8\u9762", "\u652f\u4ed8\u7ba1\u9053\u3001\u56de\u8c03\u9a8c\u7b7e\u3001\u91cd\u6295\u5e42\u7b49\u3001\u8ba2\u5355\u5f00\u5173"),
 )
 
 LINKS = ("index.html", "lobby-session-trace.html", "ledger-reconcile-face.html")
