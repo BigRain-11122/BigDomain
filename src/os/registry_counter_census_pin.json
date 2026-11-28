@@ -588,6 +588,7 @@
     "os-plain-import-comma-binding",
     "os-platform-live-report",
     "os-pre-commit-gate",
+    "os-preview-writer-census",
     "os-price-reaction-board",
     "os-probe-seam-alias-expression-scope",
     "os-probe-seam-annotated-constant-scope",
@@ -848,8 +849,6 @@
     "watermark-scale-unknown",
     "watermark-sweep"
   ],
-  "silent": [
-    "os-preview-writer-census"
-  ],
+  "silent": [],
   "unparsed": []
 }

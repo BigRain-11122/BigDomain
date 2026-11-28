@@ -12629,4 +12629,15 @@ class PWC87CityFaceReportProducerClosed(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    unittest.main()
+    # R3642 AC-PWD2: declare this suite's row from the runner's own counts, in
+    # the dialect src/os/registry_counter_census.py already reads. Until now the
+    # entry point was a bare unittest.main(), so the census graded 335 criteria
+    # of this carrier as SILENT - a property of the carrier, not of the reader.
+    # Neither number below is typed: total is testsRun, green is total minus
+    # failures and errors, so the row can never drift from what actually ran.
+    _run = unittest.main(exit=False, verbosity=0).result
+    _total = _run.testsRun
+    _bad = len(_run.failures) + len(_run.errors)
+    _verdict = "SUITE PASS" if _bad == 0 else "SUITE FAIL"
+    print("%s %d/%d" % (_verdict, _total - _bad, _total))
+    raise SystemExit(0 if _bad == 0 else 1)

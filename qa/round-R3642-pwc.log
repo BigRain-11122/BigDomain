@@ -1,0 +1,417 @@
+WROTE ..\..\..\..\AppData\Local\Temp\sth-cghddqmy\start-here.html html=41370B operable=6 faces=108 missing=6
+face export=WRITTEN
+PWC-CHECK VERDICT FAIL read_only=True
+  missing half preview-writer-census.json
+  missing half preview-writer-census.html
+PWC (R42) modules=3 closed=1 gap=1 reader=1 face export=SKIPPED AttributeError
+PWC-CHECK VERDICT PASS read_only=True modules=3 closed=1 gap=1 reader=1
+VERDICT PASS steps=11 frames=17 refusals=6 types=7 codes=4 html=9092B json=8008B rc=0
+  cap: sent=4000 outcome=REFUSED code=E_TEXT_TOO_LONG received=None
+SUITE FAIL 332/335
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\merchant_onboard.py:90: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\state\\merchant-onboard-items.json' mode='r' encoding='utf-8'>
+  return json.load(io.open(ITEMS, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\merchant_onboard.py:69: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\payment-gate-report.json' mode='r' encoding='utf-8'>
+  pay = json.load(io.open(SOURCE, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\merchant_onboard.py:75: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\buyer-trial.json' mode='r' encoding='utf-8'>
+  trial = json.load(io.open(TRIAL, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:303: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\state\\qa_replacements.jsonl'>
+  raw = io.open(path, "rb").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-2ps-R3378.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-bfold-R3369.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-brc-R3379.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-cgef-R3375.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-chf-R3396.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-cov-R3364.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-cov-R3367.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-cov-R3368.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-cov1-R3370.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-cov2-R3364.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-cov2-R3368.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-cov2-R3370.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-cov3-R3364.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-cov3-R3368.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-cov3-R3370.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-cov4-R3368.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-cov4-R3370.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-cov5-R3368.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-cov5-R3370.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-cov6-R3368.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-cov6-R3370.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-cov7-R3370.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-coverage-R3363.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-coverage2-R3363.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-coverage3-R3363.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-dix-R3353.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-export-round-R3347.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-frontdoor-R3345.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-fxp-R3383.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-fyc-R3374.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-fyc2-R3374.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-ledger-R3346.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-lga-R3356.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-logs-R3367.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-orc-R3376.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-os-R3352.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-qch-R3371.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-qfe-R3360.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-qhd-R3354.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-rlp-R3381.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-rlw-R3380.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-rps-R3382.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-smallfamilies-R3347.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-sxf-R3360.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-ugc-R3346.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\battery-shard-wgt-R3377.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\buyer-answer-wait-board-R3449.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\buyer-ledger-board-R3415.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\buyer-refund-months-board-R3417.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\closeout-order-R3299.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\fixpoint-R3383.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\frontdoor-expect-field-R3484.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\listing-velocity-board-R3420.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\negctl-R3254.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\negctl-R3265.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\negctl-R3266.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\negctl-R3267.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\negctl-R3289.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\negctl-R3291.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\negctl-R3292.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\negctl-R3312.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\negctl-R3323.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\negctl-R3334.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\negctl-R3345.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\negctl-R3365.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\preview-pair-census-R3508.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\probe-R3246.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\probe-R3278.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\probe-R3280.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\probe-R3289.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\probe-R3297.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\probe-R3336.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\probe-R3345.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\probe-R3365.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\purchase-dossier-board-R3418.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\qa-logs-toolkit-R3373.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\refund-exposure-board-R3412.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\reorg-R3225.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\reorg-R3228.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\round-R3525.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\round-R3532.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\sandbox-onclick-R3333.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\seller-price-cadence-board-R3442.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\shard-coverage-R3363.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\shard-coverage2-R3363.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\shard-coverage3-R3363.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\suite-claim-census-R3225.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\suite-closeout-gate-R3227.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\suite-frontdoor-chain-card-R3223.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\suite-frontdoor-claims-card-R3230.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\suite-ugc-gate-R3246.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_log.py:402: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\qa\\watch-conversion-board-R3436.log'>
+  disk = hashlib.sha256(io.open(target, "rb").read()).hexdigest()[:16]
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\qa_chain_diagnose.py:50: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\tools\\battery_shard.py' mode='r' encoding='utf-8'>
+  text = io.open(SHARD_SOURCE, "r", encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\buyer_trial.py:127: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\index.html' mode='r' encoding='utf-8'>
+  text = io.open(path, encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\payment_gate_report.py:315: ResourceWarning: unclosed file <_io.BufferedReader name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\tools\\payment_gate_report.py'>
+  source = open(__file__, "rb").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\merchant_onboard.py:115: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\payment-gate-report.json' mode='r' encoding='utf-8'>
+  doc = json.load(io.open(SOURCE, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\merchant_onboard.py:554: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\merchant-onboard.json' mode='r' encoding='utf-8'>
+  landed = json.load(io.open(OUT_JSON, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\merchant_onboard.py:555: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\merchant-onboard.html' mode='r' encoding='utf-8'>
+  page = io.open(OUT_HTML, encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\buyer_trial.py:127: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\buyer-trial.html' mode='r' encoding='utf-8'>
+  text = io.open(path, encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\buyer_trial.py:127: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\money-path-demo.html' mode='r' encoding='utf-8'>
+  text = io.open(path, encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\buyer_trial.py:127: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\journey-19.9.html' mode='r' encoding='utf-8'>
+  text = io.open(path, encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\buyer_trial.py:127: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\start-here.html' mode='r' encoding='utf-8'>
+  text = io.open(path, encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\buyer_trial.py:79: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\payment-gate-report.json' mode='r' encoding='utf-8'>
+  doc = json.load(io.open(SOURCE, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\buyer_trial.py:582: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\buyer-trial.json' mode='r' encoding='utf-8'>
+  landed = json.load(io.open(OUT_JSON, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\buyer_trial.py:583: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\buyer-trial.html' mode='r' encoding='utf-8'>
+  page = io.open(OUT_HTML, encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\buyer_trial.py:127: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\membership-face.html' mode='r' encoding='utf-8'>
+  text = io.open(path, encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\buyer_trial.py:127: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\merchant-onboard.html' mode='r' encoding='utf-8'>
+  text = io.open(path, encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\buyer_trial.py:127: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\lobby-session-trace.html' mode='r' encoding='utf-8'>
+  text = io.open(path, encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\lobby_protocol_map.py:327: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\AppData\\Local\\Temp\\lpm-pwc-3ev59rrf\\preview\\lobby-protocol-map.html' mode='r' encoding='utf-8'>
+  elif open(HTML, encoding="utf-8").read() != html:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\lobby_protocol_map.py:332: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\AppData\\Local\\Temp\\lpm-pwc-3ev59rrf\\preview\\lobby-protocol-map.json' mode='r' encoding='utf-8'>
+  disk = json.load(open(JSON_OUT, encoding="utf-8"))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\lobby_protocol_map.py:339: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\tools\\lobby_protocol_map.py' mode='r' encoding='utf-8'>
+  src = open(os.path.abspath(__file__), encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\lobby_protocol_map.py:345: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\AppData\\Local\\Temp\\lpm-pwc-3ev59rrf\\preview\\lobby-protocol-map.json' mode='r' encoding='utf-8'>
+  landed_onward = json.load(open(JSON_OUT, encoding="utf-8")).get("onward")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\price_reaction_board.py:643: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\AppData\\Local\\Temp\\prb-pwc-s5pgt15r\\preview\\price-reaction-board.html' mode='r' encoding='utf-8'>
+  page = open(out, "r", encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\AppData\Local\Programs\Python\Python314\Lib\tempfile.py:538: ResourceWarning: Implicitly cleaning up <HTTPError 405: 'Method Not Allowed'>
+  _warnings.warn(self.warn_message, ResourceWarning)
+C:\Users\sjs20\AppData\Local\Programs\Python\Python314\Lib\tempfile.py:538: ResourceWarning: Implicitly cleaning up <HTTPError 404: 'Not Found'>
+  _warnings.warn(self.warn_message, ResourceWarning)
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\first_yuan_path.py:287: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan.html' mode='r' encoding='utf-8'>
+  html = io.open(hp, encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\tools\first_yuan_path.py:288: ResourceWarning: unclosed file <_io.TextIOWrapper name='C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\first-yuan.json' mode='r' encoding='utf-8'>
+  raw = io.open(jp, encoding="utf-8").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+======================================================================
+ERROR: test_refresh_is_shared_and_named (__main__.PWC13NinthProducerClosed.test_refresh_is_shared_and_named)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\test_preview_writer_census.py", line 984, in test_refresh_is_shared_and_named
+    self.assertEqual(PGR._refresh_face(), "WRITTEN")
+                     ~~~~~~~~~~~~~~~~~^^
+TypeError: _refresh_face() missing 2 required positional arguments: 'html_path' and 'json_path'
+
+======================================================================
+FAIL: test_closed_and_ordered_after_the_landing (__main__.PWC13NinthProducerClosed.test_closed_and_ordered_after_the_landing)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\test_preview_writer_census.py", line 946, in test_closed_and_ordered_after_the_landing
+    self.assertEqual(pgr_closure_positions(text), (True, True, True, True))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: (False, False, False, True) != (True, True, True, True)
+
+First differing element 0:
+False
+True
+
+- (False, False, False, True)
++ (True, True, True, True)
+
+======================================================================
+FAIL: test_landing_derives_once_and_check_derives_none (__main__.PWC13NinthProducerClosed.test_landing_derives_once_and_check_derives_none)
+The landing path derives exactly once; --check derives nothing.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\sjs20\Desktop\FluxGroup\domain\BigDomain\src\os\test_preview_writer_census.py", line 1017, in test_landing_derives_once_and_check_derives_none
+    self.assertEqual(calls, [PGR.ROOT])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [] != ['C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain']
+
+Second list contains 1 additional elements.
+First extra element 0:
+'C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain'
+
+- []
++ ['C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain']
+
+----------------------------------------------------------------------
+Ran 335 tests in 43.307s
+
+FAILED (failures=2, errors=1)
