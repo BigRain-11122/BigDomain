@@ -1,0 +1,19 @@
+A live registry suites=849 criteria=7538 | page suites=849 criteria=7538
+A PASS every family row carries the live registry size
+B PASS 大厅实时层 selected=7 criteria=118
+B PASS OS 导出面 selected=23 criteria=195
+B PASS OS 队列面 selected=16 criteria=98
+B PASS OS 台账面 selected=16 criteria=149
+B PASS OS 电池面 selected=4 criteria=63
+B PASS OS 交付面 selected=1 criteria=28
+C PASS totals close: selected=67 criteria=651 uncovered=782 cover=7.9% red=2
+D1 shifted board -> test_queue_floor_export_face.py rc=0 SUITE PASS 6/6
+D1 shifted board -> test_export_consistency_queue_face.py rc=0 SUMMARY pass=19 fail=0
+D1 PASS board restored byte identically sha=3f864643e87c2362 bytes=758963
+D2 stale=HEAD export 44730 bytes sha=6c9eb527a5cd0647 | fresh 43370 bytes sha=d4fa9408280e671e
+D2 stale export -> test_queue_floor_export_face.py rc=1 SUITE FAIL 5/6
+D2 stale export -> test_export_consistency_queue_face.py rc=2 SUMMARY pass=16 fail=3
+D2 PASS export restored byte identically sha=d4fa9408280e671e
+D2 fresh export -> test_queue_floor_export_face.py rc=0 SUITE PASS 6/6
+D2 fresh export -> test_export_consistency_queue_face.py rc=0 SUMMARY pass=19 fail=0
+PROBE PASS criteria=4 fails=0
