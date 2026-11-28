@@ -1551,6 +1551,20 @@ def append_check(path):
     }
 
 
+def round_main_reader():
+    """The round-main law, imported from its one owner (never re-copied).
+
+    R3626: a window that wrote an undated main row only learned it from the
+    closeout gate afterwards (it had to append a corrective line, burning a
+    round number). The writer now asks the same reader the gate asks.
+    """
+    here = os.path.dirname(os.path.abspath(__file__))
+    if here not in sys.path:
+        sys.path.insert(0, here)
+    import ledger_lines
+    return ledger_lines
+
+
 def append_plan(path, lines, tick=None):
     """Read-only plan for appending log lines to a state.json carrier.
 
@@ -1564,6 +1578,11 @@ def append_plan(path, lines, tick=None):
     Refuses with a named AppendError instead of guessing: a missing anchor, a
     bare-LF carrier, a non-uniform indent block, an empty or multi-line item
     and a non-increasing tick are all diseases, not inputs.
+
+    R3626: the plan also asks the round-main reader (ledger_lines) whether the
+    write would leave the newest round undated or unlabelled, and refuses with
+    E_LAP_ROUND_MAIN plus that reader's own verdict line - so the law is read
+    before the write instead of by the closeout gate after it.
     """
     with open(path, 'rb') as f:
         raw = f.read()
@@ -1609,6 +1628,13 @@ def append_plan(path, lines, tick=None):
                 and post['log_item_lines'] == prof['log_item_lines'] + len(lines))
     if not ok_shape:
         raise AppendError('E_LAP_SELFCHECK')
+    reader = round_main_reader()
+    pre_law = reader.check_round_main_shape(list(old.get('log') or []))
+    post_law = reader.check_round_main_shape(list(new.get('log') or []))
+    round_bearing = any(reader.NARRATIVE_RE.match(item) for item in lines)
+    if not post_law['ok'] and (pre_law['ok'] or round_bearing):
+        raise AppendError('E_LAP_ROUND_MAIN %s'
+                          % reader.format_round_main(post_law))
     return {
         'path': path,
         'lines': list(lines),

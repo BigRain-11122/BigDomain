@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 840 | 7401 | 675/675 | R2739 |
+| 841 | 7419 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -877,7 +877,8 @@
 | 838 | os-export-chain-adjudication | ../os/test_export_chain_adjudication.py | 5 | no-evidence | - |
 | 839 | os-first-yuan-record-chain | ../os/test_first_yuan_chain_record_chain.py | 5 | no-evidence | - |
 | 840 | os-export-chain-excused | ../os/test_export_chain_excused.py | 5 | no-evidence | - |
-|  | 合计 |  | 7401 | green 675 / FAIL 0 / no-evidence 165 |  |
+| 841 | os-logs-append-round-main | ../os/test_logs_append_round_main.py | 18 | no-evidence | - |
+|  | 合计 |  | 7419 | green 675 / FAIL 0 / no-evidence 166 |  |
 
 ## 证据出处
 

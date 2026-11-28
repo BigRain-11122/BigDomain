@@ -546,6 +546,7 @@
     "os-log-floor",
     "os-logs-append",
     "os-logs-append-check",
+    "os-logs-append-round-main",
     "os-logs-inventory",
     "os-logs-toolkit",
     "os-machine-gate",

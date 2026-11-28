@@ -9217,6 +9217,14 @@ SUITES = [
     # tools changed and this suite existed.
     ("os-export-chain-excused",
      os.path.join("..", "os", "test_export_chain_excused.py"), 5),
+    # R3626: the append writer now asks the same round-main reader the closeout
+    # gate asks, so an undated or unlabelled main row is refused BEFORE the
+    # write instead of by the gate after it (the R3623 window paid a second
+    # tick and left R3624 empty). Criteria AC-LAR1..AC-LAR6 were pinned in
+    # src/os/backlog.md at R3626, before the tool changed and this suite
+    # existed.
+    ("os-logs-append-round-main",
+     os.path.join("..", "os", "test_logs_append_round_main.py"), 18),
     ]
 
 FAILS = 0
