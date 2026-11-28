@@ -1539,6 +1539,7 @@ def append_check(path):
     margin = GATE - len(raw)
     if margin < 0:
         raise AppendCheckError('E_LAC_GATE')
+    law = round_main_verdict(log)
     return {
         'bytes': len(raw),
         'gate': GATE,
@@ -1548,6 +1549,9 @@ def append_check(path):
         'caliber': caliber,
         'ledger': tokens[0],
         'api': int(api.group(1)),
+        'round_main': 'OK' if law['ok'] else law['code'],
+        'round': law['round'],
+        'round_main_line': round_main_line(law),
     }
 
 
@@ -1563,6 +1567,22 @@ def round_main_reader():
         sys.path.insert(0, here)
     import ledger_lines
     return ledger_lines
+
+
+def round_main_verdict(log_lines):
+    """Ask the round-main law of one log snapshot through its one owner.
+
+    R3627: the writer asks this before and after the surgery, and the read
+    face asks it of the live carrier, so all three answers come from the
+    same reader. No code, no verdict text and no round vocabulary is copied
+    into this module.
+    """
+    return round_main_reader().check_round_main_shape(list(log_lines))
+
+
+def round_main_line(report):
+    """Render a round-main verdict with the owner's own formatter."""
+    return round_main_reader().format_round_main(report)
 
 
 def append_plan(path, lines, tick=None):
@@ -1583,6 +1603,12 @@ def append_plan(path, lines, tick=None):
     write would leave the newest round undated or unlabelled, and refuses with
     E_LAP_ROUND_MAIN plus that reader's own verdict line - so the law is read
     before the write instead of by the closeout gate after it.
+
+    R3627: a ledger row may not land before the round it names exists. Every
+    written row that carries a round number must name the round this append
+    lands on (the post tick) AND that round must hold a narrative line in the
+    post log, or the write refuses with E_LAP_ROUND_ORPHAN - which is the
+    tokens-only append that advances the tick onto a round nothing anchors.
     """
     with open(path, 'rb') as f:
         raw = f.read()
@@ -1629,12 +1655,25 @@ def append_plan(path, lines, tick=None):
     if not ok_shape:
         raise AppendError('E_LAP_SELFCHECK')
     reader = round_main_reader()
-    pre_law = reader.check_round_main_shape(list(old.get('log') or []))
-    post_law = reader.check_round_main_shape(list(new.get('log') or []))
+    pre_law = round_main_verdict(old.get('log') or [])
+    post_law = round_main_verdict(new.get('log') or [])
     round_bearing = any(reader.NARRATIVE_RE.match(item) for item in lines)
     if not post_law['ok'] and (pre_law['ok'] or round_bearing):
-        raise AppendError('E_LAP_ROUND_MAIN %s'
-                          % reader.format_round_main(post_law))
+        raise AppendError('E_LAP_ROUND_MAIN %s' % round_main_line(post_law))
+    post_rounds = set()
+    for item in new.get('log') or []:
+        if reader.classify(item) != 'round':
+            continue
+        post_rounds.add(int(reader.NARRATIVE_RE.match(item).group(1)))
+    for item in lines:
+        if not reader.LEDGER_PRESENCE_RE.match(item):
+            continue
+        round_no = int(reader.NARRATIVE_RE.match(item).group(1))
+        if round_no != after_tick or round_no not in post_rounds:
+            raise AppendError(
+                'E_LAP_ROUND_ORPHAN round=%d tick=%d anchored=%s'
+                % (round_no, after_tick,
+                   'yes' if round_no in post_rounds else 'no'))
     return {
         'path': path,
         'lines': list(lines),
@@ -1679,6 +1718,13 @@ def cmd_append(args):
               'log=%d ledger=%s api=%d'
               % (facts['bytes'], facts['gate'], facts['margin'],
                  facts['tick'], facts['log'], facts['ledger'], facts['api']))
+        # R3627: a reading, not a ruling - the exit code follows the carrier,
+        # exactly as qa_log's ledger check follows its own report (R3618).
+        # The green path prints nothing extra, so the pinned PASS line and
+        # every caller of the returned facts keep their bytes.
+        if facts['round_main'] != 'OK' or facts['round'] != facts['tick']:
+            print('APPEND CHECK %s tick=%d'
+                  % (facts['round_main_line'], facts['tick']))
         return 0
     if not re.match(r'^R\d{3,5}$', args.round or ''):
         print('error: E_LAP_ROUND %r' % (args.round,), file=sys.stderr)

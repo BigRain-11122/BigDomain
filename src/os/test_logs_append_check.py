@@ -78,14 +78,19 @@ def main():
     base = tempfile.mkdtemp(prefix='lac_')
     try:
         # AC-LAC1: CLI contract - one exact PASS line, check wins over round.
+        # R3627: the healthy fixture is now round-main lawful too (a dated main
+        # row for the carrier tick), because the read face publishes the
+        # round-main reading when - and only when - it disagrees. The arm's
+        # meaning is unchanged: one line, byte-pinned, exit 0.
         p1, d1 = world(base, 'w1')
-        blob1 = write_world(p1, ['alpha', LEDGER], 7)
+        blob1 = write_world(p1, ['2026-11-28 R3612 PRODUCT: legal', LEDGER],
+                            3612)
         r = run('append', '--check', '--file', p1)
         out = r.stdout.decode('utf-8').strip()
         ok('AC-LAC1 a healthy carrier prints one PASS line and exits 0',
            r.returncode == 0
            and re.match(r'^APPEND CHECK PASS bytes=%d gate=78500 margin=%d '
-                        r'tick=7 log=2 ledger=R3612 api=0$'
+                        r'tick=3612 log=2 ledger=R3612 api=0$'
                         % (len(blob1), 78500 - len(blob1)), out) is not None,
            'rc=%d out=%r' % (r.returncode, out))
         before1 = read_bytes(p1)

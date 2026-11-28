@@ -9225,6 +9225,13 @@ SUITES = [
     # existed.
     ("os-logs-append-round-main",
      os.path.join("..", "os", "test_logs_append_round_main.py"), 18),
+    # R3627: the companion law - a ledger row may not land before the round it
+    # names exists (E_LAP_ROUND_ORPHAN), and the read face publishes the same
+    # verdict as a reading. Criteria AC-LRO1..AC-LRO6 were pinned in
+    # src/os/backlog.md at R3627, before the tool changed and this suite
+    # existed.
+    ("os-logs-append-round-orphan",
+     os.path.join("..", "os", "test_logs_append_round_orphan.py"), 17),
     ]
 
 FAILS = 0

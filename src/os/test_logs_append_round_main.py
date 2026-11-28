@@ -74,14 +74,21 @@ def main():
     live_before = stamp(LIVE)
     base = tempfile.mkdtemp(prefix='lar_')
     try:
-        # AC-LAR1: one law, imported rather than copied.
-        ok('AC-LAR1 the reader is asked before and after, never re-derived',
-           tool_src.count('check_round_main_shape(') == 2
+        # AC-LAR1: one law, imported rather than copied. R3627 moved the two
+        # asks behind one bridge (round_main_verdict / round_main_line) and the
+        # read face became the third ask, so the pin is now one law call, one
+        # formatter call, and exactly three asks through that bridge.
+        ok('AC-LAR1 the reader is asked through one bridge, never re-derived',
+           tool_src.count('check_round_main_shape(') == 1
            and tool_src.count('format_round_main(') == 1
+           and tool_src.count('round_main_verdict(') == 4
+           and tool_src.count('round_main_line(') == 3
            and 'def check_round_main_shape' not in tool_src,
-           'shape=%d format=%d'
+           'law=%d fmt=%d bridge=%d line=%d'
            % (tool_src.count('check_round_main_shape('),
-              tool_src.count('format_round_main(')))
+              tool_src.count('format_round_main('),
+              tool_src.count('round_main_verdict('),
+              tool_src.count('round_main_line(')))
         ok('AC-LAR1 no reader code is re-implemented in this file',
            'E_RMS_' not in tool_src and 'ROUND-MAIN' not in tool_src,
            'e_rms=%d roundmain=%d'
