@@ -9190,6 +9190,15 @@ SUITES = [
     # before the tool changed and this suite existed.
     ("os-face-sweep-carrier",
      os.path.join("..", "os", "test_face_sweep_carrier.py"), 6),
+    # R3619: the CEO face's chain block (docs/status-export.json) published the
+    # ledger's break COUNT and nothing else, so `broken=5` read as five lost
+    # records on the one face a reader is asked to believe; the block now also
+    # carries the qualification, read in that same place through the shipped
+    # helper (qa_log.chain_reading, which asks qa_chain_diagnose in process).
+    # Criteria AC-EXA1..AC-EXA5 were pinned in src/os/backlog.md at R3619,
+    # before the tool changed and this suite existed.
+    ("os-export-chain-adjudication",
+     os.path.join("..", "os", "test_export_chain_adjudication.py"), 5),
     ]
 
 FAILS = 0

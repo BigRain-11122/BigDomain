@@ -849,6 +849,32 @@ def _ensure_top(text, key, value, indent="  "):
 
 
 CHAIN_KEY = "chain"
+ADJUDICATION_KEY = "adjudication"
+
+
+def adjudication_face(reading):
+    """R3619 (AC-EXA2/AC-EXA3): the break QUALIFICATION, rendered where it is counted.
+
+    `broken` is a count and, by the ledger's own law (AC-QALB34), never says
+    what a break IS: five broken links can be five lost records or five lawful
+    progress-partials. The count station learned that last window (R3618); the
+    CEO face still published only the count, so `broken=5` read as five lost
+    records on the one face a reader is asked to believe.
+
+    `qa_log.chain_reading` is the shipped helper that asks the owner of that
+    judgement (`qa_chain_diagnose`) in process. This face renders its answer:
+    no second link law, no second kind vocabulary, no local arithmetic.
+
+    `reading is None` means asked and got nothing; that is published as
+    UNADJUDICATED with null numbers, never defaulted to OK/0.
+    """
+    if reading is None:
+        return {"partial": None, "declared": None, "unexplained": None,
+                "adjudication": "UNADJUDICATED"}
+    return {"partial": reading["partial"],
+            "declared": reading["declared"],
+            "unexplained": reading["unexplained"],
+            "adjudication": reading["verdict"]}
 
 
 def chain_face(root):
@@ -867,6 +893,12 @@ def chain_face(root):
     second stat, no second parser); `None` rather than `False` if the reading
     ever stops carrying it, because inventing a `False` would be a claim this
     face did not measure.
+
+    R3619 (AC-EXA1..AC-EXA5): the block also carries the QUALIFICATION of its
+    own break count - `partial`, `declared`, `unexplained` and `adjudication` -
+    read in this same place from `qa_log.chain_reading(<this world's ledger>)`,
+    which asks `qa_chain_diagnose` in process. The four existing keys keep
+    their values and their order; the new ones are appended.
     """
     for path in (os.path.join(REAL_ROOT, "tools"),
                  os.path.join(REAL_ROOT, "src", "os")):
@@ -876,10 +908,16 @@ def chain_face(root):
     import qa_log as QL
     reading = {}
     CG.check_ledger(root, reading)
-    return {"present": reading.get("present"),
-            "rows": reading.get("rows", 0),
-            "broken": reading.get("broken", 0),
-            "path": "state/" + QL.LEDGER_NAME}
+    block = {"present": reading.get("present"),
+             "rows": reading.get("rows", 0),
+             "broken": reading.get("broken", 0),
+             "path": "state/" + QL.LEDGER_NAME}
+    # R3619 (AC-EXA1): the qualification is asked of the same helper the
+    # command-line station asks, against THIS world's ledger - a second count
+    # here would let the two faces disagree about the same bytes.
+    block.update(adjudication_face(
+        QL.chain_reading(os.path.join(root, "state", QL.LEDGER_NAME))))
+    return block
 
 
 CLAIMS_KEY = "claims"
