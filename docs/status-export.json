@@ -1,20 +1,20 @@
 {
   "ceo_face": {
-    "board_pages_skipped": ["preview/face-sweep.html (8877B)", "preview/battery-shard-report.html (17302B)"],
-    "current": "2026-11-28 R3644 PRODUCT: three FOLD-CARRY families read green because the one frozen hole they were all counting is now named. Measured before a byte moved: audit_fold_carry read clean=False gaps=[R3625 window 3638 at state-log-archive-2026-11.md:373:10047] exempt=5(R3112,R3436,R3458,R3459,R3610) same_window=54; the evidence face read frozen=5 law_excused=4 unexplained=1 and published R3625 as law=refused:not-named; and the three suites read os-ledger-archive 10/16, os-fold-carry-evidence-law 0/4, os-fold-carry-single-walk 3/6. R3625 is the label-only round written after a corrective append advanced the tick twice - its own close line says the round label is pinned to the live tick so the export face can anchor on it - so no work was done under that label and no budget row was ever written; measured on the shipped tree: zero presence lines for it in all three archives and zero in the live ring, and its narrative carries no inline payload. It is named as tree_absence(presence_lines=0), the same re-proved kind R3632 gave R3610, so the excuse is re-earned on every read.",
+    "board_pages_skipped": ["preview/face-sweep.html (8877B)"],
+    "current": "2026-11-28 R3645 PRODUCT: the CEO battery page now reads what the tree actually is. Measured before any write: BSR-CHECK read RED with E_REGISTRY_DRIFT, E_REGISTRY_DRIFT on the OS ledger face and E_TOTALS_UNCOVERED, because the landed pair still carried an older registry size while the live registry had grown to 848 rows at R3642, and the three families R3644 returned to green had never reached that page. The shipped writer was then run bare: all six families through the shipped shard runner - lobby rc=0 7 suites/118 criteria 191.3s, os-export rc=0 23/195 53.6s, os-queue rc=0 16/98 15.5s, os-ledger rc=0 16/140 15.2s, os-battery rc=0 4/63 98.5s, os-deliverable rc=0 1/28 116.6s - landing json=19310B html=17484B verdict=PASS families=6 selected=67 criteria=642 uncovered=781, and the same process re-derived the export face (WRITTEN stamp 2026-11-28T14:39:15).",
     "do": "2026-11-25 R3456 PRODUCT: the answer-revision question now has a door - api_answer_history (live with AC-AMAW1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so 'which answer was rewritten, what did it say before, what does it say now and how often did it change' could only be read by calling the sandbox from a shell - while api_seller_answers and api_listing_qna publish only the CURRENT wording.",
-    "last_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 commit] (halves differ: html [2026-11-28 commit] + json [2026-11-27 commit]; later=html)",
-    "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 commit] (halves differ: html [2026-11-28 commit] + json [2026-11-27 commit]; later=html)",
+    "last_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 mtime] (halves differ: html [2026-11-28 mtime] + json [2026-11-27 commit]; later=html)",
+    "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 mtime] (halves differ: html [2026-11-28 mtime] + json [2026-11-27 commit]; later=html)",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ugc-gate-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/round-R3642-pwc.log (46948B, 2026-11-28, sha256 e47d64f142a9)",
+    "latest_artifact_note": "",
     "latest_evidence": "qa/round-R3642-pwc.log (46948B, 2026-11-28, sha256 e47d64f142a9)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3644] next window (<=48h): (0) **载体**：开窗先 `python src/os/state_fold_run.py --check` 与 `python src/os/logs_toolkit.py append --check`；一轮只 append 一次且带 `--round R####`，主行 `YYYY-MM-DD R#### LABEL:`（本窗 `tmp/append_R3644.py` 为 ASCII 驱动范式）。(1) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——当天或之后开窗先排刷新轮（P-2026-09-24-56）。(2) **S4U 仍未落地**（承账）：`BigDomain-OSLoop` `Principal.LogonType=Interactive`，正法=提权会话跑 `src/os/register_loop_task.ps1` 后读回须为 `S4U`。(3) **下批可认领候选**：①**CEO 电池页重派生**——注册表已 848 行，页面仍是旧计数，且本窗把三族刷绿后页内读数更旧；真活但需六族全量（~500s），先立判据再跑，禁把 RED 改「容忍」；②`archived_orphan`（本窗 267 个 id、只报计数）若要逐名，正法是把 `format_id_tail` 复用到 orphan 尾并同步钉；③`state/qa_replacements.jsonl` 链读 `broken=5` 仍未修。(4) **本窗绿序（实测一遍过，照抄）**：`logs_toolkit append --round R#### --execute` → `src/os/export_round.py <tick>` → `src/os/heartbeat.py --write <tick>` → `src/os/registry_counter_census.py --write-pin` → `src/os/suite_matrix_reconcile.py --write/--check` → `tools/status_export_fresh.py --apply`（**板面回写必须先于它**）→ `tools/deliverable_index.py --write` → `tools/first_yuan_chain.py` → `tools/face_sweep.py` → 各 `--check` → `tools/closeout_order.py --write/--check` → `tools/closeout_gate.py`。(5) 承账不变：全量 battery 未实跑、Docker (truncated)",
-    "next_milestone_due": "2026-11-30T14:27:08+08:00",
-    "updated_at": "2026-11-28T14:27:08+08:00",
+    "next_milestone": "[R3645] next window (<=48h): (0) **carrier**: `python src/os/state_fold_run.py --check` and `python src/os/logs_toolkit.py append --check` first; one append per round with `--round R####`, main line `YYYY-MM-DD R#### LABEL:` (tmp/append_R3645.py is the ASCII driver). (1) **benchmarks refresh due 2026-12-01** (benchmarks_refreshed=2026-11-24) - schedule the refresh round then (P-2026-09-24-56). (2) **S4U still not landed**: BigDomain-OSLoop Principal.LogonType=Interactive; lawful fix = elevated session running src/os/register_loop_task.ps1, read back must be S4U. (3) **next pullable**: (a) the battery page covers 67 of 848 suites and 781 stay uncovered - widening a family is a real increment but every added family must be pinned before it runs, and the page's own note forbids calling a shard the battery; (b) `archived_orphan` still publishes a count only (reuse format_id_tail for the orphan tail and move the pins with it) (truncated)",
+    "next_milestone_due": "2026-11-30T14:44:39+08:00",
+    "updated_at": "2026-11-28T14:44:39+08:00",
     "heartbeat": {
-      "tick": 3644,
-      "state_tick": 3644,
+      "tick": 3645,
+      "state_tick": 3645,
       "lag": 0,
       "verdict": "PASS",
       "reason": "fresh"
@@ -35,8 +35,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-28 R3644 PRODUCT: three FOLD-CARRY families read green because the one frozen hole they were all counting is now named. Measured before a byte moved: audit_fold_carry read clean=False gaps=[R3625 window 3638 at state-log-archive-2026-11.md:373:10047] exempt=5(R3112,R3436,R3458,R3459,R3610) same_window=54; the evidence face read frozen=5 law_excused=4 unexplained=1 and published R3625 as law=refused:not-named; and the three suites read os-ledger-archive 10/16, os-fold-carry-evidence-law 0/4, os-fold-carry-single-walk 3/6. R3625 is the label-only round written after a corrective append advanced the tick twice - its own close line says the round label is pinned to the live tick so the export face can anchor on it - so no work was done under that label and no budget row was ever written; measured on the shipped tree: zero presence lines for it in all three archives and zero in the live ring, and its narrative carries no inline payload. It is named as tree_absence(presence_lines=0), the same re-proved kind R3632 gave R3610, so the excuse is re-earned on every read.",
-  "claims": {"claimed": 14, "captured": 1, "contradicted": 0, "uncaptured": 13, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-28T14:27:08+08:00"},
+  "current": "2026-11-28 R3645 PRODUCT: the CEO battery page now reads what the tree actually is. Measured before any write: BSR-CHECK read RED with E_REGISTRY_DRIFT, E_REGISTRY_DRIFT on the OS ledger face and E_TOTALS_UNCOVERED, because the landed pair still carried an older registry size while the live registry had grown to 848 rows at R3642, and the three families R3644 returned to green had never reached that page. The shipped writer was then run bare: all six families through the shipped shard runner - lobby rc=0 7 suites/118 criteria 191.3s, os-export rc=0 23/195 53.6s, os-queue rc=0 16/98 15.5s, os-ledger rc=0 16/140 15.2s, os-battery rc=0 4/63 98.5s, os-deliverable rc=0 1/28 116.6s - landing json=19310B html=17484B verdict=PASS families=6 selected=67 criteria=642 uncovered=781, and the same process re-derived the export face (WRITTEN stamp 2026-11-28T14:39:15).",
+  "claims": {"claimed": 14, "captured": 1, "contradicted": 0, "uncaptured": 13, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-28T14:44:39+08:00"},
   "chain": {"present": true, "rows": 106, "broken": 5, "path": "state/qa_replacements.jsonl", "partial": 5, "declared": 1, "unexplained": 0, "adjudication": "OK", "excused": 1},
   "depts": [
     {
@@ -65,14 +65,14 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-28 R3644 PRODUCT: three FOLD-CARRY families read green because the one frozen hole they were all counting is now named. Measured before a byte moved: audit_fold_carry read clean=False gaps=[R3625 window 3638 at state-log-archive-2026-11.md:373:10047] exempt=5(R3112,R3436,R3458,R3459,R3610) same_window=54; the evidence face read frozen=5 law_excused=4 unexplained=1 and published R3625 as law=refused:not-named; and the three suites read os-ledger-archive 10/16, os-fold-carry-evidence-law 0/4, os-fold-carry-single-walk 3/6. R3625 is the label-only round written after a corrective append advanced the tick twice - its own close line says the round label is pinned to the live tick so the export face can anchor on it - so no work was done under that label and no budget row was ever written; measured on the shipped tree: zero presence lines for it in all three archives and zero in the live ring, and its narrative carries no inline payload. It is named as tree_absence(presence_lines=0), the same re-proved kind R3632 gave R3610, so the excuse is re-earned on every read.",
-  "export_ts": "2026-11-28T14:27:08+08:00",
-  "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 commit] (halves differ: html [2026-11-28 commit] + json [2026-11-27 commit]; later=html)",
+  "do": "2026-11-28 R3645 PRODUCT: the CEO battery page now reads what the tree actually is. Measured before any write: BSR-CHECK read RED with E_REGISTRY_DRIFT, E_REGISTRY_DRIFT on the OS ledger face and E_TOTALS_UNCOVERED, because the landed pair still carried an older registry size while the live registry had grown to 848 rows at R3642, and the three families R3644 returned to green had never reached that page. The shipped writer was then run bare: all six families through the shipped shard runner - lobby rc=0 7 suites/118 criteria 191.3s, os-export rc=0 23/195 53.6s, os-queue rc=0 16/98 15.5s, os-ledger rc=0 16/140 15.2s, os-battery rc=0 4/63 98.5s, os-deliverable rc=0 1/28 116.6s - landing json=19310B html=17484B verdict=PASS families=6 selected=67 criteria=642 uncovered=781, and the same process re-derived the export face (WRITTEN stamp 2026-11-28T14:39:15).",
+  "export_ts": "2026-11-28T14:44:39+08:00",
+  "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 mtime] (halves differ: html [2026-11-28 mtime] + json [2026-11-27 commit]; later=html)",
   "latest_evidence": "qa/round-R3642-pwc.log (46948B, 2026-11-28, sha256 e47d64f142a9)",
-  "next_milestone": "[R3644] next window (<=48h): (0) **载体**：开窗先 `python src/os/state_fold_run.py --check` 与 `python src/os/logs_toolkit.py append --check`；一轮只 append 一次且带 `--round R####`，主行 `YYYY-MM-DD R#### LABEL:`（本窗 `tmp/append_R3644.py` 为 ASCII 驱动范式）。(1) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——当天或之后开窗先排刷新轮（P-2026-09-24-56）。(2) **S4U 仍未落地**（承账）：`BigDomain-OSLoop` `Principal.LogonType=Interactive`，正法=提权会话跑 `src/os/register_loop_task.ps1` 后读回须为 `S4U`。(3) **下批可认领候选**：①**CEO 电池页重派生**——注册表已 848 行，页面仍是旧计数，且本窗把三族刷绿后页内读数更旧；真活但需六族全量（~500s），先立判据再跑，禁把 RED 改「容忍」；②`archived_orphan`（本窗 267 个 id、只报计数）若要逐名，正法是把 `format_id_tail` 复用到 orphan 尾并同步钉；③`state/qa_replacements.jsonl` 链读 `broken=5` 仍未修。(4) **本窗绿序（实测一遍过，照抄）**：`logs_toolkit append --round R#### --execute` → `src/os/export_round.py <tick>` → `src/os/heartbeat.py --write <tick>` → `src/os/registry_counter_census.py --write-pin` → `src/os/suite_matrix_reconcile.py --write/--check` → `tools/status_export_fresh.py --apply`（**板面回写必须先于它**）→ `tools/deliverable_index.py --write` → `tools/first_yuan_chain.py` → `tools/face_sweep.py` → 各 `--check` → `tools/closeout_order.py --write/--check` → `tools/closeout_gate.py`。(5) 承账不变：全量 battery 未实跑、Docker (truncated)",
+  "next_milestone": "[R3645] next window (<=48h): (0) **carrier**: `python src/os/state_fold_run.py --check` and `python src/os/logs_toolkit.py append --check` first; one append per round with `--round R####`, main line `YYYY-MM-DD R#### LABEL:` (tmp/append_R3645.py is the ASCII driver). (1) **benchmarks refresh due 2026-12-01** (benchmarks_refreshed=2026-11-24) - schedule the refresh round then (P-2026-09-24-56). (2) **S4U still not landed**: BigDomain-OSLoop Principal.LogonType=Interactive; lawful fix = elevated session running src/os/register_loop_task.ps1, read back must be S4U. (3) **next pullable**: (a) the battery page covers 67 of 848 suites and 781 stay uncovered - widening a family is a real increment but every added family must be pinned before it runs, and the page's own note forbids calling a shard the battery; (b) `archived_orphan` still publishes a count only (reuse format_id_tail for the orphan tail and move the pins with it) (truncated)",
   "outs": [
-    "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 commit] (halves differ: html [2026-11-28 commit] + json [2026-11-27 commit]; later=html)",
-    "preview/first-yuan-chain.html (5397B) + preview/first-yuan-chain.json (5180B) [2026-11-28 commit]",
+    "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 mtime] (halves differ: html [2026-11-28 mtime] + json [2026-11-27 commit]; later=html)",
+    "preview/first-yuan-chain.html (5397B) + preview/first-yuan-chain.json (5180B) [2026-11-28 mtime] (halves differ: html [2026-11-28 mtime] + json [2026-11-28 commit]; later=html)",
     "preview/preview-writer-census.html (17697B) + preview/preview-writer-census.json (25235B) [2026-11-28 commit]",
     "preview/payment-gate-report.html (7729B) + preview/payment-gate-report.json (7032B) [2026-11-28 commit]",
     "preview/membership-face.html (10881B) + preview/membership-face.json (7051B) [2026-11-28 mtime]",
@@ -211,19 +211,19 @@
     "shortfall_total": 15,
     "verdict": "FLOOR-DEBT"
   },
-  "results": [["3644", "OSLoop 执行 tick"]],
+  "results": [["3645", "OSLoop 执行 tick"]],
   "results_archive": {
     "bytes": 336680,
     "count": 179,
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
-  "self_drive": {"window": "2026-11-22..2026-11-28", "window_days": 7, "log_lines_in_window": 50, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 41, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
-  "state_bytes": 46786,
-  "next_milestone_due": "2026-11-30T14:27:08+08:00",
+  "self_drive": {"window": "2026-11-22..2026-11-28", "window_days": 7, "log_lines_in_window": 57, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 47, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
+  "state_bytes": 52645,
+  "next_milestone_due": "2026-11-30T14:44:39+08:00",
   "heartbeat": {
-    "tick": 3644,
-    "state_tick": 3644,
+    "tick": 3645,
+    "state_tick": 3645,
     "lag": 0,
     "verdict": "PASS",
     "reason": "fresh"
