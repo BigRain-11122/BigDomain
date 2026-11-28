@@ -386,14 +386,14 @@ def case_fts8(tmp):
                 assert node.module.split(".")[0] not in banned, \
                     "AC-FTS8 banned import %s" % node.module
     clock_calls = []
-    for node in ast.walk(ast.parse(open(lib, "rb").read().decode("ascii"))):
+    for node in ast.walk(ast.parse(open(lib, "rb").read().decode("utf-8", "replace"))):
         if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute):
             if node.func.attr in ("now", "utcnow", "today"):
                 clock_calls.append(node.func.attr)
     assert clock_calls == [], "AC-FTS8 wall clock calls %r" % clock_calls
 
     runner = os.path.join(BASE_DIR, "..", "reconcile_all.py")
-    text = open(runner, "rb").read().decode("ascii")
+    text = open(runner, "rb").read().decode("utf-8", "replace")
     assert '"funnel-sku-top-rank"' in text.replace("'", '"'), \
         "AC-FTS8 registry label missing"
     assert '"test_funnel_sku_top_rank.py"' in text.replace("'", '"'), \
@@ -435,9 +435,9 @@ def main():
         try:
             fn(tmp)
             print("PASS %s" % name)
-        except AssertionError as exc:
+        except Exception as exc:
             failed += 1
-            print("FAIL %s :: %s" % (name, exc))
+            print("FAIL %s :: %s: %s" % (name, type(exc).__name__, exc))
     shutil.rmtree(tmp, ignore_errors=True)
     total = len(cases)
     print("SUITE %s %d/%d" % ("PASS" if not failed else "FAIL",

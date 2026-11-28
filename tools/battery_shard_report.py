@@ -119,6 +119,11 @@ FAMILIES = (
     # funnel (19 suites, 184.3s) do not fit one window. Prefix "ugc" overlaps
     # no other family prefix.
     ("ugc", "UGC \u9762", "msgSecCheck \u7ebf\u8def\u4e0e\u9762\u3001\u5ba1\u6838\u5e2d\u3001\u6c34\u4f4d\u65e5\u5fd7\u3001\u6c60/\u6392\u7a7a/\u6279\u6b21\u6301\u4e45\u5316"),
+    # R3655: the funnel line guards the first-yuan chain (SKU buckets, routing,
+    # conservation, the water journal) and its 19 suites were measured green in
+    # 17.7s (151 criteria) after one test-hygiene repair. The 184.3s the
+    # 2026-11-15 leg estimated was the old leg's cost, not this family's.
+    ("funnel", "funnel \u9762", "\u9996\u5143\u94fe\u8def\u3001SKU \u6876\u4e0e\u6392\u5e8f\u3001\u8def\u7531\u3001\u5b88\u6052\u4e0e\u6c34\u4f4d\u65e5\u5fd7"),
 )
 
 LINKS = ("index.html", "lobby-session-trace.html", "ledger-reconcile-face.html")
