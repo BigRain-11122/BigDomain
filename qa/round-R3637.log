@@ -1,0 +1,38 @@
+# R3637 evidence — 2026-11-28
+# board fold (AC-BLFR1..AC-BLFR4)
+
+## pre-fold baseline (tmp/probe_R3637_pre.py)
+{"archive_bytes": 5102940, "archive_sha": "e581af68b48f6c54", "board_bytes": 1515387, "board_lines": 924, "board_sha": "2d9141b4082d9ad2"}
+BACKLOG-FOLD bytes=1513572 gate=800000 verdict=FOLD-DUE lines=924 rounds=253 newest=R3636 oldest=R0 archive_bytes=5102940 pointer_rows=1 would_move=734822 would_keep=778749 boundary=3516 plan_refusal=None
+
+## dry run (zero writes; board/archive sha unchanged after it)
+bytes_before=1515387 bytes_after=771656 lines_before=925 lines_after=360 moved_rows=380 oldest_kept=3519 rounds_before=254 rounds_after_live=117 dry_run_digest_same=true
+
+## executed fold (tools/backlog_fold.py --fold --round R3637)
+archive_sha_matches=true head_same=true no_line_lost=true pointer_present=true labels_findable=true
+archive_appendix_bytes=743954 moved_sha=8aba8a25d6f748e4dc2c3262ddd202117e25f83a4d67e60bd54730216ab417dd
+mixed_newer_rows=3
+
+## post-fold read face (AC-BLFR2)
+BACKLOG-FOLD bytes=771656 gate=800000 verdict=FOLD-CLEAR lines=360 rounds=117 newest=R3637 oldest=R3519 archive_bytes=5846894 pointer_rows=1 would_move=None would_keep=None boundary=None plan_refusal=E_BLF_NOT_ENOUGH_ROUNDS
+
+## independent reconstruction, not trusting the tool self-report (AC-BLFR3)
+{"appendix_bytes": 743954, "archive_prefix_ok": true, "header_ok": true, "moved_bytes": 743852, "pointer_row": true, "post_archive_bytes": 5846894, "post_board_bytes": 771656, "pre_archive_bytes": 5102940, "pre_board_bytes": 1515387, "pre_board_sha": "2d9141b4082d9ad2", "rebuilt_bytes": 1515387, "rebuilt_equals_pre": true, "rebuilt_sha": "2d9141b4082d9ad2", "trailing_newline": true}
+
+## zero regression (AC-BLFR4)
+SUITE PASS 6/6  (src/os/test_backlog_fold.py, zero edits)
+
+## sibling argument-face probe (R3636 item 3-4, measured negative)
+python tools/battery_shard.py --chek  -> rc=2, usage printed, no family run
+python tools/battery_shard.py --help  -> rc=0, usage printed
+conclusion: argparse guards the unknown-flag class here; the R3636 disease exists only in
+battery_shard_report.py's hand-rolled 'in args' matching. No source change made.
+
+## carrier + ring
+APPEND CHECK PASS bytes=71025 gate=78500 margin=7475 tick=3637 log=78 ledger=R3637 api=0
+CARRIER append_ok=true caliber=16 ledger=R3637 bytes=71025 margin=7475 round_main=OK round=3637
+GATES PASS gates=13 green=13 red=0 red_ids=none mutated=none carrier=HEALTHY round_main=OK
+DELIVERABLE INDEX faces=9 defects=0 fingerprint=944105fa92f57b13 index=56454B
+DOC-CURRENT docs/sandbox-suite-matrix.md
+REGISTRY COUNTER CENSUS rows=846 readable=845 unparsed=0 silent=1
+first_yuan_chain RENDER legs=2 entries=2 tx=1 reconcile_rc=0 zero_delta=True

@@ -1,20 +1,20 @@
 {
   "ceo_face": {
     "board_pages_skipped": ["preview/face-sweep.html (8877B)"],
-    "current": "2026-11-28 R3636 PRODUCT: an unknown flag no longer launches the whole battery. main() in tools/battery_shard_report.py matched only the exact strings --check and --control, so every other argument fell into the measure-and-write rollout: measured with a trap before the fix, --help and the typo --chek each called measure() once and a real window lost five minutes to it before being cancelled with zero bytes on disk. The flag set is now closed: -h/--help prints usage and exits 0, any unknown flag prints usage with BSR-REFUSED E_BSR_ARGS unknown=<flags> and exits 2, and both return before any measurement (source positions: if unknown: @26025 < payload = measure() @26407, zero measure( inside that band).",
+    "current": "2026-11-28 R3637 MEASURED, read-only first: the dry run was paid before the write (bytes_before 1515387 -> bytes_after 771656, dry_run_digest_same=true, and zero bytes written - board sha 2d9141b4082d9ad2 and archive sha e581af68b48f6c54 unchanged across the dry pass), and the result was then checked by a probe that does not trust the tool's self-report: it rebuilds the pre-fold board from the post-fold head plus the archive appendix minus its header line (rebuilt 1515387 bytes sha 2d9141b4082d9ad2 equals the pre-fold board) and it checks that the pre-fold archive is a byte prefix of the post-fold one (5102940 -> 5846894). The post-fold read face answers FOLD-CLEAR bytes=771656 lines=360 rounds=117 newest=R3637 oldest=R3519 archive_bytes=5846894 with plan_refusal=E_BLF_NOT_ENOUGH_ROUNDS, and src/os/test_backlog_fold.py still reads SUITE PASS 6/6 with zero edits to that file. The sibling probe named by R3636 item (3)④ is a measured NEGATIVE: tools/battery_shard.py parses with argparse, so --chek exits 2 with usage and -h exits 0 before any family runs; the silent-launch disease exists only in battery_shard_report.py's hand-rolled 'in args' matching, and no source change was made here.",
     "do": "2026-11-25 R3456 PRODUCT: the answer-revision question now has a door - api_answer_history (live with AC-AMAW1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so 'which answer was rewritten, what did it say before, what does it say now and how often did it change' could only be read by calling the sandbox from a shell - while api_seller_answers and api_listing_qna publish only the CURRENT wording.",
-    "last_artifact": "preview/preview-writer-census.html (17697B) + preview/preview-writer-census.json (25235B) [2026-11-28 commit]",
-    "latest_artifact": "preview/preview-writer-census.html (17697B) + preview/preview-writer-census.json (25235B) [2026-11-28 commit]",
-    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\preview-writer-census.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/round-R3636.log (496B, 2026-11-28, sha256 72291bca292c)",
-    "latest_evidence": "qa/round-R3636.log (496B, 2026-11-28, sha256 72291bca292c)",
+    "last_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 mtime] (halves differ: html [2026-11-28 mtime] + json [2026-11-27 commit]; later=html)",
+    "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 mtime] (halves differ: html [2026-11-28 mtime] + json [2026-11-27 commit]; later=html)",
+    "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ugc-gate-report.html",
+    "latest_artifact_note": "",
+    "latest_evidence": "qa/round-R3637.log (2722B, 2026-11-28, sha256 c2a42e2b9192)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3636] next window (<=48h): (0) **载体**：开窗先 `python src/os/state_fold_run.py --check` 与 `python src/os/logs_toolkit.py append --check`；**一轮只 append 一次**且必须带 `--round R####`，主行必须 `YYYY-MM-DD R#### LABEL:`；若余量不足一轮日志先 `logs_toolkit fold --plan-only` 再 `--execute`。(1) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先把刷新轮排最前（P-2026-09-24-56）。(2) **S4U 仍未落地**（承账）：`BigDomain-OSLoop` 任务 `Principal.LogonType=Interactive`，正法=提权会话跑 `src/os/register_loop_task.ps1` 后读回须为 `S4U`。(3) **本窗点名的可认领候选（今日不造活）**：①**电池页重派生是真活但需全量电池**（页 843 行 vs 注册表 846 行，`BSR-CHECK` 三处 drift + 两处 totals）——若下窗把它当目标，先立判据：跑哪几族、允许多久、失败如何记，禁把 RED 改成「容忍」；②`src/os/backlog.md` 已 **1.51MB**，`tools/backlog_fold.py` 在盘但本窗未跑，下次动板前先读它的 `--check`；③`ledger_lines.load_archive` 与 `read_archive_view` 两套读法仍并存（实测 `load_archive` 本就是单次开档，合并零性能收益，只是法面单一化，收益不足先记账）；④`tools/battery_shard_report.py` 现在有 `--help`，但同族 `tools/battery_shard.py` 未查参数面，若同类笔误会静默起跑，需先实测再定。(4) **本窗绿序（实测一遍过，照抄）**：`logs_toolkit append --round R#### --execute`（主行+账本行一次写完）→ `src/os/export_round.py <tick>` → `src/os/heartbeat.py --write <tick>` → `src/os/registry_counter_census.py --write-pin` → `src/os/suite_matrix_reconcile.py --write/--check` → (truncated)",
-    "next_milestone_due": "2026-11-30T12:19:25+08:00",
-    "updated_at": "2026-11-28T12:19:25+08:00",
+    "next_milestone": "[R3637] next window (<=48h): (0) **载体**：本窗收口 `APPEND CHECK PASS bytes=71025 gate=78500 margin=7475 tick=3637 log=78 ledger=R3637 api=0`——余量已不到两轮日志，开窗先 `python src/os/state_fold_run.py --check`，判可折就先折再干活；`logs_toolkit append` 必须带 `--round R####` 且主行 `YYYY-MM-DD R#### LABEL:`，一轮只 append 一次。(1) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先排刷新轮（P-2026-09-24-56）。(2) **S4U 仍未落地**（承账）：`BigDomain-OSLoop` 任务 `Principal.LogonType=Interactive`，正法=提权会话跑 `src/os/register_loop_task.ps1` 后读回须为 `S4U`。(3) 本窗点名的可认领候选（今日不造活）：①**电池页重派生是真活但需全量电池**（页 843 行 vs 注册表 846 行），若下窗当目标先立判据（跑哪几族、允许多久、失败如何记），禁把 RED 改「容忍」；②作业板折叠后仍有 28,344 B 余量，`--check` 读到 `plan_refusal=E_BLF_NOT_ENOUGH_ROUNDS`（保留轮数不足），若下窗想再折，先量 `KEEP_ROUNDS=120` 与闸的关系再动，禁为折叠改常量；③`ledger_lines.load_archive` 与 `read_archive_view` 两套读法仍并存（实测 `load_archive` 本就是单次开档，合并零性能收益，只有法面单一化的价值，收益不足先记账）。(4) **本窗绿序（实测一遍过，照抄）**：`logs_toolkit append --round R#### --execute`（主行+账本行一次写完）→ `src/os/export_round.py <tick>` → `src/os/heartbeat.py --write <tick>` → `src/os/registry_counter_census.py --write-pin` → `src/os/suite_matrix_reconcile.py --write/--check` → `tools/status_export_fresh.py --apply`（**板面回写必须先于它**）→ (truncated)",
+    "next_milestone_due": "2026-11-30T12:30:50+08:00",
+    "updated_at": "2026-11-28T12:30:50+08:00",
     "heartbeat": {
-      "tick": 3636,
-      "state_tick": 3636,
+      "tick": 3637,
+      "state_tick": 3637,
       "lag": 0,
       "verdict": "PASS",
       "reason": "fresh"
@@ -35,8 +35,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-28 R3636 PRODUCT: an unknown flag no longer launches the whole battery. main() in tools/battery_shard_report.py matched only the exact strings --check and --control, so every other argument fell into the measure-and-write rollout: measured with a trap before the fix, --help and the typo --chek each called measure() once and a real window lost five minutes to it before being cancelled with zero bytes on disk. The flag set is now closed: -h/--help prints usage and exits 0, any unknown flag prints usage with BSR-REFUSED E_BSR_ARGS unknown=<flags> and exits 2, and both return before any measurement (source positions: if unknown: @26025 < payload = measure() @26407, zero measure( inside that band).",
-  "claims": {"claimed": 54, "captured": 24, "contradicted": 0, "uncaptured": 30, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-28T12:19:25+08:00"},
+  "current": "2026-11-28 R3637 MEASURED, read-only first: the dry run was paid before the write (bytes_before 1515387 -> bytes_after 771656, dry_run_digest_same=true, and zero bytes written - board sha 2d9141b4082d9ad2 and archive sha e581af68b48f6c54 unchanged across the dry pass), and the result was then checked by a probe that does not trust the tool's self-report: it rebuilds the pre-fold board from the post-fold head plus the archive appendix minus its header line (rebuilt 1515387 bytes sha 2d9141b4082d9ad2 equals the pre-fold board) and it checks that the pre-fold archive is a byte prefix of the post-fold one (5102940 -> 5846894). The post-fold read face answers FOLD-CLEAR bytes=771656 lines=360 rounds=117 newest=R3637 oldest=R3519 archive_bytes=5846894 with plan_refusal=E_BLF_NOT_ENOUGH_ROUNDS, and src/os/test_backlog_fold.py still reads SUITE PASS 6/6 with zero edits to that file. The sibling probe named by R3636 item (3)④ is a measured NEGATIVE: tools/battery_shard.py parses with argparse, so --chek exits 2 with usage and -h exits 0 before any family runs; the silent-launch disease exists only in battery_shard_report.py's hand-rolled 'in args' matching, and no source change was made here.",
+  "claims": {"claimed": 13, "captured": 1, "contradicted": 0, "uncaptured": 12, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-28T12:30:50+08:00"},
   "chain": {"present": true, "rows": 106, "broken": 5, "path": "state/qa_replacements.jsonl", "partial": 5, "declared": 1, "unexplained": 0, "adjudication": "OK", "excused": 1},
   "depts": [
     {
@@ -65,18 +65,18 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-28 R3636 PRODUCT: an unknown flag no longer launches the whole battery. main() in tools/battery_shard_report.py matched only the exact strings --check and --control, so every other argument fell into the measure-and-write rollout: measured with a trap before the fix, --help and the typo --chek each called measure() once and a real window lost five minutes to it before being cancelled with zero bytes on disk. The flag set is now closed: -h/--help prints usage and exits 0, any unknown flag prints usage with BSR-REFUSED E_BSR_ARGS unknown=<flags> and exits 2, and both return before any measurement (source positions: if unknown: @26025 < payload = measure() @26407, zero measure( inside that band).",
-  "export_ts": "2026-11-28T12:19:25+08:00",
-  "latest_artifact": "preview/preview-writer-census.html (17697B) + preview/preview-writer-census.json (25235B) [2026-11-28 commit]",
-  "latest_evidence": "qa/round-R3636.log (496B, 2026-11-28, sha256 72291bca292c)",
-  "next_milestone": "[R3636] next window (<=48h): (0) **载体**：开窗先 `python src/os/state_fold_run.py --check` 与 `python src/os/logs_toolkit.py append --check`；**一轮只 append 一次**且必须带 `--round R####`，主行必须 `YYYY-MM-DD R#### LABEL:`；若余量不足一轮日志先 `logs_toolkit fold --plan-only` 再 `--execute`。(1) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先把刷新轮排最前（P-2026-09-24-56）。(2) **S4U 仍未落地**（承账）：`BigDomain-OSLoop` 任务 `Principal.LogonType=Interactive`，正法=提权会话跑 `src/os/register_loop_task.ps1` 后读回须为 `S4U`。(3) **本窗点名的可认领候选（今日不造活）**：①**电池页重派生是真活但需全量电池**（页 843 行 vs 注册表 846 行，`BSR-CHECK` 三处 drift + 两处 totals）——若下窗把它当目标，先立判据：跑哪几族、允许多久、失败如何记，禁把 RED 改成「容忍」；②`src/os/backlog.md` 已 **1.51MB**，`tools/backlog_fold.py` 在盘但本窗未跑，下次动板前先读它的 `--check`；③`ledger_lines.load_archive` 与 `read_archive_view` 两套读法仍并存（实测 `load_archive` 本就是单次开档，合并零性能收益，只是法面单一化，收益不足先记账）；④`tools/battery_shard_report.py` 现在有 `--help`，但同族 `tools/battery_shard.py` 未查参数面，若同类笔误会静默起跑，需先实测再定。(4) **本窗绿序（实测一遍过，照抄）**：`logs_toolkit append --round R#### --execute`（主行+账本行一次写完）→ `src/os/export_round.py <tick>` → `src/os/heartbeat.py --write <tick>` → `src/os/registry_counter_census.py --write-pin` → `src/os/suite_matrix_reconcile.py --write/--check` → (truncated)",
+  "do": "2026-11-28 R3637 MEASURED, read-only first: the dry run was paid before the write (bytes_before 1515387 -> bytes_after 771656, dry_run_digest_same=true, and zero bytes written - board sha 2d9141b4082d9ad2 and archive sha e581af68b48f6c54 unchanged across the dry pass), and the result was then checked by a probe that does not trust the tool's self-report: it rebuilds the pre-fold board from the post-fold head plus the archive appendix minus its header line (rebuilt 1515387 bytes sha 2d9141b4082d9ad2 equals the pre-fold board) and it checks that the pre-fold archive is a byte prefix of the post-fold one (5102940 -> 5846894). The post-fold read face answers FOLD-CLEAR bytes=771656 lines=360 rounds=117 newest=R3637 oldest=R3519 archive_bytes=5846894 with plan_refusal=E_BLF_NOT_ENOUGH_ROUNDS, and src/os/test_backlog_fold.py still reads SUITE PASS 6/6 with zero edits to that file. The sibling probe named by R3636 item (3)④ is a measured NEGATIVE: tools/battery_shard.py parses with argparse, so --chek exits 2 with usage and -h exits 0 before any family runs; the silent-launch disease exists only in battery_shard_report.py's hand-rolled 'in args' matching, and no source change was made here.",
+  "export_ts": "2026-11-28T12:30:50+08:00",
+  "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 mtime] (halves differ: html [2026-11-28 mtime] + json [2026-11-27 commit]; later=html)",
+  "latest_evidence": "qa/round-R3637.log (2722B, 2026-11-28, sha256 c2a42e2b9192)",
+  "next_milestone": "[R3637] next window (<=48h): (0) **载体**：本窗收口 `APPEND CHECK PASS bytes=71025 gate=78500 margin=7475 tick=3637 log=78 ledger=R3637 api=0`——余量已不到两轮日志，开窗先 `python src/os/state_fold_run.py --check`，判可折就先折再干活；`logs_toolkit append` 必须带 `--round R####` 且主行 `YYYY-MM-DD R#### LABEL:`，一轮只 append 一次。(1) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先排刷新轮（P-2026-09-24-56）。(2) **S4U 仍未落地**（承账）：`BigDomain-OSLoop` 任务 `Principal.LogonType=Interactive`，正法=提权会话跑 `src/os/register_loop_task.ps1` 后读回须为 `S4U`。(3) 本窗点名的可认领候选（今日不造活）：①**电池页重派生是真活但需全量电池**（页 843 行 vs 注册表 846 行），若下窗当目标先立判据（跑哪几族、允许多久、失败如何记），禁把 RED 改「容忍」；②作业板折叠后仍有 28,344 B 余量，`--check` 读到 `plan_refusal=E_BLF_NOT_ENOUGH_ROUNDS`（保留轮数不足），若下窗想再折，先量 `KEEP_ROUNDS=120` 与闸的关系再动，禁为折叠改常量；③`ledger_lines.load_archive` 与 `read_archive_view` 两套读法仍并存（实测 `load_archive` 本就是单次开档，合并零性能收益，只有法面单一化的价值，收益不足先记账）。(4) **本窗绿序（实测一遍过，照抄）**：`logs_toolkit append --round R#### --execute`（主行+账本行一次写完）→ `src/os/export_round.py <tick>` → `src/os/heartbeat.py --write <tick>` → `src/os/registry_counter_census.py --write-pin` → `src/os/suite_matrix_reconcile.py --write/--check` → `tools/status_export_fresh.py --apply`（**板面回写必须先于它**）→ (truncated)",
   "outs": [
+    "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 mtime] (halves differ: html [2026-11-28 mtime] + json [2026-11-27 commit]; later=html)",
+    "preview/first-yuan-chain.html (5397B) + preview/first-yuan-chain.json (5180B) [2026-11-28 mtime] (halves differ: html [2026-11-28 mtime] + json [2026-11-28 commit]; later=html)",
     "preview/preview-writer-census.html (17697B) + preview/preview-writer-census.json (25235B) [2026-11-28 commit]",
-    "preview/first-yuan-chain.html (5397B) + preview/first-yuan-chain.json (5180B) [2026-11-28 mtime]",
     "preview/payment-gate-report.html (7729B) + preview/payment-gate-report.json (7032B) [2026-11-28 commit]",
     "preview/membership-face.html (10881B) + preview/membership-face.json (7051B) [2026-11-28 mtime]",
     "preview/membership-benefit-report.html (10915B) + preview/membership-benefit-report.json (9817B) [2026-11-28 mtime]",
-    "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 mtime] (halves differ: html [2026-11-28 mtime] + json [2026-11-27 commit]; later=html)",
     "preview/city-face-report.html (7988B) + preview/city-face-report.json (5004B) [2026-11-28 commit]",
     "preview/watch-alerts-board.html (9758B) + preview/watch-alerts-board.json (3660B) [2026-11-28 mtime]",
     "preview/watch-conversion-board.html (9813B) + preview/watch-conversion-board.json (4590B) [2026-11-28 mtime]",
@@ -211,19 +211,19 @@
     "shortfall_total": 15,
     "verdict": "FLOOR-DEBT"
   },
-  "results": [["3636", "OSLoop 执行 tick"]],
+  "results": [["3637", "OSLoop 执行 tick"]],
   "results_archive": {
     "bytes": 336680,
     "count": 179,
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
-  "self_drive": {"window": "2026-11-22..2026-11-28", "window_days": 7, "log_lines_in_window": 69, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 58, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
-  "state_bytes": 65789,
-  "next_milestone_due": "2026-11-30T12:19:25+08:00",
+  "self_drive": {"window": "2026-11-22..2026-11-28", "window_days": 7, "log_lines_in_window": 75, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 63, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
+  "state_bytes": 71025,
+  "next_milestone_due": "2026-11-30T12:30:50+08:00",
   "heartbeat": {
-    "tick": 3636,
-    "state_tick": 3636,
+    "tick": 3637,
+    "state_tick": 3637,
     "lag": 0,
     "verdict": "PASS",
     "reason": "fresh"
