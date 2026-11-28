@@ -40,3 +40,9 @@ SUITE FAIL 4/6
 SUITE PASS 16/16 criteria
 SUITE PASS 7/7
 SUITE PASS 4/4
+
+== after the round append: the census page embedded a live-ring count that the append moved ==
+VALUE $.live_ledger_rounds fresh=11 landed=10  (page derived before append = stale)
+SUITE FAIL 4/6 (AC-FCW3 census_page=False; AC-FCW4 follows it)
+WROTE preview\\fold-carry-census.json 3714B (re-derived after the append)
+SUITE PASS 6/6 (same tree, page re-derived)
