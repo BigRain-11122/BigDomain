@@ -529,6 +529,7 @@
     "os-ledger-page",
     "os-ledger-reconcile-face",
     "os-ledger-round-main-shape",
+    "os-ledger-scope-ids",
     "os-ledger-tokens-prefix-repair",
     "os-leg-audit",
     "os-leg-header-check",

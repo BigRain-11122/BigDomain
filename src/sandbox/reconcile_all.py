@@ -9254,6 +9254,14 @@ SUITES = [
     # suite existed.
     ("os-ledger-archive-round-main",
      os.path.join("..", "os", "test_ledger_archive_round_main.py"), 19),
+    # R3641: the union face published archived_missing as a count and never
+    # the rounds behind it, so a reader of the default face could not tell
+    # WHICH frozen rounds it named. AC-AMID1..AC-AMID5 were pinned in
+    # src/os/backlog.md at R3641 before the module changed and this suite
+    # existed; the ids now ride the scope line as a capped tail and nothing
+    # about the VERDICT moves.
+    ("os-ledger-scope-ids",
+     os.path.join("..", "os", "test_ledger_scope_ids.py"), 14),
     # R3633: the evidence face spoke two receipt kinds while the exemption
     # table already carried four, so two rounds the law excused by name were
     # published as "no receipt". AC-FCEX1..AC-FCEX4 were pinned in

@@ -1471,6 +1471,26 @@ def network_imports(source_text):
                       if root in NET_IMPORTS))
 
 
+# R3641 AC-AMID3: a published id tail is capped. The count on the scope line
+# has always been enough for the gate, so the ids were printed only on the
+# archive audit face; a reader of the default face could not tell WHICH rounds
+# the archived_missing count named. Publishing them inline is bounded because
+# R2914 measured archived_missing=787 on the pre-law tree - uncapped, one
+# advisory line would grow to kilobytes and every consumer would pay it.
+ID_TAIL_CAP = 12
+
+
+def format_id_tail(ids, cap=ID_TAIL_CAP):
+    """A published id tail: ascending, comma-joined, capped, never blank."""
+    ordered = sorted(ids)
+    if not ordered:
+        return "none"
+    shown = ",".join(str(n) for n in ordered[:cap])
+    if len(ordered) > cap:
+        return "%s,+%d" % (shown, len(ordered) - cap)
+    return shown
+
+
 def format_report(report):
     """Render the audit report as printable ASCII lines."""
     tail = report["tail"]
@@ -1484,11 +1504,13 @@ def format_report(report):
     ]
     if "scope" in report:
         out.append("scope: %s archive_lines=%d live_lines=%d "
-                   "archived_missing=%d archived_orphan=%d"
+                   "archived_missing=%d archived_orphan=%d "
+                   "archived_missing_ids=%s"
                    % (report["scope"], report["archive_lines"],
                       report["live_lines"],
                       len(report["archived_missing"]),
-                      len(report["archived_orphan"])))
+                      len(report["archived_orphan"]),
+                      format_id_tail(report["archived_missing"])))
         # R3087 AC-LGA12: the payload reading a reader never had. Published
         # only - the archives are frozen, so neither number may gate.
         # R3629 AC-ARM3: the round-main reading rides the same published

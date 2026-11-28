@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 847 | 7499 | 675/675 | R2739 |
+| 848 | 7513 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -881,10 +881,11 @@
 | 842 | os-logs-append-round-main | ../os/test_logs_append_round_main.py | 18 | no-evidence | - |
 | 843 | os-logs-append-round-orphan | ../os/test_logs_append_round_orphan.py | 17 | no-evidence | - |
 | 844 | os-ledger-archive-round-main | ../os/test_ledger_archive_round_main.py | 19 | no-evidence | - |
-| 845 | os-fold-carry-evidence-law | ../os/test_fold_carry_evidence_law.py | 4 | no-evidence | - |
-| 846 | os-fold-carry-single-walk | ../os/test_fold_carry_census_single_walk.py | 6 | no-evidence | - |
-| 847 | os-export-pair-clock | ../os/test_export_pair_clock.py | 15 | no-evidence | - |
-|  | 合计 |  | 7499 | green 675 / FAIL 0 / no-evidence 172 |  |
+| 845 | os-ledger-scope-ids | ../os/test_ledger_scope_ids.py | 14 | no-evidence | - |
+| 846 | os-fold-carry-evidence-law | ../os/test_fold_carry_evidence_law.py | 4 | no-evidence | - |
+| 847 | os-fold-carry-single-walk | ../os/test_fold_carry_census_single_walk.py | 6 | no-evidence | - |
+| 848 | os-export-pair-clock | ../os/test_export_pair_clock.py | 15 | no-evidence | - |
+|  | 合计 |  | 7513 | green 675 / FAIL 0 / no-evidence 173 |  |
 
 ## 证据出处
 

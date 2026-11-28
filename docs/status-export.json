@@ -1,20 +1,20 @@
 {
   "ceo_face": {
     "board_pages_skipped": ["preview/face-sweep.html (8877B)", "preview/battery-shard-report.html (17302B)"],
-    "current": "2026-11-28 R3640 PRODUCT: the live ledger gate is clean again and the two suites that died on a stale exemption are green. Measured before any edit: os-ledger-lines 7/8 and os-ledger-baseline 7/8 both failed on their own live-gate arm (AC-LGR8, AC-LGB8), and a probe read scope rounds_without_ledger=[] with gated clean=True new_missing=[] while stale_missing=[3625] - the shipped state/ledger_gaps.json still declared round 3625. The cause was the R3638 fold, not the ledger: knife 25 moved the whole R3625 block into logs/state-log-archive-2026-11.md, so the round stopped being a LIVE gap (archived_missing now names 2072,3112,3436,3458,3459,3610,3625, and under the R2224 law an archived gap is reported and never gates) while the exemption that was lawful at R3631 went stale and reddened two suites. The repair is the R2225 precedent: the list is emptied and the note names the fold, the archived reading and why, rather than a criterion widened or a round erased.",
+    "current": "2026-11-28 R3641 PRODUCT: the union face now names the archive gaps it has always counted. audit_scope() published archived_missing as a number and format_report printed only len() of it, so a reader of the default gate face could not tell WHICH frozen rounds the count named, while the same id list was already printed by the archive audit face - the debt R3640 named in its own honest note (b). The ids now ride the SAME scope line as a capped tail: src/os/ledger_lines.py gained ID_TAIL_CAP=12 and format_id_tail(), and the scope line ends on archived_missing_ids=<ids|none>, ascending, comma joined, with the first twelve and a +N remainder when the set is wider (R2914 measured archived_missing=787 on the pre-law tree, so an uncapped tail would grow one advisory line to kilobytes). No new line was added because AC-LGA7 allows only the lines:/kinds:/scope: /archive_payload: prefixes to differ from the default face and AC-ARM3 pins the archive_payload line to end on its three counts.",
     "do": "2026-11-25 R3456 PRODUCT: the answer-revision question now has a door - api_answer_history (live with AC-AMAW1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so 'which answer was rewritten, what did it say before, what does it say now and how often did it change' could only be read by calling the sandbox from a shell - while api_seller_answers and api_listing_qna publish only the CURRENT wording.",
     "last_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 commit] (halves differ: html [2026-11-28 commit] + json [2026-11-27 commit]; later=html)",
     "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 commit] (halves differ: html [2026-11-28 commit] + json [2026-11-27 commit]; later=html)",
     "latest_artifact_abs": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\domain\\BigDomain\\preview\\ugc-gate-report.html",
-    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/round-R3639.log (2212B, 2026-11-28, sha256 4eef2fe49411)",
-    "latest_evidence": "qa/round-R3639.log (2212B, 2026-11-28, sha256 4eef2fe49411)",
+    "latest_artifact_note": "newest artifact this window is EVIDENCE, not a product page: qa/round-R3640.log (5600B, 2026-11-28, sha256 44b4ac850140)",
+    "latest_evidence": "qa/round-R3640.log (5600B, 2026-11-28, sha256 44b4ac850140)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3640] next window (<=48h): (0) **载体**：本窗收口 `APPEND OK tick=3640 bytes=77429 gate=78500`——余量只剩 1071B，**下窗开窗必须先折**（`python src/os/state_fold_run.py --check` 若 FOLD-DUE 就 `logs_toolkit.py fold --plan-only` 再 `--execute`），一轮只 append 一次且带 `--round R####`，主行 `YYYY-MM-DD R#### LABEL:`。(1) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先排刷新轮（P-2026-09-24-56）。(2) **S4U 仍未落地**（承账）：`BigDomain-OSLoop` 任务 `Principal.LogonType=Interactive`，正法=提权会话跑 `src/os/register_loop_task.ps1` 后读回须为 `S4U`。(3) **本窗点名的可认领候选**：①`os-ledger-archive` 10/16 的六臂仍压在「R3610 块无预算行」这一事实上，正法是把该块的账本归属在归档面讲清而不是给六条臂加豁免；②**闸面只报归档缺口计数**（`archived_missing=7`）——若要让读者看见 id，正法是在 scope 面加一个 `archived_missing_ids=` 尾巴并同步其套件钉，属真活但需先立判据；③`os-battery-shard` 31/32 的失败臂尚未逐条量过，下窗可先只读定位再决定修或不修。(4) **本窗绿序（实测一遍过，照抄）**：`logs_toolkit append --round R#### --execute` → `src/os/export_round.py <tick>` → `src/os/heartbeat.py --write <tick>` → `src/os/registry_counter_census.py --write-pin` → `src/os/suite_matrix_reconcile.py --write/--check` → `tools/status_export_fresh.py --apply`（**板面回写必须先于它**）→ `tools/deliverable_index.py --write` → `tools/first_yuan_chain.py` → `tools/face_sweep.py` → 各 `--check` → (truncated)",
-    "next_milestone_due": "2026-11-30T13:36:52+08:00",
-    "updated_at": "2026-11-28T13:36:52+08:00",
+    "next_milestone": "[R3641] next window (<=48h): (0) **载体**：本窗收口 `APPEND CHECK PASS bytes=73562 gate=78500 margin=4938 tick=3641 log=82 ledger=R3641`——**余量已不足一轮日志，下窗开窗必须先折**（`python src/os/state_fold_run.py --check`，判可折就 `logs_toolkit fold --plan-only` 再 `--execute`）；一轮只 append 一次且带 `--round R####`，主行 `YYYY-MM-DD R#### LABEL:`（本窗 `tmp/append_R3641.py` 为 ASCII 驱动范式）。(1) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先排刷新轮（P-2026-09-24-56）。(2) **S4U 仍未落地**（承账）：`BigDomain-OSLoop` 任务 `Principal.LogonType=Interactive`，正法=提权会话跑 `src/os/register_loop_task.ps1` 后读回须为 `S4U`。(3) 本窗点名的可认领候选：①`archived_orphan`（本窗 279）仍只报计数——若要逐名，正法是把同一个 `format_id_tail` 复用到 orphan 尾巴并同步套件钉，属真活但需先立判据；②`os-ledger-archive` 10/16 的六臂仍压在「R3610 块无预算行」这一事实上，正法是在归档面讲清该块的账本归属而不是给六条臂加豁免；③`os-battery-shard` 31/32 的失败臂尚未逐条量过，下窗可先只读定位再决定修或不修。(4) **本窗绿序（实测一遍过，照抄）**：`logs_toolkit append --round R#### --execute` → `src/os/export_round.py <tick>` → `src/os/heartbeat.py --write <tick>` → `src/os/registry_counter_census.py --write-pin` → `src/os/suite_matrix_reconcile.py --write/--check` → `tools/status_export_fresh.py --apply`（**板面回写必须先于它**）→ `tools/deliverable_index.py --write` → `tools/first_yuan_chain.py` → (truncated)",
+    "next_milestone_due": "2026-11-30T13:45:24+08:00",
+    "updated_at": "2026-11-28T13:45:24+08:00",
     "heartbeat": {
-      "tick": 3640,
-      "state_tick": 3640,
+      "tick": 3641,
+      "state_tick": 3641,
       "lag": 0,
       "verdict": "PASS",
       "reason": "fresh"
@@ -35,8 +35,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-28 R3640 PRODUCT: the live ledger gate is clean again and the two suites that died on a stale exemption are green. Measured before any edit: os-ledger-lines 7/8 and os-ledger-baseline 7/8 both failed on their own live-gate arm (AC-LGR8, AC-LGB8), and a probe read scope rounds_without_ledger=[] with gated clean=True new_missing=[] while stale_missing=[3625] - the shipped state/ledger_gaps.json still declared round 3625. The cause was the R3638 fold, not the ledger: knife 25 moved the whole R3625 block into logs/state-log-archive-2026-11.md, so the round stopped being a LIVE gap (archived_missing now names 2072,3112,3436,3458,3459,3610,3625, and under the R2224 law an archived gap is reported and never gates) while the exemption that was lawful at R3631 went stale and reddened two suites. The repair is the R2225 precedent: the list is emptied and the note names the fold, the archived reading and why, rather than a criterion widened or a round erased.",
-  "claims": {"claimed": 12, "captured": 1, "contradicted": 0, "uncaptured": 11, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-28T13:36:52+08:00"},
+  "current": "2026-11-28 R3641 PRODUCT: the union face now names the archive gaps it has always counted. audit_scope() published archived_missing as a number and format_report printed only len() of it, so a reader of the default gate face could not tell WHICH frozen rounds the count named, while the same id list was already printed by the archive audit face - the debt R3640 named in its own honest note (b). The ids now ride the SAME scope line as a capped tail: src/os/ledger_lines.py gained ID_TAIL_CAP=12 and format_id_tail(), and the scope line ends on archived_missing_ids=<ids|none>, ascending, comma joined, with the first twelve and a +N remainder when the set is wider (R2914 measured archived_missing=787 on the pre-law tree, so an uncapped tail would grow one advisory line to kilobytes). No new line was added because AC-LGA7 allows only the lines:/kinds:/scope: /archive_payload: prefixes to differ from the default face and AC-ARM3 pins the archive_payload line to end on its three counts.",
+  "claims": {"claimed": 12, "captured": 1, "contradicted": 0, "uncaptured": 11, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-28T13:45:24+08:00"},
   "chain": {"present": true, "rows": 106, "broken": 5, "path": "state/qa_replacements.jsonl", "partial": 5, "declared": 1, "unexplained": 0, "adjudication": "OK", "excused": 1},
   "depts": [
     {
@@ -65,11 +65,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-28 R3640 PRODUCT: the live ledger gate is clean again and the two suites that died on a stale exemption are green. Measured before any edit: os-ledger-lines 7/8 and os-ledger-baseline 7/8 both failed on their own live-gate arm (AC-LGR8, AC-LGB8), and a probe read scope rounds_without_ledger=[] with gated clean=True new_missing=[] while stale_missing=[3625] - the shipped state/ledger_gaps.json still declared round 3625. The cause was the R3638 fold, not the ledger: knife 25 moved the whole R3625 block into logs/state-log-archive-2026-11.md, so the round stopped being a LIVE gap (archived_missing now names 2072,3112,3436,3458,3459,3610,3625, and under the R2224 law an archived gap is reported and never gates) while the exemption that was lawful at R3631 went stale and reddened two suites. The repair is the R2225 precedent: the list is emptied and the note names the fold, the archived reading and why, rather than a criterion widened or a round erased.",
-  "export_ts": "2026-11-28T13:36:52+08:00",
+  "do": "2026-11-28 R3641 PRODUCT: the union face now names the archive gaps it has always counted. audit_scope() published archived_missing as a number and format_report printed only len() of it, so a reader of the default gate face could not tell WHICH frozen rounds the count named, while the same id list was already printed by the archive audit face - the debt R3640 named in its own honest note (b). The ids now ride the SAME scope line as a capped tail: src/os/ledger_lines.py gained ID_TAIL_CAP=12 and format_id_tail(), and the scope line ends on archived_missing_ids=<ids|none>, ascending, comma joined, with the first twelve and a +N remainder when the set is wider (R2914 measured archived_missing=787 on the pre-law tree, so an uncapped tail would grow one advisory line to kilobytes). No new line was added because AC-LGA7 allows only the lines:/kinds:/scope: /archive_payload: prefixes to differ from the default face and AC-ARM3 pins the archive_payload line to end on its three counts.",
+  "export_ts": "2026-11-28T13:45:24+08:00",
   "latest_artifact": "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 commit] (halves differ: html [2026-11-28 commit] + json [2026-11-27 commit]; later=html)",
-  "latest_evidence": "qa/round-R3639.log (2212B, 2026-11-28, sha256 4eef2fe49411)",
-  "next_milestone": "[R3640] next window (<=48h): (0) **载体**：本窗收口 `APPEND OK tick=3640 bytes=77429 gate=78500`——余量只剩 1071B，**下窗开窗必须先折**（`python src/os/state_fold_run.py --check` 若 FOLD-DUE 就 `logs_toolkit.py fold --plan-only` 再 `--execute`），一轮只 append 一次且带 `--round R####`，主行 `YYYY-MM-DD R#### LABEL:`。(1) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先排刷新轮（P-2026-09-24-56）。(2) **S4U 仍未落地**（承账）：`BigDomain-OSLoop` 任务 `Principal.LogonType=Interactive`，正法=提权会话跑 `src/os/register_loop_task.ps1` 后读回须为 `S4U`。(3) **本窗点名的可认领候选**：①`os-ledger-archive` 10/16 的六臂仍压在「R3610 块无预算行」这一事实上，正法是把该块的账本归属在归档面讲清而不是给六条臂加豁免；②**闸面只报归档缺口计数**（`archived_missing=7`）——若要让读者看见 id，正法是在 scope 面加一个 `archived_missing_ids=` 尾巴并同步其套件钉，属真活但需先立判据；③`os-battery-shard` 31/32 的失败臂尚未逐条量过，下窗可先只读定位再决定修或不修。(4) **本窗绿序（实测一遍过，照抄）**：`logs_toolkit append --round R#### --execute` → `src/os/export_round.py <tick>` → `src/os/heartbeat.py --write <tick>` → `src/os/registry_counter_census.py --write-pin` → `src/os/suite_matrix_reconcile.py --write/--check` → `tools/status_export_fresh.py --apply`（**板面回写必须先于它**）→ `tools/deliverable_index.py --write` → `tools/first_yuan_chain.py` → `tools/face_sweep.py` → 各 `--check` → (truncated)",
+  "latest_evidence": "qa/round-R3640.log (5600B, 2026-11-28, sha256 44b4ac850140)",
+  "next_milestone": "[R3641] next window (<=48h): (0) **载体**：本窗收口 `APPEND CHECK PASS bytes=73562 gate=78500 margin=4938 tick=3641 log=82 ledger=R3641`——**余量已不足一轮日志，下窗开窗必须先折**（`python src/os/state_fold_run.py --check`，判可折就 `logs_toolkit fold --plan-only` 再 `--execute`）；一轮只 append 一次且带 `--round R####`，主行 `YYYY-MM-DD R#### LABEL:`（本窗 `tmp/append_R3641.py` 为 ASCII 驱动范式）。(1) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先排刷新轮（P-2026-09-24-56）。(2) **S4U 仍未落地**（承账）：`BigDomain-OSLoop` 任务 `Principal.LogonType=Interactive`，正法=提权会话跑 `src/os/register_loop_task.ps1` 后读回须为 `S4U`。(3) 本窗点名的可认领候选：①`archived_orphan`（本窗 279）仍只报计数——若要逐名，正法是把同一个 `format_id_tail` 复用到 orphan 尾巴并同步套件钉，属真活但需先立判据；②`os-ledger-archive` 10/16 的六臂仍压在「R3610 块无预算行」这一事实上，正法是在归档面讲清该块的账本归属而不是给六条臂加豁免；③`os-battery-shard` 31/32 的失败臂尚未逐条量过，下窗可先只读定位再决定修或不修。(4) **本窗绿序（实测一遍过，照抄）**：`logs_toolkit append --round R#### --execute` → `src/os/export_round.py <tick>` → `src/os/heartbeat.py --write <tick>` → `src/os/registry_counter_census.py --write-pin` → `src/os/suite_matrix_reconcile.py --write/--check` → `tools/status_export_fresh.py --apply`（**板面回写必须先于它**）→ `tools/deliverable_index.py --write` → `tools/first_yuan_chain.py` → (truncated)",
   "outs": [
     "preview/ugc-gate-report.html (28799B) + preview/ugc-gate-report.json (20170B) [2026-11-28 commit] (halves differ: html [2026-11-28 commit] + json [2026-11-27 commit]; later=html)",
     "preview/first-yuan-chain.html (5397B) + preview/first-yuan-chain.json (5180B) [2026-11-28 commit]",
@@ -211,19 +211,19 @@
     "shortfall_total": 15,
     "verdict": "FLOOR-DEBT"
   },
-  "results": [["3640", "OSLoop 执行 tick"]],
+  "results": [["3641", "OSLoop 执行 tick"]],
   "results_archive": {
     "bytes": 336680,
     "count": 179,
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
-  "self_drive": {"window": "2026-11-22..2026-11-28", "window_days": 7, "log_lines_in_window": 85, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 71, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
-  "state_bytes": 77429,
-  "next_milestone_due": "2026-11-30T13:36:52+08:00",
+  "self_drive": {"window": "2026-11-22..2026-11-28", "window_days": 7, "log_lines_in_window": 81, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 67, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
+  "state_bytes": 73562,
+  "next_milestone_due": "2026-11-30T13:45:24+08:00",
   "heartbeat": {
-    "tick": 3640,
-    "state_tick": 3640,
+    "tick": 3641,
+    "state_tick": 3641,
     "lag": 0,
     "verdict": "PASS",
     "reason": "fresh"
