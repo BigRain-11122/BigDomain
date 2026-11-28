@@ -9192,6 +9192,15 @@ SUITES = [
     # before the tool changed and this suite existed.
     ("os-face-sweep-carrier",
      os.path.join("..", "os", "test_face_sweep_carrier.py"), 6),
+    # R3628: that CARRIER row dropped the round_main/round keys the append face
+    # already returns, so a carrier that could take the next line but whose
+    # newest round main was illegal read append_ok=true for a whole round and
+    # was refused at the closeout gate instead. The row and the GATES summary
+    # now forward both keys; a refused carrier invents none.
+    # Criteria AC-FSR1..AC-FSR5 were pinned in src/os/backlog.md at R3628,
+    # before the tool changed and this suite existed.
+    ("os-face-sweep-carrier-round",
+     os.path.join("..", "os", "test_face_sweep_carrier_round.py"), 15),
     # R3619: the CEO face's chain block (docs/status-export.json) published the
     # ledger's break COUNT and nothing else, so `broken=5` read as five lost
     # records on the one face a reader is asked to believe; the block now also

@@ -10,7 +10,7 @@
 
 | 套件数 | 判据总数 | 证据全绿 | 证据轮 |
 |---|---|---|---|
-| 842 | 7436 | 675/675 | R2739 |
+| 843 | 7451 | 675/675 | R2739 |
 
 ## 五域可计费/配置面（config.json 单一事实源）
 
@@ -874,12 +874,13 @@
 | 835 | os-ledger-adjudication | ../os/test_ledger_adjudication.py | 3 | no-evidence | - |
 | 836 | os-closeout-carrier-append | ../os/test_closeout_carrier_append.py | 19 | no-evidence | - |
 | 837 | os-face-sweep-carrier | ../os/test_face_sweep_carrier.py | 6 | no-evidence | - |
-| 838 | os-export-chain-adjudication | ../os/test_export_chain_adjudication.py | 5 | no-evidence | - |
-| 839 | os-first-yuan-record-chain | ../os/test_first_yuan_chain_record_chain.py | 5 | no-evidence | - |
-| 840 | os-export-chain-excused | ../os/test_export_chain_excused.py | 5 | no-evidence | - |
-| 841 | os-logs-append-round-main | ../os/test_logs_append_round_main.py | 18 | no-evidence | - |
-| 842 | os-logs-append-round-orphan | ../os/test_logs_append_round_orphan.py | 17 | no-evidence | - |
-|  | 合计 |  | 7436 | green 675 / FAIL 0 / no-evidence 167 |  |
+| 838 | os-face-sweep-carrier-round | ../os/test_face_sweep_carrier_round.py | 15 | no-evidence | - |
+| 839 | os-export-chain-adjudication | ../os/test_export_chain_adjudication.py | 5 | no-evidence | - |
+| 840 | os-first-yuan-record-chain | ../os/test_first_yuan_chain_record_chain.py | 5 | no-evidence | - |
+| 841 | os-export-chain-excused | ../os/test_export_chain_excused.py | 5 | no-evidence | - |
+| 842 | os-logs-append-round-main | ../os/test_logs_append_round_main.py | 18 | no-evidence | - |
+| 843 | os-logs-append-round-orphan | ../os/test_logs_append_round_orphan.py | 17 | no-evidence | - |
+|  | 合计 |  | 7451 | green 675 / FAIL 0 / no-evidence 168 |  |
 
 ## 证据出处
 

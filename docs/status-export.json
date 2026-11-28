@@ -1,7 +1,7 @@
 {
   "ceo_face": {
     "board_pages_skipped": ["preview/face-sweep.html (8877B)"],
-    "current": "2026-11-28 R3627 PRODUCT: the append writer now refuses a ledger row that lands before the round it names exists, and the read face publishes that same verdict. R3626 taught the writer to refuse a write that LEAVES the newest round undated or unlabelled, but nothing refused a row that names a round the log never anchors: a tokens-only append wrote green, advanced the tick onto a round with no narrative, and the CEO face anchor (newest round label == tick) disagreed only at closeout - the same family of cost that burned R3624 an empty round number. src/os/logs_toolkit.py now reads the round vocabulary of every line it is about to write: a line matching the reader's own LEDGER_PRESENCE_RE must name the round this append lands on (the post tick) AND that round must hold a classify()==round line in the post log, or the plan refuses with E_LAP_ROUND_ORPHAN round=N tick=T anchored=yes|no and writes zero bytes. The read face answers the same law through the same bridge: append_check returns round_main/round/round_main_line and prints one extra line - the reader's own rendered verdict - only when the law fails, so the green PASS line and every caller's facts stay byte-identical, and the exit code still follows the carrier because a qualification is a reading, not a ruling (the R3618 qa_log law).",
+    "current": "2026-11-28 R3628 PRODUCT: the cheapest station of a round now publishes the reading the most expensive one refused on - the tools/face_sweep.py --gates CARRIER row carried append_ok/caliber/ledger/bytes/margin and dropped round_main/round, which logs_toolkit.append_check already returns, so a carrier able to take the next line but whose newest round narrative main lacked a date or an uppercase label read append_ok=true for a whole round and was refused by closeout_gate in the last minute. carrier_face now returns the face own facts and appends round_main=%s round=%s to the row tail, gates() appends round_main=%s to the GATES summary tail, and a refused carrier publishes no such field rather than an invented NOT-ASKED.",
     "do": "2026-11-25 R3456 PRODUCT: the answer-revision question now has a door - api_answer_history (live with AC-AMAW1..8 and its own suite on disk) had zero readers across tools/, preview/ and src/os, so 'which answer was rewritten, what did it say before, what does it say now and how often did it change' could only be read by calling the sandbox from a shell - while api_seller_answers and api_listing_qna publish only the CURRENT wording.",
     "last_artifact": "preview/preview-writer-census.html (17697B) + preview/preview-writer-census.json (25235B) [2026-11-28 commit]",
     "latest_artifact": "preview/preview-writer-census.html (17697B) + preview/preview-writer-census.json (25235B) [2026-11-28 commit]",
@@ -9,13 +9,13 @@
     "latest_artifact_note": "",
     "latest_evidence": "qa/logs-append-R3612-b.log (1981B, 2026-11-28, sha256 8a1e2e573c5b)",
     "newest_pair_on_disk_is_board": true,
-    "next_milestone": "[R3628] next window (<=48h): (0) **载体先折**：本窗收口 `CARRIER bytes=73408 gate=78500 margin=5092 append_ok=true caliber=16 ledger=R3627 log_items=77`——余量 5092 **不足一轮日志**，开窗第一动作=`python src/os/state_fold_run.py --check` 与 `python src/os/logs_toolkit.py append --check`，读 `FOLD-DUE`（或余量 < 一轮）即先跑 `python src/os/logs_toolkit.py fold --window-slice A:B` 干跑（**先取轮缘、整轮进窗**，`E_ROUND_LOST` 时把被点名的指针写进 `--summary-sentence` 再跑，本窗刀 23 即此形），`--execute` 后再 append。**一轮只 append 一次**，主行必须 `YYYY-MM-DD R#### LABEL:` 形状（`E_LAP_ROUND_MAIN` 拒），且**账本行必须先有本轮叙事行**（`E_LAP_ROUND_ORPHAN` 拒，本窗新律）——正法=同一次 append 里把 dated 主行与本轮全部行一起写完。(1) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先把刷新轮排最前（P-2026-09-24-56），毕=更新字段＋文件④更新记录行。(2) **S4U 仍未落地**（承账）：`BigDomain-OSLoop` 任务 `Principal.LogonType=Interactive`，正法=提权会话跑 `src/os/register_loop_task.ps1` 后读回须为 `S4U`；宁缺不错。(3) **新点名的可认领候选**：读面新律只在**有病时**多打印一行（绿路字节零变化），所以「这条律被问过吗」只能从源码桥计数读，巡检板 `face_sweep --gates` 的 CARRIER 行尚未发布 `round_main=`——正法=把 `append_check` 已返回的 `round_main`/`round` 原样转发到 CARRIER 行与 GATES 摘要（只加字段，不动既有行文本），判据先立（PIN）再改；另：账本行的轮号 <3 位时该律看不见（承读者自己的 `NARRATIVE_RE` 语法），若要收口须先在 `ledger_lines` 立判据。(4) **本窗绿序（实测一遍过，照抄）**：`logs_toolkit append (truncated)",
-    "next_milestone_due": "2026-11-30T10:09:47+08:00",
-    "updated_at": "2026-11-28T10:09:47+08:00",
+    "next_milestone": "[R3628] next window (<=48h): (0) **载体**：本窗收口 `CARRIER bytes=68002 gate=78500 margin=10498 append_ok=true caliber=16 ledger=R3628 log_items=73 round_main=OK`——开窗先 `python src/os/state_fold_run.py --check` 与 `python src/os/logs_toolkit.py append --check`；读 `FOLD-DUE`（或余量 < 一轮）即先折，折叠窗**先取整块轮缘**（本窗实证：切 3:14 被 `E_ROUND_LOST` 点名 R3604/R3606，把被点名的指针写进 `--summary-sentence` 再跑即成）；**一轮只 append 一次**，主行必须 `YYYY-MM-DD R#### LABEL:` 形状。（1) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先把刷新轮排最前（P-2026-09-24-56）。（2) **S4U 仍未落地**（承账）：`BigDomain-OSLoop` 任务 `Principal.LogonType=Interactive`，正法=提权会话跑 `src/os/register_loop_task.ps1` 后读回须为 `S4U`；宁缺不错。（3) **本窗新点名的可认领候选**：`logs_toolkit.append_check` 的 `round_main` 读数只判**最新**一轮的主行；被折走的旧轮主行合法性无任何面复核过（`round_main_verdict` 明写「older rounds deliberately not asked」），于是归档里一条坏主行永远是黑的——正法=在 `qa_log`/归档面加只读计数（整档扫描 `E_RMS_NO_DATE|NO_LABEL`，只计数不改任何历史行），判据先立（PIN）再改；另：`face_sweep --gates` 现发布 `round_main=`，但 `deliverable_index` 的九面表尚未消费它（今日无需求，记下不造活）。（4) **本窗绿序（实测一遍过，照抄）**：`logs_toolkit append --execute`（dated 主行+全部行一次写完）→ `export_round` → `registry_counter_census --write-pin` → `suite_matrix_reconcile --write/--check` → (truncated)",
+    "next_milestone_due": "2026-11-30T10:24:01+08:00",
+    "updated_at": "2026-11-28T10:24:01+08:00",
     "heartbeat": {
       "tick": 3579,
-      "state_tick": 3627,
-      "lag": 48,
+      "state_tick": 3628,
+      "lag": 49,
       "verdict": "FLAG",
       "reason": "heartbeat_row_debt"
     },
@@ -35,8 +35,8 @@
       "criteria_claims": 0
     }
   },
-  "current": "2026-11-28 R3627 PRODUCT: the append writer now refuses a ledger row that lands before the round it names exists, and the read face publishes that same verdict. R3626 taught the writer to refuse a write that LEAVES the newest round undated or unlabelled, but nothing refused a row that names a round the log never anchors: a tokens-only append wrote green, advanced the tick onto a round with no narrative, and the CEO face anchor (newest round label == tick) disagreed only at closeout - the same family of cost that burned R3624 an empty round number. src/os/logs_toolkit.py now reads the round vocabulary of every line it is about to write: a line matching the reader's own LEDGER_PRESENCE_RE must name the round this append lands on (the post tick) AND that round must hold a classify()==round line in the post log, or the plan refuses with E_LAP_ROUND_ORPHAN round=N tick=T anchored=yes|no and writes zero bytes. The read face answers the same law through the same bridge: append_check returns round_main/round/round_main_line and prints one extra line - the reader's own rendered verdict - only when the law fails, so the green PASS line and every caller's facts stay byte-identical, and the exit code still follows the carrier because a qualification is a reading, not a ruling (the R3618 qa_log law).",
-  "claims": {"claimed": 57, "captured": 24, "contradicted": 0, "uncaptured": 33, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-28T10:09:47+08:00"},
+  "current": "2026-11-28 R3628 PRODUCT: the cheapest station of a round now publishes the reading the most expensive one refused on - the tools/face_sweep.py --gates CARRIER row carried append_ok/caliber/ledger/bytes/margin and dropped round_main/round, which logs_toolkit.append_check already returns, so a carrier able to take the next line but whose newest round narrative main lacked a date or an uppercase label read append_ok=true for a whole round and was refused by closeout_gate in the last minute. carrier_face now returns the face own facts and appends round_main=%s round=%s to the row tail, gates() appends round_main=%s to the GATES summary tail, and a refused carrier publishes no such field rather than an invented NOT-ASKED.",
+  "claims": {"claimed": 58, "captured": 24, "contradicted": 0, "uncaptured": 34, "historic": 0, "rows": 106, "present": true, "census_ts": "2026-11-28T10:24:01+08:00"},
   "chain": {"present": true, "rows": 106, "broken": 5, "path": "state/qa_replacements.jsonl", "partial": 5, "declared": 1, "unexplained": 0, "adjudication": "OK", "excused": 1},
   "depts": [
     {
@@ -65,11 +65,11 @@
       "t": "复用 docs/research/ 调研面正名扩权（X068·零新编制零新循环零新台账）；席位=宿主 OSLoop 常驻执行体兼任（一人多岗·L0 承载）；台账=docs/research/ R-件编目 12 件（README=编目面）；节律=周轮前沿扫描寄宿 OSLoop 认领步+scan_five_still 条件项；职能三件套=即 hot 即报 24h+统计面板复用 status-export/global-benchmarks（M5 直读）+P-65 应用表挂承接；首件接产=U231 块面件（R318·总规 v1.1 收口 ≤09-28 12:00）"
     }
   ],
-  "do": "2026-11-28 R3627 PRODUCT: the append writer now refuses a ledger row that lands before the round it names exists, and the read face publishes that same verdict. R3626 taught the writer to refuse a write that LEAVES the newest round undated or unlabelled, but nothing refused a row that names a round the log never anchors: a tokens-only append wrote green, advanced the tick onto a round with no narrative, and the CEO face anchor (newest round label == tick) disagreed only at closeout - the same family of cost that burned R3624 an empty round number. src/os/logs_toolkit.py now reads the round vocabulary of every line it is about to write: a line matching the reader's own LEDGER_PRESENCE_RE must name the round this append lands on (the post tick) AND that round must hold a classify()==round line in the post log, or the plan refuses with E_LAP_ROUND_ORPHAN round=N tick=T anchored=yes|no and writes zero bytes. The read face answers the same law through the same bridge: append_check returns round_main/round/round_main_line and prints one extra line - the reader's own rendered verdict - only when the law fails, so the green PASS line and every caller's facts stay byte-identical, and the exit code still follows the carrier because a qualification is a reading, not a ruling (the R3618 qa_log law).",
-  "export_ts": "2026-11-28T10:09:47+08:00",
+  "do": "2026-11-28 R3628 PRODUCT: the cheapest station of a round now publishes the reading the most expensive one refused on - the tools/face_sweep.py --gates CARRIER row carried append_ok/caliber/ledger/bytes/margin and dropped round_main/round, which logs_toolkit.append_check already returns, so a carrier able to take the next line but whose newest round narrative main lacked a date or an uppercase label read append_ok=true for a whole round and was refused by closeout_gate in the last minute. carrier_face now returns the face own facts and appends round_main=%s round=%s to the row tail, gates() appends round_main=%s to the GATES summary tail, and a refused carrier publishes no such field rather than an invented NOT-ASKED.",
+  "export_ts": "2026-11-28T10:24:01+08:00",
   "latest_artifact": "preview/preview-writer-census.html (17697B) + preview/preview-writer-census.json (25235B) [2026-11-28 commit]",
   "latest_evidence": "qa/logs-append-R3612-b.log (1981B, 2026-11-28, sha256 8a1e2e573c5b)",
-  "next_milestone": "[R3628] next window (<=48h): (0) **载体先折**：本窗收口 `CARRIER bytes=73408 gate=78500 margin=5092 append_ok=true caliber=16 ledger=R3627 log_items=77`——余量 5092 **不足一轮日志**，开窗第一动作=`python src/os/state_fold_run.py --check` 与 `python src/os/logs_toolkit.py append --check`，读 `FOLD-DUE`（或余量 < 一轮）即先跑 `python src/os/logs_toolkit.py fold --window-slice A:B` 干跑（**先取轮缘、整轮进窗**，`E_ROUND_LOST` 时把被点名的指针写进 `--summary-sentence` 再跑，本窗刀 23 即此形），`--execute` 后再 append。**一轮只 append 一次**，主行必须 `YYYY-MM-DD R#### LABEL:` 形状（`E_LAP_ROUND_MAIN` 拒），且**账本行必须先有本轮叙事行**（`E_LAP_ROUND_ORPHAN` 拒，本窗新律）——正法=同一次 append 里把 dated 主行与本轮全部行一起写完。(1) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先把刷新轮排最前（P-2026-09-24-56），毕=更新字段＋文件④更新记录行。(2) **S4U 仍未落地**（承账）：`BigDomain-OSLoop` 任务 `Principal.LogonType=Interactive`，正法=提权会话跑 `src/os/register_loop_task.ps1` 后读回须为 `S4U`；宁缺不错。(3) **新点名的可认领候选**：读面新律只在**有病时**多打印一行（绿路字节零变化），所以「这条律被问过吗」只能从源码桥计数读，巡检板 `face_sweep --gates` 的 CARRIER 行尚未发布 `round_main=`——正法=把 `append_check` 已返回的 `round_main`/`round` 原样转发到 CARRIER 行与 GATES 摘要（只加字段，不动既有行文本），判据先立（PIN）再改；另：账本行的轮号 <3 位时该律看不见（承读者自己的 `NARRATIVE_RE` 语法），若要收口须先在 `ledger_lines` 立判据。(4) **本窗绿序（实测一遍过，照抄）**：`logs_toolkit append (truncated)",
+  "next_milestone": "[R3628] next window (<=48h): (0) **载体**：本窗收口 `CARRIER bytes=68002 gate=78500 margin=10498 append_ok=true caliber=16 ledger=R3628 log_items=73 round_main=OK`——开窗先 `python src/os/state_fold_run.py --check` 与 `python src/os/logs_toolkit.py append --check`；读 `FOLD-DUE`（或余量 < 一轮）即先折，折叠窗**先取整块轮缘**（本窗实证：切 3:14 被 `E_ROUND_LOST` 点名 R3604/R3606，把被点名的指针写进 `--summary-sentence` 再跑即成）；**一轮只 append 一次**，主行必须 `YYYY-MM-DD R#### LABEL:` 形状。（1) **基准刷新到期日 2026-12-01**（`benchmarks_refreshed=2026-11-24`）——12-01 或之后开窗先把刷新轮排最前（P-2026-09-24-56）。（2) **S4U 仍未落地**（承账）：`BigDomain-OSLoop` 任务 `Principal.LogonType=Interactive`，正法=提权会话跑 `src/os/register_loop_task.ps1` 后读回须为 `S4U`；宁缺不错。（3) **本窗新点名的可认领候选**：`logs_toolkit.append_check` 的 `round_main` 读数只判**最新**一轮的主行；被折走的旧轮主行合法性无任何面复核过（`round_main_verdict` 明写「older rounds deliberately not asked」），于是归档里一条坏主行永远是黑的——正法=在 `qa_log`/归档面加只读计数（整档扫描 `E_RMS_NO_DATE|NO_LABEL`，只计数不改任何历史行），判据先立（PIN）再改；另：`face_sweep --gates` 现发布 `round_main=`，但 `deliverable_index` 的九面表尚未消费它（今日无需求，记下不造活）。（4) **本窗绿序（实测一遍过，照抄）**：`logs_toolkit append --execute`（dated 主行+全部行一次写完）→ `export_round` → `registry_counter_census --write-pin` → `suite_matrix_reconcile --write/--check` → (truncated)",
   "outs": [
     "preview/preview-writer-census.html (17697B) + preview/preview-writer-census.json (25235B) [2026-11-28 commit]",
     "preview/first-yuan-chain.html (5397B) + preview/first-yuan-chain.json (5180B) [2026-11-28 mtime]",
@@ -211,20 +211,20 @@
     "shortfall_total": 15,
     "verdict": "FLOOR-DEBT"
   },
-  "results": [["3627", "OSLoop 执行 tick"]],
+  "results": [["3628", "OSLoop 执行 tick"]],
   "results_archive": {
     "bytes": 336680,
     "count": 179,
     "path": "logs/status-export-legacy-2026-11.json",
     "sha256": "f69438b333bfdcbfdfdb15a0416cd84cae18fb5f4b7d5b1f4048e7489b62f8e7"
   },
-  "self_drive": {"window": "2026-11-22..2026-11-28", "window_days": 7, "log_lines_in_window": 75, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 61, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
-  "state_bytes": 73408,
-  "next_milestone_due": "2026-11-30T10:09:47+08:00",
+  "self_drive": {"window": "2026-11-22..2026-11-28", "window_days": 7, "log_lines_in_window": 70, "idle_fast_mention_lines": 0, "no_pullable_mention_lines": 0, "substantive_non_idle_mention_lines": 58, "proposals_total": 11, "proposals_open": 9, "queue_main_open": 6, "queue_tech_open": 5, "queue_explore_open": 1},
+  "state_bytes": 68002,
+  "next_milestone_due": "2026-11-30T10:24:01+08:00",
   "heartbeat": {
     "tick": 3579,
-    "state_tick": 3627,
-    "lag": 48,
+    "state_tick": 3628,
+    "lag": 49,
     "verdict": "FLAG",
     "reason": "heartbeat_row_debt"
   },

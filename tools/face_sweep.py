@@ -585,26 +585,31 @@ def _src_os():
 def carrier_face(path=None):
     """One CARRIER row from the append face's own read-only check.
 
-    Returns (ok, line). The judge is `logs_toolkit.append_check`, so this row
-    cannot disagree with the writer about a tail anchor, a tokens row or the
-    gate (AC-FSC2). Read-only: append_check opens the file for reading only.
+    Returns (ok, line, facts). The judge is `logs_toolkit.append_check`, so this
+    row cannot disagree with the writer about a tail anchor, a tokens row, the
+    gate or the newest round main shape (AC-FSC2, AC-FSR2). `facts` is that
+    face's own return, forwarded as readings - the caller never measures a
+    second time, and a refusal carries None rather than an invented verdict.
+    Read-only: append_check opens the file for reading only.
     """
     target = path or CARRIER
     _src_os()
     try:
         import logs_toolkit as LT
     except ImportError as exc:
-        return False, "CARRIER FAIL %s import: %s" % (E_FSW_CARRIER, exc)
+        return False, "CARRIER FAIL %s import: %s" % (E_FSW_CARRIER, exc), None
     try:
         going = LT.append_check(target)
     except (IOError, OSError) as exc:
         return False, "CARRIER FAIL %s %s: %s" % (E_FSW_CARRIER,
-                                                  type(exc).__name__, exc)
+                                                  type(exc).__name__, exc), None
     except ValueError as exc:
-        return False, "CARRIER FAIL %s %s" % (E_FSW_CARRIER, exc)
+        return False, "CARRIER FAIL %s %s" % (E_FSW_CARRIER, exc), None
     return True, ("CARRIER append_ok=true caliber=%d ledger=%s bytes=%d margin=%d"
+                  " round_main=%s round=%s"
                   % (going["caliber"], going["ledger"],
-                     going["bytes"], going["margin"]))
+                     going["bytes"], going["margin"],
+                     going["round_main"], going["round"])), going
 
 
 def gates(opts):
@@ -636,12 +641,16 @@ def gates(opts):
     bad = red + [i for i in mut if i not in red]
     # R3615: the carrier is printed as its own row before the summary, and its
     # health is a separate field - a red carrier never borrows a face's name.
-    carrier_ok, carrier_line = carrier_face()
+    # R3628 (AC-FSR3): the newest round main shape is a reading of the same
+    # face, published beside that verdict. It never reddens this scan - the
+    # door that refuses a bad main line stays the writer and the closeout gate.
+    carrier_ok, carrier_line, carrier_facts = carrier_face()
     print(carrier_line)
-    print("GATES %s gates=%d green=%d red=%d red_ids=%s mutated=%s carrier=%s"
+    tail = " round_main=%s" % carrier_facts["round_main"] if carrier_ok else ""
+    print("GATES %s gates=%d green=%d red=%d red_ids=%s mutated=%s carrier=%s%s"
           % ("PASS" if not bad and carrier_ok else "FLAG", len(rows), len(passing), len(red),
              ",".join(red) or "none", ",".join(mut) or "none",
-             "HEALTHY" if carrier_ok else "UNHEALTHY"))
+             "HEALTHY" if carrier_ok else "UNHEALTHY", tail))
     return 0 if not bad and carrier_ok else 2
 
 

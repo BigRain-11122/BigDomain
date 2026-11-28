@@ -41,7 +41,10 @@ if SRC_OS not in sys.path:
 import logs_toolkit as LT  # noqa: E402
 
 LEDGER = 'R0007 tokens: local=~1k api=0 api_reason=fixture row'
-GOOD = ['R0006 narrative row', LEDGER]
+# R3628: the canonical fixture is a LEGAL round main (dated, uppercase label),
+# so the round_main reading this row now publishes can be pinned as OK. The
+# undated world that reads E_RMS_NO_DATE lives in test_face_sweep_carrier_round.
+GOOD = ['2026-11-28 R0006 PRODUCT: fixture row', LEDGER]
 PASS_DRIVER = "import sys\nprint('VERDICT PASS 1/1')\nsys.exit(0)\n"
 
 
@@ -193,13 +196,17 @@ def main():
         rows = carrier_rows(out)
         going = LT.append_check(good_path)
         want = ('CARRIER append_ok=true caliber=%d ledger=%s bytes=%d margin=%d'
-                % (going['caliber'], going['ledger'], going['bytes'], going['margin']))
+                ' round_main=%s round=%s'
+                % (going['caliber'], going['ledger'], going['bytes'], going['margin'],
+                   going['round_main'], going['round']))
         ok('AC-FSC2 a canonical carrier publishes append_ok with the face own numbers',
            rc == 0 and len(rows) == 1 and rows[0] == want,
            rows[0] if rows else 'no CARRIER row')
         ok('AC-FSC2 the four numbers are the face return, not a second count',
            len(rows) == 1 and ('bytes=%d ' % going['bytes']) in rows[0]
-           and rows[0].endswith('margin=%d' % going['margin']))
+           and rows[0].endswith('margin=%d round_main=%s round=%s'
+                                % (going['margin'], going['round_main'],
+                                   going['round'])))
 
         # ---- AC-FSC3 a red carrier is named and stays off the face rows.
         anchor_dir = os.path.join(base, 'anchor')
@@ -244,10 +251,11 @@ def main():
            carrier_rows(out1)[0] if carrier_rows(out1) else 'no CARRIER row')
 
         # ---- AC-FSC5 additive: old shapes keep their bytes, new field is a tail.
-        ok('AC-FSC5 the summary prefix is unchanged and the field is appended',
+        ok('AC-FSC5 the summary prefix is unchanged and the fields are appended',
            summary_row(out1).startswith(
                'GATES PASS gates=2 green=2 red=0 red_ids=none mutated=none')
-           and summary_row(out1).endswith('carrier=HEALTHY'), summary_row(out1))
+           and summary_row(out1).endswith('carrier=HEALTHY round_main=%s'
+                                          % going['round_main']), summary_row(out1))
         ok('AC-FSC5 the per-face row keeps its shape',
            any(re.match(r'^gate stub-a\s+rc=0\s+mutated=0 ', ln) for ln in out1.splitlines()))
         ok('AC-FSC5 the board sweep and the board check were not touched',
